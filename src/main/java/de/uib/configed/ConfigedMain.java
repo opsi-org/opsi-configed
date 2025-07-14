@@ -986,13 +986,52 @@ public class ConfigedMain {
 
 	public void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		String oldGroupSelection = activatedGroupModel.getGroupName();
+		String oldGroupSelection = getSelectedGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection ", oldGroupSelection);
 
 		Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
 		setRebuiltClientListTableModel(true, true);
 		activateGroup(true, oldGroupSelection);
 		clientTree.expandAndSelectNodes(nodes);
+	}
+
+	public void saveSelectedGroupName() {
+		String groupName = getSelectedGroupName();
+		if (groupName != null) {
+			Configed.getSavedStates().setProperty("groupname", groupName);
+			Logging.info(this, "saveSelectedGroupName ", groupName);
+		} else {
+			Logging.info(this, "saveSelectedGroupName, no group selected");
+			Configed.getSavedStates().remove("groupname");
+		}
+	}
+
+	public String getSelectedGroupName() {
+		if (clientTree.getSelectionPath() == null) {
+			return null;
+		} else {
+			String groupName = getGroupNameForPath(clientTree.getSelectionPath());
+
+			for (int i = 1; i < clientTree.getSelectionCount(); i++) {
+				TreePath path = clientTree.getSelectionPaths()[i];
+				String groupName2 = getGroupNameForPath(path);
+				if (!groupName.equals(groupName2)) {
+					Logging.info(this, "getSelectedGroupName, multiple groups selected: ", groupName, " and ",
+							groupName2);
+					// multiple groups selected
+					return null;
+				}
+			}
+			return groupName;
+		}
+	}
+
+	private static String getGroupNameForPath(TreePath path) {
+		if (((DefaultMutableTreeNode) path.getLastPathComponent()).getAllowsChildren()) {
+			return ((DefaultMutableTreeNode) path.getLastPathComponent()).toString();
+		} else {
+			return ((DefaultMutableTreeNode) path.getPathComponent(path.getPathCount() - 2)).toString();
+		}
 	}
 
 	public void reload() {
@@ -1006,7 +1045,7 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		String selectedGroup = getActivatedGroupModel().getGroupName();
+		String selectedGroup = getSelectedGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
@@ -1180,6 +1219,13 @@ public class ConfigedMain {
 		}
 
 		return result;
+	}
+
+	public void saveAndQuit() {
+		Logging.info(this, "saveAndQuit");
+		saveSelectedGroupName();
+
+		finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
 	}
 
 	public static void finishApp(boolean checkdirty, int exitcode) {
