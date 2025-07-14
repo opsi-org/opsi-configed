@@ -22,17 +22,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.SearchTargetModelFromClientTable;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.TableSearchPane;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.data.SearchTargetModelFromClientTable;
+import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.TableSearchPane;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
 	private JScrollPane scrollpane;

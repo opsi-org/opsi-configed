@@ -8,17 +8,14 @@ package de.uib.configed.gui;
 
 import java.text.MessageFormat;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.opsicommand.ConnectionErrorReporter;
-import de.uib.opsicommand.ConnectionErrorType;
-import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.CacheManager;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.ConnectionErrorReporter;
+import de.uib.configed.core.infrastructure.ConnectionErrorType;
+import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.core.infrastructure.ServerFacade;
+import de.uib.configed.share.logging.Logging;
 
 /**
  * This class is used to handle the login process in a separate thread.
