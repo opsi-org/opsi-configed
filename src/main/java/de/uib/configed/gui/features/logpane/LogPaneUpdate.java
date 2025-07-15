@@ -9,7 +9,7 @@ package de.uib.configed.gui.features.logpane;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.configed.gui.TeaComponent.UpdateResult;
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
 
 public class LogPaneUpdate {

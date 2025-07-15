@@ -30,16 +30,17 @@ import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.app.Main;
+import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.TeaComponent;
 import de.uib.configed.gui.features.logpane.view.AdaptingSlider;
 import de.uib.configed.gui.features.logpane.view.LogTextPane;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, LogPaneEffect> implements KeyListener {
+public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPaneMsg, LogPaneEffect>
+		implements KeyListener {
 	private static final int SLIDER_W = 180;
 
 	public static final int MIN_LEVEL = 1;

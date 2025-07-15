@@ -42,7 +42,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	/**
 	 * Default constructor: model will be initialized via initModel().
 	 */
-	protected TeaComponent() {
+	protected AbstractTeaComponent() {
 		// model will be set in initUI()
 	}
 
@@ -51,7 +51,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	 * 
 	 * @param initialModel The model to use for this component.
 	 */
-	protected TeaComponent(M initialModel) {
+	protected AbstractTeaComponent(M initialModel) {
 		this.model = initialModel;
 		this.modelProvided = true;
 	}

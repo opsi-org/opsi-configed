@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.uib.configed.gui.TeaComponent.UpdateResult;
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
 
 class LogPaneUpdateTest {
