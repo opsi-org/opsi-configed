@@ -335,7 +335,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 	}
 
 	private void floatExternal() {
-		LogPaneComponent copyOfMe = new LogPaneComponent(model.toBuilder().build().withWithPopup(false));
+		LogPaneComponent copyOfMe = new LogPaneComponent(
+				model.toBuilder().minLevel(MIN_LEVEL).withPopup(false).build());
 		externalize(copyOfMe, title, rootPanel.getParent().getSize());
 	}
 
