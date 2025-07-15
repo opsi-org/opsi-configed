@@ -29,8 +29,8 @@ compile_and_package:
     - TRANSIFEX_MIN_TRANSLATION_RATE=0.0
     - '[ "$CI_COMMIT_TAG" = "" ] || TRANSIFEX_MIN_TRANSLATION_RATE=1.0'
     - curl -sS "${OPSIDEVTOOLS_INSTALLER_URL_LINUX_X64}" | sh
-    - opsi-dev-cli -l debug transifex upload-resource src/main/resources/de/uib/messages/opsi-configed_en.properties
-    - opsi-dev-cli -l debug transifex download-translations opsi-configed.properties src/main/resources/de/uib/messages --min-translation-rate $TRANSIFEX_MIN_TRANSLATION_RATE -l de -l fr
+    - opsi-dev-cli -l debug transifex upload-resource src/main/resources/de/uib/configed/gui/messages/opsi-configed_en.properties
+    - opsi-dev-cli -l debug transifex download-translations opsi-configed.properties src/main/resources/de/uib/configed/gui/messages --min-translation-rate $TRANSIFEX_MIN_TRANSLATION_RATE -l de -l fr
     # Unfortunately we need to build en extra jar vor mac aarch6
     # Since JavaFX supports only one architecture per platform
     - mvn package -Djavafx.platform=mac

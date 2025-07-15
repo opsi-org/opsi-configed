@@ -41,7 +41,6 @@ import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
-import de.uib.configed.gui.features.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.GroupNode;
@@ -75,7 +74,6 @@ public class ConfigedMain {
 	private List<String> selectedClients = new ArrayList<>();
 
 	private Set<String> clientsFilteredByTree = new HashSet<>();
-	private ActivatedGroupModel activatedGroupModel;
 
 	private HostInfo hostInfo = new HostInfo();
 
@@ -143,8 +141,6 @@ public class ConfigedMain {
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
 		initTabComponents();
-
-		activatedGroupModel = new ActivatedGroupModel();
 
 		initialTreeActivation();
 
@@ -258,9 +254,6 @@ public class ConfigedMain {
 		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
 			Logging.error(this,
 					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
-		} else if (!activatedGroupModel.isActive()) {
-			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.noGroupSelected"),
-					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 		} else {
 			ExtraFrameController.startGroupActionFrame(this);
 		}
@@ -351,8 +344,6 @@ public class ConfigedMain {
 
 		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
 				hostInfo);
-
-		activatedGroupModel.setActive(selectedClients.isEmpty());
 
 		clientTree.updateSelectedObjectsInTable();
 	}
@@ -835,11 +826,6 @@ public class ConfigedMain {
 		// with this, a selected client remains selected (but in bottom line, the group
 		// seems activated, not the client)
 
-		activatedGroupModel.setNode("" + node);
-		activatedGroupModel.setDescription(clientTree.getGroups().get("" + node).get("description"));
-		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
-		activatedGroupModel.setActive(true);
-
 		// since we select based on the tree view we disable the filter
 		deactivateFilter();
 	}
@@ -849,10 +835,6 @@ public class ConfigedMain {
 		if (clientTablePanel.isFilteredMode()) {
 			setRebuiltClientListTableModel(true, false);
 		}
-	}
-
-	public ActivatedGroupModel getActivatedGroupModel() {
-		return activatedGroupModel;
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -982,13 +964,52 @@ public class ConfigedMain {
 
 	public void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
-		String oldGroupSelection = activatedGroupModel.getGroupName();
+		String oldGroupSelection = getSelectedGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection ", oldGroupSelection);
 
 		Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
 		setRebuiltClientListTableModel(true, true);
 		activateGroup(true, oldGroupSelection);
 		clientTree.expandAndSelectNodes(nodes);
+	}
+
+	private void saveSelectedGroupName() {
+		String groupName = getSelectedGroupName();
+		if (groupName != null) {
+			Configed.getSavedStates().setProperty("groupname", groupName);
+			Logging.info(this, "saveSelectedGroupName ", groupName);
+		} else {
+			Logging.info(this, "saveSelectedGroupName, no group selected");
+			Configed.getSavedStates().remove("groupname");
+		}
+	}
+
+	public String getSelectedGroupName() {
+		if (clientTree.getSelectionPath() == null) {
+			return null;
+		} else {
+			String groupName = getGroupNameForPath(clientTree.getSelectionPath());
+
+			for (int i = 1; i < clientTree.getSelectionCount(); i++) {
+				TreePath path = clientTree.getSelectionPaths()[i];
+				String groupName2 = getGroupNameForPath(path);
+				if (!groupName.equals(groupName2)) {
+					Logging.info(this, "getSelectedGroupName, multiple groups selected: ", groupName, " and ",
+							groupName2);
+					// multiple groups selected
+					return null;
+				}
+			}
+			return groupName;
+		}
+	}
+
+	private static String getGroupNameForPath(TreePath path) {
+		if (((DefaultMutableTreeNode) path.getLastPathComponent()).getAllowsChildren()) {
+			return ((DefaultMutableTreeNode) path.getLastPathComponent()).toString();
+		} else {
+			return ((DefaultMutableTreeNode) path.getPathComponent(path.getPathCount() - 2)).toString();
+		}
 	}
 
 	public void reload() {
@@ -1002,7 +1023,7 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		String selectedGroup = getActivatedGroupModel().getGroupName();
+		String selectedGroup = getSelectedGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
@@ -1176,6 +1197,13 @@ public class ConfigedMain {
 		}
 
 		return result;
+	}
+
+	public void saveAndQuit() {
+		Logging.info(this, "saveAndQuit");
+		saveSelectedGroupName();
+
+		finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
 	}
 
 	public static void finishApp(boolean checkdirty, int exitcode) {

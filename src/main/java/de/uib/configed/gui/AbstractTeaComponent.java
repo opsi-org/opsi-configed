@@ -20,7 +20,7 @@ import javax.swing.JComponent;
  * @param <F> The type representing side-effects or commands resulting from
  *            updates.
  */
-public abstract class TeaComponent<M, E, F> {
+public abstract class AbstractTeaComponent<M, E, F> {
 	/**
 	 * The current immutable state of the component.
 	 */

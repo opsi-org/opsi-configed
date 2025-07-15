@@ -72,7 +72,7 @@ public class MainFrame extends JFrame implements KeyListener {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			WindowsPositionManager.saveWindowProperties(ConfigedMain.getMainFrame(),
 					WindowsPositionManager.MAIN_WINDOW);
-			ConfigedMain.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
+			configedMain.saveAndQuit();
 		}
 	}
 

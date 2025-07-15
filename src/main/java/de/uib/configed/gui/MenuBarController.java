@@ -65,8 +65,7 @@ public class MenuBarController {
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
-		jMenuFileExit.addActionListener(actionEvent -> ConfigedMain
-				.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0));
+		jMenuFileExit.addActionListener(actionEvent -> configedMain.saveAndQuit());
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");

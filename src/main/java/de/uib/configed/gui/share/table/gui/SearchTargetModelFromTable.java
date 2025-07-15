@@ -235,6 +235,12 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			FlexibleRowFilter filter = new FlexibleRowFilter(query, columnIndex, useRegex, caseSensitive);
 			sorter.setRowFilter(filter);
 		}
+
+		if (table.getRowCount() != 0) {
+			table.setRowSelectionInterval(0, 0);
+		} else {
+			table.clearSelection();
+		}
 	}
 
 	@Override

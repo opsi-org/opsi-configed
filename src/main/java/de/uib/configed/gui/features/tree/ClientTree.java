@@ -380,7 +380,7 @@ public class ClientTree extends AbstractGroupTree {
 				Logging.warning("group for groupId ", entry.getKey(), " not found");
 			} else {
 				boolean register = isInDirectory(groupNode);
-				Set<String> clientsOfGroup = new HashSet<>(entry.getValue());
+				Set<String> clientsOfGroup = new TreeSet<>(entry.getValue());
 				clientsOfGroup.retainAll(clientIds);
 				produceClients(clientsOfGroup, groupNode, register);
 			}
