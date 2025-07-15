@@ -292,8 +292,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 	}
 
 	public Integer getMaxExistingLevel() {
-		return model.getMaxExistingLevel() == 0 ? logTextPane.getParsedData().getMaxExistingLevel()
-				: model.getMaxExistingLevel();
+		return model.getMaxExistingLevel();
 	}
 
 	public void removeAllHighlights() {
@@ -373,8 +372,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 	private void setLevelWithoutAction(Object l) {
 		Logging.debug(this, "setLevel ", l);
 
-		Integer levelO = sliderLevel.getValue();
-		if (levelO != l) {
+		Integer level = sliderLevel.getValue();
+		if (level != l) {
 			sliderLevel.removeChangeListener(sliderLevel);
 			sliderLevel.setValue((Integer) l);
 			sliderLevel.addChangeListener(sliderLevel);
@@ -383,8 +382,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	private void activateShowLevel() {
 		Integer level = sliderLevel.getValue();
-		if (level > logTextPane.getParsedData().getMaxExistingLevel()) {
-			level = logTextPane.getParsedData().getMaxExistingLevel();
+		if (level > model.getMaxExistingLevel()) {
+			level = model.getMaxExistingLevel();
 			sliderLevel.setValue(level);
 			return;
 		}
@@ -397,10 +396,10 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		logTextPane.setShowLevel(level);
 
 		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", level, " , ", oldLevel, ", ",
-				logTextPane.getParsedData().getMaxExistingLevel());
+				model.getMaxExistingLevel());
 
-		if (!oldLevel.equals(level) && (level < logTextPane.getParsedData().getMaxExistingLevel()
-				|| oldLevel < logTextPane.getParsedData().getMaxExistingLevel())) {
+		if (!oldLevel.equals(level)
+				&& (level < model.getMaxExistingLevel() || oldLevel < model.getMaxExistingLevel())) {
 			logTextPane.rebuildDocumentWithNewLevel(jComboBoxSearch.getSelectedItem());
 		}
 	}
@@ -409,13 +408,13 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		comboType.setEnabled(false);
 		comboModelTypes.removeAllElements();
 
-		if (!logTextPane.getParsedData().getTypesList().isEmpty()) {
-			for (String type : logTextPane.getParsedData().getTypesList()) {
+		if (!model.getTypesList().isEmpty()) {
+			for (String type : model.getTypesList()) {
 				comboModelTypes.addElement(type);
 			}
 			comboType.setEnabled(true);
 
-			int maxRowCount = logTextPane.getParsedData().getTypesList().size() + 1;
+			int maxRowCount = model.getTypesList().size() + 1;
 			if (maxRowCount > TYPES_LIST_MAX_SHOW_COUNT) {
 				maxRowCount = TYPES_LIST_MAX_SHOW_COUNT;
 			}
@@ -430,13 +429,13 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	private void parse(String s) {
 		int showLevel = logTextPane.setLogText(s);
-		adaptSlider();
-		adaptComboType();
-
 		dispatch(new LogPaneMsg.LogParsed(logTextPane.getParsedData(), showLevel));
 	}
 
 	private void displayLog() {
+		adaptSlider();
+		adaptComboType();
+
 		logTextPane.buildDocument();
 		logTextPane.setCaretPosition(0);
 		logTextPane.getCaret().setVisible(true);
