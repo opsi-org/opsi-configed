@@ -18,7 +18,7 @@ import lombok.Setter;
 public class LogFileParser {
 	@Getter
 	@Setter
-	public class LogParsedData {
+	public static class LogParsedData {
 		String[] lines;
 		List<LogLine> parsedLogLines = new ArrayList<>();
 		Style[] logLevelStyles;
