@@ -32,6 +32,8 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
 	private static final int LATENCY_WINDOW_SIZE = 10;
+	private static final double LOW_LATENCY_THRESHOLD = 50.0;
+	private static final double HIGH_LATENCY_THRESHOLD = 200.0;
 
 	private FileUploadQueue queue;
 	private TerminalWidget terminalWidget;
@@ -128,17 +130,16 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			latencyMeasurements[currentLatencyIndex] = latency;
 			numLatencyMeasurements = Math.min(numLatencyMeasurements + 1, LATENCY_WINDOW_SIZE);
 			double movingAverageLatency = calculateMovingAverageLatency(numLatencyMeasurements, latencyMeasurements);
-			double scalingFactor = calculateScalingFactor(latency, movingAverageLatency);
-			chunkSize = modifyChunkSizeBasedOnScalingFactor(chunkSize, scalingFactor);
+
+			if (movingAverageLatency < LOW_LATENCY_THRESHOLD && chunkSize < MAX_CHUNK_SIZE) {
+				chunkSize = Math.min(chunkSize * 2, MAX_CHUNK_SIZE);
+			} else if (movingAverageLatency > HIGH_LATENCY_THRESHOLD && chunkSize > MIN_CHUNK_SIZE) {
+				chunkSize = Math.max(chunkSize / 2, MIN_CHUNK_SIZE);
+			}
+
 			buff = ByteBuffer.allocate(chunkSize);
 			currentLatencyIndex = (currentLatencyIndex + 1) % LATENCY_WINDOW_SIZE;
 		}
-	}
-
-	private static double calculateScalingFactor(double latency, double movingAverageLatency) {
-		double percentageDifference = Double.compare(movingAverageLatency, 0.0) == 0 ? 0.0
-				: (0.1 * (latency / movingAverageLatency));
-		return latency < movingAverageLatency ? (1.0 - percentageDifference) : (1.0 + percentageDifference);
 	}
 
 	private static double calculateMovingAverageLatency(int numLatencyMeasurements, double[] latencyMeasurements) {
@@ -147,11 +148,6 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			sum += latencyMeasurements[i];
 		}
 		return sum / numLatencyMeasurements;
-	}
-
-	private static int modifyChunkSizeBasedOnScalingFactor(int chunkSize, double scalingFactor) {
-		int newChunkSize = (int) (chunkSize * scalingFactor);
-		return Math.min(Math.max(newChunkSize, MIN_CHUNK_SIZE), MAX_CHUNK_SIZE);
 	}
 
 	private void sendFileUploadRequest(File file, String fileId) {
