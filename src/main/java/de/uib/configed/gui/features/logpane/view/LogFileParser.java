@@ -7,48 +7,43 @@
 package de.uib.configed.gui.features.logpane.view;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import javax.swing.text.Style;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class LogFileParser {
-	private String[] lines;
-	private List<LogLine> parsedLogLines;
-	private Style[] logLevelStyles;
-	private List<String> typesList;
-	private int maxExistingLevel = 1;
-	private int minExistingLevel = 1;
+	@Getter
+	@Setter
+	public class LogParsedData {
+		String[] lines;
+		List<LogLine> parsedLogLines = new ArrayList<>();
+		Style[] logLevelStyles;
+		List<String> typesList = new ArrayList<>();
+		int maxExistingLevel = 1;
+		int minExistingLevel = 1;
+	}
+
+	private LogParsedData data;
 
 	public LogFileParser(String[] lines, Style[] logLevelStyles) {
-		this.lines = lines;
-		this.logLevelStyles = logLevelStyles;
+		data = new LogParsedData();
+		data.setLines(lines);
+		data.setLogLevelStyles(logLevelStyles);
 	}
 
-	public LogLine getParsedLogLine(int index) {
-		return parsedLogLines.get(index);
-	}
-
-	public List<LogLine> getParsedLogLines() {
-		return Collections.unmodifiableList(parsedLogLines);
-	}
-
-	public List<String> getTypesList() {
-		return Collections.unmodifiableList(typesList);
-	}
-
-	public int getMaxExistingLevel() {
-		return maxExistingLevel;
-	}
-
-	public int getMinExistingLevel() {
-		return minExistingLevel;
+	public LogParsedData getData() {
+		return data;
 	}
 
 	public void parse() {
-		parsedLogLines = new ArrayList<>();
-		typesList = new ArrayList<>();
+		List<LogLine> parsedLogLines = new ArrayList<>();
+		List<String> typesList = new ArrayList<>();
+		typesList.add(LogTextPane.DEFAULT_TYPE);
+		String[] lines = data.getLines();
 
 		int lastKnownLogLevel = 0;
 		for (int i = 0; i < lines.length; i++) {
@@ -58,14 +53,19 @@ public class LogFileParser {
 			} else {
 				lastKnownLogLevel = logLevel;
 			}
-			parsedLogLines.add(
-					new LogLine(i, logLevel, getTypeIndexForLine(lines[i]), getStyleByLevelNo(logLevel), lines[i]));
+			parsedLogLines.add(new LogLine(i, logLevel, getTypeIndexForLine(lines[i], typesList),
+					getStyleByLevelNo(logLevel), lines[i]));
 		}
 
-		maxExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLogLevel()).max()
-				.getAsInt();
-		minExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLogLevel()).min()
-				.getAsInt();
+		int maxExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLogLevel())
+				.max().getAsInt();
+		int minExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLogLevel())
+				.min().getAsInt();
+
+		data.setParsedLogLines(parsedLogLines);
+		data.setTypesList(typesList);
+		data.setMaxExistingLevel(maxExistingLevel);
+		data.setMinExistingLevel(minExistingLevel);
 	}
 
 	private static int getLoglevelForLine(String line) {
@@ -77,10 +77,11 @@ public class LogFileParser {
 	}
 
 	private Style getStyleByLevelNo(int lev) {
+		Style[] logLevelStyles = data.getLogLevelStyles();
 		return lev < logLevelStyles.length ? logLevelStyles[lev] : logLevelStyles[logLevelStyles.length - 1];
 	}
 
-	private int getTypeIndexForLine(String line) {
+	private int getTypeIndexForLine(String line, List<String> typesList) {
 		String type = "";
 		int typeIndex = 0;
 		int nextStartI = 0;

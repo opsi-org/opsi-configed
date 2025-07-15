@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.DefaultComboBoxModel;
@@ -78,7 +76,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	@Override
 	protected LogPaneModel initModel() {
-		return new LogPaneModel("", true, MIN_LEVEL, MAX_LEVEL, List.of(), null, 0, "", "", false, new ArrayList<>());
+		return LogPaneModel.builder().build();
 	}
 
 	@Override
@@ -115,7 +113,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		case LogPaneEffect.Reload reload -> reload();
 		case LogPaneEffect.IncreaseFontSize increaseFontSize -> increaseFontSize();
 		case LogPaneEffect.DecreaseFontSize decreaseFontSize -> reduceFontSize();
-		case LogPaneEffect.SetLogText setLogText -> setLogText(model.getLogText());
+		case LogPaneEffect.ParseLog parseLog -> parse(model.getLogText());
+		case LogPaneEffect.DisplayLog displayLog -> displayLog();
 		case LogPaneEffect.SetType setType -> logTextPane.applyType(comboType.getSelectedItem());
 		case LogPaneEffect.SetLogLevel setLogLevel -> activateShowLevel();
 		case LogPaneEffect.Download download -> download();
@@ -130,11 +129,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	private void initComponents() {
 		rootPanel = new JPanel();
-		logTextPane = new LogTextPane(model.getLogText());
-		if (model.getLogText() != null) {
-			logTextPane.setText(model.getLogText());
-		}
-
+		logTextPane = new LogTextPane(model.getFontSize());
 		logTextPane.addKeyListener(this);
 
 		jScrollPane = new JScrollPane();
@@ -152,7 +147,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		buttonCaseSensitive.addActionListener(
 				event -> dispatch(new LogPaneMsg.SetCaseSensitive(buttonCaseSensitive.isSelected())));
 
-		jComboBoxSearch = new JComboBox<>();
+		jComboBoxSearch = new JComboBox<>(model.getSearchHistory().toArray(String[]::new));
 		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
 		jComboBoxSearch.setEditable(true);
 		((JTextField) jComboBoxSearch.getEditor().getEditorComponent())
@@ -181,17 +176,21 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 
-		Logging.info(this, "levels minL, maxL ", MIN_LEVEL, ", ", MAX_LEVEL);
+		Logging.info(this, "levels minL, maxL ", model.getMinLevel(), ", ", model.getMaxLevel());
 
-		sliderLevel = new AdaptingSlider(this, MIN_LEVEL, MAX_LEVEL, logTextPane.produceInitialMaxShowLevel());
+		sliderLevel = new AdaptingSlider(this, model.getMinLevel(), model.getMaxLevel(),
+				model.getShowLevel() == MIN_LEVEL ? logTextPane.produceInitialMaxShowLevel() : model.getShowLevel());
+		sliderLevel.setValue(model.getShowLevel());
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
 
 		comboModelTypes = new DefaultComboBoxModel<>();
+		comboModelTypes.addAll(model.getTypesList());
 		comboType = new JComboBox<>(comboModelTypes);
 
-		comboType.setEnabled(false);
+		comboType.setEnabled(!model.getTypesList().isEmpty());
 		comboType.setEditable(false);
+		comboType.setSelectedItem(model.getSelectedType());
 
 		comboType.addActionListener(
 				actionEvent -> dispatch(new LogPaneMsg.SetType((String) comboType.getSelectedItem())));
@@ -293,7 +292,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 	}
 
 	public Integer getMaxExistingLevel() {
-		return logTextPane.getMaxExistingLevel();
+		return model.getMaxExistingLevel() == 0 ? logTextPane.getParsedData().getMaxExistingLevel()
+				: model.getMaxExistingLevel();
 	}
 
 	public void removeAllHighlights() {
@@ -302,10 +302,12 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	public void reduceFontSize() {
 		logTextPane.reduceFontSize();
+		dispatch(new LogPaneMsg.FontSizeChanged(logTextPane.getDisplayFontSize()));
 	}
 
 	public void increaseFontSize() {
 		logTextPane.increaseFontSize();
+		dispatch(new LogPaneMsg.FontSizeChanged(logTextPane.getDisplayFontSize()));
 	}
 
 	public int getCaretPosition() {
@@ -352,9 +354,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		dialog.setVisible(true);
 
 		logPane.logTextPane.setParsedText(logTextPane);
-		logPane.adaptComboType();
+		logPane.logTextPane.setShowLevel(model.getShowLevel());
 		logPane.logTextPane.buildDocument();
-		logPane.adaptSlider();
 	}
 
 	public void setTitle(String s) {
@@ -382,8 +383,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	private void activateShowLevel() {
 		Integer level = sliderLevel.getValue();
-		if (level > logTextPane.getMaxExistingLevel()) {
-			level = logTextPane.getMaxExistingLevel();
+		if (level > logTextPane.getParsedData().getMaxExistingLevel()) {
+			level = logTextPane.getParsedData().getMaxExistingLevel();
 			sliderLevel.setValue(level);
 			return;
 		}
@@ -396,10 +397,10 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		logTextPane.setShowLevel(level);
 
 		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", level, " , ", oldLevel, ", ",
-				logTextPane.getMaxExistingLevel());
+				logTextPane.getParsedData().getMaxExistingLevel());
 
-		if (!oldLevel.equals(level)
-				&& (level < logTextPane.getMaxExistingLevel() || oldLevel < logTextPane.getMaxExistingLevel())) {
+		if (!oldLevel.equals(level) && (level < logTextPane.getParsedData().getMaxExistingLevel()
+				|| oldLevel < logTextPane.getParsedData().getMaxExistingLevel())) {
 			logTextPane.rebuildDocumentWithNewLevel(jComboBoxSearch.getSelectedItem());
 		}
 	}
@@ -408,14 +409,13 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		comboType.setEnabled(false);
 		comboModelTypes.removeAllElements();
 
-		if (!logTextPane.getTypesList().isEmpty()) {
-			comboModelTypes.addElement(LogTextPane.DEFAULT_TYPE);
-			for (String type : logTextPane.getTypesList()) {
+		if (!logTextPane.getParsedData().getTypesList().isEmpty()) {
+			for (String type : logTextPane.getParsedData().getTypesList()) {
 				comboModelTypes.addElement(type);
 			}
 			comboType.setEnabled(true);
 
-			int maxRowCount = logTextPane.getTypesList().size() + 1;
+			int maxRowCount = logTextPane.getParsedData().getTypesList().size() + 1;
 			if (maxRowCount > TYPES_LIST_MAX_SHOW_COUNT) {
 				maxRowCount = TYPES_LIST_MAX_SHOW_COUNT;
 			}
@@ -428,11 +428,15 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		sliderLevel.produceLabels();
 	}
 
-	private void setLogText(String s) {
+	private void parse(String s) {
 		int showLevel = logTextPane.setLogText(s);
 		adaptSlider();
 		adaptComboType();
-		sliderLevel.setValue(showLevel);
+
+		dispatch(new LogPaneMsg.LogParsed(logTextPane.getParsedData(), showLevel));
+	}
+
+	private void displayLog() {
 		logTextPane.buildDocument();
 		logTextPane.setCaretPosition(0);
 		logTextPane.getCaret().setVisible(true);

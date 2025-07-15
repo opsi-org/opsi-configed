@@ -7,9 +7,9 @@
 package de.uib.configed.gui.features.logpane;
 
 public sealed interface LogPaneEffect permits LogPaneEffect.None, LogPaneEffect.IncreaseFontSize,
-		LogPaneEffect.DecreaseFontSize, LogPaneEffect.Reload, LogPaneEffect.Search, LogPaneEffect.SetLogText,
-		LogPaneEffect.SetType, LogPaneEffect.SetLogLevel, LogPaneEffect.Download, LogPaneEffect.DownloadAsZip,
-		LogPaneEffect.DownloadAllAsZip, LogPaneEffect.FloatExternal {
+		LogPaneEffect.DecreaseFontSize, LogPaneEffect.Reload, LogPaneEffect.Search, LogPaneEffect.ParseLog,
+		LogPaneEffect.DisplayLog, LogPaneEffect.SetType, LogPaneEffect.SetLogLevel, LogPaneEffect.Download,
+		LogPaneEffect.DownloadAsZip, LogPaneEffect.DownloadAllAsZip, LogPaneEffect.FloatExternal {
 	final class None implements LogPaneEffect {}
 
 	final class IncreaseFontSize implements LogPaneEffect {}
@@ -20,7 +20,9 @@ public sealed interface LogPaneEffect permits LogPaneEffect.None, LogPaneEffect.
 
 	final class Search implements LogPaneEffect {}
 
-	final class SetLogText implements LogPaneEffect {}
+	final class ParseLog implements LogPaneEffect {}
+
+	final class DisplayLog implements LogPaneEffect {}
 
 	final class SetType implements LogPaneEffect {}
 

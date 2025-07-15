@@ -28,6 +28,7 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
 import de.uib.configed.share.logging.Logging;
 
 public class LogTextPane extends JTextPane {
@@ -54,12 +55,14 @@ public class LogTextPane extends JTextPane {
 
 	private LogFileParser parser;
 
-	private Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+	private Font monospacedFont;
 
-	public LogTextPane(String defaultText) {
+	public LogTextPane(int defaultFontSize) {
+		this.displayFontSize = defaultFontSize;
 		styleContext = new StyleContext() {
 			@Override
 			public Font getFont(AttributeSet attr) {
+				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 				return monospacedFont;
 			}
 		};
@@ -154,9 +157,9 @@ public class LogTextPane extends JTextPane {
 		lineCount2docLinestartPosition = new TreeMap<>();
 
 		try {
-			List<LogLine> logLines = parser.getParsedLogLines();
+			List<LogLine> logLines = parser.getData().getParsedLogLines();
 			for (int i = 0; i < logLines.size(); i++) {
-				LogLine line = parser.getParsedLogLine(i);
+				LogLine line = logLines.get(i);
 				if (showLine(line)) {
 					docLinestartPosition2lineCount.put(document.getLength(), i);
 					lineCount2docLinestartPosition.put(i, document.getLength());
@@ -195,10 +198,10 @@ public class LogTextPane extends JTextPane {
 		parser.parse();
 		if (lines.length > 1) {
 			showLevel = produceInitialMaxShowLevel();
-			if (parser.getMaxExistingLevel() < showLevel) {
-				showLevel = parser.getMaxExistingLevel();
-			} else if (parser.getMinExistingLevel() > showLevel) {
-				showLevel = parser.getMinExistingLevel();
+			if (parser.getData().getMaxExistingLevel() < showLevel) {
+				showLevel = parser.getData().getMaxExistingLevel();
+			} else if (parser.getData().getMinExistingLevel() > showLevel) {
+				showLevel = parser.getData().getMinExistingLevel();
 			} else {
 				// Otherwise keep initially produced max level.
 			}
@@ -233,8 +236,8 @@ public class LogTextPane extends JTextPane {
 		return savedMaxShownLogLevel;
 	}
 
-	public List<String> getTypesList() {
-		return parser.getTypesList();
+	public LogParsedData getParsedData() {
+		return parser.getData();
 	}
 
 	public void applyType(Object selectedType) {
@@ -244,7 +247,7 @@ public class LogTextPane extends JTextPane {
 			selTypeIndex = -1;
 		} else {
 			showTypeRestricted = true;
-			selTypeIndex = parser.getTypesList().indexOf(selectedType);
+			selTypeIndex = parser.getData().getTypesList().indexOf(selectedType);
 		}
 
 		if (selTypeIndex != oldSelTypeIndex) {
@@ -271,10 +274,6 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public Integer getMaxExistingLevel() {
-		return parser.getMaxExistingLevel();
-	}
-
 	public void removeAllHighlights() {
 		highlighter.removeAllHighlights();
 		applyFontSize();
@@ -290,6 +289,10 @@ public class LogTextPane extends JTextPane {
 	public void increaseFontSize() {
 		displayFontSize = (int) (displayFontSize * 1.1);
 		applyFontSize();
+	}
+
+	public int getDisplayFontSize() {
+		return displayFontSize;
 	}
 
 	private void applyFontSize() {

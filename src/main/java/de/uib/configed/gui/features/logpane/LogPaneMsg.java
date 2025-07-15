@@ -6,14 +6,20 @@
 
 package de.uib.configed.gui.features.logpane;
 
-public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.SetLogText, LogPaneMsg.SetShowLevel,
-		LogPaneMsg.SetType, LogPaneMsg.IncreaseFontSize, LogPaneMsg.DecreaseFontSize, LogPaneMsg.SetCaretPosition,
-		LogPaneMsg.Reload, LogPaneMsg.Download, LogPaneMsg.DownloadAsZip, LogPaneMsg.DownloadAllAsZip,
-		LogPaneMsg.FloatExternal, LogPaneMsg.SetCaseSensitive {
+import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
+
+public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.ParseLogRequest, LogPaneMsg.LogParsed,
+		LogPaneMsg.SetShowLevel, LogPaneMsg.SetType, LogPaneMsg.IncreaseFontSize, LogPaneMsg.DecreaseFontSize,
+		LogPaneMsg.FontSizeChanged, LogPaneMsg.SetCaretPosition, LogPaneMsg.Reload, LogPaneMsg.Download,
+		LogPaneMsg.DownloadAsZip, LogPaneMsg.DownloadAllAsZip, LogPaneMsg.FloatExternal, LogPaneMsg.SetCaseSensitive {
 	record Search(String query) implements LogPaneMsg {
 	}
 
-	record SetLogText(String text) implements LogPaneMsg {
+	record ParseLogRequest(String text) implements LogPaneMsg {
+	}
+
+	record LogParsed(LogParsedData data, int level) implements LogPaneMsg {
+
 	}
 
 	record SetShowLevel(int level) implements LogPaneMsg {
@@ -26,6 +32,9 @@ public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.SetLogT
 	}
 
 	record DecreaseFontSize() implements LogPaneMsg {
+	}
+
+	record FontSizeChanged(int fontSize) implements LogPaneMsg {
 	}
 
 	record SetCaretPosition(int position) implements LogPaneMsg {

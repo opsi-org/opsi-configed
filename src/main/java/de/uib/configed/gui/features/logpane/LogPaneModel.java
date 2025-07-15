@@ -24,7 +24,10 @@ public class LogPaneModel {
 	@Builder.Default
 	int showLevel = LogPaneComponent.MIN_LEVEL;
 	@Builder.Default
-	int maxExistingLevel = LogPaneComponent.MAX_LEVEL;
+	int minLevel = LogPaneComponent.MIN_LEVEL;
+	@Builder.Default
+	int maxLevel = LogPaneComponent.MAX_LEVEL;
+	int maxExistingLevel;
 	@Builder.Default
 	List<String> typesList = List.of();
 	String selectedType;
@@ -36,4 +39,6 @@ public class LogPaneModel {
 	boolean caseSensitive;
 	@Builder.Default
 	List<String> searchHistory = new ArrayList<>();
+	@Builder.Default
+	int fontSize = 11;
 }

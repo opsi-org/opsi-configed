@@ -215,7 +215,7 @@ public class LogFrame extends JFrame {
 			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
-				logPane.dispatch(new LogPaneMsg.SetLogText(logText));
+				logPane.dispatch(new LogPaneMsg.ParseLogRequest(logText));
 			} else {
 				setEmptyData();
 			}
@@ -225,7 +225,7 @@ public class LogFrame extends JFrame {
 	}
 
 	private void setEmptyData() {
-		logPane.dispatch(new LogPaneMsg.SetLogText(""));
+		logPane.dispatch(new LogPaneMsg.ParseLogRequest(""));
 		logPane.setTitle("");
 		setTitle(null);
 	}
@@ -262,7 +262,7 @@ public class LogFrame extends JFrame {
 
 		if (fileName != null && !fileName.isEmpty()) {
 			Logging.info(this, "Used memory ", Utils.usedMemory());
-			logPane.dispatch(new LogPaneMsg.SetLogText(readFile(fileName)));
+			logPane.dispatch(new LogPaneMsg.ParseLogRequest(readFile(fileName)));
 			Logging.info(this, "Used memory ", Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
@@ -359,7 +359,7 @@ public class LogFrame extends JFrame {
 			externalLogPane.externalize(entry.getKey(), getSize());
 			externalLogPane.setTitle(entry.getKey());
 			// externalLogPane.setLogText(entry.getValue());
-			externalLogPane.dispatch(new LogPaneMsg.SetLogText(entry.getValue()));
+			externalLogPane.dispatch(new LogPaneMsg.ParseLogRequest(entry.getValue()));
 		}
 	}
 
