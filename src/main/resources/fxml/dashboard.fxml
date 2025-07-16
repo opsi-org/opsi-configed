@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.uib.configed.dashboard.chart.ClientLastSeenComparison?>
-<?import de.uib.configed.dashboard.chart.InstalledOSComparison?>
-<?import de.uib.configed.dashboard.chart.LicenseStatusComparison?>
-<?import de.uib.configed.dashboard.chart.ModuleStatusComparison?>
-<?import de.uib.configed.dashboard.chart.ProductStatusComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.ClientLastSeenComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.InstalledOSComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.LicenseStatusComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.ModuleStatusComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.ProductStatusComparison?>
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
