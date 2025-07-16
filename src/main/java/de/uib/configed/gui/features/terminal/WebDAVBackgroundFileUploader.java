@@ -9,6 +9,7 @@ package de.uib.configed.gui.features.terminal;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,14 +30,14 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 
 	@Override
 	protected void upload() {
-		try (InputStream inputStream = new BufferedInputStream(new FileInputStream(currentFile))) {
+		try (InputStream inputStream = new ProgressTrackerInputStream(
+				new BufferedInputStream(new FileInputStream(currentFile)))) {
 			uploadedFiles += 1;
 			if (visualizeProgress) {
 				updateTotalFilesToUpload();
 			}
-			ProgressTrackerInputStream progressTrackerInputStream = new ProgressTrackerInputStream(inputStream);
 			WebDAVClient webDAVClient = new WebDAVClient();
-			webDAVClient.uploadFile(destinationDir + "/" + currentFile.getName(), progressTrackerInputStream);
+			webDAVClient.uploadFile(destinationDir + "/" + currentFile.getName(), inputStream);
 			isFileUploadSuccessfull = true;
 		} catch (IOException e) {
 			isFileUploadSuccessfull = false;
@@ -45,12 +46,11 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 	}
 
 	@SuppressWarnings({ "java:S2972" })
-	private class ProgressTrackerInputStream extends InputStream {
-		private final InputStream inputStream;
+	private class ProgressTrackerInputStream extends FilterInputStream {
 		private int totalBytesRead;
 
 		ProgressTrackerInputStream(InputStream inputStream) {
-			this.inputStream = inputStream;
+			super(inputStream);
 		}
 
 		@Override
@@ -59,7 +59,7 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 				Logging.info(this, "File upload stopped");
 				return -1;
 			}
-			int bytesRead = inputStream.read();
+			int bytesRead = super.read();
 			if (bytesRead != -1) {
 				totalBytesRead++;
 				publish(totalBytesRead);
@@ -73,17 +73,12 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 				Logging.info(this, "File upload stopped");
 				return -1;
 			}
-			int bytesRead = inputStream.read(b, off, len);
+			int bytesRead = super.read(b, off, len);
 			if (bytesRead != -1) {
 				totalBytesRead += bytesRead;
 				publish(totalBytesRead);
 			}
 			return bytesRead;
-		}
-
-		@Override
-		public void close() throws IOException {
-			inputStream.close();
 		}
 	}
 }
