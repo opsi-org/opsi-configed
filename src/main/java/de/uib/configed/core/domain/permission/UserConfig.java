@@ -15,28 +15,6 @@ import java.util.Set;
 
 import de.uib.configed.share.logging.Logging;
 
-/*
-
-	concept originally designed eg. as follows 
-
-		cf.
-		de.uib.configed.type.user.UserXRole.getRole()
-
-	private if GLOBAL_READONLY (can be specified by user group or in config)
-		everything readonly (ignoring a config  SERVER_READWRITE)
-
-		if DEPOTACCESS_ONLY_AS_SPECIFIED: (default general access!)
-			access only to specified depots
-
-	else
-		if SERVER_READWRITE false or not set:
-			write access to server
-
-		if DEPOTACCESS_AS_SPECIFIED (default general access!)
-			access only to specified depots
-			(of course, the user could change this in case of server_readwrite)
-	*/
-
 public class UserConfig {
 	public static final String CONFIGKEY_STR_USER = "user";
 
