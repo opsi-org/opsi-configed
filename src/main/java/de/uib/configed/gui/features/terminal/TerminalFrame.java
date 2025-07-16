@@ -443,7 +443,9 @@ public final class TerminalFrame implements MessagebusListener {
 
 	public void display() {
 		if (frame == null) {
-			displaySessionsDialog();
+			if (session == null) {
+				displaySessionsDialog();
+			}
 			if (restrictView || session != null) {
 				createAndShowGUI();
 			}
