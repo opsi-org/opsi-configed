@@ -680,7 +680,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			}
 			break;
 		case NONE_TYPE:
-		default:
 		}
 
 		operation.setSelectData(new SelectData(data, type));
