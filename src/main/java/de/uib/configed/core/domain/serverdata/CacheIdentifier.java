@@ -363,11 +363,6 @@ public enum CacheIdentifier {
 	PRODUCT_PROPERTIES("product_properties"),
 
 	/**
-	 * return type {@code Map<String, Boolean>}
-	 */
-	PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES("product_having_client_specific_properties"),
-
-	/**
 	 * return type {@code Map<String, Map<String, ListCellOptions>>}
 	 */
 	PRODUCT_PROPERTY_DEFINITIONS("product_property_definitions"),

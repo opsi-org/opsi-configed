@@ -686,11 +686,6 @@ public class ProductDataService {
 		return productProperties.get(pcname).get(productname);
 	}
 
-	public Boolean hasClientSpecificProperties(String productName) {
-		return (Boolean) cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES, Map.class).get(productName);
-	}
-
 	/**
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
@@ -736,8 +731,6 @@ public class ProductDataService {
 
 		Set<String> products = defaultPropertiesRetrieved.keySet();
 
-		Set<String> productsHavingSpecificProperties = new TreeSet<>(products);
-
 		for (String host : clientNames) {
 			Map<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
 			productProperties.put(host, productproperties1Client);
@@ -745,7 +738,6 @@ public class ProductDataService {
 			Map<String, Map<String, Object>> retrievedProperties = productPropertiesRetrieved.get(host);
 			if (retrievedProperties == null) {
 				retrievedProperties = defaultPropertiesRetrieved;
-				productsHavingSpecificProperties.clear();
 			}
 
 			for (String product : products) {
@@ -753,9 +745,7 @@ public class ProductDataService {
 				// complete set of default values
 				Map<String, Object> properties1Product = new HashMap<>(defaultPropertiesRetrieved.get(product));
 
-				if (retrievedProperties1Product == null) {
-					productsHavingSpecificProperties.remove(product);
-				} else {
+				if (retrievedProperties1Product != null) {
 					properties1Product.putAll(retrievedProperties1Product);
 				}
 
@@ -766,23 +756,14 @@ public class ProductDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTIES, productProperties);
 
-		Logging.info(this, " retrieveProductproperties productsHavingSpecificProperties ",
-				productsHavingSpecificProperties);
-
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(depotDataService.getDepot());
 
-		Map<String, Boolean> productHavingClientSpecificProperties = new HashMap<>();
 		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 
 		for (String product : products) {
 			setDefaultValuesForProduct(productPropertyDefinitions, depotValues, product);
-
-			productHavingClientSpecificProperties.put(product, productsHavingSpecificProperties.contains(product));
 		}
-
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES,
-				productHavingClientSpecificProperties);
 	}
 
 	private static void setDefaultValuesForProduct(Map<String, Map<String, ConfigOption>> productPropertyDefinitions,
