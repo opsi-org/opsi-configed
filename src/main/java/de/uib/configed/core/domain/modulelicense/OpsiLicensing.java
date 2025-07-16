@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -23,6 +25,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.StringIntegerRowSorter;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.LicensingInfoPanelGenEditTable;
 import de.uib.configed.gui.share.table.gui.LicensingInfoTableCellRenderer;
@@ -253,6 +256,12 @@ public class OpsiLicensing extends JPanel {
 		columnNames = theModel.getColumnNames();
 
 		licensingTable.setTableModel(theModel);
+
+		// With this we can assure that the row sorter is set up correctly
+		// and we have the correct integer columns from 2 to the end of the model
+		// (assuming the first two columns are not integer columns)
+		licensingTable.getGenEditTable().setRowSorter(new StringIntegerRowSorter(theModel,
+				IntStream.range(2, theModel.getColumnCount()).boxed().collect(Collectors.toSet())));
 
 		licensingTable.getGenEditTable().setDefaultRenderer(Object.class,
 				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));

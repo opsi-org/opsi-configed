@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
@@ -83,6 +84,9 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 
 		modelStatistics.reset();
 		thePanel.getPanelStatistics().setTableModel(modelStatistics);
+
+		thePanel.getPanelStatistics().getGenEditTable()
+				.setRowSorter(new StringIntegerRowSorter(modelStatistics, Set.of(1, 2, 3, 4, 5)));
 		thePanel.getPanelStatistics().restoreFilter();
 		modelStatistics.setEditableColumns(new int[] {});
 	}
