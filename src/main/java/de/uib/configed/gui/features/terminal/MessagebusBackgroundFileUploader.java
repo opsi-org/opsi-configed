@@ -90,8 +90,9 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 		while (true) {
 			ByteBuffer buff = ByteBuffer.allocate(chunkSize);
 			int bytesRead = channel.read(buff);
-			if (bytesRead <= 0)
+			if (bytesRead <= 0) {
 				break;
+			}
 
 			offset += bytesRead;
 			chunk++;
@@ -146,13 +147,14 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 		return (System.currentTimeMillis() - startWaitingTime);
 	}
 
-	private int adjustChunkSize(int currentChunkSize, double movingAverageLatency) {
+	private static int adjustChunkSize(int currentChunkSize, double movingAverageLatency) {
 		if (movingAverageLatency < LOW_LATENCY_THRESHOLD && currentChunkSize < MAX_CHUNK_SIZE) {
 			return Math.min(currentChunkSize * 2, MAX_CHUNK_SIZE);
 		} else if (movingAverageLatency > HIGH_LATENCY_THRESHOLD && currentChunkSize > MIN_CHUNK_SIZE) {
 			return Math.max(currentChunkSize / 2, MIN_CHUNK_SIZE);
+		} else {
+			return currentChunkSize;
 		}
-		return currentChunkSize;
 	}
 
 	private static double calculateMovingAverageLatency(int numLatencyMeasurements, double[] latencyMeasurements) {
