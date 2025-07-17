@@ -446,14 +446,10 @@ public final class ClientMenuManager implements MenuListener {
 	private void createPdf() {
 		Map<String, String> metaData = new HashMap<>();
 		String title = Configed.getResourceValue("MainFrame.ClientList");
-		//TODO add depot information to title like Client List
-		metaData.put("header", title);
-		title = "";
-		//TODO add depot information to title like Client List
 
+		metaData.put("header", title);
 		metaData.put("title", title);
 		metaData.put("subject", "report of table");
-		metaData.put("keywords", "");
 
 		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
 

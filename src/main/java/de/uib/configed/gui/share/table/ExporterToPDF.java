@@ -222,7 +222,8 @@ public class ExporterToPDF extends AbstractExportTable {
 		String userInitial = "";
 		if (System.getProperty("user.name") != null) {
 			userInitial = System.getProperty("user.name");
-			int cutpos = 3;
+			// cut position for user name
+			int cutpos = 25;
 			int nameLength = userInitial.length();
 
 			if (nameLength >= cutpos) {
