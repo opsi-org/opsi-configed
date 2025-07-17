@@ -29,7 +29,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 
 	/**
 	 * If true, model was set via constructor and should not be overwritten by
-	 * initModel().
+	 * {@link #initModel()}.
 	 */
 	private boolean modelProvided = false;
 
@@ -93,7 +93,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	}
 
 	/**
-	 * Default constructor: model will be initialized via initModel().
+	 * Default constructor: model will be initialized via {@link #initModel()}.
 	 */
 	protected AbstractTeaComponent() {
 		// model will be set in initUI()
