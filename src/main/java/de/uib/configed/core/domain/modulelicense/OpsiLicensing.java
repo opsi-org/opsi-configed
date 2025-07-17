@@ -6,6 +6,7 @@
 
 package de.uib.configed.core.domain.modulelicense;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.share.logging.Logging;
 
 public class OpsiLicensing extends JPanel {
+	private static final int LABEL_COLOR_SIZE = 10;
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
@@ -103,34 +105,35 @@ public class OpsiLicensing extends JPanel {
 		return licensingTable;
 	}
 
+	private static JLabel createColorLabel(Color color) {
+		JLabel label = new JLabel();
+		label.setOpaque(true);
+		label.setBackground(color);
+		return label;
+	}
+
 	private JPanel initClientInfo() {
 		retrieveData();
 
-		JLabel orangeWarningColor = new JLabel();
-		orangeWarningColor.setOpaque(true);
-		orangeWarningColor.setBackground(Globals.OPSI_WARNING);
+		JLabel okColor = createColorLabel(Globals.OPSI_OK);
+		JLabel warningColor = createColorLabel(Globals.OPSI_WARNING);
+		JLabel errorColor = createColorLabel(Globals.OPSI_ERROR);
 
-		JLabel redWarningColor = new JLabel();
-		redWarningColor.setOpaque(true);
-		redWarningColor.setBackground(Globals.OPSI_ERROR);
-
-		JLabel orangeWarningLabel = new JLabel(
-				"<html>" + Configed.getResourceValue("LicensingInfo.warning") + "</html>");
-		JLabel redWarningLabel = new JLabel(
-				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
+		JLabel okLabel = new JLabel(Configed.getResourceValue("LicensingInfo.ok"));
+		JLabel warningLabel = new JLabel(Configed.getResourceValue("LicensingInfo.warning"));
+		JLabel errorLabel = new JLabel(Configed.getResourceValue("LicensingInfo.warning.over_limit"));
 
 		JLabel warningLevelAbsolute = new JLabel(
-				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
-						+ licenseMap.getClientLimitWarningAbsolute() + "</html>");
-		JLabel warningLevelPercent = new JLabel(
-				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_percent") + ": "
-						+ licenseMap.getClientLimitWarningPercent() + "</html>");
-		JLabel warningLevelDays = new JLabel("<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.days")
-				+ ": " + licenseMap.getClientLimitWarningDays() + "</html>");
+				Configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
+						+ licenseMap.getClientLimitWarningAbsolute());
+		JLabel warningLevelPercent = new JLabel(Configed.getResourceValue("LicensingInfo.warning.levels.client_percent")
+				+ ": " + licenseMap.getClientLimitWarningPercent());
+		JLabel warningLevelDays = new JLabel(Configed.getResourceValue("LicensingInfo.warning.levels.days") + ": "
+				+ licenseMap.getClientLimitWarningDays());
 
 		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
-		JLabel clientTitle = new JLabel("<html>" + Configed.getResourceValue("LicensingInfo.client.title") + "  ("
-				+ persistenceController.getHostInfoCollections().getConfigServer() + ") </html>");
+		JLabel clientTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.title") + "  ("
+				+ persistenceController.getHostInfoCollections().getConfigServer() + ")");
 		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
 		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
 		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
@@ -180,11 +183,18 @@ public class OpsiLicensing extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gLayout.createSequentialGroup().addComponent(redWarningColor, 10, 10, 10)
-						.addComponent(redWarningLabel).addGap(0, 0, Short.MAX_VALUE)
-						.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
-				.addGroup(gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15)
-						.addComponent(warningLevelPercent).addGap(15).addComponent(warningLevelDays))
+				.addGroup(gLayout.createSequentialGroup()
+						.addComponent(okColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
+						.addComponent(okLabel).addGap(Globals.GAP_SIZE * 2)
+						.addComponent(warningColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
+						.addComponent(warningLabel).addGap(Globals.GAP_SIZE * 2)
+						.addComponent(errorColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE).addComponent(
+								errorLabel)
+						.addGap(0, 0, Short.MAX_VALUE))
+				.addGroup(
+						gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
+								warningLevelPercent).addGap(15).addComponent(
+										warningLevelDays))
 				.addGroup(gLayout
 						.createSequentialGroup().addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 
@@ -209,8 +219,12 @@ public class OpsiLicensing extends JPanel {
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(redWarningColor, 10, 10, 10).addComponent(redWarningLabel)
-								.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
+								.addComponent(okColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
+								.addComponent(okLabel)
+								.addComponent(warningColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
+								.addComponent(warningLabel)
+								.addComponent(errorColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
+								.addComponent(errorLabel))
 						.addGap(15)
 						.addGroup(gLayout
 								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
