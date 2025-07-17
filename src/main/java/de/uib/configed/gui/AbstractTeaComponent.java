@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.swing.JComponent;
@@ -33,10 +34,62 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	private boolean modelProvided = false;
 
 	/**
-	 * Immutable data class holding the result of an update: the updated model
-	 * and an optional side-effect to execute.
+	 * Represents the result of an update operation in the application state.
+	 * <p>
+	 * This immutable data holder contains:
+	 * <ul>
+	 * <li>{@code model}: the updated state of the model after processing an
+	 * input message.</li>
+	 * <li>{@code effect}: an optional side-effect to be executed, if any.</li>
+	 * </ul>
+	 * <p>
+	 * Instances of {@code UpdateResult} should be created using the provided
+	 * static factory methods {@link #noEffect(Object)} or
+	 * {@link #withEffect(Object, Object)} to explicitly indicate whether a
+	 * side-effect is present. Direct construction via the canonical constructor
+	 * is discouraged to maintain semantic clarity.
+	 *
+	 * @param <M> the type of the model
+	 * @param <F> the type of the side-effect
 	 */
-	public record UpdateResult<M, F>(M model, F effect) {
+	public record UpdateResult<M, F>(M model, Optional<F> effect) {
+		/**
+		 * Creates an {@code UpdateResult} representing an updated model with no
+		 * side-effects.
+		 *
+		 * @param model the updated model state; must not be {@code null}
+		 * @param <M>   the model type
+		 * @param <F>   the effect type
+		 * @return an {@code UpdateResult} with the given model and an empty
+		 *         effect
+		 * @throws IllegalArgumentException if {@code model} is {@code null}
+		 */
+		public static <M, F> UpdateResult<M, F> noEffect(M model) {
+			if (model == null) {
+				throw new IllegalArgumentException("Model must not be null");
+			}
+			return new UpdateResult<>(model, Optional.empty());
+		}
+
+		/**
+		 * Creates an {@code UpdateResult} representing an updated model with a
+		 * side-effect to execute.
+		 *
+		 * @param model  the updated model state; must not be {@code null}
+		 * @param effect the side-effect to execute; must not be {@code null}
+		 * @param <M>    the model type
+		 * @param <F>    the effect type
+		 * @return an {@code UpdateResult} with the given model and effect
+		 *         present
+		 * @throws IllegalArgumentException if {@code model} or {@code effect}
+		 *                                  is {@code null}
+		 */
+		public static <M, F> UpdateResult<M, F> withEffect(M model, F effect) {
+			if (model == null || effect == null) {
+				throw new IllegalArgumentException("Model and effect must not be null");
+			}
+			return new UpdateResult<>(model, Optional.of(effect));
+		}
 	}
 
 	/**
@@ -117,7 +170,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 		UpdateResult<M, F> result = updateModel(msg, model);
 		this.model = result.model();
 		refreshView();
-		handleEffect(result.effect());
+		result.effect.ifPresent(this::handleEffect);
 	}
 
 	/**

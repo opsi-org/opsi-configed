@@ -21,9 +21,9 @@ public class LogPaneUpdate {
 	public static UpdateResult<LogPaneModel, LogPaneEffect> update(LogPaneMsg msg, LogPaneModel model) {
 		return switch (msg) {
 		case LogPaneMsg.SimpleMsg m -> handleSimpleMsg(m, model);
-		case LogPaneMsg.ParseLogRequest(String text) -> new UpdateResult<>(model.withLogText(text),
+		case LogPaneMsg.ParseLogRequest(String text) -> UpdateResult.withEffect(model.withLogText(text),
 				LogPaneEffect.SimpleEffect.PARSE_LOG);
-		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> new UpdateResult<>(
+		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult.withEffect(
 				model.withTypesList(data.getTypesList()).withMinLevel(data.getMinExistingLevel())
 						.withMaxExistingLevel(data.getMaxExistingLevel()).withShowLevel(level),
 				LogPaneEffect.SimpleEffect.DISPLAY_LOG);
@@ -32,34 +32,32 @@ public class LogPaneUpdate {
 			if (!newHistory.contains(query)) {
 				newHistory.add(query);
 			}
-			yield new UpdateResult<>(model.withSearchHistory(newHistory), LogPaneEffect.SimpleEffect.SEARCH);
+			yield UpdateResult.withEffect(model.withSearchHistory(newHistory), LogPaneEffect.SimpleEffect.SEARCH);
 		}
-		case LogPaneMsg.SetShowLevel(int level) -> new UpdateResult<>(model.withShowLevel(level),
+		case LogPaneMsg.SetShowLevel(int level) -> UpdateResult.withEffect(model.withShowLevel(level),
 				LogPaneEffect.SimpleEffect.SET_LOG_LEVEL);
-		case LogPaneMsg.SetType(String type) -> new UpdateResult<>(model.withSelectedType(type),
+		case LogPaneMsg.SetType(String type) -> UpdateResult.withEffect(model.withSelectedType(type),
 				LogPaneEffect.SimpleEffect.SET_TYPE);
-		case LogPaneMsg.SetTitle(String title) -> new UpdateResult<>(model.withTitle(title), new LogPaneEffect.None());
-		case LogPaneMsg.SetInfo(String info) -> new UpdateResult<>(model.withInfo(info), new LogPaneEffect.None());
+		case LogPaneMsg.SetTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
+		case LogPaneMsg.SetInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));
 
-		case LogPaneMsg.FontSizeChanged(int fontSize) -> new UpdateResult<>(model.withFontSize(fontSize),
-				new LogPaneEffect.None());
-		case LogPaneMsg.SetCaretPosition(int position) -> new UpdateResult<>(model.withCaretPosition(position),
-				new LogPaneEffect.None());
-		case LogPaneMsg.SetCaseSensitive(boolean caseSensitive) -> new UpdateResult<>(
-				model.withCaseSensitive(caseSensitive), new LogPaneEffect.None());
+		case LogPaneMsg.FontSizeChanged(int fontSize) -> UpdateResult.noEffect(model.withFontSize(fontSize));
+		case LogPaneMsg.SetCaretPosition(int position) -> UpdateResult.noEffect(model.withCaretPosition(position));
+		case LogPaneMsg.SetCaseSensitive(boolean caseSensitive) -> UpdateResult
+				.noEffect(model.withCaseSensitive(caseSensitive));
 		};
 	}
 
 	private static UpdateResult<LogPaneModel, LogPaneEffect> handleSimpleMsg(LogPaneMsg.SimpleMsg msg,
 			LogPaneModel model) {
 		return switch (msg) {
-		case RELOAD -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.RELOAD);
-		case DOWNLOAD -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.DOWNLOAD);
-		case DOWNLOAD_AS_ZIP -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP);
-		case DOWNLOAD_ALL_AS_ZIP -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP);
-		case FLOAT_EXTERNAL -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL);
-		case INCREASE_FONT_SIZE -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE);
-		case DECREASE_FONT_SIZE -> new UpdateResult<>(model, LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE);
+		case RELOAD -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.RELOAD);
+		case DOWNLOAD -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD);
+		case DOWNLOAD_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP);
+		case DOWNLOAD_ALL_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP);
+		case FLOAT_EXTERNAL -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL);
+		case INCREASE_FONT_SIZE -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE);
+		case DECREASE_FONT_SIZE -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE);
 		};
 	}
 

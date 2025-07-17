@@ -6,7 +6,9 @@
 
 package de.uib.configed.gui.features.logpane;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +36,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newText, result.model().getLogText());
-		assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
 	}
 
 	@Test
@@ -53,7 +56,8 @@ class LogPaneUpdateTest {
 		assertEquals(parsedData.getMinExistingLevel(), result.model().getMinLevel());
 		assertEquals(parsedData.getMaxExistingLevel(), result.model().getMaxExistingLevel());
 		assertEquals(level, result.model().getShowLevel());
-		assertSame(LogPaneEffect.SimpleEffect.DISPLAY_LOG, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.DISPLAY_LOG, result.effect().get()));
 	}
 
 	@Test
@@ -65,7 +69,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertTrue(result.model().getSearchHistory().contains(query));
-		assertSame(LogPaneEffect.SimpleEffect.SEARCH, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.SEARCH, result.effect().get()));
 	}
 
 	@Test
@@ -89,7 +94,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newLevel, result.model().getShowLevel());
-		assertSame(LogPaneEffect.SimpleEffect.SET_LOG_LEVEL, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.SET_LOG_LEVEL, result.effect().get()));
 	}
 
 	@Test
@@ -101,7 +107,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newType, result.model().getSelectedType());
-		assertSame(LogPaneEffect.SimpleEffect.SET_TYPE, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.SET_TYPE, result.effect().get()));
 	}
 
 	@Test
@@ -112,7 +119,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE, result.effect().get()));
 	}
 
 	@Test
@@ -123,7 +131,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE, result.effect().get()));
 	}
 
 	@Test
@@ -135,7 +144,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newFontSize, result.model().getFontSize());
-		assertTrue(result.effect() instanceof LogPaneEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -147,7 +156,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newPos, result.model().getCaretPosition());
-		assertTrue(result.effect() instanceof LogPaneEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -158,7 +167,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.RELOAD, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.RELOAD, result.effect().get()));
 	}
 
 	@Test
@@ -169,7 +179,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD, result.effect().get()));
 	}
 
 	@Test
@@ -180,7 +191,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP, result.effect().get()));
 	}
 
 	@Test
@@ -191,7 +203,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP, result.effect().get()));
 	}
 
 	@Test
@@ -202,7 +215,8 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertSame(LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL, result.effect());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL, result.effect().get()));
 	}
 
 	@Test
@@ -213,6 +227,6 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertTrue(result.model().isCaseSensitive());
-		assertTrue(result.effect() instanceof LogPaneEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 }
