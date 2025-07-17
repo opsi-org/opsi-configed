@@ -190,26 +190,32 @@ public class LogTextPane extends JTextPane {
 		this.selTypeIndex = logTextPane.selTypeIndex;
 	}
 
-	public int setLogText(String s) {
+	public int parse(String s) {
 		Logging.info(this, "Setting text");
 		lines = s.split("\n");
 
 		parser = new LogFileParser(lines, logLevelStyles);
 		parser.parse();
+
 		if (lines.length > 1) {
-			showLevel = produceInitialMaxShowLevel();
-			if (parser.getData().getMaxExistingLevel() < showLevel) {
-				showLevel = parser.getData().getMaxExistingLevel();
-			} else if (parser.getData().getMinExistingLevel() > showLevel) {
-				showLevel = parser.getData().getMinExistingLevel();
-			} else {
-				// Otherwise keep initially produced max level.
-			}
+			showLevel = adjustShowLevel(produceInitialMaxShowLevel(), parser.getData());
 		} else {
 			showLevel = 1;
 		}
 
 		return showLevel;
+	}
+
+	private Integer adjustShowLevel(Integer initialLevel, LogFileParser.LogParsedData data) {
+		int minLevel = data.getMinExistingLevel();
+		int maxLevel = data.getMaxExistingLevel();
+
+		if (maxLevel < initialLevel) {
+			return maxLevel;
+		} else if (minLevel > initialLevel) {
+			return minLevel;
+		}
+		return initialLevel;
 	}
 
 	public Integer getShowLevel() {

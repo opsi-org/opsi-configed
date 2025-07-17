@@ -424,7 +424,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	private void parse(String s) {
-		int showLevel = logTextPane.setLogText(s);
+		int showLevel = logTextPane.parse(s);
 		dispatch(new LogPaneMsg.LogParsed(logTextPane.getParsedData(), showLevel));
 	}
 
