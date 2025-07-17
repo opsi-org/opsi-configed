@@ -157,9 +157,9 @@ public class LogTextPane extends JTextPane {
 		lineCount2docLinestartPosition = new TreeMap<>();
 
 		try {
-			List<LogLine> logLines = parser.getData().getParsedLogLines();
+			List<LogFileParser.LogLine> logLines = parser.getData().getParsedLogLines();
 			for (int i = 0; i < logLines.size(); i++) {
-				LogLine line = logLines.get(i);
+				LogFileParser.LogLine line = logLines.get(i);
 				if (showLine(line)) {
 					docLinestartPosition2lineCount.put(document.getLength(), i);
 					lineCount2docLinestartPosition.put(i, document.getLength());
@@ -300,7 +300,7 @@ public class LogTextPane extends JTextPane {
 		buildDocument();
 	}
 
-	private boolean showLine(LogLine line) {
+	private boolean showLine(LogFileParser.LogLine line) {
 		boolean show = false;
 
 		if (line.getLogLevel() <= showLevel) {

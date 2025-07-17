@@ -14,8 +14,18 @@ import javax.swing.text.Style;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
 
 public class LogFileParser {
+	@Value
+	public class LogLine {
+		int lineNumber;
+		int logLevel;
+		int typeIndex;
+		Style style;
+		String text;
+	}
+
 	@Getter
 	@Setter
 	public static class LogParsedData {
