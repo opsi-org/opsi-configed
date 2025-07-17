@@ -86,7 +86,7 @@ public class LogFrame extends JFrame {
 		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSave, "save");
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSave.addActionListener(actionEvent -> logPane.dispatch(new LogPaneMsg.Download()));
+		jMenuFileSave.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
@@ -118,12 +118,14 @@ public class LogFrame extends JFrame {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"));
 		Icons.addIntellijIconToMenuItem(jMenuViewFontsizePlus, "zoomIn");
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizePlus.addActionListener(actionEvent -> logPane.dispatch(new LogPaneMsg.IncreaseFontSize()));
+		jMenuViewFontsizePlus
+				.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE));
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"));
 		Icons.addIntellijIconToMenuItem(jMenuViewFontsizeMinus, "zoomOut");
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizeMinus.addActionListener(actionEvent -> logPane.dispatch(new LogPaneMsg.DecreaseFontSize()));
+		jMenuViewFontsizeMinus
+				.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE));
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
@@ -159,13 +161,13 @@ public class LogFrame extends JFrame {
 		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
-				logPane.dispatch(new LogPaneMsg.Download());
+				logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD);
 			}
 		});
 
 		JButton iconButtonCopy = new JButton(Icons.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
-		iconButtonCopy.addActionListener(actionEvent -> logPane.dispatch(new LogPaneMsg.FloatExternal()));
+		iconButtonCopy.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL));
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(iconButtonOpen);
@@ -277,7 +279,7 @@ public class LogFrame extends JFrame {
 
 	private void reloadFile() {
 		if (fileName != null && !fileName.isEmpty()) {
-			logPane.dispatch(new LogPaneMsg.Reload());
+			logPane.dispatch(LogPaneMsg.SimpleMsg.RELOAD);
 			setTitle(fileName);
 		}
 	}

@@ -105,21 +105,27 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	@Override
 	protected void handleEffect(LogPaneEffect effect) {
 		switch (effect) {
-		case LogPaneEffect.Search search -> search();
-		case LogPaneEffect.Reload reload -> reload();
-		case LogPaneEffect.IncreaseFontSize increaseFontSize -> increaseFontSize();
-		case LogPaneEffect.DecreaseFontSize decreaseFontSize -> reduceFontSize();
-		case LogPaneEffect.ParseLog parseLog -> parse(model.getLogText());
-		case LogPaneEffect.DisplayLog displayLog -> displayLog();
-		case LogPaneEffect.SetType setType -> logTextPane.applyType(comboType.getSelectedItem());
-		case LogPaneEffect.SetLogLevel setLogLevel -> activateShowLevel();
-		case LogPaneEffect.Download download -> download();
-		case LogPaneEffect.DownloadAsZip downloadAsZip -> downloadAsZip();
-		case LogPaneEffect.DownloadAllAsZip downloadAllAsZip -> downloadAllAsZip();
-		case LogPaneEffect.FloatExternal floatExternal -> floatExternal();
+		case LogPaneEffect.SimpleEffect e -> handleSimpleEffect(e);
 		case LogPaneEffect.None none -> {
 			// No operation needed
 		}
+		}
+	}
+
+	private void handleSimpleEffect(LogPaneEffect.SimpleEffect e) {
+		switch (e) {
+		case SEARCH -> search();
+		case RELOAD -> reload();
+		case INCREASE_FONT_SIZE -> increaseFontSize();
+		case DECREASE_FONT_SIZE -> reduceFontSize();
+		case PARSE_LOG -> parse(model.getLogText());
+		case DISPLAY_LOG -> displayLog();
+		case SET_TYPE -> logTextPane.applyType(comboType.getSelectedItem());
+		case SET_LOG_LEVEL -> activateShowLevel();
+		case DOWNLOAD -> download();
+		case DOWNLOAD_AS_ZIP -> downloadAsZip();
+		case DOWNLOAD_ALL_AS_ZIP -> downloadAllAsZip();
+		case FLOAT_EXTERNAL -> floatExternal();
 		}
 	}
 
@@ -159,11 +165,11 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 		JButton buttonFontPlus = new JButton(Icons.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
-		buttonFontPlus.addActionListener(event -> dispatch(new LogPaneMsg.IncreaseFontSize()));
+		buttonFontPlus.addActionListener(event -> dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE));
 
 		JButton buttonFontMinus = new JButton(Icons.getIntellijIcon("zoomOut"));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
-		buttonFontMinus.addActionListener(event -> dispatch(new LogPaneMsg.DecreaseFontSize()));
+		buttonFontMinus.addActionListener(event -> dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE));
 
 		jToolBar = new JToolBar();
 		jToolBar.add(buttonSearch);
@@ -267,19 +273,19 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private void treatPopupAction(int p) {
 		switch (p) {
 		case PopupMenuTrait.POPUP_RELOAD:
-			dispatch(new LogPaneMsg.Reload());
+			dispatch(LogPaneMsg.SimpleMsg.RELOAD);
 			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD:
-			dispatch(new LogPaneMsg.Download());
+			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD);
 			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP:
-			dispatch(new LogPaneMsg.DownloadAsZip());
+			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_AS_ZIP);
 			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP:
-			dispatch(new LogPaneMsg.DownloadAllAsZip());
+			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP);
 			break;
 		case PopupMenuTrait.POPUP_FLOATING_COPY:
-			dispatch(new LogPaneMsg.FloatExternal());
+			dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL);
 			break;
 		default:
 			Logging.warning(this, "no case found for popupMenuTrait in LogPane");
@@ -460,10 +466,10 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 			dispatch(new LogPaneMsg.Search(jComboBoxSearch.getEditor().getItem().toString()));
 		} else if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 			Logging.info(this, "Ctrl-Plus");
-			dispatch(new LogPaneMsg.IncreaseFontSize());
+			dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE);
 		} else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 			Logging.info(this, "Ctrl-Minus");
-			dispatch(new LogPaneMsg.DecreaseFontSize());
+			dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE);
 		} else {
 			// Do nothing on other keys on jTextPane
 		}

@@ -34,7 +34,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newText, result.model().getLogText());
-		assertTrue(result.effect() instanceof LogPaneEffect.ParseLog);
+		assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect());
 	}
 
 	@Test
@@ -53,7 +53,7 @@ class LogPaneUpdateTest {
 		assertEquals(parsedData.getMinExistingLevel(), result.model().getMinLevel());
 		assertEquals(parsedData.getMaxExistingLevel(), result.model().getMaxExistingLevel());
 		assertEquals(level, result.model().getShowLevel());
-		assertTrue(result.effect() instanceof LogPaneEffect.DisplayLog);
+		assertSame(LogPaneEffect.SimpleEffect.DISPLAY_LOG, result.effect());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertTrue(result.model().getSearchHistory().contains(query));
-		assertTrue(result.effect() instanceof LogPaneEffect.Search);
+		assertSame(LogPaneEffect.SimpleEffect.SEARCH, result.effect());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newLevel, result.model().getShowLevel());
-		assertTrue(result.effect() instanceof LogPaneEffect.SetLogLevel);
+		assertSame(LogPaneEffect.SimpleEffect.SET_LOG_LEVEL, result.effect());
 	}
 
 	@Test
@@ -101,29 +101,29 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newType, result.model().getSelectedType());
-		assertTrue(result.effect() instanceof LogPaneEffect.SetType);
+		assertSame(LogPaneEffect.SimpleEffect.SET_TYPE, result.effect());
 	}
 
 	@Test
 	void testIncreaseFontSize() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.IncreaseFontSize();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.IncreaseFontSize);
+		assertSame(LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE, result.effect());
 	}
 
 	@Test
 	void testDecreaseFontSize() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.DecreaseFontSize();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.DecreaseFontSize);
+		assertSame(LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE, result.effect());
 	}
 
 	@Test
@@ -153,56 +153,56 @@ class LogPaneUpdateTest {
 	@Test
 	void testReload() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.Reload();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.RELOAD;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.Reload);
+		assertSame(LogPaneEffect.SimpleEffect.RELOAD, result.effect());
 	}
 
 	@Test
 	void testDownload() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.Download();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.Download);
+		assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD, result.effect());
 	}
 
 	@Test
 	void testDownloadAsZip() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.DownloadAsZip();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_AS_ZIP;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.DownloadAsZip);
+		assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP, result.effect());
 	}
 
 	@Test
 	void testDownloadAllAsZip() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.DownloadAllAsZip();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.DownloadAllAsZip);
+		assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP, result.effect());
 	}
 
 	@Test
 	void testFloatExternal() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.FloatExternal();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof LogPaneEffect.FloatExternal);
+		assertSame(LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL, result.effect());
 	}
 
 	@Test

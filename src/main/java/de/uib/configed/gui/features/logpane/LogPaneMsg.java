@@ -8,11 +8,14 @@ package de.uib.configed.gui.features.logpane;
 
 import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
 
-public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.ParseLogRequest, LogPaneMsg.LogParsed,
-		LogPaneMsg.SetShowLevel, LogPaneMsg.SetType, LogPaneMsg.SetTitle, LogPaneMsg.SetInfo,
-		LogPaneMsg.IncreaseFontSize, LogPaneMsg.DecreaseFontSize, LogPaneMsg.FontSizeChanged,
-		LogPaneMsg.SetCaretPosition, LogPaneMsg.Reload, LogPaneMsg.Download, LogPaneMsg.DownloadAsZip,
-		LogPaneMsg.DownloadAllAsZip, LogPaneMsg.FloatExternal, LogPaneMsg.SetCaseSensitive {
+public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Search, LogPaneMsg.ParseLogRequest,
+		LogPaneMsg.LogParsed, LogPaneMsg.SetShowLevel, LogPaneMsg.SetType, LogPaneMsg.SetTitle, LogPaneMsg.SetInfo,
+		LogPaneMsg.FontSizeChanged, LogPaneMsg.SetCaretPosition, LogPaneMsg.SetCaseSensitive {
+
+	enum SimpleMsg implements LogPaneMsg {
+		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD, DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP, FLOAT_EXTERNAL,
+	}
+
 	record Search(String query) implements LogPaneMsg {
 	}
 
@@ -35,31 +38,10 @@ public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.ParseLo
 	record SetInfo(String info) implements LogPaneMsg {
 	}
 
-	record IncreaseFontSize() implements LogPaneMsg {
-	}
-
-	record DecreaseFontSize() implements LogPaneMsg {
-	}
-
 	record FontSizeChanged(int fontSize) implements LogPaneMsg {
 	}
 
 	record SetCaretPosition(int position) implements LogPaneMsg {
-	}
-
-	record Reload() implements LogPaneMsg {
-	}
-
-	record Download() implements LogPaneMsg {
-	}
-
-	record DownloadAsZip() implements LogPaneMsg {
-	}
-
-	record DownloadAllAsZip() implements LogPaneMsg {
-	}
-
-	record FloatExternal() implements LogPaneMsg {
 	}
 
 	record SetCaseSensitive(boolean caseSensitive) implements LogPaneMsg {

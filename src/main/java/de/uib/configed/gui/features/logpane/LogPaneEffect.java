@@ -6,37 +6,12 @@
 
 package de.uib.configed.gui.features.logpane;
 
-public sealed interface LogPaneEffect permits LogPaneEffect.None, LogPaneEffect.IncreaseFontSize,
-		LogPaneEffect.DecreaseFontSize, LogPaneEffect.Reload, LogPaneEffect.Search, LogPaneEffect.ParseLog,
-		LogPaneEffect.DisplayLog, LogPaneEffect.SetType, LogPaneEffect.SetLogLevel, LogPaneEffect.Download,
-		LogPaneEffect.DownloadAsZip, LogPaneEffect.DownloadAllAsZip, LogPaneEffect.FloatExternal {
-	final class None implements LogPaneEffect {}
-
-	final class IncreaseFontSize implements LogPaneEffect {}
-
-	final class DecreaseFontSize implements LogPaneEffect {}
-
-	final class Reload implements LogPaneEffect {}
-
-	final class Search implements LogPaneEffect {}
-
-	final class ParseLog implements LogPaneEffect {}
-
-	final class DisplayLog implements LogPaneEffect {}
-
-	final class SetType implements LogPaneEffect {}
-
-	final class SetLogLevel implements LogPaneEffect {}
-
-	record Download() implements LogPaneEffect {
+public sealed interface LogPaneEffect permits LogPaneEffect.None, LogPaneEffect.SimpleEffect {
+	record None() implements LogPaneEffect {
 	}
 
-	record DownloadAsZip() implements LogPaneEffect {
-	}
-
-	record DownloadAllAsZip() implements LogPaneEffect {
-	}
-
-	record FloatExternal() implements LogPaneEffect {
+	enum SimpleEffect implements LogPaneEffect {
+		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD, SEARCH, PARSE_LOG, DISPLAY_LOG, SET_TYPE, SET_LOG_LEVEL,
+		DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP, FLOAT_EXTERNAL
 	}
 }
