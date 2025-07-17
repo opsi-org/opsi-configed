@@ -108,14 +108,15 @@ public class WebDAVClient {
 
 		Logging.info(this, "Uploading file to WebDAV: " + parsedRemoteURL);
 
+		String contentType = "application/octet-stream";
 		if (isInputStreamEmpty(dataSource)) {
 			Logging.info(this, "Input stream is empty, uploading zero-byte file: " + parsedRemoteURL);
-			sardine.put(parsedRemoteURL, new byte[0]);
+			sardine.put(parsedRemoteURL, new byte[0], contentType);
 		} else {
 			Logging.info(this, "Input stream is non-empty, uploading file: " + location);
 			InputStream uploadStream = (dataSource instanceof BufferedInputStream) ? dataSource
 					: new BufferedInputStream(dataSource);
-			sardine.put(parsedRemoteURL, uploadStream);
+			sardine.put(parsedRemoteURL, uploadStream, contentType);
 			Logging.info(this, "Successfully uploaded file to: " + parsedRemoteURL);
 		}
 	}
