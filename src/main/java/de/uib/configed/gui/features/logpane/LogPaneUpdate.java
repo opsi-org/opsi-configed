@@ -37,6 +37,8 @@ public class LogPaneUpdate {
 				new LogPaneEffect.SetLogLevel());
 		case LogPaneMsg.SetType(String type) -> new UpdateResult<>(model.withSelectedType(type),
 				new LogPaneEffect.SetType());
+		case LogPaneMsg.SetTitle(String title) -> new UpdateResult<>(model.withTitle(title), new LogPaneEffect.None());
+		case LogPaneMsg.SetInfo(String info) -> new UpdateResult<>(model.withInfo(info), new LogPaneEffect.None());
 		case LogPaneMsg.IncreaseFontSize() -> new UpdateResult<>(model, new LogPaneEffect.IncreaseFontSize());
 		case LogPaneMsg.DecreaseFontSize() -> new UpdateResult<>(model, new LogPaneEffect.DecreaseFontSize());
 		case LogPaneMsg.FontSizeChanged(int fontSize) -> new UpdateResult<>(model.withFontSize(fontSize),

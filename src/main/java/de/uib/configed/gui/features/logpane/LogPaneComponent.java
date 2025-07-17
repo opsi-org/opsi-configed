@@ -62,9 +62,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private JComboBox<String> comboType;
 	private DefaultComboBoxModel<String> comboModelTypes;
 
-	private String title;
-	private String info;
-
 	private JPanel rootPanel;
 
 	public LogPaneComponent() {
@@ -88,8 +85,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	@Override
 	protected JComponent renderView(LogPaneModel model, Consumer<LogPaneMsg> dispatch) {
 		Logging.info(this, "initializing");
-		title = "";
-		info = "";
 
 		initComponents();
 
@@ -300,22 +295,18 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		logTextPane.removeAllHighlights();
 	}
 
-	public void reduceFontSize() {
+	private void reduceFontSize() {
 		logTextPane.reduceFontSize();
 		dispatch(new LogPaneMsg.FontSizeChanged(logTextPane.getDisplayFontSize()));
 	}
 
-	public void increaseFontSize() {
+	private void increaseFontSize() {
 		logTextPane.increaseFontSize();
 		dispatch(new LogPaneMsg.FontSizeChanged(logTextPane.getDisplayFontSize()));
 	}
 
-	public int getCaretPosition() {
-		return logTextPane.getCaretPosition();
-	}
-
 	public void setCaretPosition(int caretPosition) {
-		logTextPane.setCaretPosition(caretPosition);
+		dispatch(new LogPaneMsg.SetCaretPosition(caretPosition));
 	}
 
 	public void reload() {
@@ -338,7 +329,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private void floatExternal() {
 		LogPaneComponent copyOfMe = new LogPaneComponent(
 				model.toBuilder().minLevel(MIN_LEVEL).withPopup(false).build());
-		externalize(copyOfMe, title, rootPanel.getParent().getSize());
+		externalize(copyOfMe, model.getTitle(), rootPanel.getParent().getSize());
 	}
 
 	public void externalize(String title, Dimension size) {
@@ -359,16 +350,16 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		logPane.logTextPane.buildDocument();
 	}
 
-	public void setTitle(String s) {
-		title = s;
+	public void setTitle(String title) {
+		dispatch(new LogPaneMsg.SetTitle(title));
 	}
 
-	public void setInfo(String s) {
-		info = s;
+	public void setInfo(String info) {
+		dispatch(new LogPaneMsg.SetInfo(info));
 	}
 
 	public String getInfo() {
-		return info;
+		return model.getInfo();
 	}
 
 	private void setLevelWithoutAction(Object l) {

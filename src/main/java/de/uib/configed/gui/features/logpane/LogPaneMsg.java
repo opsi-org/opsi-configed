@@ -9,9 +9,10 @@ package de.uib.configed.gui.features.logpane;
 import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
 
 public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.ParseLogRequest, LogPaneMsg.LogParsed,
-		LogPaneMsg.SetShowLevel, LogPaneMsg.SetType, LogPaneMsg.IncreaseFontSize, LogPaneMsg.DecreaseFontSize,
-		LogPaneMsg.FontSizeChanged, LogPaneMsg.SetCaretPosition, LogPaneMsg.Reload, LogPaneMsg.Download,
-		LogPaneMsg.DownloadAsZip, LogPaneMsg.DownloadAllAsZip, LogPaneMsg.FloatExternal, LogPaneMsg.SetCaseSensitive {
+		LogPaneMsg.SetShowLevel, LogPaneMsg.SetType, LogPaneMsg.SetTitle, LogPaneMsg.SetInfo,
+		LogPaneMsg.IncreaseFontSize, LogPaneMsg.DecreaseFontSize, LogPaneMsg.FontSizeChanged,
+		LogPaneMsg.SetCaretPosition, LogPaneMsg.Reload, LogPaneMsg.Download, LogPaneMsg.DownloadAsZip,
+		LogPaneMsg.DownloadAllAsZip, LogPaneMsg.FloatExternal, LogPaneMsg.SetCaseSensitive {
 	record Search(String query) implements LogPaneMsg {
 	}
 
@@ -26,6 +27,12 @@ public sealed interface LogPaneMsg permits LogPaneMsg.Search, LogPaneMsg.ParseLo
 	}
 
 	record SetType(String type) implements LogPaneMsg {
+	}
+
+	record SetTitle(String title) implements LogPaneMsg {
+	}
+
+	record SetInfo(String info) implements LogPaneMsg {
 	}
 
 	record IncreaseFontSize() implements LogPaneMsg {

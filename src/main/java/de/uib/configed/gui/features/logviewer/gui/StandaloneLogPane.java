@@ -29,7 +29,7 @@ public class StandaloneLogPane extends LogPaneComponent {
 
 	@Override
 	public void reload() {
-		int caretPosition = getCaretPosition();
+		int caretPosition = model.getCaretPosition();
 		super.dispatch(new LogPaneMsg.ParseLogRequest(reloadFile(logFrame.getFileName())));
 		super.setTitle(logFrame.getFileName());
 		super.setCaretPosition(caretPosition);
@@ -38,8 +38,8 @@ public class StandaloneLogPane extends LogPaneComponent {
 
 	public void close() {
 		LogFrame.resetFileName();
-		super.dispatch(new LogPaneMsg.ParseLogRequest(logFrame.getFileName()));
-		super.setTitle(logFrame.getFileName());
+		super.dispatch(new LogPaneMsg.ParseLogRequest(""));
+		super.setTitle(null);
 		super.removeAllHighlights();
 	}
 
