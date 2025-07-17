@@ -4,9 +4,9 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane;
 
-import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 
 public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Search, LogPaneMsg.ParseLogRequest,
 		LogPaneMsg.LogParsed, LogPaneMsg.SetShowLevel, LogPaneMsg.SetType, LogPaneMsg.SetTitle, LogPaneMsg.SetInfo,

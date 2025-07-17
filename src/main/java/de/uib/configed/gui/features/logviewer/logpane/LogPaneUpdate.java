@@ -4,13 +4,13 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 
 public class LogPaneUpdate {
 

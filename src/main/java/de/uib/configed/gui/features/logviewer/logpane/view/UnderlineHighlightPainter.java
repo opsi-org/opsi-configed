@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane.view;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;

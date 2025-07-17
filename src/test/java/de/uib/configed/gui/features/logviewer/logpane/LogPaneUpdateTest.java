@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +17,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.features.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneEffect;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneModel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneUpdate;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 
 class LogPaneUpdateTest {
 

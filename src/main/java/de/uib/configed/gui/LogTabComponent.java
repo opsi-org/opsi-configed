@@ -20,8 +20,8 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.logpane.LogPaneComponent;
-import de.uib.configed.gui.features.logpane.LogPaneModel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneModel;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 

@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logviewer.gui;
+package de.uib.configed.gui.features.logviewer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -38,8 +38,7 @@ import de.uib.configed.app.Main;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.MenuBarController;
-import de.uib.configed.gui.features.logpane.LogPaneMsg;
-import de.uib.configed.gui.features.logviewer.Logviewer;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.ExtractorUtil;
 import de.uib.configed.share.Icons;

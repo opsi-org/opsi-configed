@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -33,8 +33,8 @@ import de.uib.configed.app.Main;
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.features.logpane.view.AdaptingSlider;
-import de.uib.configed.gui.features.logpane.view.LogTextPane;
+import de.uib.configed.gui.features.logviewer.logpane.view.AdaptingSlider;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;

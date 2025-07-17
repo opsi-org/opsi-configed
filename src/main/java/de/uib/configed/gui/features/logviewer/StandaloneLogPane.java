@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logviewer.gui;
+package de.uib.configed.gui.features.logviewer;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,9 +13,9 @@ import java.nio.charset.StandardCharsets;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.features.logpane.LogPaneComponent;
-import de.uib.configed.gui.features.logpane.LogPaneModel;
-import de.uib.configed.gui.features.logpane.LogPaneMsg;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneModel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.logging.Logging;
 
 public class StandaloneLogPane extends LogPaneComponent {

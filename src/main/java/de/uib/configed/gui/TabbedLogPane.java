@@ -17,7 +17,7 @@ import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.logpane.LogPaneMsg;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
