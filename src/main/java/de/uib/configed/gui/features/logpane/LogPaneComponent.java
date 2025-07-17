@@ -106,9 +106,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	protected void handleEffect(LogPaneEffect effect) {
 		switch (effect) {
 		case LogPaneEffect.SimpleEffect e -> handleSimpleEffect(e);
-		case LogPaneEffect.None none -> {
-			// No operation needed
-		}
 		}
 	}
 
