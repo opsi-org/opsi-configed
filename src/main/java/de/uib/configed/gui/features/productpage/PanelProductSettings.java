@@ -248,9 +248,6 @@ public class PanelProductSettings extends JSplitPane {
 		// depot server, selected clients out of statusPane
 		metaData.put("header", title);
 		metaData.put("subject", title);
-
-		title = "";
-		// TODO add more information
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
 
