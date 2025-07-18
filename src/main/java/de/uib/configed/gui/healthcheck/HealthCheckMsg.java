@@ -11,40 +11,16 @@ import java.util.Map;
 /**
  * Msg represents all possible events/messages that can affect the Model.
  */
-public sealed interface HealthCheckMsg permits HealthCheckMsg.ExpandAll, HealthCheckMsg.CollapseAll,
-		HealthCheckMsg.ToggleDetails, HealthCheckMsg.CopyHealthInformation, HealthCheckMsg.DownloadDiagnosticData,
-		HealthCheckMsg.HealthDataRefreshed {
-	// Marker interface for all messages
+public sealed interface HealthCheckMsg
+		permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails, HealthCheckMsg.HealthDataRefreshed {
 
-	/**
-	 * User clicked to expand all details.
-	 */
-	final class ExpandAll implements HealthCheckMsg {}
+	enum SimpleMsg implements HealthCheckMsg {
+		EXPAND_ALL, COLLAPSE_ALL, COPY_HEALTH_INFORMATION, DOWNLOAD_DIAGNOSTIC_DATA
+	}
 
-	/**
-	 * User clicked to collapse all details.
-	 */
-	final class CollapseAll implements HealthCheckMsg {}
-
-	/**
-	 * User clicked to toggle details for a specific key.
-	 */
 	record ToggleDetails(String key) implements HealthCheckMsg {
 	}
 
-	/**
-	 * User requested to copy health information.
-	 */
-	final class CopyHealthInformation implements HealthCheckMsg {}
-
-	/**
-	 * User requested to download diagnostic data.
-	 */
-	final class DownloadDiagnosticData implements HealthCheckMsg {}
-
-	/**
-	 * Health data was refreshed (e.g., after an update).
-	 */
 	record HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) implements HealthCheckMsg {
 	}
 }

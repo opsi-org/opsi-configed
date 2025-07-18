@@ -9,7 +9,6 @@ package de.uib.configed.gui.healthcheck;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
 /**
@@ -23,11 +22,9 @@ public class HealthCheckUpdate {
 	/**
 	 * Applies a message to the model and returns a new model.
 	 */
-	public static AbstractTeaComponent.UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model,
-			HealthCheckMsg msg) {
+	public static UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model, HealthCheckMsg msg) {
 		return switch (msg) {
-		case HealthCheckMsg.ExpandAll ignored -> UpdateResult.noEffect(updateAllShowDetails(model, true));
-		case HealthCheckMsg.CollapseAll ignored -> UpdateResult.noEffect(updateAllShowDetails(model, false));
+		case HealthCheckMsg.SimpleMsg m -> handleSimpleMsg(m, model);
 		case HealthCheckMsg.ToggleDetails(String key) -> {
 			Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
 			Map<String, Object> details = newHealthData.get(key);
@@ -39,10 +36,16 @@ public class HealthCheckUpdate {
 		}
 		case HealthCheckMsg.HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) -> UpdateResult
 				.noEffect(HealthCheckModel.initial(newHealthData));
-		case HealthCheckMsg.CopyHealthInformation ignored -> UpdateResult.withEffect(model,
-				new HealthCheckEffect.Copy());
-		case HealthCheckMsg.DownloadDiagnosticData ignored -> UpdateResult.withEffect(model,
-				new HealthCheckEffect.Download());
+		};
+	}
+
+	private static UpdateResult<HealthCheckModel, HealthCheckEffect> handleSimpleMsg(HealthCheckMsg.SimpleMsg msg,
+			HealthCheckModel model) {
+		return switch (msg) {
+		case EXPAND_ALL -> UpdateResult.noEffect(updateAllShowDetails(model, true));
+		case COLLAPSE_ALL -> UpdateResult.noEffect(updateAllShowDetails(model, false));
+		case COPY_HEALTH_INFORMATION -> UpdateResult.withEffect(model, HealthCheckEffect.SimpleEffect.COPY);
+		case DOWNLOAD_DIAGNOSTIC_DATA -> UpdateResult.withEffect(model, HealthCheckEffect.SimpleEffect.DOWNLOAD);
 		};
 	}
 

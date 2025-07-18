@@ -186,7 +186,7 @@ public final class HealthCheckSettingsComponent
 		saveButton = new JButton(Configed.getResourceValue("save"));
 		saveButton.addActionListener(actionEvent -> {
 			Logging.info(this, "User clicked save button");
-			dispatch(new HealthCheckSettingsMsg.SaveClicked());
+			dispatch(HealthCheckSettingsMsg.SimpleMsg.SAVE_CLICKED);
 		});
 		saveButton.setEnabled(model.isSaveEnabled());
 		return saveButton;
@@ -195,15 +195,23 @@ public final class HealthCheckSettingsComponent
 	@Override
 	protected void handleEffect(HealthCheckSettingsEffect effect) {
 		switch (effect) {
-		case HealthCheckSettingsEffect.Save save -> {
+		case HealthCheckSettingsEffect.SimpleEffect e -> handleSimpleEffect(e);
+		}
+	}
+
+	@SuppressWarnings({ "java:S1301", "java:S6916" })
+	private void handleSimpleEffect(HealthCheckSettingsEffect.SimpleEffect effect) {
+		switch (effect) {
+		case SAVE -> {
 			save();
 			if (configedMain != null) {
 				configedMain.reloadHosts();
 			}
 		}
-		case HealthCheckSettingsEffect.Close close when dialog != null -> dialog.setVisible(false);
-		case HealthCheckSettingsEffect.Close close -> {
-			// Dialog is null
+		case CLOSE -> {
+			if (dialog != null) {
+				dialog.setVisible(false);
+			}
 		}
 		}
 	}

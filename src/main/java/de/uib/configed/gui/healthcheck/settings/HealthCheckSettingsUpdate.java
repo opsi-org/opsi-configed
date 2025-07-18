@@ -2,7 +2,6 @@ package de.uib.configed.gui.healthcheck.settings;
 
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
-import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
 public class HealthCheckSettingsUpdate {
@@ -11,7 +10,7 @@ public class HealthCheckSettingsUpdate {
 		// Hide constructor.
 	}
 
-	public static AbstractTeaComponent.UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> update(
+	public static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> update(
 			HealthCheckSettingsModel model, HealthCheckSettingsMsg msg) {
 		return switch (msg) {
 		case HealthCheckSettingsMsg.HostsSelected(var hosts) -> UpdateResult.noEffect(model.withSelectedHosts(hosts));
@@ -21,10 +20,15 @@ public class HealthCheckSettingsUpdate {
 				.noEffect(model.withStartDowntime(value));
 		case HealthCheckSettingsMsg.EndDowntimeChanged(var value) -> UpdateResult
 				.noEffect(model.withEndDowntime(value));
-		case HealthCheckSettingsMsg.SaveClicked ignored -> UpdateResult.withEffect(model,
-				new HealthCheckSettingsEffect.Save());
-		case HealthCheckSettingsMsg.CancelClicked ignored -> UpdateResult.withEffect(model,
-				new HealthCheckSettingsEffect.Close());
+		case HealthCheckSettingsMsg.SimpleMsg m -> handleSimpleMsg(m, model);
+		};
+	}
+
+	private static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> handleSimpleMsg(
+			HealthCheckSettingsMsg.SimpleMsg msg, HealthCheckSettingsModel model) {
+		return switch (msg) {
+		case SAVE_CLICKED -> UpdateResult.withEffect(model, HealthCheckSettingsEffect.SimpleEffect.SAVE);
+		case CANCLE_CLICKED -> UpdateResult.withEffect(model, HealthCheckSettingsEffect.SimpleEffect.CLOSE);
 		};
 	}
 }

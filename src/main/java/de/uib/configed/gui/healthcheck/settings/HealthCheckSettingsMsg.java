@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
-public sealed interface HealthCheckSettingsMsg
-		permits HealthCheckSettingsMsg.HostsSelected, HealthCheckSettingsMsg.CheckActiveChanged,
-		HealthCheckSettingsMsg.StartDowntimeChanged, HealthCheckSettingsMsg.EndDowntimeChanged,
-		HealthCheckSettingsMsg.SaveClicked, HealthCheckSettingsMsg.CancelClicked {
+public sealed interface HealthCheckSettingsMsg permits HealthCheckSettingsMsg.SimpleMsg,
+		HealthCheckSettingsMsg.HostsSelected, HealthCheckSettingsMsg.CheckActiveChanged,
+		HealthCheckSettingsMsg.StartDowntimeChanged, HealthCheckSettingsMsg.EndDowntimeChanged {
+	enum SimpleMsg implements HealthCheckSettingsMsg {
+		SAVE_CLICKED, CANCLE_CLICKED
+	}
 
 	record HostsSelected(List<String> hosts) implements HealthCheckSettingsMsg {
 	}
@@ -20,8 +22,4 @@ public sealed interface HealthCheckSettingsMsg
 
 	record EndDowntimeChanged(String value) implements HealthCheckSettingsMsg {
 	}
-
-	final class SaveClicked implements HealthCheckSettingsMsg {}
-
-	final class CancelClicked implements HealthCheckSettingsMsg {}
 }

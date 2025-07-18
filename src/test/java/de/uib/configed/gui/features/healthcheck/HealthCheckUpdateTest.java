@@ -41,7 +41,7 @@ class HealthCheckUpdateTest {
 		initialShowDetails.put("entry2", false);
 		initialShowDetails.put("entry3", true);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
-		HealthCheckMsg msg = new HealthCheckMsg.ExpandAll();
+		HealthCheckMsg msg = HealthCheckMsg.SimpleMsg.EXPAND_ALL;
 
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
@@ -59,7 +59,7 @@ class HealthCheckUpdateTest {
 		initialShowDetails.put("entry2", true);
 		initialShowDetails.put("entry3", true);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
-		HealthCheckMsg msg = new HealthCheckMsg.CollapseAll();
+		HealthCheckMsg msg = HealthCheckMsg.SimpleMsg.COLLAPSE_ALL;
 
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
@@ -112,13 +112,13 @@ class HealthCheckUpdateTest {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryX", false);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
-		HealthCheckMsg msg = new HealthCheckMsg.CopyHealthInformation();
+		HealthCheckMsg msg = HealthCheckMsg.SimpleMsg.COPY_HEALTH_INFORMATION;
 
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertTrue(result.effect().get() instanceof HealthCheckEffect.Copy));
+				() -> assertSame(HealthCheckEffect.SimpleEffect.COPY, result.effect().get()));
 	}
 
 	@Test
@@ -126,12 +126,12 @@ class HealthCheckUpdateTest {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryX", false);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
-		HealthCheckMsg msg = new HealthCheckMsg.DownloadDiagnosticData();
+		HealthCheckMsg msg = HealthCheckMsg.SimpleMsg.DOWNLOAD_DIAGNOSTIC_DATA;
 
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertTrue(result.effect().get() instanceof HealthCheckEffect.Download));
+				() -> assertSame(HealthCheckEffect.SimpleEffect.DOWNLOAD, result.effect().get()));
 	}
 }

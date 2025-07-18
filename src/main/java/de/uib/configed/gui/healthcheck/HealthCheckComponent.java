@@ -167,7 +167,7 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"));
 		Icons.addIntellijIconToMenuItem(popupSaveAsZip, "download");
 
-		popupSaveAsZip.addActionListener(actionEvent -> dispatch(new HealthCheckMsg.DownloadDiagnosticData()));
+		popupSaveAsZip.addActionListener(actionEvent -> dispatch(HealthCheckMsg.SimpleMsg.DOWNLOAD_DIAGNOSTIC_DATA));
 		popupMenu.add(popupSaveAsZip);
 
 		return popupMenu;
@@ -213,10 +213,12 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE));
 
-		jButtonCollapseAll.addActionListener((ActionEvent event) -> dispatch(new HealthCheckMsg.CollapseAll()));
-		jButtonExpandAll.addActionListener((ActionEvent event) -> dispatch(new HealthCheckMsg.ExpandAll()));
-		jButtonCopyHealthInformation.addActionListener(event -> dispatch(new HealthCheckMsg.CopyHealthInformation()));
-		jButtonDownloadDiagnosticData.addActionListener(event -> dispatch(new HealthCheckMsg.DownloadDiagnosticData()));
+		jButtonCollapseAll.addActionListener((ActionEvent event) -> dispatch(HealthCheckMsg.SimpleMsg.COLLAPSE_ALL));
+		jButtonExpandAll.addActionListener((ActionEvent event) -> dispatch(HealthCheckMsg.SimpleMsg.EXPAND_ALL));
+		jButtonCopyHealthInformation
+				.addActionListener(event -> dispatch(HealthCheckMsg.SimpleMsg.COPY_HEALTH_INFORMATION));
+		jButtonDownloadDiagnosticData
+				.addActionListener(event -> dispatch(HealthCheckMsg.SimpleMsg.DOWNLOAD_DIAGNOSTIC_DATA));
 
 		return centerPanel;
 	}
@@ -224,9 +226,16 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 	@Override
 	protected void handleEffect(HealthCheckEffect effect) {
 		switch (effect) {
-		case HealthCheckEffect.Copy copy -> Toolkit.getDefaultToolkit().getSystemClipboard()
+		case HealthCheckEffect.SimpleEffect e -> handleSimpleEffect(e);
+		}
+	}
+
+	@SuppressWarnings("java:S1301")
+	private void handleSimpleEffect(HealthCheckEffect.SimpleEffect effect) {
+		switch (effect) {
+		case COPY -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(textPane.getText()), null);
-		case HealthCheckEffect.Download download -> saveAsZip();
+		case DOWNLOAD -> saveAsZip();
 		}
 	}
 

@@ -69,26 +69,26 @@ class HealthCheckSettingsUpdateTest {
 	void updateWithSaveClickedReturnsSaveEffect() {
 		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
 				FlatTriStateCheckBox.State.SELECTED, true, "2024-01-01T00:00", "2024-01-01T01:00");
-		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.SaveClicked();
+		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.SAVE_CLICKED;
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
 
 		assertSame(initialModel, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertTrue(result.effect().get() instanceof HealthCheckSettingsEffect.Save));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SAVE, result.effect().get()));
 	}
 
 	@Test
 	void updateWithCloseClickedReturnsCloseEffect() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
-		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.CancelClicked();
+		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.CANCLE_CLICKED;
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
 
 		assertSame(initialModel, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertTrue(result.effect().get() instanceof HealthCheckSettingsEffect.Close));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.CLOSE, result.effect().get()));
 	}
 }
