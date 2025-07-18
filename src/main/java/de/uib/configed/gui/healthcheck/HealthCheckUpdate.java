@@ -34,7 +34,7 @@ public class HealthCheckUpdate {
 			}
 			yield UpdateResult.noEffect(HealthCheckModel.initial(newHealthData));
 		}
-		case HealthCheckMsg.HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) -> UpdateResult
+		case HealthCheckMsg.RefreshHealthData(Map<String, Map<String, Object>> newHealthData) -> UpdateResult
 				.noEffect(HealthCheckModel.initial(newHealthData));
 		};
 	}

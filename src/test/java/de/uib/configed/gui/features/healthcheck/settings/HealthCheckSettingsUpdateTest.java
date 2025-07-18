@@ -41,7 +41,7 @@ class HealthCheckSettingsUpdateTest {
 	void updateWithHostsSelectedUpdatesModelAndReturnsNoneEffect() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
 		List<String> newHosts = List.of("host1", "host2");
-		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.HostsSelected(newHosts);
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.SelectHosts(newHosts);
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
@@ -55,7 +55,7 @@ class HealthCheckSettingsUpdateTest {
 		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
 				FlatTriStateCheckBox.State.INDETERMINATE, false, "2024-01-01T00:00", "2024-01-01T01:00");
 		FlatTriStateCheckBox.State newState = FlatTriStateCheckBox.State.SELECTED;
-		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.CheckActiveChanged(newState);
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.ToggleActivity(newState);
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);

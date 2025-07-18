@@ -92,7 +92,7 @@ public final class HealthCheckSettingsComponent
 		selectedHosts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				dispatch.accept(new HealthCheckSettingsMsg.HostsSelected(openHostSelectionDialog()));
+				dispatch.accept(new HealthCheckSettingsMsg.SelectHosts(openHostSelectionDialog()));
 			}
 		});
 		selectedHosts.setText(Utils.getListStringRepresentation(model.getSelectedHosts()));
@@ -111,7 +111,7 @@ public final class HealthCheckSettingsComponent
 				Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"), model.getCheckActiveState());
 		checkBoxCheckActive.setAllowIndeterminate(false);
 		checkBoxCheckActive.addItemListener(itemEvent -> dispatch
-				.accept(new HealthCheckSettingsMsg.CheckActiveChanged(checkBoxCheckActive.getState())));
+				.accept(new HealthCheckSettingsMsg.ToggleActivity(checkBoxCheckActive.getState())));
 
 		labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
 		labelStartDowntime.setFont(labelStartDowntime.getFont().deriveFont(Font.BOLD));
@@ -122,7 +122,7 @@ public final class HealthCheckSettingsComponent
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkBoxCheckActive.isSelected()) {
-					dispatch.accept(new HealthCheckSettingsMsg.StartDowntimeChanged(
+					dispatch.accept(new HealthCheckSettingsMsg.ChangeStartDowntime(
 							openDateSelectionDialog(startDowntimeField.getText(),
 									Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"))));
 				}
@@ -138,7 +138,7 @@ public final class HealthCheckSettingsComponent
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkBoxCheckActive.isSelected()) {
-					dispatch.accept(new HealthCheckSettingsMsg.EndDowntimeChanged(
+					dispatch.accept(new HealthCheckSettingsMsg.ChangeEndDowntime(
 							openDateSelectionDialog(endDowntimeField.getText(),
 									Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"))));
 				}

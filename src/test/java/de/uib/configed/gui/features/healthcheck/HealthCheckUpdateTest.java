@@ -80,7 +80,7 @@ class HealthCheckUpdateTest {
 		initialShowDetails.put("entry2", false);
 		Map<String, Map<String, Object>> reloadedData = makeHealthDataWithShowDetails(initialShowDetails);
 		HealthCheckModel model = makeModelWithHealthData(initialData);
-		HealthCheckMsg msg = new HealthCheckMsg.HealthDataRefreshed(reloadedData);
+		HealthCheckMsg msg = new HealthCheckMsg.RefreshHealthData(reloadedData);
 
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 

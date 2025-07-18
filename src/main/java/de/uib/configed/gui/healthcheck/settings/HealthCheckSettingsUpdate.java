@@ -13,13 +13,12 @@ public class HealthCheckSettingsUpdate {
 	public static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> update(
 			HealthCheckSettingsModel model, HealthCheckSettingsMsg msg) {
 		return switch (msg) {
-		case HealthCheckSettingsMsg.HostsSelected(var hosts) -> UpdateResult.noEffect(model.withSelectedHosts(hosts));
-		case HealthCheckSettingsMsg.CheckActiveChanged(var state) -> UpdateResult.noEffect(
+		case HealthCheckSettingsMsg.SelectHosts(var hosts) -> UpdateResult.noEffect(model.withSelectedHosts(hosts));
+		case HealthCheckSettingsMsg.ToggleActivity(var state) -> UpdateResult.noEffect(
 				model.withCheckActiveState(state).withSaveEnabled(state != FlatTriStateCheckBox.State.INDETERMINATE));
-		case HealthCheckSettingsMsg.StartDowntimeChanged(var value) -> UpdateResult
+		case HealthCheckSettingsMsg.ChangeStartDowntime(var value) -> UpdateResult
 				.noEffect(model.withStartDowntime(value));
-		case HealthCheckSettingsMsg.EndDowntimeChanged(var value) -> UpdateResult
-				.noEffect(model.withEndDowntime(value));
+		case HealthCheckSettingsMsg.ChangeEndDowntime(var value) -> UpdateResult.noEffect(model.withEndDowntime(value));
 		case HealthCheckSettingsMsg.SimpleMsg m -> handleSimpleMsg(m, model);
 		};
 	}

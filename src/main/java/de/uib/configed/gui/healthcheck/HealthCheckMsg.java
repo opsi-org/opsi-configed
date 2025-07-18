@@ -12,7 +12,7 @@ import java.util.Map;
  * Msg represents all possible events/messages that can affect the Model.
  */
 public sealed interface HealthCheckMsg
-		permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails, HealthCheckMsg.HealthDataRefreshed {
+		permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails, HealthCheckMsg.RefreshHealthData {
 
 	enum SimpleMsg implements HealthCheckMsg {
 		EXPAND_ALL, COLLAPSE_ALL, COPY_HEALTH_INFORMATION, DOWNLOAD_DIAGNOSTIC_DATA
@@ -21,6 +21,6 @@ public sealed interface HealthCheckMsg
 	record ToggleDetails(String key) implements HealthCheckMsg {
 	}
 
-	record HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) implements HealthCheckMsg {
+	record RefreshHealthData(Map<String, Map<String, Object>> newHealthData) implements HealthCheckMsg {
 	}
 }
