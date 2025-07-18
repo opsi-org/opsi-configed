@@ -117,8 +117,8 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		case DECREASE_FONT_SIZE -> reduceFontSize();
 		case PARSE_LOG -> parse(model.getLogText());
 		case DISPLAY_LOG -> displayLog();
-		case SET_TYPE -> logTextPane.applyType(comboType.getSelectedItem());
-		case SET_LOG_LEVEL -> activateShowLevel();
+		case CHANGE_EVENT_TYPE -> logTextPane.applyType(comboType.getSelectedItem());
+		case CHANGE_LOG_LEVEL -> activateShowLevel();
 		case DOWNLOAD -> download();
 		case DOWNLOAD_AS_ZIP -> downloadAsZip();
 		case DOWNLOAD_ALL_AS_ZIP -> downloadAllAsZip();
@@ -144,7 +144,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		buttonCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
 		buttonCaseSensitive.setSelected(false);
 		buttonCaseSensitive.addActionListener(
-				event -> dispatch(new LogPaneMsg.SetCaseSensitive(buttonCaseSensitive.isSelected())));
+				event -> dispatch(new LogPaneMsg.ToggleCaseSensitivity(buttonCaseSensitive.isSelected())));
 
 		jComboBoxSearch = new JComboBox<>(model.getSearchHistory().toArray(String[]::new));
 		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
@@ -192,7 +192,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		comboType.setSelectedItem(model.getSelectedType());
 
 		comboType.addActionListener(
-				actionEvent -> dispatch(new LogPaneMsg.SetType((String) comboType.getSelectedItem())));
+				actionEvent -> dispatch(new LogPaneMsg.ChangeEventType((String) comboType.getSelectedItem())));
 	}
 
 	private void setLayout() {
@@ -309,7 +309,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	public void setCaretPosition(int caretPosition) {
-		dispatch(new LogPaneMsg.SetCaretPosition(caretPosition));
+		dispatch(new LogPaneMsg.ChangeCaretPosition(caretPosition));
 	}
 
 	public void reload() {
@@ -354,11 +354,11 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	public void setTitle(String title) {
-		dispatch(new LogPaneMsg.SetTitle(title));
+		dispatch(new LogPaneMsg.ChangeTitle(title));
 	}
 
 	public void setInfo(String info) {
-		dispatch(new LogPaneMsg.SetInfo(info));
+		dispatch(new LogPaneMsg.ChangeInfo(info));
 	}
 
 	public String getInfo() {

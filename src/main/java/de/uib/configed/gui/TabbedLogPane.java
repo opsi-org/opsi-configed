@@ -86,7 +86,7 @@ public class TabbedLogPane extends JTabbedPane {
 		}
 
 		if (document == null) {
-			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequest(document));
+			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
 			textPanes[i].setTitle("");
 			return;
 		}
@@ -96,7 +96,7 @@ public class TabbedLogPane extends JTabbedPane {
 
 		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
 		textPanes[i].setInfo(selectedClient);
-		textPanes[i].dispatch(new LogPaneMsg.ParseLogRequest(document));
+		textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
 	}
 
 	private boolean logfileExists(String logtype) {

@@ -57,7 +57,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			public void run() {
 				Logging.debug(this, "activateShowLevel call");
 
-				logPane.dispatch(new LogPaneMsg.SetShowLevel(getValue()));
+				logPane.dispatch(new LogPaneMsg.ChangeLogLevel(getValue()));
 
 				setCursor(null);
 			}

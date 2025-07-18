@@ -17,10 +17,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.features.logviewer.logpane.LogPaneEffect;
-import de.uib.configed.gui.features.logviewer.logpane.LogPaneModel;
-import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
-import de.uib.configed.gui.features.logviewer.logpane.LogPaneUpdate;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 
 class LogPaneUpdateTest {
@@ -32,10 +28,10 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testParseLogRequest() {
+	void shouldTriggerParseLogEffect_whenParseLogRequested() {
 		LogPaneModel model = baseModel();
 		String newText = "new log text";
-		LogPaneMsg msg = new LogPaneMsg.ParseLogRequest(newText);
+		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText);
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
@@ -45,7 +41,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testLogParsed() {
+	void shouldTriggerDisplayEffect_whenLogParsed() {
 		LogParsedData parsedData = new LogParsedData();
 		parsedData.setTypesList(List.of("INFO", "WARN"));
 		parsedData.setMinExistingLevel(1);
@@ -65,7 +61,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testSearchAddsToHistory() {
+	void shouldAddToHistory_whenSearch() {
 		LogPaneModel model = baseModel();
 		String query = "bar";
 		LogPaneMsg msg = new LogPaneMsg.Search(query);
@@ -78,7 +74,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testSearchDoesNotDuplicateHistory() {
+	void shouldNotAddDuplicateToHistory_whenSearch() {
 		LogPaneModel model = baseModel();
 		String query = "foo";
 		LogPaneMsg msg = new LogPaneMsg.Search(query);
@@ -90,33 +86,33 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testSetShowLevel() {
+	void shouldTriggerChangeLogLevelEffect_whenChangeLogLevel() {
 		LogPaneModel model = baseModel();
 		int newLevel = 4;
-		LogPaneMsg msg = new LogPaneMsg.SetShowLevel(newLevel);
+		LogPaneMsg msg = new LogPaneMsg.ChangeLogLevel(newLevel);
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newLevel, result.model().getShowLevel());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.SET_LOG_LEVEL, result.effect().get()));
+				() -> assertSame(LogPaneEffect.SimpleEffect.CHANGE_LOG_LEVEL, result.effect().get()));
 	}
 
 	@Test
-	void testSetType() {
+	void shouldTriggerChangeEventTypeEffect_whenChangeEventType() {
 		LogPaneModel model = baseModel();
 		String newType = "WARN";
-		LogPaneMsg msg = new LogPaneMsg.SetType(newType);
+		LogPaneMsg msg = new LogPaneMsg.ChangeEventType(newType);
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newType, result.model().getSelectedType());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.SET_TYPE, result.effect().get()));
+				() -> assertSame(LogPaneEffect.SimpleEffect.CHANGE_EVENT_TYPE, result.effect().get()));
 	}
 
 	@Test
-	void testIncreaseFontSize() {
+	void shouldTriggerIncreaseFontSizeEffect_whenIncreaseFontSize() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE;
 
@@ -128,7 +124,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testDecreaseFontSize() {
+	void shouldTriggerDecreaseFontSize_whenDecreaseFontSize() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE;
 
@@ -140,7 +136,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testFontSizeChanged() {
+	void shouldChangeFontSize_whenFontSizeChanged() {
 		LogPaneModel model = baseModel();
 		int newFontSize = 15;
 		LogPaneMsg msg = new LogPaneMsg.FontSizeChanged(newFontSize);
@@ -152,10 +148,10 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testSetCaretPosition() {
+	void shouldChangeCaretPosition_whenChangeCaretPosition() {
 		LogPaneModel model = baseModel();
 		int newPos = 42;
-		LogPaneMsg msg = new LogPaneMsg.SetCaretPosition(newPos);
+		LogPaneMsg msg = new LogPaneMsg.ChangeCaretPosition(newPos);
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
@@ -164,7 +160,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testReload() {
+	void shouldTriggerReloadEffect_whenReload() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.RELOAD;
 
@@ -176,7 +172,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testDownload() {
+	void shouldTriggerDownloadEffect_whenDownload() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD;
 
@@ -188,7 +184,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testDownloadAsZip() {
+	void shouldTriggerDownloadAsZipEffect_whenDownloadAsZip() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_AS_ZIP;
 
@@ -200,7 +196,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testDownloadAllAsZip() {
+	void shouldTriggerDownloadAllAsZipEffect_whenDownloadAllAsZip() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP;
 
@@ -212,7 +208,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testFloatExternal() {
+	void shouldTriggerFloatExternalEffect_whenFloatExternal() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL;
 
@@ -224,9 +220,9 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void testSetCaseSensitive() {
+	void shouldUpdateCaseSensitivity_whenToggleCaseSensitivity() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = new LogPaneMsg.SetCaseSensitive(true);
+		LogPaneMsg msg = new LogPaneMsg.ToggleCaseSensitivity(true);
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 

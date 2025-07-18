@@ -21,7 +21,7 @@ public class LogPaneUpdate {
 	public static UpdateResult<LogPaneModel, LogPaneEffect> update(LogPaneMsg msg, LogPaneModel model) {
 		return switch (msg) {
 		case LogPaneMsg.SimpleMsg m -> handleSimpleMsg(m, model);
-		case LogPaneMsg.ParseLogRequest(String text) -> UpdateResult.withEffect(model.withLogText(text),
+		case LogPaneMsg.ParseLogRequested(String text) -> UpdateResult.withEffect(model.withLogText(text),
 				LogPaneEffect.SimpleEffect.PARSE_LOG);
 		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult.withEffect(
 				model.withTypesList(data.getTypesList()).withMinLevel(data.getMinExistingLevel())
@@ -34,16 +34,16 @@ public class LogPaneUpdate {
 			}
 			yield UpdateResult.withEffect(model.withSearchHistory(newHistory), LogPaneEffect.SimpleEffect.SEARCH);
 		}
-		case LogPaneMsg.SetShowLevel(int level) -> UpdateResult.withEffect(model.withShowLevel(level),
-				LogPaneEffect.SimpleEffect.SET_LOG_LEVEL);
-		case LogPaneMsg.SetType(String type) -> UpdateResult.withEffect(model.withSelectedType(type),
-				LogPaneEffect.SimpleEffect.SET_TYPE);
-		case LogPaneMsg.SetTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
-		case LogPaneMsg.SetInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));
+		case LogPaneMsg.ChangeLogLevel(int level) -> UpdateResult.withEffect(model.withShowLevel(level),
+				LogPaneEffect.SimpleEffect.CHANGE_LOG_LEVEL);
+		case LogPaneMsg.ChangeEventType(String type) -> UpdateResult.withEffect(model.withSelectedType(type),
+				LogPaneEffect.SimpleEffect.CHANGE_EVENT_TYPE);
+		case LogPaneMsg.ChangeTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
+		case LogPaneMsg.ChangeInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));
 
 		case LogPaneMsg.FontSizeChanged(int fontSize) -> UpdateResult.noEffect(model.withFontSize(fontSize));
-		case LogPaneMsg.SetCaretPosition(int position) -> UpdateResult.noEffect(model.withCaretPosition(position));
-		case LogPaneMsg.SetCaseSensitive(boolean caseSensitive) -> UpdateResult
+		case LogPaneMsg.ChangeCaretPosition(int position) -> UpdateResult.noEffect(model.withCaretPosition(position));
+		case LogPaneMsg.ToggleCaseSensitivity(boolean caseSensitive) -> UpdateResult
 				.noEffect(model.withCaseSensitive(caseSensitive));
 		};
 	}
