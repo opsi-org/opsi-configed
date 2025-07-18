@@ -1,7 +1,9 @@
 
-package de.uib.configed.gui.healthcheck;
+package de.uib.configed.gui.features.healthcheck;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,8 +13,12 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.healthcheck.HealthCheckEffect;
+import de.uib.configed.gui.healthcheck.HealthCheckModel;
+import de.uib.configed.gui.healthcheck.HealthCheckMsg;
+import de.uib.configed.gui.healthcheck.HealthCheckUpdate;
 
-class UpdateTest {
+class HealthCheckUpdateTest {
 
 	private HealthCheckModel makeModelWithHealthData(Map<String, Map<String, Object>> healthData) {
 		return HealthCheckModel.initial(healthData);
@@ -43,7 +49,7 @@ class UpdateTest {
 		assertEquals(true, updatedHealthData.get("entry1").get("showDetails"));
 		assertEquals(true, updatedHealthData.get("entry2").get("showDetails"));
 		assertEquals(true, updatedHealthData.get("entry3").get("showDetails"));
-		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -61,7 +67,7 @@ class UpdateTest {
 		assertEquals(false, updatedHealthData.get("entry1").get("showDetails"));
 		assertEquals(false, updatedHealthData.get("entry2").get("showDetails"));
 		assertEquals(false, updatedHealthData.get("entry3").get("showDetails"));
-		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -82,7 +88,7 @@ class UpdateTest {
 		assertEquals(false, updatedHealthData.get("entry1").get("showDetails"));
 		assertEquals(false, updatedHealthData.get("entry2").get("showDetails"));
 		assertEquals(true, updatedHealthData.get("entry3").get("showDetails"));
-		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -98,7 +104,7 @@ class UpdateTest {
 		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
 		assertEquals(true, updatedHealthData.get("entryA").get("showDetails"));
 		assertEquals(true, updatedHealthData.get("entryB").get("showDetails"));
-		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -111,7 +117,8 @@ class UpdateTest {
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof HealthCheckEffect.Copy);
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertTrue(result.effect().get() instanceof HealthCheckEffect.Copy));
 	}
 
 	@Test
@@ -124,6 +131,7 @@ class UpdateTest {
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		assertSame(model, result.model());
-		assertTrue(result.effect() instanceof HealthCheckEffect.Download);
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertTrue(result.effect().get() instanceof HealthCheckEffect.Download));
 	}
 }

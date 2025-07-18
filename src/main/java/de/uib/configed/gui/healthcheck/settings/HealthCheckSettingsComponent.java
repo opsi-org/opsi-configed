@@ -30,7 +30,6 @@ import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.AbstractTeaComponent;
-import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -205,9 +204,6 @@ public final class HealthCheckSettingsComponent
 		case HealthCheckSettingsEffect.Close close when dialog != null -> dialog.setVisible(false);
 		case HealthCheckSettingsEffect.Close close -> {
 			// Dialog is null
-		}
-		case HealthCheckSettingsEffect.None none -> {
-			// No operation needed.
 		}
 		}
 	}

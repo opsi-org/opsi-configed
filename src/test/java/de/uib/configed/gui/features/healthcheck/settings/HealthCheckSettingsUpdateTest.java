@@ -6,7 +6,9 @@
 
 package de.uib.configed.gui.features.healthcheck.settings;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,7 +47,7 @@ class HealthCheckSettingsUpdateTest {
 				.update(initialModel, msg);
 
 		assertEquals(newHosts, result.model().getSelectedHosts());
-		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -60,7 +62,7 @@ class HealthCheckSettingsUpdateTest {
 
 		assertEquals(newState, result.model().getCheckActiveState());
 		assertTrue(result.model().isSaveEnabled());
-		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.None);
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
@@ -73,7 +75,8 @@ class HealthCheckSettingsUpdateTest {
 				.update(initialModel, msg);
 
 		assertSame(initialModel, result.model());
-		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.Save);
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertTrue(result.effect().get() instanceof HealthCheckSettingsEffect.Save));
 	}
 
 	@Test
@@ -85,6 +88,7 @@ class HealthCheckSettingsUpdateTest {
 				.update(initialModel, msg);
 
 		assertSame(initialModel, result.model());
-		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.Close);
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertTrue(result.effect().get() instanceof HealthCheckSettingsEffect.Close));
 	}
 }

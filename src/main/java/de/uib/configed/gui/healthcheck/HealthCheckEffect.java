@@ -1,8 +1,6 @@
 package de.uib.configed.gui.healthcheck;
 
-public sealed interface HealthCheckEffect
-		permits HealthCheckEffect.None, HealthCheckEffect.Copy, HealthCheckEffect.Download {
-	final class None implements HealthCheckEffect {}
+public sealed interface HealthCheckEffect permits HealthCheckEffect.Copy, HealthCheckEffect.Download {
 
 	final class Copy implements HealthCheckEffect {}
 

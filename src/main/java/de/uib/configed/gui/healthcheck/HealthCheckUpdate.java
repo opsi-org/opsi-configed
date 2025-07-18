@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent;
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
 /**
  * Update contains the logic to update the Model in response to a Msg.
@@ -25,10 +26,8 @@ public class HealthCheckUpdate {
 	public static AbstractTeaComponent.UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model,
 			HealthCheckMsg msg) {
 		return switch (msg) {
-		case HealthCheckMsg.ExpandAll ignored -> new AbstractTeaComponent.UpdateResult<>(
-				updateAllShowDetails(model, true), new HealthCheckEffect.None());
-		case HealthCheckMsg.CollapseAll ignored -> new AbstractTeaComponent.UpdateResult<>(
-				updateAllShowDetails(model, false), new HealthCheckEffect.None());
+		case HealthCheckMsg.ExpandAll ignored -> UpdateResult.noEffect(updateAllShowDetails(model, true));
+		case HealthCheckMsg.CollapseAll ignored -> UpdateResult.noEffect(updateAllShowDetails(model, false));
 		case HealthCheckMsg.ToggleDetails(String key) -> {
 			Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
 			Map<String, Object> details = newHealthData.get(key);
@@ -36,14 +35,13 @@ public class HealthCheckUpdate {
 				boolean current = Boolean.TRUE.equals(details.get("showDetails"));
 				details.put("showDetails", !current);
 			}
-			yield new AbstractTeaComponent.UpdateResult<>(HealthCheckModel.initial(newHealthData),
-					new HealthCheckEffect.None());
+			yield UpdateResult.noEffect(HealthCheckModel.initial(newHealthData));
 		}
-		case HealthCheckMsg.HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) -> new AbstractTeaComponent.UpdateResult<>(
-				HealthCheckModel.initial(newHealthData), new HealthCheckEffect.None());
-		case HealthCheckMsg.CopyHealthInformation ignored -> new AbstractTeaComponent.UpdateResult<>(model,
+		case HealthCheckMsg.HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) -> UpdateResult
+				.noEffect(HealthCheckModel.initial(newHealthData));
+		case HealthCheckMsg.CopyHealthInformation ignored -> UpdateResult.withEffect(model,
 				new HealthCheckEffect.Copy());
-		case HealthCheckMsg.DownloadDiagnosticData ignored -> new AbstractTeaComponent.UpdateResult<>(model,
+		case HealthCheckMsg.DownloadDiagnosticData ignored -> UpdateResult.withEffect(model,
 				new HealthCheckEffect.Download());
 		};
 	}

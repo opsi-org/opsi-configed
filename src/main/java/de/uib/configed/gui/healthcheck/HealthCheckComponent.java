@@ -50,7 +50,6 @@ import org.json.JSONObject;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.AbstractTeaComponent;
-import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -228,16 +227,14 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		case HealthCheckEffect.Copy copy -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(textPane.getText()), null);
 		case HealthCheckEffect.Download download -> saveAsZip();
-		case HealthCheckEffect.None none -> {
-			// No operation needed
-		}
 		}
 	}
 
 	@Override
 	protected void refreshView() {
-		if (styledDocument == null || model == null)
+		if (styledDocument == null || model == null) {
 			return;
+		}
 		setMessage(model.getHealthData());
 
 		// Update button states
