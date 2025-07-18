@@ -10,11 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelSoftwareLicencepool extends PanelGenEdit {
 	private ControlPanelAssignToLPools controlPanelAssignToLPools;

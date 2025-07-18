@@ -29,26 +29,21 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.EditingTarget;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
-import de.uib.configed.messageoftheday.MessageOfTheDayDialog;
-import de.uib.messages.Messages;
-import de.uib.opsicommand.ServerFacade;
-import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.opsidatamodel.permission.UserFeaturesConfig;
-import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.userprefs.ThemeManager;
-import de.uib.utils.userprefs.UserPreferences;
+import de.uib.configed.core.domain.permission.UserFeaturesConfig;
+import de.uib.configed.core.domain.serverdata.CacheManager;
+import de.uib.configed.core.domain.serverdata.OpsiModule;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.ServerFacade;
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
+import de.uib.configed.gui.ConfigedMain.EditingTarget;
+import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
+import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
+import de.uib.configed.share.userprefs.ThemeManager;
+import de.uib.configed.share.userprefs.UserPreferences;
 
 public class MenuBarController {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -70,8 +65,7 @@ public class MenuBarController {
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
-		jMenuFileExit.addActionListener(actionEvent -> ConfigedMain
-				.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0));
+		jMenuFileExit.addActionListener(actionEvent -> configedMain.saveAndQuit());
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");

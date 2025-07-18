@@ -7,7 +7,7 @@
     <groupId>configed</groupId>
     <artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.3.11.2</version>
+    <version>4.3.12.1</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.uib.Main</mainClass>
+                            <mainClass>de.uib.configed.app.Main</mainClass>
                             <addDefaultImplementationEntries>
                                 true
                             </addDefaultImplementationEntries>
@@ -399,15 +399,15 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.13.2</version>
+            <version>5.13.3</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.13.2</version>
-            <scope>test</scope>
-        </dependency> -->
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+        </dependency>
     </dependencies>
 </project>

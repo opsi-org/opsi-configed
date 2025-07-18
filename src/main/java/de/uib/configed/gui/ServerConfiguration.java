@@ -13,14 +13,12 @@ import java.util.Map;
 
 import javax.swing.JTabbedPane;
 
-import de.uib.configed.Configed;
-import de.uib.configed.UpdateCollectionManager;
-import de.uib.configed.gui.hostconfigs.PanelHostConfig;
-import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.POJOReMapper;
+import de.uib.configed.gui.features.hostconfigs.PanelHostConfig;
+import de.uib.configed.share.logging.Logging;
 
 public class ServerConfiguration extends JTabbedPane {
 	private PanelHostConfig panelHostConfig;

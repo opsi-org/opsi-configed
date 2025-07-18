@@ -17,11 +17,11 @@ import java.util.Map;
 
 import javax.swing.SwingWorker;
 
-import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.script.Interpreter;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.logging.Logging;
+import de.uib.configed.share.script.Interpreter;
 
 public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	private String command;

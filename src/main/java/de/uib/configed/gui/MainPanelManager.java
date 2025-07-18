@@ -23,22 +23,19 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.EditingTarget;
-import de.uib.configed.Globals;
-import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.ConfigedMain.EditingTarget;
+import de.uib.configed.gui.features.dashboard.Dashboard;
+import de.uib.configed.gui.features.licenses.LicenseManagement;
+import de.uib.configed.gui.features.tree.ClientTree;
+import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
-import de.uib.configed.gui.licenses.LicenseManagement;
-import de.uib.configed.tree.ClientTree;
-import de.uib.configed.tree.ProductTree;
-import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.ButtonTabComponent;
+import de.uib.configed.gui.share.swing.ButtonTabComponent;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
@@ -128,7 +125,7 @@ public class MainPanelManager {
 
 		leftTabs.setMinimumSize(new Dimension());
 		clientConfiguration = new ClientConfiguration(configedMain, mainFrame, productTree);
-		hostsStatusPanel = new HostsStatusPanel();
+		hostsStatusPanel = new HostsStatusPanel(configedMain);
 	}
 
 	public JTabbedPane getTabbedPane() {

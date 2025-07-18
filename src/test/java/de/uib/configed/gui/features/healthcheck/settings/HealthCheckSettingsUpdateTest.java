@@ -1,0 +1,90 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.features.healthcheck.settings;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsEffect;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsModel;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsMsg;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsUpdate;
+
+class HealthCheckSettingsUpdateTest {
+
+	private HealthCheckSettingsModel makeDefaultSettingsModel() {
+		return HealthCheckSettingsModel.initial(List.of(), FlatTriStateCheckBox.State.INDETERMINATE, "", "", false);
+	}
+
+	private HealthCheckSettingsModel makeSettingsModelWith(List<String> selectedHosts,
+			FlatTriStateCheckBox.State checkActiveState, boolean saveEnabled, String startDowntime,
+			String endDowntime) {
+		return HealthCheckSettingsModel.initial(selectedHosts, checkActiveState, startDowntime, endDowntime,
+				saveEnabled);
+	}
+
+	@Test
+	void updateWithHostsSelectedUpdatesModelAndReturnsNoneEffect() {
+		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
+		List<String> newHosts = List.of("host1", "host2");
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.HostsSelected(newHosts);
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertEquals(newHosts, result.model().getSelectedHosts());
+		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.None);
+	}
+
+	@Test
+	void updateWithCheckActiveChangedUpdatesModelAndSaveEnabled() {
+		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
+				FlatTriStateCheckBox.State.INDETERMINATE, false, "2024-01-01T00:00", "2024-01-01T01:00");
+		FlatTriStateCheckBox.State newState = FlatTriStateCheckBox.State.SELECTED;
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.CheckActiveChanged(newState);
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertEquals(newState, result.model().getCheckActiveState());
+		assertTrue(result.model().isSaveEnabled());
+		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.None);
+	}
+
+	@Test
+	void updateWithSaveClickedReturnsSaveEffect() {
+		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
+				FlatTriStateCheckBox.State.SELECTED, true, "2024-01-01T00:00", "2024-01-01T01:00");
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.SaveClicked();
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertSame(initialModel, result.model());
+		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.Save);
+	}
+
+	@Test
+	void updateWithCloseClickedReturnsCloseEffect() {
+		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.CancelClicked();
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertSame(initialModel, result.model());
+		assertTrue(result.effect() instanceof HealthCheckSettingsEffect.Close);
+	}
+}

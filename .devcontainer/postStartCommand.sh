@@ -13,3 +13,4 @@ wget $DEV_TOOLS_URL
 chmod 750 $SCRIPT_NAME && ./${SCRIPT_NAME}
 rm -f "./${SCRIPT_NAME}"
 rm -f "./${SCRIPT_NAME}*"
+opsi-dev-tool --self-upgrade

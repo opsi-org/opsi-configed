@@ -9,7 +9,7 @@ package de.uib.configed.gui.healthcheck;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.configed.gui.TeaComponent;
+import de.uib.configed.gui.AbstractTeaComponent;
 
 /**
  * Update contains the logic to update the Model in response to a Msg.
@@ -22,13 +22,13 @@ public class HealthCheckUpdate {
 	/**
 	 * Applies a message to the model and returns a new model.
 	 */
-	public static TeaComponent.UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model,
+	public static AbstractTeaComponent.UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model,
 			HealthCheckMsg msg) {
 		return switch (msg) {
-		case HealthCheckMsg.ExpandAll ignored -> new TeaComponent.UpdateResult<>(updateAllShowDetails(model, true),
-				new HealthCheckEffect.None());
-		case HealthCheckMsg.CollapseAll ignored -> new TeaComponent.UpdateResult<>(updateAllShowDetails(model, false),
-				new HealthCheckEffect.None());
+		case HealthCheckMsg.ExpandAll ignored -> new AbstractTeaComponent.UpdateResult<>(
+				updateAllShowDetails(model, true), new HealthCheckEffect.None());
+		case HealthCheckMsg.CollapseAll ignored -> new AbstractTeaComponent.UpdateResult<>(
+				updateAllShowDetails(model, false), new HealthCheckEffect.None());
 		case HealthCheckMsg.ToggleDetails(String key) -> {
 			Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
 			Map<String, Object> details = newHealthData.get(key);
@@ -36,14 +36,14 @@ public class HealthCheckUpdate {
 				boolean current = Boolean.TRUE.equals(details.get("showDetails"));
 				details.put("showDetails", !current);
 			}
-			yield new TeaComponent.UpdateResult<>(HealthCheckModel.initial(newHealthData),
+			yield new AbstractTeaComponent.UpdateResult<>(HealthCheckModel.initial(newHealthData),
 					new HealthCheckEffect.None());
 		}
-		case HealthCheckMsg.HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) -> new TeaComponent.UpdateResult<>(
+		case HealthCheckMsg.HealthDataRefreshed(Map<String, Map<String, Object>> newHealthData) -> new AbstractTeaComponent.UpdateResult<>(
 				HealthCheckModel.initial(newHealthData), new HealthCheckEffect.None());
-		case HealthCheckMsg.CopyHealthInformation ignored -> new TeaComponent.UpdateResult<>(model,
+		case HealthCheckMsg.CopyHealthInformation ignored -> new AbstractTeaComponent.UpdateResult<>(model,
 				new HealthCheckEffect.Copy());
-		case HealthCheckMsg.DownloadDiagnosticData ignored -> new TeaComponent.UpdateResult<>(model,
+		case HealthCheckMsg.DownloadDiagnosticData ignored -> new AbstractTeaComponent.UpdateResult<>(model,
 				new HealthCheckEffect.Download());
 		};
 	}

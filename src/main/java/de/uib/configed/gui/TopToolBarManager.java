@@ -16,19 +16,14 @@ import javax.swing.JToolBar;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
+import de.uib.configed.core.domain.modulelicense.LicensingInfoMap;
+import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.Icons;
+import de.uib.configed.share.Icons;
 
 public class TopToolBarManager {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory

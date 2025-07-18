@@ -15,14 +15,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.gui.logpane.LogPanel;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.logpane.LogPanel;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class TabbedLogPane extends JTabbedPane {
 	private LogPanel[] textPanes;
@@ -74,16 +71,14 @@ public class TabbedLogPane extends JTabbedPane {
 	}
 
 	public void setDocuments(String logtype) {
-		String info = ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
-
 		Map<String, String> documents = getLogfilesUpdating(logtype);
-		Logging.info(this, "idents.length ", idents.length, " info: ", info);
+		Logging.info(this, "idents.length ", idents.length);
 		for (String ident : idents) {
-			setDocument(ident, documents.get(ident), info);
+			setDocument(ident, documents.get(ident));
 		}
 	}
 
-	private void setDocument(String ident, final String document, final String info) {
+	private void setDocument(String ident, final String document) {
 		int i = identsList.indexOf(ident);
 		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
 		if (i < 0 || i >= idents.length) {
@@ -96,8 +91,11 @@ public class TabbedLogPane extends JTabbedPane {
 			return;
 		}
 
-		textPanes[i].setTitle(idents[i] + "  " + info);
-		textPanes[i].setInfo(info);
+		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
+				: "";
+
+		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
+		textPanes[i].setInfo(selectedClient);
 		textPanes[i].setLogText(document);
 	}
 

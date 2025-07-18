@@ -47,20 +47,21 @@ import javax.swing.text.StyleContext;
 
 import org.json.JSONObject;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.HealthInfo;
-import de.uib.configed.gui.TeaComponent;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.AbstractTeaComponent;
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.HealthInfo;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 /**
  * HealthCheck component using TEA architecture via TeaComponent.
  */
-public class HealthCheckComponent extends TeaComponent<HealthCheckModel, HealthCheckMsg, HealthCheckEffect> {
+public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel, HealthCheckMsg, HealthCheckEffect> {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 

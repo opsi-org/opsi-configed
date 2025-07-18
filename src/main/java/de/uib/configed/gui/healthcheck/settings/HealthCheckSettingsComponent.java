@@ -27,15 +27,16 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.AbstractTeaComponent;
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
-import de.uib.configed.gui.TeaComponent;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -48,7 +49,7 @@ import javafx.scene.layout.StackPane;
  * TeaComponent.
  */
 public final class HealthCheckSettingsComponent
-		extends TeaComponent<HealthCheckSettingsModel, HealthCheckSettingsMsg, HealthCheckSettingsEffect> {
+		extends AbstractTeaComponent<HealthCheckSettingsModel, HealthCheckSettingsMsg, HealthCheckSettingsEffect> {
 	private static final int TEXT_LABEL_WIDTH = 200;
 	private static final String ZERO_HOUR_STRING = "00:00:00";
 	private static final String END_OF_DAY_STRING = "23:59:59";

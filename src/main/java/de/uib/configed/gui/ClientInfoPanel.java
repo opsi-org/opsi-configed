@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,19 +30,15 @@ import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
+import de.uib.configed.core.domain.serverdata.OpsiModule;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
-import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.SeparatedDocument;
+import de.uib.configed.gui.share.swing.SeparatedDocument;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientDescription;
@@ -430,23 +427,29 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
-		dataAreChangedProgramatically = true;
-		String deviceTypeIcon;
-		if (deviceType == null) {
-			deviceTypeIcon = "";
-		} else {
-			deviceTypeIcon = ("<<intern:empty>>".equals(deviceType) ? "" : deviceType);
+	public static ImageIcon getDeviceTypeIcon(String deviceType) {
+		if (deviceType == null || "<<intern:empty>>".equals(deviceType)) {
+			deviceType = "";
 		}
-		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceTypeIcon, 20));
 
+		return Utils.determineIconBasedOnDeviceType(deviceType, 20);
+	}
+
+	public static String transformDeviceType(String deviceType) {
 		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
 		if ("<<intern:empty>>".equals(deviceTypeResourceKey)) {
-			labelDeviceType.setText("");
+			return "";
 		} else {
-			labelDeviceType.setText(
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
+			return Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey);
 		}
+	}
+
+	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
+		dataAreChangedProgramatically = true;
+
+		labelDeviceTypeIcon.setIcon(getDeviceTypeIcon(deviceType));
+
+		labelDeviceType.setText(transformDeviceType(deviceType));
 
 		jTextAreaVendorModel.setText("");
 		if (vendor.isBlank() && model.isBlank()) {

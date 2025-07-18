@@ -21,25 +21,21 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.EditingTarget;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
-import de.uib.configed.dashboard.LicenseDisplayer;
+import de.uib.configed.core.domain.serverdata.OpsiModule;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.ConfigedMain.EditingTarget;
+import de.uib.configed.gui.features.dashboard.LicenseDisplayer;
+import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
+import de.uib.configed.gui.features.tree.ClientTree;
+import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.healthcheck.HealthCheckDataLoader;
-import de.uib.configed.serverconsole.command.CommandFactory;
-import de.uib.configed.tree.ClientTree;
-import de.uib.configed.tree.ProductTree;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.PopupMouseListener;
-import de.uib.utils.Utils;
-import de.uib.utils.WindowsPositionManager;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.FilterStateManager;
+import de.uib.configed.gui.share.table.gui.FilterStateManager;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.WindowsPositionManager;
+import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -77,7 +73,7 @@ public class MainFrame extends JFrame implements KeyListener {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			WindowsPositionManager.saveWindowProperties(ConfigedMain.getMainFrame(),
 					WindowsPositionManager.MAIN_WINDOW);
-			ConfigedMain.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
+			configedMain.saveAndQuit();
 		}
 	}
 

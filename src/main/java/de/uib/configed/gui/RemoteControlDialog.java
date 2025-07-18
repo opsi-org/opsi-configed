@@ -26,10 +26,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.share.logging.Logging;
 
 public class RemoteControlDialog implements DocumentListener {
 	private Map<String, String> meanings;
