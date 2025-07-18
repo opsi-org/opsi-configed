@@ -8,7 +8,7 @@ public sealed interface HealthCheckSettingsMsg permits HealthCheckSettingsMsg.Si
 		HealthCheckSettingsMsg.SelectHosts, HealthCheckSettingsMsg.ToggleActivity,
 		HealthCheckSettingsMsg.ChangeStartDowntime, HealthCheckSettingsMsg.ChangeEndDowntime {
 	enum SimpleMsg implements HealthCheckSettingsMsg {
-		SAVE_CLICKED, CANCLE_CLICKED
+		SAVE, CANCLE
 	}
 
 	record SelectHosts(List<String> hosts) implements HealthCheckSettingsMsg {

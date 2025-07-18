@@ -35,7 +35,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void updateWithExpandAllMsgSetsAllShowDetailsTrue() {
+	void shouldExpanAllDetails_whenExpandAll() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entry1", false);
 		initialShowDetails.put("entry2", false);
@@ -53,7 +53,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void updateWithCollapseAllMsgSetsAllShowDetailsTrue() {
+	void shouldCollapseAllDetails_whenCollapseAll() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entry1", false);
 		initialShowDetails.put("entry2", true);
@@ -71,7 +71,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void updateWithHealthDataRefreshedMsgSetsAllShowDetailsTrue() {
+	void shouldUpdateHealthData_whenRefreshHealthData() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entry1", false);
 		initialShowDetails.put("entry2", true);
@@ -92,7 +92,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void updateWithToggleDetailsMsgTogglesShowDetailsForKey() {
+	void shouldToggleDetailsOfEntry_whenToggleDetails() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryA", false);
 		initialShowDetails.put("entryB", true);
@@ -108,7 +108,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void updateWithCopyHealthInformationMsgReturnsEffectCopy() {
+	void shouldTriggerCopyEffect_whenCopyHealthInformation() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryX", false);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
@@ -122,7 +122,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void updateWithDownloadDiagnosticDataMsgReturnsEffectDownload() {
+	void shouldTriggerDownloadEffect_whenDownloadDiagnosticData() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryX", false);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));

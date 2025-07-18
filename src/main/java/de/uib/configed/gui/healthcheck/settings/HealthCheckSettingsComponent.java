@@ -186,7 +186,7 @@ public final class HealthCheckSettingsComponent
 		saveButton = new JButton(Configed.getResourceValue("save"));
 		saveButton.addActionListener(actionEvent -> {
 			Logging.info(this, "User clicked save button");
-			dispatch(HealthCheckSettingsMsg.SimpleMsg.SAVE_CLICKED);
+			dispatch(HealthCheckSettingsMsg.SimpleMsg.SAVE);
 		});
 		saveButton.setEnabled(model.isSaveEnabled());
 		return saveButton;

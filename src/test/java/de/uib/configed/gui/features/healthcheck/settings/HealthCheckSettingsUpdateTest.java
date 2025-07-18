@@ -38,7 +38,7 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void updateWithHostsSelectedUpdatesModelAndReturnsNoneEffect() {
+	void shouldUpdateSelectedHosts_whenSelectHosts() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
 		List<String> newHosts = List.of("host1", "host2");
 		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.SelectHosts(newHosts);
@@ -51,7 +51,7 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void updateWithCheckActiveChangedUpdatesModelAndSaveEnabled() {
+	void shouldToggleActivityAndEnableSave_whenToggleActivity() {
 		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
 				FlatTriStateCheckBox.State.INDETERMINATE, false, "2024-01-01T00:00", "2024-01-01T01:00");
 		FlatTriStateCheckBox.State newState = FlatTriStateCheckBox.State.SELECTED;
@@ -66,10 +66,10 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void updateWithSaveClickedReturnsSaveEffect() {
+	void shouldTriggerSaveEffect_whenSave() {
 		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
 				FlatTriStateCheckBox.State.SELECTED, true, "2024-01-01T00:00", "2024-01-01T01:00");
-		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.SAVE_CLICKED;
+		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.SAVE;
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
@@ -80,9 +80,9 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void updateWithCloseClickedReturnsCloseEffect() {
+	void shouldTriggerCloseEffect_whenCancle() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
-		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.CANCLE_CLICKED;
+		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.CANCLE;
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
