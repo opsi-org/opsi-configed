@@ -427,7 +427,11 @@ public class ClientTree extends AbstractGroupTree {
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {
 		// child with this objectID not existing
 		if (getChildWithUserObjectString(objectID, newGroupNode) == null) {
-			produceClients(Collections.singleton(objectID), newGroupNode);
+			Set<String> clientIds = new TreeSet<>();
+			newGroupNode.children().asIterator().forEachRemaining(node -> clientIds.add(node.toString()));
+			clientIds.add(objectID);
+			newGroupNode.removeAllChildren();
+			produceClients(clientIds, newGroupNode);
 			makeVisible(newPath.pathByAddingChild(objectID));
 			return true;
 		}
@@ -455,7 +459,7 @@ public class ClientTree extends AbstractGroupTree {
 			Logging.warning("removing client not successful but stopped because of reaching the repetition limit");
 		}
 
-		clientNodesInDirectory.remove(clientID); // 11
+		clientNodesInDirectory.remove(clientID);
 
 		model.nodeStructureChanged(parentNode);
 
