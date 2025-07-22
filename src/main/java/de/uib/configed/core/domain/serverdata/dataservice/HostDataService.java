@@ -86,6 +86,7 @@ public class HostDataService {
 		List<Map<String, Object>> clientsJsonObject = new ArrayList<>();
 		List<Map<String, Object>> productsNetbootJsonObject = new ArrayList<>();
 		List<Map<String, Object>> groupsJsonObject = new ArrayList<>();
+		List<HostInfo> hostInfos = new ArrayList<>();
 
 		for (List<Object> client : clients) {
 			String hostname = ((String) client.get(0)).trim();
@@ -136,11 +137,12 @@ public class HostDataService {
 			hostInfo.setInDepot(depotId);
 			hostInfo.setWanConfig(wanConfig);
 			hostInfo.setShutdownInstall(shutdownInstall);
+			hostInfos.add(hostInfo);
 
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
 
-		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
+		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject, hostInfos);
 	}
 
 	private void addGroupsToList(String groupsAsString, String newClientId,
@@ -163,11 +165,16 @@ public class HostDataService {
 	}
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
-			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { clientsJsonObject });
+			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject,
+			List<HostInfo> hostInfos) {
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
+			if (!hostInfos.isEmpty()) {
+				updateConfigs(hostInfos);
+			}
+
 			if (!groupsJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
 						new Object[] { groupsJsonObject });
@@ -234,10 +241,29 @@ public class HostDataService {
 			hostInfo.setShutdownInstall(shutdownInstall);
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 
+			updateConfigs(List.of(hostInfo));
 			Logging.info(this, " createClient hostInfo ", hostInfo);
 		}
 
 		return result;
+	}
+
+	private void updateConfigs(List<HostInfo> hostInfos) {
+		List<Map<String, Object>> hostItems = new ArrayList<>();
+		for (HostInfo hostInfo : hostInfos) {
+			Map<String, Object> hostItem = new HashMap<>();
+			hostItem.put(HostInfo.HOSTNAME_KEY, hostInfo.getName());
+			hostItem.put(HostInfo.CLIENT_WAN_CONFIG_KEY, hostInfo.getWanConfig());
+			hostItem.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, hostInfo.getShutdownInstall());
+			hostItems.add(hostItem);
+		}
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { hostItems });
+		boolean result = exec.doCall(omc);
+		if (result) {
+			Logging.info(this, "Hosts' configs updated successfully");
+		} else {
+			Logging.warning(this, "Failed to update hosts' configs");
+		}
 	}
 
 	private boolean updateGroupsForClient(String[] groups, String newClientId) {
