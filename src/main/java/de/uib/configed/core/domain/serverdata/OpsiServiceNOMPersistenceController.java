@@ -38,6 +38,7 @@ import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandl
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.LicenseOnClientDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicensePoolDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiLicenseReloadHandler;
@@ -363,6 +364,11 @@ public class OpsiServiceNOMPersistenceController {
 		softwareLicense2LicensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
 				softwareLicense2LicensePoolDataReloadHandler);
+
+		LicenseOnClientDataReloadHandler licenseOnClientDataReloadHandler = new LicenseOnClientDataReloadHandler();
+		licenseOnClientDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD.toString(),
+				licenseOnClientDataReloadHandler);
 
 		StatisticsDataReloadHandler statisticsDataReloadHandler = new StatisticsDataReloadHandler();
 		statisticsDataReloadHandler.setSoftwareDataService(softwareDataService);

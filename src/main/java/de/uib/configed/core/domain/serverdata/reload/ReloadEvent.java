@@ -16,6 +16,7 @@ import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandl
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.LicenseOnClientDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicensePoolDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiLicenseReloadHandler;
@@ -96,6 +97,11 @@ public enum ReloadEvent {
 	SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD("software_license_to_license_pool_data_reload"),
 
 	/**
+	 * Triggers {@link LicenseOnClientDataReloadHandler}.
+	 */
+	LICENSE_ON_CLIENT_DATA_RELOAD("license_on_client_data_reload"),
+
+	/**
 	 * Triggers {@link StatisticsDataReloadHandler}.
 	 */
 	STATISTICS_DATA_RELOAD("statistics_reload_handler"),
@@ -106,7 +112,7 @@ public enum ReloadEvent {
 	HOST_DATA_RELOAD("host_data_reload"),
 
 	/**
-	 * Trigers {@link DepotProductPropertiesDataReloadHandler}
+	 * Triggers {@link DepotProductPropertiesDataReloadHandler}.
 	 */
 	DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD("depot_product_properties_data_reload");
 	;
