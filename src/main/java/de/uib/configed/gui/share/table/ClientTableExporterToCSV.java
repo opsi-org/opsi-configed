@@ -52,7 +52,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				continue;
 			}
 
-			HostInfo clientInfo = clientInfos.get(theTable.getValueAt(rowI, 0));
+			HostInfo clientInfo = clientInfos
+					.get(ConfigedMain.getMainFrame().getClientTablePanel().getClientTable().getClientName(rowI));
 			List<String> row = new ArrayList<>();
 			for (String columnName : columnNames) {
 				row.add(getRowValue(columnName, clientInfo));
