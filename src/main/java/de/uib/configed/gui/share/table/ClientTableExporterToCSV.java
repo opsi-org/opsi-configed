@@ -120,8 +120,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
 		columnSelectionDialog.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
-		columnSelectionDialog.setPreviousSelectionValues(defaultValues);
 		columnSelectionDialog.setMultiSelection();
+		columnSelectionDialog.setPreviousSelectionValues(defaultValues);
 		columnSelectionDialog.show();
 
 		if (columnSelectionDialog.wasAccepted()) {
