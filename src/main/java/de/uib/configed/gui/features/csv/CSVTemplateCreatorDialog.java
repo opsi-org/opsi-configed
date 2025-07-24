@@ -54,6 +54,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -238,6 +239,10 @@ public class CSVTemplateCreatorDialog {
 
 	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {
 		JCheckBox headerCheckBox = new JCheckBox(header, isImportantHeader(header));
+		if (isImportantHeader(header)) {
+			headerCheckBox.setEnabled(false);
+			headerCheckBox.setIcon(Icons.getIntellijIcon("locked"));
+		}
 		headerCheckBox.setActionCommand(header);
 
 		model.addElement(headerCheckBox);
@@ -245,8 +250,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	private static boolean isImportantHeader(String header) {
-		return HostInfo.HOSTNAME_KEY.equals(header) || "domain".equals(header)
-				|| HostInfo.DEPOT_OF_CLIENT_KEY.equals(header) || HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header);
+		return CSVImportDataModifier.getImportantHeaders().contains(header);
 	}
 
 	private static class InputListener implements DocumentListener {
