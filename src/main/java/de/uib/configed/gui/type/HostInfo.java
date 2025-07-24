@@ -6,11 +6,12 @@
 
 package de.uib.configed.gui.type;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -183,22 +184,22 @@ public class HostInfo {
 		return unordered;
 	}
 
-	public static List<String> getKeysForCSV() {
-		List<String> keys = new ArrayList<>();
+	public static Set<String> getKeysForCSV() {
+		Set<String> keys = new LinkedHashSet<>();
 		keys.add(HOSTNAME_KEY);
 		keys.add("domain");
 		keys.add(DEPOT_OF_CLIENT_KEY);
+		keys.add(CLIENT_MAC_ADRESS_KEY);
 		keys.add(CLIENT_DESCRIPTION_KEY);
 		keys.add(CLIENT_INVENTORY_NUMBER_KEY);
 		keys.add(CLIENT_NOTES_KEY);
 		keys.add(CLIENT_SYSTEM_UUID_KEY);
-		keys.add(CLIENT_MAC_ADRESS_KEY);
 		keys.add(CLIENT_IP_ADDRESS_KEY);
 		keys.add("groups");
 		keys.add(CLIENT_WAN_CONFIG_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
-		return Collections.unmodifiableList(keys);
+		return Collections.unmodifiableSet(keys);
 	}
 
 	public void put(String key, Object value) {

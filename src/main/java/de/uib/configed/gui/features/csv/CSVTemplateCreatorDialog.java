@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -65,13 +66,13 @@ public class CSVTemplateCreatorDialog {
 
 	private JFormattedTextField otherDelimiterInput;
 
-	private List<String> columnNames;
+	private Set<String> columnNames;
 	private List<JCheckBox> headerCheckBoxes;
 
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	public CSVTemplateCreatorDialog(List<String> columnNames, Component parent) {
+	public CSVTemplateCreatorDialog(Set<String> columnNames, Component parent) {
 		this.columnNames = columnNames;
 
 		JPanel panel = initPanel();
@@ -331,7 +332,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	public static void displayCSVTemplateDialog(Component parent) {
-		List<String> columnNames = HostInfo.getKeysForCSV();
+		Set<String> columnNames = HostInfo.getKeysForCSV();
 		if (csvTemplateCreatorDialog == null) {
 			csvTemplateCreatorDialog = new CSVTemplateCreatorDialog(columnNames, parent);
 		}

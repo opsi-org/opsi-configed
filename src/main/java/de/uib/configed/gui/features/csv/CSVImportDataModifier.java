@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
@@ -40,12 +41,15 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 
 public class CSVImportDataModifier {
+	private static final List<String> IMPORTANT_HEADER_NAMES = List.of(HostInfo.HOSTNAME_KEY, "domain",
+			HostInfo.DEPOT_OF_CLIENT_KEY, HostInfo.CLIENT_MAC_ADRESS_KEY);
+
 	private GenTableModel model;
 	private String csvFile;
-	private List<String> columnNames;
+	private Set<String> columnNames;
 	private List<String> hiddenColumns;
 
-	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
+	public CSVImportDataModifier(String csvFile, Set<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
 		this.hiddenColumns = new ArrayList<>();
@@ -92,17 +96,12 @@ public class CSVImportDataModifier {
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVParser parser = CSVParser.parse(reader, format)) {
 			List<String> headerNames = parser.getHeaderNames();
-			List<String> importantHeaderNames = new ArrayList<>();
-			importantHeaderNames.add(HostInfo.HOSTNAME_KEY);
-			importantHeaderNames.add("domain");
-			importantHeaderNames.add(HostInfo.DEPOT_OF_CLIENT_KEY);
-			importantHeaderNames.add(HostInfo.CLIENT_MAC_ADRESS_KEY);
 
-			if (!headerNames.containsAll(importantHeaderNames)) {
+			if (!headerNames.containsAll(IMPORTANT_HEADER_NAMES)) {
 				StringBuilder message = new StringBuilder();
 				message.append(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.message"));
 				message.append("\n");
-				message.append(" " + importantHeaderNames.toString().replace("[", "").replace("]", ""));
+				message.append(" " + IMPORTANT_HEADER_NAMES.toString().replace("[", "").replace("]", ""));
 				JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
 						Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
 						JOptionPane.ERROR_MESSAGE);
@@ -211,7 +210,7 @@ public class CSVImportDataModifier {
 		thePanel.getGenEditTable().setRowSorter(rowSorter);
 	}
 
-	private static void makeColumnsEditable(GenTableModel model, List<String> columnNames) {
+	private static void makeColumnsEditable(GenTableModel model, Set<String> columnNames) {
 		int[] editableColumns = new int[columnNames.size()];
 
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -223,5 +222,9 @@ public class CSVImportDataModifier {
 
 	public List<List<Object>> getRows() {
 		return model.getRows();
+	}
+
+	public static List<String> getImportantHeaders() {
+		return IMPORTANT_HEADER_NAMES;
 	}
 }
