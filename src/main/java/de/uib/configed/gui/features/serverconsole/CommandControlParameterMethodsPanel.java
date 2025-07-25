@@ -73,10 +73,9 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		jComboBoxParameterFormats.setEnabled(false);
 
 		jComboBoxParameterMethods.addItemListener((ItemEvent itemEvent) -> {
-			boolean enabled = ((String) jComboBoxParameterMethods.getSelectedItem())
+			boolean isInteractiveParameterMethod = ((String) jComboBoxParameterMethods.getSelectedItem())
 					.equals(Configed.getResourceValue("CommandControlDialog.cbElementInteractiv"));
-
-			jComboBoxParameterFormats.setEnabled(enabled);
+			jComboBoxParameterFormats.setEnabled(!isInteractiveParameterMethod);
 		});
 
 		jButtonTestParam = new JButton(Icons.getIntellijIcon("run"));
