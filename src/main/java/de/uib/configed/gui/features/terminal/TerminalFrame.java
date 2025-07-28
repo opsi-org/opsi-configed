@@ -404,7 +404,7 @@ public final class TerminalFrame implements MessagebusListener {
 		return northPanel;
 	}
 
-	private void focusOnSelectedWidget() {
+	public void focusOnSelectedWidget() {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
 			widget.requestFocusInWindow();
