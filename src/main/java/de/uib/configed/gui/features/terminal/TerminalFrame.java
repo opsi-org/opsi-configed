@@ -52,7 +52,7 @@ public final class TerminalFrame implements MessagebusListener {
 	private boolean fullClientsPermission = persistenceController.getUserRolesConfigDataService()
 			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
 	private Set<Object> allowedDepots = persistenceController.getUserRolesConfigDataService().getPermittedDepots();
-	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
+	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
 
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
@@ -234,9 +234,7 @@ public final class TerminalFrame implements MessagebusListener {
 		Logging.info(this, "terminal, depotsList: ", depotsList);
 
 		Set<String> allowedHosts = getAllowedHostsByUserRolesHosts(depotsList);
-
-		List<String> filteredHosts = new ArrayList<>(allowedHosts);
-		filterByMsgbusForbiddenConfig(filteredHosts, allowedHosts, depotsList);
+		List<String> filteredHosts = filterByMsgbusForbiddenConfig(allowedHosts, depotsList);
 		separateDepotsAndClients(resultListAllowedDevices, filteredHosts, depotsList);
 
 		return resultListAllowedDevices;
@@ -332,9 +330,6 @@ public final class TerminalFrame implements MessagebusListener {
 	 * new user role config 'connect.terminal.forbidden' This method updates the
 	 * resultList parameter
 	 * 
-	 * @param resultList                         List of clients and depots
-	 *                                           allowed by user roles. it will
-	 *                                           be shown to the user
 	 * @param allClientsDepotsAllowedByPrivilege Set of clients and depots
 	 *                                           allowed by user roles
 	 *                                           (priviliges.host.depotaccess.depots
@@ -343,9 +338,12 @@ public final class TerminalFrame implements MessagebusListener {
 	 * @param depotsList                         List of all server/depots
 	 *                                           (including forbidden items,
 	 *                                           etc.)
+	 * @return List of clients and depots allowed by user roles. It will be
+	 *         shown to the user.
 	 */
-	private void filterByMsgbusForbiddenConfig(List<String> resultList, Set<String> allClientsDepotsAllowedByPrivilege,
+	private List<String> filterByMsgbusForbiddenConfig(Set<String> allClientsDepotsAllowedByPrivilege,
 			List<String> depotsList) {
+		List<String> resultList = new ArrayList<>();
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
 		// filter clients and depots by configured permissions (mostly msg bus settings cause user roles already filtered)
@@ -375,6 +373,7 @@ public final class TerminalFrame implements MessagebusListener {
 				resultList.addAll(allDepots);
 			}
 		}
+		return resultList;
 	}
 
 	private JPanel createNorthPanel() {
