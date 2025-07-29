@@ -130,8 +130,8 @@ public class CSVTemplateCreatorDialog {
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
 
-		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		quoteLabel.setFont(quoteLabel.getFont().deriveFont(Font.BOLD));
+		JLabel delimeterLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		delimeterLabel.setFont(delimeterLabel.getFont().deriveFont(Font.BOLD));
 
 		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
@@ -192,7 +192,7 @@ public class CSVTemplateCreatorDialog {
 				.addComponent(includeFormatHintOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(delimeterLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -212,7 +212,7 @@ public class CSVTemplateCreatorDialog {
 						.addGap(Globals.GAP_SIZE).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
@@ -221,7 +221,7 @@ public class CSVTemplateCreatorDialog {
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(includeFormatHintOption).addGap(Globals.GAP_SIZE)
-				.addComponent(fieldSeparatorLabel)
+				.addComponent(delimeterLabel)
 				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -232,7 +232,7 @@ public class CSVTemplateCreatorDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(otherOption)
 						.addComponent(otherDelimiterInput))
-				.addGap(Globals.GAP_SIZE).addComponent(quoteLabel).addComponent(quoteOptions));
+				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addComponent(quoteOptions));
 
 		return centerPanel;
 	}
