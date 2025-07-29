@@ -131,7 +131,7 @@ public class HostDataService {
 			addGroupsToList(groups, newClientId, groupsJsonObject);
 
 			HostInfo hostInfo = new HostInfo();
-			hostInfo.setValues(itemDepot);
+			hostInfo.setValues(hostItem);
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = hostInfoCollections.getConfigServer();
 			}
