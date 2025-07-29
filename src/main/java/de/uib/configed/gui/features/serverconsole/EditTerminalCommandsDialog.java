@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -360,6 +361,7 @@ public final class EditTerminalCommandsDialog {
 			public void run() {
 				CommandExecutor executor = new CommandExecutor(configedMain, command);
 				executor.execute();
+				SwingUtilities.invokeLater(() -> jTextAreaCommands.requestFocus());
 			}
 		}.start();
 	}
