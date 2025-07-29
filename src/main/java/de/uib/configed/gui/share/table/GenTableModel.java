@@ -600,8 +600,6 @@ public class GenTableModel extends AbstractTableModel {
 			return;
 		}
 
-		Logging.devel("deleteRow, rowNum ", rowNum, " rows.size() ", rows.size());
-
 		List<Object> oldValues = new ArrayList<>(rows.get(rowNum));
 		Logging.debug(this, "deleteRow values ", oldValues);
 		updates.add(itemFactory.produceDeleteItem(oldValues));

@@ -9,6 +9,9 @@ package de.uib.configed.gui.share.table;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +26,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.gui.features.csv.CSVImportDataModifier;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
@@ -32,7 +36,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private List<String> columnNames;
+	private Set<String> columnNames;
 
 	public ClientTableExporterToCSV(JTable table) {
 		super(table);
@@ -52,7 +56,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				continue;
 			}
 
-			HostInfo clientInfo = clientInfos.get(theTable.getValueAt(rowI, 0));
+			HostInfo clientInfo = clientInfos
+					.get(ConfigedMain.getMainFrame().getClientTablePanel().getClientTable().getClientName(rowI));
 			List<String> row = new ArrayList<>();
 			for (String columnName : columnNames) {
 				row.add(getRowValue(columnName, clientInfo));
@@ -114,28 +119,48 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		return menuItem;
 	}
 
-	private static List<String> getColumnsToInclude() {
-		ListSelectionDialog columnSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"));
-		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
-		columnSelectionDialog.setListData(defaultValues);
-		defaultValues.remove(HostInfo.HOST_KEY_KEY);
-		columnSelectionDialog.setMultiSelection();
-		columnSelectionDialog.setPreviousSelectionValues(defaultValues);
+	private static Set<String> getColumnsToInclude() {
+		ListSelectionDialog columnSelectionDialog = createColumnSelectionDialog();
 		columnSelectionDialog.show();
 
-		if (columnSelectionDialog.wasAccepted()) {
-			List<String> result = columnSelectionDialog.getSelectedValues();
+		if (!columnSelectionDialog.wasAccepted()) {
+			return Collections.emptySet();
+		}
 
-			// We remove the host key if it was included in the selection
-			// but the user does not want to include it
-			if (result.contains(HostInfo.HOST_KEY_KEY) && !Utils.includeOpsiHostKey()) {
-				return new ArrayList<>();
+		Set<String> selected = new HashSet<>(columnSelectionDialog.getSelectedValues());
+		List<String> important = CSVImportDataModifier.getImportantHeaders();
+		LinkedHashSet<String> orderedResult = getOrderedSelectedColumns(selected, important);
+
+		removeHostTypeKeyIfNeeded(orderedResult);
+
+		return orderedResult;
+	}
+
+	private static ListSelectionDialog createColumnSelectionDialog() {
+		ListSelectionDialog dialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"));
+		Set<String> defaultValues = new LinkedHashSet<>(HostInfo.getKeysForCSV());
+		dialog.setListData(new ArrayList<>(defaultValues));
+		defaultValues.remove(HostInfo.HOST_KEY_KEY);
+		dialog.setMultiSelection();
+		dialog.setPreviousSelectionValues(defaultValues);
+		dialog.setNonDeselectableValues(CSVImportDataModifier.getImportantHeaders());
+		return dialog;
+	}
+
+	private static LinkedHashSet<String> getOrderedSelectedColumns(Set<String> selected, List<String> important) {
+		LinkedHashSet<String> orderedResult = new LinkedHashSet<>();
+		for (String key : HostInfo.getKeysForCSV()) {
+			if (important.contains(key) || selected.contains(key)) {
+				orderedResult.add(key);
 			}
+		}
+		return orderedResult;
+	}
 
-			return result;
-		} else {
-			return new ArrayList<>();
+	private static void removeHostTypeKeyIfNeeded(Set<String> columns) {
+		if (columns.contains(HostInfo.HOST_TYPE_KEY) && !Utils.includeOpsiHostKey()) {
+			columns.remove(HostInfo.HOST_TYPE_KEY);
 		}
 	}
 }
