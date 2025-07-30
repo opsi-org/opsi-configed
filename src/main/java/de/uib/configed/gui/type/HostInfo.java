@@ -366,6 +366,10 @@ public class HostInfo {
 		clientWanConfig = b;
 	}
 
+	public void setType(String type) {
+		hostType = type;
+	}
+
 	private static String showValue(String value) {
 		if (value == null || "null".equals(value)) {
 			return "";
