@@ -97,16 +97,33 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
+		labelClientDescription.setFont(labelClientDescription.getFont().deriveFont(Font.BOLD));
+
 		labelClientInventoryNumber = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
+		labelClientInventoryNumber.setFont(labelClientInventoryNumber.getFont().deriveFont(Font.BOLD));
+
 		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
+		labelClientNotes.setFont(labelClientNotes.getFont().deriveFont(Font.BOLD));
+
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
+		labelClientSystemUUID.setFont(labelClientSystemUUID.getFont().deriveFont(Font.BOLD));
+
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
+		labelClientMacAddress.setFont(labelClientMacAddress.getFont().deriveFont(Font.BOLD));
+		labelClientMacAddress
+				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.macAddressTooltip"));
+
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		labelClientIPAddress.setFont(labelClientIPAddress.getFont().deriveFont(Font.BOLD));
+		labelClientIPAddress
+				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.ipAddressTooltip"));
 
 		labelClientOS = new JLabel();
+		labelClientOS.setFont(labelClientOS.getFont().deriveFont(Font.BOLD));
 		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
+
 		labelDeviceType = new JLabel();
 		labelDeviceTypeIcon = new JLabel();
 
@@ -121,7 +138,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		scrollpaneVendorModel.setBorder(null);
 
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
+		labelOneTimePassword.setFont(labelOneTimePassword.getFont().deriveFont(Font.BOLD));
+
 		labelOpsiHostKey = new JLabel("opsi-host-key");
+		labelOpsiHostKey.setFont(labelOpsiHostKey.getFont().deriveFont(Font.BOLD));
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
@@ -212,76 +232,65 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		setLayout(layoutClientPane);
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+
 				/////// Operating System (long label)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 				/////// DEVICE INFO (icon, vendor, model)
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutClientPane.createSequentialGroup()
 						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(30, 30, 30)
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(25, 25, 25)
 						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+
 				/////// DESCRIPTION
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// INVENTORY NUMBER
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// SYSTEM UUID
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(systemUUIDField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// MAC ADDRESS
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(macAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// IP ADDRESS
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(ipAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// INSTALL BY SHUTDOWN
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-						checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				/////// UEFI BOOT
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(checkBoxUEFIBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(checkBoxUEFIBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				/////// WAN CONFIG
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				/////// Health-Check active
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutClientPane.createSequentialGroup()
 						.addComponent(checkBoxHealthCheckActive, 0, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE).addComponent(openHealthCheckSettingsDialogButton,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// ONE TIME PASSWORD
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				////// opsiHostKey
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(hostKeyField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// NOTES
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
