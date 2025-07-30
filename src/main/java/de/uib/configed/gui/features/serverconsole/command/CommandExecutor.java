@@ -116,8 +116,6 @@ public class CommandExecutor implements MessagebusListener {
 			} else {
 				terminalFrame.getTabbedPane().getSelectedTerminalWidget().clearScreen();
 				getDialog().toFront();
-				getDialog().requestFocus();
-				terminalFrame.focusOnSelectedWidget();
 			}
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
