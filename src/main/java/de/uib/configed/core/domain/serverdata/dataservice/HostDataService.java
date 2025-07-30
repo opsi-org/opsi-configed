@@ -107,7 +107,7 @@ public class HostDataService {
 
 			String newClientId = hostname + "." + domainname;
 
-			Map<String, Object> hostItem = Utils.createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+			Map<String, Object> hostItem = new HashMap<>();
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -137,6 +137,7 @@ public class HostDataService {
 				depotId = hostInfoCollections.getConfigServer();
 			}
 			hostInfo.setInDepot(depotId);
+			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
@@ -233,6 +234,7 @@ public class HostDataService {
 			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(hostItem);
 			hostInfo.setInDepot(depotId);
+			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 
 			Logging.info(this, " createClient hostInfo ", hostInfo);
