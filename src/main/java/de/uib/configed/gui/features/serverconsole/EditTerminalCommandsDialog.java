@@ -55,6 +55,8 @@ public final class EditTerminalCommandsDialog {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
+	private CommandExecutor executor;
+
 	public EditTerminalCommandsDialog(ConfigedMain configedMain) {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -65,6 +67,7 @@ public final class EditTerminalCommandsDialog {
 		}
 
 		this.configedMain = configedMain;
+		this.executor = new CommandExecutor(configedMain);
 		factory = CommandFactory.getInstance();
 
 		initComponents();
@@ -359,7 +362,7 @@ public final class EditTerminalCommandsDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				CommandExecutor executor = new CommandExecutor(configedMain, command);
+				executor.setMultiCommand(command);
 				executor.execute();
 				SwingUtilities.invokeLater(() -> jTextAreaCommands.requestFocus());
 			}
