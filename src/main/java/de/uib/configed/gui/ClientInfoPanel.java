@@ -133,8 +133,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextAreaVendorModel.setBorder(null);
 
 		scrollpaneVendorModel = new JScrollPane(jTextAreaVendorModel);
-		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
 
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
@@ -474,8 +474,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 					+ "\n" + Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
 			jTextAreaVendorModel.append(vendor + "\n");
 			jTextAreaVendorModel.append(model);
-
 		}
+
+		// Go to the beginning of the text area
+		jTextAreaVendorModel.setCaretPosition(0);
 
 		dataAreChangedProgramatically = false;
 	}
