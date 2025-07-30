@@ -107,6 +107,8 @@ public class CommandExecutor implements MessagebusListener {
 			return null;
 		}
 
+		stopCommandExecution = false;
+
 		terminalFrame.setMessagebus(Messagebus.getInstance());
 		if (withGUI) {
 			if (getDialog() == null || !getDialog().isVisible()) {

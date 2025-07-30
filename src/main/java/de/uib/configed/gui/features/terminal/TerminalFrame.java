@@ -386,12 +386,7 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane = new TerminalTabbedPane(this);
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
-		tabbedPane.addTerminalTab();
-		if (!restrictView && session != null) {
-			tabbedPane.openSessionOnSelectedTab(session);
-		} else {
-			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
-		}
+		addAndInitTerminalTab();
 
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
@@ -452,10 +447,23 @@ public final class TerminalFrame implements MessagebusListener {
 		} else {
 			frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			frame.setVisible(true);
+
+			if (tabbedPane.getTabCount() == 0) {
+				addAndInitTerminalTab();
+			}
 		}
 
 		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
 			messagebus.getWebSocket().registerListener(this);
+		}
+	}
+
+	private void addAndInitTerminalTab() {
+		tabbedPane.addTerminalTab();
+		if (!restrictView && session != null) {
+			tabbedPane.openSessionOnSelectedTab(session);
+		} else {
+			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
 		}
 	}
 
