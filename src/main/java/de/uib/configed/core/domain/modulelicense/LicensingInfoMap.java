@@ -321,9 +321,9 @@ public final class LicensingInfoMap {
 
 		LocalDate latest = findLatestChangeDate(dates);
 
-		List<String> reducedDatesKeys = new ArrayList<>();
-
 		if (reducedView) {
+			List<String> reducedDatesKeys = new ArrayList<>();
+
 			for (String key : dates) {
 				if ((LocalDate.parse(key)).compareTo(latest) >= 0) {
 					reducedDatesKeys.add(key);
@@ -456,7 +456,7 @@ public final class LicensingInfoMap {
 	 * gets the date with the currently active licenses
 	 */
 	private String findLatestChangeDateString() {
-		String newest = null;
+		String newest = "";
 		try {
 			LocalDate now = LocalDate.now();
 
