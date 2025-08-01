@@ -7,6 +7,7 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -288,7 +289,7 @@ public class GroupDataService {
 		return new ArrayList<>(groups);
 	}
 
-	public boolean addHosts2Group(List<String> objectIds, String groupId) {
+	public boolean addHosts2Group(Collection<String> objectIds, String groupId) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}

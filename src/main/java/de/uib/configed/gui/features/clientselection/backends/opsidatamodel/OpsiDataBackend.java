@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.clientselection.backends.opsidatamodel;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +139,7 @@ public final class OpsiDataBackend {
 	 * Goes through the list of clients and filters them with operation. The
 	 * boolean arguments give hints which data is needed.
 	 */
-	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
+	public Set<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
 			boolean hasSwAudit) {
 		Logging.debug(this, "Starting the filtering.. , operation ", operation);
 		this.hasSoftware = hasSoftware;
@@ -147,7 +148,8 @@ public final class OpsiDataBackend {
 		List<OpsiDataClient> clients = getClients();
 		Logging.debug(this, "Number of clients to filter: ", clients.size());
 
-		List<String> matchingClients = new LinkedList<>();
+		Set<String> matchingClients = new HashSet<>();
+
 		for (OpsiDataClient client : clients) {
 			if (operation.doesMatch(client)) {
 				matchingClients.add(client.getId());

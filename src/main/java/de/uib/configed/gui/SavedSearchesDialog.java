@@ -11,7 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -45,7 +46,7 @@ import de.uib.configed.share.logging.Logging;
 
 public class SavedSearchesDialog {
 	private SelectionManager manager;
-	private List<String> result;
+	private Collection<String> result;
 	private DefaultListModel<String> model;
 
 	private ConfigedMain configedMain;
@@ -165,10 +166,10 @@ public class SavedSearchesDialog {
 
 	private void commit() {
 		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
-			result = new ArrayList<>();
-			List<String> selected = visibleList.getSelectedValuesList();
-			if (!selected.isEmpty()) {
-				manager.loadSearch(selected.get(0));
+			result = new HashSet<>();
+			String selected = visibleList.getSelectedValue();
+			if (selected != null) {
+				manager.loadSearch(selected);
 
 				result = manager.selectClients();
 			}

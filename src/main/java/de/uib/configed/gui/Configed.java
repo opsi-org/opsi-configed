@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Formatter;
-import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -363,7 +363,7 @@ public final class Configed {
 
 			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
 
-			List<String> newGroupMembers = query.runSearch(false);
+			Collection<String> newGroupMembers = query.runSearch(false);
 
 			query.populateHostGroup(newGroupMembers, group);
 			Main.endApp(Main.NO_ERROR);

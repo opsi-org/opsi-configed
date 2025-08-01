@@ -16,6 +16,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -172,7 +173,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
 			dialog.setCursor(Globals.WAIT_CURSOR);
 			collectData();
-			List<String> result = manager.selectClients();
+			Collection<String> result = manager.selectClients();
 			dialog.setCursor(null);
 			return result;
 		}, searchName);

@@ -6,8 +6,8 @@
 
 package de.uib.configed.gui.share.swing;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
@@ -17,21 +17,21 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.logging.Logging;
 
-public class SearchQueryExecutor extends SwingWorker<List<String>, Void> {
-	private Callable<List<String>> runnable;
+public class SearchQueryExecutor extends SwingWorker<Collection<String>, Void> {
+	private Callable<Collection<String>> runnable;
 	private String searchQuery;
 
-	public SearchQueryExecutor(Callable<List<String>> runnable, String searchQuery) {
+	public SearchQueryExecutor(Callable<Collection<String>> runnable, String searchQuery) {
 		this.runnable = runnable;
 		this.searchQuery = searchQuery;
 	}
 
 	@Override
-	public List<String> doInBackground() {
+	public Collection<String> doInBackground() {
 		ConfigedMain.getMainFrame().activateLoadingPane(
 				Configed.getResourceValue("ClientSelectionDialog.executingSearchQuery") + " " + searchQuery);
 		ConfigedMain.getMainFrame().activateLoadingCursor();
-		List<String> result = new ArrayList<>();
+		Collection<String> result = new HashSet<>();
 		try {
 			result = runnable.call();
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class SearchQueryExecutor extends SwingWorker<List<String>, Void> {
 		ConfigedMain.getMainFrame().getClientConfiguration().setSelectedIndex(0);
 
 		try {
-			List<String> clients = get();
+			Collection<String> clients = get();
 			Logging.debug(this, "", clients);
 			ConfigedMain.getMainFrame().getClientTablePanel().setSelectedValues(clients);
 		} catch (InterruptedException e) {
