@@ -8,12 +8,12 @@ package de.uib.configed.gui.features.clientselection.backends.opsidatamodel;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -148,14 +148,7 @@ public final class OpsiDataBackend {
 		List<OpsiDataClient> clients = getClients();
 		Logging.debug(this, "Number of clients to filter: ", clients.size());
 
-		Set<String> matchingClients = new HashSet<>();
-
-		for (OpsiDataClient client : clients) {
-			if (operation.doesMatch(client)) {
-				matchingClients.add(client.getId());
-			}
-		}
-		return matchingClients;
+		return clients.stream().filter(operation::doesMatch).map(OpsiDataClient::getId).collect(Collectors.toSet());
 	}
 
 	/**
