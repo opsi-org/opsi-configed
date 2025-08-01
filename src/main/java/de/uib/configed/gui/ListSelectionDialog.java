@@ -77,43 +77,8 @@ public class ListSelectionDialog {
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jList.setFixedCellHeight(20);
-		jList.setCellRenderer(
-				(JList<? extends String> l, String value, int index, boolean isSelected, boolean cellHasFocus) -> {
-					JLabel label = new JLabel(value);
-					label.setOpaque(true);
-
-					if (nonDeselectableIndices != null && nonDeselectableIndices.contains(index)) {
-						label.setForeground(UIManager.getColor("List.selectionInactiveForeground"));
-						label.setBackground(UIManager.getColor("List.selectionInactiveBackground"));
-						label.setIcon(Icons.getIntellijIcon("locked"));
-					} else {
-						label.setForeground(isSelected ? UIManager.getColor("List.selectionForeground")
-								: UIManager.getColor("List.foreground"));
-						label.setBackground(isSelected ? UIManager.getColor("List.selectionBackground")
-								: UIManager.getColor("List.background"));
-					}
-
-					return label;
-				});
-		jList.setSelectionModel(new DefaultListSelectionModel() {
-			@Override
-			public void removeSelectionInterval(int index0, int index1) {
-				for (int i = index0; i <= index1; i++) {
-					if (nonDeselectableIndices != null && !nonDeselectableIndices.contains(i)) {
-						super.removeSelectionInterval(i, i);
-					}
-				}
-			}
-
-			@Override
-			public void clearSelection() {
-				for (int i = 0; i < jList.getModel().getSize(); i++) {
-					if (nonDeselectableIndices != null && !nonDeselectableIndices.contains(i)) {
-						super.removeSelectionInterval(i, i);
-					}
-				}
-			}
-		});
+		jList.setCellRenderer(this::renderLabel);
+		jList.setSelectionModel(createListSelectionModel());
 		jList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -168,6 +133,48 @@ public class ListSelectionDialog {
 		layout.setHorizontalGroup(horizontalGroup);
 
 		return panel;
+	}
+
+	private ListSelectionModel createListSelectionModel() {
+		return new DefaultListSelectionModel() {
+			@Override
+			public void removeSelectionInterval(int index0, int index1) {
+				for (int i = index0; i <= index1; i++) {
+					if (nonDeselectableIndices != null && !nonDeselectableIndices.contains(i)) {
+						super.removeSelectionInterval(i, i);
+					}
+				}
+			}
+
+			@Override
+			public void clearSelection() {
+				for (int i = 0; i < jList.getModel().getSize(); i++) {
+					if (nonDeselectableIndices != null && !nonDeselectableIndices.contains(i)) {
+						super.removeSelectionInterval(i, i);
+					}
+				}
+			}
+		};
+	}
+
+	@SuppressWarnings("java:S4968")
+	private JLabel renderLabel(JList<? extends String> l, String value, int index, boolean isSelected,
+			boolean cellHasFocus) {
+		JLabel label = new JLabel(value);
+		label.setOpaque(true);
+
+		if (nonDeselectableIndices != null && nonDeselectableIndices.contains(index)) {
+			label.setForeground(UIManager.getColor("List.selectionInactiveForeground"));
+			label.setBackground(UIManager.getColor("List.selectionInactiveBackground"));
+			label.setIcon(Icons.getIntellijIcon("locked"));
+		} else {
+			label.setForeground(isSelected ? UIManager.getColor("List.selectionForeground")
+					: UIManager.getColor("List.foreground"));
+			label.setBackground(isSelected ? UIManager.getColor("List.selectionBackground")
+					: UIManager.getColor("List.background"));
+		}
+
+		return label;
 	}
 
 	public void setTitle(String title) {
@@ -270,7 +277,7 @@ public class ListSelectionDialog {
 		dialog.setAlwaysOnTop(value);
 	}
 
-	public void setNonDeselectableValues(List<String> nonDeselectableValues) {
+	public void setNonDeselectableValues(Collection<String> nonDeselectableValues) {
 		nonDeselectableIndices = new HashSet<>();
 		for (int i = 0; i < jList.getModel().getSize(); i++) {
 			if (nonDeselectableValues.contains(jList.getModel().getElementAt(i))) {
