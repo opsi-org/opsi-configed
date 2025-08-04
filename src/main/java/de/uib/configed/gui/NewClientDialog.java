@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -48,6 +49,8 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class NewClientDialog {
+	private static final Pattern NUMERIC_PATTERN = Pattern.compile("\\d+");
+
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
 	private JTextField jTextGroupSelection;
@@ -556,7 +559,7 @@ public final class NewClientDialog {
 	}
 
 	private boolean checkHostname(String hostname) {
-		if (hostname.length() > 15) {
+		if (hostname.length() > 15 || NUMERIC_PATTERN.matcher(hostname).matches()) {
 			int answer = JOptionPane.showConfirmDialog(dialog,
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
