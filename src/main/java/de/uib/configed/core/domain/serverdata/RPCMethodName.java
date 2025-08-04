@@ -108,8 +108,6 @@ public enum RPCMethodName {
 
 	GET_DOMAIN("getDomain"),
 
-	SET_RIGHTS("setRights"),
-
 	SERVICE_HEALTH_CHECK("service_healthCheck"), SERVICE_GET_DIAGNOSTIC_DATA("service_getDiagnosticData"),
 
 	/**
