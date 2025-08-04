@@ -96,7 +96,6 @@ public final class HealthCheckSettingsDialog {
 		hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
 
 		selectedHostList.setListData(hostNames);
-		selectedHostList.setMultiSelection();
 		if (defaultSelection != null && !defaultSelection.isEmpty()) {
 			selectedHostList.setPreviousSelectionValues(defaultSelection);
 		}

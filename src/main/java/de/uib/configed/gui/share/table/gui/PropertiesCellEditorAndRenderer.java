@@ -80,7 +80,6 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		unusedfield = new JLabel();
 
 		listSelectionDialog = new ListSelectionDialog(null, null, true);
-		listSelectionDialog.setMultiSelection();
 	}
 
 	public void setModelProducer(ListModelProducer producer) {

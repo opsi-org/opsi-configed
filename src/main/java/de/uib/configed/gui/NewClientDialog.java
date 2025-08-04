@@ -358,7 +358,6 @@ public final class NewClientDialog {
 	private void displayGroupSelectionDialog() {
 		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(dialog,
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
-		groupsSelectionDialog.setMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
 		groupsSelectionDialog

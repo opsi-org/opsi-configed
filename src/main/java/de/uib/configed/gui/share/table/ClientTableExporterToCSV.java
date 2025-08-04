@@ -142,7 +142,6 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		Set<String> defaultValues = new LinkedHashSet<>(HostInfo.getKeysForCSV());
 		dialog.setListData(new ArrayList<>(defaultValues));
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
-		dialog.setMultiSelection();
 		dialog.setPreviousSelectionValues(defaultValues);
 		dialog.setNonDeselectableValues(CSVImportDataModifier.getImportantHeaders());
 		return dialog;

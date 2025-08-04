@@ -93,7 +93,6 @@ public class ClientSearch {
 				Configed.getResourceValue("MainFrame.productSelection"));
 		listSelectionDialog.setListData(
 				new ArrayList<>(persistenceController.getProductDataService().getAllLocalbootProductNames()));
-		listSelectionDialog.setMultiSelection();
 		listSelectionDialog.show();
 		return listSelectionDialog.wasAccepted() ? listSelectionDialog.getSelectedValue() : "";
 	}

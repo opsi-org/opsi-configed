@@ -91,7 +91,6 @@ public class PackageManagerUninstallParameterDialog {
 		dialog.setModal(false);
 
 		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
-		depotSelection.setMultiSelection();
 
 		dialog.setVisible(true);
 	}

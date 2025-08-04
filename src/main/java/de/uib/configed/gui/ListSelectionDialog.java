@@ -43,13 +43,13 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ListSelectionDialog {
-	private JList<String> jList;
-	private TableSearchPane searchPane;
+	protected JList<String> jList;
+	protected TableSearchPane searchPane;
 
 	private FlatTextField editingTextField;
 
-	private JOptionPane jOptionPane;
-	private JDialog dialog;
+	protected JOptionPane jOptionPane;
+	protected JDialog dialog;
 
 	private Set<Integer> nonDeselectableIndices;
 
@@ -75,10 +75,10 @@ public class ListSelectionDialog {
 		panel.setLayout(layout);
 
 		jList = new JList<>();
-		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jList.setFixedCellHeight(20);
 		jList.setCellRenderer(this::renderLabel);
 		jList.setSelectionModel(createListSelectionModel());
+
 		jList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -223,7 +223,6 @@ public class ListSelectionDialog {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, list, list);
 		searchPane.setTargetModel(searchTargetModel);
-
 	}
 
 	public void addItem(String element) {

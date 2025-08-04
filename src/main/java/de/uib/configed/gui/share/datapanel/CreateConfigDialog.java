@@ -7,7 +7,6 @@
 package de.uib.configed.gui.share.datapanel;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -115,24 +114,15 @@ public class CreateConfigDialog {
 		// These dialogs are there to 
 		defaultValuesSelectionDialog = createSelectionDialog(
 				Configed.getResourceValue("CreateConfigDialog.defaultValues"));
+		updateSelectionModeForDefaultValuesSelectionDialog();
 		possibleValuesSelectionDialog = createSelectionDialog(
 				Configed.getResourceValue("CreateConfigDialog.possibleValues"));
-		possibleValuesSelectionDialog.setMultiSelection();
 
 		// These textfields will show currently selected values in the dialog.
 		JTextField defaultValuesTextField = createTextFieldAssociated(defaultValuesSelectionDialog);
 		JTextField possibleValuesTextField = createTextFieldAssociated(possibleValuesSelectionDialog);
 
-		isMultiValue.addActionListener((ActionEvent actionEvent) -> {
-			if (isMultiValue.isSelected()) {
-				defaultValuesSelectionDialog.setMultiSelection();
-			} else {
-				defaultValuesSelectionDialog.setSingleSelection();
-				// Update field according to single selection
-				defaultValuesTextField.setText(
-						PropertiesCellEditorAndRenderer.formatList(defaultValuesSelectionDialog.getSelectedValues()));
-			}
-		});
+		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
 
 		JLabel defaultValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValues"));
 		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
@@ -153,6 +143,14 @@ public class CreateConfigDialog {
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(propertiesLabel).addComponent(isEditable)
 				.addComponent(isMultiValue).addComponent(defaultValuesLabel).addComponent(defaultValuesTextField)
 				.addComponent(possibleValuesLabel).addComponent(possibleValuesTextField));
+	}
+
+	private void updateSelectionModeForDefaultValuesSelectionDialog() {
+		if (isMultiValue.isSelected()) {
+			defaultValuesSelectionDialog.setMultiSelection();
+		} else {
+			defaultValuesSelectionDialog.setSingleSelection();
+		}
 	}
 
 	private JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
