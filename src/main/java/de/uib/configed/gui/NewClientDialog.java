@@ -567,26 +567,6 @@ public final class NewClientDialog {
 			}
 		}
 
-		boolean onlyNumbers = true;
-		int i = 0;
-		while (onlyNumbers && i < hostname.length()) {
-			if (!Character.isDigit(hostname.charAt(i))) {
-				onlyNumbers = false;
-			}
-			i++;
-		}
-
-		if (onlyNumbers) {
-			int answer = JOptionPane.showConfirmDialog(dialog,
-					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"),
-					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question"),
-					JOptionPane.YES_NO_OPTION);
-
-			if (answer == JOptionPane.NO_OPTION) {
-				return false;
-			}
-		}
-
 		return true;
 	}
 
