@@ -50,8 +50,8 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		manager = new SelectionManager();
 		result = new ArrayList<>();
 		model = new DefaultListModel<>();
-		jList.setModel(model);
-		jList.addMouseListener(new MouseAdapter() {
+		listSelectionList.setModel(model);
+		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 1) {
@@ -62,7 +62,7 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 
 		super.setSingleSelection();
 
-		// The jList already needs to exist
+		// The listSelectionList already needs to exist
 		initPopupMenu();
 
 		JButton searchButton = new JButton(Configed.getResourceValue("search"));
@@ -84,8 +84,8 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		Icons.addIntellijIconToMenuItem(edit, "edit");
-		edit.addActionListener(
-				actionEvent -> ExtraFrameController.editClientSearch(configedMain, jList.getSelectedValue()));
+		edit.addActionListener(actionEvent -> ExtraFrameController.editClientSearch(configedMain,
+				listSelectionList.getSelectedValue()));
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
 		Icons.addIntellijIconToMenuItem(add, "add");
@@ -97,27 +97,27 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		jPopupMenu.add(edit);
 		jPopupMenu.add(add);
 
-		jList.setComponentPopupMenu(jPopupMenu);
+		listSelectionList.setComponentPopupMenu(jPopupMenu);
 	}
 
 	private void commit() {
 		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
 			result = new HashSet<>();
-			String selected = jList.getSelectedValue();
+			String selected = listSelectionList.getSelectedValue();
 			if (selected != null) {
 				manager.loadSearch(selected);
 
 				result = manager.selectClients();
 			}
 			return result;
-		}, jList.getSelectedValue());
+		}, listSelectionList.getSelectedValue());
 		executor.execute();
 
 		dialog.setVisible(false);
 	}
 
 	private void removeSelectedEntry() {
-		int index = jList.getSelectedIndex();
+		int index = listSelectionList.getSelectedIndex();
 		Logging.debug(this, "remove selected Entry, list index ", index);
 
 		if (index == -1) {
@@ -156,11 +156,11 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
-		jList.setModel(model);
+		listSelectionList.setModel(model);
 
-		searchPane.setTargetModel(new SearchTargetModelFromJList(jList, new ArrayList<>(descMap.keySet()),
+		searchPane.setTargetModel(new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(descMap.keySet()),
 				new ArrayList<>(descMap.values())));
 
-		jList.setCellRenderer(new ListCellRendererByIndex(descMap));
+		listSelectionList.setCellRenderer(new ListCellRendererByIndex(descMap));
 	}
 }

@@ -13,25 +13,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -43,7 +36,7 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ListSelectionDialog {
-	protected JList<String> jList;
+	protected ListSelectionList listSelectionList;
 	protected TableSearchPane searchPane;
 
 	private FlatTextField editingTextField;
@@ -72,21 +65,21 @@ public class ListSelectionDialog {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		jList = new JList<>();
-		jList.setFixedCellHeight(20);
+		listSelectionList = new ListSelectionList();
 
-		jList.addMouseListener(new MouseAdapter() {
+		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2 && editingTextField != null) {
-					editingTextField.setText(jList.getSelectedValue());
+					editingTextField.setText(listSelectionList.getSelectedValue());
 				}
 			}
 		});
-		JScrollPane listScrollPane = new JScrollPane(jList);
+
+		JScrollPane listScrollPane = new JScrollPane(listSelectionList);
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setNarrow(true);
@@ -131,26 +124,6 @@ public class ListSelectionDialog {
 		return panel;
 	}
 
-	@SuppressWarnings("java:S4968")
-	private static JLabel renderLabel(JList<? extends String> l, String value, int index, boolean isSelected,
-			boolean cellHasFocus, Set<Integer> nonDeselectableIndices) {
-		JLabel label = new JLabel(value);
-		label.setOpaque(true);
-
-		if (nonDeselectableIndices.contains(index)) {
-			label.setForeground(UIManager.getColor("List.selectionInactiveForeground"));
-			label.setBackground(UIManager.getColor("List.selectionInactiveBackground"));
-			label.setIcon(Icons.getIntellijIcon("locked"));
-		} else {
-			label.setForeground(isSelected ? UIManager.getColor("List.selectionForeground")
-					: UIManager.getColor("List.foreground"));
-			label.setBackground(isSelected ? UIManager.getColor("List.selectionBackground")
-					: UIManager.getColor("List.background"));
-		}
-
-		return label;
-	}
-
 	public void setTitle(String title) {
 		dialog.setTitle(title);
 	}
@@ -171,8 +144,8 @@ public class ListSelectionDialog {
 	}
 
 	public void setListData(List<String> v) {
-		jList.setListData(v.toArray(String[]::new));
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, v, v);
+		listSelectionList.setListData(v.toArray(String[]::new));
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, v, v);
 		searchPane.setTargetModel(searchTargetModel);
 	}
 
@@ -182,7 +155,7 @@ public class ListSelectionDialog {
 	}
 
 	public void setModel(ListModel<String> model) {
-		jList.setModel(model);
+		listSelectionList.setModel(model);
 
 		// Without this the search won't work
 		updateSearchTargetModel(model);
@@ -195,107 +168,42 @@ public class ListSelectionDialog {
 			list.add(element);
 		}
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, list, list);
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, list, list);
 		searchPane.setTargetModel(searchTargetModel);
 	}
 
-	public void addItem(String element) {
-		DefaultListModel<String> model = (DefaultListModel<String>) jList.getModel();
-		if (!model.contains(element) && !element.isBlank()) {
-			model.addElement(element);
-			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
-			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
-
-			// Without this the search won't work
-			updateSearchTargetModel(model);
-		}
-	}
-
 	public String getSelectedValue() {
-		return jList.getSelectedValue();
+		return listSelectionList.getSelectedValue();
 	}
 
 	public List<String> getSelectedValues() {
-		return jList.getSelectedValuesList();
+		return listSelectionList.getSelectedValuesList();
 	}
 
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
-		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
-		jList.setSelectedIndices(indices);
-
-		jList.ensureIndexIsVisible(jList.getSelectedIndex());
-	}
-
-	private int[] getPreviouslySelectedIndicesFromValues(Collection<String> previouslySelectedValues) {
-		int[] indices = new int[previouslySelectedValues.size()];
-		int n = 0;
-		for (int i = 0; i < jList.getModel().getSize(); i++) {
-			if (previouslySelectedValues.contains(jList.getModel().getElementAt(i))) {
-				indices[n] = i;
-				n++;
-			}
-		}
-		return indices;
+		listSelectionList.setPreviousSelectionValues(previouslySelectedValues);
 	}
 
 	public void setSingleSelection() {
-		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listSelectionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	public void setMultiSelection() {
-		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		listSelectionList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	public void setAlwaysOnTop(boolean value) {
 		dialog.setAlwaysOnTop(value);
 	}
 
-	@SuppressWarnings("java:S4968")
 	public void setNonDeselectableValues(Collection<String> nonDeselectableValues) {
-		if (nonDeselectableValues == null) {
-			// No need to do anything if there are no non-deselectable values
-			return;
-		}
-
-		Set<Integer> nonDeselectableIndices = new HashSet<>();
-		for (int i = 0; i < jList.getModel().getSize(); i++) {
-			if (nonDeselectableValues.contains(jList.getModel().getElementAt(i))) {
-				nonDeselectableIndices.add(i);
-			}
-		}
-
-		jList.setSelectionModel(new ExcludeFromDelelectionListSelectionModel(jList, nonDeselectableIndices));
-		jList.setCellRenderer((JList<? extends String> list, String value, int index, boolean isSelected,
-				boolean cellHasFocus) -> renderLabel(list, value, index, isSelected, cellHasFocus,
-						nonDeselectableIndices));
+		listSelectionList.setNonDeselectableValues(nonDeselectableValues);
 	}
 
-	public static class ExcludeFromDelelectionListSelectionModel extends DefaultListSelectionModel {
-		private Collection<Integer> nonDeselectableIndices;
-		private JList<String> jList;
+	private void addItem(String element) {
+		listSelectionList.addItem(element);
 
-		public ExcludeFromDelelectionListSelectionModel(JList<String> jList,
-				Collection<Integer> nonDeselectableValues) {
-			this.jList = jList;
-			this.nonDeselectableIndices = nonDeselectableValues;
-		}
-
-		private void removeSelectionIntervalFromJList(int index0, int index1) {
-			for (int i = index0; i <= index1; i++) {
-				if (!nonDeselectableIndices.contains(i)) {
-					super.removeSelectionInterval(i, i);
-				}
-			}
-		}
-
-		@Override
-		public void removeSelectionInterval(int index0, int index1) {
-			removeSelectionIntervalFromJList(index0, index1);
-		}
-
-		@Override
-		public void clearSelection() {
-			removeSelectionIntervalFromJList(0, jList.getModel().getSize() - 1);
-		}
+		// Without this the search won't work
+		updateSearchTargetModel(listSelectionList.getModel());
 	}
 }
