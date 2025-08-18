@@ -143,8 +143,7 @@ public final class ThemeManager {
 				Logging.error("OpenSans font resource not found for JavaFX!");
 				return;
 			}
-			javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(fontStream, JAVAFX_FONT_SIZE);
-			Logging.devel("font family ", font.getFamily());
+			javafx.scene.text.Font.loadFont(fontStream, JAVAFX_FONT_SIZE);
 		} catch (Exception e) {
 			Logging.error(e, "Failed to load OpenSans font for JavaFX.");
 		}
