@@ -29,9 +29,6 @@
          <children>
             <Button fx:id="backButton" mnemonicParsing="false" styleClass="btn"
                text="%Dashboard.goBackText">
-               <font>
-                  <Font size="16.0" />
-               </font>
                <graphic>
                   <FontAwesomeIconView fx:id="backButtonIcon" glyphName="ANGLE_LEFT" />
                </graphic>
@@ -42,11 +39,7 @@
                      styleClass="border-pane">
                      <center>
                         <Label fx:id="productsNumberLabel" text="0" wrapText="true"
-                           BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Label>
+                           BorderPane.alignment="CENTER" styleClass="big-label" />
                      </center>
                      <bottom>
                         <Text fx:id="productNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0"
@@ -57,11 +50,7 @@
                      styleClass="border-pane">
                      <center>
                         <Label fx:id="localbootProductsNumberLabel" text="0" wrapText="true"
-                           BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Label>
+                           BorderPane.alignment="CENTER" styleClass="big-label" />
                      </center>
                      <bottom>
                         <Text fx:id="localbootProductNumberTitleText" strokeType="OUTSIDE"
@@ -72,11 +61,7 @@
                      styleClass="border-pane">
                      <center>
                         <Label fx:id="netbootProductsNumberLabel" text="0" wrapText="true"
-                           BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Label>
+                           BorderPane.alignment="CENTER" styleClass="big-label" />
                      </center>
                      <bottom>
                         <Text fx:id="netbootProductNumberTitleText" strokeType="OUTSIDE"
@@ -88,11 +73,7 @@
                      styleClass="border-pane">
                      <center>
                         <Label fx:id="installedProductsNumberLabel" text="0" wrapText="true"
-                           BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Label>
+                           BorderPane.alignment="CENTER" styleClass="big-label" />
                      </center>
                      <bottom>
                         <Text fx:id="installedProductNumberTitleText" strokeType="OUTSIDE"
@@ -104,11 +85,7 @@
                      styleClass="border-pane">
                      <center>
                         <Label fx:id="failedProductsNumberLabel" text="0" wrapText="true"
-                           BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Label>
+                           BorderPane.alignment="CENTER" styleClass="big-label" />
                      </center>
                      <bottom>
                         <Text fx:id="failedProductNumberTitleText" strokeType="OUTSIDE"
@@ -120,11 +97,7 @@
                      styleClass="border-pane">
                      <center>
                         <Label fx:id="unusedProductsNumberLabel" text="0" wrapText="true"
-                           BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Label>
+                           BorderPane.alignment="CENTER" styleClass="big-label" />
                      </center>
                      <bottom>
                         <Text fx:id="unusedProductNumberTitleText" strokeType="OUTSIDE"

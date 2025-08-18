@@ -30,6 +30,18 @@ public final class ThemeManager {
 	public static final String THEME_LIGHT = "Light";
 	public static final String THEME_DARK = "Dark";
 
+	/**
+	 * Path to the OpenSans font resource. IMPORTANT: If you change this font,
+	 * you MUST also update references to the font name in 'default.css' (and
+	 * any other relevant stylesheet) for JavaFX. The font name used in CSS must
+	 * match the loaded font.
+	 */
+	private static final String FONT_PATH = "/fonts/OpenSans.ttf";
+	private static final String BOLD_FONT_PATH = "/fonts/OpenSans-Bold.ttf";
+	private static final float UI_FONT_SIZE = 13F;
+	private static final int JAVAFX_FONT_SIZE = 13;
+	private static final String THEMES_PACKAGE = "de.uib.configed.themes";
+
 	private static final List<String> availableThemes = Arrays.asList(THEME_LIGHT, THEME_DARK);
 	private static String selectedTheme = availableThemes.get(0);
 
@@ -85,9 +97,9 @@ public final class ThemeManager {
 		Logging.info("set look and feel ", getSelectedTheme());
 
 		// Location of the theme property files - register them
-		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
+		FlatLaf.registerCustomDefaultsSource(THEMES_PACKAGE);
 
-		registerOpenSansFont();
+		registerOpenSansFonts();
 
 		switch (getSelectedTheme()) {
 		case THEME_LIGHT:
@@ -106,15 +118,35 @@ public final class ThemeManager {
 		Globals.setTableColors();
 	}
 
-	private static void registerOpenSansFont() {
-		try (InputStream fontStream = Main.class.getResourceAsStream("/fonts/OpenSans.ttf")) {
-			Font openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-			openSansFont = openSansFont.deriveFont(13F);
+	private static void registerOpenSansFonts() {
+		registerSwingFont();
+		registerJavaFxFont(FONT_PATH);
+		registerJavaFxFont(BOLD_FONT_PATH);
+	}
+
+	private static void registerSwingFont() {
+		try (InputStream fontStream = Main.class.getResourceAsStream(FONT_PATH)) {
+			if (fontStream == null) {
+				Logging.error("OpenSans font resource not found for Swing!");
+				return;
+			}
+			Font openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(UI_FONT_SIZE);
 			UIManager.put("defaultFont", openSansFont);
-		} catch (IOException e) {
-			Logging.error(e, "Failed to retrieve font from resources (using font chosen by the system)");
-		} catch (FontFormatException e) {
-			Logging.error(e, "Font is faulty");
+		} catch (IOException | FontFormatException e) {
+			Logging.error(e, "Failed to load or parse OpenSans font for Swing (using system font)");
+		}
+	}
+
+	private static void registerJavaFxFont(String fontPath) {
+		try (InputStream fontStream = Main.class.getResourceAsStream(fontPath)) {
+			if (fontStream == null) {
+				Logging.error("OpenSans font resource not found for JavaFX!");
+				return;
+			}
+			javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(fontStream, JAVAFX_FONT_SIZE);
+			Logging.devel("font family ", font.getFamily());
+		} catch (Exception e) {
+			Logging.error(e, "Failed to load OpenSans font for JavaFX.");
 		}
 	}
 }
