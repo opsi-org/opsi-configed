@@ -40,11 +40,7 @@
                            styleClass="border-pane">
                            <center>
                               <Label fx:id="depotsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="depotNumberTitleText" strokeType="OUTSIDE"
@@ -56,11 +52,7 @@
                            styleClass="border-pane">
                            <center>
                               <Label fx:id="clientsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="clientNumberTitleText" strokeType="OUTSIDE"
@@ -72,11 +64,7 @@
                            styleClass="border-pane">
                            <center>
                               <Label fx:id="productsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="productNumberTitleText" strokeType="OUTSIDE"
@@ -88,11 +76,7 @@
                            prefWidth="322.0" styleClass="border-pane">
                            <center>
                               <Label fx:id="localbootProductsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="localbootProductNumberTitleText" strokeType="OUTSIDE"
@@ -104,11 +88,7 @@
                            prefWidth="322.0" styleClass="border-pane">
                            <center>
                               <Label fx:id="netbootProductsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="netbootProductNumberTitleText" strokeType="OUTSIDE"
@@ -120,11 +100,7 @@
                            prefWidth="322.0" styleClass="border-pane">
                            <center>
                               <Label fx:id="installedOSsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="installedOSNumberTitleText" strokeType="OUTSIDE"
@@ -136,11 +112,7 @@
                            styleClass="border-pane">
                            <center>
                               <Label fx:id="modulesNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="moduleNumberTitleText" strokeType="OUTSIDE"
@@ -152,11 +124,7 @@
                            styleClass="border-pane">
                            <center>
                               <Label fx:id="licensesNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="licenseNumberTitleText" strokeType="OUTSIDE"
@@ -176,11 +144,8 @@
                                        prefWidth="342.0" spacing="10.0" styleClass="pane">
                                        <children>
                                           <Text fx:id="depotTitleText" strokeType="OUTSIDE"
-                                             strokeWidth="0.0" text="%Dashboard.depotTitle">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                          </Text>
+                                             strokeWidth="0.0" text="%Dashboard.depotTitle"
+                                             styleClass="title-label" />
                                           <HBox alignment="CENTER_LEFT" prefHeight="24.0"
                                              prefWidth="360.0" spacing="20.0">
                                              <children>
@@ -245,11 +210,8 @@
                                        prefWidth="349.0" HBox.hgrow="ALWAYS">
                                        <children>
                                           <Text fx:id="productTitleText" strokeType="OUTSIDE"
-                                             strokeWidth="0.0" text="%Dashboard.productTitle">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                          </Text>
+                                             strokeWidth="0.0" text="%Dashboard.productTitle"
+                                             styleClass="title-label" />
                                           <ProductStatusComparison fx:id="productStatusComparison"
                                              VBox.vgrow="ALWAYS" />
                                        </children>
@@ -267,11 +229,8 @@
                                  prefWidth="492.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Text fx:id="clientTitleText" strokeType="OUTSIDE"
-                                       strokeWidth="0.0" text="%Dashboard.clientTitle">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
+                                       strokeWidth="0.0" text="%Dashboard.clientTitle"
+                                       styleClass="title-label" />
                                     <ClientLastSeenComparison fx:id="clientLastSeenComparison"
                                        VBox.vgrow="ALWAYS" />
                                  </children>
@@ -293,11 +252,8 @@
                                  VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Text fx:id="installedOSTitleText" strokeType="OUTSIDE"
-                                       strokeWidth="0.0" text="%Dashboard.installedOSTitle">
-                                       <font>
-                                          <Font size="19.0" />
-                                       </font>
-                                    </Text>
+                                       strokeWidth="0.0" text="%Dashboard.installedOSTitle"
+                                       styleClass="title-label" />
                                     <InstalledOSComparison fx:id="installedOSComparison"
                                        VBox.vgrow="ALWAYS" />
                                  </children>
@@ -309,11 +265,8 @@
                                  prefWidth="465.0" styleClass="pane" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Text fx:id="moduleTitleText" strokeType="OUTSIDE"
-                                       strokeWidth="0.0" text="%Dashboard.moduleTitle">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
+                                       strokeWidth="0.0" text="%Dashboard.moduleTitle"
+                                       styleClass="title-label" />
                                     <ModuleStatusComparison fx:id="moduleStatusComparison"
                                        VBox.vgrow="ALWAYS" />
                                  </children>
@@ -325,11 +278,8 @@
                                  prefWidth="269.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Text fx:id="licenseTitleText" strokeType="OUTSIDE"
-                                       strokeWidth="0.0" text="%Dashboard.licensesTitle">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
+                                       strokeWidth="0.0" text="%Dashboard.licensesTitle"
+                                       styleClass="title-label" />
                                     <LicenseStatusComparison fx:id="licenseStatusComparison"
                                        VBox.vgrow="ALWAYS" />
                                  </children>
@@ -354,11 +304,7 @@
                prefWidth="100.0" spacing="20.0" visible="false">
                <children>
                   <Text fx:id="reloadingText" strokeType="OUTSIDE" strokeWidth="0.0"
-                     text="%Dashboard.retrievingData">
-                     <font>
-                        <Font size="32.0" />
-                     </font>
-                  </Text>
+                     text="%Dashboard.retrievingData" styleClass="loading-data-label" />
                   <ProgressBar fx:id="statusProgressBar" prefWidth="200.0" />
                </children>
             </VBox>

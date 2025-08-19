@@ -10,17 +10,14 @@
 <fx:root type="StackPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BarChart fx:id="productStatusComparisonBarChart" animated="false" legendVisible="false">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
       </BarChart>
-      <Text fx:id="productStatusNoDataText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false">
-         <font>
-            <Font size="21.0" />
-         </font>
-      </Text>
+      <Text fx:id="productStatusNoDataText" strokeType="OUTSIDE" strokeWidth="0.0"
+         textAlignment="CENTER" visible="false" styleClass="no-data-label" />
    </children>
 </fx:root>
