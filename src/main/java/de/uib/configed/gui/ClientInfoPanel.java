@@ -112,13 +112,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientMacAddress.setFont(labelClientMacAddress.getFont().deriveFont(Font.BOLD));
-		labelClientMacAddress
-				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.macAddressTooltip"));
 
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelClientIPAddress.setFont(labelClientIPAddress.getFont().deriveFont(Font.BOLD));
-		labelClientIPAddress
-				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.ipAddressTooltip"));
 
 		labelClientOS = new JLabel();
 		labelClientOS.setFont(labelClientOS.getFont().deriveFont(Font.BOLD));
