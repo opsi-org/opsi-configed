@@ -122,7 +122,7 @@ public class ListSelectionDialog {
 
 			popupMenu = new JPopupMenu();
 			JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
-			Icons.addThemeIconToMenuItem(addItemMenu, "add");
+			Icons.addIntellijIconToMenuItem(addItemMenu, "add");
 			addItemMenu.addActionListener(actionEvent -> addMultilineItem(null));
 
 			popupMenu.add(addItemMenu);

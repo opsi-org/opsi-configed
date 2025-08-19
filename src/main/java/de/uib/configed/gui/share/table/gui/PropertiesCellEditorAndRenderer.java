@@ -131,7 +131,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 				result = getMultiValueEditor((String) table.getValueAt(row, 0), value, row);
 			} else if (value.toString().contains("\n")) {
-				result = getSingleValueMultiLineEditor((String) table.getValueAt(row, 0), value, row);
+				result = getSingleValueMultiLineEditor((String) table.getValueAt(row, 0), value);
 			} else {
 				result = getSingleValueEditor(value, row);
 			}
@@ -155,7 +155,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return checkBox;
 	}
 
-	public Component getSingleValueMultiLineEditor(String title, Object value, int row) {
+	public Component getSingleValueMultiLineEditor(String title, Object value) {
 		selectionMode = SINGLE_SELECTION_MULTI_LINE;
 
 		if (!((List<?>) value).isEmpty()) {

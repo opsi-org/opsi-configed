@@ -212,7 +212,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		propertiesCellEditorAndRenderer.getSingleValueMultiLineEditor(table.getValueAt(row, 0).toString(),
-				table.getValueAt(row, 1), row);
+				table.getValueAt(row, 1));
 
 		table.setValueAt(propertiesCellEditorAndRenderer.getCellEditorValue(), row, 1);
 	}
