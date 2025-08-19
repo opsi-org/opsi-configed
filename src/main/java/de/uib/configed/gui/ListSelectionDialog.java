@@ -150,10 +150,15 @@ public class ListSelectionDialog {
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(DEFAULT_MULTI_LINE_EDITOR_SIZE);
 
-		int result = JOptionPane.showConfirmDialog(dialog, scrollPane,
-				Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
-		if (result == JOptionPane.OK_OPTION) {
+		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(optionPane);
+
+		JDialog multiLineItemDialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+		multiLineItemDialog.pack();
+		multiLineItemDialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
 			addItem(textArea.getText());
 		}
 	}
