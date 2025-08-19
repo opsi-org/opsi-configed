@@ -165,7 +165,6 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public void build() {
-
 		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 

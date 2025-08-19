@@ -28,7 +28,6 @@ import de.uib.configed.gui.features.serverconsole.command.SingleCommandPackageUp
 import de.uib.configed.share.logging.Logging;
 
 public class PackageUpdaterDialog {
-
 	private JComboBox<String> jComboBoxActions;
 	private JComboBox<String> jComboBoxRepos;
 	private SingleCommandPackageUpdater command;

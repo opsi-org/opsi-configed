@@ -110,7 +110,6 @@ public class PackageManagerUninstallParameterDialog {
 				// Do nothing if no depots are available
 			}
 		} else {
-
 			if (selectedDepots.contains(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
 			} else if (selectedDepots.contains(DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {

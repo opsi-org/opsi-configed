@@ -25,7 +25,6 @@ public class ListSelectionList extends JList<String> {
 	public ListSelectionList() {
 		super.setFixedCellHeight(20);
 		super.setCellRenderer(this::renderLabel);
-
 	}
 
 	@SuppressWarnings("java:S4968")
@@ -121,5 +120,4 @@ public class ListSelectionList extends JList<String> {
 		}
 		return indices;
 	}
-
 }

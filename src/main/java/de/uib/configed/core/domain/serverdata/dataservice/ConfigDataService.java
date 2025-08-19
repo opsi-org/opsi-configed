@@ -28,9 +28,9 @@ import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.gui.type.SavedSearch;
-import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
@@ -962,7 +962,6 @@ public class ConfigDataService {
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 
 		for (String hostId : hostIds) {
-
 			Map<String, Object> enabledItem = Utils
 					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 			enabledItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);

@@ -51,7 +51,6 @@ public class UserConfigProducing {
 	}
 
 	public void produce() {
-
 		Set<String> userparts = new TreeSet<>();
 		Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);

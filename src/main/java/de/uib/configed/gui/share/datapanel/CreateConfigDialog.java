@@ -270,7 +270,6 @@ public class CreateConfigDialog {
 		if (!editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
 				booleanButton.isSelected(), isMultiValue.isSelected(), isEditable.isSelected(), defaultValues,
 				possibleValues)) {
-
 			JOptionPane.showMessageDialog(dialog,
 					Configed.getResourceValue("CreateConfigDialog.couldNotCreate.message") + ": "
 							+ textFieldConfigEntry.getText().strip(),
