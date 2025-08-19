@@ -155,7 +155,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return checkBox;
 	}
 
-	private Component getSingleValueMultiLineEditor(String title, Object value, int row) {
+	public Component getSingleValueMultiLineEditor(String title, Object value, int row) {
 		selectionMode = SINGLE_SELECTION_MULTI_LINE;
 
 		if (!((List<?>) value).isEmpty()) {

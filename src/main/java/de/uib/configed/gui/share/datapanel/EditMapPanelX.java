@@ -9,6 +9,7 @@ package de.uib.configed.gui.share.datapanel;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +61,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private JMenuItem popupRemoveSpecificEntry;
 	private JMenuItem setDefaultValue;
 	private JMenuItem popupItemAddStringListEntry;
+
+	private JMenuItem multiLineEditingItem;
 
 	protected Map<String, Object> originalMap;
 
@@ -123,8 +126,17 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		popupMenu = definePopup();
 
 		Logging.debug(this, "logPopupElements ", popupMenu.getSubElements().length);
+		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
+		Icons.addIntellijIconToMenuItem(multiLineEditingItem, "edit");
+		multiLineEditingItem.addActionListener(event -> startMultiLineEdit());
+		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu) {
+			@Override
+			protected void maybeShowPopup(MouseEvent e) {
+				updatePopupMenu();
+				super.maybeShowPopup(e);
+			}
+		};
 
-		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -172,6 +184,37 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		propertyHandler.setMapTableModel(mapTableModel);
+	}
+
+	private void updatePopupMenu() {
+		int row = table.getSelectedRow();
+
+		if (row != -1 && modelProducer.isEditable(row)
+				&& modelProducer.getSelectionMode(row) == ListSelectionModel.SINGLE_SELECTION) {
+			popupMenu.add(multiLineEditingItem);
+		} else {
+			popupMenu.remove(multiLineEditingItem);
+		}
+
+		if (setDefaultValue != null) {
+			setDefaultValue.setEnabled(row != -1);
+		}
+
+		if (popupRemoveSpecificEntry != null) {
+			popupRemoveSpecificEntry.setEnabled(row != -1);
+		}
+	}
+
+	public void startMultiLineEdit() {
+		int row = table.getSelectedRow();
+		if (row == -1) {
+			return;
+		}
+
+		propertiesCellEditorAndRenderer.getSingleValueMultiLineEditor(table.getValueAt(row, 0).toString(),
+				table.getValueAt(row, 1), row);
+
+		table.setValueAt(propertiesCellEditorAndRenderer.getCellEditorValue(), row, 1);
 	}
 
 	public void setOriginalMap(Map<String, Object> originalMap) {
