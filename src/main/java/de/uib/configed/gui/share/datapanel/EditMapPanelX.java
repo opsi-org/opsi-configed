@@ -128,7 +128,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		Logging.debug(this, "logPopupElements ", popupMenu.getSubElements().length);
 		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
 		Icons.addIntellijIconToMenuItem(multiLineEditingItem, "edit");
-		multiLineEditingItem.addActionListener(event -> startMultiLineEdit());
+		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
 		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
@@ -205,7 +205,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	public void startMultiLineEdit() {
+	public void startMultiLineEditing() {
 		int row = table.getSelectedRow();
 		if (row == -1) {
 			return;
