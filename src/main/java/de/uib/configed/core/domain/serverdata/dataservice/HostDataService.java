@@ -31,6 +31,7 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.gui.type.Object2GroupEntry;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
@@ -505,9 +506,9 @@ public class HostDataService {
 
 		List<String> userSavedDisplayFields = Arrays
 				.asList(UserPreferences.get(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS).split(","));
-		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-			hostDisplayFields.put(field,
-					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
+		for (ColumnDisplayInfo info : HostInfo.ORDERED_DISPLAY_COLUMN_INFOS) {
+			hostDisplayFields.put(info.label,
+					configuredByService.indexOf(info.label) > -1 || userSavedDisplayFields.contains(info.label));
 		}
 
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
