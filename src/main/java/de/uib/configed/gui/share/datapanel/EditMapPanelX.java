@@ -211,10 +211,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			return;
 		}
 
-		propertiesCellEditorAndRenderer.getSingleValueMultiLineEditor(table.getValueAt(row, 0).toString(),
-				table.getValueAt(row, 1));
-
-		table.setValueAt(propertiesCellEditorAndRenderer.getCellEditorValue(), row, 1);
+		propertiesCellEditorAndRenderer.editMultiValueSingleLine(table, row);
 	}
 
 	public void setOriginalMap(Map<String, Object> originalMap) {

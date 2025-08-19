@@ -155,9 +155,15 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return checkBox;
 	}
 
-	public Component getSingleValueMultiLineEditor(String title, Object value) {
-		selectionMode = SINGLE_SELECTION_MULTI_LINE;
+	public void editMultiValueSingleLine(JTable table, int row) {
+		Object result = startMultiLineEditor((String) table.getValueAt(row, 0), table.getValueAt(row, 1));
 
+		if (result != null && result.equals(JOptionPane.OK_OPTION)) {
+			table.setValueAt(Collections.singletonList(multiLineTextArea.getText()), table.getSelectedRow(), 1);
+		}
+	}
+
+	private Object startMultiLineEditor(String title, Object value) {
 		if (!((List<?>) value).isEmpty()) {
 			multiLineTextArea.setText(((List<?>) value).get(0).toString());
 		}
@@ -169,8 +175,18 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		dialog.pack();
 		dialog.setVisible(true);
 
+		return optionPane.getValue();
+	}
+
+	private Component getSingleValueMultiLineEditor(String title, Object value) {
+		selectionMode = SINGLE_SELECTION_MULTI_LINE;
+
+		Object result = startMultiLineEditor(title, value);
+
+		// Invoke this outside so that editing will be started before it's stopped or cancelled.
+		// Editing is started when the Component (not null) is returned
 		SwingUtilities.invokeLater(() -> {
-			if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+			if (result != null && result.equals(JOptionPane.OK_OPTION)) {
 				stopCellEditing();
 			} else {
 				cancelCellEditing();
