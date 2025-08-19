@@ -334,7 +334,29 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	}
 
 	public static String formatList(Object value) {
-		String s = value.toString();
-		return s.substring(Math.min(s.length(), 1), Math.max(0, s.length() - 1));
+		StringBuilder result = new StringBuilder();
+		for (Object element : ((List<?>) value)) {
+			result.append(formatValue(element));
+			result.append(" • ");
+		}
+		if (!result.isEmpty()) {
+			// Remove the last " • "
+			result.setLength(result.length() - 3);
+		}
+
+		return result.toString();
+	}
+
+	public static String formatValue(Object value) {
+		StringBuilder result = new StringBuilder();
+
+		String str = value.toString();
+		if (str.contains("\n")) {
+			result.append(str.substring(0, str.indexOf('\n')));
+			result.append("...");
+		} else {
+			result.append(str);
+		}
+		return result.toString();
 	}
 }

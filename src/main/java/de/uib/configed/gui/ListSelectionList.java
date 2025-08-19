@@ -16,12 +16,16 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.UIManager;
 
+import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.share.Icons;
 
 public class ListSelectionList extends JList<String> {
+	private Set<Integer> nonDeselectableIndices = new HashSet<>();
 
 	public ListSelectionList() {
 		super.setFixedCellHeight(20);
+		super.setCellRenderer(this::renderLabel);
+
 	}
 
 	@SuppressWarnings("java:S4968")
@@ -31,7 +35,7 @@ public class ListSelectionList extends JList<String> {
 			return;
 		}
 
-		Set<Integer> nonDeselectableIndices = new HashSet<>();
+		nonDeselectableIndices.clear();
 		for (int i = 0; i < getModel().getSize(); i++) {
 			if (nonDeselectableValues.contains(getModel().getElementAt(i))) {
 				nonDeselectableIndices.add(i);
@@ -39,9 +43,6 @@ public class ListSelectionList extends JList<String> {
 		}
 
 		setSelectionModel(new ExcludeFromDelelectionListSelectionModel(this, nonDeselectableIndices));
-		setCellRenderer((JList<? extends String> list, String value, int index, boolean isSelected,
-				boolean cellHasFocus) -> renderLabel(list, value, index, isSelected, cellHasFocus,
-						nonDeselectableIndices));
 	}
 
 	public static class ExcludeFromDelelectionListSelectionModel extends DefaultListSelectionModel {
@@ -74,9 +75,9 @@ public class ListSelectionList extends JList<String> {
 	}
 
 	@SuppressWarnings("java:S4968")
-	private static JLabel renderLabel(JList<? extends String> l, String value, int index, boolean isSelected,
-			boolean cellHasFocus, Set<Integer> nonDeselectableIndices) {
-		JLabel label = new JLabel(value);
+	private JLabel renderLabel(JList<? extends String> l, String value, int index, boolean isSelected,
+			boolean cellHasFocus) {
+		JLabel label = new JLabel(PropertiesCellEditorAndRenderer.formatValue(value));
 		label.setOpaque(true);
 
 		if (nonDeselectableIndices.contains(index)) {
