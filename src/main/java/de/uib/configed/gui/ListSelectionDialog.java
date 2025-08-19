@@ -39,6 +39,8 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ListSelectionDialog {
+	public static final Dimension DEFAULT_MULTI_LINE_EDITOR_SIZE = new Dimension(400, 200);
+
 	protected ListSelectionList listSelectionList;
 	private JPopupMenu popupMenu;
 	protected TableSearchPane searchPane;
@@ -146,7 +148,7 @@ public class ListSelectionDialog {
 	private void addMultilineItem(String initialText) {
 		JTextArea textArea = new JTextArea(initialText);
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		scrollPane.setPreferredSize(new Dimension(200, 100));
+		scrollPane.setPreferredSize(DEFAULT_MULTI_LINE_EDITOR_SIZE);
 
 		int result = JOptionPane.showConfirmDialog(dialog, scrollPane,
 				Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"), JOptionPane.OK_CANCEL_OPTION,

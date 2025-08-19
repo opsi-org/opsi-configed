@@ -7,7 +7,6 @@
 package de.uib.configed.gui.share.table.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -86,7 +85,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		multiLineTextArea = new JTextArea();
 		multiLineScrollPane = new JScrollPane(multiLineTextArea);
-		multiLineScrollPane.setPreferredSize(new Dimension(0, 100));
+		multiLineScrollPane.setPreferredSize(ListSelectionDialog.DEFAULT_MULTI_LINE_EDITOR_SIZE);
 
 		unusedfield = new JLabel();
 
