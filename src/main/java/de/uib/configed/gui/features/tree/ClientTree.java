@@ -161,24 +161,37 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public Set<String> getAllowedClients() {
+		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()
+				&& allowedClients == null) {
+			Map<String, Set<String>> group2Members = persistenceController.getGroupDataService()
+					.getFHostGroup2MembersPD();
+			group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
+
+			Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+			Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
+			allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
+		} else if (persistenceController.getUserRolesConfigDataService()
+				.isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+			allowedClients = null;
+		} else {
+			// Not needed.
+		}
 		return allowedClients;
 	}
 
 	public void build() {
-		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
-		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
-
-		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
-
-		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
-		allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
 		Set<String> allPCs = persistenceController.getHostInfoCollections()
-				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
+				.getClientsForDepots(configedMain.getSelectedDepots(), getAllowedClients());
 
 		produceTreeForALL(allPCs);
+
+		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
 		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
 				expandedPermittedHostGroups);
 
+		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
+		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 		associateClientsToGroups(allPCs, group2Members);
 
 		if (allowedClients != null) {
