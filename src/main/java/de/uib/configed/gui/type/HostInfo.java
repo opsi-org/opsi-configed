@@ -82,6 +82,8 @@ public class HostInfo {
 			this.resourceKey = resourceKey;
 		}
 
+		// When we have no resource key it means, we won't show it in the options
+		// because it will always be shown
 		public ColumnDisplayInfo(String label) {
 			this.label = label;
 			this.resourceKey = null;

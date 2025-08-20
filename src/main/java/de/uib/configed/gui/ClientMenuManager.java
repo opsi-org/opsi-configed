@@ -297,7 +297,8 @@ public final class ClientMenuManager implements MenuListener {
 	private JCheckBoxMenuItem createShowColumnCheckBoxMenuItem(ColumnDisplayInfo info) {
 		String resourceKey = info.resourceKey;
 		if (resourceKey == null) {
-			Logging.warning(this, "Unknown label - not included in the menu", resourceKey);
+			Logging.info(this, "Label ", info.label,
+					" has no resourceKey because we want it not to be shown - skipping");
 			return null;
 		}
 		String menuLabel = Configed.getResourceValue(resourceKey);
