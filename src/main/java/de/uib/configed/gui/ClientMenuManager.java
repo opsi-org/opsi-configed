@@ -43,6 +43,7 @@ import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
@@ -281,166 +282,46 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenu;
 	}
 
-	@SuppressWarnings({ "java:S138" })
 	private JMenu initShowColumnsMenu() {
-		JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		jCheckBoxMenuItemShowCreatedColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowCreatedColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		jCheckBoxMenuItemShowWANactiveColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowWANactiveColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ipAddress"));
-		jCheckBoxMenuItemShowIPAddressColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowIPAddressColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowlastSeenColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientLastSeen"));
-		jCheckBoxMenuItemShowlastSeenColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowlastSeenColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDescriptionColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
-		jCheckBoxMenuItemShowDescriptionColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDescriptionColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowConnectedColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-		jCheckBoxMenuItemShowConnectedColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowConnectedColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowSystemUUIDColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
-		jCheckBoxMenuItemShowSystemUUIDColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowSystemUUIDColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
-		jCheckBoxMenuItemShowHardwareAddressColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowHardwareAddressColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("sessionInfo"));
-		jCheckBoxMenuItemShowSessionInfoColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowSessionInfoColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
-		jCheckBoxMenuItemShowInventoryNumberColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowInventoryNumberColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
-		jCheckBoxMenuItemShowInstallByShutdown.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowInstallByShutdown.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem(Configed.getResourceValue("depot"));
-		jCheckBoxMenuItemShowDepotColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDepotColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowHealthCheckActiveColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.healthCheckActive"));
-		jCheckBoxMenuItemShowHealthCheckActiveColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowHealthCheckActiveColumn.addActionListener((ActionEvent event) -> {
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getHostDataService()
-							.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
-			configedMain.toggleColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL);
-		});
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowOSColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
-		jCheckBoxMenuItemShowOSColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowOSColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowOSTypeColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystemType"));
-		jCheckBoxMenuItemShowOSTypeColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowOSTypeColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowOSArchitectureColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystemArchitecture"));
-		jCheckBoxMenuItemShowOSArchitectureColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowOSArchitectureColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceTypeColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType"));
-		jCheckBoxMenuItemShowDeviceTypeColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDeviceTypeColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceVendorColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
-		jCheckBoxMenuItemShowDeviceVendorColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDeviceVendorColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceModelColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
-		jCheckBoxMenuItemShowDeviceModelColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDeviceModelColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
-
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowlastSeenColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDescriptionColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowConnectedColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowHardwareAddressColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowInventoryNumberColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowCreatedColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowHealthCheckActiveColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowOSColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowOSTypeColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowOSArchitectureColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceTypeColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceVendorColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceModelColumn);
+		for (ColumnDisplayInfo info : HostInfo.ORDERED_DISPLAY_COLUMN_INFOS) {
+			JCheckBoxMenuItem jCheckBoxMenuItem = createShowColumnCheckBoxMenuItem(info);
+			if (jCheckBoxMenuItem != null) {
+				jMenuShowColumns.add(jCheckBoxMenuItem);
+			}
+		}
 
 		return jMenuShowColumns;
+	}
+
+	private JCheckBoxMenuItem createShowColumnCheckBoxMenuItem(ColumnDisplayInfo info) {
+		String resourceKey = info.resourceKey;
+		if (resourceKey == null) {
+			Logging.warning(this, "Unknown label - not included in the menu", resourceKey);
+			return null;
+		}
+		String menuLabel = Configed.getResourceValue(resourceKey);
+		boolean selected = false;
+		if (persistenceController.getHostDataService().getHostDisplayFields().containsKey(info.label)) {
+			Boolean val = persistenceController.getHostDataService().getHostDisplayFields().get(info.label);
+			selected = Boolean.TRUE.equals(val);
+		}
+
+		JCheckBoxMenuItem item = new JCheckBoxMenuItem(menuLabel);
+		item.setSelected(selected);
+
+		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
+			item.addActionListener((ActionEvent event) -> {
+				ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+						.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getHostDataService()
+								.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
+				configedMain.toggleColumn(info.label);
+			});
+			return item;
+		}
+
+		item.addActionListener(event -> configedMain.toggleColumn(info.label));
+		return item;
 	}
 
 	private void createPdf() {
