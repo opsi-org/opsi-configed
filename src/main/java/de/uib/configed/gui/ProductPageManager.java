@@ -93,7 +93,7 @@ public class ProductPageManager implements MessagebusListener {
 	private void setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
 			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
 			List<String> displayFields) {
-		if (!configedMain.setDepotRepresentative()) {
+		if (!configedMain.checkSynchronous(configedMain.getDepotsOfSelectedClients())) {
 			// In this case, we need to go back to the client configuration
 			clientConfiguration.setSelectedIndex(0);
 			return;

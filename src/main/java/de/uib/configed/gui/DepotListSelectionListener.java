@@ -54,6 +54,8 @@ public class DepotListSelectionListener implements ListSelectionListener {
 			configedMain.refreshClientListKeepingGroup();
 
 			configedMain.initTabComponents();
+
+			configedMain.setDepotRepresentative(depotsList.getSelectedValuesList());
 		}
 	}
 }
