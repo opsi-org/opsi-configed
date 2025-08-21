@@ -837,7 +837,7 @@ public class ConfigedMain {
 		}
 	}
 
-	private boolean checkSynchronous(Set<String> depots) {
+	public boolean checkSynchronous(Set<String> depots) {
 		if (depots.size() > 1 && !persistenceController.getDepotDataService().areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
@@ -848,23 +848,12 @@ public class ConfigedMain {
 		return true;
 	}
 
-	public boolean setDepotRepresentative() {
+	public void setDepotRepresentative(Collection<String> depots) {
 		Logging.debug(this, "setDepotRepresentative");
 
-		if (selectedClients.isEmpty()) {
+		if (depots.isEmpty()) {
 			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-
-			return true;
-		}
-
-		Set<String> depotsOfSelectedClients = getDepotsOfSelectedClients();
-
-		Logging.info(this, "depots of selected clients:", depotsOfSelectedClients);
-
-		Logging.debug(this, "setDepotRepresentative(), old representative: ", depotRepresentative, " should be ");
-
-		if (!checkSynchronous(depotsOfSelectedClients)) {
-			return false;
+			return;
 		}
 
 		String oldRepresentative = depotRepresentative;
@@ -872,9 +861,9 @@ public class ConfigedMain {
 		Logging.debug(this, "setDepotRepresentative  start   up to now ", oldRepresentative, " old",
 				depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
 
-		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients ", depotsOfSelectedClients);
+		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients ", depots);
 
-		Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
+		Iterator<String> depotsIterator = depots.iterator();
 
 		if (!depotsIterator.hasNext()) {
 			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
@@ -905,8 +894,6 @@ public class ConfigedMain {
 			// everything
 			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 		}
-
-		return true;
 	}
 
 	public String getDepotRepresentative() {

@@ -54,6 +54,16 @@ public class DepotListSelectionListener implements ListSelectionListener {
 			configedMain.refreshClientListKeepingGroup();
 
 			configedMain.initTabComponents();
+
+			configedMain.setDepotRepresentative(depotsList.getSelectedValuesList());
+
+			if (ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() == 1) {
+				ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setLocalbootProductsPage();
+			} else if (ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() == 2) {
+				ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setNetbootProductsPage();
+			} else {
+				// Do nothing.
+			}
 		}
 	}
 }
