@@ -153,7 +153,7 @@ public class ListSelectionDialog {
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 		Utils.enableDialogResizing(optionPane);
 
-		JDialog multiLineItemDialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+		JDialog multiLineItemDialog = optionPane.createDialog(dialog,
 				Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
 		multiLineItemDialog.pack();
 		multiLineItemDialog.setVisible(true);
