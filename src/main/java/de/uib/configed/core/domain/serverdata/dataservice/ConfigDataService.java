@@ -652,15 +652,13 @@ public class ConfigDataService {
 			state.put("configId", entry.getKey());
 			state.put("values", entry.getValue());
 
+			configStateCollection.add(state);
+
 			Map<String, Object> retrievedConfig = settings.getRetrieved();
 
-			if (retrievedConfig == null) {
-				configStateCollection.add(state);
-			} else {
-				configStateCollection.add(state);
-
-				// we hope that the update works and directly update the retrievedConfig
-				retrievedConfig.put(entry.getKey(), entry.getValue());
+			// remove the key from the retrievedConfig so that we won't update/save it again
+			if (retrievedConfig != null) {
+				retrievedConfig.remove(entry.getKey());
 			}
 		}
 	}
