@@ -78,7 +78,7 @@ public class ListSelectionDialog {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2 && editingTextField != null) {
 					if (listSelectionList.getSelectedValue().contains("\n")) {
-						addMultilineItem(listSelectionList.getSelectedValue());
+						addMultilineItem(listSelectionList.getSelectedValue(), true);
 					} else {
 						editingTextField.setText(listSelectionList.getSelectedValue());
 					}
@@ -125,7 +125,7 @@ public class ListSelectionDialog {
 			popupMenu = new JPopupMenu();
 			JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
 			Icons.addIntellijIconToMenuItem(addItemMenu, "add");
-			addItemMenu.addActionListener(actionEvent -> addMultilineItem(null));
+			addItemMenu.addActionListener(actionEvent -> addMultilineItem(null, false));
 
 			popupMenu.add(addItemMenu);
 
@@ -145,7 +145,7 @@ public class ListSelectionDialog {
 		return panel;
 	}
 
-	private void addMultilineItem(String initialText) {
+	private void addMultilineItem(String initialText, boolean edit) {
 		JTextArea textArea = new JTextArea(initialText);
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(DEFAULT_MULTI_LINE_EDITOR_SIZE);
@@ -154,11 +154,16 @@ public class ListSelectionDialog {
 		Utils.enableDialogResizing(optionPane);
 
 		JDialog multiLineItemDialog = optionPane.createDialog(dialog,
-				Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+				edit ? Configed.getResourceValue("ListSelectionDialog.editMultiLineValue")
+						: Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
 		multiLineItemDialog.pack();
 		multiLineItemDialog.setVisible(true);
 
 		if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+			if (edit) {
+				removeItem(initialText);
+			}
+
 			addItem(textArea.getText());
 		}
 	}
@@ -245,6 +250,13 @@ public class ListSelectionDialog {
 
 	private void addItem(String element) {
 		listSelectionList.addItem(element);
+
+		// Without this the search won't work
+		updateSearchTargetModel(listSelectionList.getModel());
+	}
+
+	private void removeItem(String element) {
+		listSelectionList.removeItem(element);
 
 		// Without this the search won't work
 		updateSearchTargetModel(listSelectionList.getModel());

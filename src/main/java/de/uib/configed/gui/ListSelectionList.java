@@ -102,6 +102,11 @@ public class ListSelectionList extends JList<String> {
 		}
 	}
 
+	public void removeItem(String element) {
+		DefaultListModel<String> model = (DefaultListModel<String>) getModel();
+		model.removeElement(element);
+	}
+
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
 		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
 		setSelectedIndices(indices);
