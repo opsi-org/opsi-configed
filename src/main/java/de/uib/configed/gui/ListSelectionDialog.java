@@ -28,6 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -76,7 +78,8 @@ public class ListSelectionDialog {
 		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2 && editingTextField != null) {
+				if (e.getClickCount() == 2 && editingTextField != null
+						&& listSelectionList.getSelectedValuesList().size() == 1) {
 					if (listSelectionList.getSelectedValue().contains("\n")) {
 						addMultilineItem(listSelectionList.getSelectedValue(), true);
 					} else {
@@ -114,35 +117,69 @@ public class ListSelectionDialog {
 		// Add additional component if not null
 		Logging.info(this, "editable: ", editable);
 		if (editable) {
-			editingTextField = new FlatTextField();
-			JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
-			addValueButton.addActionListener(actionEvent -> addItem(editingTextField.getText()));
-
-			editingTextField.setTrailingComponent(addValueButton);
-			editingTextField.setShowClearButton(true);
-			editingTextField.addActionListener(actionEvent -> addItem(editingTextField.getText()));
-
-			popupMenu = new JPopupMenu();
-			JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
-			Icons.addIntellijIconToMenuItem(addItemMenu, "add");
-			addItemMenu.addActionListener(actionEvent -> addMultilineItem(null, false));
-
-			popupMenu.add(addItemMenu);
-
-			editingTextField.setComponentPopupMenu(popupMenu);
-			listSelectionList.setComponentPopupMenu(popupMenu);
-
-			horizontalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					Short.MAX_VALUE);
-			verticalGroup.addGap(Globals.GAP_SIZE);
-			verticalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE);
+			createEditableOptions(horizontalGroup, verticalGroup);
 		}
 
 		layout.setVerticalGroup(verticalGroup);
 		layout.setHorizontalGroup(horizontalGroup);
 
 		return panel;
+	}
+
+	private void createEditableOptions(ParallelGroup horizontalGroup, SequentialGroup verticalGroup) {
+		editingTextField = new FlatTextField();
+		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
+		addValueButton.addActionListener(actionEvent -> addItem(editingTextField.getText()));
+
+		editingTextField.setTrailingComponent(addValueButton);
+		editingTextField.setShowClearButton(true);
+		editingTextField.addActionListener(actionEvent -> addItem(editingTextField.getText()));
+
+		popupMenu = new JPopupMenu();
+
+		JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+		Icons.addIntellijIconToMenuItem(addItemMenu, "add");
+		addItemMenu.addActionListener(actionEvent -> addMultilineItem(null, false));
+
+		JMenuItem editItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.editMultiLineValue"));
+		Icons.addIntellijIconToMenuItem(editItemMenu, "edit");
+		editItemMenu.addActionListener(actionEvent -> addMultilineItem(listSelectionList.getSelectedValue(), true));
+
+		JMenuItem removeItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.removeSelectedValues"));
+		Icons.addIntellijIconToMenuItem(removeItemMenu, "remove");
+		removeItemMenu
+				.addActionListener(actionEvent -> listSelectionList.getSelectedValuesList().forEach(this::removeItem));
+
+		popupMenu.add(addItemMenu);
+		popupMenu.add(editItemMenu);
+		popupMenu.add(removeItemMenu);
+
+		editingTextField.setComponentPopupMenu(popupMenu);
+		listSelectionList.setComponentPopupMenu(popupMenu);
+
+		popupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				editItemMenu.setEnabled(listSelectionList.getSelectedValuesList().size() == 1);
+				removeItemMenu.setEnabled(!listSelectionList.isSelectionEmpty());
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// Not needed here
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// Handle popup menu cancellation
+			}
+		});
+
+		horizontalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				Short.MAX_VALUE);
+		verticalGroup.addGap(Globals.GAP_SIZE);
+		verticalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
 	}
 
 	private void addMultilineItem(String initialText, boolean edit) {
