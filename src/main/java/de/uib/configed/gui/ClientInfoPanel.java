@@ -78,7 +78,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private Map<String, Map<String, String>> changedClientInfos;
 
 	// We need this flag so that the document listener is not active when
-	// the data in the components are updated by the program instead of by user input
+	// the data in the components are updated by the program instead of by user
+	// input
 	private boolean dataAreChangedProgramatically;
 
 	private ConfigedMain configedMain;
@@ -96,6 +97,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private void initComponents() {
 		labelClientOSIcon = new JLabel();
 		jTextFieldClientID = createUneditableTextField();
+		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientDescription.setFont(labelClientDescription.getFont().deriveFont(Font.BOLD));
@@ -122,6 +124,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.ipAddressTooltip"));
 
 		jTextFieldClientOS = createUneditableTextField();
+		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
 		jTextFieldClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
 
 		jTextFieldDeviceType = createUneditableTextField();
