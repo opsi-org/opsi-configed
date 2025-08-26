@@ -46,8 +46,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientSystemUUID;
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
-	private JLabel labelClientOS;
-	private JLabel labelDeviceType;
 	private JLabel labelDeviceTypeIcon;
 	private JTextArea jTextAreaVendorModel;
 	private JLabel labelOneTimePassword;
@@ -57,6 +55,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JScrollPane scrollpaneVendorModel;
 
 	private JLabel labelClientID;
+	private JLabel labelClientOSIcon;
+	private JTextField jTextFieldClientID;
+	private JTextField jTextFieldClientOS;
+	private JTextField jTextFieldDeviceType;
 	private FlatTriStateCheckBox checkBoxInstallByShutdown;
 	private FlatTriStateCheckBox checkBoxUEFIBoot;
 	private FlatTriStateCheckBox checkBoxWANConfig;
@@ -76,7 +78,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private Map<String, Map<String, String>> changedClientInfos;
 
 	// We need this flag so that the document listener is not active when
-	// the data in the components are updated by the program instead of by user input
+	// the data in the components are updated by the program instead of by user
+	// input
 	private boolean dataAreChangedProgramatically;
 
 	private ConfigedMain configedMain;
@@ -92,9 +95,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	private void initComponents() {
-		labelClientID = new JLabel();
-
-		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
+		labelClientOSIcon = new JLabel();
+		jTextFieldClientID = createUneditableTextField();
+		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientDescription.setFont(labelClientDescription.getFont().deriveFont(Font.BOLD));
@@ -116,11 +119,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelClientIPAddress.setFont(labelClientIPAddress.getFont().deriveFont(Font.BOLD));
 
-		labelClientOS = new JLabel();
-		labelClientOS.setFont(labelClientOS.getFont().deriveFont(Font.BOLD));
-		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
+		jTextFieldClientOS = createUneditableTextField();
+		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
+		jTextFieldClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
 
-		labelDeviceType = new JLabel();
+		jTextFieldDeviceType = createUneditableTextField();
 		labelDeviceTypeIcon = new JLabel();
 
 		jTextAreaVendorModel = new JTextArea();
@@ -223,21 +226,32 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		hostKeyField.setTrailingComponent(jButtonCopyHostKey);
 	}
 
+	private JTextField createUneditableTextField() {
+		JTextField textField = new JTextField();
+		textField.setEditable(false);
+		textField.setBorder(null);
+		textField.setBackground(null);
+		return textField;
+	}
+
 	private void setupLayout() {
 		GroupLayout layoutClientPane = new GroupLayout(this);
 		setLayout(layoutClientPane);
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
-				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutClientPane.createSequentialGroup()
+						.addComponent(labelClientOSIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(jTextFieldClientID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 				/////// Operating System (long label)
-				.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(jTextFieldClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// DEVICE INFO (icon, vendor, model)
 				.addGroup(layoutClientPane.createSequentialGroup()
 						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addComponent(jTextFieldDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(25, 25, 25)
 						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
@@ -292,17 +306,21 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT + 4,
-						Globals.DEFAULT_JLABEL_HEIGHT + 8)
+				.addGroup(layoutClientPane.createParallelGroup()
+						.addComponent(labelClientOSIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT)
+						.addComponent(jTextFieldClientID, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT))
 				/////// Operating System (long label)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
+				.addComponent(jTextFieldClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
 				/////// DEVICE INFO (icon, vendor, model)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutClientPane.createParallelGroup()
 						.addComponent(labelDeviceTypeIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
 								Globals.DEFAULT_JLABEL_HEIGHT)
-						.addComponent(labelDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT))
+						.addComponent(jTextFieldDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT))
 				.addComponent(scrollpaneVendorModel, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE,
 						Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE)
 
@@ -427,7 +445,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientOS(String s) {
 		dataAreChangedProgramatically = true;
-		labelClientOS.setText(s);
+		jTextFieldClientOS.setText(s);
 		dataAreChangedProgramatically = false;
 	}
 
@@ -453,7 +471,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		labelDeviceTypeIcon.setIcon(getDeviceTypeIcon(deviceType));
 
-		labelDeviceType.setText(transformDeviceType(deviceType));
+		jTextFieldDeviceType.setText(transformDeviceType(deviceType));
 
 		jTextAreaVendorModel.setText("");
 		if (vendor.isBlank() && model.isBlank()) {
@@ -486,7 +504,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientPlatform(String value) {
 		dataAreChangedProgramatically = true;
-		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
+		labelClientOSIcon.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
 		dataAreChangedProgramatically = false;
 	}
 
@@ -511,7 +529,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	public void setClientID(String s) {
-		labelClientID.setText(s);
+		jTextFieldClientID.setText(s);
 	}
 
 	public void updateClientCheckboxText() {
