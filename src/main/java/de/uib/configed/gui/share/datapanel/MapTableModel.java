@@ -397,13 +397,12 @@ public class MapTableModel extends AbstractTableModel {
 		if (!getValueAt(row, col).equals(value) && !getValueAt(row, col).toString().equals(value.toString()) && col == 1
 				&& keys != null) {
 			String myKey = keys.get(row);
-			Object o = value;
 
 			// the internal view data:
-			data.put(myKey, o);
+			data.put(myKey, value);
 			// the external view data
-			oridata.put(myKey, o);
-			Logging.debug(this, "put into oridata for myKey o ", myKey, ": ", o);
+			oridata.put(myKey, value);
+			Logging.debug(this, "put into oridata for myKey o ", myKey, ": ", value);
 			// the data sources:
 
 			if (writeData) {
