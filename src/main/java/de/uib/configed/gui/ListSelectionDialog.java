@@ -145,14 +145,8 @@ public class ListSelectionDialog {
 		Icons.addIntellijIconToMenuItem(editItemMenu, "edit");
 		editItemMenu.addActionListener(actionEvent -> addMultilineItem(listSelectionList.getSelectedValue(), true));
 
-		JMenuItem removeItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.removeSelectedValues"));
-		Icons.addIntellijIconToMenuItem(removeItemMenu, "remove");
-		removeItemMenu
-				.addActionListener(actionEvent -> listSelectionList.getSelectedValuesList().forEach(this::removeItem));
-
 		popupMenu.add(addItemMenu);
 		popupMenu.add(editItemMenu);
-		popupMenu.add(removeItemMenu);
 
 		editingTextField.setComponentPopupMenu(popupMenu);
 		listSelectionList.setComponentPopupMenu(popupMenu);
@@ -161,7 +155,6 @@ public class ListSelectionDialog {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				editItemMenu.setEnabled(listSelectionList.getSelectedValuesList().size() == 1);
-				removeItemMenu.setEnabled(!listSelectionList.isSelectionEmpty());
 			}
 
 			@Override
