@@ -30,16 +30,15 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 
 	@Override
 	public boolean addMap(Map<String, Object> map) {
-		boolean result = true;
+		if (ConfigedMain.getEditingTarget() == EditingTarget.SERVER) {
+			Logging.debug(this, "adding ConfigUpdateCommand");
+			return add(new ConfigUpdateCommand(POJOReMapper.remap(map)));
+		}
 
+		boolean result = true;
 		for (String objectId : objectIds) {
-			if (ConfigedMain.getEditingTarget() == EditingTarget.SERVER) {
-				Logging.debug(this, "adding ConfigUpdateCommand");
-				result = add(new ConfigUpdateCommand(POJOReMapper.remap(map)));
-			} else {
-				Logging.debug(this, "adding ConfigStateUpdateCommand");
-				result = add(new ConfigStateUpdateCommand(objectId, map));
-			}
+			Logging.debug(this, "adding ConfigStateUpdateCommand");
+			result = add(new ConfigStateUpdateCommand(objectId, map));
 		}
 
 		return result;
