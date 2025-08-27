@@ -23,6 +23,10 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
+	public ConfigUpdateCollection() {
+		super();
+	}
+
 	public ConfigUpdateCollection(List<String> objectIds) {
 		super();
 		this.objectIds = objectIds;

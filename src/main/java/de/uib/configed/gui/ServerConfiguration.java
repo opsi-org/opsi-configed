@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +35,7 @@ public class ServerConfiguration extends JTabbedPane {
 
 	private void setHostConfigTab() {
 		Logging.info(this, "setNetworkconfigurationPage for server");
-		ConfigUpdateCollection configUpdateCollection = new ConfigUpdateCollection(
-				Collections.singletonList(persistenceController.getHostInfoCollections().getConfigServer()));
+		ConfigUpdateCollection configUpdateCollection = new ConfigUpdateCollection();
 
 		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
