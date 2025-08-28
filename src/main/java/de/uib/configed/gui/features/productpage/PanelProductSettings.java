@@ -273,12 +273,10 @@ public class PanelProductSettings extends JSplitPane {
 		} else {
 			int selectedRow = lsm.getMinSelectionIndex();
 			Logging.debug(this, "selected ", selectedRow);
-			Logging.debug(this, "selected modelIndex ", productTable.convertRowIndexToModel(selectedRow));
-			Logging.debug(this, "selected  value at ",
-					productTable.getModel().getValueAt(productTable.convertRowIndexToModel(selectedRow), 0));
-			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setProductEdited(
-					(String) productTable.getModel().getValueAt(productTable.convertRowIndexToModel(selectedRow), 0),
-					this);
+			Logging.debug(this, "selected modelIndex ", selectedRow);
+			Logging.debug(this, "selected  value at ", productTable.getValueAt(selectedRow, 0));
+			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager()
+					.setProductEdited((String) productTable.getValueAt(selectedRow, 0), this);
 		}
 
 		productTree.produceActiveParents();
