@@ -183,7 +183,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(jMenuCopyClient);
 		jMenuClients.add(jMenuDeleteClient);
 
-		jMenuClients.add(initResetProductsMenu());
+		jMenuClients.add(jMenuResetProducts);
 
 		jMenuClients.add(jMenuFreeLicenses);
 		jMenuClients.add(jMenuChangeClientID);
@@ -219,6 +219,7 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private static JMenu initResetProductsMenu() {
+		Logging.devel("initResetProductsMenu");
 		return createResetProductsMenuItemsTo();
 	}
 
@@ -469,6 +470,7 @@ public final class ClientMenuManager implements MenuListener {
 		if (sourceItem instanceof JMenu sourceSubMenu) {
 			clonedItem = new JMenu(sourceSubMenu.getText());
 			JMenu targetSubMenu = (JMenu) clonedItem;
+			targetSubMenu.setEnabled(sourceSubMenu.isEnabled());
 			for (int i = 0; i < sourceSubMenu.getItemCount(); i++) {
 				JMenuItem sourceSubItem = sourceSubMenu.getItem(i);
 				if (sourceSubItem != null) {
