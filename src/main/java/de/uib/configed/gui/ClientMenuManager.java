@@ -70,6 +70,7 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
 			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
+	private JMenu jMenuShowColumns = initShowColumnsMenu();
 	private JMenuItem jMenuInvertSelection = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuInvertSelection"));
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
@@ -93,6 +94,9 @@ public final class ClientMenuManager implements MenuListener {
 		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES, jMenuFreeLicenses);
 
 		initJMenu();
+
+		mainFrame.getClientTablePanel().getClientTable().getTableHeader()
+				.setComponentPopupMenu(getPopupMenuShowClientsClone());
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
@@ -211,7 +215,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(initShowColumnsMenu());
+		jMenuClients.add(jMenuShowColumns);
 
 		jMenuClients.addSeparator();
 
@@ -428,6 +432,28 @@ public final class ClientMenuManager implements MenuListener {
 		}
 	}
 
+	private JPopupMenu getPopupMenuShowClientsClone() {
+		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+				// Nothing to do.
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				// Nothing to do.
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				popupMenu.removeAll();
+				cloneMenuItems(popupMenu, jMenuShowColumns);
+			}
+		});
+		return popupMenu;
+	}
+
 	public JPopupMenu getPopupMenuClone() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -445,15 +471,15 @@ public final class ClientMenuManager implements MenuListener {
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 				enableMenuItemsForClients();
 				popupMenu.removeAll();
-				cloneMenuItems(popupMenu);
+				cloneMenuItems(popupMenu, jMenuClients);
 			}
 		});
 		return popupMenu;
 	}
 
-	private void cloneMenuItems(JPopupMenu popupMenu) {
-		for (int i = 0; i < jMenuClients.getItemCount(); i++) {
-			Component component = jMenuClients.getMenuComponent(i);
+	private void cloneMenuItems(JPopupMenu popupMenu, JMenu menuToCopy) {
+		for (int i = 0; i < menuToCopy.getItemCount(); i++) {
+			Component component = menuToCopy.getMenuComponent(i);
 			if (component instanceof JSeparator) {
 				popupMenu.addSeparator();
 			}
