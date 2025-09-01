@@ -219,7 +219,6 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private static JMenu initResetProductsMenu() {
-		Logging.devel("initResetProductsMenu");
 		return createResetProductsMenuItemsTo();
 	}
 
