@@ -20,7 +20,7 @@ import de.uib.configed.share.Utils;
 public class CopySuffixAddition {
 	private static final String COPY_SUFFIX = "-copy";
 	private static final Pattern numberSuffixPattern = Pattern.compile("\\d+$");
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private String clientName;
@@ -112,7 +112,7 @@ public class CopySuffixAddition {
 		return splittedClientName[0];
 	}
 
-	private static boolean clientExists(String clientName) {
+	private boolean clientExists(String clientName) {
 		List<String> opsiHostNames = persistenceController.getHostInfoCollections().getOpsiHostNames();
 		return opsiHostNames.stream().anyMatch(opsiHostName -> opsiHostName.equals(clientName));
 	}

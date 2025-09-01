@@ -29,7 +29,7 @@ import de.uib.configed.share.logging.Logging;
  * product's properties and config states.
  */
 public class CopyClient {
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private HostInfo clientToCopy;
@@ -120,7 +120,7 @@ public class CopyClient {
 		persistenceController.getProductDataService().updateProductOnClients();
 	}
 
-	private static int getProductType(String productId) {
+	private int getProductType(String productId) {
 		if (persistenceController.getProductDataService().getAllLocalbootProductNames().contains(productId)) {
 			return OpsiPackage.TYPE_LOCALBOOT;
 		} else {
