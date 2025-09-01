@@ -54,6 +54,8 @@ public class PanelProductSettings extends JSplitPane {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
 
+	private JMenu jMenuVisibleColumns;
+
 	private ProductTable productTable;
 	private ProductSettingsTableModel productSettingsTableModel;
 
@@ -133,6 +135,8 @@ public class PanelProductSettings extends JSplitPane {
 		PopupMouseListener popupMouseListener = new PopupMouseListener(producePopupMenu());
 		paneProducts.addMouseListener(popupMouseListener);
 		productTable.addMouseListener(popupMouseListener);
+
+		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
 	}
 
 	public void updateSearchFields() {
@@ -199,7 +203,7 @@ public class PanelProductSettings extends JSplitPane {
 		ExporterToCSV exportTable = new ExporterToCSV(productTable);
 		exportTable.addMenuItemsTo(popup);
 
-		JMenu jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		popup.addSeparator();
 		popup.add(jMenuVisibleColumns);
 

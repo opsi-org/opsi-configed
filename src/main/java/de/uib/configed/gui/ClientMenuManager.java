@@ -96,7 +96,7 @@ public final class ClientMenuManager implements MenuListener {
 		initJMenu();
 
 		mainFrame.getClientTablePanel().getClientTable().getTableHeader()
-				.setComponentPopupMenu(getPopupMenuShowClientsClone());
+				.setComponentPopupMenu(getPopupMenuClone(jMenuShowColumns));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
@@ -432,7 +432,7 @@ public final class ClientMenuManager implements MenuListener {
 		}
 	}
 
-	private JPopupMenu getPopupMenuShowClientsClone() {
+	public static JPopupMenu getPopupMenuClone(JMenu jMenuToClone) {
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {
 			@Override
@@ -448,7 +448,7 @@ public final class ClientMenuManager implements MenuListener {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 				popupMenu.removeAll();
-				cloneMenuItems(popupMenu, jMenuShowColumns);
+				cloneMenuItems(popupMenu, jMenuToClone);
 			}
 		});
 		return popupMenu;
@@ -477,7 +477,7 @@ public final class ClientMenuManager implements MenuListener {
 		return popupMenu;
 	}
 
-	private void cloneMenuItems(JPopupMenu popupMenu, JMenu menuToCopy) {
+	private static void cloneMenuItems(JPopupMenu popupMenu, JMenu menuToCopy) {
 		for (int i = 0; i < menuToCopy.getItemCount(); i++) {
 			Component component = menuToCopy.getMenuComponent(i);
 			if (component instanceof JSeparator) {
