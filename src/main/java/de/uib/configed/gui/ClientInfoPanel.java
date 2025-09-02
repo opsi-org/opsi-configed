@@ -54,7 +54,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JScrollPane scrollpaneNotes;
 	private JScrollPane scrollpaneVendorModel;
 
-	private JLabel labelClientID;
 	private JLabel labelClientOSIcon;
 	private JTextField jTextFieldClientID;
 	private JTextField jTextFieldClientOS;
@@ -226,7 +225,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		hostKeyField.setTrailingComponent(jButtonCopyHostKey);
 	}
 
-	private JTextField createUneditableTextField() {
+	private static JTextField createUneditableTextField() {
 		JTextField textField = new JTextField();
 		textField.setEditable(false);
 		textField.setBorder(null);

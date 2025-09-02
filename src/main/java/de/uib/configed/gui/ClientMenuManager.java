@@ -47,7 +47,6 @@ import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-@SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager implements MenuListener {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -287,15 +286,15 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private JMenu initShowColumnsMenu() {
-		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		JMenu jMenu = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		for (ColumnDisplayInfo info : HostInfo.ORDERED_DISPLAY_COLUMN_INFOS) {
 			JCheckBoxMenuItem jCheckBoxMenuItem = createShowColumnCheckBoxMenuItem(info);
 			if (jCheckBoxMenuItem != null) {
-				jMenuShowColumns.add(jCheckBoxMenuItem);
+				jMenu.add(jCheckBoxMenuItem);
 			}
 		}
 
-		return jMenuShowColumns;
+		return jMenu;
 	}
 
 	private JCheckBoxMenuItem createShowColumnCheckBoxMenuItem(ColumnDisplayInfo info) {
