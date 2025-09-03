@@ -11,8 +11,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -79,56 +77,27 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			return false;
 		}
 
-		String transferData = null;
-
-		try {
-			transferData = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-		} catch (UnsupportedFlavorException ex) {
-			Logging.warning(this, ex, " unsupported data flavor ");
-		} catch (IOException ex) {
-			Logging.warning(this, ex, " transferable io exception ");
-		}
-
-		GroupNode sourceGroupNode = transferRepresentsGroup(transferData);
-		Object[] sourceObjectPath = new Object[0];
-		if (sourceGroupNode != null) {
-			sourceObjectPath = sourceGroupNode.getUserObjectPath();
-		}
-
 		String dropOnThisNodeId = dropLocation.getPath().getLastPathComponent().toString();
 		GroupNode targetNode = tree.getGroupNode(dropOnThisNodeId);
-		Object[] dropObjectPath = new Object[0];
-		if (targetNode != null) {
-			dropObjectPath = targetNode.getUserObjectPath();
-			Logging.debug(this, "canImport targetNode.isImmutable() ", targetNode.isImmutable());
-		}
 
-		Logging.debug(this, "canImport sourceGroupNode ", sourceGroupNode);
-		if (sourceGroupNode != null && targetNode != null) {
+		if (targetNode != null) {
 			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() ", targetNode.allowsOnlyGroupChilds());
 			Logging.debug(this, "canImport !allows subgroups ",
 					ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
 		}
 
-		Logging.debug(this, "canImport, dropOnThis  path ", Arrays.toString(dropObjectPath));
-		Logging.debug(this, "canImport source path ", Arrays.toString(sourceObjectPath));
-
-		return canImport(targetNode, sourceGroupNode, dropObjectPath, sourceObjectPath, dropOnThisNodeId);
+		return canImport(targetNode, dropOnThisNodeId);
 	}
 
-	private boolean canImport(GroupNode targetNode, GroupNode sourceGroupNode, Object[] dropObjectPath,
-			Object[] sourceObjectPath, String dropOnThisNodeId) {
+	private boolean canImport(GroupNode targetNode, String dropOnThisNodeId) {
 		if (targetNode == null) {
 			return false;
 		}
 
-		boolean canImportGroupNode = sourceGroupNode == null
-				|| !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
-		boolean canImportNonGroupNode = sourceGroupNode != null || !targetNode.allowsOnlyGroupChilds();
-		boolean isSameGroupBranch = (sourceGroupNode == null || sourceObjectPath.length <= 1
-				|| dropObjectPath.length <= 1 || sourceObjectPath[1].equals(dropObjectPath[1]));
+		boolean canImportGroupNode = !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
+		boolean canImportNonGroupNode = !targetNode.allowsOnlyGroupChilds();
 
-		boolean result = !targetNode.isImmutable() && canImportGroupNode && canImportNonGroupNode && isSameGroupBranch;
+		boolean result = !targetNode.isImmutable() && canImportGroupNode && canImportNonGroupNode;
 
 		Logging.debug(this, "canImport, dropOnThis ", dropOnThisNodeId);
 		Logging.debug(this, "canImport: ", result);
