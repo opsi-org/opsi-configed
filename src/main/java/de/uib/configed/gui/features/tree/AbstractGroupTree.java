@@ -33,7 +33,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
-import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -110,9 +109,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this);
 		addMouseListener(treePopupMouseListener);
 
-		// preparing Drag and Drop
-		TransferHandler handler = new GroupTreeTransferHandler(this);
-		setTransferHandler(handler);
+		// Drag and drop needs to be enabled
 		setDragEnabled(true);
 		setDropMode(DropMode.ON);
 

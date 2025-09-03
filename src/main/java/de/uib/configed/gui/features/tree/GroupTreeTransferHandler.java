@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.tree;
 
+import java.awt.Component;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -25,10 +26,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.ClientTable;
+import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.share.logging.Logging;
 
 public class GroupTreeTransferHandler extends TransferHandler {
 	private AbstractGroupTree tree;
+
+	private JComponent source;
 
 	public GroupTreeTransferHandler(AbstractGroupTree tree) {
 		super();
@@ -60,6 +65,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
 				|| !support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
+			return false;
+		}
+
+		if (!canImportToThisComponent(support.getComponent())) {
 			return false;
 		}
 
@@ -126,93 +135,26 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return result;
 	}
 
+	private boolean canImportToThisComponent(Component target) {
+		if (target instanceof ClientTree) {
+			return source instanceof ClientTable || source instanceof ClientTree;
+		} else if (target instanceof ProductTree) {
+			return source instanceof ProductTable || source instanceof ProductTree;
+		} else {
+			Logging.debug(this, "The target is not a Client or product tree, but ", target.getClass().getName());
+			return false;
+		}
+	}
+
 	@Override
 	public int getSourceActions(JComponent c) {
-		Logging.debug(this, "getSourceActions,  activePaths ", Arrays.toString(tree.getSelectionPaths()));
-
-		if (isSourceActionsNONE()) {
-			return TransferHandler.NONE;
-		} else {
-			return getSourceActions();
-		}
-	}
-
-	private boolean isSourceActionsNONE() {
-		if (tree.getSelectionPaths() == null || tree.getSelectionPaths().length == 0) {
-			Logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
-			return true;
-		}
-
-		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getSelectionPaths()[0].getLastPathComponent();
-
-		if (dropThis instanceof GroupNode) {
-			GroupNode dropThisVariant = tree.getGroupNode(dropThis.toString());
-
-			if (dropThis != dropThisVariant) {
-				Logging.warning(this, "getSourceActions,  dropThis != dropThisVariant");
-				Logging.warning(this, "getSourceActions,  dropThis ", dropThis);
-				Logging.warning(this, "getSourceActions,  dropThisVariant ", dropThisVariant);
-			}
-
-			GroupNode parent = (GroupNode) dropThisVariant.getParent();
-
-			Logging.debug(this, "getSourceActions,  dropThis ", dropThis, " parent ", parent);
-
-			if (parent.isImmutable()) {
-				Logging.debug(this, "getSourceActions dropObject is immutable, TransferHandler.NONE");
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private int getSourceActions() {
-		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getSelectionPaths()[0].getLastPathComponent();
-		String nodeString = dropThis.getUserObject().toString();
-
-		if (tree.getGroups().keySet().contains(nodeString)) {
-			Logging.debug(this, "getSourceActions object already there, TransferHandler.MOVE");
-			return TransferHandler.MOVE;
-		}
-
-		// there can only be one group selected, and it can only be moved
-		// (for top groups the NONE handler was already returned)
-		for (TreePath path : tree.getSelectionPaths()) {
-			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
-				Logging.debug(this, "getSourceActions path ", path, " childOfALL, should be TransferHandler.COPY");
-				return TransferHandler.COPY;
-				// we dont accept to move any item out of ALL
-			}
-
-			if (tree.isInDirectory(path)) {
-				Logging.debug(this, "getSourceActions , isInDirectory true");
-				// action depends additionally from target
-			}
-		}
-
-		Logging.debug(this, "getSourceActions all remaining, TransferHandler.COPY_OR_MOVE");
 		return TransferHandler.COPY_OR_MOVE;
 	}
 
 	@Override
-	protected Transferable createTransferable(JComponent c) {
-		StringBuilder buff = new StringBuilder();
-
-		for (TreePath path : tree.getSelectionPaths()) {
-			int len = path.getPath().length;
-			for (int j = 0; j < len; j++) {
-				buff.append(path.getPath()[j]);
-				if (j < len - 1) {
-					buff.append(",");
-				}
-			}
-
-			buff.append("\n");
-		}
-
-		// We want to get the string without the last character "\n"
-		return new StringSelection(buff.substring(0, buff.length() - 1));
+	protected Transferable createTransferable(JComponent source) {
+		this.source = source;
+		return new StringSelection(source.getClass().getName());
 	}
 
 	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
@@ -351,7 +293,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-		Logging.debug(this, " exportToClipboard ", comp, " , ", clip, ", ", action);
 		super.exportToClipboard(comp, clip, action);
 	}
 }
