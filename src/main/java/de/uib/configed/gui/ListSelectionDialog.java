@@ -28,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -209,6 +210,11 @@ public class ListSelectionDialog {
 	public void show(Container parent) {
 		dialog.setLocationRelativeTo(parent);
 		dialog.pack();
+		// Workaround: Schedule two nested invokeLater() calls to ensure the search field reliably gains focus.
+		// This accounts for focus-stealing components (e.g., dialog activation or defualt buttons) that may
+		// override the focus requests. Without this delay, the search field may not receive focus when the
+		// dialog is shown.
+		SwingUtilities.invokeLater(() -> SwingUtilities.invokeLater(() -> searchPane.requestFocus()));
 		dialog.setVisible(true);
 	}
 
