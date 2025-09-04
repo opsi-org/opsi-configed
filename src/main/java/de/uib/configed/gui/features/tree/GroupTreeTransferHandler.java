@@ -63,17 +63,42 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			return false;
 		}
 
-		return canImport(targetNode);
+		if (source instanceof ClientTable || source instanceof ProductTable) {
+			// Objects in Table are selected
+			return isNormalGroup(targetNode);
+		} else {
+			return canImportFromTree(targetNode);
+		}
 	}
 
-	private boolean canImport(GroupNode targetNode) {
-		boolean canImportGroupNode = !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
-		boolean canImportNonGroupNode = !targetNode.allowsOnlyGroupChilds();
+	private static boolean isNormalGroup(GroupNode targetNode) {
+		return !targetNode.isImmutable() && !targetNode.allowsOnlyGroupChilds()
+				&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
+	}
 
-		boolean result = !targetNode.isImmutable() && canImportGroupNode && canImportNonGroupNode;
+	private boolean canImportFromTree(GroupNode targetNode) {
+		AbstractGroupTree sourceTree = (AbstractGroupTree) source;
+		TreePath[] sourcePaths = sourceTree.getSelectionPaths();
 
-		Logging.debug(this, "canImport: ", result);
-		return result;
+		if (sourcePaths == null || sourcePaths.length > 1) {
+			return false;
+		} else {
+			GroupNode sourceNode = tree.getGroupNode(sourcePaths[0].getLastPathComponent().toString());
+			if (sourceNode == null) {
+				// An object in the tree is selected
+				return isNormalGroup(targetNode);
+			} else {
+				// A group in the tree is selected
+				return isNormalGroup(sourceNode) && !targetNode.isImmutable()
+						&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString())
+						&& nodesAreNotEqualOrAncestor(sourceNode, targetNode);
+			}
+		}
+	}
+
+	private static boolean nodesAreNotEqualOrAncestor(GroupNode sourceNode, GroupNode targetNode) {
+		return !sourceNode.equals(targetNode) && !sourceNode.isNodeAncestor(targetNode)
+				&& !targetNode.isNodeAncestor(sourceNode);
 	}
 
 	private boolean canImportToThisComponent(Component target) {
