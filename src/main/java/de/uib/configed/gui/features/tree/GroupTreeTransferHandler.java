@@ -59,21 +59,14 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 
 		GroupNode targetNode = tree.getGroupNode(dropLocation.getPath().getLastPathComponent().toString());
-
-		if (targetNode != null) {
-			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() ", targetNode.allowsOnlyGroupChilds());
-			Logging.debug(this, "canImport !allows subgroups ",
-					ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
+		if (targetNode == null) {
+			return false;
 		}
 
 		return canImport(targetNode);
 	}
 
 	private boolean canImport(GroupNode targetNode) {
-		if (targetNode == null) {
-			return false;
-		}
-
 		boolean canImportGroupNode = !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString());
 		boolean canImportNonGroupNode = !targetNode.allowsOnlyGroupChilds();
 
