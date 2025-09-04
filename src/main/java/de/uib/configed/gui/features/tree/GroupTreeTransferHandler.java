@@ -38,25 +38,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		this.tree = tree;
 	}
 
-	private GroupNode transferRepresentsGroup(String treeRepresentation) {
-		if (treeRepresentation == null) {
-			return null;
-		}
-
-		String[] parts = treeRepresentation.split(",");
-
-		if (parts.length == 1) {
-			return null;
-		}
-
-		String node = parts[parts.length - 1];
-		GroupNode result = tree.getGroupNode(node);
-
-		Logging.debug(this, "transferRepresentsGroup : ", treeRepresentation, ", result ", result);
-
-		return result;
-	}
-
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
