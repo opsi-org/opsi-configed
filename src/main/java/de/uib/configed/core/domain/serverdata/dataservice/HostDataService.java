@@ -29,6 +29,7 @@ import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
@@ -122,25 +123,21 @@ public class HostDataService {
 
 			clientsJsonObject.add(hostItem);
 
-			Map<String, Object> itemDepot = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 			List<String> valuesDepot = new ArrayList<>();
+			ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
+			if (depotId == null || depotId.isEmpty()) {
+				depotId = hostInfoCollections.getConfigServer();
+			}
 			valuesDepot.add(depotId);
-			itemDepot.put(OpsiServiceNOMPersistenceController.OBJECT_ID, newClientId);
-			itemDepot.put(OpsiServiceNOMPersistenceController.VALUES_ID, valuesDepot);
-			itemDepot.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
-					OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
+			config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, valuesDepot);
+			persistenceController.getConfigDataService().setConfigStates(newClientId, config);
 
 			addGroupsToList(groups, newClientId, groupsJsonObject);
 
 			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(hostItem);
-			if (depotId == null || depotId.isEmpty()) {
-				depotId = hostInfoCollections.getConfigServer();
-			}
-			hostInfo.setInDepot(depotId);
 			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
-
-			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
+			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
 		}
 
 		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
@@ -182,6 +179,8 @@ public class HostDataService {
 						new Object[] { productsNetbootJsonObject });
 				result = result && exec.doCall(omc);
 			}
+
+			persistenceController.getConfigDataService().updateConfigStates();
 		}
 
 		return result;
@@ -234,9 +233,9 @@ public class HostDataService {
 			}
 			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(hostItem);
-			hostInfo.setInDepot(depotId);
 			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
-			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
+			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
+			hostInfoCollections.setDepotForClients(List.of(newClientId), depotId);
 
 			Logging.info(this, " createClient hostInfo ", hostInfo);
 		}
