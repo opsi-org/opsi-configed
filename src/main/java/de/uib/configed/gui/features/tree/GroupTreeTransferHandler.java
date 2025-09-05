@@ -9,8 +9,6 @@ package de.uib.configed.gui.features.tree;
 import java.awt.Component;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -183,7 +181,35 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	@Override
-	public boolean importData(TransferHandler.TransferSupport support) {
+	public boolean importData(TransferSupport support) {
+		if (source instanceof ProductTable || source instanceof ClientTable) {
+			return importFromTable(support);
+		} else {
+			return importFromTree(support);
+		}
+	}
+
+	private boolean importFromTree(TransferSupport support) {
+		String selectedObject = ((AbstractGroupTree) source).getSelectionPath().getLastPathComponent().toString();
+
+		return importObjects(Set.of(selectedObject), support);
+	}
+
+	private boolean importFromTable(TransferSupport support) {
+		Set<String> selectedObjects;
+		if (source instanceof ClientTable clientTable) {
+			selectedObjects = clientTable.getSelectedSet();
+		} else {
+			selectedObjects = ((ProductTable) source).getSelectedIDs();
+		}
+
+		return importObjects(selectedObjects, support);
+	}
+
+	private boolean importObjects(Set<String> selectedObjects, TransferSupport support) {
+		if (selectedObjects.isEmpty()) {
+			return false;
+		}
 		// we are at a group node
 		// where we want to move/copy to
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
@@ -193,27 +219,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		String dropParentID = dropParentNode.getUserObject().toString();
 
 		Logging.debug(this, "dropPath ", dropPath);
-
-		// what is to be moved/copied
-
-		Logging.debug(this, "importData, getActivePaths(): ", Arrays.toString(tree.getSelectionPaths()));
-
-		Set<String> selectedObjects = tree.getSelectedObjectsInTable();
-		// possibly transfer of a group node
-		if (selectedObjects.isEmpty()) {
-			TreePath[] activePaths = tree.getSelectionPaths();
-			if (activePaths != null && activePaths.length == 1) {
-				String importID = (String) (((DefaultMutableTreeNode) (activePaths[0]).getLastPathComponent())
-						.getUserObject());
-				selectedObjects = Collections.singleton(importID);
-			}
-		}
-
-		Logging.debug(this, "importData, values: ", selectedObjects);
-
-		// if the source is the tree then we arranged lines for the transfer
-		// the other possible source are lines from the JTable, as well arranged to
-		// lines
 
 		// Perform the actual import, but in sorted order
 		for (String selectedObject : new TreeSet<>(selectedObjects)) {
