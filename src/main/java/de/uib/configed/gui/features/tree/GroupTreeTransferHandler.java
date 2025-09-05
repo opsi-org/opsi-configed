@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.tree;
 
 import java.awt.Component;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.util.Arrays;
@@ -261,10 +260,5 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 
 		return true;
-	}
-
-	@Override
-	public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-		super.exportToClipboard(comp, clip, action);
 	}
 }
