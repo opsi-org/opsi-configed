@@ -52,6 +52,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
 		Logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() ", dropLocation.getPath());
 
+		return canImportToThisLocation(dropLocation);
+	}
+
+	private boolean canImportToThisLocation(JTree.DropLocation dropLocation) {
 		if (dropLocation.getPath() == null) {
 			return false;
 		}
@@ -61,6 +65,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			return false;
 		}
 
+		return canImportToThisGroupNode(targetNode);
+	}
+
+	private boolean canImportToThisGroupNode(GroupNode targetNode) {
 		if (source instanceof ClientTable || source instanceof ProductTable) {
 			// Objects in Table are selected
 			return isNormalGroup(targetNode);
