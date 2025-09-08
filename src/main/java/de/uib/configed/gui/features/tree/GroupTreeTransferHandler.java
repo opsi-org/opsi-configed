@@ -145,18 +145,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return result;
 	}
 
-	private void handleObjectID(String importID, GroupNode sourceParentNode, String sourceParentID, TreePath dropPath,
-			DefaultMutableTreeNode dropParentNode, String dropParentID) {
-		Logging.debug(this, "handleClientID importID, sourceParentID, sourceParentNode, dropParentID,  ", importID,
-				", ", sourceParentID, ", ", sourceParentNode, ", ", dropParentID);
-
-		if (chooseMove(sourceParentID, dropPath, false)) {
-			tree.moveObjectTo(importID, sourceParentID, sourceParentNode, dropParentNode, dropPath, dropParentID);
-		} else {
-			tree.copyObjectTo(importID, dropParentID, dropParentNode, dropPath);
-		}
-	}
-
 	@Override
 	public boolean importData(TransferSupport support) {
 		if (source instanceof ProductTable || source instanceof ClientTable) {
@@ -228,9 +216,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			} else {
 				// import node
 				Logging.debug(this, "importData handling selectedObject ", selectedObject);
-
-				handleObjectID(selectedObject, sourceParentNode, sourceParentID, dropPath, dropParentNode,
-						dropParentID);
+				if (chooseMove(sourceParentID, dropPath, false)) {
+					tree.moveObjectTo(selectedObject, sourceParentID, sourceParentNode, dropParentNode, dropPath,
+							dropParentID);
+				} else {
+					tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
+				}
 			}
 
 			Logging.debug(this, "importData ready, selectedObject ", selectedObject);
