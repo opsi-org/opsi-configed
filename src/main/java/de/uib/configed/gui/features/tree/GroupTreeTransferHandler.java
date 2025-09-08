@@ -195,11 +195,14 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			GroupNode sourceParentNode = null;
 			GroupNode groupNode = null;
+			TreePath activeTreePath = tree.getActiveTreePath(selectedObject);
 
-			sourceParentID = (String) ((DefaultMutableTreeNode) tree.getActiveTreePath(selectedObject).getParentPath()
-					.getLastPathComponent()).getUserObject();
-			sourceParentNode = tree.getGroupNode(sourceParentID);
-			groupNode = tree.getGroupNode(selectedObject);
+			if (activeTreePath != null) {
+				sourceParentID = (String) ((DefaultMutableTreeNode) activeTreePath.getParentPath()
+						.getLastPathComponent()).getUserObject();
+				sourceParentNode = tree.getGroupNode(sourceParentID);
+				groupNode = tree.getGroupNode(selectedObject);
+			}
 
 			Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
 			Logging.debug(this, "importData, groupNode ", groupNode);
