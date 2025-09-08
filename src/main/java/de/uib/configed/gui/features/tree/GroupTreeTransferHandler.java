@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -20,6 +21,8 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ClientTable;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.share.logging.Logging;
 
@@ -126,27 +129,29 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	@Override
 	protected Transferable createTransferable(JComponent source) {
 		this.source = source;
-		return new StringSelection(source.getClass().getName());
+		return new StringSelection(null);
 	}
 
+	/**
+	 * We want to move only if the source and target are both in DIRECTORY or
+	 * both in GROUPS when it is a group or we want to move an object only
+	 * inside the directory (because it can appear only once anyways), otherwise
+	 * we copy the object.
+	 */
 	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
 		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath ", sourceGroupName, " , ", dropPath);
 
 		boolean result = false;
 
 		boolean stayInsideDIRECTORY = tree.isInDirectory(sourceGroupName) && tree.isInDirectory(dropPath);
-		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath);
+		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath) && isLeaf;
 
 		Logging.info(this, "chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS ", stayInsideDIRECTORY, ", ",
 				stayInsideGROUPS);
 
-		if (stayInsideDIRECTORY || (stayInsideGROUPS && isLeaf)) {
-			result = true;
-		}
-
 		Logging.debug(this, "chooseMOVE  ", result);
 
-		return result;
+		return stayInsideDIRECTORY || stayInsideGROUPS;
 	}
 
 	@Override
@@ -225,12 +230,15 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "importData, groupNode ", groupNode);
 
 		if (groupNode != null) {
-			// it is a group and it could be moved
 			// it is a group, and it will be moved, but only inside one partial tree
 			if (chooseMove(sourceParentID, dropPath, true)) {
 				tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
 			} else {
-				Logging.info(this, "importData: this group will not be moved");
+				JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+						Configed.getResourceValue("GroupTreeTransferHandler.cannotMoveGroup.message"),
+						Configed.getResourceValue("GroupTreeTransferHandler.cannotMoveGroup.title"),
+						JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+				Logging.warning(this, "importData: this group will not be moved");
 			}
 		} else {
 			// import node
