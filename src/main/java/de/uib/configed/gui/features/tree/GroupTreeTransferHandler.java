@@ -145,16 +145,15 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		return result;
 	}
 
-	private void handleObjectID(String importID, TreePath sourcePath, GroupNode sourceParentNode, String sourceParentID,
-			TreePath dropPath, DefaultMutableTreeNode dropParentNode, String dropParentID) {
-		Logging.debug(this, "handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  ",
-				importID, ", ", sourcePath, " , ", sourceParentID, ", ", sourceParentNode, ", ", dropParentID);
+	private void handleObjectID(String importID, GroupNode sourceParentNode, String sourceParentID, TreePath dropPath,
+			DefaultMutableTreeNode dropParentNode, String dropParentID) {
+		Logging.debug(this, "handleClientID importID, sourceParentID, sourceParentNode, dropParentID,  ", importID,
+				", ", sourceParentID, ", ", sourceParentNode, ", ", dropParentID);
 
 		if (chooseMove(sourceParentID, dropPath, false)) {
-			tree.moveObjectTo(importID, sourcePath, sourceParentID, sourceParentNode, dropParentNode, dropPath,
-					dropParentID);
+			tree.moveObjectTo(importID, sourceParentID, sourceParentNode, dropParentNode, dropPath, dropParentID);
 		} else {
-			tree.copyObjectTo(importID, sourcePath, dropParentID, dropParentNode, dropPath);
+			tree.copyObjectTo(importID, dropParentID, dropParentNode, dropPath);
 		}
 	}
 
@@ -204,21 +203,16 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			Logging.debug(this, "importData ", selectedObject);
 
-			TreePath sourcePath = tree.getActiveTreePath(selectedObject);
-			Logging.debug(this, "active source tree path for selectedObject ", selectedObject, ": ", sourcePath);
+			Logging.debug(this, "active source tree path for selectedObject ", selectedObject);
 
 			GroupNode sourceParentNode = null;
 			GroupNode groupNode = null;
 
-			if (sourcePath != null) {
-				sourceParentID = (String) ((DefaultMutableTreeNode) sourcePath.getParentPath().getLastPathComponent())
-						.getUserObject();
-				sourceParentNode = tree.getGroupNode(sourceParentID);
-				groupNode = tree.getGroupNode(selectedObject);
-			} else {
-				// coming from table, replace!
-				Logging.debug(this, "importData, sourceParentID ", sourceParentID);
-			}
+			sourceParentID = (String) ((DefaultMutableTreeNode) tree.getActiveTreePath(selectedObject).getParentPath()
+					.getLastPathComponent()).getUserObject();
+			sourceParentNode = tree.getGroupNode(sourceParentID);
+			groupNode = tree.getGroupNode(selectedObject);
+
 			Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
 			Logging.debug(this, "importData, groupNode ", groupNode);
 
@@ -235,7 +229,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				// import node
 				Logging.debug(this, "importData handling selectedObject ", selectedObject);
 
-				handleObjectID(selectedObject, sourcePath, sourceParentNode, sourceParentID, dropPath, dropParentNode,
+				handleObjectID(selectedObject, sourceParentNode, sourceParentID, dropPath, dropParentNode,
 						dropParentID);
 			}
 

@@ -639,11 +639,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	abstract boolean isInDirectory(TreePath path);
 
-	abstract void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	abstract void moveObjectTo(String importID, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID);
 
-	abstract void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
-			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
+	abstract void copyObjectTo(String objectID, String newParentID, DefaultMutableTreeNode newParentNode,
+			TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
 
