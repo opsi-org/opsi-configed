@@ -44,6 +44,7 @@ import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.GroupNode;
+import de.uib.configed.gui.features.tree.GroupTreeTransferHandler;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
@@ -140,6 +141,8 @@ public class ConfigedMain {
 
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
+		connectTreesWithTables();
+
 		initTabComponents();
 
 		initialTreeActivation();
@@ -157,6 +160,19 @@ public class ConfigedMain {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+	}
+
+	private void connectTreesWithTables() {
+		GroupTreeTransferHandler clientTransferHandler = new GroupTreeTransferHandler(clientTree);
+		clientTree.setTransferHandler(clientTransferHandler);
+		clientTablePanel.getClientTable().setTransferHandler(clientTransferHandler);
+
+		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
+		productTree.setTransferHandler(productTransferHandler);
+		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+				.setTransferHandler(productTransferHandler);
+		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+				.setTransferHandler(productTransferHandler);
 	}
 
 	public ProductTree getProductTree() {

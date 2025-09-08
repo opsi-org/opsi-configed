@@ -33,7 +33,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
-import javax.swing.TransferHandler;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -110,9 +109,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this);
 		addMouseListener(treePopupMouseListener);
 
-		// preparing Drag and Drop
-		TransferHandler handler = new GroupTreeTransferHandler(this);
-		setTransferHandler(handler);
+		// Drag and drop needs to be enabled
 		setDragEnabled(true);
 		setDropMode(DropMode.ON);
 
@@ -585,6 +582,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return path.length >= 2 && path[1] == groupNodeGroups;
 	}
 
+	public boolean equalsGroupNodeGroups(DefaultMutableTreeNode node) {
+		return node == groupNodeGroups;
+	}
+
 	public boolean isInGROUPS(TreePath path) {
 		return path.getPathCount() >= 2 && path.getPathComponent(1) == groupNodeGroups;
 	}
@@ -642,13 +643,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	abstract boolean isInDirectory(TreePath path);
 
-	abstract Set<GroupNode> getLocationsInDirectory(String importID);
-
-	abstract void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	abstract void moveObjectTo(String importID, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID);
 
-	abstract void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
-			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
+	abstract void copyObjectTo(String objectID, String newParentID, DefaultMutableTreeNode newParentNode,
+			TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
 

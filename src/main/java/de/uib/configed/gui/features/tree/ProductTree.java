@@ -118,14 +118,14 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	public void moveObjectTo(String importID, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		// This method is never invoked in the product tree
 	}
 
 	@Override
-	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
-			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
+	public void copyObjectTo(String objectID, String newParentID, DefaultMutableTreeNode newParentNode,
+			TreePath newParentPath) {
 		if (getChildWithUserObjectString(objectID, newParentNode) == null) {
 			newParentNode.add(new DefaultMutableTreeNode(objectID, false));
 
@@ -153,11 +153,6 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	public boolean isInDirectory(TreePath path) {
 		return false;
-	}
-
-	@Override
-	public Set<GroupNode> getLocationsInDirectory(String clientId) {
-		return new HashSet<>();
 	}
 
 	@Override

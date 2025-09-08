@@ -479,17 +479,11 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	public void moveObjectTo(String importID, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		DefaultMutableTreeNode existingNode = getChildWithUserObjectString(importID, dropParentNode);
 		if (existingNode == null) {
-			// we have not a node with this name in the target group
-			if (sourcePath != null) {
-				Logging.debug(this, "moveObjectTo checked importID sourcePath.getLastPathComponent(); ",
-						sourcePath.getLastPathComponent(), " class ", ((sourcePath.getLastPathComponent()).getClass()));
-			} else {
-				Logging.debug(this, "moveCmoveObjectToientTo sourcePath null, sourceParentNode ", sourceParentNode);
-			}
+			Logging.debug(this, "moveObjectTo sourcePath null, sourceParentNode ", sourceParentNode);
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
 			insertNodeInOrder(clientNode, dropParentNode);
@@ -510,7 +504,7 @@ public class ClientTree extends AbstractGroupTree {
 			activeParents.addAll(Arrays.stream(dropPath.getPath()).map(Object::toString).collect(Collectors.toSet()));
 
 			Logging.debug(this, "moveObjectTo -- remove ", importID, " from ", sourceParentID,
-					" clientNode, sourceParentNode, sourcePath ", clientNode, ", ", sourceParentNode, ", ", sourcePath);
+					" clientNode, sourceParentNode ", clientNode, ", ", sourceParentNode);
 
 			// persistent removal
 			persistenceController.getGroupDataService().removeObject2Group(importID, sourceParentID);
@@ -524,9 +518,9 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
-			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
-		Logging.debug(this, " copying ", objectID, ", sourcePath ", sourcePath, " into group ", newParentID);
+	public void copyObjectTo(String objectID, String newParentID, DefaultMutableTreeNode newParentNode,
+			TreePath newParentPath) {
+		Logging.debug(this, " copying ", objectID, " into group ", newParentID);
 
 		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode ", newParentNode, " ",
 				DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
@@ -633,11 +627,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	public TreePath getPathToALL() {
 		return pathToALL;
-	}
-
-	@Override
-	public Set<GroupNode> getLocationsInDirectory(String clientId) {
-		return locationsInDirectory.get(clientId);
 	}
 
 	@Override
