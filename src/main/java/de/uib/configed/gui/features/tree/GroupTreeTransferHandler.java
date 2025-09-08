@@ -9,7 +9,6 @@ package de.uib.configed.gui.features.tree;
 import java.awt.Component;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -151,28 +150,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  ",
 				importID, ", ", sourcePath, " , ", sourceParentID, ", ", sourceParentNode, ", ", dropParentID);
 
-		boolean moving = false;
-
-		// we are in table and did not get a real souce path if sourcePath is null
-		if (sourcePath == null) {
-			String firstDIRECTORYgroupname = null;
-			Set<GroupNode> locations = tree.getLocationsInDirectory(importID);
-			if (!locations.isEmpty()) {
-				Logging.debug(this, "handleClientID tree.getLocationsInDirectory 1");
-				Iterator<GroupNode> iter = locations.iterator();
-				firstDIRECTORYgroupname = iter.next().toString();
-				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname ",
-						firstDIRECTORYgroupname);
-				sourceParentID = firstDIRECTORYgroupname;
-				moving = chooseMove(firstDIRECTORYgroupname, dropPath, false);
-
-				sourceParentNode = tree.getGroupNode(sourceParentID);
-			}
-		} else {
-			moving = chooseMove(sourceParentID, dropPath, false);
-		}
-
-		if (moving) {
+		if (chooseMove(sourceParentID, dropPath, false)) {
 			tree.moveObjectTo(importID, sourcePath, sourceParentID, sourceParentNode, dropParentNode, dropPath,
 					dropParentID);
 		} else {

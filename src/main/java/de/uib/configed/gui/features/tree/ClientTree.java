@@ -636,11 +636,6 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public Set<GroupNode> getLocationsInDirectory(String clientId) {
-		return locationsInDirectory.get(clientId);
-	}
-
-	@Override
 	public Set<String> getSelectedObjectsInTable() {
 		return configedMain.getClientTablePanel().getClientTable().getSelectedSet();
 	}

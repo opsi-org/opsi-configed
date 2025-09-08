@@ -156,11 +156,6 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public Set<GroupNode> getLocationsInDirectory(String clientId) {
-		return new HashSet<>();
-	}
-
-	@Override
 	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
 		Set<String> productIds = getChildrenRecursively(groupNode);
 		setFilter(productIds);
