@@ -98,9 +98,13 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 	}
 
+	/*
+	 * We check if the source and target node are not equal and not ancestor of each other.
+	 * But we exclude the ALL_GROUPS node as source, because it's not a "real" group.
+	*/
 	private static boolean nodesAreNotEqualOrAncestor(GroupNode sourceNode, GroupNode targetNode) {
-		return !sourceNode.equals(targetNode) && !sourceNode.isNodeAncestor(targetNode)
-				&& !targetNode.isNodeAncestor(sourceNode);
+		return AbstractGroupTree.ALL_GROUPS_NAME.equals(targetNode.toString()) || (!sourceNode.equals(targetNode)
+				&& !sourceNode.isNodeAncestor(targetNode) && !targetNode.isNodeAncestor(sourceNode));
 	}
 
 	private boolean canImportToThisComponent(Component target) {
