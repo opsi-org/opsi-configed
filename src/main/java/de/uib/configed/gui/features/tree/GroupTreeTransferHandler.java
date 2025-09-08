@@ -191,49 +191,58 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		// Perform the actual import, but in sorted order
 		for (String selectedObject : new TreeSet<>(selectedObjects)) {
-			String sourceParentID = null;
-
 			Logging.debug(this, "importData ", selectedObject);
 
 			Logging.debug(this, "active source tree path for selectedObject ", selectedObject);
 
-			GroupNode sourceParentNode = null;
-			GroupNode groupNode = null;
-			TreePath activeTreePath = tree.getActiveTreePath(selectedObject);
-
-			if (activeTreePath != null) {
-				sourceParentID = (String) ((DefaultMutableTreeNode) activeTreePath.getParentPath()
-						.getLastPathComponent()).getUserObject();
-				sourceParentNode = tree.getGroupNode(sourceParentID);
-				groupNode = tree.getGroupNode(selectedObject);
-			}
-
-			Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
-			Logging.debug(this, "importData, groupNode ", groupNode);
-
-			if (groupNode != null) {
-				// it is a group and it could be moved
-				// it is a group, and it will be moved, but only inside one partial tree
-				if (chooseMove(sourceParentID, dropPath, true)) {
-					tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath,
-							dropParentID);
-				} else {
-					Logging.info(this, "importData: this group will not be moved");
-				}
+			if (source instanceof ClientTable || source instanceof ProductTable) {
+				// object is selected in table
+				tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
 			} else {
-				// import node
-				Logging.debug(this, "importData handling selectedObject ", selectedObject);
-				if (chooseMove(sourceParentID, dropPath, false)) {
-					tree.moveObjectTo(selectedObject, sourceParentID, sourceParentNode, dropParentNode, dropPath,
-							dropParentID);
-				} else {
-					tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
-				}
+				// object is selected in tree
+				moveObjectInTree(selectedObject, dropParentNode, dropPath, dropParentID);
 			}
-
-			Logging.debug(this, "importData ready, selectedObject ", selectedObject);
 		}
 
 		return true;
+	}
+
+	private void moveObjectInTree(String selectedObject, DefaultMutableTreeNode dropParentNode, TreePath dropPath,
+			String dropParentID) {
+		GroupNode sourceParentNode = null;
+		GroupNode groupNode = null;
+		TreePath activeTreePath = tree.getActiveTreePath(selectedObject);
+
+		String sourceParentID = null;
+		if (activeTreePath != null) {
+			sourceParentID = (String) ((DefaultMutableTreeNode) activeTreePath.getParentPath().getLastPathComponent())
+					.getUserObject();
+			sourceParentNode = tree.getGroupNode(sourceParentID);
+			groupNode = tree.getGroupNode(selectedObject);
+		}
+
+		Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
+		Logging.debug(this, "importData, groupNode ", groupNode);
+
+		if (groupNode != null) {
+			// it is a group and it could be moved
+			// it is a group, and it will be moved, but only inside one partial tree
+			if (chooseMove(sourceParentID, dropPath, true)) {
+				tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
+			} else {
+				Logging.info(this, "importData: this group will not be moved");
+			}
+		} else {
+			// import node
+			Logging.debug(this, "importData handling selectedObject ", selectedObject);
+			if (chooseMove(sourceParentID, dropPath, false)) {
+				tree.moveObjectTo(selectedObject, sourceParentID, sourceParentNode, dropParentNode, dropPath,
+						dropParentID);
+			} else {
+				tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
+			}
+		}
+
+		Logging.debug(this, "importData ready, selectedObject ", selectedObject);
 	}
 }
