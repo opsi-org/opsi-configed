@@ -534,8 +534,8 @@ public final class NewClientDialog {
 		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
 			if (persistenceController.getHostInfoCollections().getDepotNamesList().contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(dialog,
-						opsiHostKey + "\n" + Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
-						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.WARNING_MESSAGE);
+						String.format(Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"), opsiHostKey),
+						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
