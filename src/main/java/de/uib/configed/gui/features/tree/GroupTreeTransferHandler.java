@@ -14,6 +14,7 @@ import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -129,7 +130,49 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	@Override
 	protected Transferable createTransferable(JComponent source) {
 		this.source = source;
-		return new StringSelection(null);
+		if (source instanceof JTable tableSource) {
+			return createTransferableForJTable(tableSource);
+		} else {
+			return createTransferableForJTree((AbstractGroupTree) source);
+		}
+	}
+
+	private static Transferable createTransferableForJTable(JTable tableSource) {
+		int[] rows = tableSource.getSelectedRows();
+		int cols = tableSource.getColumnCount();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < rows.length; i++) {
+			if (i > 0) {
+				sb.append(System.lineSeparator());
+			}
+			int viewRow = rows[i];
+			for (int c = 0; c < cols; c++) {
+				if (c > 0) {
+					sb.append('\t');
+				}
+				Object value = tableSource.getValueAt(viewRow, c);
+				if (value != null) {
+					sb.append(value.toString());
+				}
+			}
+		}
+		return new StringSelection(sb.toString());
+	}
+
+	private static Transferable createTransferableForJTree(AbstractGroupTree treeSource) {
+		TreePath[] paths = treeSource.getSelectionPaths();
+		if (paths == null || paths.length == 0) {
+			return null;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < paths.length; i++) {
+			if (i > 0) {
+				sb.append(System.lineSeparator());
+			}
+			sb.append(paths[i].getLastPathComponent().toString());
+		}
+		return new StringSelection(sb.toString());
 	}
 
 	/**
