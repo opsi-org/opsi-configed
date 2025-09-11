@@ -423,8 +423,8 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesServer.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
 		propertyClassesServer.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
 		propertyClassesServer.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
+		propertyClassesServer.put("netboot", "HostConfigNodeRenderer.netboot.Tooltip");
 		propertyClassesServer.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
-
 		propertyClassesServer.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
 		propertyClassesServer.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
 		propertyClassesServer.put(KEY_USER_ROOT,
@@ -434,6 +434,7 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesClient = new TreeMap<>();
 		propertyClassesClient.put("", "HostConfigNodeRenderer.mainNode");
 		propertyClassesClient.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
+		propertyClassesClient.put("netboot", "HostConfigNodeRenderer.netboot.Tooltip");
 		propertyClassesClient.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
 		propertyClassesClient.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
 		propertyClassesClient.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
