@@ -82,8 +82,8 @@ signandupload:
     - cp output/changelog.md CHANGELOG.md
     - cp output/changelog.md opsi-configed/CHANGELOG.md
     - head -n 30 CHANGELOG.md
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION'
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed opsi-configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed opsi-configed all all $CONFIGED_VERSION'
   needs:
     - set_variables
     - compile_and_package
