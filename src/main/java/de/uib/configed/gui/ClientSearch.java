@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -111,6 +112,7 @@ public class ClientSearch {
 		}, Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct").replace("...",
 				" " + selectedProduct));
 		executor.execute();
+		selectProducts(Set.of(selectedProduct));
 	}
 
 	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
@@ -132,6 +134,14 @@ public class ClientSearch {
 					productVersion, packageVersion, includeClientsWithBrokenInstallation);
 		}, searchQueryName.replace("...", " " + selectedProduct));
 		executor.execute();
+		selectProducts(Set.of(selectedProduct));
+	}
+
+	private void selectProducts(Set<String> products) {
+		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().enableFilterMode(false);
+		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+				.setPendingSelection(products);
+		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().enableFilterMode(true);
 	}
 
 	public void selectClientsByFailedAtSomeTimeAgo(String arg, String searchQueryName) {
