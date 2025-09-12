@@ -1075,9 +1075,9 @@ public class ConfigedMain {
 		clientTree.updateSelectedObjectsInTable();
 
 		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
-				.setSelection(selectedLocalbootProducts);
+				.setPendingSelection(selectedLocalbootProducts);
 		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
-				.setSelection(selectedNetbootProducts);
+				.setPendingSelection(selectedNetbootProducts);
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
 
