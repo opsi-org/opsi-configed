@@ -147,6 +147,10 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.restoreFilter();
 	}
 
+	public void enableFilterMode(boolean enable) {
+		groupPanel.setFilterMark(enable);
+	}
+
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 

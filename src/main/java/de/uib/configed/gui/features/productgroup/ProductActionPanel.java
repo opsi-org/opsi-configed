@@ -198,7 +198,7 @@ public class ProductActionPanel extends JPanel {
 			installationStateTableModel.finishCollectiveChange();
 		}
 
-		panelProductSettings.getProductTable().setSelection(saveSelectedProducts);
+		panelProductSettings.getProductTable().setPendingSelection(saveSelectedProducts);
 	}
 
 	public void setFilterMark(boolean selected) {
