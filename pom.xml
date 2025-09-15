@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>configed</groupId>
@@ -222,11 +224,11 @@
             <version>9.1.2</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark -->
+        <!-- https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark-all -->
         <dependency>
-            <groupId>org.commonmark</groupId>
-            <artifactId>commonmark</artifactId>
-            <version>0.24.0</version>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.64.8</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark-ext-autolink -->

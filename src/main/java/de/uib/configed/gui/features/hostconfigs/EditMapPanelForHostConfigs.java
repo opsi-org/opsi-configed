@@ -174,7 +174,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		}
 
 		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-			tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
+			tooltip.append(Utils.parseMarkdown(descriptionsMap.get(propertyName)));
 		}
 
 		return tooltip.toString();

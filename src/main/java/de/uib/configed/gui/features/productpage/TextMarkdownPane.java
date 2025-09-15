@@ -6,16 +6,9 @@
 
 package de.uib.configed.gui.features.productpage;
 
-import java.util.Arrays;
-
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.DefaultCaret;
-
-import org.commonmark.ext.autolink.AutolinkExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -33,11 +26,7 @@ public class TextMarkdownPane extends JTextPane {
 
 	@Override
 	public void setText(String s) {
-		Parser parser = Parser.builder().extensions(Arrays.asList(AutolinkExtension.create())).build();
-		Node document = parser.parse(s);
-		HtmlRenderer renderer = HtmlRenderer.builder().build();
-		String html = renderer.render(document);
-		super.setText(html);
+		super.setText(Utils.parseMarkdown(s));
 	}
 
 	private void hyperlinkUpdate(HyperlinkEvent event) {
