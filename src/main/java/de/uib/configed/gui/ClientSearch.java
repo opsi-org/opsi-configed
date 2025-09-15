@@ -137,7 +137,7 @@ public class ClientSearch {
 		selectProducts(Set.of(selectedProduct));
 	}
 
-	private void selectProducts(Set<String> products) {
+	private static void selectProducts(Set<String> products) {
 		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().enableFilterMode(false);
 		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
 				.setPendingSelection(products);

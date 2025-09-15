@@ -50,8 +50,6 @@ public class ProductTable extends JTable {
 		try {
 			clearSelection();
 
-			int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
-
 			if (selectedIDs == null || selectedIDs.isEmpty()) {
 				Logging.info("setSelection: selectedIDs is null or empty; cleared current selection.");
 				return;
@@ -64,6 +62,8 @@ public class ProductTable extends JTable {
 				pendingSelection = selectedIDs;
 				return;
 			}
+
+			int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
 
 			if (col < 0) {
 				Logging.info(this, "setSelection: 'productId' column not found; cannot apply selection at this time.");
