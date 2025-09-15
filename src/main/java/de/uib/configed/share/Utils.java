@@ -316,6 +316,41 @@ public final class Utils {
 		return renderer.render(document);
 	}
 
+	public static String createTooltipForPropertyName(String propertyName, Map<String, Object> defaultsMap,
+			Map<String, String> descriptionsMap, String additionalTooltipText) {
+		if (propertyName == null) {
+			return "";
+		}
+
+		StringBuilder tooltip = new StringBuilder();
+
+		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
+			if (additionalTooltipText != null && !additionalTooltipText.isEmpty()) {
+				tooltip.append("default (" + additionalTooltipText + "): ");
+			} else {
+				tooltip.append("default: ");
+			}
+
+			if (Utils.isKeyForSecretValue(propertyName)) {
+				tooltip.append(Globals.STARRED_STRING);
+			} else {
+				tooltip.append(defaultsMap.get(propertyName));
+			}
+		}
+
+		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
+			tooltip.append(Utils.parseMarkdown(descriptionsMap.get(propertyName)));
+		}
+
+		if (tooltip.length() > 200) {
+			Logging.debug("tooltip length is ", tooltip.length());
+			tooltip.insert(0, "<div style='width: 500px'>");
+			tooltip.append("</div>");
+		}
+
+		return "<html>" + tooltip + "</html>";
+	}
+
 	public static String getSeconds() {
 		String sqlNow = new Timestamp(System.currentTimeMillis()).toString();
 		int i = sqlNow.lastIndexOf(' ');

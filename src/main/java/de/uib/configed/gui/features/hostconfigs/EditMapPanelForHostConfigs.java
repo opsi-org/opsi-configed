@@ -119,7 +119,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
-		jc.setToolTipText("<html>" + createTooltipForPropertyName(propertyName) + "</html>");
+		jc.setToolTipText(Utils.createTooltipForPropertyName(propertyName, defaultsMap, descriptionsMap,
+				includeAdditionalTooltipText ? getPropertyOrigin(propertyName) : null));
 
 		// check equals with default
 
@@ -150,34 +151,6 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 				&& jComponent instanceof JLabel jLabel) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
-	}
-
-	private String createTooltipForPropertyName(String propertyName) {
-		if (propertyName == null) {
-			return "";
-		}
-
-		StringBuilder tooltip = new StringBuilder();
-
-		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-			if (includeAdditionalTooltipText) {
-				tooltip.append("default (" + getPropertyOrigin(propertyName) + "): ");
-			} else {
-				tooltip.append("default: ");
-			}
-
-			if (Utils.isKeyForSecretValue(propertyName)) {
-				tooltip.append(Globals.STARRED_STRING);
-			} else {
-				tooltip.append(defaultsMap.get(propertyName));
-			}
-		}
-
-		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-			tooltip.append(Utils.parseMarkdown(descriptionsMap.get(propertyName)));
-		}
-
-		return tooltip.toString();
 	}
 
 	private String getPropertyOrigin(String propertyName) {

@@ -323,7 +323,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
-		jComponent.setToolTipText(generateTooltip(row));
+		jComponent
+				.setToolTipText(Utils.createTooltipForPropertyName(names.get(row), defaultsMap, descriptionsMap, null));
 
 		// check equals with default
 		Object defaultValue;
@@ -350,31 +351,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 				&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
-	}
-
-	private String generateTooltip(int row) {
-		String propertyName = names.get(row);
-
-		StringBuilder tooltip = new StringBuilder();
-
-		if (propertyName != null) {
-			if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-				tooltip.append("default: ");
-
-				if (Utils.isKeyForSecretValue(propertyName)) {
-					tooltip.append(Globals.STARRED_STRING);
-				} else {
-					tooltip.append(defaultsMap.get(propertyName));
-				}
-			}
-
-			if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-				// Keep newlines as <br> in HTML so non-markdown text is displayed better
-				tooltip.append(Utils.parseMarkdown(descriptionsMap.get(propertyName)));
-			}
-		}
-
-		return "<html>" + tooltip + "</html>";
 	}
 
 	@Override
