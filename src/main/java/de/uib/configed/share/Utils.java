@@ -59,6 +59,9 @@ public final class Utils {
 	private static final int[] MAX_LOG_SIZES = new int[] { 4 * KIBI_BYTE * KIBI_BYTE, 8 * KIBI_BYTE * KIBI_BYTE,
 			8 * KIBI_BYTE * KIBI_BYTE, 0, 1 * KIBI_BYTE * KIBI_BYTE };
 
+	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
+	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
+
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
@@ -284,7 +287,14 @@ public final class Utils {
 
 	public static boolean isKeyForSecretValue(String key) {
 		String keyLowerCase = key.toLowerCase(Locale.ROOT);
-		return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
+
+		if (BLACKLISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
+			return true;
+		} else if (WHITELISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
+			return false;
+		} else {
+			return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
+		}
 	}
 
 	public static String getSeconds() {
