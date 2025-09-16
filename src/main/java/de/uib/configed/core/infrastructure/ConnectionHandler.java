@@ -163,10 +163,9 @@ public class ConnectionHandler {
 
 		try {
 			if (!isTargetConfigServer(certValidator, timeout)) {
-				Logging.info(this, "Connection not established (policy): target is not a configserver. endpoint=",
+				Logging.info(this, "Connection not established: target is not a configserver. endpoint=",
 						safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
 						". Enable DEBUG for preflight details.");
-				Logging.info(this, "Connecting to non-configserver is not allowed - denying connection");
 				conStat = new ConnectionState(ConnectionState.ERROR,
 						"Connection attempt to depot server blocked – only configservers are permitted.");
 				if (notifyUserOfErrors) {
