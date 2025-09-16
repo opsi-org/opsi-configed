@@ -28,6 +28,8 @@ import de.uib.configed.share.logging.Logging;
 
 public class ConnectionHandler {
 	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
+	private static final String HEADER_OPSI_SERVER_ROLE = "X-opsi-server-role";
+	private static final String ROLE_CONFIGSERVER = "configserver";
 
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
@@ -160,6 +162,22 @@ public class ConnectionHandler {
 		HttpsURLConnection connection = null;
 
 		try {
+			if (!preflightCheckServerRole(certValidator, timeout)) {
+				Logging.info(this, "Connection not established (policy): target is not a configserver. endpoint=",
+						safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
+						". Enable DEBUG for preflight details.");
+				Logging.info(this, "Connecting to non-configserver is not allowed - denying connection");
+				conStat = new ConnectionState(ConnectionState.ERROR,
+						"Connection attempt to depot server blocked – only configservers are permitted.");
+				if (notifyUserOfErrors) {
+					reporter.notify(Configed.getResourceValue("ConnectionHandler.connectionDenied"),
+							ConnectionErrorType.GENERAL_ERROR);
+				}
+				// Reset validators so next attempt builds fresh state
+				CertificateValidatorFactory.resetCertificateValidators();
+				return null;
+			}
+
 			connection = (HttpsURLConnection) serviceURL.openConnection();
 			connection.setConnectTimeout(timeout);
 			connection.setReadTimeout(DEFAULT_READ_TIMEOUT_MS);
@@ -216,6 +234,61 @@ public class ConnectionHandler {
 		}
 
 		return connection;
+	}
+
+	private boolean preflightCheckServerRole(CertificateValidator certValidator, int timeout) throws IOException {
+		HttpsURLConnection connection = null;
+		try {
+			connection = (HttpsURLConnection) serviceURL.openConnection();
+			connection.setConnectTimeout(timeout);
+			connection.setReadTimeout(DEFAULT_READ_TIMEOUT_MS);
+			connection.setUseCaches(false);
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setRequestMethod(RequestMethod.HEAD.toString());
+
+			if (requestProperties != null) {
+				for (Entry<String, String> entry : requestProperties.entrySet()) {
+					connection.setRequestProperty(entry.getKey(), entry.getValue());
+				}
+			}
+
+			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
+			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
+
+			connection.connect();
+
+			int code = connection.getResponseCode();
+			String role = connection.getHeaderField(HEADER_OPSI_SERVER_ROLE);
+			Logging.debug(this, "preflight HEAD response code=", code, ", role=", role, ", endpoint=",
+					safeEndpoint(serviceURL), ", timeoutMs=", timeout);
+
+			return ROLE_CONFIGSERVER.equals(role);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.disconnect();
+				} catch (RuntimeException e) {
+					// Best-effort cleanup: failures during disconnect must not mask the original error
+					// (from connect/getResponseCode). HttpsURLConnection is not AutoCloseable and the
+					// underlying resources will be reclaimed by the runtime. Log at debug for diagnostics.
+					Logging.debug(this, "Ignoring exception during disconnect of preflight HEAD connection: ", e);
+				}
+			}
+		}
+	}
+
+	private static String safeEndpoint(URL url) {
+		if (url == null) {
+			return "<null>";
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(url.getProtocol()).append("://").append(url.getHost());
+		int port = url.getPort();
+		if (port > 0) {
+			sb.append(':').append(port);
+		}
+		return sb.toString();
 	}
 
 	private void reportSSLException(CertificateValidator certValidator) {
