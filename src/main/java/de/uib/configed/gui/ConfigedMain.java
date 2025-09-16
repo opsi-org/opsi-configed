@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -92,8 +91,6 @@ public class ConfigedMain {
 	private String depotRepresentative;
 
 	private DepotListSelectionListener depotListSelectionListener;
-
-	private Map<String, String> sessionInfo = new HashMap<>();
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
@@ -555,8 +552,8 @@ public class ConfigedMain {
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
 			String sessionValue = "";
-			if (sessionInfo.get(clientId) != null) {
-				sessionValue = sessionInfo.get(clientId);
+			if (persistenceController.getHostDataService().getSessionInfo().get(clientId) != null) {
+				sessionValue = persistenceController.getHostDataService().getSessionInfo().get(clientId);
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
@@ -1110,10 +1107,6 @@ public class ConfigedMain {
 
 	public ClientTablePanel getClientTablePanel() {
 		return clientTablePanel;
-	}
-
-	public void setSessionInfo(Map<String, String> sessionInfo) {
-		this.sessionInfo = sessionInfo;
 	}
 
 	public void initialTreeActivation() {

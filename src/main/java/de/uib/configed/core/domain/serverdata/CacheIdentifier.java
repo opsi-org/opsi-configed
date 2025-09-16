@@ -248,6 +248,11 @@ public enum CacheIdentifier {
 	SERVER_FULL_PERMISION("server_full_permission"),
 
 	/**
+	 * return type {@code Map<String, String>}
+	 */
+	SESSION_INFO("session_info"),
+
+	/**
 	 * return type {@code boolean}
 	 */
 	DEPOTS_FULL_PERMISSION("depots_full_permission"),

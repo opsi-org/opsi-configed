@@ -9,6 +9,7 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -412,13 +413,11 @@ public class HostDataService {
 		return result;
 	}
 
-	public Map<String, String> sessionInfo(List<String> clientIds) {
-		Map<String, String> result = new HashMap<>();
+	public void retrieveSessionInfo(List<String> clientIds) {
+		Map<String, String> sessionInfo = new HashMap<>();
 
-		Object[] callParameters = new Object[] {};
-		if (clientIds != null && !clientIds.isEmpty()) {
-			callParameters = new Object[] { clientIds };
-		}
+		Object[] callParameters = clientIds != null && !clientIds.isEmpty() ? new Object[] { clientIds }
+				: new Object[] {};
 
 		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
 		Map<String, Object> sessionInfos = exec.getResponses(exec
@@ -435,10 +434,25 @@ public class HostDataService {
 				value = "";
 			}
 
-			result.put(resultEntry.getKey(), value);
+			sessionInfo.put(resultEntry.getKey(), value);
 		}
 
-		return result;
+		cacheManager.setCachedData(CacheIdentifier.SESSION_INFO, sessionInfo);
+	}
+
+	/**
+	 * Get a map of clients and their session information. If no session
+	 * information is available, an empty map is returned, because we only want
+	 * to load the data when requested by user
+	 * 
+	 * @return
+	 */
+	public Map<String, String> getSessionInfo() {
+		if (cacheManager.isDataCached(CacheIdentifier.SESSION_INFO)) {
+			return cacheManager.getCachedData(CacheIdentifier.SESSION_INFO, Map.class);
+		} else {
+			return Collections.emptyMap();
+		}
 	}
 
 	private static String createSessionInfoForList(List<?> sessionlist) {
