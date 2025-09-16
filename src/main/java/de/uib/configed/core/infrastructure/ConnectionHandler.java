@@ -162,7 +162,7 @@ public class ConnectionHandler {
 		HttpsURLConnection connection = null;
 
 		try {
-			if (!preflightCheckServerRole(certValidator, timeout)) {
+			if (!isTargetConfigServer(certValidator, timeout)) {
 				Logging.info(this, "Connection not established (policy): target is not a configserver. endpoint=",
 						safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
 						". Enable DEBUG for preflight details.");
@@ -236,7 +236,7 @@ public class ConnectionHandler {
 		return connection;
 	}
 
-	private boolean preflightCheckServerRole(CertificateValidator certValidator, int timeout) throws IOException {
+	private boolean isTargetConfigServer(CertificateValidator certValidator, int timeout) throws IOException {
 		HttpsURLConnection connection = null;
 		try {
 			connection = (HttpsURLConnection) serviceURL.openConnection();
