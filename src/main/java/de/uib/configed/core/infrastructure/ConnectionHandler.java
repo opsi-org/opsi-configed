@@ -11,8 +11,11 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
@@ -29,7 +32,10 @@ import de.uib.configed.share.logging.Logging;
 public class ConnectionHandler {
 	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
 	private static final String HEADER_OPSI_SERVER_ROLE = "X-opsi-server-role";
+	private static final String HEADER_OPSI_USER_ID = "X-opsi-user-id";
 	private static final String ROLE_CONFIGSERVER = "configserver";
+	private static final Pattern OPSI_USER_ID_TYPE = Pattern.compile("^\s*\\[?\s*(user|client)\s*:",
+			Pattern.CASE_INSENSITIVE);
 
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
@@ -40,6 +46,10 @@ public class ConnectionHandler {
 
 	public enum RequestMethod {
 		POST, GET, HEAD
+	}
+
+	private enum PreflightResult {
+		ALLOWED, NOT_CONFIGSERVER, CLIENT_PRINCIPAL
 	}
 
 	/**
@@ -162,18 +172,9 @@ public class ConnectionHandler {
 		HttpsURLConnection connection = null;
 
 		try {
-			if (!isTargetConfigServer(certValidator, timeout)) {
-				Logging.info(this, "Connection not established: target is not a configserver. endpoint=",
-						safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
-						". Enable DEBUG for preflight details.");
-				conStat = new ConnectionState(ConnectionState.ERROR,
-						"Connection attempt to depot server blocked – only configservers are permitted.");
-				if (notifyUserOfErrors) {
-					reporter.notify(Configed.getResourceValue("ConnectionHandler.connectionDenied"),
-							ConnectionErrorType.GENERAL_ERROR);
-				}
-				// Reset validators so next attempt builds fresh state
-				CertificateValidatorFactory.resetCertificateValidators();
+			PreflightResult preflightResult = checkTargetEligibility(certValidator, timeout);
+			if (preflightResult != PreflightResult.ALLOWED) {
+				handlePreflightDenial(preflightResult);
 				return null;
 			}
 
@@ -235,7 +236,44 @@ public class ConnectionHandler {
 		return connection;
 	}
 
-	private boolean isTargetConfigServer(CertificateValidator certValidator, int timeout) throws IOException {
+	private void handlePreflightDenial(PreflightResult result) {
+		String uiMsgKey;
+		String stateDetail;
+
+		switch (result) {
+		case NOT_CONFIGSERVER:
+			Logging.info(this, "Connection not established: target is not a configserver. endpoint=",
+					safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
+					". Enable DEBUG for preflight details.");
+			uiMsgKey = "ConnectionHandler.connectionDenied.notConfigserver";
+			stateDetail = "Connection attempt to depot server blocked – only configservers are permitted.";
+			break;
+		case CLIENT_PRINCIPAL:
+			Logging.info(this, "Connection not established: client principal is not permitted. endpoint=",
+					safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
+					". Enable DEBUG for preflight details.");
+			uiMsgKey = "ConnectionHandler.connectionDenied.clientPrincipal";
+			stateDetail = "Connection attempt blocked – client credentials are not permitted.";
+			break;
+		default:
+			// Invariant violation: this handler must only be called for denial outcomes.
+			// Either a new PreflightResult was introduced without updating this switch,
+			// or the caller invoked it with ALLOWED.
+			throw new IllegalStateException("Unhandled PreflightResult: " + result);
+		}
+
+		conStat = new ConnectionState(ConnectionState.ERROR, stateDetail);
+
+		if (notifyUserOfErrors) {
+			String uiMsg = Configed.getResourceValue(uiMsgKey);
+			reporter.notify(uiMsg, ConnectionErrorType.GENERAL_ERROR);
+		}
+
+		// Reset validators so next attempt builds fresh state
+		CertificateValidatorFactory.resetCertificateValidators();
+	}
+
+	private PreflightResult checkTargetEligibility(CertificateValidator certValidator, int timeout) throws IOException {
 		HttpsURLConnection connection = null;
 		try {
 			connection = (HttpsURLConnection) serviceURL.openConnection();
@@ -257,12 +295,21 @@ public class ConnectionHandler {
 
 			connection.connect();
 
-			int code = connection.getResponseCode();
-			String role = connection.getHeaderField(HEADER_OPSI_SERVER_ROLE);
-			Logging.debug(this, "preflight HEAD response code=", code, ", role=", role, ", endpoint=",
-					safeEndpoint(serviceURL), ", timeoutMs=", timeout);
+			final int code = connection.getResponseCode();
+			final String role = connection.getHeaderField(HEADER_OPSI_SERVER_ROLE);
+			final String userId = connection.getHeaderField(HEADER_OPSI_USER_ID);
+			final String principalType = parsePrincipalTypeFromUserIdHeader(userId);
 
-			return ROLE_CONFIGSERVER.equals(role);
+			Logging.debug(this, "preflight HEAD response code=", code, ", role=", role, ", x-opsi-user-id=", userId,
+					" (type=", principalType, ")", ", endpoint=", safeEndpoint(serviceURL), ", timeoutMs=", timeout);
+
+			if (!ROLE_CONFIGSERVER.equals(role)) {
+				return PreflightResult.NOT_CONFIGSERVER;
+			}
+			if ("client".equals(principalType)) {
+				return PreflightResult.CLIENT_PRINCIPAL;
+			}
+			return PreflightResult.ALLOWED;
 		} finally {
 			if (connection != null) {
 				try {
@@ -275,6 +322,14 @@ public class ConnectionHandler {
 				}
 			}
 		}
+	}
+
+	private static String parsePrincipalTypeFromUserIdHeader(String headerValue) {
+		if (headerValue == null) {
+			return null;
+		}
+		Matcher m = OPSI_USER_ID_TYPE.matcher(headerValue);
+		return m.find() ? m.group(1).toLowerCase(Locale.ROOT) : null;
 	}
 
 	private static String safeEndpoint(URL url) {
