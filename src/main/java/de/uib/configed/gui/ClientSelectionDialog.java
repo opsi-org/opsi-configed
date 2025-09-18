@@ -848,8 +848,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldText = new TextInputField(sourceGroup.element.getEnumData());
-		fieldText.setEditable(true);
-		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		if (sourceGroup.element instanceof ConnectionElement) {
+			fieldText.setReadOnly(true);
+			fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.readOnlyTextInputToolTip"));
+		} else {
+			fieldText.setEditable(true);
+			fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		}
 		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
 	}
