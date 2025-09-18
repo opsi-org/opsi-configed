@@ -26,10 +26,11 @@ public class OpsiDataConnectionEqualsOperation extends StringEqualsOperation imp
 
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
-		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client ", client);
+		Logging.debug(this, " (OpsiDataConnectionEqualsOperation) doesMatch client ", client);
 
 		Set<String> clientsConnectedByMessagebus = client.getConnectedByMessagebus();
-		Logging.devel(this, "realmap ", clientsConnectedByMessagebus, " client id ", client.getId());
+		Logging.debug(this, "clients connected by messagebus ", clientsConnectedByMessagebus, " client id ",
+				client.getId());
 		if (clientsConnectedByMessagebus == null) {
 			return false;
 		}
