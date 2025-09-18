@@ -1066,8 +1066,8 @@ public class ConfigedMain {
 
 		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.activateListSelectionListener();
-		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.restoreFilter();
+		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
