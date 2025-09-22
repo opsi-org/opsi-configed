@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.java_websocket.handshake.ServerHandshake;
@@ -477,7 +478,7 @@ public final class TerminalFrame implements MessagebusListener {
 		if (callback != null) {
 			callback.run();
 		}
-		frame.dispose();
+		SwingUtilities.invokeLater(() -> frame.dispose());
 		messagebus.getWebSocket().unregisterListener(this);
 	}
 
