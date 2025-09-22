@@ -140,7 +140,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private String produceURL() {
-		String host = persistenceController.getExecutioner().getHost();
+		String host = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHost();
 		if (host == null) {
 			Logging.error(this, "Host is null");
 			return null;
@@ -161,7 +161,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private ServerFacade getServerFacadeExecutor() {
-		return persistenceController.getExecutioner();
+		return PersistenceControllerFactory.getPersistenceController().getExecutioner();
 	}
 
 	private String createEncBasicAuth() {
