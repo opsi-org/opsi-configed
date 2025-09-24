@@ -28,7 +28,7 @@ public final class Globals {
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
 	public static final String MIN_MAJOR_VERSION = "4.3";
-	public static final String MIN_SERVER_VERSION = "4.3.31.11";
+	public static final String MIN_SERVER_VERSION = "4.3.35.6";
 	public static final String APPNAME = "opsi-configed";
 	public static final String APPNAME_SERVER_CONNECTION = "opsi config editor";
 
