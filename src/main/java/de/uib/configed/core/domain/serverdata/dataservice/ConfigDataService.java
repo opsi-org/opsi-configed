@@ -189,59 +189,7 @@ public class ConfigDataService {
 			}
 		}
 
-		retrieveWANConfigOptionsPD();
 		Logging.debug(this, "getConfigOptions() work finished");
-	}
-
-	public Map<String, List<Object>> getWanConfigurationPD() {
-		retrieveWANConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.WAN_CONFIGURATION, Map.class);
-	}
-
-	public Map<String, ConfigOption> retrieveWANConfigOptionsPD() {
-		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + WAN_PARTKEY);
-
-		Logging.info(this, " getWANConfigOptions   ", allWanConfigOptions);
-
-		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
-
-		Map<String, List<Object>> wanConfiguration = new HashMap<>();
-
-		List<Object> values = null;
-
-		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
-			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-				Logging.error(this, "WAN config option key ", notWanConfigOption.getKey(), " is non BOOL_CONFIG");
-				wanConfiguration.put(notWanConfigOption.getKey(), null);
-			} else {
-				Boolean b = (Boolean) notWanConfigOption.getValue().getDefaultValues().get(0);
-
-				values = new ArrayList<>();
-				values.add(!b);
-				wanConfiguration.put(notWanConfigOption.getKey(), values);
-			}
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.WAN_CONFIGURATION, wanConfiguration);
-		Logging.info(this, "getWANConfigOptions wanConfiguration ", wanConfiguration);
-
-		return allWanConfigOptions;
-	}
-
-	private Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
-		Map<String, ConfigOption> result = new HashMap<>();
-		retrieveConfigOptionsPD();
-		Map<String, ConfigOption> configOptions = getConfigOptionsPD();
-		for (Entry<String, ConfigOption> configOption : configOptions.entrySet()) {
-			if (configOption.getKey().startsWith(s) && configOption.getKey().length() > s.length()) {
-				String xKey = configOption.getKey().substring(s.length());
-				result.put(xKey, configOption.getValue());
-			}
-		}
-
-		return result;
 	}
 
 	public Map<String, Map<String, Object>> getHostConfigsPD() {
@@ -777,55 +725,71 @@ public class ConfigDataService {
 		return false;
 	}
 
-	public Boolean isWanConfigured(String host) {
-		Map<String, List<Object>> wanConfiguration = getWanConfigurationPD();
-		Logging.info(this, " isWanConfigured wanConfiguration  ", wanConfiguration, " for host ", host);
-		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
+	public Boolean isWanConfigured(String hostId) {
+		final String netConnectionActiveKey = "opsiclientd.event_net_connection.active";
+		final String timerActiveKey = "opsiclientd.event_timer.active";
+		final String guiStartupActiveKey = "opsiclientd.event_gui_startup.active";
+		final String guiStartupUserLoggedInActiveKey = "opsiclientd.event_gui_startup{user_logged_in}.active";
+
+		Logging.debug(this, "isWanConfigured evaluating host '", hostId, "' with keys: '", netConnectionActiveKey, "; ",
+				timerActiveKey, "; ", guiStartupActiveKey, "; ", guiStartupUserLoggedInActiveKey, "'");
+
+		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
+
+		Boolean[] enabling = resolvePair(hostId, hostConfig, netConnectionActiveKey, timerActiveKey, "[enabling]");
+		Boolean[] disabling = resolvePair(hostId, hostConfig, guiStartupActiveKey, guiStartupUserLoggedInActiveKey,
+				"[disabling]");
+
+		boolean enabledByEvents = Boolean.TRUE.equals(enabling[0]) && Boolean.TRUE.equals(enabling[1]);
+		if (!enabledByEvents) {
+			Logging.info(this, "isWanConfigured: WAN not enabled by net/timer for host '", hostId, "'. Returning: ",
+					false);
+			return false;
+		}
+
+		boolean guiStartupBlocks = Boolean.TRUE.equals(disabling[0]) || Boolean.TRUE.equals(disabling[1]);
+		if (guiStartupBlocks) {
+			// Covers "all four active": prefer safety and disable WAN
+			Logging.warning(this, "isWanConfigured: conflicting settings for host '", hostId,
+					"': WAN enabling events are active but GUI startup is active as well. Disabling WAN.");
+			return false;
+		}
+
+		Logging.debug(this, "isWanConfigured: WAN enabled for host '", hostId, "'.");
+
+		return true;
 	}
 
-	// for checking if WAN default configuration is set
-	public boolean findBooleanConfigurationComparingToDefaults(String host,
-			Map<String, List<Object>> defaultConfiguration) {
-		boolean tested = false;
-		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
-			if (configuration.getValue() == null) {
-				Logging.info(this, "We encountered non BOOL_CONFIG option ", configuration.getKey(), "; We skip it");
-			} else {
-				tested = valueFromConfigStateAsExpected(getHostConfigsPD().get(host), configuration.getKey(),
-						(Boolean) (configuration.getValue().get(0)));
-				if (!tested) {
-					break;
-				}
+	private Boolean getHostBoolean(Map<String, Object> hostConfig, String key) {
+		Object v = null;
+		if (hostConfig != null) {
+			Object raw = hostConfig.get(key);
+			if (raw instanceof List<?> list && !list.isEmpty()) {
+				v = list.get(0);
 			}
 		}
-		return tested;
+		return (v instanceof Boolean b) ? b : null;
 	}
 
-	private Boolean valueFromConfigStateAsExpected(Map<String, Object> configs, String configKey, boolean expectValue) {
-		Logging.debug(this, "valueFromConfigStateAsExpected configKey ", configKey);
-		boolean result = false;
+	private Boolean[] resolvePair(String hostId, Map<String, Object> hostConfig, String keyA, String keyB,
+			String pairLabel) {
+		Boolean hostA = getHostBoolean(hostConfig, keyA);
+		Boolean hostB = getHostBoolean(hostConfig, keyB);
+		final Boolean a;
+		final Boolean b;
 
-		if (configs != null && configs.get(configKey) != null && !((List<?>) (configs.get(configKey))).isEmpty()) {
-			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values ", configKey, ", valueList ",
-					configs.get(configKey), " expected ", expectValue);
-
-			Object value = ((List<?>) configs.get(configKey)).get(0);
-
-			if (value instanceof Boolean b) {
-				if (b.equals(expectValue)) {
-					result = true;
-				}
-			} else if (value instanceof String s) {
-				if (s.equalsIgnoreCase("" + expectValue)) {
-					result = true;
-				}
-			} else {
-				Logging.error(this, "it is not a boolean and not a string, how to handle it ? value ", value);
-			}
-
-			Logging.debug(this, "valueFromConfigStateAsExpected ", result);
+		if (hostA != null && hostB != null) {
+			a = hostA;
+			b = hostB;
+			Logging.debug(this, "resolvePair ", pairLabel, " (host-level) for '", hostId, "': ", keyA, "=", a, ", ",
+					keyB, "=", b);
+		} else {
+			a = getGlobalBooleanConfigValue(keyA, null);
+			b = getGlobalBooleanConfigValue(keyB, null);
+			Logging.debug(this, "resolvePair ", pairLabel, " (global) for '", hostId, "': ", keyA, "=", a, ", ", keyB,
+					"=", b);
 		}
-		return result;
+		return new Boolean[] { a, b };
 	}
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
