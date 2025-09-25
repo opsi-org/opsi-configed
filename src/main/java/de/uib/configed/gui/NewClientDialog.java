@@ -118,10 +118,9 @@ public final class NewClientDialog {
 	}
 
 	public void setDefaultValues() {
-		jCheckWan.setSelected(persistenceController.getConfigDataService()
-				.isWanConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
-		jCheckShutdownInstall.setSelected(persistenceController.getConfigDataService()
-				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
+		jCheckWan.setSelected(persistenceController.getConfigDataService().isWanConfiguredOnConfigserver());
+		jCheckShutdownInstall.setSelected(
+				persistenceController.getConfigDataService().isInstallByShutdownConfiguredOnConfigserver());
 	}
 
 	private JPanel createPanel() {

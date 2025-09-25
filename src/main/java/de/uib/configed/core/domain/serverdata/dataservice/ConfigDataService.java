@@ -700,15 +700,16 @@ public class ConfigDataService {
 		}
 	}
 
-	public Boolean isInstallByShutdownConfigured(String hostId) {
+	public Boolean isInstallByShutdownConfiguredOnConfigserver() {
+		final String configserver = persistenceController.getHostInfoCollections().getConfigServer();
 		String key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
-		Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "'");
+		Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", configserver, "'");
 		Boolean value = null;
 
-		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
+		Map<String, Object> hostConfig = getHostConfigsPD().get(configserver);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
 			value = (Boolean) ((List<?>) hostConfig.get(key)).get(0);
-			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', value: ", value);
+			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", configserver, "', value: ", value);
 			if (value != null) {
 				return value;
 			}
@@ -716,46 +717,48 @@ public class ConfigDataService {
 
 		value = getGlobalBooleanConfigValue(key, null);
 		if (value != null) {
-			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', global value: ",
+			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", configserver, "', global value: ",
 					value);
 			return value;
 		}
-		Logging.info(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', returning default value: ",
-				false);
+		Logging.info(this, "getHostBooleanConfigValue key '", key, "', host '", configserver,
+				"', returning default value: ", false);
 		return false;
 	}
 
-	public Boolean isWanConfigured(String hostId) {
+	public Boolean isWanConfiguredOnConfigserver() {
+		final String configserver = persistenceController.getHostInfoCollections().getConfigServer();
 		final String netConnectionActiveKey = "opsiclientd.event_net_connection.active";
 		final String timerActiveKey = "opsiclientd.event_timer.active";
 		final String guiStartupActiveKey = "opsiclientd.event_gui_startup.active";
 		final String guiStartupUserLoggedInActiveKey = "opsiclientd.event_gui_startup{user_logged_in}.active";
 
-		Logging.debug(this, "isWanConfigured evaluating host '", hostId, "' with keys: '", netConnectionActiveKey, "; ",
-				timerActiveKey, "; ", guiStartupActiveKey, "; ", guiStartupUserLoggedInActiveKey, "'");
+		Logging.debug(this, "isWanConfigured evaluating host '", configserver, "' with keys: '", netConnectionActiveKey,
+				"; ", timerActiveKey, "; ", guiStartupActiveKey, "; ", guiStartupUserLoggedInActiveKey, "'");
 
-		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
+		Map<String, Object> hostConfig = getHostConfigsPD().get(configserver);
 
-		Boolean[] enabling = resolvePair(hostId, hostConfig, netConnectionActiveKey, timerActiveKey, "[enabling]");
-		Boolean[] disabling = resolvePair(hostId, hostConfig, guiStartupActiveKey, guiStartupUserLoggedInActiveKey,
-				"[disabling]");
+		Boolean[] enabling = resolvePair(configserver, hostConfig, netConnectionActiveKey, timerActiveKey,
+				"[enabling]");
+		Boolean[] disabling = resolvePair(configserver, hostConfig, guiStartupActiveKey,
+				guiStartupUserLoggedInActiveKey, "[disabling]");
 
 		boolean enabledByEvents = Boolean.TRUE.equals(enabling[0]) && Boolean.TRUE.equals(enabling[1]);
 		if (!enabledByEvents) {
-			Logging.info(this, "isWanConfigured: WAN not enabled by net/timer for host '", hostId, "'. Returning: ",
-					false);
+			Logging.info(this, "isWanConfigured: WAN not enabled by net/timer for host '", configserver,
+					"'. Returning: ", false);
 			return false;
 		}
 
 		boolean guiStartupBlocks = Boolean.TRUE.equals(disabling[0]) || Boolean.TRUE.equals(disabling[1]);
 		if (guiStartupBlocks) {
 			// Covers "all four active": prefer safety and disable WAN
-			Logging.warning(this, "isWanConfigured: conflicting settings for host '", hostId,
+			Logging.warning(this, "isWanConfigured: conflicting settings for host '", configserver,
 					"': WAN enabling events are active but GUI startup is active as well. Disabling WAN.");
 			return false;
 		}
 
-		Logging.debug(this, "isWanConfigured: WAN enabled for host '", hostId, "'.");
+		Logging.debug(this, "isWanConfigured: WAN enabled for host '", configserver, "'.");
 
 		return true;
 	}
