@@ -258,7 +258,16 @@ public class LogPanel extends JPanel implements KeyListener {
 	}
 
 	public void setCaretPosition(int caretPosition) {
-		logTextPane.setCaretPosition(caretPosition);
+		try {
+			logTextPane.setCaretPosition(caretPosition);
+		} catch (IllegalArgumentException e) {
+			int maxPos = logTextPane.getDocument().getLength();
+			int safePos = Math.clamp(caretPosition, 0, maxPos);
+			Logging.info(this, String.format(
+					"Failed to restore caret position %d: index out of bounds (possibly due to changed log content). Using nearest valid position: %d.",
+					caretPosition, safePos));
+			logTextPane.setCaretPosition(safePos);
+		}
 	}
 
 	public void reload() {
