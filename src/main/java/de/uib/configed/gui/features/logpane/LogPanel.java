@@ -281,6 +281,7 @@ public class LogPanel extends JPanel implements KeyListener {
 	public void floatExternal() {
 		LogPanel copyOfMe = new LogPanel("", false);
 		copyOfMe.setLevelWithoutAction(logTextPane.getShowLevel());
+		copyOfMe.logTextPane.setShowLevel(logTextPane.getShowLevel());
 		copyOfMe.logTextPane.setParsedText(logTextPane);
 		copyOfMe.adaptComboType();
 		copyOfMe.logTextPane.buildDocument();
