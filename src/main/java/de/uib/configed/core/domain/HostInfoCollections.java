@@ -305,18 +305,14 @@ public class HostInfoCollections {
 
 			Logging.debug(this, "getConfigs for ", name);
 
-			HostInfo hostInfo = null;
-			String myDepot = null;
-
 			depotId = depotFound ? depotId : getConfigServer();
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
-			hostInfo = new HostInfo();
+			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(host);
 			hostInfo.setInDepot(depotId);
-			myDepot = depotId;
 
 			host2hostInfo.put(name, hostInfo);
-			depot2Host2HostInfo.get(myDepot).put(name, hostInfo);
+			depot2Host2HostInfo.get(depotId).put(name, hostInfo);
 		}
 		addOpsiHostNames(host2hostInfo.keySet());
 		cacheManager.setCachedData(CacheIdentifier.HOST_TO_HOST_INFO, host2hostInfo);
