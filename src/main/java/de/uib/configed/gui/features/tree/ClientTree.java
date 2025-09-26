@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.tree;
 
 import java.text.Collator;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -440,9 +441,20 @@ public class ClientTree extends AbstractGroupTree {
 		// child with this objectID not existing
 		if (getChildWithUserObjectString(objectID, newGroupNode) == null) {
 			Set<String> clientIds = new TreeSet<>();
-			newGroupNode.children().asIterator().forEachRemaining(node -> clientIds.add(node.toString()));
 			clientIds.add(objectID);
+
+			// Must be a list and not a treeset because GroupNode is not comparable
+			List<GroupNode> groups = new ArrayList<>();
+			newGroupNode.children().asIterator().forEachRemaining((TreeNode node) -> {
+				switch (node) {
+				case GroupNode gn -> groups.add(gn);
+				default -> clientIds.add(node.toString());
+				}
+			});
+
 			newGroupNode.removeAllChildren();
+			// Add all the groups alphabetically ordered
+			groups.forEach(newGroupNode::add);
 			produceClients(clientIds, newGroupNode);
 			makeVisible(newPath.pathByAddingChild(objectID));
 			return true;
