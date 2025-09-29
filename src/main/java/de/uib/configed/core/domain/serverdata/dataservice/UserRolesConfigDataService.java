@@ -852,39 +852,6 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private static void buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
-		// NOT_WAN meta configs
-		Map<String, Object> item = Utils
-				.createNOMBoolConfig(
-						OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-								+ ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_STARTUP,
-						true, "meta configuration for default not wan behaviour");
-
-		readyObjects.add(item);
-
-		item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY
-						+ "." + CONFIG_CLIENTD_EVENT_STARTUP_USER,
-				true, "meta configuration for default not wan behaviour");
-
-		readyObjects.add(item);
-
-		item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY
-						+ "." + CONFIG_CLIENTD_EVENT_NET_CONNECTION,
-				false, "meta configuration for default not wan behaviour");
-
-		readyObjects.add(item);
-
-		item = Utils
-				.createNOMBoolConfig(
-						OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-								+ ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_TIMER,
-						false, "meta configuration for default not wan behaviour");
-
-		readyObjects.add(item);
-	}
-
 	public boolean hasDepotPermission(String depotId) {
 		if (hasDepotsFullPermissionPD()) {
 			return true;

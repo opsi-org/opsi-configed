@@ -78,7 +78,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
-	public static final String CONFIG_KEY = "configed.meta_config";
 
 	public static final String CONFIG_KEY_MSG_OF_DAY_DEVICE = "message_of_the_day.device.message";
 	public static final String CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL = "message_of_the_day.device.message_valid_until";
@@ -420,7 +419,6 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesServer.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
 		propertyClassesServer.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
 		propertyClassesServer.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
-		propertyClassesServer.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
 		propertyClassesServer.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
 		propertyClassesServer.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
 		propertyClassesServer.put("netboot", "HostConfigNodeRenderer.netboot.Tooltip");
