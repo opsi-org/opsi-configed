@@ -370,8 +370,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public Object getValueAt(int row, int col) {
-		return genEditTable.getValueAt(genEditTable.convertRowIndexToModel(row),
-				genEditTable.convertColumnIndexToModel(col));
+		return genEditTable.getValueAt(row, col);
 	}
 
 	public void setAwareOfSelectionListener(boolean awareOfSelectionListener) {
