@@ -33,7 +33,6 @@ import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -783,16 +782,6 @@ public class UserRolesConfigDataService {
 
 		// remote controls
 		checkRemoteControlConfigs(configDefaultValues, readyObjects);
-
-		// WAN_CONFIGURATION
-		// does it exist?
-
-		Map<String, ConfigOption> wanConfigOptions = persistenceController.getConfigDataService()
-				.retrieveWANConfigOptionsPD();
-		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
-			Logging.info(this, "build default wanConfigOptions");
-			buildWANConfigOptions(readyObjects);
-		}
 
 		// configuration of host menus
 		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
