@@ -938,7 +938,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	public String getSelectedLicensePool() {
 		if (thePanel.getPanelLicensepools().getGenEditTable().getSelectedRow() >= 0) {
-			return thePanel.getPanelLicensepools()
+			return thePanel.getPanelLicensepools().getGenEditTable()
 					.getValueAt(thePanel.getPanelLicensepools().getGenEditTable().getSelectedRow(), 0).toString();
 		} else {
 			return null;
