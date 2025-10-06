@@ -263,9 +263,10 @@ public class LogPanel extends JPanel implements KeyListener {
 		} catch (IllegalArgumentException e) {
 			int maxPos = logTextPane.getDocument().getLength();
 			int safePos = Math.clamp(caretPosition, 0, maxPos);
-			Logging.info(this, String.format(
-					"Failed to restore caret position %d: index out of bounds (possibly due to changed log content). Using nearest valid position: %d.",
-					caretPosition, safePos));
+			Logging.info(this, "catching IllegalArgumentException ", e.getMessage());
+			Logging.info(this, "Failed to restore caret position ", caretPosition,
+					": index out of bounds (possibly due to changed log content). Using nearest valid position: ",
+					safePos);
 			logTextPane.setCaretPosition(safePos);
 		}
 	}

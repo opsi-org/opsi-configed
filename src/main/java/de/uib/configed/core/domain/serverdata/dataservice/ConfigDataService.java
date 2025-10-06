@@ -727,43 +727,45 @@ public class ConfigDataService {
 	}
 
 	public Boolean isWanConfiguredOnConfigserver() {
-		final String configserver = persistenceController.getHostInfoCollections().getConfigServer();
-		final String netConnectionActiveKey = "opsiclientd.event_net_connection.active";
-		final String timerActiveKey = "opsiclientd.event_timer.active";
-		final String guiStartupActiveKey = "opsiclientd.event_gui_startup.active";
-		final String guiStartupUserLoggedInActiveKey = "opsiclientd.event_gui_startup{user_logged_in}.active";
+		final String CONFIG_SERVER = persistenceController.getHostInfoCollections().getConfigServer();
+		final String NET_CONNECTION_ACTIVE_KEY = "opsiclientd.event_net_connection.active";
+		final String TIMER_ACTIVE_KEY = "opsiclientd.event_timer.active";
+		final String GUI_STARTUP_ACTIVE_KEY = "opsiclientd.event_gui_startup.active";
+		final String GUI_STARTUP_USER_LOGGED_IN_ACTIVE_KEY = "opsiclientd.event_gui_startup{user_logged_in}.active";
 
-		Logging.debug(this, "isWanConfigured evaluating host '", configserver, "' with keys: '", netConnectionActiveKey,
-				"; ", timerActiveKey, "; ", guiStartupActiveKey, "; ", guiStartupUserLoggedInActiveKey, "'");
+		Logging.debug(this, "isWanConfigured evaluating host '", CONFIG_SERVER, "' with keys: '",
+				NET_CONNECTION_ACTIVE_KEY, "; ", TIMER_ACTIVE_KEY, "; ", GUI_STARTUP_ACTIVE_KEY, "; ",
+				GUI_STARTUP_USER_LOGGED_IN_ACTIVE_KEY, "'");
 
-		Map<String, Object> hostConfig = getHostConfigsPD().get(configserver);
+		Map<String, Object> hostConfig = getHostConfigsPD().get(CONFIG_SERVER);
 
-		Boolean[] enabling = resolvePair(configserver, hostConfig, netConnectionActiveKey, timerActiveKey,
+		Boolean[] enabling = resolvePair(CONFIG_SERVER, hostConfig, NET_CONNECTION_ACTIVE_KEY, TIMER_ACTIVE_KEY,
 				"[enabling]");
-		Boolean[] disabling = resolvePair(configserver, hostConfig, guiStartupActiveKey,
-				guiStartupUserLoggedInActiveKey, "[disabling]");
 
 		boolean enabledByEvents = Boolean.TRUE.equals(enabling[0]) && Boolean.TRUE.equals(enabling[1]);
 		if (!enabledByEvents) {
-			Logging.info(this, "isWanConfigured: WAN not enabled by net/timer for host '", configserver,
+			Logging.info(this, "isWanConfigured: WAN not enabled by net/timer for host '", CONFIG_SERVER,
 					"'. Returning: ", false);
 			return false;
 		}
 
+		Boolean[] disabling = resolvePair(CONFIG_SERVER, hostConfig, GUI_STARTUP_ACTIVE_KEY,
+				GUI_STARTUP_USER_LOGGED_IN_ACTIVE_KEY, "[disabling]");
+
 		boolean guiStartupBlocks = Boolean.TRUE.equals(disabling[0]) || Boolean.TRUE.equals(disabling[1]);
 		if (guiStartupBlocks) {
 			// Covers "all four active": prefer safety and disable WAN
-			Logging.warning(this, "isWanConfigured: conflicting settings for host '", configserver,
+			Logging.warning(this, "isWanConfigured: conflicting settings for host '", CONFIG_SERVER,
 					"': WAN enabling events are active but GUI startup is active as well. Disabling WAN.");
 			return false;
 		}
 
-		Logging.debug(this, "isWanConfigured: WAN enabled for host '", configserver, "'.");
+		Logging.debug(this, "isWanConfigured: WAN enabled for host '", CONFIG_SERVER, "'.");
 
 		return true;
 	}
 
-	private Boolean getHostBoolean(Map<String, Object> hostConfig, String key) {
+	private static Boolean getHostBoolean(Map<String, Object> hostConfig, String key) {
 		Object v = null;
 		if (hostConfig != null) {
 			Object raw = hostConfig.get(key);
