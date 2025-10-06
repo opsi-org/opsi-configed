@@ -25,7 +25,6 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidator;
@@ -52,9 +51,6 @@ public class Messagebus implements MessagebusListener {
 	// to check if channel subscription event was received
 	private String channelSessionTerminalId;
 	private ThreadLocker locker;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -160,11 +156,11 @@ public class Messagebus implements MessagebusListener {
 		return url;
 	}
 
-	private ServerFacade getServerFacadeExecutor() {
+	private static ServerFacade getServerFacadeExecutor() {
 		return PersistenceControllerFactory.getPersistenceController().getExecutioner();
 	}
 
-	private String createEncBasicAuth() {
+	private static String createEncBasicAuth() {
 		ServerFacade exec = getServerFacadeExecutor();
 		if (exec.isUseSAML()) {
 			return null;
