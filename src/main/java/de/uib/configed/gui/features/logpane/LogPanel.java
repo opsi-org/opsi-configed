@@ -9,7 +9,6 @@ package de.uib.configed.gui.features.logpane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -282,13 +281,29 @@ public class LogPanel extends JPanel implements KeyListener {
 	}
 
 	public void copyTextToClipboard() {
-		Logging.debug(this, "copy text action");
 		String selectedText = logTextPane.getSelectedText();
 		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
+		StringBuilder sb = removeLineNumbers(textToCopy);
+		StringSelection selection = new StringSelection(sb.toString());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+	}
 
-		StringSelection selection = new StringSelection(textToCopy);
-		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clipboard.setContents(selection, null);
+	private StringBuilder removeLineNumbers(String text) {
+		StringBuilder sb = new StringBuilder();
+		String[] lines = text.split("\\R");
+		for (String line : lines) {
+			if (line.matches("^\\(\\d+\\)\\s+.*")) {
+				int logStart = line.indexOf(')') + 1;
+				while (logStart < line.length() && Character.isWhitespace(line.charAt(logStart))) {
+					logStart++;
+				}
+				sb.append(line.substring(logStart));
+			} else {
+				sb.append(line);
+			}
+			sb.append("\n");
+		}
+		return sb;
 	}
 
 	public void download() {
