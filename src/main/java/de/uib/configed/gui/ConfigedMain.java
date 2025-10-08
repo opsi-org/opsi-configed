@@ -809,6 +809,12 @@ public class ConfigedMain {
 	private void setGroupByTree(DefaultMutableTreeNode node) {
 		Logging.info(this, "setGroupByTree, node ", node);
 
+		if (node == null) {
+			Logging.info(this, "Target node not found — possibly deleted or not selected. Defaulting to '",
+					ClientTree.ALL_CLIENTS_NAME, "'");
+			node = clientTree.getGroupNode(ClientTree.ALL_CLIENTS_NAME);
+		}
+
 		clientTree.initActiveParents();
 		// Get all leaves from the node which should be a group
 		clientsFilteredByTree.clear();
