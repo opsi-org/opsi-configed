@@ -8,6 +8,9 @@ package de.uib.configed.gui.features.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -194,12 +197,12 @@ public class LogPanel extends JPanel implements KeyListener {
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_FLOATING_COPY };
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP,
+					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
@@ -217,7 +220,9 @@ public class LogPanel extends JPanel implements KeyListener {
 		case PopupMenuTrait.POPUP_RELOAD:
 			reload();
 			break;
-
+		case PopupMenuTrait.POPUP_COPY:
+			copyTextToClipboard();
+			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD:
 			download();
 			break;
@@ -274,6 +279,16 @@ public class LogPanel extends JPanel implements KeyListener {
 	public void reload() {
 		Logging.info(this, "reload action");
 		setLevelWithoutAction(logTextPane.produceInitialMaxShowLevel());
+	}
+
+	public void copyTextToClipboard() {
+		Logging.debug(this, "copy text action");
+		String selectedText = logTextPane.getSelectedText();
+		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
+
+		StringSelection selection = new StringSelection(textToCopy);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(selection, null);
 	}
 
 	public void download() {

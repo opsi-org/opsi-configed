@@ -29,6 +29,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	public static final int POPUP_DOWNLOAD_AS_ZIP = 10;
 
 	public static final int POPUP_DOWNLOAD_ALL_AS_ZIP = 11;
+	public static final int POPUP_COPY = 12;
 
 	public static final int POPUP_DELETE = 13;
 	public static final int POPUP_ADD = 14;
@@ -45,7 +46,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	// map of popup type to method to create the popup item depending on the type
 	private Map<Integer, Consumer<Integer>> popupCreators = Map.ofEntries(Map.entry(POPUP_RELOAD, this::addItemReload),
 			Map.entry(POPUP_FLOATING_COPY, p -> addPopupFloatingCopy()), Map.entry(POPUP_SAVE, this::addItemSave),
-			Map.entry(POPUP_DOWNLOAD, this::addItemDownload),
+			Map.entry(POPUP_COPY, this::addItemCopyText), Map.entry(POPUP_DOWNLOAD, this::addItemDownload),
 			Map.entry(POPUP_DOWNLOAD_AS_ZIP, this::addItemDownloadAsZIP),
 			Map.entry(POPUP_DOWNLOAD_ALL_AS_ZIP, this::addItemDownloadAllAsZIP), Map.entry(POPUP_PDF, this::addItemPDF),
 			Map.entry(POPUP_EXPORT_CSV, this::addItemExportCSV),
@@ -122,6 +123,15 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_DOWNLOAD_ALL_AS_ZIP);
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAllAsZip"));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "download");
+
+		addItem(p);
+	}
+
+	private void addItemCopyText(int p) {
+		int i = listPopups.indexOf(POPUP_COPY);
+
+		menuItems[i] = new JMenuItem(Configed.getResourceValue("copy"));
+		Icons.addIntellijIconToMenuItem(menuItems[i], "copy");
 
 		addItem(p);
 	}
