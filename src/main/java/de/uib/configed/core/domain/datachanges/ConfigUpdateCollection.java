@@ -22,6 +22,7 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	private List<String> objectIds;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
+	private Map<String, Object> configUpdates;
 
 	public ConfigUpdateCollection() {
 		super();
@@ -40,6 +41,7 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 		}
 
 		boolean result = true;
+		this.configUpdates = map;
 		for (String objectId : objectIds) {
 			Logging.debug(this, "adding ConfigStateUpdateCommand");
 			result = add(new ConfigStateUpdateCommand(objectId, map));
@@ -58,6 +60,9 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: ", size());
+		if (configUpdates != null) {
+			configUpdates.clear();
+		}
 		persistenceController.getConfigDataService().updateConfigs();
 		persistenceController.getConfigDataService().updateConfigStates();
 

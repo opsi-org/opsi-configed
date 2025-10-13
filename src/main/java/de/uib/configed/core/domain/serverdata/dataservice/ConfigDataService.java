@@ -601,13 +601,6 @@ public class ConfigDataService {
 			state.put("values", entry.getValue());
 
 			configStateCollection.add(state);
-
-			Map<String, Object> retrievedConfig = settings.getRetrieved();
-
-			// remove the key from the retrievedConfig so that we won't update/save it again
-			if (retrievedConfig != null) {
-				retrievedConfig.remove(entry.getKey());
-			}
 		}
 	}
 
