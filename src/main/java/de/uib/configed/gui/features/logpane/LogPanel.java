@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -46,6 +47,8 @@ public class LogPanel extends JPanel implements KeyListener {
 	private static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
+
+	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
 
 	protected LogTextPane logTextPane;
 
@@ -289,30 +292,20 @@ public class LogPanel extends JPanel implements KeyListener {
 		setLevelWithoutAction(logTextPane.produceInitialMaxShowLevel());
 	}
 
-	public void copyTextToClipboard() {
+	private void copyTextToClipboard() {
 		String selectedText = logTextPane.getSelectedText();
 		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
-		StringBuilder sb = removeLineNumbers(textToCopy);
-		StringSelection selection = new StringSelection(sb.toString());
+		String cleanedText = removeLineNumbers(textToCopy);
+		StringSelection selection = new StringSelection(cleanedText);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 	}
 
-	private StringBuilder removeLineNumbers(String text) {
+	private static String removeLineNumbers(String text) {
 		StringBuilder sb = new StringBuilder();
-		String[] lines = text.split("\\R");
-		for (String line : lines) {
-			if (line.matches("^\\(\\d+\\)\\s+.*")) {
-				int logStart = line.indexOf(')') + 1;
-				while (logStart < line.length() && Character.isWhitespace(line.charAt(logStart))) {
-					logStart++;
-				}
-				sb.append(line.substring(logStart));
-			} else {
-				sb.append(line);
-			}
-			sb.append("\n");
+		for (String line : text.split("\\R")) {
+			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst("")).append('\n');
 		}
-		return sb;
+		return sb.toString();
 	}
 
 	public void download() {
