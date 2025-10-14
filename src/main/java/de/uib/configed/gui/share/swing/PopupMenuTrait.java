@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.share.swing;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.Icons;
@@ -132,6 +135,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("copy"));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "copy");
+		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 
 		addItem(p);
 	}
