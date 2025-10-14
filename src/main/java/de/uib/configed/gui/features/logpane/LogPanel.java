@@ -8,11 +8,15 @@ package de.uib.configed.gui.features.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.app.Main;
@@ -42,6 +47,8 @@ public class LogPanel extends JPanel implements KeyListener {
 	private static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
+
+	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
 
 	protected LogTextPane logTextPane;
 
@@ -81,6 +88,13 @@ public class LogPanel extends JPanel implements KeyListener {
 		}
 
 		logTextPane.addKeyListener(this);
+		logTextPane.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "copyRaw");
+		logTextPane.getActionMap().put("copyRaw", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				copyTextToClipboard();
+			}
+		});
 
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -194,12 +208,12 @@ public class LogPanel extends JPanel implements KeyListener {
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_FLOATING_COPY };
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP,
+					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
@@ -217,7 +231,9 @@ public class LogPanel extends JPanel implements KeyListener {
 		case PopupMenuTrait.POPUP_RELOAD:
 			reload();
 			break;
-
+		case PopupMenuTrait.POPUP_COPY:
+			copyTextToClipboard();
+			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD:
 			download();
 			break;
@@ -274,6 +290,22 @@ public class LogPanel extends JPanel implements KeyListener {
 	public void reload() {
 		Logging.info(this, "reload action");
 		setLevelWithoutAction(logTextPane.produceInitialMaxShowLevel());
+	}
+
+	private void copyTextToClipboard() {
+		String selectedText = logTextPane.getSelectedText();
+		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
+		String cleanedText = removeLineNumbers(textToCopy);
+		StringSelection selection = new StringSelection(cleanedText);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+	}
+
+	private static String removeLineNumbers(String text) {
+		StringBuilder sb = new StringBuilder();
+		for (String line : text.split("\\R")) {
+			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst("")).append('\n');
+		}
+		return sb.toString();
 	}
 
 	public void download() {
