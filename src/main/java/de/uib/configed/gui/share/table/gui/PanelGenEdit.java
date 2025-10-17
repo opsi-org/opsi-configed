@@ -479,9 +479,10 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 			while (viewrow < genEditTable.getRowCount()) {
 				String[] partialkeys = new String[genEditTable.getGenTableModel().getFinalCols().size()];
 
-				for (int j = 0; j < genEditTable.getGenTableModel().getFinalCols().size(); j++) {
-					partialkeys[j] = genEditTable.getValueAt(genEditTable.convertRowIndexToModel(viewrow),
-							genEditTable.getGenTableModel().getFinalCols().get(j)).toString();
+				int j = 0;
+				for (Integer col : genEditTable.getGenTableModel().getFinalCols()) {
+					partialkeys[j++] = genEditTable.getValueAt(genEditTable.convertRowIndexToModel(viewrow), col)
+							.toString();
 				}
 
 				if (keyValue.equals(Utils.pseudokey(partialkeys))) {

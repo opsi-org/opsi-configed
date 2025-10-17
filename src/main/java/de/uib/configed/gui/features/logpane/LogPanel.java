@@ -48,7 +48,9 @@ public class LogPanel extends JPanel implements KeyListener {
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
 
+	@SuppressWarnings("java:S5867")
 	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
+	private static final Pattern LINE_BREAK_PATTERN = Pattern.compile("\\R");
 
 	protected LogTextPane logTextPane;
 
@@ -301,10 +303,14 @@ public class LogPanel extends JPanel implements KeyListener {
 	}
 
 	private static String removeLineNumbers(String text) {
-		StringBuilder sb = new StringBuilder();
-		for (String line : text.split("\\R")) {
-			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst("")).append('\n');
+		String[] lines = LINE_BREAK_PATTERN.split(text, -1);
+		StringBuilder sb = new StringBuilder(text.length());
+
+		for (String line : lines) {
+			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst(""));
+			sb.append('\n');
 		}
+
 		return sb.toString();
 	}
 

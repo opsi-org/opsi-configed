@@ -7,7 +7,8 @@
 package de.uib.configed.gui.type;
 
 import java.sql.Date;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.util.Optional;
 
 import de.uib.configed.share.logging.Logging;
 
@@ -28,57 +29,56 @@ public final class DateExtendedByVars extends Date {
 		return datetime.substring(0, idx);
 	}
 
-	public static String interpretVar(final String s) {
-		Logging.debug("OpsiDataDateMatcher interpretVar in ", s);
+	public static String interpretVar(final String input) {
+		Logging.debug("OpsiDataDateMatcher interpretVar in ", input);
 
-		int i = s.indexOf(CHAR_DELIMITER);
+		String result = input;
+		Optional<String> maybeToken = extractToken(input);
+		Optional<String> maybeReplaced = maybeToken.filter(token -> {
+			if (!token.startsWith(MINUS)) {
+				Logging.info("OpsiDataDateMatcher interpretVar expected: \"", MINUS, "\"");
+				return false;
+			}
+			return true;
+		}).flatMap(token -> parseSubtrahend(token.substring(MINUS.length())).map(days -> {
+			String dateString = calculateDateString(days);
+			Logging.debug("OpsiDataDateMatcher interpretVar produced time ", dateString);
+			String tokenFull = CHAR_DELIMITER + token + CHAR_DELIMITER;
+			return input.replace(tokenFull, dateString);
+		}));
 
-		if (i == -1) {
-			return s;
+		if (maybeReplaced.isPresent()) {
+			result = maybeReplaced.get();
 		}
 
-		i++;
+		return result;
+	}
 
-		if (i > s.length()) {
-			Logging.info("OpsiDataDateMatcher interpretVar \"", CHAR_DELIMITER, "\" found at end of string");
-			return s;
+	private static Optional<String> extractToken(String s) {
+		int first = s.indexOf(CHAR_DELIMITER);
+		if (first == -1 || first + 1 >= s.length()) {
+			if (first == s.length() - 1) {
+				Logging.info("OpsiDataDateMatcher interpretVar \"", CHAR_DELIMITER, "\" found at end of string");
+			}
+			return Optional.empty();
 		}
+		int second = s.indexOf(CHAR_DELIMITER, first + 1);
+		if (second == -1)
+			return Optional.empty();
+		return Optional.of(s.substring(first + 1, second));
+	}
 
-		String replaceContent = s.substring(i);
-		i = replaceContent.indexOf(CHAR_DELIMITER);
-
-		replaceContent = replaceContent.substring(0, i);
-
-		Logging.debug("OpsiDataDateMatcher interpretVar replaceContent ", replaceContent);
-
-		if (!replaceContent.startsWith(MINUS)) {
-			Logging.info("OpsiDataDateMatcher interpretVar expected: \"", MINUS, "\"");
-			return s;
-		}
-
-		String subtrahendS = replaceContent.substring(MINUS.length());
-
-		Integer subtrahend = null;
-
+	private static Optional<Integer> parseSubtrahend(String s) {
 		try {
-			subtrahend = Integer.valueOf(subtrahendS);
+			return Optional.of(Integer.parseInt(s));
 		} catch (NumberFormatException ex) {
-			Logging.info("OpsiDataDateMatcher interpretVar not a number: ", subtrahendS, ", error: ", ex);
-			return s;
+			Logging.info("OpsiDataDateMatcher interpretVar not a number: ", s, ", error: ", ex);
+			return Optional.empty();
 		}
+	}
 
-		Calendar cal = new java.util.GregorianCalendar();
-
-		cal.add(Calendar.DAY_OF_MONTH, -subtrahend);
-
-		java.util.Date myTime = new java.sql.Timestamp(cal.getTimeInMillis());
-
-		String timeS = stripTimeFromDay(myTime.toString());
-
-		Logging.debug("OpsiDataDateMatcher interpretVar produced time ", timeS);
-
-		String toReplace = CHAR_DELIMITER + replaceContent + CHAR_DELIMITER;
-
-		return s.replace(toReplace, timeS);
+	private static String calculateDateString(int daysToSubtract) {
+		LocalDate date = LocalDate.now().minusDays(daysToSubtract);
+		return stripTimeFromDay(date.toString());
 	}
 }

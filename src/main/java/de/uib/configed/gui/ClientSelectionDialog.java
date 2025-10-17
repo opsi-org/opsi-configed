@@ -1038,15 +1038,14 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 
-		if (component instanceof TextInputField textInputField) {
-			textInputField.setText(data.getData().toString());
-		} else if (component instanceof SpinnerWithExtension spinnerWithExtension
-				&& data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
-			spinnerWithExtension.setValue((Long) data.getData());
-		} else if (component instanceof JSpinner jSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
-			jSpinner.setValue(data.getData());
-		} else {
-			Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
+		switch (component) {
+		case TextInputField textInputField -> textInputField.setText(data.getData().toString());
+		case SpinnerWithExtension spinnerWithExtension when data
+				.getType() == SelectData.DataType.BIG_INTEGER_TYPE -> spinnerWithExtension
+						.setValue((Long) data.getData());
+		case JSpinner jSpinner when data.getType() == SelectData.DataType.INTEGER_TYPE -> jSpinner
+				.setValue(data.getData());
+		default -> Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}
 
@@ -1140,16 +1139,16 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		int index = newElementBox.getSelectedIndex();
 
-		if (index == 0) {
-			return;
-		} else if (index == 1) {
-			complexElements.add(createHostGroup());
-		} else if (index == 2) {
-			complexElements.add(createSoftwareGroup());
-		} else if (index == 3) {
-			complexElements.add(createSwAuditGroup());
-		} else {
-			complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));
+		ComplexGroup complexGroup = switch (index) {
+		case 0 -> null;
+		case 1 -> createHostGroup();
+		case 2 -> createSoftwareGroup();
+		case 3 -> createSwAuditGroup();
+		default -> createHardwareGroup(newElementBox.getSelectedItem().toString());
+		};
+
+		if (complexGroup != null) {
+			complexElements.add(complexGroup);
 		}
 
 		contentPane.revalidate();

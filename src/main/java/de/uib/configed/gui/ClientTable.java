@@ -82,7 +82,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 	}
 
 	public Set<String> getSelectedSet() {
-		Set<String> result = new HashSet<>(getSelectedRowCount());
+		Set<String> result = HashSet.newHashSet(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
 			result.add(getClientName(i));
@@ -92,7 +92,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 	}
 
 	public Set<String> getClients() {
-		Set<String> result = new HashSet<>(getRowCount());
+		Set<String> result = HashSet.newHashSet(getRowCount());
 
 		for (int i = 0; i < getRowCount(); i++) {
 			result.add(getClientName(i));
