@@ -25,7 +25,6 @@ public class OpsiDataClient {
 	public static final String SWAUDIT_MAP = "SwAuditMap";
 
 	private String hostId;
-	private Set<String> connectedByMessagebus;
 	private Map<String, Object> infoMap;
 
 	// The opsi groups for the client
@@ -59,10 +58,6 @@ public class OpsiDataClient {
 		productNames = new ArrayList<>();
 		swauditList = new LinkedList<>();
 		hardwareInfo = new LinkedList<>();
-	}
-
-	public void setConnectedByMessagebus(Set<String> elements) {
-		connectedByMessagebus = elements;
 	}
 
 	/** Set the map with the information about hosts */
@@ -110,10 +105,6 @@ public class OpsiDataClient {
 	/** Get the ID of this client */
 	public String getId() {
 		return hostId;
-	}
-
-	public Set<String> getConnectedByMessagebus() {
-		return connectedByMessagebus;
 	}
 
 	@Override

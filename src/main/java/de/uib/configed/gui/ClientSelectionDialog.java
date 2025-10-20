@@ -53,7 +53,6 @@ import de.uib.configed.gui.features.clientselection.ConnectionStatus;
 import de.uib.configed.gui.features.clientselection.OperationWithStatus;
 import de.uib.configed.gui.features.clientselection.SelectData;
 import de.uib.configed.gui.features.clientselection.SelectionManager;
-import de.uib.configed.gui.features.clientselection.elements.ConnectionElement;
 import de.uib.configed.gui.features.clientselection.elements.DescriptionElement;
 import de.uib.configed.gui.features.clientselection.elements.GroupElement;
 import de.uib.configed.gui.features.clientselection.elements.GroupWithSubgroupsElement;
@@ -394,7 +393,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		} else {
 			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
 		}
-
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 
@@ -525,7 +523,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.groupList.add(createSimpleGroup(
 				new NameElement(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
 		result.groupList.add(createSimpleGroup(new IPElement()));
-		result.groupList.add(createSimpleGroup(new ConnectionElement()));
 		result.groupList.add(createSimpleGroup(new DescriptionElement()));
 		result.groupList.getLast().connectionType.setVisible(false);
 		createComplexBottom(result);
@@ -848,13 +845,8 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldText = new TextInputField(sourceGroup.element.getEnumData());
-		if (sourceGroup.element instanceof ConnectionElement) {
-			fieldText.setReadOnly(true);
-			fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.readOnlyTextInputToolTip"));
-		} else {
-			fieldText.setEditable(true);
-			fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		}
+		fieldText.setEditable(true);
+		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
 	}
