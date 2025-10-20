@@ -29,6 +29,7 @@ import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.opera
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterThanOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntLessOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntLessThanOperation;
+import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataConnectionEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateGreaterOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateGreaterThanOperation;
@@ -46,6 +47,7 @@ import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.opera
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataSuperGroupEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataSwAuditOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiSoftwareEqualsOperation;
+import de.uib.configed.gui.features.clientselection.elements.ConnectionElement;
 import de.uib.configed.gui.features.clientselection.elements.DescriptionElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericBigIntegerElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericEnumElement;
@@ -128,6 +130,8 @@ public final class OpsiDataBackend {
 	private Map<String, String> hwUiToOpsi;
 	private Map<String, List<Map<String, Object>>> hwClassToValues;
 
+	private Set<String> clientsConnectedByMessagebus;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -195,6 +199,10 @@ public final class OpsiDataBackend {
 						(String) operation.getData(), element);
 			}
 			throw new IllegalArgumentException("Wrong operation for this element.");
+		}
+
+		if (element instanceof ConnectionElement) {
+			return new OpsiDataConnectionEqualsOperation((String) operation.getData(), element);
 		}
 
 		if (element instanceof GroupElement && operation instanceof StringEqualsOperation) {
@@ -416,6 +424,10 @@ public final class OpsiDataBackend {
 			superGroups = persistenceController.getHostInfoCollections().getFNode2TreeparentsPD();
 		}
 
+		if (clientsConnectedByMessagebus == null || reloadRequested) {
+			clientsConnectedByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
+		}
+
 		Set<String> clientNames = clientMaps.keySet();
 
 		if (hasSoftware) {
@@ -451,7 +463,9 @@ public final class OpsiDataBackend {
 
 		for (Entry<String, HostInfo> clientEntry : clientMaps.entrySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientEntry.getKey());
+			client.setConnectedByMessagebus(clientsConnectedByMessagebus);
 			client.setInfoMap(clientEntry.getValue().getMap());
+
 			if (hasHardware) {
 				client.setHardwareInfo(clientToHardware.get(clientEntry.getKey()));
 			}
