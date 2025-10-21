@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -75,6 +76,10 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
 			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
+	private Set<JMenuItem> clientMenuItemsDisableOnGlobalReadOnly = Set.of(jMenuAddClient, jMenuDeleteClient,
+			jMenuRebootClient, jMenuShutdownClient, jMenuCopyClient, jMenuResetProducts, jMenuFreeLicenses,
+			jMenuChangeDepot, jMenuRemoteControl, jMenuShowPopupMessage, jMenuDeletePackageCaches,
+			jMenuRequestSessionInfo);
 
 	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
@@ -136,6 +141,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		JMenuItem jMenuWakeOnLan = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 		jMenuWakeOnLan.addActionListener(event -> ServerActionManager.wakeSelectedClients());
+		jMenuWakeOnLan.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
@@ -144,15 +150,19 @@ public final class ClientMenuManager implements MenuListener {
 			item.addActionListener(actionEvent -> ServerActionManager.fireOpsiclientdEventOnSelectedClients(event));
 			jMenuOpsiClientdEvent.add(item);
 		}
+		jMenuOpsiClientdEvent.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
 		jMenuShutdownClient.addActionListener(event -> ServerActionManager.shutdownSelectedClients());
+		jMenuShutdownClient.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		jMenuRequestSessionInfo.addActionListener(event -> SessionInfoRetriever.retrieveSessionInfo(configedMain));
 		Icons.addThemeIconInvertedToMenuItem(jMenuRequestSessionInfo, "user");
 		jMenuRebootClient.addActionListener(event -> ServerActionManager.rebootSelectedClients());
+		jMenuRebootClient.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		Icons.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
 		jMenuDeleteClient.addActionListener(event -> ServerActionManager.deleteSelectedClients());
+		jMenuDeleteClient.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		jMenuCopyClient.addActionListener(event -> ServerActionManager.copySelectedClient());
 		jMenuFreeLicenses.addActionListener(event -> ServerActionManager.freeAllPossibleLicensesForSelectedClients());
@@ -380,11 +390,21 @@ public final class ClientMenuManager implements MenuListener {
 		Logging.debug(" enableMenuItemsForClients, countSelectedClients ", countSelectedClients);
 
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			jMenuItem.setEnabled(countSelectedClients >= 1);
+			if (clientMenuItemsDisableOnGlobalReadOnly.contains(jMenuItem)
+					&& persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+				jMenuItem.setEnabled(false);
+			} else {
+				jMenuItem.setEnabled(countSelectedClients >= 1);
+			}
 		}
 
-		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
-		jMenuCopyClient.setEnabled(countSelectedClients == 1);
+		if (!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+			jMenuChangeClientID.setEnabled(countSelectedClients == 1);
+			jMenuCopyClient.setEnabled(countSelectedClients == 1);
+		} else {
+			jMenuChangeClientID.setEnabled(false);
+			jMenuCopyClient.setEnabled(false);
+		}
 
 		List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
 

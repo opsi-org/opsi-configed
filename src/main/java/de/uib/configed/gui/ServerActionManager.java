@@ -182,7 +182,8 @@ public final class ServerActionManager {
 	}
 
 	public static void shutdownSelectedClients() {
-		if (configedMain.getSelectedClients().isEmpty()) {
+		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -199,7 +200,8 @@ public final class ServerActionManager {
 	}
 
 	public static void rebootSelectedClients() {
-		if (configedMain.getSelectedClients().isEmpty()) {
+		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 
