@@ -32,21 +32,21 @@ public final class DateExtendedByVars extends Date {
 	public static String interpretVar(final String input) {
 		Logging.debug("OpsiDataDateMatcher interpretVar in ", input);
 
-		String result = input;
 		Optional<String> maybeToken = extractToken(input);
-		Optional<String> maybeReplaced = maybeToken.filter(token -> {
+		Optional<String> maybeReplaced = maybeToken.filter((String token) -> {
 			if (!token.startsWith(MINUS)) {
 				Logging.info("OpsiDataDateMatcher interpretVar expected: \"", MINUS, "\"");
 				return false;
 			}
 			return true;
-		}).flatMap(token -> parseSubtrahend(token.substring(MINUS.length())).map(days -> {
+		}).flatMap(token -> parseSubtrahend(token.substring(MINUS.length())).map((Integer days) -> {
 			String dateString = calculateDateString(days);
 			Logging.debug("OpsiDataDateMatcher interpretVar produced time ", dateString);
 			String tokenFull = CHAR_DELIMITER + token + CHAR_DELIMITER;
 			return input.replace(tokenFull, dateString);
 		}));
 
+		String result = input;
 		if (maybeReplaced.isPresent()) {
 			result = maybeReplaced.get();
 		}
@@ -63,8 +63,9 @@ public final class DateExtendedByVars extends Date {
 			return Optional.empty();
 		}
 		int second = s.indexOf(CHAR_DELIMITER, first + 1);
-		if (second == -1)
+		if (second == -1) {
 			return Optional.empty();
+		}
 		return Optional.of(s.substring(first + 1, second));
 	}
 

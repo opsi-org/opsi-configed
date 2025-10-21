@@ -51,6 +51,15 @@ public class ConnectionHandler {
 		ALLOWED, NOT_CONFIGSERVER, CLIENT_PRINCIPAL
 	}
 
+	private Map<PreflightResult, ConnectionInfo> connectionInfoMap = Map.of(PreflightResult.NOT_CONFIGSERVER,
+			new ConnectionInfo("ConnectionHandler.connectionDenied.notConfigserver",
+					"Connection attempt to depot server blocked – only configservers are permitted."),
+			PreflightResult.CLIENT_PRINCIPAL, new ConnectionInfo("ConnectionHandler.connectionDenied.clientPrincipal",
+					"Connection attempt blocked – client credentials are not permitted."));
+
+	record ConnectionInfo(String uiMsgKey, String stateDetail) {
+	}
+
 	/**
 	 * Constructs {@code ConnectionHandler} object with provided information.
 	 * 
@@ -236,35 +245,18 @@ public class ConnectionHandler {
 	}
 
 	private void handlePreflightDenial(PreflightResult result) {
-		String uiMsgKey;
-		String stateDetail;
-
-		switch (result) {
-		case NOT_CONFIGSERVER:
-			Logging.info(this, "Connection not established: target is not a configserver. endpoint=",
-					safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
-					". Enable DEBUG for preflight details.");
-			uiMsgKey = "ConnectionHandler.connectionDenied.notConfigserver";
-			stateDetail = "Connection attempt to depot server blocked – only configservers are permitted.";
-			break;
-		case CLIENT_PRINCIPAL:
-			Logging.info(this, "Connection not established: client principal is not permitted. endpoint=",
-					safeEndpoint(serviceURL), ", userNotified=", notifyUserOfErrors,
-					". Enable DEBUG for preflight details.");
-			uiMsgKey = "ConnectionHandler.connectionDenied.clientPrincipal";
-			stateDetail = "Connection attempt blocked – client credentials are not permitted.";
-			break;
-		default:
-			// Invariant violation: this handler must only be called for denial outcomes.
-			// Either a new PreflightResult was introduced without updating this switch,
-			// or the caller invoked it with ALLOWED.
+		ConnectionInfo info = connectionInfoMap.get(result);
+		if (info == null) {
 			throw new IllegalStateException("Unhandled PreflightResult: " + result);
 		}
 
-		conStat = new ConnectionState(ConnectionState.ERROR, stateDetail);
+		Logging.info(this, "Connection not established: ", info.stateDetail(), ". endpoint=", safeEndpoint(serviceURL),
+				", userNotified=", notifyUserOfErrors, ". Enable DEBUG for preflight details.");
+
+		conStat = new ConnectionState(ConnectionState.ERROR, info.stateDetail());
 
 		if (notifyUserOfErrors) {
-			String uiMsg = Configed.getResourceValue(uiMsgKey);
+			String uiMsg = Configed.getResourceValue(info.uiMsgKey());
 			reporter.notify(uiMsg, ConnectionErrorType.GENERAL_ERROR);
 		}
 
