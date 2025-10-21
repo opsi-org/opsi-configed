@@ -34,7 +34,7 @@ public class ConnectionHandler {
 	private static final String HEADER_OPSI_SERVER_ROLE = "X-opsi-server-role";
 	private static final String HEADER_OPSI_USER_ID = "X-opsi-user-id";
 	private static final String ROLE_CONFIGSERVER = "configserver";
-	private static final Pattern OPSI_USER_ID_TYPE = Pattern.compile("^\s*\\[?\s*(user|client)\s*:",
+	private static final Pattern OPSI_USER_ID_TYPE = Pattern.compile("^(user|client):[^\\s]+$",
 			Pattern.CASE_INSENSITIVE);
 
 	private URL serviceURL;
