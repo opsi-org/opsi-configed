@@ -247,6 +247,9 @@ public class ConnectionHandler {
 	private void handlePreflightDenial(PreflightResult result) {
 		ConnectionInfo info = connectionInfoMap.get(result);
 		if (info == null) {
+			// Invariant violation: this handler must only be called for denial outcomes.
+			// Either a new PreflightResult was introduced without updating this switch,
+			// or the caller invoked it with ALLOWED.
 			throw new IllegalStateException("Unhandled PreflightResult: " + result);
 		}
 
