@@ -25,8 +25,10 @@ public final class UserPreferences {
 	public static final String CLIENTS_TABLE_DISPLAY_FIELDS = "clients_table_display_fields";
 	public static final String LOCALBOOT_TABLE_DISPLAY_FIELDS = "localboot_table_display_fields";
 	public static final String NETBOOT_TABLE_DISPLAY_FIELDS = "netboot_table_display_fields";
+	public static final String CLIENTS_TABLE_COLUMN_WIDTHS = "clients_table.column_widths";
 	public static final String WINDOW_BOUNDS = "window_bounds";
 	public static final String WINDOW_STATE = "window_state";
+	public static final String RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION = "retain_table_column_widths_during_session";
 
 	private static Properties properties = new Properties();
 	private static File propertiesFile = new File(
@@ -52,6 +54,10 @@ public final class UserPreferences {
 			Logging.warning(e, "saved states file not found");
 		} catch (IOException e) {
 			Logging.warning(e, "error loading saved states file");
+		}
+
+		if (!properties.containsKey(RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION)) {
+			setBoolean(RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION, false);
 		}
 	}
 
