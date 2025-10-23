@@ -898,9 +898,9 @@ public class ConfigedMain {
 
 			persistenceController.getDepotDataService().setDepot(depotRepresentative);
 			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
+		} else {
+			Logging.debug(this, "Depot representative unchanged.");
 		}
-
-		Logging.debug(this, "Depot representative unchanged.");
 	}
 
 	public String getDepotRepresentative() {
