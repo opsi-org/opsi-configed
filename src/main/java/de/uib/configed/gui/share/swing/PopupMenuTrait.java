@@ -18,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
@@ -101,6 +102,8 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("save"));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "save");
+		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		addItem(p);
 	}
@@ -168,6 +171,8 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_DELETE);
 		menuItems[i] = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItems[i], "remove");
+		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		addItem(p);
 	}
@@ -176,6 +181,8 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_ADD);
 		menuItems[i] = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItems[i], "add");
+		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly());
 
 		addItem(p);
 	}

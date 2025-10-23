@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.event.ListSelectionEvent;
 
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.share.logging.Logging;
@@ -55,7 +56,8 @@ public class PanelSoftwareLicencepool extends PanelGenEdit {
 
 		if (val != null && genEditTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
 				&& !((String) val).equals(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL)) {
-			buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
+			buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(!PersistenceControllerFactory
+					.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly());
 			labelSetAllAssignmentsToPoolFromSelectedRow
 					.setText(labelText + " " + getValueAt(genEditTable.getSelectedRow(), 1));
 		} else {
