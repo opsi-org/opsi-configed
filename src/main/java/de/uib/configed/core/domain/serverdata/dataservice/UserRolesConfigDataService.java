@@ -329,16 +329,12 @@ public class UserRolesConfigDataService {
 
 		boolean serverActionPermission = true;
 
-		if (globalReadOnly) {
-			serverActionPermission = false;
-		} else {
-			configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
-			Logging.info(this, "checkPermissions  configKey ", configKey);
+		configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
+		Logging.info(this, "checkPermissions  configKey ", configKey);
 
-			if (serverPropertyMap.get(configKey) != null) {
-				Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
-				serverActionPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
-			}
+		if (serverPropertyMap.get(configKey) != null) {
+			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
+			serverActionPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);

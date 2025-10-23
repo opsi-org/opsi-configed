@@ -32,6 +32,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.share.table.DefaultListModelProducer;
 import de.uib.configed.gui.type.ConfigOption;
@@ -98,8 +99,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
+				&& !canEditOwnServerRole()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}
@@ -139,6 +140,15 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		}
 
 		return result;
+	}
+
+	private static boolean canEditOwnServerRole() {
+		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
+		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().hasServerFullPermissionPD();
+		boolean isCurrentUserRoleSelected = ConfigedMain.getMainFrame().getServerConfiguration()
+				.isCurrentUserRoleSelected();
+		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
 	}
 
 	private Component getBooleanEditor(Object value, String key) {
