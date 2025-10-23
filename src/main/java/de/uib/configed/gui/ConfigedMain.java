@@ -13,10 +13,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -867,52 +867,40 @@ public class ConfigedMain {
 		return true;
 	}
 
-	public void setDepotRepresentative(Collection<String> depots) {
+	public void setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		if (depots.isEmpty()) {
-			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-			return;
-		}
-
+		List<String> selectedDepots = getSelectedDepots();
 		String oldRepresentative = depotRepresentative;
 
-		Logging.debug(this, "setDepotRepresentative  start   up to now ", oldRepresentative, " old",
-				depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
+		String configServer = persistenceController.getHostInfoCollections().getConfigServer();
+		Set<String> clientDepots = selectedClients.isEmpty() ? Collections.emptySet() : getDepotsOfSelectedClients();
 
-		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients ", depots);
+		Logging.info(this, "Selected depots: " + selectedDepots);
+		Logging.info(this, "Depots of selected clients: " + clientDepots);
 
-		Iterator<String> depotsIterator = depots.iterator();
+		String newRepresentative;
 
-		if (!depotsIterator.hasNext()) {
-			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-			Logging.debug(this, "setDepotRepresentative  without next change depotRepresentative ", " up to now ",
-					oldRepresentative, " new ", depotRepresentative, " equal ",
-					oldRepresentative.equals(depotRepresentative));
+		if (selectedDepots.isEmpty() || clientDepots.contains(configServer)) {
+			newRepresentative = configServer;
+		} else if (selectedDepots.size() == 1) {
+			String onlyDepot = selectedDepots.get(0);
+			newRepresentative = clientDepots.contains(onlyDepot) ? onlyDepot : configServer;
 		} else {
-			depotRepresentative = depotsIterator.next();
-
-			while (depotsIterator.hasNext()) {
-				String depot = depotsIterator.next();
-				if (depot.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
-					depotRepresentative = depot;
-					break;
-				}
-			}
+			newRepresentative = selectedDepots.stream().filter(clientDepots::contains).findFirst().orElse(configServer);
 		}
 
-		Logging.debug(this, "depotRepresentative: ", depotRepresentative);
+		Logging.debug(this, "Old representative: " + oldRepresentative + ", new: " + newRepresentative);
 
-		Logging.info(this, "setDepotRepresentative  change depotRepresentative ", " up to now ", oldRepresentative,
-				" new ", depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
+		if (!Objects.equals(oldRepresentative, newRepresentative)) {
+			depotRepresentative = newRepresentative;
+			Logging.info(this, "Depot representative changed to " + depotRepresentative);
 
-		if (!oldRepresentative.equals(depotRepresentative)) {
-			Logging.info(this, " new depotRepresentative ", depotRepresentative);
 			persistenceController.getDepotDataService().setDepot(depotRepresentative);
-
-			// everything
 			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 		}
+
+		Logging.debug(this, "Depot representative unchanged.");
 	}
 
 	public String getDepotRepresentative() {

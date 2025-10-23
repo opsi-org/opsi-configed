@@ -28,7 +28,6 @@ public class InitialDataLoader extends SwingWorker<Void, Void> {
 	@Override
 	public void done() {
 		configedMain.initGui();
-		configedMain.setDepotRepresentative(configedMain.getSelectedDepots());
 
 		isDataLoaded = true;
 
