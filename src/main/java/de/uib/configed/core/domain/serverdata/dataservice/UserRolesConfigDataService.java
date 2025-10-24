@@ -28,11 +28,13 @@ import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -125,6 +127,47 @@ public class UserRolesConfigDataService {
 	public boolean isAccessToHostgroupsOnlyIfExplicitlyStatedPD() {
 		return Boolean.TRUE.equals(
 				cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, Boolean.class));
+	}
+
+	/**
+	 * Determines whether the currently logged-in user is allowed to edit their
+	 * own role in the server configuration, even if the global read-only
+	 * privilege is enabled.
+	 * <p>
+	 * Domain-specific context:
+	 * <ul>
+	 * <li>Users can have privileges that restrict actions (e.g. read-only,
+	 * write, etc.).</li>
+	 * <li>The {@code privilege.host.all.registered_readonly} flag normally
+	 * prevents all data modifications.</li>
+	 * <li>However, if the user has {@code privilege.host.opsiserver.write} set
+	 * to {@code true}, and they are currently viewing the Server Configuration
+	 * and editing their own role, they are allowed to make changes to their own
+	 * role configuration despite being globally read-only.</li>
+	 * </ul>
+	 * <p>
+	 * This method checks whether:
+	 * <ol>
+	 * <li>The current editing target is the Server Configuration view,</li>
+	 * <li>The user has full server write permission
+	 * ({@code opsiserver.write == true}), and</li>
+	 * <li>The role currently selected in the configuration matches the
+	 * logged-in user's own role.</li>
+	 * </ol>
+	 * <p>
+	 * If all conditions are met, the user can edit their own server role.
+	 * </p>
+	 *
+	 * @return {@code true} if the user is allowed to edit their own server
+	 *         role, {@code false} otherwise.
+	 */
+	public boolean canEditOwnServerRole() {
+		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
+		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().hasServerFullPermissionPD();
+		boolean isCurrentUserRoleSelected = ConfigedMain.getMainFrame().getServerConfiguration()
+				.isCurrentUserRoleSelected();
+		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
 	}
 
 	public final void checkConfigurationPD() {

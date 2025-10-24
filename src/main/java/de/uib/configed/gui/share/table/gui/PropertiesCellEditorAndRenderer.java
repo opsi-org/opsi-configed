@@ -29,10 +29,10 @@ import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.share.table.DefaultListModelProducer;
 import de.uib.configed.gui.type.ConfigOption;
@@ -99,8 +99,9 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
-				&& !canEditOwnServerRole()) {
+		UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService();
+		if (userRolesConfigDataService.isGlobalReadOnly() && !userRolesConfigDataService.canEditOwnServerRole()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}
@@ -140,47 +141,6 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		}
 
 		return result;
-	}
-
-	/**
-	 * Determines whether the currently logged-in user is allowed to edit their
-	 * own role in the server configuration, even if the global read-only
-	 * privilege is enabled.
-	 * <p>
-	 * Domain-specific context:
-	 * <ul>
-	 * <li>Users can have privileges that restrict actions (e.g. read-only,
-	 * write, etc.).</li>
-	 * <li>The {@code privilege.host.all.registered_readonly} flag normally
-	 * prevents all data modifications.</li>
-	 * <li>However, if the user has {@code privilege.host.opsiserver.write} set
-	 * to {@code true}, and they are currently viewing the Server Configuration
-	 * and editing their own role, they are allowed to make changes to their own
-	 * role configuration despite being globally read-only.</li>
-	 * </ul>
-	 * <p>
-	 * This method checks whether:
-	 * <ol>
-	 * <li>The current editing target is the Server Configuration view,</li>
-	 * <li>The user has full server write permission
-	 * ({@code opsiserver.write == true}), and</li>
-	 * <li>The role currently selected in the configuration matches the
-	 * logged-in user's own role.</li>
-	 * </ol>
-	 * <p>
-	 * If all conditions are met, the user can edit their own server role.
-	 * </p>
-	 *
-	 * @return {@code true} if the user is allowed to edit their own server
-	 *         role, {@code false} otherwise.
-	 */
-	private static boolean canEditOwnServerRole() {
-		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
-		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().hasServerFullPermissionPD();
-		boolean isCurrentUserRoleSelected = ConfigedMain.getMainFrame().getServerConfiguration()
-				.isCurrentUserRoleSelected();
-		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
 	}
 
 	private Component getBooleanEditor(Object value, String key) {
