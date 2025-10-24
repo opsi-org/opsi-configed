@@ -122,6 +122,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
 		Icons.addIntellijIconToMenuItem(multiLineEditingItem, "edit");
 		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
+		multiLineEditingItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
