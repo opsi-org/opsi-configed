@@ -142,6 +142,38 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return result;
 	}
 
+	/**
+	 * Determines whether the currently logged-in user is allowed to edit their
+	 * own role in the server configuration, even if the global read-only
+	 * privilege is enabled.
+	 * <p>
+	 * Domain-specific context:
+	 * <ul>
+	 * <li>Users can have privileges that restrict actions (e.g. read-only,
+	 * write, etc.).</li>
+	 * <li>The {@code privilege.host.all.registered_readonly} flag normally
+	 * prevents all data modifications.</li>
+	 * <li>However, if the user has {@code privilege.host.opsiserver.write} set
+	 * to {@code true}, and they are currently viewing the Server Configuration
+	 * and editing their own role, they are allowed to make changes to their own
+	 * role configuration despite being globally read-only.</li>
+	 * </ul>
+	 * <p>
+	 * This method checks whether:
+	 * <ol>
+	 * <li>The current editing target is the Server Configuration view,</li>
+	 * <li>The user has full server write permission
+	 * ({@code opsiserver.write == true}), and</li>
+	 * <li>The role currently selected in the configuration matches the
+	 * logged-in user's own role.</li>
+	 * </ol>
+	 * <p>
+	 * If all conditions are met, the user can edit their own server role.
+	 * </p>
+	 *
+	 * @return {@code true} if the user is allowed to edit their own server
+	 *         role, {@code false} otherwise.
+	 */
 	private static boolean canEditOwnServerRole() {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
