@@ -437,7 +437,8 @@ public final class ClientMenuManager implements MenuListener {
 				}
 			}
 
-			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {
+			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
+					|| persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
 				jMenuCopyClient.setEnabled(false);
 			}
 
@@ -445,8 +446,9 @@ public final class ClientMenuManager implements MenuListener {
 					.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
 				jMenuAddClient.setEnabled(false);
 			} else {
-				jMenuAddClient.setEnabled(
-						persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
+				jMenuAddClient
+						.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
+								&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 			}
 		}
 	}
