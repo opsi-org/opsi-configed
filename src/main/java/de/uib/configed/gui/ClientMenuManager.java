@@ -91,10 +91,6 @@ public final class ClientMenuManager implements MenuListener {
 
 	private void initJMenu() {
 		jMenuClients.addMenuListener(this);
-		JMenuItem jMenuInvertSelection = createMenuItem("MainFrame.jMenuInvertSelection", configedMain::invertSelection,
-				false);
-		jMenuInvertSelection.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 
 		jMenuClients.add(createMenuItem("MainFrame.jMenuWakeOnLan", ServerActionManager::wakeSelectedClients, true));
 		jMenuClients.add(createSubMenu("MainFrame.jMenuOpsiClientdEvent", this::initOpsiclientdEventMenu, true));
@@ -159,7 +155,12 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(createMenuItem("MainFrame.jMenuInvertSelection", configedMain::invertSelection, false));
+		JMenuItem jMenuInvertSelection = createMenuItem("MainFrame.jMenuInvertSelection", configedMain::invertSelection,
+				false);
+		jMenuInvertSelection.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+
+		jMenuClients.add(jMenuInvertSelection);
 	}
 
 	private JMenuItem createMenuItem(String resourceKey, Runnable action, boolean dependOnSelectionCount) {
