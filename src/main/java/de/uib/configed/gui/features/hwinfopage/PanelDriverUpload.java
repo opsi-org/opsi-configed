@@ -231,7 +231,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			driverPathChecked.setSelected(stateDriverPath);
 			Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
 
-			if (stateServerPath && stateDriverPath) {
+			if (stateServerPath && stateDriverPath
+					&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
 				result = true;
 			}
 		}

@@ -196,11 +196,13 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		if (setDefaultValue != null) {
-			setDefaultValue.setEnabled(row != -1);
+			setDefaultValue.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly());
 		}
 
 		if (popupRemoveSpecificEntry != null) {
-			popupRemoveSpecificEntry.setEnabled(row != -1);
+			popupRemoveSpecificEntry.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly());
 		}
 	}
 
