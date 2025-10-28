@@ -35,6 +35,7 @@ import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
+import de.uib.configed.gui.ServerConfiguration;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -165,8 +166,9 @@ public class UserRolesConfigDataService {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().hasServerFullPermissionPD();
-		boolean isCurrentUserRoleSelected = ConfigedMain.getMainFrame().getServerConfiguration()
-				.isCurrentUserRoleSelected();
+		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
+		boolean isCurrentUserRoleSelected = serverConfiguration != null
+				&& serverConfiguration.isCurrentUserRoleSelected();
 		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
 	}
 
