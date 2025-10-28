@@ -29,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -98,8 +99,9 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService();
+		if (userRolesConfigDataService.isGlobalReadOnly() && !userRolesConfigDataService.canEditOwnServerRole()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}

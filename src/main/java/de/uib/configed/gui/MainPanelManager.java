@@ -288,6 +288,10 @@ public class MainPanelManager {
 		return clientConfiguration;
 	}
 
+	public ServerConfiguration getServerConfiguration() {
+		return serverConfiguration;
+	}
+
 	public HostsStatusPanel getHostsStatusPanel() {
 		return hostsStatusPanel;
 	}

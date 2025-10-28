@@ -48,4 +48,8 @@ public class ServerConfiguration extends JTabbedPane {
 				additionalConfigs.get(0), POJOReMapper.remap(additionalConfigs), configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesServer(), null, false);
 	}
+
+	public boolean isCurrentUserRoleSelected() {
+		return panelHostConfig.isSelected(persistenceController.getExecutioner().getUsername());
+	}
 }

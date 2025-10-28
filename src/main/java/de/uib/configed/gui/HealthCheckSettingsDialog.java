@@ -66,6 +66,9 @@ public final class HealthCheckSettingsDialog {
 	}
 
 	public void showHealthCheckSettings(ConfigedMain configedMain, List<String> defaultSelection, State state) {
+		if (!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+			return;
+		}
 		this.configedMain = configedMain;
 		Logging.info(this, "show health check settings dialog");
 
