@@ -165,9 +165,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		JMenuItem itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
-		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener(actionEvent -> saveAndExecuteAction());
-		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
+				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		popup.add(itemOnDemand);
 
@@ -178,7 +178,8 @@ public class PanelProductSettings extends JSplitPane {
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts.addActionListener(
 				actionEvent -> ServerActionManager.processActionRequestsSelectedProducts(groupPanel.getVisibility()));
-		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
+				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		popup.add(itemOnDemandForSelectedProducts);
 
@@ -190,6 +191,7 @@ public class PanelProductSettings extends JSplitPane {
 		} else {
 			resetProductsMenu = ClientMenuManager.createResetNetbootProductsMenuItemsTo();
 		}
+		resetProductsMenu.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		popup.add(resetProductsMenu);
 
 		popup.addSeparator();

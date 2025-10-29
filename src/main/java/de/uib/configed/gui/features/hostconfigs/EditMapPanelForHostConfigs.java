@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -19,10 +20,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -88,6 +92,28 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 				}
 			}
 		};
+
+		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// We don't override default behavior.
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// We don't override default behavior.
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
+						.getPersistenceController().getUserRolesConfigDataService();
+				boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
+						|| userRolesConfigDataService.canEditOwnServerRole();
+				Component saveComponent = jPopupMenu.getComponent(0);
+				saveComponent.setEnabled(canSave);
+			}
+		});
 
 		JMenuItem jPopupMenuCopyToClipBoard = new JMenuItem(
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.copyPropertyToClipboard"));

@@ -114,6 +114,10 @@ public class MainFrame extends JFrame implements KeyListener {
 		return mainPanelManager.getClientConfiguration();
 	}
 
+	public ServerConfiguration getServerConfiguration() {
+		return mainPanelManager.getServerConfiguration();
+	}
+
 	public HostsStatusPanel getHostsStatusPanel() {
 		return mainPanelManager.getHostsStatusPanel();
 	}

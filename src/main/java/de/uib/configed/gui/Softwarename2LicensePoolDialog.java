@@ -117,6 +117,8 @@ public class Softwarename2LicensePoolDialog {
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(VALUE_NO_LICENSE_POOL)));
+		buttonRemoveAllAssignments
+				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
@@ -396,7 +398,8 @@ public class Softwarename2LicensePoolDialog {
 
 		Logging.info(this, "setGlobalPool  labelSetAllAssignmentsToGloballySelectedPool", labelText);
 		labelSetAllAssignmentsToGloballySelectedPool.setText(labelText);
-		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(buttonActive);
+		buttonSetAllAssignmentsToGloballySelectedPool
+				.setEnabled(buttonActive && !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 	}
 
 	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {

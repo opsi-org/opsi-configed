@@ -88,6 +88,7 @@ public class TopToolBarManager {
 		healthCheckSettingsButton.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
 		healthCheckSettingsButton.addActionListener(
 				actionEvent -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain));
+		healthCheckSettingsButton.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		return Arrays.asList(downloadButton, healthCheckSettingsButton);
 	}
@@ -101,7 +102,8 @@ public class TopToolBarManager {
 			addClientButton.setEnabled(false);
 		} else {
 			addClientButton
-					.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
+					.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
+							&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		}
 
 		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));
