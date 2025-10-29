@@ -334,9 +334,6 @@ public class ConfigedMain {
 
 		clientTree.produceActiveParents();
 
-		// change in selection not via clientpage (i.e. via tree)
-		mainFrame.getClientConfiguration().stateChanged(null);
-
 		hostInfo.resetValues();
 
 		updateHostInfo();
