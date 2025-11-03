@@ -11,11 +11,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -52,7 +53,7 @@ public final class ClientMenuManager implements MenuListener {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private List<JMenuItem> clientMenuItemsDependOnSelectionCount = new ArrayList<>();
+	private Set<JMenuItem> clientMenuItemsDependOnSelectionCount = new HashSet<>();
 
 	private final Map<String, JMenuItem> clientMenuItems = new LinkedHashMap<>();
 
