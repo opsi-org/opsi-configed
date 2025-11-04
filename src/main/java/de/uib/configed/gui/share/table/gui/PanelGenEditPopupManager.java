@@ -69,7 +69,7 @@ public class PanelGenEditPopupManager {
 				menuItemSave.addActionListener(actionEvent -> panelGenEdit.commit());
 				addPopupItem(menuItemSave);
 			}, POPUP_CANCEL, () -> {
-				menuItemCancel = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.abandonNewData"));
+				menuItemCancel = new JMenuItem(Configed.getResourceValue("discard"));
 				menuItemCancel.setEnabled(false);
 				menuItemCancel.addActionListener(actionEvent -> panelGenEdit.cancel());
 				addPopupItem(menuItemCancel);

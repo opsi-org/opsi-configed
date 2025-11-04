@@ -25,9 +25,13 @@ public class DataChangedKeeper implements DataChangedObserver {
 		boolean result = false;
 
 		if (this.dataChanged) {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ConfigedMain.confirmUnsavedChanges"),
-					Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_OPTION);
+			int answer = JOptionPane
+					.showOptionDialog(ConfigedMain.getMainFrame(),
+							Configed.getResourceValue("ConfigedMain.confirmUnsavedChanges"),
+							Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, new String[] { Configed.getResourceValue("save"),
+									Configed.getResourceValue("discard"), Configed.getResourceValue("buttonCancel") },
+							null);
 
 			result = answer == JOptionPane.YES_OPTION;
 		}
