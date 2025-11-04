@@ -94,27 +94,32 @@ public final class ChangedDataManager {
 	}
 
 	// save if not otherwise stated
-	public static void checkSaveAll(boolean ask) {
+	public static boolean checkSaveAll(boolean ask) {
+		boolean result = true;
 		Logging.debug("checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
 
 		if (anyDataChanged) {
 			if (!PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection(true)) {
 				setDataChanged(true, true);
-				return;
+				return result;
 			}
 			// actually save the data
-			saveData(ask);
+			result = saveData(ask);
 
 			// without showing, but must be on first place since we run in this method again
 			setDataChanged(false, false);
 
 			setDataChanged(false, true);
 		}
+
+		return result;
 	}
 
-	private static void saveData(boolean ask) {
+	private static boolean saveData(boolean ask) {
+		boolean result = true;
 		if (ask) {
-			if (clientInfoDataChangedKeeper.askSave()) {
+			int option = clientInfoDataChangedKeeper.askSave();
+			if (option == JOptionPane.YES_OPTION) {
 				clientInfoDataChangedKeeper.save();
 			} else if (clientInfoDataChangedKeeper.isDataChanged()) {
 				// reset to old values when data have been changed 
@@ -123,18 +128,33 @@ public final class ChangedDataManager {
 				// if no data have been changed, and no client selected, we do nothing
 				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
 			}
+			result = option != JOptionPane.CANCEL_OPTION;
 		} else {
 			clientInfoDataChangedKeeper.save();
 		}
 
-		if (!ask || generalDataChangedKeeper.askSave()) {
+		if (ask) {
+			int option = generalDataChangedKeeper.askSave();
+			if (option == JOptionPane.YES_OPTION) {
+				generalDataChangedKeeper.save();
+			}
+
+			result = result && option != JOptionPane.CANCEL_OPTION;
+
+			option = hostConfigsDataChangedKeeper.askSave();
+			if (option == JOptionPane.YES_OPTION) {
+				hostConfigsDataChangedKeeper.save();
+			} else if (option == JOptionPane.NO_OPTION) {
+				// Here we don't change anything, just discard changes
+				hostConfigsDataChangedKeeper.cancel();
+			} else {
+				result = false;
+			}
+		} else {
 			generalDataChangedKeeper.save();
+			hostConfigsDataChangedKeeper.save();
 		}
 
-		if (!ask || hostConfigsDataChangedKeeper.askSave()) {
-			hostConfigsDataChangedKeeper.save();
-		} else {
-			hostConfigsDataChangedKeeper.cancel();
-		}
+		return result;
 	}
 }
