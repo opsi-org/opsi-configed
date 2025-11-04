@@ -26,8 +26,8 @@ public class DataChangedKeeper implements DataChangedObserver {
 
 		if (this.dataChanged) {
 			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ConfigedMain.reminderSaveConfig"),
-					Configed.getResourceValue("PanelGenEditTable.saveData"), JOptionPane.YES_NO_OPTION);
+					Configed.getResourceValue("ConfigedMain.confirmUnsavedChanges"),
+					Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_OPTION);
 
 			result = answer == JOptionPane.YES_OPTION;
 		}
