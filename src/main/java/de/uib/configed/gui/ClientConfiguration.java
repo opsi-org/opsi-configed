@@ -56,6 +56,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private ProductPageManager productPageManager;
 
+	private int lastSelectedIndex;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -186,7 +188,15 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, "state change in clientConfiguration with selected index", getSelectedIndex());
 
-		ChangedDataManager.checkSaveAll(true);
+		boolean checkSaveAll = ChangedDataManager.checkSaveAll(true);
+		if (!checkSaveAll && lastSelectedIndex != getSelectedIndex()) {
+			// We don't want to trigger state change events while changing the selected index
+			this.removeChangeListener(this);
+			setSelectedIndex(lastSelectedIndex);
+			this.addChangeListener(this);
+			// If switching is cancelled due to unsaved data, we abort the state change
+			return;
+		}
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
@@ -227,6 +237,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 			break;
 		}
+
+		lastSelectedIndex = getSelectedIndex();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}

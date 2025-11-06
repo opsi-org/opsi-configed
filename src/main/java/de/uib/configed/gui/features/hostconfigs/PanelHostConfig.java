@@ -42,7 +42,9 @@ public class PanelHostConfig extends JPanel {
 	private void reloadHostConfig() {
 		Logging.info(this, "reloadHostConfig");
 
-		ChangedDataManager.checkSaveAll(true);
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			return;
+		}
 
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());

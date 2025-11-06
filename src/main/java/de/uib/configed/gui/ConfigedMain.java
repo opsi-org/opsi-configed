@@ -274,7 +274,11 @@ public class ConfigedMain {
 
 	public static void setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
-		ChangedDataManager.checkSaveAll(true);
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			Logging.info("stop changing editingTarget, unsaved data");
+			return;
+		}
+
 		if (newEditingTarget == editingTarget) {
 			Logging.info("stop setting editingTarget, it remains the same");
 			return;
@@ -1012,7 +1016,10 @@ public class ConfigedMain {
 	}
 
 	private void reloadData() {
-		ChangedDataManager.checkSaveAll(true);
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			mainFrame.deactivateLoadingPane();
+			return;
+		}
 
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
