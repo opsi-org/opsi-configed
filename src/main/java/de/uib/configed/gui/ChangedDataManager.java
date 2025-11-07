@@ -108,37 +108,11 @@ public final class ChangedDataManager {
 	private static boolean saveData(boolean ask) {
 		boolean result = true;
 		if (ask) {
-			result = saveData(clientInfoDataChangedKeeper);
-			int option = clientInfoDataChangedKeeper.askSave();
-			if (option == JOptionPane.YES_OPTION) {
-				clientInfoDataChangedKeeper.save();
-			} else if (option == JOptionPane.NO_OPTION) {
-				clientInfoDataChangedKeeper.cancel();
-			} else {
-				// if no data have been changed, and no client selected, we do nothing
-				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
-				result = false;
-			}
+			boolean result1 = saveData(clientInfoDataChangedKeeper);
+			boolean result2 = saveData(generalDataChangedKeeper);
+			boolean result3 = saveData(hostConfigsDataChangedKeeper);
 
-			option = generalDataChangedKeeper.askSave();
-			if (option == JOptionPane.YES_OPTION) {
-				generalDataChangedKeeper.save();
-			} else if (option == JOptionPane.NO_OPTION) {
-				// Here we don't change anything, just discard changes
-				generalDataChangedKeeper.cancel();
-			} else {
-				result = false;
-			}
-
-			option = hostConfigsDataChangedKeeper.askSave();
-			if (option == JOptionPane.YES_OPTION) {
-				hostConfigsDataChangedKeeper.save();
-			} else if (option == JOptionPane.NO_OPTION) {
-				// Here we don't change anything, just discard changes
-				hostConfigsDataChangedKeeper.cancel();
-			} else {
-				result = false;
-			}
+			result = result1 && result2 && result3;
 		} else {
 			clientInfoDataChangedKeeper.save();
 			generalDataChangedKeeper.save();
