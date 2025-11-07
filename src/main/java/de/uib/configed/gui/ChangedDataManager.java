@@ -98,18 +98,11 @@ public final class ChangedDataManager {
 		boolean result = true;
 		Logging.debug("checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
 
-		if (anyDataChanged) {
-			if (!PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection(true)) {
-				setDataChanged(true, true);
-				return result;
-			}
-			// actually save the data
+		if (anyDataChanged
+				&& PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection(true)) {
 			result = saveData(ask);
 
-			// without showing, but must be on first place since we run in this method again
-			setDataChanged(false, false);
-
-			setDataChanged(false, true);
+			setDataChanged(!result);
 		}
 
 		return result;
@@ -121,25 +114,24 @@ public final class ChangedDataManager {
 			int option = clientInfoDataChangedKeeper.askSave();
 			if (option == JOptionPane.YES_OPTION) {
 				clientInfoDataChangedKeeper.save();
-			} else if (clientInfoDataChangedKeeper.isDataChanged()) {
+			} else if (option == JOptionPane.NO_OPTION) {
 				// reset to old values when data have been changed 
 				hostInfo.resetGui();
 			} else {
 				// if no data have been changed, and no client selected, we do nothing
 				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
+				result = false;
 			}
-			result = option != JOptionPane.CANCEL_OPTION;
-		} else {
-			clientInfoDataChangedKeeper.save();
-		}
 
-		if (ask) {
-			int option = generalDataChangedKeeper.askSave();
+			option = generalDataChangedKeeper.askSave();
 			if (option == JOptionPane.YES_OPTION) {
 				generalDataChangedKeeper.save();
+			} else if (option == JOptionPane.NO_OPTION) {
+				// Here we don't change anything, just discard changes
+				generalDataChangedKeeper.cancel();
+			} else {
+				result = false;
 			}
-
-			result = result && option != JOptionPane.CANCEL_OPTION;
 
 			option = hostConfigsDataChangedKeeper.askSave();
 			if (option == JOptionPane.YES_OPTION) {
@@ -151,6 +143,7 @@ public final class ChangedDataManager {
 				result = false;
 			}
 		} else {
+			clientInfoDataChangedKeeper.save();
 			generalDataChangedKeeper.save();
 			hostConfigsDataChangedKeeper.save();
 		}
