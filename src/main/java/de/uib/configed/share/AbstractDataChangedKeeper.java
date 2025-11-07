@@ -12,10 +12,9 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.logging.Logging;
 
-public abstract class AbstractDataChangedKeeper implements DataChangedObserver {
+public abstract class AbstractDataChangedKeeper {
 	protected boolean dataChanged;
 
-	@Override
 	public void dataHaveChanged(Object source) {
 		Logging.debug(this, "dataHaveChanged ", source);
 		dataChanged = true;
