@@ -12,7 +12,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.logging.Logging;
 
-public class DataChangedKeeper implements DataChangedObserver {
+public abstract class AbstractDataChangedKeeper implements DataChangedObserver {
 	protected boolean dataChanged;
 
 	@Override
@@ -39,4 +39,11 @@ public class DataChangedKeeper implements DataChangedObserver {
 	public boolean isDataChanged() {
 		return dataChanged;
 	}
+
+	public void cancel() {
+		Logging.info(this, "cancel");
+		dataChanged = false;
+	}
+
+	public abstract void save();
 }

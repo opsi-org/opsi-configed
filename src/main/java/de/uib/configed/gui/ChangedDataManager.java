@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
 public final class ChangedDataManager {
@@ -21,8 +22,6 @@ public final class ChangedDataManager {
 
 	private static boolean anyDataChanged;
 
-	private static HostInfo hostInfo;
-
 	// This is the save button that is shown in the top toolbar
 	private static Component shownSaveButton;
 
@@ -31,8 +30,6 @@ public final class ChangedDataManager {
 	}
 
 	public static void initData(ConfigedMain configedMain, HostInfo hostInfo) {
-		ChangedDataManager.hostInfo = hostInfo;
-
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper(configedMain, hostInfo);
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
@@ -111,12 +108,12 @@ public final class ChangedDataManager {
 	private static boolean saveData(boolean ask) {
 		boolean result = true;
 		if (ask) {
+			result = saveData(clientInfoDataChangedKeeper);
 			int option = clientInfoDataChangedKeeper.askSave();
 			if (option == JOptionPane.YES_OPTION) {
 				clientInfoDataChangedKeeper.save();
 			} else if (option == JOptionPane.NO_OPTION) {
-				// reset to old values when data have been changed 
-				hostInfo.resetGui();
+				clientInfoDataChangedKeeper.cancel();
 			} else {
 				// if no data have been changed, and no client selected, we do nothing
 				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
@@ -146,6 +143,22 @@ public final class ChangedDataManager {
 			clientInfoDataChangedKeeper.save();
 			generalDataChangedKeeper.save();
 			hostConfigsDataChangedKeeper.save();
+		}
+
+		return result;
+	}
+
+	private static boolean saveData(AbstractDataChangedKeeper keeper) {
+		boolean result = true;
+
+		int option = keeper.askSave();
+		if (option == JOptionPane.YES_OPTION) {
+			keeper.save();
+		} else if (option == JOptionPane.NO_OPTION) {
+			keeper.cancel();
+		} else {
+			Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
+			result = false;
 		}
 
 		return result;
