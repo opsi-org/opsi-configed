@@ -100,6 +100,7 @@ public class LogPanel extends JPanel implements KeyListener {
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPane.getViewport().add(logTextPane);
 		jScrollPane.setRowHeaderView(lineNumber);
 		super.add(jScrollPane, BorderLayout.CENTER);

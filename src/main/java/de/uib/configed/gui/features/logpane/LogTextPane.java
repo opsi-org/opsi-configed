@@ -14,14 +14,24 @@ import java.util.TreeMap;
 
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.BoxView;
+import javax.swing.text.ComponentView;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Element;
 import javax.swing.text.Highlighter;
+import javax.swing.text.IconView;
+import javax.swing.text.LabelView;
+import javax.swing.text.ParagraphView;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
+import javax.swing.text.StyledEditorKit;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -62,6 +72,7 @@ public class LogTextPane extends JTextPane {
 				return monospacedFont;
 			}
 		};
+		setEditorKit(new WrapEditorKit());
 
 		logLevelStyles = new Style[10];
 		setLoglevelStyles();
@@ -367,6 +378,47 @@ public class LogTextPane extends JTextPane {
 		@Override
 		public void remove(int offs, int len) throws BadLocationException {
 			// Should be empty, because we don't want it to be able to be editable.
+		}
+	}
+
+	public static class WrapEditorKit extends StyledEditorKit {
+		private final ViewFactory defaultFactory = new WrapColumnFactory();
+
+		@Override
+		public ViewFactory getViewFactory() {
+			return defaultFactory;
+		}
+	}
+
+	public static class WrapColumnFactory implements ViewFactory {
+		@Override
+		public View create(Element elem) {
+			String kind = elem.getName();
+			if (kind != null) {
+				return switch (kind) {
+				case AbstractDocument.ContentElementName -> new WrapLabelView(elem);
+				case AbstractDocument.ParagraphElementName -> new ParagraphView(elem);
+				case AbstractDocument.SectionElementName -> new BoxView(elem, View.Y_AXIS);
+				case StyleConstants.ComponentElementName -> new ComponentView(elem);
+				case StyleConstants.IconElementName -> new IconView(elem);
+				default -> new LabelView(elem);
+				};
+			}
+			return new LabelView(elem);
+		}
+	}
+
+	public static class WrapLabelView extends LabelView {
+		public WrapLabelView(Element elem) {
+			super(elem);
+		}
+
+		@Override
+		public float getMinimumSpan(int axis) {
+			if (axis == View.X_AXIS) {
+				return 0; // allow wrapping
+			}
+			return super.getMinimumSpan(axis);
 		}
 	}
 }
