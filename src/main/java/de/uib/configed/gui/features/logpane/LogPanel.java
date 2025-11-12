@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -48,10 +47,6 @@ public class LogPanel extends JPanel implements KeyListener {
 	private static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
-
-	@SuppressWarnings("java:S5867")
-	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
-	private static final Pattern LINE_BREAK_PATTERN = Pattern.compile("\\R");
 
 	protected LogTextPane logTextPane;
 
