@@ -381,10 +381,13 @@ public class LogTextPane extends JTextPane {
 	}
 
 	public static class WrapEditorKit extends StyledEditorKit {
-		private final ViewFactory defaultFactory = new WrapColumnFactory();
+		private transient ViewFactory defaultFactory;
 
 		@Override
 		public ViewFactory getViewFactory() {
+			if (defaultFactory == null) {
+				defaultFactory = new WrapColumnFactory();
+			}
 			return defaultFactory;
 		}
 	}
