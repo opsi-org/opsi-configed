@@ -159,10 +159,7 @@ public class LogTextPane extends JTextPane {
 				if (showLine(line)) {
 					docLinestartPosition2lineCount.put(document.getLength(), i);
 					lineCount2docLinestartPosition.put(i, document.getLength());
-
-					String lineNumberRepresentation = "(" + line.getLineNumber() + ")";
-					document.insertStringTruely(document.getLength(),
-							String.format("%-10s", lineNumberRepresentation) + line.getText() + '\n', line.getStyle());
+					document.insertStringTruely(document.getLength(), line.getText() + '\n', line.getStyle());
 				}
 			}
 		} catch (BadLocationException e) {
@@ -293,6 +290,7 @@ public class LogTextPane extends JTextPane {
 
 	private void applyFontSize() {
 		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+		setFont(monospacedFont);
 		buildDocument();
 	}
 
