@@ -302,7 +302,6 @@ public class LogTextPane extends JTextPane {
 	private void applyFontSize() {
 		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 		setFont(monospacedFont);
-		buildDocument();
 	}
 
 	private boolean showLine(LogLine line) {
