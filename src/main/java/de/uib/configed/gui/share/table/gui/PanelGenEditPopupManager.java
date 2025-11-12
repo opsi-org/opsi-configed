@@ -167,7 +167,7 @@ public class PanelGenEditPopupManager {
 	}
 
 	private void addPopupItemReload() {
-		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"));
+		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reload"));
 		Icons.addIntellijIconToMenuItem(menuItemReload, "refresh");
 
 		// does not work

@@ -175,8 +175,8 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(createMenuItem(
-				ClientMenuItemConfig.item("PopupMenuTrait.reload", configedMain::reloadHosts).withIcon("refresh")));
+		jMenuClients.add(
+				createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts).withIcon("refresh")));
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 

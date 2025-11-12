@@ -201,7 +201,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		saveButton.addActionListener(actionEvent -> save());
 
 		buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
-		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
+		buttonReload.setToolTipText(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
 		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));

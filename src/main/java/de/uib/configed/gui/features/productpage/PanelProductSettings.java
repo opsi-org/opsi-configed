@@ -196,7 +196,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		popup.addSeparator();
 
-		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("reload"));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener(actionEvent -> reloadAction());
 		popup.add(reload);

@@ -56,7 +56,7 @@ public class GroupActionsDialog {
 		buttonSetup.setToolTipText(Configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
 		buttonSetup.addActionListener(actionEvent -> replay());
 
-		JButton buttonReload = new JButton(Configed.getResourceValue("reloadData"));
+		JButton buttonReload = new JButton(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
 		JPanel panel = defineImageActionPanel();
@@ -97,8 +97,7 @@ public class GroupActionsDialog {
 			groupName = Configed.getResourceValue("FGroupAction.noGroupSelected");
 		}
 
-		setGroupLabelling(groupName,
-				"" + configedMain.getClientTablePanel().getClientTable().getRowCount());
+		setGroupLabelling(groupName, "" + configedMain.getClientTablePanel().getClientTable().getRowCount());
 
 		associatedClients = configedMain.getClientTablePanel().getClientTable().getClients();
 		setImages();

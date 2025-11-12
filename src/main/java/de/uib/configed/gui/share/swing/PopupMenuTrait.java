@@ -81,7 +81,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private void addItemReload(int p) {
 		int i = listPopups.indexOf(POPUP_RELOAD);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
+		menuItems[i] = new JMenuItem(Configed.getResourceValue("reload"));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "refresh");
 
 		// not work

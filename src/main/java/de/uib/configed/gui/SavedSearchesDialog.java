@@ -68,13 +68,13 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		JButton searchButton = new JButton(Configed.getResourceValue("search"));
 		searchButton.addActionListener(actionEvent -> commit());
 
-		jOptionPane.setOptions(new Object[] { searchButton, Configed.getResourceValue("cancel") });
+		jOptionPane.setOptions(new Object[] { searchButton, Configed.getResourceValue("buttonClose") });
 
 		SavedSearchesDialog.this.resetModel();
 	}
 
 	private void initPopupMenu() {
-		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("reload"));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener(actionEvent -> reloadAction());
 
