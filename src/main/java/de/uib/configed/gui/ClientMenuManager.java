@@ -175,8 +175,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(
-				createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts).withIcon("refresh")));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts)
+				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
+
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
@@ -194,16 +195,26 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		JMenuItem jMenuInvertSelection = createMenuItem(
-				ClientMenuItemConfig.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection));
-		jMenuInvertSelection.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-
-		jMenuClients.add(jMenuInvertSelection);
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
+						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
-		JMenuItem item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));
+		JMenuItem item = new JMenuItem(Configed.getResourceValue(config.resourceKey())) {
+			@Override
+			protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
+				// We are going to disable the functionality of the key binding, because here the key binding
+				// should only be shown graphically, but not be active. If it was active, it would become
+				// active globally since we add these Items to the MenuBar. Instead, we directly add
+				// the key binding to the whole client view (a JSplitPane) in ClientConfiguration.
+				return false;
+			}
+		};
+
+		if (config.keyStroke() != null) {
+			item.setAccelerator(config.keyStroke());
+		}
 
 		if (config.icon() != null) {
 			if (config.invertedIcon()) {

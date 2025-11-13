@@ -47,6 +47,7 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelProductSettings extends JSplitPane {
@@ -137,6 +138,8 @@ public class PanelProductSettings extends JSplitPane {
 		productTable.addMouseListener(popupMouseListener);
 
 		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
+
+		Utils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
 
 	public void updateSearchFields() {
@@ -197,6 +200,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.addSeparator();
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("reload"));
+		reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener(actionEvent -> reloadAction());
 		popup.add(reload);
