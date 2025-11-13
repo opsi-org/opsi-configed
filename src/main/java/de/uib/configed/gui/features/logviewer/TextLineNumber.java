@@ -42,10 +42,10 @@ import javax.swing.text.Utilities;
  * supports wrapped lines and will highlight the line number of the current line
  * in the text component. This class was designed to be used as a component
  * added to the row header of a JScrollPane.
- * <p/>
- * Retrieved from:
- * https://github.com/tips4java/tips4java/blob/main/source/TextLineNumber.java
  */
+// Original TextLineNumber class by tips4java
+// Source: https://github.com/tips4java/tips4java/blob/main/source/TextLineNumber.java
+// Modifications: Updated depracted method usage
 public class TextLineNumber extends JPanel implements CaretListener, DocumentListener, PropertyChangeListener {
 	public static final float LEFT = 0.0f;
 	public static final float CENTER = 0.5f;
