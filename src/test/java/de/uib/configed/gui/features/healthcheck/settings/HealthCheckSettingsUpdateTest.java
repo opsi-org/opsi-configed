@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.healthcheck.settings.DowntimeType;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsEffect;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsModel;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsMsg;
@@ -38,15 +39,53 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void shouldUpdateSelectedHosts_whenSelectHosts() {
+	void shouldTriggerSelectHostsEffect_whenHostSelectionRequested() {
+		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.HostsSelectionRequested();
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SELECT_HOSTS, result.effect().get()));
+	}
+
+	@Test
+	void shouldUpdateSelectedHosts_whenHostSelected() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
 		List<String> newHosts = List.of("host1", "host2");
-		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.SelectHosts(newHosts);
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.HostsSelected(newHosts);
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
 
 		assertEquals(newHosts, result.model().getSelectedHosts());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldTriggerSelectDowntimeEffect_whenDowntimeSelectionRequested() {
+		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
+		DowntimeType downtimeType = DowntimeType.START;
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.DowntimeSelectionRequested(downtimeType);
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertEquals(new HealthCheckSettingsEffect.SelectDownTime(downtimeType), result.effect().get()));
+	}
+
+	@Test
+	void shouldUpdateDowntime_whenDowntimeSelected() {
+		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
+		String downtime = "2024-01-01T00:00";
+		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.DowntimeSelected(DowntimeType.START, downtime);
+
+		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
+				.update(initialModel, msg);
+
+		assertEquals(downtime, result.model().getStartDowntime());
 		assertFalse(result.effect().isPresent());
 	}
 

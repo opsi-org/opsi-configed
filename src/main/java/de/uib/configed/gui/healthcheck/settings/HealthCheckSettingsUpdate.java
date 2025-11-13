@@ -1,5 +1,7 @@
 package de.uib.configed.gui.healthcheck.settings;
 
+import java.util.List;
+
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -13,12 +15,23 @@ public class HealthCheckSettingsUpdate {
 	public static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> update(
 			HealthCheckSettingsModel model, HealthCheckSettingsMsg msg) {
 		return switch (msg) {
-		case HealthCheckSettingsMsg.SelectHosts(var hosts) -> UpdateResult.noEffect(model.withSelectedHosts(hosts));
-		case HealthCheckSettingsMsg.ToggleActivity(var state) -> UpdateResult.noEffect(
+		case HealthCheckSettingsMsg.HostsSelectionRequested() -> UpdateResult.withEffect(model,
+				HealthCheckSettingsEffect.SimpleEffect.SELECT_HOSTS);
+		case HealthCheckSettingsMsg.HostsSelected(List<String> hosts) -> UpdateResult
+				.noEffect(model.withSelectedHosts(hosts));
+		case HealthCheckSettingsMsg.ToggleActivity(FlatTriStateCheckBox.State state) -> UpdateResult.noEffect(
 				model.withCheckActiveState(state).withSaveEnabled(state != FlatTriStateCheckBox.State.INDETERMINATE));
-		case HealthCheckSettingsMsg.ChangeStartDowntime(var value) -> UpdateResult
-				.noEffect(model.withStartDowntime(value));
-		case HealthCheckSettingsMsg.ChangeEndDowntime(var value) -> UpdateResult.noEffect(model.withEndDowntime(value));
+		case HealthCheckSettingsMsg.DowntimeSelectionRequested(DowntimeType downtimeType) -> UpdateResult
+				.withEffect(model, new HealthCheckSettingsEffect.SelectDownTime(downtimeType));
+		case HealthCheckSettingsMsg.DowntimeSelected(DowntimeType downtimeType, String value) -> {
+			UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = null;
+			if (DowntimeType.START == downtimeType) {
+				result = UpdateResult.noEffect(model.withStartDowntime(value));
+			} else {
+				result = UpdateResult.noEffect(model.withEndDowntime(value));
+			}
+			yield result;
+		}
 		case HealthCheckSettingsMsg.SimpleMsg m -> handleSimpleMsg(m, model);
 		};
 	}

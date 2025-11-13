@@ -92,7 +92,7 @@ public final class HealthCheckSettingsComponent
 		selectedHosts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				dispatch.accept(new HealthCheckSettingsMsg.SelectHosts(openHostSelectionDialog()));
+				dispatch.accept(new HealthCheckSettingsMsg.HostsSelectionRequested());
 			}
 		});
 		selectedHosts.setText(Utils.getListStringRepresentation(model.getSelectedHosts()));
@@ -122,9 +122,7 @@ public final class HealthCheckSettingsComponent
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkBoxCheckActive.isSelected()) {
-					dispatch.accept(new HealthCheckSettingsMsg.ChangeStartDowntime(
-							openDateSelectionDialog(startDowntimeField.getText(),
-									Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"))));
+					dispatch.accept(new HealthCheckSettingsMsg.DowntimeSelectionRequested(DowntimeType.START));
 				}
 			}
 		});
@@ -138,9 +136,7 @@ public final class HealthCheckSettingsComponent
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkBoxCheckActive.isSelected()) {
-					dispatch.accept(new HealthCheckSettingsMsg.ChangeEndDowntime(
-							openDateSelectionDialog(endDowntimeField.getText(),
-									Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"))));
+					dispatch.accept(new HealthCheckSettingsMsg.DowntimeSelectionRequested(DowntimeType.END));
 				}
 			}
 		});
@@ -196,6 +192,17 @@ public final class HealthCheckSettingsComponent
 	protected void handleEffect(HealthCheckSettingsEffect effect) {
 		switch (effect) {
 		case HealthCheckSettingsEffect.SimpleEffect e -> handleSimpleEffect(e);
+		case HealthCheckSettingsEffect.SelectDownTime(DowntimeType downtimeType) -> {
+			String downTime = "";
+			if (DowntimeType.START == downtimeType) {
+				downTime = openDateSelectionDialog(startDowntimeField.getText(),
+						Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
+			} else {
+				downTime = openDateSelectionDialog(endDowntimeField.getText(),
+						Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
+			}
+			dispatch(new HealthCheckSettingsMsg.DowntimeSelected(downtimeType, downTime));
+		}
 		}
 	}
 
@@ -212,6 +219,10 @@ public final class HealthCheckSettingsComponent
 			if (dialog != null) {
 				dialog.setVisible(false);
 			}
+		}
+		case SELECT_HOSTS -> {
+			List<String> hostsSelected = openHostSelectionDialog();
+			dispatch(new HealthCheckSettingsMsg.HostsSelected(hostsSelected));
 		}
 		}
 	}
