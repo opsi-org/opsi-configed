@@ -22,6 +22,11 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	private List<String> objectIds;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
+	private Map<String, Object> configUpdates;
+
+	public ConfigUpdateCollection() {
+		super();
+	}
 
 	public ConfigUpdateCollection(List<String> objectIds) {
 		super();
@@ -30,16 +35,16 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 
 	@Override
 	public boolean addMap(Map<String, Object> map) {
-		boolean result = true;
+		if (ConfigedMain.getEditingTarget() == EditingTarget.SERVER) {
+			Logging.debug(this, "adding ConfigUpdateCommand");
+			return add(new ConfigUpdateCommand(POJOReMapper.remap(map)));
+		}
 
+		boolean result = true;
+		this.configUpdates = map;
 		for (String objectId : objectIds) {
-			if (ConfigedMain.getEditingTarget() == EditingTarget.SERVER) {
-				Logging.debug(this, "adding ConfigUpdateCommand");
-				result = add(new ConfigUpdateCommand(POJOReMapper.remap(map)));
-			} else {
-				Logging.debug(this, "adding ConfigStateUpdateCommand");
-				result = add(new ConfigStateUpdateCommand(objectId, map));
-			}
+			Logging.debug(this, "adding ConfigStateUpdateCommand");
+			result = add(new ConfigStateUpdateCommand(objectId, map));
 		}
 
 		return result;
@@ -55,6 +60,9 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: ", size());
+		if (configUpdates != null) {
+			configUpdates.clear();
+		}
 		persistenceController.getConfigDataService().updateConfigs();
 		persistenceController.getConfigDataService().updateConfigStates();
 

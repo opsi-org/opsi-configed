@@ -142,7 +142,7 @@ public class GenEditTable extends JTable implements KeyListener {
 		String val = value.toString();
 
 		for (int viewrow = 0; viewrow < getRowCount(); viewrow++) {
-			Object compareValue = getValueAt(convertRowIndexToModel(viewrow), col);
+			Object compareValue = getValueAt(viewrow, col);
 
 			if ((compareValue == null && val.isEmpty())
 					|| (compareValue != null && val.equals(compareValue.toString()))) {

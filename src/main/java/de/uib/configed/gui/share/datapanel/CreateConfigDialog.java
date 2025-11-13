@@ -7,13 +7,13 @@
 package de.uib.configed.gui.share.datapanel;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -21,8 +21,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.gui.Configed;
@@ -38,12 +38,14 @@ public class CreateConfigDialog {
 	private JTextField textFieldConfigEntry;
 	private JTextField textFieldDescription;
 
-	private JCheckBox booleanDefault;
+	private JRadioButton isBooleanTrue;
 
 	private ListSelectionDialog defaultValuesSelectionDialog;
 	private ListSelectionDialog possibleValuesSelectionDialog;
 
-	private JCheckBox isBoolean;
+	JRadioButton booleanButton;
+	JRadioButton unicodeButton;
+
 	private JCheckBox isEditable;
 	private JCheckBox isMultiValue;
 
@@ -82,47 +84,45 @@ public class CreateConfigDialog {
 
 	private void initBooleanDetailsPanel() {
 		JLabel defaultLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValue"));
-		booleanDefault = new JCheckBox();
-		booleanDefault.setHorizontalTextPosition(SwingConstants.LEADING);
+		defaultLabel.setFont(defaultLabel.getFont().deriveFont(Font.BOLD));
+
+		isBooleanTrue = new JRadioButton("true", true);
+		JRadioButton isBooleanFalse = new JRadioButton("false", false);
+
+		ButtonGroup booleanGroup = new ButtonGroup();
+		booleanGroup.add(isBooleanTrue);
+		booleanGroup.add(isBooleanFalse);
 
 		booleanDetailsPanel = new JPanel();
 		GroupLayout layout = new GroupLayout(booleanDetailsPanel);
 		booleanDetailsPanel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(defaultLabel).addComponent(booleanDefault))
-				.addGap(0, 0, Short.MAX_VALUE));
-		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(defaultLabel)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(booleanDefault));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(defaultLabel).addComponent(isBooleanTrue)
+				.addComponent(isBooleanFalse));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(defaultLabel).addComponent(isBooleanTrue)
+				.addComponent(isBooleanFalse));
 
 		booleanDetailsPanel.setVisible(false);
 	}
 
 	private void initUnicodeDetailsPanel() {
+		JLabel propertiesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.properties"));
+		propertiesLabel.setFont(propertiesLabel.getFont().deriveFont(Font.BOLD));
 		isEditable = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.editable"), true);
 		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
 
 		// These dialogs are there to 
 		defaultValuesSelectionDialog = createSelectionDialog(
 				Configed.getResourceValue("CreateConfigDialog.defaultValues"));
+		updateSelectionModeForDefaultValuesSelectionDialog();
 		possibleValuesSelectionDialog = createSelectionDialog(
 				Configed.getResourceValue("CreateConfigDialog.possibleValues"));
-		possibleValuesSelectionDialog.setMultiSelection();
 
 		// These textfields will show currently selected values in the dialog.
 		JTextField defaultValuesTextField = createTextFieldAssociated(defaultValuesSelectionDialog);
 		JTextField possibleValuesTextField = createTextFieldAssociated(possibleValuesSelectionDialog);
 
-		isMultiValue.addActionListener((ActionEvent actionEvent) -> {
-			if (isMultiValue.isSelected()) {
-				defaultValuesSelectionDialog.setMultiSelection();
-			} else {
-				defaultValuesSelectionDialog.setSingleSelection();
-				// Update field according to single selection
-				defaultValuesTextField.setText(
-						PropertiesCellEditorAndRenderer.formatList(defaultValuesSelectionDialog.getSelectedValues()));
-			}
-		});
+		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
 
 		JLabel defaultValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValues"));
 		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
@@ -134,16 +134,23 @@ public class CreateConfigDialog {
 		GroupLayout layout = new GroupLayout(unicodeDetailsPanel);
 		unicodeDetailsPanel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(isEditable)
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(propertiesLabel).addComponent(isEditable)
 				.addComponent(isMultiValue).addGap(Globals.GAP_SIZE).addComponent(defaultValuesLabel)
 				.addComponent(defaultValuesTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(possibleValuesLabel).addComponent(possibleValuesTextField,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(0, 0, Short.MAX_VALUE));
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(isEditable).addComponent(isMultiValue)
-				.addComponent(defaultValuesLabel).addComponent(defaultValuesTextField).addComponent(possibleValuesLabel)
-				.addComponent(possibleValuesTextField));
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(propertiesLabel).addComponent(isEditable)
+				.addComponent(isMultiValue).addComponent(defaultValuesLabel).addComponent(defaultValuesTextField)
+				.addComponent(possibleValuesLabel).addComponent(possibleValuesTextField));
+	}
+
+	private void updateSelectionModeForDefaultValuesSelectionDialog() {
+		if (isMultiValue.isSelected()) {
+			defaultValuesSelectionDialog.setMultiSelection();
+		} else {
+			defaultValuesSelectionDialog.setSingleSelection();
+		}
 	}
 
 	private JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
@@ -196,24 +203,38 @@ public class CreateConfigDialog {
 
 		textFieldDescription = new JTextField();
 
-		isBoolean = new JCheckBox("boolean");
-		isBoolean.addActionListener(event -> updateDetailsTab());
+		JLabel labelDataType = new JLabel(Configed.getResourceValue("CreateConfigDialog.dataType"));
+		labelDataType.setFont(labelDataType.getFont().deriveFont(Font.BOLD));
+
+		booleanButton = new JRadioButton("boolean", false);
+		unicodeButton = new JRadioButton("unicode", true);
+
+		// We add it to both of them, so that the details tab is updated
+		// when the user clicks on either of them.
+		booleanButton.addActionListener(event -> updateDetailsTab());
+		unicodeButton.addActionListener(event -> updateDetailsTab());
+
+		// Create a group so that only one can be selected
+		ButtonGroup booleanGroup = new ButtonGroup();
+		booleanGroup.add(booleanButton);
+		booleanGroup.add(unicodeButton);
 
 		generalPanel = new JPanel();
 		GroupLayout layout = new GroupLayout(generalPanel);
 		generalPanel.setLayout(layout);
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(labelConfigEntry)
-						.addComponent(textFieldConfigEntry, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(labelDescription).addComponent(textFieldDescription,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(isBoolean));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(labelConfigEntry)
+				.addComponent(textFieldConfigEntry, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(labelDescription)
+				.addComponent(textFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(labelDataType).addComponent(booleanButton)
+				.addComponent(unicodeButton));
 
-		layout.setHorizontalGroup(
-				layout.createParallelGroup().addComponent(labelConfigEntry).addComponent(textFieldConfigEntry)
-						.addComponent(labelDescription).addComponent(textFieldDescription).addComponent(isBoolean));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(labelConfigEntry)
+				.addComponent(textFieldConfigEntry).addComponent(labelDescription).addComponent(textFieldDescription)
+				.addComponent(labelDataType).addComponent(booleanButton).addComponent(unicodeButton));
 	}
 
 	private void initPanel() {
@@ -222,15 +243,15 @@ public class CreateConfigDialog {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(generalPanel)
-				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(generalPanel).addGap(Globals.GAP_SIZE)
+				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel).addGap(0, 0, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(generalPanel)
 				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
 	}
 
 	private void updateDetailsTab() {
-		booleanDetailsPanel.setVisible(isBoolean.isSelected());
-		unicodeDetailsPanel.setVisible(!isBoolean.isSelected());
+		booleanDetailsPanel.setVisible(booleanButton.isSelected());
+		unicodeDetailsPanel.setVisible(!booleanButton.isSelected());
 
 		dialog.pack();
 	}
@@ -238,8 +259,8 @@ public class CreateConfigDialog {
 	private void createConfig() {
 		List<?> defaultValues;
 		List<?> possibleValues;
-		if (isBoolean.isSelected()) {
-			defaultValues = new ArrayList<>(Arrays.asList(booleanDefault.isSelected()));
+		if (booleanButton.isSelected()) {
+			defaultValues = new ArrayList<>(Arrays.asList(isBooleanTrue.isSelected()));
 			possibleValues = new ArrayList<>(defaultValues);
 		} else {
 			defaultValues = new ArrayList<>(defaultValuesSelectionDialog.getSelectedValues());
@@ -247,9 +268,8 @@ public class CreateConfigDialog {
 		}
 
 		if (!editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
-				isBoolean.isSelected(), isMultiValue.isSelected(), isEditable.isSelected(), defaultValues,
+				booleanButton.isSelected(), isMultiValue.isSelected(), isEditable.isSelected(), defaultValues,
 				possibleValues)) {
-
 			JOptionPane.showMessageDialog(dialog,
 					Configed.getResourceValue("CreateConfigDialog.couldNotCreate.message") + ": "
 							+ textFieldConfigEntry.getText().strip(),

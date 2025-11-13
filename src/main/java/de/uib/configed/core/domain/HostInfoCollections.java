@@ -305,18 +305,14 @@ public class HostInfoCollections {
 
 			Logging.debug(this, "getConfigs for ", name);
 
-			HostInfo hostInfo = null;
-			String myDepot = null;
-
 			depotId = depotFound ? depotId : getConfigServer();
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
-			hostInfo = new HostInfo();
+			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(host);
 			hostInfo.setInDepot(depotId);
-			myDepot = depotId;
 
 			host2hostInfo.put(name, hostInfo);
-			depot2Host2HostInfo.get(myDepot).put(name, hostInfo);
+			depot2Host2HostInfo.get(depotId).put(name, hostInfo);
 		}
 		addOpsiHostNames(host2hostInfo.keySet());
 		cacheManager.setCachedData(CacheIdentifier.HOST_TO_HOST_INFO, host2hostInfo);
@@ -431,7 +427,9 @@ public class HostInfoCollections {
 
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
-		depot2Host2HostInfo.get(oldDepot).remove(clientName);
+		if (oldDepot != null) {
+			depot2Host2HostInfo.get(oldDepot).remove(clientName);
+		}
 		depot2Host2HostInfo.get(depotId).put(clientName, hostInfo);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 	}
@@ -502,16 +500,10 @@ public class HostInfoCollections {
 		}
 	}
 
-	public void setLocalHostInfo(String hostId, String depotId, HostInfo hostInfo) {
+	public void setLocalHostInfo(String hostId, HostInfo hostInfo) {
 		Map<String, HostInfo> mapPCInfomap = cacheManager.getCachedData(CacheIdentifier.MAP_PC_INFO_MAP, Map.class);
-		Map<String, HostInfo> host2HostInfo = cacheManager.getCachedData(CacheIdentifier.HOST_TO_HOST_INFO, Map.class);
-		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
-				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
-		Logging.debug(this, "setLocalHostInfo ", " ", hostId, ", ", depotId, ", ", hostInfo);
+		Logging.debug(this, "setLocalHostInfo ", " ", hostId, ", ", hostInfo);
 		mapPCInfomap.put(hostId, hostInfo);
-		host2HostInfo.put(hostId, hostInfo);
-		depot2Host2HostInfo.get(depotId).put(hostId, hostInfo);
 		cacheManager.setCachedData(CacheIdentifier.MAP_PC_INFO_MAP, mapPCInfomap);
-		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 	}
 }

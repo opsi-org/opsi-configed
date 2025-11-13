@@ -93,7 +93,9 @@ public class ProductPageManager implements MessagebusListener {
 	private void setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
 			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
 			List<String> displayFields) {
-		if (!configedMain.setDepotRepresentative()) {
+		if (configedMain.checkSynchronous(configedMain.getDepotsOfSelectedClients())) {
+			configedMain.setDepotRepresentative();
+		} else {
 			// In this case, we need to go back to the client configuration
 			clientConfiguration.setSelectedIndex(0);
 			return;
@@ -146,7 +148,7 @@ public class ProductPageManager implements MessagebusListener {
 		panelProductSettings.getProductTable().setSortedByNames(sortKeyNames);
 
 		if (!oldProductSelection.isEmpty()) {
-			panelProductSettings.getProductTable().setSelection(oldProductSelection);
+			panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 		}
 		if (panelProductSettings.isFilteredMode()) {
 			panelProductSettings.getProductTable().reduceToSelected();

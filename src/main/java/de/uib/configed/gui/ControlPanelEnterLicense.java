@@ -159,6 +159,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
 		menuItemAddContract.addActionListener(actionEvent -> addContract());
+		menuItemAddContract.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		thePanel.getPanelLicenseContracts().addPopupItem(menuItemAddContract);
 	}

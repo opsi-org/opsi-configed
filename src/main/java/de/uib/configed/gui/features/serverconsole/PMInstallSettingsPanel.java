@@ -51,7 +51,6 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	public PMInstallSettingsPanel(JDialog dialog) {
 		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
-		depotSelection.setMultiSelection();
 
 		initComponents();
 		initLayout();

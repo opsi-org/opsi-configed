@@ -51,6 +51,10 @@ public class CommandExecutor implements MessagebusListener {
 	private int failedNumberOfCommands;
 	private int succededNumberOfCommands;
 
+	public CommandExecutor(ConfigedMain configedMain) {
+		initValues(configedMain);
+	}
+
 	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand) {
 		initValues(configedMain);
 		this.singleCommand = singleCommand;
@@ -63,6 +67,14 @@ public class CommandExecutor implements MessagebusListener {
 
 	public void setWithGUI(boolean withGUI) {
 		this.withGUI = withGUI;
+	}
+
+	public void setSingleCommand(SingleCommand singleCommand) {
+		this.singleCommand = singleCommand;
+	}
+
+	public void setMultiCommand(MultiCommand multiCommand) {
+		this.multiCommand = multiCommand;
 	}
 
 	private void initValues(ConfigedMain configedMain) {
@@ -95,9 +107,16 @@ public class CommandExecutor implements MessagebusListener {
 			return null;
 		}
 
+		stopCommandExecution = false;
+
 		terminalFrame.setMessagebus(Messagebus.getInstance());
 		if (withGUI) {
-			terminalFrame.display();
+			if (getDialog() == null || !getDialog().isVisible()) {
+				terminalFrame.display();
+			} else {
+				terminalFrame.getTabbedPane().getSelectedTerminalWidget().clearScreen();
+				getDialog().toFront();
+			}
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
@@ -274,12 +293,20 @@ public class CommandExecutor implements MessagebusListener {
 	}
 
 	private void outputEndResult() {
-		if (numberOfCommands == executeNumberOfCommands) {
-			terminalFrame.writeToWidget("----------------------------------------\r\n");
-			terminalFrame.writeToWidget(Configed.getResourceValue("CommandExecutor.endResult.failedCommands") + " "
-					+ failedNumberOfCommands + "/" + numberOfCommands + "\r\n");
-			terminalFrame.writeToWidget(Configed.getResourceValue("CommandExecutor.endResult.succeededCommands") + " "
-					+ succededNumberOfCommands + "/" + numberOfCommands + "\r\n");
+		if (numberOfCommands != executeNumberOfCommands) {
+			return;
 		}
+
+		terminalFrame.writeToWidget("----------------------------------------\r\n");
+		terminalFrame.writeToWidget(Configed.getResourceValue("CommandExecutor.endResult.failedCommands") + " "
+				+ failedNumberOfCommands + "/" + numberOfCommands + "\r\n");
+		terminalFrame.writeToWidget(Configed.getResourceValue("CommandExecutor.endResult.succeededCommands") + " "
+				+ succededNumberOfCommands + "/" + numberOfCommands + "\r\n");
+
+		commandNumber = 0;
+		numberOfCommands = 0;
+		executeNumberOfCommands = 0;
+		failedNumberOfCommands = 0;
+		succededNumberOfCommands = 0;
 	}
 }

@@ -39,7 +39,9 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 
 			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
-			panelProductSettings.getProductTable().reduceToSelected();
+			if (selectedRows.length != 0) {
+				panelProductSettings.getProductTable().reduceToSelected();
+			}
 		} else {
 			panelProductSettings.valueChanged(false);
 		}

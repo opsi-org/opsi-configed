@@ -267,7 +267,7 @@ public class MenuBarController {
 		return jMenuExtras;
 	}
 
-	private static JMenu createJMenuHelp() {
+	private static JMenu createJMenuHelp(MainFrame mainFrame) {
 		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
 		addHelpLinks(jMenuHelp);
@@ -280,11 +280,11 @@ public class MenuBarController {
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
-		addLogfileMenus(jMenuHelp, ConfigedMain.getMainFrame());
+		addLogfileMenus(jMenuHelp, mainFrame);
 
 		jMenuHelp.addSeparator();
 
-		addCreditsMenus(jMenuHelp, ConfigedMain.getMainFrame());
+		addCreditsMenus(jMenuHelp, mainFrame);
 
 		return jMenuHelp;
 	}
@@ -300,7 +300,7 @@ public class MenuBarController {
 		jMenuBar.add(leftToolBar.getJMenuServerConsoleMenuBar());
 
 		jMenuBar.add(jMenuExtras());
-		jMenuBar.add(createJMenuHelp());
+		jMenuBar.add(createJMenuHelp(mainFrame));
 
 		return jMenuBar;
 	}

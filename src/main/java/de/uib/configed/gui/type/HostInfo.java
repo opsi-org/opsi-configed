@@ -6,11 +6,12 @@
 
 package de.uib.configed.gui.type;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -72,16 +73,58 @@ public class HostInfo {
 	public static final String CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL = "deviceVendor";
 	public static final String CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL = "deviceModel";
 
-	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL,
-			HOST_NAME_DISPLAY_FIELD_LABEL, CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL,
-			CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
-			LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL,
-			CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL,
-			CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, CREATED_DISPLAY_FIELD_LABEL,
-			CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
-			CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, CLIENT_OS_DISPLAY_FIELD_LABEL,
-			CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL,
-			CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL);
+	public static class ColumnDisplayInfo {
+		public final String label;
+		public final String resourceKey;
+
+		public ColumnDisplayInfo(String label, String resourceKey) {
+			this.label = label;
+			this.resourceKey = resourceKey;
+		}
+
+		// When we have no resource key it means, we won't show it in the options
+		// because it will always be shown
+		public ColumnDisplayInfo(String label) {
+			this.label = label;
+			this.resourceKey = null;
+		}
+	}
+
+	public static final List<ColumnDisplayInfo> ORDERED_DISPLAY_COLUMN_INFOS = List.of(
+			new ColumnDisplayInfo(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.operatingSystemType"),
+			new ColumnDisplayInfo(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL),
+			new ColumnDisplayInfo(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.clientDescription"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
+					"MainFrame.jMenuShowInventoryNumberColumn"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.clientConnected"),
+			new ColumnDisplayInfo(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.clientLastSeen"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, "MainFrame.jMenuShowWanConfig"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, "ipAddress"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL,
+					"MainFrame.jMenuShowSystemUUIDColumn"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL,
+					"MainFrame.jMenuShowHardwareAddressColumn"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
+					"MainFrame.jMenuShowInstallByShutdown"),
+			new ColumnDisplayInfo(HostInfo.CREATED_DISPLAY_FIELD_LABEL, "MainFrame.jMenuShowCreatedColumn"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, "sessionInfo"),
+			new ColumnDisplayInfo(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, "depot"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.healthCheckActive"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.operatingSystem"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.operatingSystemArchitecture"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.deviceType"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.deviceVendor"),
+			new ColumnDisplayInfo(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL,
+					"ConfigedMain.pclistTableModel.deviceModel"));
 
 	public static final String IS_MASTER_DEPOT_KEY = "isMasterDepot";
 
@@ -183,22 +226,22 @@ public class HostInfo {
 		return unordered;
 	}
 
-	public static List<String> getKeysForCSV() {
-		List<String> keys = new ArrayList<>();
+	public static Set<String> getKeysForCSV() {
+		Set<String> keys = new LinkedHashSet<>();
 		keys.add(HOSTNAME_KEY);
 		keys.add("domain");
 		keys.add(DEPOT_OF_CLIENT_KEY);
+		keys.add(CLIENT_MAC_ADRESS_KEY);
 		keys.add(CLIENT_DESCRIPTION_KEY);
 		keys.add(CLIENT_INVENTORY_NUMBER_KEY);
 		keys.add(CLIENT_NOTES_KEY);
 		keys.add(CLIENT_SYSTEM_UUID_KEY);
-		keys.add(CLIENT_MAC_ADRESS_KEY);
 		keys.add(CLIENT_IP_ADDRESS_KEY);
 		keys.add("groups");
 		keys.add(CLIENT_WAN_CONFIG_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
-		return Collections.unmodifiableList(keys);
+		return Collections.unmodifiableSet(keys);
 	}
 
 	public void put(String key, Object value) {
@@ -363,6 +406,10 @@ public class HostInfo {
 
 	public void setWanConfig(boolean b) {
 		clientWanConfig = b;
+	}
+
+	public void setType(String type) {
+		hostType = type;
 	}
 
 	private static String showValue(String value) {

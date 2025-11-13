@@ -8,11 +8,15 @@ package de.uib.configed.gui.features.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.app.Main;
@@ -42,6 +47,10 @@ public class LogPanel extends JPanel implements KeyListener {
 	private static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
+
+	@SuppressWarnings("java:S5867")
+	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
+	private static final Pattern LINE_BREAK_PATTERN = Pattern.compile("\\R");
 
 	protected LogTextPane logTextPane;
 
@@ -81,6 +90,13 @@ public class LogPanel extends JPanel implements KeyListener {
 		}
 
 		logTextPane.addKeyListener(this);
+		logTextPane.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "copyRaw");
+		logTextPane.getActionMap().put("copyRaw", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				copyTextToClipboard();
+			}
+		});
 
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -194,12 +210,12 @@ public class LogPanel extends JPanel implements KeyListener {
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_FLOATING_COPY };
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP,
+					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
@@ -217,7 +233,9 @@ public class LogPanel extends JPanel implements KeyListener {
 		case PopupMenuTrait.POPUP_RELOAD:
 			reload();
 			break;
-
+		case PopupMenuTrait.POPUP_COPY:
+			copyTextToClipboard();
+			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD:
 			download();
 			break;
@@ -258,12 +276,42 @@ public class LogPanel extends JPanel implements KeyListener {
 	}
 
 	public void setCaretPosition(int caretPosition) {
-		logTextPane.setCaretPosition(caretPosition);
+		try {
+			logTextPane.setCaretPosition(caretPosition);
+		} catch (IllegalArgumentException e) {
+			int maxPos = logTextPane.getDocument().getLength();
+			int safePos = Math.clamp(caretPosition, 0, maxPos);
+			Logging.info(this, "catching IllegalArgumentException ", e.getMessage());
+			Logging.info(this, "Failed to restore caret position ", caretPosition,
+					": index out of bounds (possibly due to changed log content). Using nearest valid position: ",
+					safePos);
+			logTextPane.setCaretPosition(safePos);
+		}
 	}
 
 	public void reload() {
 		Logging.info(this, "reload action");
 		setLevelWithoutAction(logTextPane.produceInitialMaxShowLevel());
+	}
+
+	private void copyTextToClipboard() {
+		String selectedText = logTextPane.getSelectedText();
+		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
+		String cleanedText = removeLineNumbers(textToCopy);
+		StringSelection selection = new StringSelection(cleanedText);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+	}
+
+	private static String removeLineNumbers(String text) {
+		String[] lines = LINE_BREAK_PATTERN.split(text, -1);
+		StringBuilder sb = new StringBuilder(text.length());
+
+		for (String line : lines) {
+			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst(""));
+			sb.append('\n');
+		}
+
+		return sb.toString();
 	}
 
 	public void download() {
@@ -281,6 +329,7 @@ public class LogPanel extends JPanel implements KeyListener {
 	public void floatExternal() {
 		LogPanel copyOfMe = new LogPanel("", false);
 		copyOfMe.setLevelWithoutAction(logTextPane.getShowLevel());
+		copyOfMe.logTextPane.setShowLevel(logTextPane.getShowLevel());
 		copyOfMe.logTextPane.setParsedText(logTextPane);
 		copyOfMe.adaptComboType();
 		copyOfMe.logTextPane.buildDocument();

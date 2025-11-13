@@ -12,9 +12,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -43,37 +45,17 @@ import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-@SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager implements MenuListener {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private JMenuItem jMenuRemoteControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
-	private JMenuItem jMenuShowPopupMessage = new JMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuShowPopupMessage"));
-	private JMenuItem jMenuRequestSessionInfo = new JMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
-	private JMenuItem jMenuShutdownClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuShutdownClient"));
-	private JMenuItem jMenuRebootClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuRebootClient"));
-	private JMenuItem jMenuOpenTerminalOnClient = new JMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
-	private JMenuItem jMenuChangeDepot = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
-	private JMenuItem jMenuChangeClientID = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-	private JMenuItem jMenuAddClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuAddClient"));
-	private JMenuItem jMenuDeleteClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDeleteClient"));
-	private JMenuItem jMenuCopyClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
-	private JMenu jMenuResetProducts = initResetProductsMenu();
-	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
-	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-	private JMenuItem jMenuInvertSelection = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuInvertSelection"));
+	private Set<JMenuItem> clientMenuItemsDependOnSelectionCount = new HashSet<>();
 
-	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
-			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
-			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
+	private final Map<String, JMenuItem> clientMenuItems = new LinkedHashMap<>();
 
 	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
@@ -87,11 +69,16 @@ public final class ClientMenuManager implements MenuListener {
 		this.mainFrame = mainFrame;
 
 		menuItemsHost = new LinkedHashMap<>();
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, jMenuAddClient);
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT, jMenuDeleteClient);
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES, jMenuFreeLicenses);
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, clientMenuItems.get("MainFrame.jMenuAddClient"));
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT,
+				clientMenuItems.get("MainFrame.jMenuDeleteClient"));
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES,
+				clientMenuItems.get("MainFrame.jMenuFreeLicenses"));
 
 		initJMenu();
+
+		mainFrame.getClientTablePanel().getClientTable().getTableHeader()
+				.setComponentPopupMenu(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns")));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
@@ -105,101 +92,93 @@ public final class ClientMenuManager implements MenuListener {
 	private void initJMenu() {
 		jMenuClients.addMenuListener(this);
 
-		jMenuChangeDepot.addActionListener(event -> ServerActionManager.callChangeDepotDialog());
-		jMenuChangeClientID.addActionListener(event -> ServerActionManager.callChangeClientIDDialog());
-
-		JMenuItem jMenuSelectionGetGroup = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuSelectionGetGroup.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
-
-		JMenuItem jMenuSelectionGetSavedSearch = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		jMenuSelectionGetSavedSearch
-				.addActionListener(event -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain));
-
-		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
-		Icons.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
-		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
-
-		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-		Icons.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
-		jMenuCreatePdf.addActionListener(event -> createPdf());
-
-		Icons.addIntellijIconToMenuItem(jMenuAddClient, "add");
-		jMenuAddClient.addActionListener(event -> ExtraFrameController.callNewClientDialog());
-
-		jMenuDeletePackageCaches.addActionListener(event -> ServerActionManager.deletePackageCachesOfSelectedClients());
-
-		JMenuItem jMenuWakeOnLan = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-		jMenuWakeOnLan.addActionListener(event -> ServerActionManager.wakeSelectedClients());
-
-		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
-
-		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
-			JMenuItem item = new JMenuItem(event);
-			item.addActionListener(actionEvent -> ServerActionManager.fireOpsiclientdEventOnSelectedClients(event));
-			jMenuOpsiClientdEvent.add(item);
-		}
-
-		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
-		jMenuShutdownClient.addActionListener(event -> ServerActionManager.shutdownSelectedClients());
-		jMenuRequestSessionInfo.addActionListener(event -> SessionInfoRetriever.retrieveSessionInfo(configedMain));
-		Icons.addThemeIconInvertedToMenuItem(jMenuRequestSessionInfo, "user");
-		jMenuRebootClient.addActionListener(event -> ServerActionManager.rebootSelectedClients());
-
-		Icons.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
-		jMenuDeleteClient.addActionListener(event -> ServerActionManager.deleteSelectedClients());
-
-		jMenuCopyClient.addActionListener(event -> ServerActionManager.copySelectedClient());
-		jMenuFreeLicenses.addActionListener(event -> ServerActionManager.freeAllPossibleLicensesForSelectedClients());
-		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
-		jMenuRemoteControl.addActionListener(
-				event -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
-
-		Icons.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
-		jMenuOpenTerminalOnClient.addActionListener(event -> TerminalController.openTerminalOnClient());
-
-		jMenuInvertSelection.addActionListener(event -> configedMain.invertSelection());
-		jMenuInvertSelection.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-
-		jMenuClients.add(jMenuWakeOnLan);
-		jMenuClients.add(jMenuOpsiClientdEvent);
-		jMenuClients.add(jMenuShowPopupMessage);
-		jMenuClients.add(jMenuRequestSessionInfo);
-		jMenuClients.add(jMenuDeletePackageCaches);
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuWakeOnLan", ServerActionManager::wakeSelectedClients).dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createSubMenu(ClientMenuItemConfig
+				.submenu("MainFrame.jMenuOpsiClientdEvent", this::initOpsiclientdEventMenu).dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuShowPopupMessage", this::showPopupOnClientsAction).dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuRequestSessionInfo", () -> SessionInfoRetriever.retrieveSessionInfo(configedMain))
+				.withIcon("user").withInvertedIcon(true).dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuDeletePackageCaches", ServerActionManager::deletePackageCachesOfSelectedClients)
+				.dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(jMenuShutdownClient);
-		jMenuClients.add(jMenuRebootClient);
-		jMenuClients.add(jMenuOpenTerminalOnClient);
-		jMenuClients.add(jMenuRemoteControl);
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuShutdownClient", ServerActionManager::shutdownSelectedClients)
+						.dependOnSelectionCount(true)
+						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuRebootClient", ServerActionManager::rebootSelectedClients)
+						.dependOnSelectionCount(true)
+						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuOpenTerminal", TerminalController::openTerminalOnClient)
+						.withIcon("terminal").dependOnSelectionCount(true)
+						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients
+				.add(createMenuItem(
+						ClientMenuItemConfig
+								.item("MainFrame.jMenuRemoteControl",
+										() -> ExtraFrameController.startRemoteControlFrame(configedMain,
+												persistenceController))
+								.dependOnSelectionCount(true)
+								.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(jMenuAddClient);
-		jMenuClients.add(jMenuCopyClient);
-		jMenuClients.add(jMenuDeleteClient);
-
-		jMenuClients.add(initResetProductsMenu());
-
-		jMenuClients.add(jMenuFreeLicenses);
-		jMenuClients.add(jMenuChangeClientID);
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callNewClientDialog)
+						.withIcon("add").dependOnSelectionCount(true)
+						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuCopyClient", ServerActionManager::copySelectedClient).dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuDeleteClient", ServerActionManager::deleteSelectedClients)
+						.withIcon("delete").dependOnSelectionCount(true)
+						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createSubMenu(ClientMenuItemConfig
+				.submenu("MainFrame.jMenuResetProducts", () -> initResetProductsMenu()).dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuFreeLicenses", ServerActionManager::freeAllPossibleLicensesForSelectedClients)
+				.dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuChangeClientID", ServerActionManager::callChangeClientIDDialog)
+				.dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 
 		// is multiDepot
 		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
-			jMenuClients.add(jMenuChangeDepot);
+			jMenuClients.add(createMenuItem(
+					ClientMenuItemConfig.item("MainFrame.jMenuChangeDepot", ServerActionManager::callChangeDepotDialog)
+							.dependOnSelectionCount(true)
+							.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 		}
-		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuSelectionGetGroup);
-		jMenuClients.add(jMenuSelectionGetSavedSearch);
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(jMenuRebuildClientList);
-		jMenuClients.add(jMenuCreatePdf);
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuClientselectionGetGroup",
+				() -> ExtraFrameController.callClientSelectionDialog(configedMain))));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuClientselectionGetSavedSearch",
+				() -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain))));
+
+		jMenuClients.addSeparator();
+
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("PopupMenuTrait.reload", configedMain::reloadHosts).withIcon("refresh")));
+		jMenuClients.add(
+				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
 		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
 		exportTable.addMenuItemsTo(jMenuClients);
@@ -210,11 +189,61 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(initShowColumnsMenu());
+		jMenuClients.add(
+				createSubMenu(ClientMenuItemConfig.submenu("MainFrame.jMenuShowColumns", this::initShowColumnsMenu)));
 
 		jMenuClients.addSeparator();
 
+		JMenuItem jMenuInvertSelection = createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection));
+		jMenuInvertSelection.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+
 		jMenuClients.add(jMenuInvertSelection);
+	}
+
+	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));
+
+		if (config.icon() != null) {
+			if (config.invertedIcon()) {
+				Icons.addThemeIconInvertedToMenuItem(item, config.icon());
+			} else {
+				Icons.addIntellijIconToMenuItem(item, config.icon());
+			}
+		}
+
+		if (config.action() != null) {
+			item.addActionListener(e -> config.action().run());
+		}
+
+		if (config.dependOnSelectionCount()) {
+			clientMenuItemsDependOnSelectionCount.add(item);
+		}
+
+		item.setEnabled(!config.readOnly());
+		clientMenuItems.put(config.resourceKey(), item);
+		return item;
+	}
+
+	private JMenu createSubMenu(ClientMenuItemConfig config) {
+		JMenu menu = config.subMenuSupplier().get();
+		if (config.dependOnSelectionCount()) {
+			clientMenuItemsDependOnSelectionCount.add(menu);
+		}
+		menu.setEnabled(!config.readOnly());
+		clientMenuItems.put(config.resourceKey(), menu);
+		return menu;
+	}
+
+	private JMenu initOpsiclientdEventMenu() {
+		JMenu menu = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
+			JMenuItem item = new JMenuItem(event);
+			item.addActionListener(actionEvent -> ServerActionManager.fireOpsiclientdEventOnSelectedClients(event));
+			menu.add(item);
+		}
+		return menu;
 	}
 
 	private static JMenu initResetProductsMenu() {
@@ -281,166 +310,47 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenu;
 	}
 
-	@SuppressWarnings({ "java:S138" })
 	private JMenu initShowColumnsMenu() {
-		JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		jCheckBoxMenuItemShowCreatedColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowCreatedColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
+		JMenu jMenu = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		for (ColumnDisplayInfo info : HostInfo.ORDERED_DISPLAY_COLUMN_INFOS) {
+			JCheckBoxMenuItem jCheckBoxMenuItem = createShowColumnCheckBoxMenuItem(info);
+			if (jCheckBoxMenuItem != null) {
+				jMenu.add(jCheckBoxMenuItem);
+			}
+		}
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		jCheckBoxMenuItemShowWANactiveColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowWANactiveColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
+		return jMenu;
+	}
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ipAddress"));
-		jCheckBoxMenuItemShowIPAddressColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowIPAddressColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
+	private JCheckBoxMenuItem createShowColumnCheckBoxMenuItem(ColumnDisplayInfo info) {
+		String resourceKey = info.resourceKey;
+		if (resourceKey == null) {
+			Logging.info(this, "Label ", info.label,
+					" has no resourceKey because we want it not to be shown - skipping");
+			return null;
+		}
+		String menuLabel = Configed.getResourceValue(resourceKey);
+		boolean selected = false;
+		if (persistenceController.getHostDataService().getHostDisplayFields().containsKey(info.label)) {
+			Boolean val = persistenceController.getHostDataService().getHostDisplayFields().get(info.label);
+			selected = Boolean.TRUE.equals(val);
+		}
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowlastSeenColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientLastSeen"));
-		jCheckBoxMenuItemShowlastSeenColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowlastSeenColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL));
+		JCheckBoxMenuItem item = new JCheckBoxMenuItem(menuLabel);
+		item.setSelected(selected);
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDescriptionColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
-		jCheckBoxMenuItemShowDescriptionColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDescriptionColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL));
+		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
+			item.addActionListener((ActionEvent event) -> {
+				ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+						.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getHostDataService()
+								.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
+				configedMain.toggleColumn(info.label);
+			});
+			return item;
+		}
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowConnectedColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-		jCheckBoxMenuItemShowConnectedColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowConnectedColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowSystemUUIDColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
-		jCheckBoxMenuItemShowSystemUUIDColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowSystemUUIDColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
-		jCheckBoxMenuItemShowHardwareAddressColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowHardwareAddressColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("sessionInfo"));
-		jCheckBoxMenuItemShowSessionInfoColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowSessionInfoColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
-		jCheckBoxMenuItemShowInventoryNumberColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowInventoryNumberColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
-		jCheckBoxMenuItemShowInstallByShutdown.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowInstallByShutdown.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem(Configed.getResourceValue("depot"));
-		jCheckBoxMenuItemShowDepotColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDepotColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowHealthCheckActiveColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.healthCheckActive"));
-		jCheckBoxMenuItemShowHealthCheckActiveColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowHealthCheckActiveColumn.addActionListener((ActionEvent event) -> {
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getHostDataService()
-							.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
-			configedMain.toggleColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL);
-		});
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowOSColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
-		jCheckBoxMenuItemShowOSColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowOSColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowOSTypeColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystemType"));
-		jCheckBoxMenuItemShowOSTypeColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowOSTypeColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowOSArchitectureColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystemArchitecture"));
-		jCheckBoxMenuItemShowOSArchitectureColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowOSArchitectureColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceTypeColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType"));
-		jCheckBoxMenuItemShowDeviceTypeColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDeviceTypeColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceVendorColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
-		jCheckBoxMenuItemShowDeviceVendorColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDeviceVendorColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
-
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceModelColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
-		jCheckBoxMenuItemShowDeviceModelColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowDeviceModelColumn.addActionListener(
-				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
-
-		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowlastSeenColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDescriptionColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowConnectedColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowHardwareAddressColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowInventoryNumberColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowCreatedColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowHealthCheckActiveColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowOSColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowOSTypeColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowOSArchitectureColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceTypeColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceVendorColumn);
-		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceModelColumn);
-
-		return jMenuShowColumns;
+		item.addActionListener(event -> configedMain.toggleColumn(info.label));
+		return item;
 	}
 
 	private void createPdf() {
@@ -495,23 +405,32 @@ public final class ClientMenuManager implements MenuListener {
 		Logging.debug(" enableMenuItemsForClients, countSelectedClients ", countSelectedClients);
 
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			jMenuItem.setEnabled(countSelectedClients >= 1);
+			if (clientMenuItemsDependOnSelectionCount.contains(jMenuItem)
+					&& persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+				jMenuItem.setEnabled(false);
+			} else {
+				jMenuItem.setEnabled(countSelectedClients >= 1);
+			}
 		}
 
-		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
-		jMenuCopyClient.setEnabled(countSelectedClients == 1);
+		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(
+				countSelectedClients == 1 && !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(
+				countSelectedClients == 1 && !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
 
 		if (forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS)
 				|| !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
 				|| persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
-			jMenuOpenTerminalOnClient.setEnabled(false);
-			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal")
-					+ Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden"));
+			clientMenuItems.get("MainFrame.jMenuOpenTerminal").setEnabled(false);
+			clientMenuItems.get("MainFrame.jMenuOpenTerminal")
+					.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal")
+							+ Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden"));
 		} else {
-			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
-			jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1);
+			clientMenuItems.get("MainFrame.jMenuOpenTerminal")
+					.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
+			clientMenuItems.get("MainFrame.jMenuOpenTerminal").setEnabled(countSelectedClients == 1);
 		}
 
 		checkMenuItemsDisabling();
@@ -532,21 +451,31 @@ public final class ClientMenuManager implements MenuListener {
 				}
 			}
 
-			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {
-				jMenuCopyClient.setEnabled(false);
+			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
+					&& persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+				clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(false);
 			}
 
 			if (persistenceController.getConfigDataService().getDisabledClientMenuEntries()
 					.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
-				jMenuAddClient.setEnabled(false);
+				clientMenuItems.get("MainFrame.jMenuAddClient").setEnabled(false);
 			} else {
-				jMenuAddClient.setEnabled(
-						persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
+				clientMenuItems.get("MainFrame.jMenuAddClient")
+						.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
+								&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 			}
 		}
 	}
 
+	public static JPopupMenu getPopupMenuClone(JMenu jMenuToClone) {
+		return clonePopupMenu(jMenuToClone, null);
+	}
+
 	public JPopupMenu getPopupMenuClone() {
+		return clonePopupMenu(jMenuClients, this::enableMenuItemsForClients);
+	}
+
+	private static JPopupMenu clonePopupMenu(JMenu jMenuToClone, Runnable beforeCloneAction) {
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {
 			@Override
@@ -561,17 +490,20 @@ public final class ClientMenuManager implements MenuListener {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				enableMenuItemsForClients();
+				if (beforeCloneAction != null) {
+					beforeCloneAction.run();
+				}
 				popupMenu.removeAll();
-				cloneMenuItems(popupMenu);
+				cloneMenuItems(popupMenu, jMenuToClone);
 			}
+
 		});
 		return popupMenu;
 	}
 
-	private void cloneMenuItems(JPopupMenu popupMenu) {
-		for (int i = 0; i < jMenuClients.getItemCount(); i++) {
-			Component component = jMenuClients.getMenuComponent(i);
+	private static void cloneMenuItems(JPopupMenu popupMenu, JMenu menuToCopy) {
+		for (int i = 0; i < menuToCopy.getItemCount(); i++) {
+			Component component = menuToCopy.getMenuComponent(i);
 			if (component instanceof JSeparator) {
 				popupMenu.addSeparator();
 			}
@@ -587,6 +519,7 @@ public final class ClientMenuManager implements MenuListener {
 		if (sourceItem instanceof JMenu sourceSubMenu) {
 			clonedItem = new JMenu(sourceSubMenu.getText());
 			JMenu targetSubMenu = (JMenu) clonedItem;
+			targetSubMenu.setEnabled(sourceSubMenu.isEnabled());
 			for (int i = 0; i < sourceSubMenu.getItemCount(); i++) {
 				JMenuItem sourceSubItem = sourceSubMenu.getItem(i);
 				if (sourceSubItem != null) {

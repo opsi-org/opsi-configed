@@ -22,13 +22,13 @@ import com.formdev.flatlaf.FlatLaf;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2025-07-15";
+	public static final String VERDATE = "2025-10-28";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
 	public static final String MIN_MAJOR_VERSION = "4.3";
-	public static final String MIN_SERVER_VERSION = "4.3.31.11";
+	public static final String MIN_SERVER_VERSION = "4.3.35.6";
 	public static final String APPNAME = "opsi-configed";
 	public static final String APPNAME_SERVER_CONNECTION = "opsi config editor";
 

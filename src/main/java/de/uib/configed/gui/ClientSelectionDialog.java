@@ -16,6 +16,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -52,6 +53,7 @@ import de.uib.configed.gui.features.clientselection.ConnectionStatus;
 import de.uib.configed.gui.features.clientselection.OperationWithStatus;
 import de.uib.configed.gui.features.clientselection.SelectData;
 import de.uib.configed.gui.features.clientselection.SelectionManager;
+import de.uib.configed.gui.features.clientselection.elements.ConnectionElement;
 import de.uib.configed.gui.features.clientselection.elements.DescriptionElement;
 import de.uib.configed.gui.features.clientselection.elements.GroupElement;
 import de.uib.configed.gui.features.clientselection.elements.GroupWithSubgroupsElement;
@@ -172,7 +174,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
 			dialog.setCursor(Globals.WAIT_CURSOR);
 			collectData();
-			List<String> result = manager.selectClients();
+			Collection<String> result = manager.selectClients();
 			dialog.setCursor(null);
 			return result;
 		}, searchName);
@@ -392,6 +394,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		} else {
 			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
 		}
+
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 
@@ -522,6 +525,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.groupList.add(createSimpleGroup(
 				new NameElement(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
 		result.groupList.add(createSimpleGroup(new IPElement()));
+		result.groupList.add(createSimpleGroup(new ConnectionElement()));
 		result.groupList.add(createSimpleGroup(new DescriptionElement()));
 		result.groupList.getLast().connectionType.setVisible(false);
 		createComplexBottom(result);
@@ -844,8 +848,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldText = new TextInputField(sourceGroup.element.getEnumData());
-		fieldText.setEditable(true);
-		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		if (sourceGroup.element instanceof ConnectionElement) {
+			fieldText.setReadOnly(true);
+			fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.readOnlyTextInputToolTip"));
+		} else {
+			fieldText.setEditable(true);
+			fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		}
 		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
 	}
@@ -1029,15 +1038,14 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 
-		if (component instanceof TextInputField textInputField) {
-			textInputField.setText(data.getData().toString());
-		} else if (component instanceof SpinnerWithExtension spinnerWithExtension
-				&& data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
-			spinnerWithExtension.setValue((Long) data.getData());
-		} else if (component instanceof JSpinner jSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
-			jSpinner.setValue(data.getData());
-		} else {
-			Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
+		switch (component) {
+		case TextInputField textInputField -> textInputField.setText(data.getData().toString());
+		case SpinnerWithExtension spinnerWithExtension when data
+				.getType() == SelectData.DataType.BIG_INTEGER_TYPE -> spinnerWithExtension
+						.setValue((Long) data.getData());
+		case JSpinner jSpinner when data.getType() == SelectData.DataType.INTEGER_TYPE -> jSpinner
+				.setValue(data.getData());
+		default -> Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}
 
@@ -1131,16 +1139,16 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		int index = newElementBox.getSelectedIndex();
 
-		if (index == 0) {
-			return;
-		} else if (index == 1) {
-			complexElements.add(createHostGroup());
-		} else if (index == 2) {
-			complexElements.add(createSoftwareGroup());
-		} else if (index == 3) {
-			complexElements.add(createSwAuditGroup());
-		} else {
-			complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));
+		ComplexGroup complexGroup = switch (index) {
+		case 0 -> null;
+		case 1 -> createHostGroup();
+		case 2 -> createSoftwareGroup();
+		case 3 -> createSwAuditGroup();
+		default -> createHardwareGroup(newElementBox.getSelectedItem().toString());
+		};
+
+		if (complexGroup != null) {
+			complexElements.add(complexGroup);
 		}
 
 		contentPane.revalidate();

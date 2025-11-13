@@ -9,7 +9,8 @@
 
 <fx:root type="StackPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BarChart fx:id="installedOSComparisonBarChart" animated="false" legendVisible="false" prefHeight="338.0" prefWidth="339.0">
+      <BarChart fx:id="installedOSComparisonBarChart" animated="false" legendVisible="false"
+         prefHeight="338.0" prefWidth="339.0">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -17,10 +18,7 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <Text fx:id="installedOSNoDataText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false">
-         <font>
-            <Font size="21.0" />
-         </font>
-      </Text>
+      <Text fx:id="installedOSNoDataText" strokeType="OUTSIDE" strokeWidth="0.0"
+         textAlignment="CENTER" visible="false" styleClass="no-data-label" />
    </children>
 </fx:root>

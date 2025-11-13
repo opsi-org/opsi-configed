@@ -38,6 +38,7 @@ import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandl
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicenseContractDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicenseDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.LicenseOnClientDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.LicensePoolDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiHostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiLicenseReloadHandler;
@@ -77,7 +78,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
-	public static final String CONFIG_KEY = "configed.meta_config";
 
 	public static final String CONFIG_KEY_MSG_OF_DAY_DEVICE = "message_of_the_day.device.message";
 	public static final String CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL = "message_of_the_day.device.message_valid_until";
@@ -364,6 +364,11 @@ public class OpsiServiceNOMPersistenceController {
 		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
 				softwareLicense2LicensePoolDataReloadHandler);
 
+		LicenseOnClientDataReloadHandler licenseOnClientDataReloadHandler = new LicenseOnClientDataReloadHandler();
+		licenseOnClientDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD.toString(),
+				licenseOnClientDataReloadHandler);
+
 		StatisticsDataReloadHandler statisticsDataReloadHandler = new StatisticsDataReloadHandler();
 		statisticsDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(), statisticsDataReloadHandler);
@@ -414,11 +419,10 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesServer.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
 		propertyClassesServer.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
 		propertyClassesServer.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
-		propertyClassesServer.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
 		propertyClassesServer.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
 		propertyClassesServer.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
+		propertyClassesServer.put("netboot", "HostConfigNodeRenderer.netboot.Tooltip");
 		propertyClassesServer.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
-
 		propertyClassesServer.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
 		propertyClassesServer.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");
 		propertyClassesServer.put(KEY_USER_ROOT,
@@ -428,6 +432,7 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesClient = new TreeMap<>();
 		propertyClassesClient.put("", "HostConfigNodeRenderer.mainNode");
 		propertyClassesClient.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
+		propertyClassesClient.put("netboot", "HostConfigNodeRenderer.netboot.Tooltip");
 		propertyClassesClient.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
 		propertyClassesClient.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");
 		propertyClassesClient.put("software-on-demand", "HostConfigNodeRenderer.software_on_demand.Tooltip");

@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.tree;
 
 import java.text.Collator;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -161,25 +162,37 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public Set<String> getAllowedClients() {
+		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()
+				&& allowedClients == null) {
+			Map<String, Set<String>> group2Members = persistenceController.getGroupDataService()
+					.getFHostGroup2MembersPD();
+			group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
+
+			Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+			Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
+			allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
+		} else if (persistenceController.getUserRolesConfigDataService()
+				.isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+			allowedClients = null;
+		} else {
+			// Not needed.
+		}
 		return allowedClients;
 	}
 
 	public void build() {
-
-		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
-		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
-
-		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
-
-		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
-		allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
 		Set<String> allPCs = persistenceController.getHostInfoCollections()
-				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
+				.getClientsForDepots(configedMain.getSelectedDepots(), getAllowedClients());
 
 		produceTreeForALL(allPCs);
+
+		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
 		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
 				expandedPermittedHostGroups);
 
+		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
+		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 		associateClientsToGroups(allPCs, group2Members);
 
 		if (allowedClients != null) {
@@ -427,7 +440,22 @@ public class ClientTree extends AbstractGroupTree {
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {
 		// child with this objectID not existing
 		if (getChildWithUserObjectString(objectID, newGroupNode) == null) {
-			produceClients(Collections.singleton(objectID), newGroupNode);
+			Set<String> clientIds = new TreeSet<>();
+			clientIds.add(objectID);
+
+			// Must be a list and not a treeset because GroupNode is not comparable
+			List<GroupNode> groups = new ArrayList<>();
+			newGroupNode.children().asIterator().forEachRemaining((TreeNode node) -> {
+				switch (node) {
+				case GroupNode gn -> groups.add(gn);
+				default -> clientIds.add(node.toString());
+				}
+			});
+
+			newGroupNode.removeAllChildren();
+			// Add all the groups alphabetically ordered
+			groups.forEach(newGroupNode::add);
+			produceClients(clientIds, newGroupNode);
 			makeVisible(newPath.pathByAddingChild(objectID));
 			return true;
 		}
@@ -455,7 +483,7 @@ public class ClientTree extends AbstractGroupTree {
 			Logging.warning("removing client not successful but stopped because of reaching the repetition limit");
 		}
 
-		clientNodesInDirectory.remove(clientID); // 11
+		clientNodesInDirectory.remove(clientID);
 
 		model.nodeStructureChanged(parentNode);
 
@@ -463,17 +491,11 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	public void moveObjectTo(String importID, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		DefaultMutableTreeNode existingNode = getChildWithUserObjectString(importID, dropParentNode);
 		if (existingNode == null) {
-			// we have not a node with this name in the target group
-			if (sourcePath != null) {
-				Logging.debug(this, "moveObjectTo checked importID sourcePath.getLastPathComponent(); ",
-						sourcePath.getLastPathComponent(), " class ", ((sourcePath.getLastPathComponent()).getClass()));
-			} else {
-				Logging.debug(this, "moveCmoveObjectToientTo sourcePath null, sourceParentNode ", sourceParentNode);
-			}
+			Logging.debug(this, "moveObjectTo sourcePath null, sourceParentNode ", sourceParentNode);
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
 			insertNodeInOrder(clientNode, dropParentNode);
@@ -494,7 +516,7 @@ public class ClientTree extends AbstractGroupTree {
 			activeParents.addAll(Arrays.stream(dropPath.getPath()).map(Object::toString).collect(Collectors.toSet()));
 
 			Logging.debug(this, "moveObjectTo -- remove ", importID, " from ", sourceParentID,
-					" clientNode, sourceParentNode, sourcePath ", clientNode, ", ", sourceParentNode, ", ", sourcePath);
+					" clientNode, sourceParentNode ", clientNode, ", ", sourceParentNode);
 
 			// persistent removal
 			persistenceController.getGroupDataService().removeObject2Group(importID, sourceParentID);
@@ -508,9 +530,9 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
-			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
-		Logging.debug(this, " copying ", objectID, ", sourcePath ", sourcePath, " into group ", newParentID);
+	public void copyObjectTo(String objectID, String newParentID, DefaultMutableTreeNode newParentNode,
+			TreePath newParentPath) {
+		Logging.debug(this, " copying ", objectID, " into group ", newParentID);
 
 		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode ", newParentNode, " ",
 				DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
@@ -617,11 +639,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	public TreePath getPathToALL() {
 		return pathToALL;
-	}
-
-	@Override
-	public Set<GroupNode> getLocationsInDirectory(String clientId) {
-		return locationsInDirectory.get(clientId);
 	}
 
 	@Override

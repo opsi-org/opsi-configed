@@ -247,7 +247,6 @@ public final class Icons {
 	}
 
 	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
-
 		Color dotColor = null;
 
 		String warningLevel = HealthInfo.getMaxWarningLevel();

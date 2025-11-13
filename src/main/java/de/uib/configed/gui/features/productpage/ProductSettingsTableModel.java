@@ -64,7 +64,6 @@ public class ProductSettingsTableModel {
 	}
 
 	private void initRenderer() {
-
 		productNameTableCellRenderer = new ProductNameTableCellRenderer();
 
 		colorTableCellRenderer = new ColorTableCellRenderer();

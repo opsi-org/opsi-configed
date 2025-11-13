@@ -1,3 +1,41 @@
+.root,
+.button,
+Text {
+	-fx-font-family: 'Open Sans';
+	-fx-font-size: 13px;
+}
+
+/* Apply font to all chart text */
+.chart-legend,
+.chart-title,
+.axis-label,
+.tick-label,
+.chart-bar text {
+	-fx-font-family: 'Open Sans';
+	-fx-font-size: 13px;
+}
+
+.label.big-label {
+	-fx-font-family: 'Open Sans';
+	-fx-font-size: 28px;
+	-fx-font-weight: bold;
+}
+
+.title-label {
+	-fx-font-family: 'Open Sans';
+	-fx-font-size: 22px;
+}
+
+.no-data-label {
+	-fx-font-family: 'Open Sans';
+	-fx-font-size: 21px;
+}
+
+.loading-data-label {
+	-fx-font-family: 'Open Sans';
+	-fx-font-size: 32px;
+}
+
 .primary-background {
 	-fx-background-color: #DCE4F2;
 }

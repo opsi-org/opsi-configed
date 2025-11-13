@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -19,10 +20,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -89,6 +93,28 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			}
 		};
 
+		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// We don't override default behavior.
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// We don't override default behavior.
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
+						.getPersistenceController().getUserRolesConfigDataService();
+				boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
+						|| userRolesConfigDataService.canEditOwnServerRole();
+				Component saveComponent = jPopupMenu.getComponent(0);
+				saveComponent.setEnabled(canSave);
+			}
+		});
+
 		JMenuItem jPopupMenuCopyToClipBoard = new JMenuItem(
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.copyPropertyToClipboard"));
 		Icons.addIntellijIconToMenuItem(jPopupMenuCopyToClipBoard, "copy");
@@ -119,7 +145,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
-		jc.setToolTipText("<html>" + createTooltipForPropertyName(propertyName) + "</html>");
+		jc.setToolTipText(Utils.createTooltipForPropertyName(propertyName, defaultsMap, descriptionsMap,
+				includeAdditionalTooltipText ? getPropertyOrigin(propertyName) : null));
 
 		// check equals with default
 
@@ -150,34 +177,6 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 				&& jComponent instanceof JLabel jLabel) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
-	}
-
-	private String createTooltipForPropertyName(String propertyName) {
-		if (propertyName == null) {
-			return "";
-		}
-
-		StringBuilder tooltip = new StringBuilder();
-
-		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-			if (includeAdditionalTooltipText) {
-				tooltip.append("default (" + getPropertyOrigin(propertyName) + "): ");
-			} else {
-				tooltip.append("default: ");
-			}
-
-			if (Utils.isKeyForSecretValue(propertyName)) {
-				tooltip.append(Globals.STARRED_STRING);
-			} else {
-				tooltip.append(defaultsMap.get(propertyName));
-			}
-		}
-
-		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-			tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
-		}
-
-		return tooltip.toString();
 	}
 
 	private String getPropertyOrigin(String propertyName) {

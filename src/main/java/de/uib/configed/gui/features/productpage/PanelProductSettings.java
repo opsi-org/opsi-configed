@@ -54,6 +54,8 @@ public class PanelProductSettings extends JSplitPane {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
 
+	private JMenu jMenuVisibleColumns;
+
 	private ProductTable productTable;
 	private ProductSettingsTableModel productSettingsTableModel;
 
@@ -133,6 +135,8 @@ public class PanelProductSettings extends JSplitPane {
 		PopupMouseListener popupMouseListener = new PopupMouseListener(producePopupMenu());
 		paneProducts.addMouseListener(popupMouseListener);
 		productTable.addMouseListener(popupMouseListener);
+
+		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
 	}
 
 	public void updateSearchFields() {
@@ -141,6 +145,10 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void restoreFilter() {
 		groupPanel.restoreFilter();
+	}
+
+	public void enableFilterMode(boolean enable) {
+		groupPanel.setFilterMark(enable);
 	}
 
 	private JPopupMenu producePopupMenu() {
@@ -157,9 +165,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		JMenuItem itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
-		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener(actionEvent -> saveAndExecuteAction());
-		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
+				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		popup.add(itemOnDemand);
 
@@ -170,7 +178,8 @@ public class PanelProductSettings extends JSplitPane {
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts.addActionListener(
 				actionEvent -> ServerActionManager.processActionRequestsSelectedProducts(groupPanel.getVisibility()));
-		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
+				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		popup.add(itemOnDemandForSelectedProducts);
 
@@ -182,6 +191,7 @@ public class PanelProductSettings extends JSplitPane {
 		} else {
 			resetProductsMenu = ClientMenuManager.createResetNetbootProductsMenuItemsTo();
 		}
+		resetProductsMenu.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		popup.add(resetProductsMenu);
 
 		popup.addSeparator();
@@ -199,7 +209,7 @@ public class PanelProductSettings extends JSplitPane {
 		ExporterToCSV exportTable = new ExporterToCSV(productTable);
 		exportTable.addMenuItemsTo(popup);
 
-		JMenu jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		popup.addSeparator();
 		popup.add(jMenuVisibleColumns);
 
@@ -273,12 +283,10 @@ public class PanelProductSettings extends JSplitPane {
 		} else {
 			int selectedRow = lsm.getMinSelectionIndex();
 			Logging.debug(this, "selected ", selectedRow);
-			Logging.debug(this, "selected modelIndex ", productTable.convertRowIndexToModel(selectedRow));
-			Logging.debug(this, "selected  value at ",
-					productTable.getModel().getValueAt(productTable.convertRowIndexToModel(selectedRow), 0));
-			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setProductEdited(
-					(String) productTable.getModel().getValueAt(productTable.convertRowIndexToModel(selectedRow), 0),
-					this);
+			Logging.debug(this, "selected modelIndex ", selectedRow);
+			Logging.debug(this, "selected  value at ", productTable.getValueAt(selectedRow, 0));
+			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager()
+					.setProductEdited((String) productTable.getValueAt(selectedRow, 0), this);
 		}
 
 		productTree.produceActiveParents();

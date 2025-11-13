@@ -64,5 +64,4 @@ public class DateTimePickerWrapper extends JFXPanel {
 	public DateTimePicker getDateTimePicker() {
 		return dateTimePicker;
 	}
-
 }

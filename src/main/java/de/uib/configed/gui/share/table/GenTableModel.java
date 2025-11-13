@@ -10,6 +10,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class GenTableModel extends AbstractTableModel {
 	private Set<Integer> updatedRows;
 	// rows which are updated and not yet saved
 
-	private List<Integer> finalCols;
+	private Set<Integer> finalCols;
 	// columns for which the values can only be entered and changed as long as the
 	// row is not saved
 
@@ -85,7 +86,7 @@ public class GenTableModel extends AbstractTableModel {
 		addedRows = new HashSet<>();
 		updatedRows = new HashSet<>();
 
-		this.finalCols = new ArrayList<>();
+		this.finalCols = new LinkedHashSet<>();
 		if (finalColumns == null) {
 			if (keyCol > -1) {
 				this.finalCols.add(keyCol);
@@ -131,7 +132,7 @@ public class GenTableModel extends AbstractTableModel {
 		return keyCol;
 	}
 
-	public List<Integer> getFinalCols() {
+	public Set<Integer> getFinalCols() {
 		return finalCols;
 	}
 

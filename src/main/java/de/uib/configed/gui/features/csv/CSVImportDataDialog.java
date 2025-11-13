@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -309,7 +309,7 @@ public class CSVImportDataDialog {
 
 	public static CSVImportDataDialog createCSVImportDataDialog(Component parent, String csvFile) {
 		Logging.info("createCSVImportDataDialog for file ", csvFile);
-		List<String> columnNames = HostInfo.getKeysForCSV();
+		Set<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
 			csvFormatDetector.detectFormat(csvFile);
@@ -327,7 +327,8 @@ public class CSVImportDataDialog {
 		}
 
 		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
-				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().get();
+				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader()
+				.setIgnoreSurroundingSpaces(true).get();
 		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
 		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
 		csvImportDataDialog.setDetectedOptions();

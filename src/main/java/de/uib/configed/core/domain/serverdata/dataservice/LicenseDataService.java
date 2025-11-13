@@ -380,7 +380,7 @@ public class LicenseDataService {
 		return cacheManager.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class);
 	}
 
-	private void retrieveLicensesUsagePD() {
+	public void retrieveLicensesUsagePD() {
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT) && cacheManager.isDataCached(
 				Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;

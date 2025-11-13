@@ -534,6 +534,7 @@ public final class Logging {
 
 		// Get the text as a string, each element separated by a newline
 		jTextArea.setText(errorList.toString().replace("[", "").replace("]", "").replace(",", "\n"));
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialog.setVisible(true);
 	}
 

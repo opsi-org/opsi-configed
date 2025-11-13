@@ -52,5 +52,4 @@ public class ProductSettingsTableRowSorter extends TableRowSorter<TableModel> {
 
 		return comparator;
 	}
-
 }

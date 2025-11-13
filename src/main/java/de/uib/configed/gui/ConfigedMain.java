@@ -12,12 +12,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -44,6 +43,7 @@ import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.GroupNode;
+import de.uib.configed.gui.features.tree.GroupTreeTransferHandler;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
@@ -92,8 +92,6 @@ public class ConfigedMain {
 
 	private DepotListSelectionListener depotListSelectionListener;
 
-	private Map<String, String> sessionInfo = new HashMap<>();
-
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
 	}
@@ -140,6 +138,8 @@ public class ConfigedMain {
 
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
+		connectTreesWithTables();
+
 		initTabComponents();
 
 		initialTreeActivation();
@@ -157,6 +157,19 @@ public class ConfigedMain {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+	}
+
+	private void connectTreesWithTables() {
+		GroupTreeTransferHandler clientTransferHandler = new GroupTreeTransferHandler(clientTree);
+		clientTree.setTransferHandler(clientTransferHandler);
+		clientTablePanel.getClientTable().setTransferHandler(clientTransferHandler);
+
+		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
+		productTree.setTransferHandler(productTransferHandler);
+		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+				.setTransferHandler(productTransferHandler);
+		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+				.setTransferHandler(productTransferHandler);
 	}
 
 	public ProductTree getProductTree() {
@@ -539,8 +552,8 @@ public class ConfigedMain {
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
 			String sessionValue = "";
-			if (sessionInfo.get(clientId) != null) {
-				sessionValue = sessionInfo.get(clientId);
+			if (persistenceController.getHostDataService().getSessionInfo().get(clientId) != null) {
+				sessionValue = persistenceController.getHostDataService().getSessionInfo().get(clientId);
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
@@ -796,6 +809,12 @@ public class ConfigedMain {
 	private void setGroupByTree(DefaultMutableTreeNode node) {
 		Logging.info(this, "setGroupByTree, node ", node);
 
+		if (node == null) {
+			Logging.info(this, "Target node not found — possibly deleted or not selected. Defaulting to '",
+					ClientTree.ALL_CLIENTS_NAME, "'");
+			node = clientTree.getGroupNode(ClientTree.ALL_CLIENTS_NAME);
+		}
+
 		clientTree.initActiveParents();
 		// Get all leaves from the node which should be a group
 		clientsFilteredByTree.clear();
@@ -837,7 +856,7 @@ public class ConfigedMain {
 		}
 	}
 
-	private boolean checkSynchronous(Set<String> depots) {
+	public boolean checkSynchronous(Set<String> depots) {
 		if (depots.size() > 1 && !persistenceController.getDepotDataService().areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
@@ -848,65 +867,40 @@ public class ConfigedMain {
 		return true;
 	}
 
-	public boolean setDepotRepresentative() {
+	public void setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		if (selectedClients.isEmpty()) {
-			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-
-			return true;
-		}
-
-		Set<String> depotsOfSelectedClients = getDepotsOfSelectedClients();
-
-		Logging.info(this, "depots of selected clients:", depotsOfSelectedClients);
-
-		Logging.debug(this, "setDepotRepresentative(), old representative: ", depotRepresentative, " should be ");
-
-		if (!checkSynchronous(depotsOfSelectedClients)) {
-			return false;
-		}
-
+		List<String> selectedDepots = getSelectedDepots();
 		String oldRepresentative = depotRepresentative;
 
-		Logging.debug(this, "setDepotRepresentative  start   up to now ", oldRepresentative, " old",
-				depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
+		String configServer = persistenceController.getHostInfoCollections().getConfigServer();
+		Set<String> clientDepots = selectedClients.isEmpty() ? Collections.emptySet() : getDepotsOfSelectedClients();
 
-		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients ", depotsOfSelectedClients);
+		Logging.info(this, "Selected depots: " + selectedDepots);
+		Logging.info(this, "Depots of selected clients: " + clientDepots);
 
-		Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
+		String newRepresentative;
 
-		if (!depotsIterator.hasNext()) {
-			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-			Logging.debug(this, "setDepotRepresentative  without next change depotRepresentative ", " up to now ",
-					oldRepresentative, " new ", depotRepresentative, " equal ",
-					oldRepresentative.equals(depotRepresentative));
+		if (selectedDepots.isEmpty() || clientDepots.contains(configServer)) {
+			newRepresentative = configServer;
+		} else if (selectedDepots.size() == 1) {
+			String onlyDepot = selectedDepots.get(0);
+			newRepresentative = clientDepots.contains(onlyDepot) ? onlyDepot : configServer;
 		} else {
-			depotRepresentative = depotsIterator.next();
-
-			while (depotsIterator.hasNext()) {
-				String depot = depotsIterator.next();
-				if (depot.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
-					depotRepresentative = depot;
-					break;
-				}
-			}
+			newRepresentative = selectedDepots.stream().filter(clientDepots::contains).findFirst().orElse(configServer);
 		}
 
-		Logging.debug(this, "depotRepresentative: ", depotRepresentative);
+		Logging.debug(this, "Old representative: " + oldRepresentative + ", new: " + newRepresentative);
 
-		Logging.info(this, "setDepotRepresentative  change depotRepresentative ", " up to now ", oldRepresentative,
-				" new ", depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
+		if (!Objects.equals(oldRepresentative, newRepresentative)) {
+			depotRepresentative = newRepresentative;
+			Logging.info(this, "Depot representative changed to " + depotRepresentative);
 
-		if (!oldRepresentative.equals(depotRepresentative)) {
-			Logging.info(this, " new depotRepresentative ", depotRepresentative);
 			persistenceController.getDepotDataService().setDepot(depotRepresentative);
-
-			// everything
 			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
+		} else {
+			Logging.debug(this, "Depot representative unchanged.");
 		}
-
-		return true;
 	}
 
 	public String getDepotRepresentative() {
@@ -1066,15 +1060,15 @@ public class ConfigedMain {
 
 		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.activateListSelectionListener();
-		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.restoreFilter();
+		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
 		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
-				.setSelection(selectedLocalbootProducts);
+				.setPendingSelection(selectedLocalbootProducts);
 		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
-				.setSelection(selectedNetbootProducts);
+				.setPendingSelection(selectedNetbootProducts);
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
 
@@ -1107,10 +1101,6 @@ public class ConfigedMain {
 
 	public ClientTablePanel getClientTablePanel() {
 		return clientTablePanel;
-	}
-
-	public void setSessionInfo(Map<String, String> sessionInfo) {
-		this.sessionInfo = sessionInfo;
 	}
 
 	public void initialTreeActivation() {

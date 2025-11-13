@@ -94,4 +94,8 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.updateData(configUpdateCollection, collectionConfigStored);
 		editMapPanel.setLabel(labeltext);
 	}
+
+	public boolean isSelected(String obj) {
+		return editMapPanel.isSelected(obj);
+	}
 }

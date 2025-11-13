@@ -15,18 +15,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -38,13 +42,16 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ListSelectionDialog {
-	private JList<String> jList;
-	private TableSearchPane searchPane;
+	public static final Dimension DEFAULT_MULTI_LINE_EDITOR_SIZE = new Dimension(400, 200);
+
+	protected ListSelectionList listSelectionList;
+	private JPopupMenu popupMenu;
+	protected TableSearchPane searchPane;
 
 	private FlatTextField editingTextField;
 
-	private JOptionPane jOptionPane;
-	private JDialog dialog;
+	protected JOptionPane jOptionPane;
+	protected JDialog dialog;
 
 	public ListSelectionDialog(Component owner, String title) {
 		this(owner, title, false);
@@ -67,21 +74,26 @@ public class ListSelectionDialog {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		jList = new JList<>();
-		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jList.setFixedCellHeight(20);
-		jList.addMouseListener(new MouseAdapter() {
+		listSelectionList = new ListSelectionList();
+
+		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2 && editingTextField != null) {
-					editingTextField.setText(jList.getSelectedValue());
+				if (e.getClickCount() == 2 && editingTextField != null
+						&& listSelectionList.getSelectedValuesList().size() == 1) {
+					if (listSelectionList.getSelectedValue().contains("\n")) {
+						addMultilineItem(listSelectionList.getSelectedValue(), true);
+					} else {
+						editingTextField.setText(listSelectionList.getSelectedValue());
+					}
 				}
 			}
 		});
-		JScrollPane listScrollPane = new JScrollPane(jList);
+
+		JScrollPane listScrollPane = new JScrollPane(listSelectionList);
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setNarrow(true);
@@ -104,26 +116,87 @@ public class ListSelectionDialog {
 				Short.MAX_VALUE);
 
 		// Add additional component if not null
+		Logging.info(this, "editable: ", editable);
 		if (editable) {
-			editingTextField = new FlatTextField();
-			JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
-			addValueButton.addActionListener(actionEvent -> addItem(editingTextField.getText()));
-
-			editingTextField.setTrailingComponent(addValueButton);
-			editingTextField.setShowClearButton(true);
-			editingTextField.addActionListener(actionEvent -> addItem(editingTextField.getText()));
-
-			horizontalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					Short.MAX_VALUE);
-			verticalGroup.addGap(Globals.GAP_SIZE);
-			verticalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE);
+			createEditableOptions(horizontalGroup, verticalGroup);
 		}
 
 		layout.setVerticalGroup(verticalGroup);
 		layout.setHorizontalGroup(horizontalGroup);
 
 		return panel;
+	}
+
+	private void createEditableOptions(ParallelGroup horizontalGroup, SequentialGroup verticalGroup) {
+		editingTextField = new FlatTextField();
+		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
+		addValueButton.addActionListener(actionEvent -> addItem(editingTextField.getText()));
+
+		editingTextField.setTrailingComponent(addValueButton);
+		editingTextField.setShowClearButton(true);
+		editingTextField.addActionListener(actionEvent -> addItem(editingTextField.getText()));
+
+		popupMenu = new JPopupMenu();
+
+		JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+		Icons.addIntellijIconToMenuItem(addItemMenu, "add");
+		addItemMenu.addActionListener(actionEvent -> addMultilineItem(null, false));
+
+		JMenuItem editItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.editMultiLineValue"));
+		Icons.addIntellijIconToMenuItem(editItemMenu, "edit");
+		editItemMenu.addActionListener(actionEvent -> addMultilineItem(listSelectionList.getSelectedValue(), true));
+
+		popupMenu.add(addItemMenu);
+		popupMenu.add(editItemMenu);
+
+		editingTextField.setComponentPopupMenu(popupMenu);
+		listSelectionList.setComponentPopupMenu(popupMenu);
+
+		popupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				editItemMenu.setEnabled(listSelectionList.getSelectedValuesList().size() == 1);
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// Not needed here
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// Handle popup menu cancellation
+			}
+		});
+
+		horizontalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				Short.MAX_VALUE);
+		verticalGroup.addGap(Globals.GAP_SIZE);
+		verticalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
+	}
+
+	private void addMultilineItem(String initialText, boolean edit) {
+		JTextArea textArea = new JTextArea(initialText);
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		scrollPane.setPreferredSize(DEFAULT_MULTI_LINE_EDITOR_SIZE);
+
+		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(optionPane);
+
+		JDialog multiLineItemDialog = optionPane.createDialog(dialog,
+				edit ? Configed.getResourceValue("ListSelectionDialog.editMultiLineValue")
+						: Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+		multiLineItemDialog.pack();
+		multiLineItemDialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+			if (edit) {
+				removeItem(initialText);
+			}
+
+			addItem(textArea.getText());
+		}
 	}
 
 	public void setTitle(String title) {
@@ -137,6 +210,11 @@ public class ListSelectionDialog {
 	public void show(Container parent) {
 		dialog.setLocationRelativeTo(parent);
 		dialog.pack();
+		// Workaround: Schedule two nested invokeLater() calls to ensure the search field reliably gains focus.
+		// This accounts for focus-stealing components (e.g., dialog activation or defualt buttons) that may
+		// override the focus requests. Without this delay, the search field may not receive focus when the
+		// dialog is shown.
+		SwingUtilities.invokeLater(() -> SwingUtilities.invokeLater(() -> searchPane.requestFocus()));
 		dialog.setVisible(true);
 	}
 
@@ -146,18 +224,22 @@ public class ListSelectionDialog {
 	}
 
 	public void setListData(List<String> v) {
-		jList.setListData(v.toArray(String[]::new));
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, v, v);
+		listSelectionList.setListData(v.toArray(String[]::new));
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, v, v);
 		searchPane.setTargetModel(searchTargetModel);
 	}
 
 	public void setEditable(boolean editable) {
 		editingTextField.setText(null);
 		editingTextField.setVisible(editable);
+
+		// We need to remove the popup menu from the list if not editable,
+		// because the popup menu is for adding values
+		listSelectionList.setComponentPopupMenu(editable ? popupMenu : null);
 	}
 
 	public void setModel(ListModel<String> model) {
-		jList.setModel(model);
+		listSelectionList.setModel(model);
 
 		// Without this the search won't work
 		updateSearchTargetModel(model);
@@ -170,59 +252,49 @@ public class ListSelectionDialog {
 			list.add(element);
 		}
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, list, list);
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, list, list);
 		searchPane.setTargetModel(searchTargetModel);
-
-	}
-
-	public void addItem(String element) {
-		DefaultListModel<String> model = (DefaultListModel<String>) jList.getModel();
-		if (!model.contains(element) && !element.isBlank()) {
-			model.addElement(element);
-			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
-			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
-
-			// Without this the search won't work
-			updateSearchTargetModel(model);
-		}
 	}
 
 	public String getSelectedValue() {
-		return jList.getSelectedValue();
+		return listSelectionList.getSelectedValue();
 	}
 
 	public List<String> getSelectedValues() {
-		return jList.getSelectedValuesList();
+		return listSelectionList.getSelectedValuesList();
 	}
 
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
-		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
-		jList.setSelectedIndices(indices);
-
-		jList.ensureIndexIsVisible(jList.getSelectedIndex());
-	}
-
-	private int[] getPreviouslySelectedIndicesFromValues(Collection<String> previouslySelectedValues) {
-		int[] indices = new int[previouslySelectedValues.size()];
-		int n = 0;
-		for (int i = 0; i < jList.getModel().getSize(); i++) {
-			if (previouslySelectedValues.contains(jList.getModel().getElementAt(i))) {
-				indices[n] = i;
-				n++;
-			}
-		}
-		return indices;
+		listSelectionList.setPreviousSelectionValues(previouslySelectedValues);
 	}
 
 	public void setSingleSelection() {
-		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listSelectionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	public void setMultiSelection() {
-		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		listSelectionList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	public void setAlwaysOnTop(boolean value) {
 		dialog.setAlwaysOnTop(value);
+	}
+
+	public void setNonDeselectableValues(Collection<String> nonDeselectableValues) {
+		listSelectionList.setNonDeselectableValues(nonDeselectableValues);
+	}
+
+	private void addItem(String element) {
+		listSelectionList.addItem(element);
+
+		// Without this the search won't work
+		updateSearchTargetModel(listSelectionList.getModel());
+	}
+
+	private void removeItem(String element) {
+		listSelectionList.removeItem(element);
+
+		// Without this the search won't work
+		updateSearchTargetModel(listSelectionList.getModel());
 	}
 }

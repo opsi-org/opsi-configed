@@ -118,14 +118,14 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
+	public void moveObjectTo(String importID, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		// This method is never invoked in the product tree
 	}
 
 	@Override
-	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
-			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
+	public void copyObjectTo(String objectID, String newParentID, DefaultMutableTreeNode newParentNode,
+			TreePath newParentPath) {
 		if (getChildWithUserObjectString(objectID, newParentNode) == null) {
 			newParentNode.add(new DefaultMutableTreeNode(objectID, false));
 
@@ -156,16 +156,11 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public Set<GroupNode> getLocationsInDirectory(String clientId) {
-		return new HashSet<>();
-	}
-
-	@Override
 	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
 		Set<String> productIds = getChildrenRecursively(groupNode);
 		setFilter(productIds);
-		localbootPanel.getProductTable().setSelection(productIds);
-		netbootPanel.getProductTable().setSelection(productIds);
+		localbootPanel.getProductTable().setPendingSelection(productIds);
+		netbootPanel.getProductTable().setPendingSelection(productIds);
 	}
 
 	@Override
@@ -184,8 +179,8 @@ public class ProductTree extends AbstractGroupTree {
 		}
 		setFilter(productIds);
 		if (anyIsLeaf) {
-			localbootPanel.getProductTable().setSelection(selectedProductIds);
-			netbootPanel.getProductTable().setSelection(selectedProductIds);
+			localbootPanel.getProductTable().setPendingSelection(selectedProductIds);
+			netbootPanel.getProductTable().setPendingSelection(selectedProductIds);
 		}
 		Logging.debug("ProductTree.setGroupsAndSelect productIds " + productIds);
 		Logging.debug("ProductTree.setGroupsAndSelect selectedProductIds " + selectedProductIds);

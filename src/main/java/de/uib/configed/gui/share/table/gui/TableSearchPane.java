@@ -643,7 +643,17 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
 			filter();
-			if (filterKey != null) {
+			if (filterKey == null) {
+				Logging.info(this, "Skipping filter state change: filterKey is null");
+				return;
+			}
+
+			String text = flatTextFieldSearch.getText();
+			boolean isBlank = text == null || text.isBlank();
+			if (isBlank) {
+				Logging.info(this, "Clearing filter state for filter key ", filterKey, " (blank search)");
+				FilterStateManager.removeFilterState(filterKey);
+			} else {
 				Logging.info(this, "Saving filter state for filter key ", filterKey);
 				FilterStateManager.saveFilterState(filterKey, getFilterState());
 			}

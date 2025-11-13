@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.java_websocket.handshake.ServerHandshake;
@@ -52,7 +53,7 @@ public final class TerminalFrame implements MessagebusListener {
 	private boolean fullClientsPermission = persistenceController.getUserRolesConfigDataService()
 			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
 	private Set<Object> allowedDepots = persistenceController.getUserRolesConfigDataService().getPermittedDepots();
-	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
+	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
 
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
@@ -234,9 +235,7 @@ public final class TerminalFrame implements MessagebusListener {
 		Logging.info(this, "terminal, depotsList: ", depotsList);
 
 		Set<String> allowedHosts = getAllowedHostsByUserRolesHosts(depotsList);
-
-		List<String> filteredHosts = new ArrayList<>(allowedHosts);
-		filterByMsgbusForbiddenConfig(filteredHosts, allowedHosts, depotsList);
+		List<String> filteredHosts = filterByMsgbusForbiddenConfig(allowedHosts, depotsList);
 		separateDepotsAndClients(resultListAllowedDevices, filteredHosts, depotsList);
 
 		return resultListAllowedDevices;
@@ -332,9 +331,6 @@ public final class TerminalFrame implements MessagebusListener {
 	 * new user role config 'connect.terminal.forbidden' This method updates the
 	 * resultList parameter
 	 * 
-	 * @param resultList                         List of clients and depots
-	 *                                           allowed by user roles. it will
-	 *                                           be shown to the user
 	 * @param allClientsDepotsAllowedByPrivilege Set of clients and depots
 	 *                                           allowed by user roles
 	 *                                           (priviliges.host.depotaccess.depots
@@ -343,9 +339,12 @@ public final class TerminalFrame implements MessagebusListener {
 	 * @param depotsList                         List of all server/depots
 	 *                                           (including forbidden items,
 	 *                                           etc.)
+	 * @return List of clients and depots allowed by user roles. It will be
+	 *         shown to the user.
 	 */
-	private void filterByMsgbusForbiddenConfig(List<String> resultList, Set<String> allClientsDepotsAllowedByPrivilege,
+	private List<String> filterByMsgbusForbiddenConfig(Set<String> allClientsDepotsAllowedByPrivilege,
 			List<String> depotsList) {
+		List<String> resultList = new ArrayList<>();
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
 		// filter clients and depots by configured permissions (mostly msg bus settings cause user roles already filtered)
@@ -375,6 +374,7 @@ public final class TerminalFrame implements MessagebusListener {
 				resultList.addAll(allDepots);
 			}
 		}
+		return resultList;
 	}
 
 	private JPanel createNorthPanel() {
@@ -386,12 +386,7 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane = new TerminalTabbedPane(this);
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
-		tabbedPane.addTerminalTab();
-		if (!restrictView && session != null) {
-			tabbedPane.openSessionOnSelectedTab(session);
-		} else {
-			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
-		}
+		addAndInitTerminalTab();
 
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
@@ -404,7 +399,7 @@ public final class TerminalFrame implements MessagebusListener {
 		return northPanel;
 	}
 
-	private void focusOnSelectedWidget() {
+	public void focusOnSelectedWidget() {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
 			widget.requestFocusInWindow();
@@ -452,10 +447,23 @@ public final class TerminalFrame implements MessagebusListener {
 		} else {
 			frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			frame.setVisible(true);
+
+			if (tabbedPane.getTabCount() == 0) {
+				addAndInitTerminalTab();
+			}
 		}
 
 		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
 			messagebus.getWebSocket().registerListener(this);
+		}
+	}
+
+	private void addAndInitTerminalTab() {
+		tabbedPane.addTerminalTab();
+		if (!restrictView && session != null) {
+			tabbedPane.openSessionOnSelectedTab(session);
+		} else {
+			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
 		}
 	}
 
@@ -470,7 +478,7 @@ public final class TerminalFrame implements MessagebusListener {
 		if (callback != null) {
 			callback.run();
 		}
-		frame.dispose();
+		SwingUtilities.invokeLater(() -> frame.dispose());
 		messagebus.getWebSocket().unregisterListener(this);
 	}
 
