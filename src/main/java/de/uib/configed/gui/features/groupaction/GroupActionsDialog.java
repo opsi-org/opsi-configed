@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.groupaction;
 
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -31,6 +33,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.OpsiPackage;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class GroupActionsDialog {
@@ -60,6 +63,7 @@ public class GroupActionsDialog {
 		buttonReload.addActionListener(actionEvent -> reload());
 
 		JPanel panel = defineImageActionPanel();
+		Utils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
 
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
 				new Object[] { buttonSetup, buttonReload, Configed.getResourceValue("buttonCancel") });

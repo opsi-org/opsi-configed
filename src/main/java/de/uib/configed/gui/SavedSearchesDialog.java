@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.SavedSearches;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
@@ -30,6 +32,7 @@ import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class SavedSearchesDialog extends ListSelectionDialog {
@@ -71,10 +74,14 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		jOptionPane.setOptions(new Object[] { searchButton, Configed.getResourceValue("buttonClose") });
 
 		SavedSearchesDialog.this.resetModel();
+
+		Utils.addKeyBindingToJComponent(listSelectionList, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+				this::reloadAction);
 	}
 
 	private void initPopupMenu() {
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("reload"));
+		reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener(actionEvent -> reloadAction());
 

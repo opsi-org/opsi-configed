@@ -40,6 +40,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
 import de.uib.configed.gui.share.table.AbstractExportTable;
 import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToCSV;
@@ -201,16 +202,7 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
-		JMenuItem item = new JMenuItem(Configed.getResourceValue(config.resourceKey())) {
-			@Override
-			protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
-				// We are going to disable the functionality of the key binding, because here the key binding
-				// should only be shown graphically, but not be active. If it was active, it would become
-				// active globally since we add these Items to the MenuBar. Instead, we directly add
-				// the key binding to the whole client view (a JSplitPane) in ClientConfiguration.
-				return false;
-			}
-		};
+		JMenuItem item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
 
 		if (config.keyStroke() != null) {
 			item.setAccelerator(config.keyStroke());
