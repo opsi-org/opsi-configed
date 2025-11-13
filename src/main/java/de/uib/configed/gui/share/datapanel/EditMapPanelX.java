@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Map;
 
@@ -124,16 +123,11 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
 		multiLineEditingItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
-		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu) {
-			@Override
-			protected void maybeShowPopup(MouseEvent e) {
-				updatePopupMenu();
-				super.maybeShowPopup(e);
-			}
-		};
 
-		table.addMouseListener(popupNoEditOptionsListener);
-		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
+		PopupMouseListener.addPopupMouseListenerToComponents(popupMenu, (MouseEvent event) -> {
+			updatePopupMenu();
+			return true;
+		}, new JComponent[] { table, jScrollPane.getViewport() });
 
 		if (keylistExtendible) {
 			if (popupMenu.getComponentCount() > 0) {

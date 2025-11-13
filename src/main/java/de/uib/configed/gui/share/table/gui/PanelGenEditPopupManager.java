@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
@@ -194,10 +195,8 @@ public class PanelGenEditPopupManager {
 		if (popupMenu == null) {
 			// for the first item, we create the menu
 			popupMenu = new JPopupMenu();
-			panelGenEdit.getGenEditTable().addMouseListener(new PopupMouseListener(popupMenu));
-
-			// add the popup to the scrollpane if the table is empty
-			panelGenEdit.getTheScrollpane().addMouseListener(new PopupMouseListener(popupMenu));
+			PopupMouseListener.addPopupMouseListenerToComponents(popupMenu,
+					new JComponent[] { panelGenEdit.getGenEditTable(), panelGenEdit.getTheScrollpane() });
 		}
 
 		if (item == null) {

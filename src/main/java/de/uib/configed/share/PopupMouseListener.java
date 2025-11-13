@@ -8,14 +8,28 @@ package de.uib.configed.share;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.function.Predicate;
 
+import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 public class PopupMouseListener extends MouseAdapter {
 	private JPopupMenu popupMenu;
+	private Predicate<MouseEvent> condition;
 
-	public PopupMouseListener(JPopupMenu popup) {
+	public PopupMouseListener(JPopupMenu popup, Predicate<MouseEvent> condition, JComponent... components) {
 		popupMenu = popup;
+		this.condition = condition;
+
+		if (components != null) {
+			for (JComponent component : components) {
+				component.addMouseListener(this);
+			}
+		}
+	}
+
+	public PopupMouseListener(JPopupMenu popup, JComponent... components) {
+		this(popup, null, components);
 	}
 
 	@Override
@@ -29,8 +43,17 @@ public class PopupMouseListener extends MouseAdapter {
 	}
 
 	protected void maybeShowPopup(MouseEvent e) {
-		if (e.isPopupTrigger()) {
+		if (e.isPopupTrigger() && (condition == null || condition.test(e))) {
 			popupMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
+	}
+
+	public static void addPopupMouseListenerToComponents(JPopupMenu popup, JComponent[] components) {
+		new PopupMouseListener(popup, null, components);
+	}
+
+	public static void addPopupMouseListenerToComponents(JPopupMenu popup, Predicate<MouseEvent> condition,
+			JComponent[] components) {
+		new PopupMouseListener(popup, condition, components);
 	}
 }

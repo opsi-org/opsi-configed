@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -133,9 +134,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		setRightComponent(infoPane);
 
-		PopupMouseListener popupMouseListener = new PopupMouseListener(producePopupMenu());
-		paneProducts.addMouseListener(popupMouseListener);
-		productTable.addMouseListener(popupMouseListener);
+		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(),
+				new JComponent[] { paneProducts, productTable });
 
 		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
 

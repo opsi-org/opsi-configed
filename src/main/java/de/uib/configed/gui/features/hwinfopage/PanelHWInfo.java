@@ -48,6 +48,7 @@ import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
@@ -170,7 +171,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 			};
 
-			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
+			PopupMouseListener.addPopupMouseListenerToComponents(popupMenu, new JComponent[] { tree, table });
 		}
 	}
 

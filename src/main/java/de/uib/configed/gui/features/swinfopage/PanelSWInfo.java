@@ -53,6 +53,7 @@ import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelSWInfo extends JPanel {
@@ -286,7 +287,7 @@ public class PanelSWInfo extends JPanel {
 				}
 			};
 
-			popupTrait.addPopupListenersTo(
+			PopupMouseListener.addPopupMouseListenerToComponents(popupTrait,
 					new JComponent[] { this, panelTable.getGenEditTable(), panelTable.getTheScrollpane() });
 		}
 	}

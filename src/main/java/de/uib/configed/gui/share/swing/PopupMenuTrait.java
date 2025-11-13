@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
@@ -21,7 +20,6 @@ import javax.swing.KeyStroke;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 public class PopupMenuTrait extends JPopupMenu {
@@ -82,6 +80,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	private void addItemReload(int p) {
 		int i = listPopups.indexOf(POPUP_RELOAD);
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("reload"));
+		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "refresh");
 
 		// not work
@@ -212,12 +211,6 @@ public class PopupMenuTrait extends JPopupMenu {
 		menuItems[i].addActionListener(actionEvent -> action(p));
 
 		add(menuItems[i]);
-	}
-
-	public void addPopupListenersTo(JComponent[] components) {
-		for (JComponent component : components) {
-			component.addMouseListener(new PopupMouseListener(this));
-		}
 	}
 
 	// should be overwritten for specific actions in subclasses

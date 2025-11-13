@@ -37,7 +37,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemRemoveElements;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		super(jPopupMenu);
+		super(jPopupMenu, tree);
 		this.tree = tree;
 
 		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
