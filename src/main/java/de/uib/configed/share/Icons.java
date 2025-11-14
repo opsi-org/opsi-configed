@@ -25,7 +25,7 @@ import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.HealthInfo;
+import de.uib.configed.gui.HealthDataProcessor;
 import de.uib.configed.share.logging.Logging;
 
 public final class Icons {
@@ -249,7 +249,7 @@ public final class Icons {
 	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
 		Color dotColor = null;
 
-		HealthInfo.StatusLevel warningLevel = HealthInfo.getMaxStatusLevel();
+		HealthDataProcessor.StatusLevel warningLevel = HealthDataProcessor.getMaxStatusLevel();
 		switch (warningLevel) {
 		case ERROR:
 			dotColor = Globals.OPSI_ERROR;
@@ -264,7 +264,7 @@ public final class Icons {
 			break;
 
 		default:
-			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthInfo.getMaxStatusLevel());
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
 			break;
 		}
 

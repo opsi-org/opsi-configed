@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.HealthInfo;
+import de.uib.configed.gui.HealthDataProcessor;
 import lombok.Value;
 import lombok.With;
 
@@ -37,9 +37,9 @@ public class HealthCheckUpdate {
 		case HealthCheckMsg.ToggleDetails(String key) -> {
 			Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
 			Map<String, Object> details = newHealthData.get(key);
-			if (details != null && details.containsKey(HealthInfo.KEY_SHOW_DETAILS)) {
-				boolean current = Boolean.TRUE.equals(details.get(HealthInfo.KEY_SHOW_DETAILS));
-				details.put(HealthInfo.KEY_SHOW_DETAILS, !current);
+			if (details != null && details.containsKey(HealthDataProcessor.KEY_SHOW_DETAILS)) {
+				boolean current = Boolean.TRUE.equals(details.get(HealthDataProcessor.KEY_SHOW_DETAILS));
+				details.put(HealthDataProcessor.KEY_SHOW_DETAILS, !current);
 			}
 			yield UpdateResult.noEffect(initModel(newHealthData));
 		}
@@ -61,7 +61,7 @@ public class HealthCheckUpdate {
 	private static HealthCheckModel updateAllShowDetails(HealthCheckModel model, boolean show) {
 		Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
 		for (Map<String, Object> details : newHealthData.values()) {
-			details.put(HealthInfo.KEY_SHOW_DETAILS, show);
+			details.put(HealthDataProcessor.KEY_SHOW_DETAILS, show);
 		}
 		return initModel(newHealthData);
 	}

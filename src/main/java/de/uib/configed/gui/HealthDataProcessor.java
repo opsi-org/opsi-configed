@@ -17,11 +17,19 @@ import java.util.TreeMap;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 
 /**
- * {@link HealthInfo} processes retrieved data from {@code service_healthCheck}
- * RPC method in a way, that retrieved data could be displayed in a frame and
- * saved in a file.
+ * Utility class for processing health check data.
+ * <p>
+ * Provides methods to transform raw health data retrieved from the server into
+ * formats suitable for:
+ * <ul>
+ * <li>UI display (as a Map)</li>
+ * <li>File export or saving (as a formatted String)</li>
+ * </ul>
+ * <p>
+ * Data entries are consistently sorted by status level (ERROR > WARNING > OK),
+ * and detailed information can optionally be included.
  */
-public final class HealthInfo {
+public final class HealthDataProcessor {
 	public enum StatusLevel {
 		OK, WARNING, ERROR
 	}
@@ -35,16 +43,18 @@ public final class HealthInfo {
 	private static final String KEY_NAME = "name";
 	private static final String KEY_CHECK_STATUS = "check_status";
 
-	private HealthInfo() {
+	private HealthDataProcessor() {
 	}
 
 	/**
-	 * retrieves processed data as String. Data entries are sorted based on the
-	 * status level (error, warning, ok).
-	 * 
-	 * @return processed data with or without detailed information
+	 * Builds a processed health data string suitable for export or saving to a
+	 * file. Entries are sorted by status level (ERROR > WARNING > OK) and
+	 * formatted for readability.
+	 *
+	 * @return a formatted string representing all health checks, including
+	 *         messages and details
 	 */
-	public static String getHealthData() {
+	public static String buildHealthDataForExport() {
 		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
 				.getHealthDataService().checkHealthPD();
 		StringBuilder healthDataBuilder = new StringBuilder();
@@ -60,16 +70,14 @@ public final class HealthInfo {
 	}
 
 	/**
-	 * retrieves processed data as Map object. Data entries are sorted based on
-	 * the status level (error, warning, ok).
-	 * 
-	 * @param includeDetailedInformation whether to include detailed
-	 *                                   information, when processing health
-	 *                                   data
-	 * @return processed data with or without detailed information (depends on
-	 *         {@code includeDetailedInformation})
+	 * Builds a processed health data map suitable for UI display. Each entry is
+	 * sorted by status level (ERROR > WARNING > OK).
+	 *
+	 * @param includeDetailedInformation whether to include detailed information
+	 *                                   in each entry
+	 * @return a map of health checks with optional detailed information
 	 */
-	public static Map<String, Map<String, Object>> getHealthDataMap(boolean includeDetailedInformation) {
+	public static Map<String, Map<String, Object>> buildHealthDataForUI(boolean includeDetailedInformation) {
 		return produceMap(includeDetailedInformation);
 	}
 

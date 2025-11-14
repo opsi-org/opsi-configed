@@ -54,7 +54,7 @@ import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.HealthInfo;
+import de.uib.configed.gui.HealthDataProcessor;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -80,7 +80,7 @@ public class HealthCheckComponent extends
 
 	@Override
 	protected HealthCheckUpdate.HealthCheckModel initModel() {
-		Map<String, Map<String, Object>> initialHealthData = HealthInfo.getHealthDataMap(false);
+		Map<String, Map<String, Object>> initialHealthData = HealthDataProcessor.buildHealthDataForUI(false);
 		return new HealthCheckUpdate.HealthCheckModel(initialHealthData);
 	}
 
@@ -259,23 +259,26 @@ public class HealthCheckComponent extends
 			styledDocument.remove(0, styledDocument.getLength());
 			for (Map<String, Object> healthInfo : message.values()) {
 				styledDocument.insertString(styledDocument.getLength(),
-						((String) healthInfo.get(HealthInfo.KEY_MESSAGE)), null);
+						((String) healthInfo.get(HealthDataProcessor.KEY_MESSAGE)), null);
 
-				if (!((String) healthInfo.get(HealthInfo.KEY_DETAILS)).isBlank()) {
+				if (!((String) healthInfo.get(HealthDataProcessor.KEY_DETAILS)).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
-					String imagePath = Boolean.TRUE.equals(healthInfo.get(HealthInfo.KEY_SHOW_DETAILS)) ? "arrowDown"
+					String imagePath = Boolean.TRUE.equals(healthInfo.get(HealthDataProcessor.KEY_SHOW_DETAILS))
+							? "arrowDown"
 							: "arrowRight";
 					StyleConstants.setIcon(iconStyle, Icons.getIntellijIcon(imagePath));
-					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get(HealthInfo.KEY_MESSAGE)),
-							" ", iconStyle);
+					styledDocument.insertString(
+							getMessageStartOffset((String) healthInfo.get(HealthDataProcessor.KEY_MESSAGE)), " ",
+							iconStyle);
 				} else {
-					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get(HealthInfo.KEY_MESSAGE)),
-							"    ", null);
+					styledDocument.insertString(
+							getMessageStartOffset((String) healthInfo.get(HealthDataProcessor.KEY_MESSAGE)), "    ",
+							null);
 				}
 
-				if (Boolean.TRUE.equals(healthInfo.get(HealthInfo.KEY_SHOW_DETAILS))) {
+				if (Boolean.TRUE.equals(healthInfo.get(HealthDataProcessor.KEY_SHOW_DETAILS))) {
 					styledDocument.insertString(styledDocument.getLength(),
-							(String) healthInfo.get(HealthInfo.KEY_DETAILS), null);
+							(String) healthInfo.get(HealthDataProcessor.KEY_DETAILS), null);
 					styledDocument.insertString(styledDocument.getLength(), "\n", null);
 				}
 			}
@@ -331,7 +334,8 @@ public class HealthCheckComponent extends
 
 	private void saveHealthDataToFile() {
 		File healthDataFile = new File(getDirectoryLocation(), Globals.HEALTH_CHECK_LOG_FILE_NAME);
-		writeToFile(healthDataFile, ByteBuffer.wrap(HealthInfo.getHealthData().getBytes(StandardCharsets.UTF_8)));
+		writeToFile(healthDataFile,
+				ByteBuffer.wrap(HealthDataProcessor.buildHealthDataForExport().getBytes(StandardCharsets.UTF_8)));
 	}
 
 	private void saveDiagnosticDataToFile() {
@@ -441,13 +445,13 @@ public class HealthCheckComponent extends
 
 	private static boolean allDetailsShown(Map<String, Map<String, Object>> healthData) {
 		return healthData.values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
-				.filter(entry -> HealthInfo.KEY_SHOW_DETAILS.equals(entry.getKey()))
+				.filter(entry -> HealthDataProcessor.KEY_SHOW_DETAILS.equals(entry.getKey()))
 				.allMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}
 
 	private static boolean anyDetailsShown(Map<String, Map<String, Object>> healthData) {
 		return healthData.values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
-				.filter(entry -> HealthInfo.KEY_SHOW_DETAILS.equals(entry.getKey()))
+				.filter(entry -> HealthDataProcessor.KEY_SHOW_DETAILS.equals(entry.getKey()))
 				.anyMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}
 }
