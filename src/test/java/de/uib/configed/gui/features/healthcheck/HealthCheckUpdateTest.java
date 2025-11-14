@@ -13,11 +13,11 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.HealthDataProcessor;
 import de.uib.configed.gui.healthcheck.HealthCheckMsg;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckModel;
+import de.uib.configed.gui.healthcheck.HealthDataProcessor;
 
 class HealthCheckUpdateTest {
 

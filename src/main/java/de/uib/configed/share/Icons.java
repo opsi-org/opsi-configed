@@ -25,7 +25,7 @@ import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.HealthDataProcessor;
+import de.uib.configed.gui.healthcheck.HealthDataProcessor;
 import de.uib.configed.share.logging.Logging;
 
 public final class Icons {

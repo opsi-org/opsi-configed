@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.gui.healthcheck;
 
 import java.util.Collections;
 import java.util.Comparator;

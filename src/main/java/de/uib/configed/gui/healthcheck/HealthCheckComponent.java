@@ -54,7 +54,6 @@ import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.HealthDataProcessor;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;

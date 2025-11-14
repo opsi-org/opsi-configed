@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.HealthDataProcessor;
 import lombok.Value;
 import lombok.With;
 
