@@ -55,13 +55,15 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.HealthInfo;
+import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
 /**
  * HealthCheck component using TEA architecture via TeaComponent.
  */
-public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel, HealthCheckMsg, HealthCheckEffect> {
+public class HealthCheckComponent extends
+		AbstractTeaComponent<HealthCheckUpdate.HealthCheckModel, HealthCheckMsg, HealthCheckUpdate.HealthCheckEffect> {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
@@ -80,19 +82,19 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 	}
 
 	@Override
-	protected HealthCheckModel initModel() {
+	protected HealthCheckUpdate.HealthCheckModel initModel() {
 		Map<String, Map<String, Object>> initialHealthData = HealthInfo.getHealthDataMap(false);
-		return new HealthCheckModel(initialHealthData);
+		return new HealthCheckUpdate.HealthCheckModel(initialHealthData);
 	}
 
 	@Override
-	protected UpdateResult<HealthCheckModel, HealthCheckEffect> updateModel(HealthCheckMsg msg,
-			HealthCheckModel model) {
+	protected UpdateResult<HealthCheckUpdate.HealthCheckModel, HealthCheckUpdate.HealthCheckEffect> updateModel(
+			HealthCheckMsg msg, HealthCheckUpdate.HealthCheckModel model) {
 		return HealthCheckUpdate.update(model, msg);
 	}
 
 	@Override
-	protected JComponent renderView(HealthCheckModel model, Consumer<HealthCheckMsg> dispatch) {
+	protected JComponent renderView(HealthCheckUpdate.HealthCheckModel model, Consumer<HealthCheckMsg> dispatch) {
 		JPanel rootPanel = new JPanel();
 		GroupLayout allLayout = new GroupLayout(rootPanel);
 		rootPanel.setLayout(allLayout);
@@ -138,8 +140,8 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 				if (!key.isBlank() && model.getHealthData().containsKey(key)) {
 					dispatch(new HealthCheckMsg.ToggleDetails(key));
 					textPane.setCaretPosition(textPane.viewToModel2D(event.getPoint()));
-					jButtonExpandAll.setEnabled(!allDetailsShown(model));
-					jButtonCollapseAll.setEnabled(anyDetailsShown(model));
+					jButtonExpandAll.setEnabled(!allDetailsShown(model.getHealthData()));
+					jButtonCollapseAll.setEnabled(anyDetailsShown(model.getHealthData()));
 				}
 			}
 		});
@@ -181,10 +183,10 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		centerPanel.setLayout(centerPanelLayout);
 
 		jButtonCollapseAll = new JButton(Configed.getResourceValue("HealthCheckDialog.collapseAll"));
-		jButtonCollapseAll.setEnabled(anyDetailsShown(model));
+		jButtonCollapseAll.setEnabled(anyDetailsShown(model.getHealthData()));
 
 		jButtonExpandAll = new JButton(Configed.getResourceValue("HealthCheckDialog.expandAll"));
-		jButtonExpandAll.setEnabled(!allDetailsShown(model));
+		jButtonExpandAll.setEnabled(!allDetailsShown(model.getHealthData()));
 
 		JButton jButtonCopyHealthInformation = new JButton(Configed.getResourceValue("copy"));
 
@@ -248,10 +250,10 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		setMessage(model.getHealthData());
 
 		if (jButtonExpandAll != null) {
-			jButtonExpandAll.setEnabled(!allDetailsShown(model));
+			jButtonExpandAll.setEnabled(!allDetailsShown(model.getHealthData()));
 		}
 		if (jButtonCollapseAll != null) {
-			jButtonCollapseAll.setEnabled(anyDetailsShown(model));
+			jButtonCollapseAll.setEnabled(anyDetailsShown(model.getHealthData()));
 		}
 	}
 
@@ -437,14 +439,14 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		}
 	}
 
-	private static boolean allDetailsShown(HealthCheckModel model) {
-		return model.getHealthData().values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
+	private static boolean allDetailsShown(Map<String, Map<String, Object>> healthData) {
+		return healthData.values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
 				.filter(entry -> "showDetails".equals(entry.getKey()))
 				.allMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}
 
-	private static boolean anyDetailsShown(HealthCheckModel model) {
-		return model.getHealthData().values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
+	private static boolean anyDetailsShown(Map<String, Map<String, Object>> healthData) {
+		return healthData.values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
 				.filter(entry -> "showDetails".equals(entry.getKey()))
 				.anyMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}

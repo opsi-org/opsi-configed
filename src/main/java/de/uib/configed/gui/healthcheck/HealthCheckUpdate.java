@@ -10,8 +10,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import lombok.Value;
+import lombok.With;
 
 public class HealthCheckUpdate {
+	@Value
+	@With
+	public static class HealthCheckModel {
+		private final Map<String, Map<String, Object>> healthData;
+	}
+
+	public sealed interface HealthCheckEffect permits HealthCheckEffect.SimpleEffect {
+		enum SimpleEffect implements HealthCheckEffect {
+			COPY, DOWNLOAD
+		}
+	}
+
 	private HealthCheckUpdate() {
 		// Hide constructor.
 	}
