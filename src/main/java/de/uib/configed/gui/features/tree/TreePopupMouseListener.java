@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -37,7 +38,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemRemoveElements;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		super(jPopupMenu, tree);
+		super(jPopupMenu, new JComponent[] { tree });
 		this.tree = tree;
 
 		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));

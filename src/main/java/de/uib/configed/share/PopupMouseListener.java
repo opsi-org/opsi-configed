@@ -17,7 +17,7 @@ public class PopupMouseListener extends MouseAdapter {
 	private JPopupMenu popupMenu;
 	private Predicate<MouseEvent> condition;
 
-	public PopupMouseListener(JPopupMenu popup, Predicate<MouseEvent> condition, JComponent... components) {
+	public PopupMouseListener(JPopupMenu popup, Predicate<MouseEvent> condition, JComponent[] components) {
 		popupMenu = popup;
 		this.condition = condition;
 
@@ -28,7 +28,7 @@ public class PopupMouseListener extends MouseAdapter {
 		}
 	}
 
-	public PopupMouseListener(JPopupMenu popup, JComponent... components) {
+	public PopupMouseListener(JPopupMenu popup, JComponent[] components) {
 		this(popup, null, components);
 	}
 

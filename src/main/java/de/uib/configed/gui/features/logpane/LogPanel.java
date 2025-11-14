@@ -38,7 +38,6 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 public class LogPanel extends JPanel implements KeyListener {
@@ -219,14 +218,12 @@ public class LogPanel extends JPanel implements KeyListener {
 					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
-		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
+		new PopupMenuTrait(popups, new JComponent[] { logTextPane }) {
 			@Override
 			public void action(int p) {
 				treatPopupAction(p);
 			}
 		};
-
-		PopupMouseListener.addPopupMouseListenerToComponents(popupMenu, new JComponent[] { logTextPane });
 	}
 
 	private void treatPopupAction(int p) {

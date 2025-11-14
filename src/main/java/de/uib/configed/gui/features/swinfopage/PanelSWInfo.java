@@ -53,7 +53,6 @@ import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelSWInfo extends JPanel {
@@ -278,17 +277,15 @@ public class PanelSWInfo extends JPanel {
 				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
-			PopupMenuTrait popupTrait = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV,
-					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATING_COPY }) {
+			new PopupMenuTrait(
+					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY },
+					new JComponent[] { this, panelTable.getGenEditTable(), panelTable.getTheScrollpane() }) {
 				@Override
 				public void action(int p) {
 					actionOnPopupMenu(p);
 				}
 			};
-
-			PopupMouseListener.addPopupMouseListenerToComponents(popupTrait,
-					new JComponent[] { this, panelTable.getGenEditTable(), panelTable.getTheScrollpane() });
 		}
 	}
 
