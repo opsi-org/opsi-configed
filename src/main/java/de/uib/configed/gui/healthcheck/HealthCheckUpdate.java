@@ -18,7 +18,7 @@ public class HealthCheckUpdate {
 	@Value
 	@With
 	public static class HealthCheckModel {
-		private final Map<String, Map<String, Object>> healthData;
+		Map<String, Map<String, Object>> healthData;
 	}
 
 	public sealed interface HealthCheckEffect permits HealthCheckEffect.SimpleEffect {
