@@ -13,7 +13,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -40,7 +39,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class LogPanel extends JPanel implements KeyListener {
+public class LogPanel extends JPanel {
 	private static final int SLIDER_W = 180;
 
 	public static final int MIN_LEVEL = 1;
@@ -75,6 +74,7 @@ public class LogPanel extends JPanel implements KeyListener {
 		info = "";
 
 		initComponents(defaultText);
+		addKeyBindings();
 
 		setLayout();
 
@@ -88,10 +88,6 @@ public class LogPanel extends JPanel implements KeyListener {
 		if (defaultText != null) {
 			logTextPane.setText(defaultText);
 		}
-
-		logTextPane.addKeyListener(this);
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
-				this::copyTextToClipboard);
 
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -149,6 +145,32 @@ public class LogPanel extends JPanel implements KeyListener {
 		comboType.setEditable(false);
 
 		comboType.addActionListener(actionEvent -> logTextPane.applyType(comboType.getSelectedItem()));
+	}
+
+	private void addKeyBindings() {
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this::search,
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), this::search,
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_N, 0), this::search,
+				JComponent.WHEN_FOCUSED);
+
+		// The Binding with KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, 0) does not work on some systems (e.g. German keyboard)
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke('/'), jComboBoxSearch::requestFocus,
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane,
+				KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK), this::increaseFontSize,
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane,
+				KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK), this::reduceFontSize,
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
+				this::copyTextToClipboard, JComponent.WHEN_FOCUSED);
 	}
 
 	private void setLayout() {
@@ -443,42 +465,6 @@ public class LogPanel extends JPanel implements KeyListener {
 		}
 
 		logTextPane.search(item.toString());
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, "KeyEvent ", e);
-
-		if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
-			search();
-		} else if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-			Logging.info(this, "Ctrl-Plus");
-			increaseFontSize();
-		} else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-			Logging.info(this, "Ctrl-Minus");
-			reduceFontSize();
-		} else {
-			// Do nothing on other keys on jTextPane
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if (e.getSource() == logTextPane) {
-			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') {
-				jComboBoxSearch.requestFocus();
-			}
-
-			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) {
-				search();
-			}
-			e.consume();
-		}
 	}
 
 	public String[] getLines() {

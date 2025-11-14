@@ -597,9 +597,10 @@ public final class Utils {
 		};
 	}
 
-	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable) {
+	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable,
+			int condition) {
 		Logging.info(keyStroke.toString(), " added to ", component.getClass().getSimpleName());
-		component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStroke.toString());
+		component.getInputMap(condition).put(keyStroke, keyStroke.toString());
 		component.getActionMap().put(keyStroke.toString(), new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -607,5 +608,10 @@ public final class Utils {
 				runnable.run();
 			}
 		});
+	}
+
+	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable) {
+		Logging.info(keyStroke.toString(), " added to ", component.getClass().getSimpleName());
+		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 }
