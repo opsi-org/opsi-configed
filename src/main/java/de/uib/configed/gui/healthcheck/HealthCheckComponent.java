@@ -261,21 +261,24 @@ public class HealthCheckComponent extends
 		try {
 			styledDocument.remove(0, styledDocument.getLength());
 			for (Map<String, Object> healthInfo : message.values()) {
-				styledDocument.insertString(styledDocument.getLength(), ((String) healthInfo.get("message")), null);
+				styledDocument.insertString(styledDocument.getLength(),
+						((String) healthInfo.get(HealthInfo.KEY_MESSAGE)), null);
 
-				if (!((String) healthInfo.get("details")).isBlank()) {
+				if (!((String) healthInfo.get(HealthInfo.KEY_DETAILS)).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
-					String imagePath = Boolean.TRUE.equals(healthInfo.get("showDetails")) ? "arrowDown" : "arrowRight";
+					String imagePath = Boolean.TRUE.equals(healthInfo.get(HealthInfo.KEY_SHOW_DETAILS)) ? "arrowDown"
+							: "arrowRight";
 					StyleConstants.setIcon(iconStyle, Icons.getIntellijIcon(imagePath));
-					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
-							iconStyle);
+					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get(HealthInfo.KEY_MESSAGE)),
+							" ", iconStyle);
 				} else {
-					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), "    ",
-							null);
+					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get(HealthInfo.KEY_MESSAGE)),
+							"    ", null);
 				}
 
-				if (Boolean.TRUE.equals(healthInfo.get("showDetails"))) {
-					styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("details"), null);
+				if (Boolean.TRUE.equals(healthInfo.get(HealthInfo.KEY_SHOW_DETAILS))) {
+					styledDocument.insertString(styledDocument.getLength(),
+							(String) healthInfo.get(HealthInfo.KEY_DETAILS), null);
 					styledDocument.insertString(styledDocument.getLength(), "\n", null);
 				}
 			}
@@ -441,13 +444,13 @@ public class HealthCheckComponent extends
 
 	private static boolean allDetailsShown(Map<String, Map<String, Object>> healthData) {
 		return healthData.values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
-				.filter(entry -> "showDetails".equals(entry.getKey()))
+				.filter(entry -> HealthInfo.KEY_SHOW_DETAILS.equals(entry.getKey()))
 				.allMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}
 
 	private static boolean anyDetailsShown(Map<String, Map<String, Object>> healthData) {
 		return healthData.values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
-				.filter(entry -> "showDetails".equals(entry.getKey()))
+				.filter(entry -> HealthInfo.KEY_SHOW_DETAILS.equals(entry.getKey()))
 				.anyMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}
 }

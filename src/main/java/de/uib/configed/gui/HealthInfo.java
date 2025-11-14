@@ -28,6 +28,15 @@ public final class HealthInfo {
 
 	private static final List<String> statusLevels = Arrays.asList(OK, WARNING, ERROR);
 
+	public static final String KEY_MESSAGE = "message";
+	public static final String KEY_DETAILS = "details";
+	public static final String KEY_SHOW_DETAILS = "showDetails";
+
+	private static final String KEY_ID = "id";
+	private static final String KEY_CHECK = "check";
+	private static final String KEY_NAME = "name";
+	private static final String KEY_CHECK_STATUS = "check_status";
+
 	private HealthInfo() {
 	}
 
@@ -75,10 +84,12 @@ public final class HealthInfo {
 
 		for (Map<String, Object> data : healthData) {
 			Map<String, Object> info = new TreeMap<>();
-			info.put("message", produceMessages(data));
-			info.put("details", produceHealthDetails(data));
-			info.put("showDetails", includeDetailedInformation);
-			result.put((String) ((Map<?, ?>) data.get("check")).get("name"), info);
+			info.put(KEY_MESSAGE, produceMessages(data));
+			info.put(KEY_DETAILS, produceHealthDetails(data));
+			info.put(KEY_SHOW_DETAILS, includeDetailedInformation);
+
+			String checkName = (String) ((Map<?, ?>) data.get(KEY_CHECK)).get(KEY_NAME);
+			result.put(checkName, info);
 		}
 
 		return result;
@@ -86,10 +97,13 @@ public final class HealthInfo {
 
 	private static String produceMessages(Map<String, Object> healthData) {
 		StringBuilder messageBuilder = new StringBuilder();
-		messageBuilder.append((String) ((Map<?, ?>) healthData.get("check")).get("name") + ": ");
-		messageBuilder.append(((String) healthData.get("check_status")).toUpperCase(Locale.ROOT) + " ");
+		String checkName = (String) ((Map<?, ?>) healthData.get(KEY_CHECK)).get(KEY_NAME);
+		messageBuilder.append(checkName);
+		messageBuilder.append(": ");
+		messageBuilder.append(((String) healthData.get(KEY_CHECK_STATUS)).toUpperCase(Locale.ROOT));
+		messageBuilder.append(" ");
 		messageBuilder.append("\n\t");
-		messageBuilder.append((String) healthData.get("message"));
+		messageBuilder.append((String) healthData.get(KEY_MESSAGE));
 		messageBuilder.append("\n");
 
 		return messageBuilder.toString();
@@ -97,7 +111,8 @@ public final class HealthInfo {
 
 	private static String produceHealthDetails(Map<String, Object> healthData) {
 		List<Map<String, Object>> healthDetails = PersistenceControllerFactory.getPersistenceController()
-				.getHealthDataService().retrieveHealthDetails((String) ((Map<?, ?>) healthData.get("check")).get("id"));
+				.getHealthDataService()
+				.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get(KEY_CHECK)).get(KEY_ID));
 
 		sortHealthDataBasedOnStatusLevel(healthDetails);
 
@@ -110,8 +125,9 @@ public final class HealthInfo {
 
 		for (Map<String, Object> details : healthDetails) {
 			healthDetailsBuilder.append("\t");
-			healthDetailsBuilder.append(((String) details.get("check_status")).toUpperCase(Locale.ROOT) + " - ");
-			healthDetailsBuilder.append(((String) details.get("message")).replace("\n", "\n\t\t"));
+			healthDetailsBuilder.append(((String) details.get(KEY_CHECK_STATUS)).toUpperCase(Locale.ROOT));
+			healthDetailsBuilder.append(" - ");
+			healthDetailsBuilder.append(((String) details.get(KEY_MESSAGE)).replace("\n", "\n\t\t"));
 			healthDetailsBuilder.append("\n");
 		}
 
@@ -120,8 +136,8 @@ public final class HealthInfo {
 
 	private static void sortHealthDataBasedOnStatusLevel(List<Map<String, Object>> healthData) {
 		Collections.sort(healthData, (Map<String, Object> map1, Map<String, Object> map2) -> {
-			String status1 = (String) map1.get("check_status");
-			String status2 = (String) map2.get("check_status");
+			String status1 = (String) map1.get(KEY_CHECK_STATUS);
+			String status2 = (String) map2.get(KEY_CHECK_STATUS);
 			return -Integer.compare(statusLevels.indexOf(status1), statusLevels.indexOf(status2));
 		});
 	}
@@ -133,7 +149,7 @@ public final class HealthInfo {
 				.getHealthDataService().checkHealthPD();
 
 		for (Map<String, Object> data : healthData) {
-			warningLevel = Math.max(warningLevel, statusLevels.indexOf(data.get("check_status")));
+			warningLevel = Math.max(warningLevel, statusLevels.indexOf(data.get(KEY_CHECK_STATUS)));
 		}
 
 		return statusLevels.get(warningLevel);
