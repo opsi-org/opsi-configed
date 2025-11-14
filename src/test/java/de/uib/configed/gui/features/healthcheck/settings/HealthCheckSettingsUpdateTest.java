@@ -28,14 +28,16 @@ import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsUpdate;
 class HealthCheckSettingsUpdateTest {
 
 	private HealthCheckSettingsModel makeDefaultSettingsModel() {
-		return HealthCheckSettingsModel.initial(List.of(), FlatTriStateCheckBox.State.INDETERMINATE, "", "", false);
+		return HealthCheckSettingsModel.builder().selectedHosts(List.of())
+				.checkActiveState(FlatTriStateCheckBox.State.INDETERMINATE).startDowntime("").endDowntime("")
+				.saveEnabled(false).build();
 	}
 
 	private HealthCheckSettingsModel makeSettingsModelWith(List<String> selectedHosts,
 			FlatTriStateCheckBox.State checkActiveState, boolean saveEnabled, String startDowntime,
 			String endDowntime) {
-		return HealthCheckSettingsModel.initial(selectedHosts, checkActiveState, startDowntime, endDowntime,
-				saveEnabled);
+		return HealthCheckSettingsModel.builder().selectedHosts(selectedHosts).checkActiveState(checkActiveState)
+				.startDowntime(startDowntime).endDowntime(endDowntime).saveEnabled(saveEnabled).build();
 	}
 
 	@Test

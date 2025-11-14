@@ -72,8 +72,8 @@ public final class HealthCheckSettingsComponent
 
 	@Override
 	protected HealthCheckSettingsModel initModel() {
-		return HealthCheckSettingsModel.initial(initialSelection, initialState, "", "",
-				initialState != FlatTriStateCheckBox.State.INDETERMINATE);
+		return HealthCheckSettingsModel.builder().selectedHosts(initialSelection).checkActiveState(initialState)
+				.saveEnabled(initialState != State.INDETERMINATE).build();
 	}
 
 	@Override

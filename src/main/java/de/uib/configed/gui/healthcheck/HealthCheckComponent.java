@@ -82,7 +82,7 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 	@Override
 	protected HealthCheckModel initModel() {
 		Map<String, Map<String, Object>> initialHealthData = HealthInfo.getHealthDataMap(false);
-		return HealthCheckModel.initial(initialHealthData);
+		return new HealthCheckModel(initialHealthData);
 	}
 
 	@Override
@@ -138,8 +138,8 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 				if (!key.isBlank() && model.getHealthData().containsKey(key)) {
 					dispatch(new HealthCheckMsg.ToggleDetails(key));
 					textPane.setCaretPosition(textPane.viewToModel2D(event.getPoint()));
-					jButtonExpandAll.setEnabled(!model.isAllDetailsShown());
-					jButtonCollapseAll.setEnabled(model.isAnyDetailsShown());
+					jButtonExpandAll.setEnabled(!allDetailsShown(model));
+					jButtonCollapseAll.setEnabled(anyDetailsShown(model));
 				}
 			}
 		});
@@ -181,10 +181,10 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		centerPanel.setLayout(centerPanelLayout);
 
 		jButtonCollapseAll = new JButton(Configed.getResourceValue("HealthCheckDialog.collapseAll"));
-		jButtonCollapseAll.setEnabled(model.isAnyDetailsShown());
+		jButtonCollapseAll.setEnabled(anyDetailsShown(model));
 
 		jButtonExpandAll = new JButton(Configed.getResourceValue("HealthCheckDialog.expandAll"));
-		jButtonExpandAll.setEnabled(!model.isAllDetailsShown());
+		jButtonExpandAll.setEnabled(!allDetailsShown(model));
 
 		JButton jButtonCopyHealthInformation = new JButton(Configed.getResourceValue("copy"));
 
@@ -247,12 +247,11 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		}
 		setMessage(model.getHealthData());
 
-		// Update button states
 		if (jButtonExpandAll != null) {
-			jButtonExpandAll.setEnabled(!model.isAllDetailsShown());
+			jButtonExpandAll.setEnabled(!allDetailsShown(model));
 		}
 		if (jButtonCollapseAll != null) {
-			jButtonCollapseAll.setEnabled(model.isAnyDetailsShown());
+			jButtonCollapseAll.setEnabled(anyDetailsShown(model));
 		}
 	}
 
@@ -436,5 +435,17 @@ public class HealthCheckComponent extends AbstractTeaComponent<HealthCheckModel,
 		} catch (IOException e) {
 			Logging.error(this, e, "");
 		}
+	}
+
+	private static boolean allDetailsShown(HealthCheckModel model) {
+		return model.getHealthData().values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
+				.filter(entry -> "showDetails".equals(entry.getKey()))
+				.allMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
+	}
+
+	private static boolean anyDetailsShown(HealthCheckModel model) {
+		return model.getHealthData().values().stream().flatMap(innerMap -> innerMap.entrySet().stream())
+				.filter(entry -> "showDetails".equals(entry.getKey()))
+				.anyMatch(entry -> Boolean.TRUE.equals(entry.getValue()));
 	}
 }

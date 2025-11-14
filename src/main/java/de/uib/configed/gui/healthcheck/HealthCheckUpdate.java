@@ -11,17 +11,11 @@ import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
-/**
- * Update contains the logic to update the Model in response to a Msg.
- */
 public class HealthCheckUpdate {
 	private HealthCheckUpdate() {
 		// Hide constructor.
 	}
 
-	/**
-	 * Applies a message to the model and returns a new model.
-	 */
 	public static UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model, HealthCheckMsg msg) {
 		return switch (msg) {
 		case HealthCheckMsg.SimpleMsg m -> handleSimpleMsg(m, model);
@@ -32,10 +26,10 @@ public class HealthCheckUpdate {
 				boolean current = Boolean.TRUE.equals(details.get("showDetails"));
 				details.put("showDetails", !current);
 			}
-			yield UpdateResult.noEffect(HealthCheckModel.initial(newHealthData));
+			yield UpdateResult.noEffect(initModel(newHealthData));
 		}
 		case HealthCheckMsg.RefreshHealthData(Map<String, Map<String, Object>> newHealthData) -> UpdateResult
-				.noEffect(HealthCheckModel.initial(newHealthData));
+				.noEffect(initModel(newHealthData));
 		};
 	}
 
@@ -54,7 +48,11 @@ public class HealthCheckUpdate {
 		for (Map<String, Object> details : newHealthData.values()) {
 			details.put("showDetails", show);
 		}
-		return HealthCheckModel.initial(newHealthData);
+		return initModel(newHealthData);
+	}
+
+	private static HealthCheckModel initModel(Map<String, Map<String, Object>> healthData) {
+		return new HealthCheckModel(healthData);
 	}
 
 	private static Map<String, Map<String, Object>> deepCopy(Map<String, Map<String, Object>> original) {

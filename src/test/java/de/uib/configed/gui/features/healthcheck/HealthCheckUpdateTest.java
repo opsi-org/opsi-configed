@@ -21,7 +21,7 @@ import de.uib.configed.gui.healthcheck.HealthCheckUpdate;
 class HealthCheckUpdateTest {
 
 	private HealthCheckModel makeModelWithHealthData(Map<String, Map<String, Object>> healthData) {
-		return HealthCheckModel.initial(healthData);
+		return new HealthCheckModel(healthData);
 	}
 
 	private Map<String, Map<String, Object>> makeHealthDataWithShowDetails(Map<String, Boolean> showDetailsMap) {
