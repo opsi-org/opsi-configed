@@ -13,10 +13,11 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.HealthInfo;
 import de.uib.configed.gui.healthcheck.HealthCheckMsg;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
-import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckModel;;
+import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckModel;
 
 class HealthCheckUpdateTest {
 
@@ -46,9 +47,9 @@ class HealthCheckUpdateTest {
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
-		assertEquals(true, updatedHealthData.get("entry1").get("showDetails"));
-		assertEquals(true, updatedHealthData.get("entry2").get("showDetails"));
-		assertEquals(true, updatedHealthData.get("entry3").get("showDetails"));
+		assertEquals(true, updatedHealthData.get("entry1").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(true, updatedHealthData.get("entry2").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(true, updatedHealthData.get("entry3").get(HealthInfo.KEY_SHOW_DETAILS));
 		assertFalse(result.effect().isPresent());
 	}
 
@@ -64,9 +65,9 @@ class HealthCheckUpdateTest {
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
-		assertEquals(false, updatedHealthData.get("entry1").get("showDetails"));
-		assertEquals(false, updatedHealthData.get("entry2").get("showDetails"));
-		assertEquals(false, updatedHealthData.get("entry3").get("showDetails"));
+		assertEquals(false, updatedHealthData.get("entry1").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(false, updatedHealthData.get("entry2").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(false, updatedHealthData.get("entry3").get(HealthInfo.KEY_SHOW_DETAILS));
 		assertFalse(result.effect().isPresent());
 	}
 
@@ -85,9 +86,9 @@ class HealthCheckUpdateTest {
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
-		assertEquals(false, updatedHealthData.get("entry1").get("showDetails"));
-		assertEquals(false, updatedHealthData.get("entry2").get("showDetails"));
-		assertEquals(true, updatedHealthData.get("entry3").get("showDetails"));
+		assertEquals(false, updatedHealthData.get("entry1").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(false, updatedHealthData.get("entry2").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(true, updatedHealthData.get("entry3").get(HealthInfo.KEY_SHOW_DETAILS));
 		assertFalse(result.effect().isPresent());
 	}
 
@@ -102,8 +103,8 @@ class HealthCheckUpdateTest {
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
 		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
-		assertEquals(true, updatedHealthData.get("entryA").get("showDetails"));
-		assertEquals(true, updatedHealthData.get("entryB").get("showDetails"));
+		assertEquals(true, updatedHealthData.get("entryA").get(HealthInfo.KEY_SHOW_DETAILS));
+		assertEquals(true, updatedHealthData.get("entryB").get(HealthInfo.KEY_SHOW_DETAILS));
 		assertFalse(result.effect().isPresent());
 	}
 
