@@ -43,10 +43,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.StackPane;
 
-/**
- * HealthCheckSettingsDialog implemented using the TEA architecture via
- * TeaComponent.
- */
 public final class HealthCheckSettingsComponent
 		extends AbstractTeaComponent<HealthCheckSettingsModel, HealthCheckSettingsMsg, HealthCheckSettingsEffect> {
 	private static final int TEXT_LABEL_WIDTH = 200;
@@ -227,9 +223,6 @@ public final class HealthCheckSettingsComponent
 		}
 	}
 
-	/**
-	 * Update UI components from the model.
-	 */
 	@Override
 	protected void refreshView() {
 		if (selectedHosts != null) {
@@ -257,9 +250,6 @@ public final class HealthCheckSettingsComponent
 		}
 	}
 
-	/**
-	 * Opens the host selection dialog and returns the selected hosts.
-	 */
 	private List<String> openHostSelectionDialog() {
 		Logging.info(this, "openSelectionDialog for health check settings");
 		List<String> previousSelection = selectedHostList.getSelectedValues();
@@ -272,10 +262,6 @@ public final class HealthCheckSettingsComponent
 		}
 	}
 
-	/**
-	 * Opens the date selection dialog and returns the selected date as a
-	 * string.
-	 */
 	private String openDateSelectionDialog(String oldValue, String title) {
 		Logging.info(this, "openDateSelectionDialog for health check settings");
 		JFXPanel jfxPanel = new JFXPanel();
@@ -308,9 +294,6 @@ public final class HealthCheckSettingsComponent
 		return datePicker;
 	}
 
-	/**
-	 * Save the settings using the current model.
-	 */
 	private void save() {
 		Logging.info(this, "save health check settings for selected hosts");
 		if (model.getSelectedHosts() == null || model.getSelectedHosts().isEmpty()) {

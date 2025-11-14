@@ -59,9 +59,6 @@ import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-/**
- * HealthCheck component using TEA architecture via TeaComponent.
- */
 public class HealthCheckComponent extends
 		AbstractTeaComponent<HealthCheckUpdate.HealthCheckModel, HealthCheckMsg, HealthCheckUpdate.HealthCheckEffect> {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");

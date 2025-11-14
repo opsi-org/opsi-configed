@@ -8,9 +8,6 @@ package de.uib.configed.gui.healthcheck;
 
 import java.util.Map;
 
-/**
- * Msg represents all possible events/messages that can affect the Model.
- */
 public sealed interface HealthCheckMsg
 		permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails, HealthCheckMsg.RefreshHealthData {
 
