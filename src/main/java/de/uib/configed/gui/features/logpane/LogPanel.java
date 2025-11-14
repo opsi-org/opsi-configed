@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.regex.Pattern;
 
-import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -38,6 +37,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class LogPanel extends JPanel implements KeyListener {
@@ -90,13 +90,8 @@ public class LogPanel extends JPanel implements KeyListener {
 		}
 
 		logTextPane.addKeyListener(this);
-		logTextPane.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "copyRaw");
-		logTextPane.getActionMap().put("copyRaw", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				copyTextToClipboard();
-			}
-		});
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
+				this::copyTextToClipboard);
 
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
