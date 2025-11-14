@@ -7,6 +7,7 @@
 package de.uib.configed.gui.healthcheck;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -70,7 +71,7 @@ public class HealthCheckUpdate {
 	}
 
 	private static Map<String, Map<String, Object>> deepCopy(Map<String, Map<String, Object>> original) {
-		Map<String, Map<String, Object>> copy = new HashMap<>();
+		Map<String, Map<String, Object>> copy = new LinkedHashMap<>();
 		for (Map.Entry<String, Map<String, Object>> entry : original.entrySet()) {
 			copy.put(entry.getKey(), new HashMap<>(entry.getValue()));
 		}
