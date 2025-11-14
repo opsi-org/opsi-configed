@@ -6,8 +6,8 @@
 
 package de.uib.configed.gui;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,11 +22,9 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
  * saved in a file.
  */
 public final class HealthInfo {
-	public static final String ERROR = "error";
-	public static final String WARNING = "warning";
-	public static final String OK = "ok";
-
-	private static final List<String> statusLevels = Arrays.asList(OK, WARNING, ERROR);
+	public enum StatusLevel {
+		OK, WARNING, ERROR
+	}
 
 	public static final String KEY_MESSAGE = "message";
 	public static final String KEY_DETAILS = "details";
@@ -136,22 +134,18 @@ public final class HealthInfo {
 
 	private static void sortHealthDataBasedOnStatusLevel(List<Map<String, Object>> healthData) {
 		Collections.sort(healthData, (Map<String, Object> map1, Map<String, Object> map2) -> {
-			String status1 = (String) map1.get(KEY_CHECK_STATUS);
-			String status2 = (String) map2.get(KEY_CHECK_STATUS);
-			return -Integer.compare(statusLevels.indexOf(status1), statusLevels.indexOf(status2));
+			StatusLevel s1 = StatusLevel.valueOf(((String) map1.get(KEY_CHECK_STATUS)).toUpperCase(Locale.ROOT));
+			StatusLevel s2 = StatusLevel.valueOf(((String) map2.get(KEY_CHECK_STATUS)).toUpperCase(Locale.ROOT));
+			return -Integer.compare(s1.ordinal(), s2.ordinal());
 		});
 	}
 
-	public static String getMaxWarningLevel() {
-		int warningLevel = 0;
-
+	public static StatusLevel getMaxStatusLevel() {
 		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
 				.getHealthDataService().checkHealthPD();
 
-		for (Map<String, Object> data : healthData) {
-			warningLevel = Math.max(warningLevel, statusLevels.indexOf(data.get(KEY_CHECK_STATUS)));
-		}
-
-		return statusLevels.get(warningLevel);
+		return healthData.stream()
+				.map(m -> StatusLevel.valueOf(((String) m.get(KEY_CHECK_STATUS)).toUpperCase(Locale.ROOT)))
+				.max(Comparator.comparingInt(StatusLevel::ordinal)).orElse(StatusLevel.OK);
 	}
 }

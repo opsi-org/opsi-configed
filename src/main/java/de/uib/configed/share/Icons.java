@@ -249,22 +249,22 @@ public final class Icons {
 	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
 		Color dotColor = null;
 
-		String warningLevel = HealthInfo.getMaxWarningLevel();
+		HealthInfo.StatusLevel warningLevel = HealthInfo.getMaxStatusLevel();
 		switch (warningLevel) {
-		case HealthInfo.ERROR:
+		case ERROR:
 			dotColor = Globals.OPSI_ERROR;
 			break;
 
-		case HealthInfo.WARNING:
+		case WARNING:
 			dotColor = Globals.OPSI_WARNING;
 			break;
 
-		case HealthInfo.OK:
+		case OK:
 			Logging.info("icon will remain null, we don't want to show a dot when health check are okay");
 			break;
 
 		default:
-			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthInfo.getMaxWarningLevel());
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthInfo.getMaxStatusLevel());
 			break;
 		}
 
