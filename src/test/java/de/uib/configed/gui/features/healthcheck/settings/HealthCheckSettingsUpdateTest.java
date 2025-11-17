@@ -49,7 +49,8 @@ class HealthCheckSettingsUpdateTest {
 				.update(initialModel, msg);
 
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SELECT_HOSTS, result.effect().get()));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.OPEN_HOST_SELECTION_DIALOG,
+						result.effect().get()));
 	}
 
 	@Test

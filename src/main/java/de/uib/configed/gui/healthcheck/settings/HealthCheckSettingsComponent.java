@@ -216,7 +216,7 @@ public final class HealthCheckSettingsComponent
 				dialog.setVisible(false);
 			}
 		}
-		case SELECT_HOSTS -> {
+		case OPEN_HOST_SELECTION_DIALOG -> {
 			List<String> hostsSelected = openHostSelectionDialog();
 			dispatch(new HealthCheckSettingsMsg.HostsSelected(hostsSelected));
 		}

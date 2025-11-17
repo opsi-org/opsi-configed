@@ -22,7 +22,7 @@ public class HealthCheckSettingsUpdate {
 			HealthCheckSettingsModel model, HealthCheckSettingsMsg msg) {
 		return switch (msg) {
 		case HealthCheckSettingsMsg.HostsSelectionRequested() -> UpdateResult.withEffect(model,
-				HealthCheckSettingsEffect.SimpleEffect.SELECT_HOSTS);
+				HealthCheckSettingsEffect.SimpleEffect.OPEN_HOST_SELECTION_DIALOG);
 		case HealthCheckSettingsMsg.HostsSelected(List<String> hosts) -> UpdateResult
 				.noEffect(model.withSelectedHosts(hosts));
 		case HealthCheckSettingsMsg.ToggleActivity(FlatTriStateCheckBox.State state) -> UpdateResult.noEffect(
