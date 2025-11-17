@@ -41,7 +41,7 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerSelectHostsEffect_whenHostSelectionRequested() {
+	void shouldTriggerOpenHostSelectionDialogEffect_whenHostSelectionRequested() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
 		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.HostsSelectionRequested();
 
@@ -54,7 +54,7 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void shouldUpdateSelectedHosts_whenHostSelected() {
+	void shouldUpdateSelectedHosts_whenHostsSelected() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
 		List<String> newHosts = List.of("host1", "host2");
 		HealthCheckSettingsMsg msg = new HealthCheckSettingsMsg.HostsSelected(newHosts);
@@ -108,29 +108,29 @@ class HealthCheckSettingsUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerSaveEffect_whenSave() {
+	void shouldTriggerSaveSettingsEffect_whenSaveSettings() {
 		HealthCheckSettingsModel initialModel = makeSettingsModelWith(List.of("host1"),
 				FlatTriStateCheckBox.State.SELECTED, true, "2024-01-01T00:00", "2024-01-01T01:00");
-		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.SAVE;
+		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.SAVE_SETTINGS;
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
 
 		assertSame(initialModel, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SAVE_CONFIG, result.effect().get()));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SAVE_SETTINGS, result.effect().get()));
 	}
 
 	@Test
-	void shouldTriggerCloseEffect_whenCancle() {
+	void shouldTriggerDismissSettingsEffect_whenCancleSettings() {
 		HealthCheckSettingsModel initialModel = makeDefaultSettingsModel();
-		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.CANCLE;
+		HealthCheckSettingsMsg msg = HealthCheckSettingsMsg.SimpleMsg.CANCLE_SETTINGS;
 
 		UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = HealthCheckSettingsUpdate
 				.update(initialModel, msg);
 
 		assertSame(initialModel, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.CLOSE_DIALOG, result.effect().get()));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.DISMISS_SETTINGS, result.effect().get()));
 	}
 }

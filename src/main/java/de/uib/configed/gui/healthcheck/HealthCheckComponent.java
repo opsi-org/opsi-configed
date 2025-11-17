@@ -214,8 +214,7 @@ public class HealthCheckComponent extends
 
 		jButtonCollapseAll.addActionListener((ActionEvent event) -> dispatch(HealthCheckMsg.SimpleMsg.COLLAPSE_ALL));
 		jButtonExpandAll.addActionListener((ActionEvent event) -> dispatch(HealthCheckMsg.SimpleMsg.EXPAND_ALL));
-		jButtonCopyHealthInformation
-				.addActionListener(event -> dispatch(HealthCheckMsg.SimpleMsg.COPY_HEALTH_INFORMATION));
+		jButtonCopyHealthInformation.addActionListener(event -> dispatch(HealthCheckMsg.SimpleMsg.COPY_HEALTH_REPORT));
 		jButtonDownloadDiagnosticData
 				.addActionListener(event -> dispatch(HealthCheckMsg.SimpleMsg.DOWNLOAD_DIAGNOSTIC_DATA));
 
@@ -234,7 +233,7 @@ public class HealthCheckComponent extends
 		switch (effect) {
 		case COPY_HEALTH_REPORT -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(textPane.getText()), null);
-		case EXPORT_HEALTH_DATA -> saveAsZip();
+		case DOWNLOAD_DIAGNOSTIC_DATA -> saveAsZip();
 		}
 	}
 

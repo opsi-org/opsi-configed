@@ -15,7 +15,7 @@ public sealed interface HealthCheckSettingsMsg
 		HealthCheckSettingsMsg.HostsSelected, HealthCheckSettingsMsg.ToggleActivity,
 		HealthCheckSettingsMsg.DowntimeSelectionRequested, HealthCheckSettingsMsg.DowntimeSelected {
 	enum SimpleMsg implements HealthCheckSettingsMsg {
-		SAVE, CANCLE
+		SAVE_SETTINGS, CANCLE_SETTINGS
 	}
 
 	record HostsSelectionRequested() implements HealthCheckSettingsMsg {

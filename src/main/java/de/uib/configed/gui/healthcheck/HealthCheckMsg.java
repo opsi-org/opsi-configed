@@ -9,7 +9,7 @@ package de.uib.configed.gui.healthcheck;
 public sealed interface HealthCheckMsg permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails {
 
 	enum SimpleMsg implements HealthCheckMsg {
-		EXPAND_ALL, COLLAPSE_ALL, COPY_HEALTH_INFORMATION, DOWNLOAD_DIAGNOSTIC_DATA
+		EXPAND_ALL, COLLAPSE_ALL, COPY_HEALTH_REPORT, DOWNLOAD_DIAGNOSTIC_DATA
 	}
 
 	record ToggleDetails(String key) implements HealthCheckMsg {

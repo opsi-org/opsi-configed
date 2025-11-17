@@ -88,11 +88,11 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerCopyEffect_whenCopyHealthInformation() {
+	void shouldTriggerCopyHealthReportEffect_whenCopyHealthReport() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryX", false);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
-		HealthCheckMsg msg = HealthCheckMsg.SimpleMsg.COPY_HEALTH_INFORMATION;
+		HealthCheckMsg msg = HealthCheckMsg.SimpleMsg.COPY_HEALTH_REPORT;
 
 		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
 
@@ -102,7 +102,7 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerDownloadEffect_whenDownloadDiagnosticData() {
+	void shouldTriggerDownloadDiagnosticDataEffect_whenDownloadDiagnosticData() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryX", false);
 		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
@@ -112,6 +112,6 @@ class HealthCheckUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckEffect.SimpleEffect.EXPORT_HEALTH_DATA, result.effect().get()));
+				() -> assertSame(HealthCheckEffect.SimpleEffect.DOWNLOAD_DIAGNOSTIC_DATA, result.effect().get()));
 	}
 }
