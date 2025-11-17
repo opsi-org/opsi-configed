@@ -13,7 +13,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -34,6 +33,7 @@ import javax.swing.ScrollPaneConstants;
 import de.uib.configed.app.Main;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.logviewer.TextLineNumber;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
@@ -46,10 +46,6 @@ public class LogPanel extends JPanel {
 	private static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
-
-	@SuppressWarnings("java:S5867")
-	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
-	private static final Pattern LINE_BREAK_PATTERN = Pattern.compile("\\R");
 
 	protected LogTextPane logTextPane;
 
@@ -89,10 +85,15 @@ public class LogPanel extends JPanel {
 			logTextPane.setText(defaultText);
 		}
 
+		TextLineNumber lineNumber = new TextLineNumber(logTextPane);
+		lineNumber.setUpdateFont(true);
+		lineNumber.setCurrentLineForeground(Globals.OPSI_MAGENTA);
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPane.getViewport().add(logTextPane);
+		jScrollPane.setRowHeaderView(lineNumber);
 		super.add(jScrollPane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("search"));
@@ -312,21 +313,8 @@ public class LogPanel extends JPanel {
 	private void copyTextToClipboard() {
 		String selectedText = logTextPane.getSelectedText();
 		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
-		String cleanedText = removeLineNumbers(textToCopy);
-		StringSelection selection = new StringSelection(cleanedText);
+		StringSelection selection = new StringSelection(textToCopy);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-	}
-
-	private static String removeLineNumbers(String text) {
-		String[] lines = LINE_BREAK_PATTERN.split(text, -1);
-		StringBuilder sb = new StringBuilder(text.length());
-
-		for (String line : lines) {
-			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst(""));
-			sb.append('\n');
-		}
-
-		return sb.toString();
 	}
 
 	public void download() {
