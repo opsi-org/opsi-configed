@@ -119,6 +119,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_SAVE);
 
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("save"));
+		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "save");
 		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
