@@ -258,7 +258,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		Integer[] popups = reloadable ? new Integer[] { PopupMenuTrait.POPUP_RELOAD } : new Integer[] {};
 
 		return new PopupMenuTrait(popups, (MouseEvent event) -> {
-			Logging.devel("updatePopupMenu called from definePopup");
 			updatePopupMenu();
 			return true;
 		}, new JComponent[] { table, jScrollPane.getViewport() }) {

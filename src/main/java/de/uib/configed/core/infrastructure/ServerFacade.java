@@ -375,7 +375,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	@Override
 	@SuppressWarnings("java:S1168")
 	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
-		Logging.devel(omc.toString());
 		Logging.info(this, "retrieveResponse started");
 
 		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
