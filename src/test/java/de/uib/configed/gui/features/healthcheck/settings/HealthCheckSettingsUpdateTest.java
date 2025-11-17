@@ -117,7 +117,7 @@ class HealthCheckSettingsUpdateTest {
 
 		assertSame(initialModel, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SAVE, result.effect().get()));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.SAVE_CONFIG, result.effect().get()));
 	}
 
 	@Test
@@ -130,6 +130,6 @@ class HealthCheckSettingsUpdateTest {
 
 		assertSame(initialModel, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.CLOSE, result.effect().get()));
+				() -> assertSame(HealthCheckSettingsEffect.SimpleEffect.CLOSE_DIALOG, result.effect().get()));
 	}
 }

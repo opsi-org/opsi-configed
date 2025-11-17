@@ -205,13 +205,13 @@ public final class HealthCheckSettingsComponent
 	@SuppressWarnings({ "java:S1301", "java:S6916" })
 	private void handleSimpleEffect(HealthCheckSettingsEffect.SimpleEffect effect) {
 		switch (effect) {
-		case SAVE -> {
+		case SAVE_CONFIG -> {
 			save();
 			if (configedMain != null) {
 				configedMain.reloadHosts();
 			}
 		}
-		case CLOSE -> {
+		case CLOSE_DIALOG -> {
 			if (dialog != null) {
 				dialog.setVisible(false);
 			}

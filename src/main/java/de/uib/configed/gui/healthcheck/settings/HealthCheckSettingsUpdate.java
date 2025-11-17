@@ -45,8 +45,8 @@ public class HealthCheckSettingsUpdate {
 	private static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> handleSimpleMsg(
 			HealthCheckSettingsMsg.SimpleMsg msg, HealthCheckSettingsModel model) {
 		return switch (msg) {
-		case SAVE -> UpdateResult.withEffect(model, HealthCheckSettingsEffect.SimpleEffect.SAVE);
-		case CANCLE -> UpdateResult.withEffect(model, HealthCheckSettingsEffect.SimpleEffect.CLOSE);
+		case SAVE -> UpdateResult.withEffect(model, HealthCheckSettingsEffect.SimpleEffect.SAVE_CONFIG);
+		case CANCLE -> UpdateResult.withEffect(model, HealthCheckSettingsEffect.SimpleEffect.CLOSE_DIALOG);
 		};
 	}
 }
