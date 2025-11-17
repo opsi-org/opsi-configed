@@ -232,9 +232,9 @@ public class HealthCheckComponent extends
 	@SuppressWarnings("java:S1301")
 	private void handleSimpleEffect(HealthCheckEffect.SimpleEffect effect) {
 		switch (effect) {
-		case COPY -> Toolkit.getDefaultToolkit().getSystemClipboard()
+		case COPY_HEALTH_REPORT -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(textPane.getText()), null);
-		case DOWNLOAD -> saveAsZip();
+		case EXPORT_HEALTH_DATA -> saveAsZip();
 		}
 	}
 

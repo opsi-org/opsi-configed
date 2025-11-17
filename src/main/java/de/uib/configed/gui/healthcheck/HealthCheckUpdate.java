@@ -23,7 +23,7 @@ public class HealthCheckUpdate {
 
 	public sealed interface HealthCheckEffect permits HealthCheckEffect.SimpleEffect {
 		enum SimpleEffect implements HealthCheckEffect {
-			COPY, DOWNLOAD
+			COPY_HEALTH_REPORT, EXPORT_HEALTH_DATA
 		}
 	}
 
@@ -53,8 +53,10 @@ public class HealthCheckUpdate {
 		return switch (msg) {
 		case EXPAND_ALL -> UpdateResult.noEffect(updateAllShowDetails(model, true));
 		case COLLAPSE_ALL -> UpdateResult.noEffect(updateAllShowDetails(model, false));
-		case COPY_HEALTH_INFORMATION -> UpdateResult.withEffect(model, HealthCheckEffect.SimpleEffect.COPY);
-		case DOWNLOAD_DIAGNOSTIC_DATA -> UpdateResult.withEffect(model, HealthCheckEffect.SimpleEffect.DOWNLOAD);
+		case COPY_HEALTH_INFORMATION -> UpdateResult.withEffect(model,
+				HealthCheckEffect.SimpleEffect.COPY_HEALTH_REPORT);
+		case DOWNLOAD_DIAGNOSTIC_DATA -> UpdateResult.withEffect(model,
+				HealthCheckEffect.SimpleEffect.EXPORT_HEALTH_DATA);
 		};
 	}
 

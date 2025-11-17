@@ -119,7 +119,7 @@ class HealthCheckUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckEffect.SimpleEffect.COPY, result.effect().get()));
+				() -> assertSame(HealthCheckEffect.SimpleEffect.COPY_HEALTH_REPORT, result.effect().get()));
 	}
 
 	@Test
@@ -133,6 +133,6 @@ class HealthCheckUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(HealthCheckEffect.SimpleEffect.DOWNLOAD, result.effect().get()));
+				() -> assertSame(HealthCheckEffect.SimpleEffect.EXPORT_HEALTH_DATA, result.effect().get()));
 	}
 }
