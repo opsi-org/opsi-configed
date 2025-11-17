@@ -6,18 +6,12 @@
 
 package de.uib.configed.gui.healthcheck;
 
-import java.util.Map;
-
-public sealed interface HealthCheckMsg
-		permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails, HealthCheckMsg.RefreshHealthData {
+public sealed interface HealthCheckMsg permits HealthCheckMsg.SimpleMsg, HealthCheckMsg.ToggleDetails {
 
 	enum SimpleMsg implements HealthCheckMsg {
 		EXPAND_ALL, COLLAPSE_ALL, COPY_HEALTH_INFORMATION, DOWNLOAD_DIAGNOSTIC_DATA
 	}
 
 	record ToggleDetails(String key) implements HealthCheckMsg {
-	}
-
-	record RefreshHealthData(Map<String, Map<String, Object>> newHealthData) implements HealthCheckMsg {
 	}
 }

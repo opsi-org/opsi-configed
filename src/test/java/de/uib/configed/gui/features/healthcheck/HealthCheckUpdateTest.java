@@ -72,27 +72,6 @@ class HealthCheckUpdateTest {
 	}
 
 	@Test
-	void shouldUpdateHealthData_whenRefreshHealthData() {
-		Map<String, Boolean> initialShowDetails = new HashMap<>();
-		initialShowDetails.put("entry1", false);
-		initialShowDetails.put("entry2", true);
-		initialShowDetails.put("entry3", true);
-		Map<String, Map<String, Object>> initialData = makeHealthDataWithShowDetails(initialShowDetails);
-		initialShowDetails.put("entry2", false);
-		Map<String, Map<String, Object>> reloadedData = makeHealthDataWithShowDetails(initialShowDetails);
-		HealthCheckModel model = makeModelWithHealthData(initialData);
-		HealthCheckMsg msg = new HealthCheckMsg.RefreshHealthData(reloadedData);
-
-		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
-
-		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
-		assertEquals(false, updatedHealthData.get("entry1").get(HealthDataProcessor.KEY_SHOW_DETAILS));
-		assertEquals(false, updatedHealthData.get("entry2").get(HealthDataProcessor.KEY_SHOW_DETAILS));
-		assertEquals(true, updatedHealthData.get("entry3").get(HealthDataProcessor.KEY_SHOW_DETAILS));
-		assertFalse(result.effect().isPresent());
-	}
-
-	@Test
 	void shouldToggleDetailsOfEntry_whenToggleDetails() {
 		Map<String, Boolean> initialShowDetails = new HashMap<>();
 		initialShowDetails.put("entryA", false);
