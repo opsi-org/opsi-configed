@@ -21,6 +21,8 @@ import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
+import de.uib.configed.gui.healthcheck.HealthCheckComponent;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
 import de.uib.configed.share.Icons;
 
 public class TopToolBarManager {
@@ -79,7 +81,7 @@ public class TopToolBarManager {
 		return Collections.singletonList(reloadButton);
 	}
 
-	public List<JButton> getHealthCheckButtons(HealthCheck healthCheck) {
+	public List<JButton> getHealthCheckButtons(HealthCheckComponent healthCheck) {
 		JButton downloadButton = new JButton(Icons.getIntellijIcon("download", 24));
 		downloadButton.setToolTipText(Configed.getResourceValue("download"));
 		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
@@ -87,7 +89,7 @@ public class TopToolBarManager {
 		JButton healthCheckSettingsButton = new JButton(Icons.getIntellijIcon("settings", 24));
 		healthCheckSettingsButton.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
 		healthCheckSettingsButton.addActionListener(
-				actionEvent -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain));
+				actionEvent -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain));
 		healthCheckSettingsButton.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		return Arrays.asList(downloadButton, healthCheckSettingsButton);

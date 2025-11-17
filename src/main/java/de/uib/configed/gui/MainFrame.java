@@ -30,6 +30,7 @@ import de.uib.configed.gui.features.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.gui.healthcheck.HealthCheckDataLoader;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
