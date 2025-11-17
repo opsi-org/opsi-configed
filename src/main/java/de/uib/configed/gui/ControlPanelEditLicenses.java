@@ -103,6 +103,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 			thePanel.getPanelKeys().moveToLastRow();
 			thePanel.getPanelKeys().moveToValue("" + a[0], 0);
 		});
+		menuItemAddKey.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		thePanel.getPanelKeys().addPopupItem(menuItemAddKey);
 
@@ -183,6 +184,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddLicense = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewSoftwarelicense"));
 		menuItemAddLicense.addActionListener(actionEvent -> addLicense());
+		menuItemAddLicense.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		thePanel.getPanelSoftwarelicenses().addPopupItem(menuItemAddLicense);
 
@@ -237,6 +239,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
 		menuItemAddContract.addActionListener(actionEvent -> addContract());
+		menuItemAddContract.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemAddContract);
 

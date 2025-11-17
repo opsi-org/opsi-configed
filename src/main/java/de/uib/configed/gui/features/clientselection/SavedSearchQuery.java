@@ -6,9 +6,8 @@
 
 package de.uib.configed.gui.features.clientselection;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,7 +59,7 @@ public class SavedSearchQuery {
 		Messages.setLocale("en");
 	}
 
-	public List<String> runSearch(boolean printing) {
+	public Collection<String> runSearch(boolean printing) {
 		Map<String, Map<String, Object>> depots = persistenceController.getHostInfoCollections().getAllDepots();
 
 		// Load data that we need to find clients for selection
@@ -70,7 +69,7 @@ public class SavedSearchQuery {
 		Set<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);
-			return new ArrayList<>();
+			return new HashSet<>();
 		}
 
 		if (!searches.contains(searchName)) {
@@ -80,14 +79,14 @@ public class SavedSearchQuery {
 
 		manager.loadSearch(searchName);
 
-		List<String> result = manager.selectClients();
+		Collection<String> result = manager.selectClients();
 		if (printing) {
 			printResult(result);
 		}
 		return result;
 	}
 
-	public void populateHostGroup(List<String> hosts, String groupName) {
+	public void populateHostGroup(Collection<String> hosts, String groupName) {
 		if (hosts == null) {
 			Logging.error("hosts collection not initialized");
 			Main.endApp(4);

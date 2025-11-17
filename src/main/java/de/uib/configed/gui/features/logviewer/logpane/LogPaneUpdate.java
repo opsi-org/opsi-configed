@@ -52,6 +52,7 @@ public class LogPaneUpdate {
 			LogPaneModel model) {
 		return switch (msg) {
 		case RELOAD -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.RELOAD);
+		case COPY_CONTENTS -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.COPY_CONTENTS);
 		case DOWNLOAD -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD);
 		case DOWNLOAD_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP);
 		case DOWNLOAD_ALL_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP);

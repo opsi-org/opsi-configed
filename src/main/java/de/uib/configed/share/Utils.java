@@ -22,6 +22,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +38,11 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
@@ -58,6 +64,13 @@ public final class Utils {
 			"opsiconfd" };
 	private static final int[] MAX_LOG_SIZES = new int[] { 4 * KIBI_BYTE * KIBI_BYTE, 8 * KIBI_BYTE * KIBI_BYTE,
 			8 * KIBI_BYTE * KIBI_BYTE, 0, 1 * KIBI_BYTE * KIBI_BYTE };
+
+	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
+	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
+
+	private static Parser markdownParser = Parser.builder()
+			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
+	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
 
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
@@ -284,7 +297,58 @@ public final class Utils {
 
 	public static boolean isKeyForSecretValue(String key) {
 		String keyLowerCase = key.toLowerCase(Locale.ROOT);
-		return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
+
+		if (BLACKLISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
+			return true;
+		} else if (WHITELISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
+			return false;
+		} else {
+			return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
+		}
+	}
+
+	public static String parseMarkdown(String markdown) {
+		if (markdown == null) {
+			return "";
+		}
+
+		Node document = markdownParser.parse(markdown);
+		return renderer.render(document);
+	}
+
+	public static String createTooltipForPropertyName(String propertyName, Map<String, Object> defaultsMap,
+			Map<String, String> descriptionsMap, String additionalTooltipText) {
+		if (propertyName == null) {
+			return "";
+		}
+
+		StringBuilder tooltip = new StringBuilder();
+
+		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
+			if (additionalTooltipText != null && !additionalTooltipText.isEmpty()) {
+				tooltip.append("default (" + additionalTooltipText + "): ");
+			} else {
+				tooltip.append("default: ");
+			}
+
+			if (Utils.isKeyForSecretValue(propertyName)) {
+				tooltip.append(Globals.STARRED_STRING);
+			} else {
+				tooltip.append(defaultsMap.get(propertyName));
+			}
+		}
+
+		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
+			tooltip.append(Utils.parseMarkdown(descriptionsMap.get(propertyName)));
+		}
+
+		if (tooltip.length() > 200) {
+			Logging.debug("tooltip length is ", tooltip.length());
+			tooltip.insert(0, "<div style='width: 500px'>");
+			tooltip.append("</div>");
+		}
+
+		return "<html>" + tooltip + "</html>";
 	}
 
 	public static String getSeconds() {

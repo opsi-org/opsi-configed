@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import de.uib.configed.dashboard.chart.ClientActivityComparison?>
-<?import de.uib.configed.dashboard.chart.ClientLastSeenComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.ClientActivityComparison?>
+<?import de.uib.configed.gui.features.dashboard.chart.ClientLastSeenComparison?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -45,11 +45,7 @@
                            styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="clientsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="clientNumberTitleText" strokeType="OUTSIDE"
@@ -61,11 +57,7 @@
                            prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="activeClientsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="activeClientNumberTitleText" strokeType="OUTSIDE"
@@ -77,11 +69,7 @@
                            prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="inactiveClientsNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="inactiveClientNumberTitleText" strokeType="OUTSIDE"
@@ -93,11 +81,7 @@
                            prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="fourteenOrLowerDaysNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="fourteenOrLowerDaysNumberTitleText" strokeType="OUTSIDE"
@@ -109,11 +93,8 @@
                            prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="betweenFifteenAndThirtyDaysNumberLabel" text="0"
-                                 wrapText="true" BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 wrapText="true" BorderPane.alignment="CENTER"
+                                 styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="betweenFifteenAndThirtyDaysNumberTitleText"
@@ -126,11 +107,7 @@
                            prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="moreThanThirtyDaysNumberLabel" text="0" wrapText="true"
-                                 BorderPane.alignment="CENTER">
-                                 <font>
-                                    <Font name="System Bold" size="28.0" />
-                                 </font>
-                              </Label>
+                                 BorderPane.alignment="CENTER" styleClass="big-label" />
                            </center>
                            <bottom>
                               <Text fx:id="moreThanThirtyDaysNumberTitleText" strokeType="OUTSIDE"

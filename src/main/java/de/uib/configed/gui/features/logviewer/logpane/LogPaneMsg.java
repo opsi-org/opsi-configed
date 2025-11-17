@@ -14,7 +14,8 @@ public sealed interface LogPaneMsg
 		LogPaneMsg.FontSizeChanged, LogPaneMsg.ChangeCaretPosition, LogPaneMsg.ToggleCaseSensitivity {
 
 	enum SimpleMsg implements LogPaneMsg {
-		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD, DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP, FLOAT_EXTERNAL,
+		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD, COPY_CONTENTS, DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP,
+		FLOAT_EXTERNAL,
 	}
 
 	record Search(String query) implements LogPaneMsg {

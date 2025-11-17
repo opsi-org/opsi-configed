@@ -100,7 +100,7 @@ public class TabbedLogPane extends JTabbedPane {
 	}
 
 	private boolean logfileExists(String logtype) {
-		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
+		return !logfiles.get(logtype).isEmpty()
 				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 	}
 

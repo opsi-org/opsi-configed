@@ -125,8 +125,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						persistenceController
-								.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
+						persistenceController.reloadData(ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD.toString());
 					}
 
 					@Override

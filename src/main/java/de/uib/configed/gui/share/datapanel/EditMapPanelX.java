@@ -9,8 +9,8 @@ package de.uib.configed.gui.share.datapanel;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +28,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.commonmark.ext.autolink.AutolinkExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
-
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -61,9 +57,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private JMenuItem setDefaultValue;
 	private JMenuItem popupItemAddStringListEntry;
 
-	protected Map<String, Object> originalMap;
+	private JMenuItem multiLineEditingItem;
 
-	private Parser markdownParser = Parser.builder().extensions(Arrays.asList(AutolinkExtension.create())).build();
+	protected Map<String, Object> originalMap;
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
@@ -123,8 +119,19 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		popupMenu = definePopup();
 
 		Logging.debug(this, "logPopupElements ", popupMenu.getSubElements().length);
+		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
+		Icons.addIntellijIconToMenuItem(multiLineEditingItem, "edit");
+		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
+		multiLineEditingItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu) {
+			@Override
+			protected void maybeShowPopup(MouseEvent e) {
+				updatePopupMenu();
+				super.maybeShowPopup(e);
+			}
+		};
 
-		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -136,11 +143,15 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			popupItemAddStringListEntry = new JMenuItem(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 			popupItemAddStringListEntry.addActionListener(actionEvent -> new CreateConfigDialog(this));
+			popupItemAddStringListEntry.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly());
 			popupMenu.add(popupItemAddStringListEntry);
 
 			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
 			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
+			popupItemDeleteEntry0.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly());
 
 			popupMenu.add(popupItemDeleteEntry0);
 			// the menu item seems to work only for one menu
@@ -172,6 +183,36 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		propertyHandler.setMapTableModel(mapTableModel);
+	}
+
+	private void updatePopupMenu() {
+		int row = table.getSelectedRow();
+
+		if (row != -1 && modelProducer.isEditable(row)
+				&& modelProducer.getSelectionMode(row) == ListSelectionModel.SINGLE_SELECTION) {
+			popupMenu.add(multiLineEditingItem);
+		} else {
+			popupMenu.remove(multiLineEditingItem);
+		}
+
+		if (setDefaultValue != null) {
+			setDefaultValue.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly());
+		}
+
+		if (popupRemoveSpecificEntry != null) {
+			popupRemoveSpecificEntry.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly());
+		}
+	}
+
+	public void startMultiLineEditing() {
+		int row = table.getSelectedRow();
+		if (row == -1) {
+			return;
+		}
+
+		propertiesCellEditorAndRenderer.editMultiValueSingleLine(table, row);
 	}
 
 	public void setOriginalMap(Map<String, Object> originalMap) {
@@ -291,7 +332,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
-		jComponent.setToolTipText(generateTooltip(row));
+		jComponent
+				.setToolTipText(Utils.createTooltipForPropertyName(names.get(row), defaultsMap, descriptionsMap, null));
 
 		// check equals with default
 		Object defaultValue;
@@ -318,33 +360,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 				&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
-	}
-
-	private String generateTooltip(int row) {
-		String propertyName = names.get(row);
-
-		StringBuilder tooltip = new StringBuilder();
-
-		if (propertyName != null) {
-			if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-				tooltip.append("default: ");
-
-				if (Utils.isKeyForSecretValue(propertyName)) {
-					tooltip.append(Globals.STARRED_STRING);
-				} else {
-					tooltip.append(defaultsMap.get(propertyName));
-				}
-			}
-
-			if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-				// Keep newlines as <br> in HTML so non-markdown text is displayed better
-				Node document = markdownParser.parse(descriptionsMap.get(propertyName).replace("\n", "  \n"));
-				HtmlRenderer renderer = HtmlRenderer.builder().build();
-				tooltip.append(renderer.render(document));
-			}
-		}
-
-		return "<html>" + tooltip + "</html>";
 	}
 
 	@Override

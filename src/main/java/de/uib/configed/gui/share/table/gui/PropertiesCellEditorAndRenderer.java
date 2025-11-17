@@ -15,9 +15,12 @@ import java.util.Map;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -26,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -38,8 +42,9 @@ import de.uib.configed.share.logging.Logging;
 
 public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
 	private static final int BOOLEAN = 0;
-	private static final int SINGLE_SELECTION = 1;
-	private static final int MULTI_SELECTION = 2;
+	private static final int SINGLE_SELECTION_SINGLE_LINE = 1;
+	private static final int SINGLE_SELECTION_MULTI_LINE = 2;
+	private static final int MULTI_SELECTION = 3;
 
 	// Components for the renderer
 	private FlatTriStateCheckBox rendererCheckBox;
@@ -50,6 +55,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	private FlatTriStateCheckBox checkBox;
 	private JComboBox<String> comboBox;
+	private JTextArea multiLineTextArea;
+	private JScrollPane multiLineScrollPane;
 
 	private ListSelectionDialog listSelectionDialog;
 
@@ -77,10 +84,13 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		comboBox.addActionListener(actionEvent -> stopCellEditing());
 
+		multiLineTextArea = new JTextArea();
+		multiLineScrollPane = new JScrollPane(multiLineTextArea);
+		multiLineScrollPane.setPreferredSize(ListSelectionDialog.DEFAULT_MULTI_LINE_EDITOR_SIZE);
+
 		unusedfield = new JLabel();
 
 		listSelectionDialog = new ListSelectionDialog(null, null, true);
-		listSelectionDialog.setMultiSelection();
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
@@ -89,8 +99,9 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService();
+		if (userRolesConfigDataService.isGlobalReadOnly() && !userRolesConfigDataService.canEditOwnServerRole()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}
@@ -119,7 +130,9 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
 				result = getBooleanEditor(value, key);
 			} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
-				result = getMultiValueEditor(table, value, row);
+				result = getMultiValueEditor((String) table.getValueAt(row, 0), value, row);
+			} else if (value.toString().contains("\n")) {
+				result = getSingleValueMultiLineEditor((String) table.getValueAt(row, 0), value);
 			} else {
 				result = getSingleValueEditor(value, row);
 			}
@@ -143,8 +156,50 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return checkBox;
 	}
 
+	public void editMultiValueSingleLine(JTable table, int row) {
+		Object result = startMultiLineEditor((String) table.getValueAt(row, 0), table.getValueAt(row, 1));
+
+		if (result != null && result.equals(JOptionPane.OK_OPTION)) {
+			table.setValueAt(Collections.singletonList(multiLineTextArea.getText()), table.getSelectedRow(), 1);
+		}
+	}
+
+	private Object startMultiLineEditor(String title, Object value) {
+		if (!((List<?>) value).isEmpty()) {
+			multiLineTextArea.setText(((List<?>) value).get(0).toString());
+		}
+
+		JOptionPane optionPane = new JOptionPane(multiLineScrollPane, JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(optionPane);
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), title);
+		dialog.pack();
+		dialog.setVisible(true);
+
+		return optionPane.getValue();
+	}
+
+	private Component getSingleValueMultiLineEditor(String title, Object value) {
+		selectionMode = SINGLE_SELECTION_MULTI_LINE;
+
+		Object result = startMultiLineEditor(title, value);
+
+		// Invoke this outside so that editing will be started before it's stopped or cancelled.
+		// Editing is started when the Component (not null) is returned
+		SwingUtilities.invokeLater(() -> {
+			if (result != null && result.equals(JOptionPane.OK_OPTION)) {
+				stopCellEditing();
+			} else {
+				cancelCellEditing();
+			}
+		});
+
+		// We cannot return null here, otherwise the editing is cancelled...
+		return unusedfield;
+	}
+
 	private Component getSingleValueEditor(Object value, int row) {
-		selectionMode = SINGLE_SELECTION;
+		selectionMode = SINGLE_SELECTION_SINGLE_LINE;
 
 		comboBox.setModel(modelProducer.getComboBoxModel(row));
 
@@ -165,10 +220,10 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return comboBox;
 	}
 
-	private Component getMultiValueEditor(JTable table, Object value, int row) {
+	private Component getMultiValueEditor(String title, Object value, int row) {
 		selectionMode = MULTI_SELECTION;
 
-		listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
+		listSelectionDialog.setTitle(title);
 		listSelectionDialog.setModel(modelProducer.getListModel(row));
 
 		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
@@ -192,13 +247,13 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Object getCellEditorValue() {
-		if (selectionMode == BOOLEAN) {
-			return Collections.singletonList(checkBox.getChecked());
-		} else if (selectionMode == SINGLE_SELECTION) {
-			return Collections.singletonList(getComboBoxValue());
-		} else {
-			return listSelectionDialog.getSelectedValues();
-		}
+		return switch (selectionMode) {
+		case BOOLEAN -> Collections.singletonList(checkBox.getChecked());
+		case SINGLE_SELECTION_SINGLE_LINE -> Collections.singletonList(getComboBoxValue());
+		case SINGLE_SELECTION_MULTI_LINE -> Collections.singletonList(multiLineTextArea.getText());
+		case MULTI_SELECTION -> listSelectionDialog.getSelectedValues();
+		default -> throw new IllegalStateException("Unexpected value: " + selectionMode);
+		};
 	}
 
 	// The correct value for the combo box depends on whether it is editable or not.
@@ -281,7 +336,29 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	}
 
 	public static String formatList(Object value) {
-		String s = value.toString();
-		return s.substring(Math.min(s.length(), 1), Math.max(0, s.length() - 1));
+		StringBuilder result = new StringBuilder();
+		for (Object element : ((List<?>) value)) {
+			result.append(formatValue(element));
+			result.append(" • ");
+		}
+		if (!result.isEmpty()) {
+			// Remove the last " • "
+			result.setLength(result.length() - 3);
+		}
+
+		return result.toString();
+	}
+
+	public static String formatValue(Object value) {
+		StringBuilder result = new StringBuilder();
+
+		String str = value.toString();
+		if (str.contains("\n")) {
+			result.append(str.substring(0, str.indexOf('\n')));
+			result.append("...");
+		} else {
+			result.append(str);
+		}
+		return result.toString();
 	}
 }

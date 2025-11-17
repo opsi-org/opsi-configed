@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.Map;
-
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,9 +15,6 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 
 public class SessionInfoRetriever extends SwingWorker<Void, Void> {
-	private boolean onlySelectedClients;
-	private Map<String, String> sessionInfo;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -29,15 +24,9 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		this.configedMain = configedMain;
 	}
 
-	public void setOnlySelectedClients(boolean onlySelectedClients) {
-		this.onlySelectedClients = onlySelectedClients;
-	}
-
 	@Override
 	protected Void doInBackground() throws Exception {
-		sessionInfo = persistenceController.getHostDataService()
-				.sessionInfo(onlySelectedClients ? configedMain.getSelectedClients() : null);
-		configedMain.setSessionInfo(sessionInfo);
+		persistenceController.getHostDataService().retrieveSessionInfo(configedMain.getSelectedClients());
 		return null;
 	}
 
@@ -55,11 +44,13 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 
 			for (int row = 0; row < clientTable.getRowCount(); row++) {
 				String clientId = clientTable.getClientName(row);
-				clientTable.setValueAt(sessionInfo.get(clientId), row, col);
+				clientTable.setValueAt(persistenceController.getHostDataService().getSessionInfo().get(clientId), row,
+						col);
 			}
 
 			model.fireTableDataChanged();
-			configedMain.getClientTablePanel().setSelectedValues(sessionInfo.keySet());
+			configedMain.getClientTablePanel()
+					.setSelectedValues(persistenceController.getHostDataService().getSessionInfo().keySet());
 		}
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
@@ -75,7 +66,6 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		Logging.info("setColumnSessionInfo ", visible);
 
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(configedMain);
-		infoRetriever.setOnlySelectedClients(!configedMain.getSelectedClients().isEmpty());
 		infoRetriever.execute();
 	}
 }

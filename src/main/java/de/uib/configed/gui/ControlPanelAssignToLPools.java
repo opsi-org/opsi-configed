@@ -439,6 +439,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 			// setting back the other tables is provided by ListSelectionListener
 		});
+		menuItemAddPool.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		thePanel.getPanelLicensepools().addPopupItem(menuItemAddPool);
 		thePanel.getPanelLicensepools().getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -495,6 +496,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			modelProductId2LPool.addRow(a);
 			thePanel.getPanelProductId2LPool().moveToValue("" + a[0], 0);
 		});
+		menuItemAddRelationProductId2LPool
+				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		thePanel.getPanelProductId2LPool().addPopupItem(menuItemAddRelationProductId2LPool);
 
@@ -938,7 +941,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	public String getSelectedLicensePool() {
 		if (thePanel.getPanelLicensepools().getGenEditTable().getSelectedRow() >= 0) {
-			return thePanel.getPanelLicensepools()
+			return thePanel.getPanelLicensepools().getGenEditTable()
 					.getValueAt(thePanel.getPanelLicensepools().getGenEditTable().getSelectedRow(), 0).toString();
 		} else {
 			return null;

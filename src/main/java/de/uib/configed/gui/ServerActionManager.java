@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.gui.type.HostInfo;
@@ -67,7 +68,7 @@ public final class ServerActionManager {
 				Logging.debug("createClients", clients);
 				Logging.checkErrorList();
 
-				persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
+				persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 
 				configedMain.setRebuiltClientListTableModel(true, true);
 				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
@@ -84,7 +85,7 @@ public final class ServerActionManager {
 		Logging.checkErrorList();
 		isLocalChangeInProgress.set(true);
 		try {
-			persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
+			persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 
 			configedMain.setRebuiltClientListTableModel(true, true);
 
@@ -181,7 +182,8 @@ public final class ServerActionManager {
 	}
 
 	public static void shutdownSelectedClients() {
-		if (configedMain.getSelectedClients().isEmpty()) {
+		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 
@@ -198,7 +200,8 @@ public final class ServerActionManager {
 	}
 
 	public static void rebootSelectedClients() {
-		if (configedMain.getSelectedClients().isEmpty()) {
+		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 

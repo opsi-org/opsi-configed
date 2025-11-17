@@ -6,10 +6,10 @@
 
 package de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -29,38 +29,33 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		super(operation);
 
 		productDefaultStates = persistenceController.getProductDataService().getProductDefaultStatesPD();
-		productsWithDefaultValues = new TreeSet<>(productDefaultStates.keySet());
+		productsWithDefaultValues = new HashSet<>(productDefaultStates.keySet());
 	}
 
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
 		Logging.debug(this, "doesMatch starting");
+		ExecutableOperation childOperation = (ExecutableOperation) getChildOperations().get(0);
+		Logging.debug(this, " getChildOperations().get(0) check default product values, instance of ",
+				childOperation.getClass());
 
 		List<Map<String, String>> softwareSet = client.getSoftwareList();
-		List<String> theProductNames = client.getProductNames();
-		TreeSet<String> productsWithDefaultValuesClient = new TreeSet<>(productsWithDefaultValues);
-
-		productsWithDefaultValuesClient.removeAll(theProductNames);
-
 		for (Map<String, String> value : softwareSet) {
-			if (value instanceof Map) {
-				client.setCurrentSoftwareValue(value);
-				Logging.debug(this, " getChildOperations().get(0) instance of ",
-						getChildOperations().get(0).getClass());
-				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
-					return true;
-				}
-			} else {
-				Logging.error(this, "Software map returned bad value (not a Map)");
+			client.setCurrentSoftwareValue(value);
+			if (childOperation.doesMatch(client)) {
+				return true;
 			}
 		}
 
-		for (String product : productsWithDefaultValuesClient) {
-			client.setCurrentSoftwareValue(productDefaultStates.get(product));
-			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of ",
-					(getChildOperations().get(0)).getClass());
-			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
-				return true;
+		Set<String> clientProductNames = new HashSet<>(client.getProductNames());
+
+		// We go through 
+		for (String product : productsWithDefaultValues) {
+			if (!clientProductNames.contains(product)) {
+				client.setCurrentSoftwareValue(productDefaultStates.get(product));
+				if (childOperation.doesMatch(client)) {
+					return true;
+				}
 			}
 		}
 

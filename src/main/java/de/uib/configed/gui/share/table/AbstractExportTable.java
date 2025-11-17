@@ -180,7 +180,7 @@ public abstract class AbstractExportTable {
 			if (file.exists()) {
 				int option = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
 						Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
-						Configed.getResourceValue("DocumentExport.question"), JOptionPane.OK_CANCEL_OPTION);
+						Configed.getResourceValue("DocumentExport.fileAlreadyExists"), JOptionPane.OK_CANCEL_OPTION);
 
 				if (option == JOptionPane.CANCEL_OPTION) {
 					return null;

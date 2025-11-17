@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.clientselection;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -122,11 +123,11 @@ public class SelectionManager {
 		return build(groupWithStatusList, new int[] { 0 });
 	}
 
-	public List<String> selectClients() {
+	public Set<String> selectClients() {
 		AbstractSelectOperation operation = getTopOperation();
 		if (operation == null) {
 			Logging.info(this, "Nothing selected");
-			return new ArrayList<>();
+			return new HashSet<>();
 		} else {
 			Logging.info("\n", operation.printOperation(""));
 		}
@@ -135,7 +136,7 @@ public class SelectionManager {
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
 		Logging.info(this, "selectClients, operation ", operation.getClassName());
 		Logging.info(this, "", ((AbstractSelectGroupOperation) operation).getChildOperations().size());
-		List<String> selectedClients = backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
+		Set<String> selectedClients = backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
 		Logging.notice(this, "select Clients ", System.currentTimeMillis() - startTime);
 		return selectedClients;
 	}

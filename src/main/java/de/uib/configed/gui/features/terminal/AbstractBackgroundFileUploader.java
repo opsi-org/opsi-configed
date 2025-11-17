@@ -53,7 +53,7 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 
 			try {
 				terminal.getTerminalFileUploadProgressIndicator().updateFileUploadProgressBar(chunkSize,
-						(int) Files.size(currentFile.toPath()));
+						Files.size(currentFile.toPath()));
 			} catch (IOException e) {
 				Logging.warning(this, e, "unable to retrieve file size: ");
 			}

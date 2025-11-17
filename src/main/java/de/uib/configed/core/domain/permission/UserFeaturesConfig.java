@@ -13,7 +13,6 @@ import java.util.Set;
 import de.uib.configed.share.logging.Logging;
 
 public class UserFeaturesConfig extends UserConfigModule {
-
 	public static final String KEY_MOTD_ACCESS_FORBIDDEN = "message_of_the_day.forbidden";
 	public static final String KEY_OPT_MOTD_DEVICE = "Device";
 	public static final String KEY_OPT_MOTD_USER = "User";

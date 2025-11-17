@@ -6,27 +6,19 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dialog.ModalityType;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 import de.uib.configed.core.domain.SavedSearches;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
@@ -36,104 +28,49 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.features.clientselection.SelectionManager;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
-import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class SavedSearchesDialog {
+public class SavedSearchesDialog extends ListSelectionDialog {
 	private SelectionManager manager;
-	private List<String> result;
+	private Collection<String> result;
 	private DefaultListModel<String> model;
 
 	private ConfigedMain configedMain;
-
-	private JList<String> visibleList;
-	private TableSearchPane searchPane;
-
-	private JOptionPane optionPane;
-	private JDialog dialog;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public SavedSearchesDialog(ConfigedMain configedMain) {
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
+
 		this.configedMain = configedMain;
 
-		JPanel panel = createPanel();
-
-		// The visibleList already needs to exist
-		initPopupMenu();
-
-		JButton searchButton = new JButton(Configed.getResourceValue("search"));
-		searchButton.addActionListener((ActionEvent actionEvent) -> {
-			commit();
-			dialog.setVisible(false);
-		});
-
-		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
-				new Object[] { searchButton, Configed.getResourceValue("buttonCancel") });
-		Utils.enableDialogResizing(optionPane);
-
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		dialog.setModalityType(ModalityType.MODELESS);
-
-		waitForUserInput();
-	}
-
-	private void waitForUserInput() {
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("search"))) {
-			commit();
-		}
-	}
-
-	public void show() {
-		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		dialog.setVisible(true);
-
-		waitForUserInput();
-	}
-
-	private JPanel createPanel() {
 		manager = new SelectionManager();
 		result = new ArrayList<>();
-
 		model = new DefaultListModel<>();
-
-		visibleList = new JList<>(model);
-		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		visibleList.addMouseListener(new MouseAdapter() {
+		listSelectionList.setModel(model);
+		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 1) {
 					commit();
-					dialog.setVisible(false);
 				}
 			}
 		});
 
-		JScrollPane scrollPane = new JScrollPane(visibleList);
+		super.setSingleSelection();
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
-				new ArrayList<>());
-		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setNarrow(true);
+		// The listSelectionList already needs to exist
+		initPopupMenu();
 
-		resetModel();
+		JButton searchButton = new JButton(Configed.getResourceValue("search"));
+		searchButton.addActionListener(actionEvent -> commit());
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		jOptionPane.setOptions(new Object[] { searchButton, Configed.getResourceValue("cancel") });
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(searchPane).addComponent(scrollPane)));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(searchPane).addComponent(scrollPane));
-
-		return panel;
+		SavedSearchesDialog.this.resetModel();
 	}
 
 	private void initPopupMenu() {
@@ -147,8 +84,8 @@ public class SavedSearchesDialog {
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		Icons.addIntellijIconToMenuItem(edit, "edit");
-		edit.addActionListener(
-				actionEvent -> ExtraFrameController.editClientSearch(configedMain, visibleList.getSelectedValue()));
+		edit.addActionListener(actionEvent -> ExtraFrameController.editClientSearch(configedMain,
+				listSelectionList.getSelectedValue()));
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
 		Icons.addIntellijIconToMenuItem(add, "add");
@@ -160,25 +97,27 @@ public class SavedSearchesDialog {
 		jPopupMenu.add(edit);
 		jPopupMenu.add(add);
 
-		visibleList.setComponentPopupMenu(jPopupMenu);
+		listSelectionList.setComponentPopupMenu(jPopupMenu);
 	}
 
 	private void commit() {
 		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
-			result = new ArrayList<>();
-			List<String> selected = visibleList.getSelectedValuesList();
-			if (!selected.isEmpty()) {
-				manager.loadSearch(selected.get(0));
+			result = new HashSet<>();
+			String selected = listSelectionList.getSelectedValue();
+			if (selected != null) {
+				manager.loadSearch(selected);
 
 				result = manager.selectClients();
 			}
 			return result;
-		}, visibleList.getSelectedValue());
+		}, listSelectionList.getSelectedValue());
 		executor.execute();
+
+		dialog.setVisible(false);
 	}
 
 	private void removeSelectedEntry() {
-		int index = visibleList.getSelectedIndex();
+		int index = listSelectionList.getSelectedIndex();
 		Logging.debug(this, "remove selected Entry, list index ", index);
 
 		if (index == -1) {
@@ -217,9 +156,11 @@ public class SavedSearchesDialog {
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
-		searchPane.setTargetModel(new SearchTargetModelFromJList(visibleList, new ArrayList<>(descMap.keySet()),
+		listSelectionList.setModel(model);
+
+		searchPane.setTargetModel(new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(descMap.keySet()),
 				new ArrayList<>(descMap.values())));
 
-		visibleList.setCellRenderer(new ListCellRendererByIndex(descMap));
+		listSelectionList.setCellRenderer(new ListCellRendererByIndex(descMap));
 	}
 }

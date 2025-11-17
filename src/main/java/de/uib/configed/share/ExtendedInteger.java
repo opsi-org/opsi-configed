@@ -11,7 +11,7 @@ import de.uib.configed.share.logging.Logging;
 public class ExtendedInteger implements Comparable<Integer> {
 	private static final String INFINITE_IMPORT = "infinite";
 	private static final String S_INFINITE = "INFINITE";
-	private static final String DISPLAY_INFINITE = "\u221E";
+	public static final String DISPLAY_INFINITE = "\u221E";
 
 	public static final ExtendedInteger INFINITE = new ExtendedInteger(S_INFINITE);
 	public static final ExtendedInteger ZERO = new ExtendedInteger(0);

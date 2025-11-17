@@ -82,6 +82,16 @@ public class TextInputField extends JPanel {
 		combo.setEditable(b);
 	}
 
+	public void setReadOnly(boolean readOnly) {
+		if (isValueList) {
+			combo.setEditable(true);
+			JTextField editor = (JTextField) combo.getEditor().getEditorComponent();
+			editor.setEditable(!readOnly);
+		} else {
+			textfield.setEditable(!readOnly);
+		}
+	}
+
 	@Override
 	public void setToolTipText(String s) {
 		textfield.setToolTipText(s);

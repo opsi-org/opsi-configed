@@ -29,6 +29,8 @@ import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.share.logging.Logging;
 
 public class ProductTable extends JTable {
+	private Set<String> pendingSelection;
+
 	public ProductTable() {
 		super.setDragEnabled(true);
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -40,28 +42,48 @@ public class ProductTable extends JTable {
 		// only in case of setting ActionRequest needed, since we there call
 		// fireTableDataChanged
 		super.setValueAt(value, row, column);
-		setSelection(saveSelectedProducts);
+		setPendingSelection(saveSelectedProducts);
 	}
 
-	public void setSelection(Set<String> selectedIDs) {
+	public void setPendingSelection(Set<String> selectedIDs) {
 		getSelectionModel().setValueIsAdjusting(true);
+		try {
+			clearSelection();
 
-		clearSelection();
+			if (selectedIDs == null || selectedIDs.isEmpty()) {
+				Logging.info("setSelection: selectedIDs is null or empty; cleared current selection.");
+				return;
+			}
 
-		int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
+			int rowCount = getRowCount();
+			if (rowCount == 0) {
+				Logging.info(this,
+						"setSelection: table not populated yet; temporarily storing selection for later application.");
+				pendingSelection = selectedIDs;
+				return;
+			}
 
-		if (selectedIDs == null || selectedIDs.isEmpty()) {
-			Logging.info("selectedIds is null or empty");
-		} else {
-			for (int row = 0; row < getRowCount(); row++) {
+			int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
+
+			if (col < 0) {
+				Logging.info(this, "setSelection: 'productId' column not found; cannot apply selection at this time.");
+				return;
+			}
+
+			int matchedRows = 0;
+			for (int row = 0; row < rowCount; row++) {
 				Object productId = getValueAt(row, col);
 				if (selectedIDs.contains(productId)) {
 					addRowSelectionInterval(row, row);
+					matchedRows++;
 				}
 			}
-		}
 
-		getSelectionModel().setValueIsAdjusting(false);
+			Logging.info(this, "setSelection: requested " + selectedIDs.size() + " ID(s); selected " + matchedRows
+					+ " matching row(s).");
+		} finally {
+			getSelectionModel().setValueIsAdjusting(false);
+		}
 	}
 
 	private void reduceToSet(Set<String> filter) {
@@ -77,7 +99,7 @@ public class ProductTable extends JTable {
 		Set<String> selection = getSelectedIDs();
 		Logging.debug(this, "reduceToSelected: selectedIds  ", selection);
 		reduceToSet(selection);
-		setSelection(selection);
+		setPendingSelection(selection);
 	}
 
 	public void nodeSelection(DefaultMutableTreeNode node) {
@@ -87,7 +109,7 @@ public class ProductTable extends JTable {
 		} else {
 			Set<String> productIds = Collections.singleton(node.toString());
 			setFilter(productIds);
-			setSelection(productIds);
+			setPendingSelection(productIds);
 		}
 	}
 
@@ -101,8 +123,14 @@ public class ProductTable extends JTable {
 		Set<String> result = new HashSet<>();
 		int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
 
-		for (int selectionElement : getSelectedRows()) {
-			result.add((String) getValueAt(selectionElement, col));
+		if (getSelectedRowCount() == 0 && (pendingSelection != null && !pendingSelection.isEmpty())) {
+			Logging.info(this, "Table populated. Applying pending selection: ", pendingSelection);
+			result = pendingSelection;
+			pendingSelection = null;
+		} else {
+			for (int selectionElement : getSelectedRows()) {
+				result.add((String) getValueAt(selectionElement, col));
+			}
 		}
 
 		return result;
@@ -297,7 +325,7 @@ public class ProductTable extends JTable {
 			setFilter(productIds);
 
 			if (doSelection) {
-				setSelection(productIds);
+				setPendingSelection(productIds);
 			}
 		}
 	}

@@ -292,7 +292,8 @@ public class ModuleDataService {
 
 		Logging.info(this, " retrieveOpsiModules ", key, " old  warningLimit ", warningLimit, " stopLimit ", stopLimit);
 
-		if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
+		int allActiveClients = ((int) LicensingInfoMap.getInstance().getClientNumbersMap().get(LicensingInfoMap.ALL));
+		if (stopLimit != null && allActiveClients > stopLimit) {
 			opsiModules.put(key, false);
 		} else if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
 			LocalDateTime expiresDate = expiresForThisModule.getDate();
@@ -309,11 +310,11 @@ public class ModuleDataService {
 
 	private List<String> produceMissingModulesPermissionInfo(Map<String, Boolean> opsiModules,
 			Map<String, ModulePermissionValue> opsiModulesPermissions) {
-		int countClients = hostInfoCollections.getCountClients();
 		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 		for (String key : MODULE_CHECKED) {
-			int countClientsInThisBlock = countClients;
+			int allActiveClients = ((int) LicensingInfoMap.getInstance().getClientNumbersMap()
+					.get(LicensingInfoMap.ALL));
 
 			// tests
 
@@ -343,11 +344,10 @@ public class ModuleDataService {
 
 			if (problemToIndicate) {
 				Logging.info(this, "retrieveOpsiModules ", key, " , maxClients ", maxAllowedClientsForThisModule,
-						" count ", countClientsInThisBlock);
+						" count ", allActiveClients);
 
 				addExpiredModulePermissionInfo(key, expiresForThisModule, missingModulesPermissionInfo);
-				addOverused(key, maxAllowedClientsForThisModule, countClientsInThisBlock, countClients,
-						missingModulesPermissionInfo);
+				addOverused(key, maxAllowedClientsForThisModule, allActiveClients, missingModulesPermissionInfo);
 			}
 		}
 
@@ -366,28 +366,28 @@ public class ModuleDataService {
 		}
 	}
 
-	private void addOverused(String key, ExtendedInteger maxAllowedClientsForThisModule, int countClientsInThisBlock,
-			int countClients, List<String> missingModulesPermissionInfo) {
+	private void addOverused(String key, ExtendedInteger maxAllowedClientsForThisModule, int allActiveClients,
+			List<String> missingModulesPermissionInfo) {
 		if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
 			int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
 			int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
 
-			if (countClientsInThisBlock > stopCount) {
+			if (allActiveClients > stopCount) {
 				Logging.info(this, "retrieveOpsiModules ", key, " stopCount ", stopCount, " count clients ",
-						countClients);
+						allActiveClients);
 
 				String warningText = String.format(Configed.getResourceValue("Permission.modules.clientcount.error"),
-						"" + countClientsInThisBlock, "" + key, "" + maxAllowedClientsForThisModule.getNumber());
+						"" + allActiveClients, "" + key, "" + maxAllowedClientsForThisModule.getNumber());
 
 				missingModulesPermissionInfo.add(warningText);
 
 				Logging.warning(this, warningText);
-			} else if (countClientsInThisBlock > startWarningCount) {
+			} else if (allActiveClients > startWarningCount) {
 				Logging.info(this, "retrieveOpsiModules ", key, " startWarningCount ", startWarningCount,
-						" count clients ", countClients);
+						" count clients ", allActiveClients);
 
 				String warningText = String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
-						"" + countClientsInThisBlock, "" + key, "" + maxAllowedClientsForThisModule.getNumber());
+						"" + allActiveClients, "" + key, "" + maxAllowedClientsForThisModule.getNumber());
 
 				missingModulesPermissionInfo.add(warningText);
 				Logging.warning(this, warningText);

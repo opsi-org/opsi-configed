@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -28,6 +29,7 @@ import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.opera
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterThanOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntLessOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntLessThanOperation;
+import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataConnectionEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateGreaterOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateGreaterThanOperation;
@@ -45,6 +47,7 @@ import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.opera
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataSuperGroupEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataSwAuditOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiSoftwareEqualsOperation;
+import de.uib.configed.gui.features.clientselection.elements.ConnectionElement;
 import de.uib.configed.gui.features.clientselection.elements.DescriptionElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericBigIntegerElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericEnumElement;
@@ -127,6 +130,8 @@ public final class OpsiDataBackend {
 	private Map<String, String> hwUiToOpsi;
 	private Map<String, List<Map<String, Object>>> hwClassToValues;
 
+	private Set<String> clientsConnectedByMessagebus;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -138,7 +143,7 @@ public final class OpsiDataBackend {
 	 * Goes through the list of clients and filters them with operation. The
 	 * boolean arguments give hints which data is needed.
 	 */
-	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
+	public Set<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
 			boolean hasSwAudit) {
 		Logging.debug(this, "Starting the filtering.. , operation ", operation);
 		this.hasSoftware = hasSoftware;
@@ -147,13 +152,7 @@ public final class OpsiDataBackend {
 		List<OpsiDataClient> clients = getClients();
 		Logging.debug(this, "Number of clients to filter: ", clients.size());
 
-		List<String> matchingClients = new LinkedList<>();
-		for (OpsiDataClient client : clients) {
-			if (operation.doesMatch(client)) {
-				matchingClients.add(client.getId());
-			}
-		}
-		return matchingClients;
+		return clients.stream().filter(operation::doesMatch).map(OpsiDataClient::getId).collect(Collectors.toSet());
 	}
 
 	/**
@@ -200,6 +199,10 @@ public final class OpsiDataBackend {
 						(String) operation.getData(), element);
 			}
 			throw new IllegalArgumentException("Wrong operation for this element.");
+		}
+
+		if (element instanceof ConnectionElement) {
+			return new OpsiDataConnectionEqualsOperation((String) operation.getData(), element);
 		}
 
 		if (element instanceof GroupElement && operation instanceof StringEqualsOperation) {
@@ -421,6 +424,10 @@ public final class OpsiDataBackend {
 			superGroups = persistenceController.getHostInfoCollections().getFNode2TreeparentsPD();
 		}
 
+		if (clientsConnectedByMessagebus == null || reloadRequested) {
+			clientsConnectedByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
+		}
+
 		Set<String> clientNames = clientMaps.keySet();
 
 		if (hasSoftware) {
@@ -456,7 +463,9 @@ public final class OpsiDataBackend {
 
 		for (Entry<String, HostInfo> clientEntry : clientMaps.entrySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientEntry.getKey());
+			client.setConnectedByMessagebus(clientsConnectedByMessagebus);
 			client.setInfoMap(clientEntry.getValue().getMap());
+
 			if (hasHardware) {
 				client.setHardwareInfo(clientToHardware.get(clientEntry.getKey()));
 			}

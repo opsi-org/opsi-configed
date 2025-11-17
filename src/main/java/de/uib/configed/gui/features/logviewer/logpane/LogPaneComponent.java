@@ -8,12 +8,16 @@ package de.uib.configed.gui.features.logviewer.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.app.Main;
@@ -47,6 +52,8 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	public static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
+
+	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
 
 	protected LogTextPane logTextPane;
 
@@ -113,6 +120,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		switch (e) {
 		case SEARCH -> search();
 		case RELOAD -> reload();
+		case COPY_CONTENTS -> copyTextToClipboard();
 		case INCREASE_FONT_SIZE -> increaseFontSize();
 		case DECREASE_FONT_SIZE -> reduceFontSize();
 		case PARSE_LOG -> parse(model.getLogText());
@@ -130,6 +138,13 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		rootPanel = new JPanel();
 		logTextPane = new LogTextPane(model.getFontSize());
 		logTextPane.addKeyListener(this);
+		logTextPane.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "copyRaw");
+		logTextPane.getActionMap().put("copyRaw", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
+			}
+		});
 
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -249,12 +264,12 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_FLOATING_COPY };
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
+					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP,
+					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
@@ -271,6 +286,9 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		switch (p) {
 		case PopupMenuTrait.POPUP_RELOAD:
 			dispatch(LogPaneMsg.SimpleMsg.RELOAD);
+			break;
+		case PopupMenuTrait.POPUP_COPY:
+			dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
 			break;
 		case PopupMenuTrait.POPUP_DOWNLOAD:
 			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD);
@@ -310,6 +328,22 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	public void setCaretPosition(int caretPosition) {
 		dispatch(new LogPaneMsg.ChangeCaretPosition(caretPosition));
+	}
+
+	private void copyTextToClipboard() {
+		String selectedText = logTextPane.getSelectedText();
+		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
+		String cleanedText = removeLineNumbers(textToCopy);
+		StringSelection selection = new StringSelection(cleanedText);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+	}
+
+	private static String removeLineNumbers(String text) {
+		StringBuilder sb = new StringBuilder();
+		for (String line : text.split("\\R")) {
+			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst("")).append('\n');
+		}
+		return sb.toString();
 	}
 
 	public void reload() {

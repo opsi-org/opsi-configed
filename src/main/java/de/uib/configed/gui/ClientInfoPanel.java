@@ -46,8 +46,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientSystemUUID;
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
-	private JLabel labelClientOS;
-	private JLabel labelDeviceType;
 	private JLabel labelDeviceTypeIcon;
 	private JTextArea jTextAreaVendorModel;
 	private JLabel labelOneTimePassword;
@@ -56,7 +54,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JScrollPane scrollpaneNotes;
 	private JScrollPane scrollpaneVendorModel;
 
-	private JLabel labelClientID;
+	private JLabel labelClientOSIcon;
+	private JTextField jTextFieldClientID;
+	private JTextField jTextFieldClientOS;
+	private JTextField jTextFieldDeviceType;
 	private FlatTriStateCheckBox checkBoxInstallByShutdown;
 	private FlatTriStateCheckBox checkBoxUEFIBoot;
 	private FlatTriStateCheckBox checkBoxWANConfig;
@@ -76,7 +77,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private Map<String, Map<String, String>> changedClientInfos;
 
 	// We need this flag so that the document listener is not active when
-	// the data in the components are updated by the program instead of by user input
+	// the data in the components are updated by the program instead of by user
+	// input
 	private boolean dataAreChangedProgramatically;
 
 	private ConfigedMain configedMain;
@@ -92,22 +94,35 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	private void initComponents() {
-		labelClientID = new JLabel();
-
-		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
+		labelClientOSIcon = new JLabel();
+		jTextFieldClientID = createUneditableTextField();
+		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
+		labelClientDescription.setFont(labelClientDescription.getFont().deriveFont(Font.BOLD));
+
 		labelClientInventoryNumber = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
+		labelClientInventoryNumber.setFont(labelClientInventoryNumber.getFont().deriveFont(Font.BOLD));
+
 		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
+		labelClientNotes.setFont(labelClientNotes.getFont().deriveFont(Font.BOLD));
+
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
+		labelClientSystemUUID.setFont(labelClientSystemUUID.getFont().deriveFont(Font.BOLD));
+
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		labelClientMacAddress.setFont(labelClientMacAddress.getFont().deriveFont(Font.BOLD));
 
-		labelClientOS = new JLabel();
-		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
-		labelDeviceType = new JLabel();
+		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		labelClientIPAddress.setFont(labelClientIPAddress.getFont().deriveFont(Font.BOLD));
+
+		jTextFieldClientOS = createUneditableTextField();
+		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
+		jTextFieldClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
+
+		jTextFieldDeviceType = createUneditableTextField();
 		labelDeviceTypeIcon = new JLabel();
 
 		jTextAreaVendorModel = new JTextArea();
@@ -116,12 +131,15 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextAreaVendorModel.setBorder(null);
 
 		scrollpaneVendorModel = new JScrollPane(jTextAreaVendorModel);
-		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
 
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
+		labelOneTimePassword.setFont(labelOneTimePassword.getFont().deriveFont(Font.BOLD));
+
 		labelOpsiHostKey = new JLabel("opsi-host-key");
+		labelOpsiHostKey.setFont(labelOpsiHostKey.getFont().deriveFont(Font.BOLD));
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
@@ -184,6 +202,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		openHealthCheckSettingsDialogButton
 				.addActionListener(e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain,
 						configedMain.getSelectedClients(), checkBoxHealthCheckActive.getState()));
+		openHealthCheckSettingsDialogButton
+				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		checkBoxInstallByShutdown = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.installByShutdown"));
@@ -207,97 +227,101 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		hostKeyField.setTrailingComponent(jButtonCopyHostKey);
 	}
 
+	private static JTextField createUneditableTextField() {
+		JTextField textField = new JTextField();
+		textField.setEditable(false);
+		textField.setBorder(null);
+		textField.setBackground(null);
+		return textField;
+	}
+
 	private void setupLayout() {
 		GroupLayout layoutClientPane = new GroupLayout(this);
 		setLayout(layoutClientPane);
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutClientPane.createSequentialGroup()
+						.addComponent(labelClientOSIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(jTextFieldClientID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+
 				/////// Operating System (long label)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(jTextFieldClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 				/////// DEVICE INFO (icon, vendor, model)
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutClientPane.createSequentialGroup()
 						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(30, 30, 30)
+						.addComponent(jTextFieldDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(25, 25, 25)
 						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+
 				/////// DESCRIPTION
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// INVENTORY NUMBER
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// SYSTEM UUID
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(systemUUIDField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// MAC ADDRESS
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(macAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// IP ADDRESS
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(ipAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// INSTALL BY SHUTDOWN
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-						checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				/////// UEFI BOOT
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(checkBoxUEFIBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(checkBoxUEFIBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				/////// WAN CONFIG
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				/////// Health-Check active
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutClientPane.createSequentialGroup()
 						.addComponent(checkBoxHealthCheckActive, 0, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE).addComponent(openHealthCheckSettingsDialogButton,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// ONE TIME PASSWORD
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				////// opsiHostKey
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(hostKeyField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// NOTES
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT + 4,
-						Globals.DEFAULT_JLABEL_HEIGHT + 8)
+				.addGroup(layoutClientPane.createParallelGroup()
+						.addComponent(labelClientOSIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT)
+						.addComponent(jTextFieldClientID, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT))
 				/////// Operating System (long label)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
+				.addComponent(jTextFieldClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
 				/////// DEVICE INFO (icon, vendor, model)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutClientPane.createParallelGroup()
 						.addComponent(labelDeviceTypeIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
 								Globals.DEFAULT_JLABEL_HEIGHT)
-						.addComponent(labelDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT))
+						.addComponent(jTextFieldDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT))
 				.addComponent(scrollpaneVendorModel, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE,
 						Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE)
 
@@ -422,7 +446,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientOS(String s) {
 		dataAreChangedProgramatically = true;
-		labelClientOS.setText(s);
+		jTextFieldClientOS.setText(s);
 		dataAreChangedProgramatically = false;
 	}
 
@@ -448,7 +472,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		labelDeviceTypeIcon.setIcon(getDeviceTypeIcon(deviceType));
 
-		labelDeviceType.setText(transformDeviceType(deviceType));
+		jTextFieldDeviceType.setText(transformDeviceType(deviceType));
 
 		jTextAreaVendorModel.setText("");
 		if (vendor.isBlank() && model.isBlank()) {
@@ -465,8 +489,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 					+ "\n" + Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
 			jTextAreaVendorModel.append(vendor + "\n");
 			jTextAreaVendorModel.append(model);
-
 		}
+
+		// Go to the beginning of the text area
+		jTextAreaVendorModel.setCaretPosition(0);
 
 		dataAreChangedProgramatically = false;
 	}
@@ -479,7 +505,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientPlatform(String value) {
 		dataAreChangedProgramatically = true;
-		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
+		labelClientOSIcon.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
 		dataAreChangedProgramatically = false;
 	}
 
@@ -504,7 +530,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	public void setClientID(String s) {
-		labelClientID.setText(s);
+		jTextFieldClientID.setText(s);
 	}
 
 	public void updateClientCheckboxText() {

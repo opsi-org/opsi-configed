@@ -32,6 +32,8 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
 	private static final int LATENCY_WINDOW_SIZE = 10;
+	private static final double LOW_LATENCY_THRESHOLD = 50.0;
+	private static final double HIGH_LATENCY_THRESHOLD = 200.0;
 
 	private FileUploadQueue queue;
 	private TerminalWidget terminalWidget;
@@ -80,65 +82,79 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 	private void uploadFileInChunks(File file, FileChannel channel, String fileId) throws IOException {
 		int chunk = 0;
 		int offset = 0;
-		int chunkSize = DEFAULT_CHUNK_SIZE;
+		int chunkSize = (int) Math.min(channel.size(), DEFAULT_CHUNK_SIZE);
 		double[] latencyMeasurements = new double[LATENCY_WINDOW_SIZE];
 		int currentLatencyIndex = 0;
 		int numLatencyMeasurements = 0;
 
-		if (channel.size() < DEFAULT_CHUNK_SIZE) {
-			chunkSize = (int) channel.size();
-		}
+		while (true) {
+			ByteBuffer buff = ByteBuffer.allocate(chunkSize);
+			int bytesRead = channel.read(buff);
+			if (bytesRead <= 0) {
+				break;
+			}
 
-		ByteBuffer buff = ByteBuffer.allocate(chunkSize);
-
-		while (channel.read(buff) > 0) {
-			offset += chunkSize;
-			chunk += 1;
+			offset += bytesRead;
+			chunk++;
 			boolean last = offset >= Files.size(file.toPath());
 
 			publish(offset);
 
 			buff.flip();
 
-			Map<String, Object> data = new HashMap<>();
-			data.put("type", WebSocketEvent.FILE_CHUNK.toString());
-			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
-			data.put("channel", terminalWidget.getTerminalChannel());
-			data.put("created", System.currentTimeMillis());
-			data.put("expires", System.currentTimeMillis() + 10000);
-			data.put("file_id", fileId);
-			data.put("number", chunk);
-			data.put("data", buff);
-			data.put("last", last);
-
+			Map<String, Object> data = prepareChunkData(fileId, chunk, buff, last);
 			Logging.debug(this, "uploading file chunk: ", data);
 
-			ObjectMapper mapper = new MessagePackMapper();
-			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			terminalWidget.getMessagebus().sendMessage(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			sendChunk(data);
 
-			buff.clear();
-
-			long startWaitingTime = System.currentTimeMillis();
-			while (!last && terminalWidget.getMessagebus().isBusy()) {
-				wait(DEFAULT_BUSY_WAIT_IN_MS);
-			}
-			double latency = (double) System.currentTimeMillis() - (double) startWaitingTime;
+			double latency = measureLatency(last);
 			latencyMeasurements[currentLatencyIndex] = latency;
 			numLatencyMeasurements = Math.min(numLatencyMeasurements + 1, LATENCY_WINDOW_SIZE);
+
 			double movingAverageLatency = calculateMovingAverageLatency(numLatencyMeasurements, latencyMeasurements);
-			double scalingFactor = calculateScalingFactor(latency, movingAverageLatency);
-			chunkSize = modifyChunkSizeBasedOnScalingFactor(chunkSize, scalingFactor);
-			buff = ByteBuffer.allocate(chunkSize);
+			chunkSize = adjustChunkSize(chunkSize, movingAverageLatency);
+
 			currentLatencyIndex = (currentLatencyIndex + 1) % LATENCY_WINDOW_SIZE;
 		}
 	}
 
-	private static double calculateScalingFactor(double latency, double movingAverageLatency) {
-		double percentageDifference = Double.compare(movingAverageLatency, 0.0) == 0 ? 0.0
-				: (0.1 * (latency / movingAverageLatency));
-		return latency < movingAverageLatency ? (1.0 - percentageDifference) : (1.0 + percentageDifference);
+	private Map<String, Object> prepareChunkData(String fileId, int chunk, ByteBuffer buff, boolean last) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("type", WebSocketEvent.FILE_CHUNK.toString());
+		data.put("id", UUID.randomUUID().toString());
+		data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
+		data.put("channel", terminalWidget.getTerminalChannel());
+		data.put("created", System.currentTimeMillis());
+		data.put("expires", System.currentTimeMillis() + 10000);
+		data.put("file_id", fileId);
+		data.put("number", chunk);
+		data.put("data", buff);
+		data.put("last", last);
+		return data;
+	}
+
+	private void sendChunk(Map<String, Object> data) throws IOException {
+		ObjectMapper mapper = new MessagePackMapper();
+		byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
+		terminalWidget.getMessagebus().sendMessage(ByteBuffer.wrap(dataJsonBytes));
+	}
+
+	private double measureLatency(boolean last) {
+		long startWaitingTime = System.currentTimeMillis();
+		while (!last && terminalWidget.getMessagebus().isBusy()) {
+			wait(DEFAULT_BUSY_WAIT_IN_MS);
+		}
+		return (System.currentTimeMillis() - startWaitingTime);
+	}
+
+	private static int adjustChunkSize(int currentChunkSize, double movingAverageLatency) {
+		if (movingAverageLatency < LOW_LATENCY_THRESHOLD && currentChunkSize < MAX_CHUNK_SIZE) {
+			return Math.min(currentChunkSize * 2, MAX_CHUNK_SIZE);
+		} else if (movingAverageLatency > HIGH_LATENCY_THRESHOLD && currentChunkSize > MIN_CHUNK_SIZE) {
+			return Math.max(currentChunkSize / 2, MIN_CHUNK_SIZE);
+		} else {
+			return currentChunkSize;
+		}
 	}
 
 	private static double calculateMovingAverageLatency(int numLatencyMeasurements, double[] latencyMeasurements) {
@@ -147,11 +163,6 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			sum += latencyMeasurements[i];
 		}
 		return sum / numLatencyMeasurements;
-	}
-
-	private static int modifyChunkSizeBasedOnScalingFactor(int chunkSize, double scalingFactor) {
-		int newChunkSize = (int) (chunkSize * scalingFactor);
-		return Math.min(Math.max(newChunkSize, MIN_CHUNK_SIZE), MAX_CHUNK_SIZE);
 	}
 
 	private void sendFileUploadRequest(File file, String fileId) {

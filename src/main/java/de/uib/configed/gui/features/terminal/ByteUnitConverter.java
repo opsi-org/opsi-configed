@@ -11,51 +11,49 @@ import java.util.Locale;
 import de.uib.configed.share.logging.Logging;
 
 public class ByteUnitConverter {
-	private static final int ONE_MB_IN_BYTES = 1_000_000;
-	private static final int ONE_GB_IN_BYTES = 1_000_000_000;
-	private static final long ONE_TB_IN_BYTES = 1_000_000_000_000L;
+	private static final long ONE_KB = 1_000L;
+	private static final long ONE_MB = ONE_KB * 1_000;
+	private static final long ONE_GB = ONE_MB * 1_000;
+	private static final long ONE_TB = ONE_GB * 1_000;
 
-	public ByteUnit detectByteUnit(int bytes) {
-		ByteUnit result = null;
-
-		if (bytes < ONE_MB_IN_BYTES) {
+	public ByteUnit detectByteUnit(long bytes) {
+		ByteUnit result;
+		if (bytes < ONE_MB) {
 			result = ByteUnit.KILO_BYTE;
-		} else if (bytes > ONE_MB_IN_BYTES && bytes < ONE_GB_IN_BYTES) {
+		} else if (bytes < ONE_GB) {
 			result = ByteUnit.MEGA_BYTE;
-		} else if (bytes > ONE_GB_IN_BYTES && bytes < ONE_TB_IN_BYTES) {
+		} else if (bytes < ONE_TB) {
 			result = ByteUnit.GIGA_BYTE;
 		} else {
 			result = ByteUnit.TERA_BYTE;
 		}
-
 		return result;
 	}
 
-	public double convertByteUnit(int bytes, ByteUnit byteUnitToUse) {
-		double size = 0.0;
-
-		switch (byteUnitToUse) {
+	public double convertByteUnit(long bytes, ByteUnit unit) {
+		double size;
+		switch (unit) {
 		case KILO_BYTE:
-			size = bytes / 1000.0;
+			size = bytes / 1_000.0;
 			break;
 		case MEGA_BYTE:
-			size = bytes / Math.pow(1000, 2);
+			size = bytes / 1_000_000.0;
 			break;
 		case GIGA_BYTE:
-			size = bytes / Math.pow(1000, 3);
+			size = bytes / 1_000_000_000.0;
 			break;
 		case TERA_BYTE:
-			size = bytes / Math.pow(1000, 4);
+			size = bytes / 1_000_000_000_000.0;
 			break;
 		default:
-			Logging.warning(this, "unknown unit byte: ", byteUnitToUse);
+			Logging.warning(this, "Unknown byte unit: ", unit);
+			size = bytes;
 			break;
 		}
-
 		return size;
 	}
 
-	public String asString(double bytes, ByteUnit byteUnitToUse) {
-		return String.format(Locale.getDefault(), "%.2f %s", bytes, byteUnitToUse.toString());
+	public String asString(double value, ByteUnit unit) {
+		return String.format(Locale.getDefault(), "%.2f %s", value, unit);
 	}
 }

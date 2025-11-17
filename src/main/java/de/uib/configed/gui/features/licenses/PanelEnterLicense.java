@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.gui.Configed;
@@ -114,11 +113,9 @@ public class PanelEnterLicense extends MultiTablePanel {
 			return;
 		}
 
-		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
-
-		if (!lsm.isSelectionEmpty()) {
-			int selectedRow = lsm.getMinSelectionIndex();
-			String keyValue = panelLicenseContracts.getValueAt(selectedRow, 0).toString();
+		if (!panelLicenseContracts.getGenEditTable().getSelectionModel().isSelectionEmpty()) {
+			int selectedRow = panelLicenseContracts.getGenEditTable().getSelectionModel().getMinSelectionIndex();
+			String keyValue = panelLicenseContracts.getGenEditTable().getValueAt(selectedRow, 0).toString();
 
 			if (jTextFieldLicenseContract.isEnabled()) {
 				jTextFieldLicenseContract.setText(keyValue);
@@ -136,7 +133,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		selectedLicensePool = "";
 
 		if (i > -1) {
-			selectedLicensePool = panelLicensePools.getValueAt(i, 0).toString();
+			selectedLicensePool = panelLicensePools.getGenEditTable().getValueAt(i, 0).toString();
 		}
 
 		panelLicensePools.setTitle(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool")

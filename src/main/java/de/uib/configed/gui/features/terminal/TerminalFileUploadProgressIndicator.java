@@ -72,7 +72,7 @@ public class TerminalFileUploadProgressIndicator extends JPanel {
 		fileNameLabel.setText(file.getAbsolutePath());
 	}
 
-	public void updateFileUploadProgressBar(int progress, int fileSize) {
+	public void updateFileUploadProgressBar(int progress, long fileSize) {
 		if (!isVisible()) {
 			showFileUploadProgress(true);
 		}

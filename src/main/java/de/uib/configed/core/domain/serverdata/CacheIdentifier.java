@@ -248,6 +248,11 @@ public enum CacheIdentifier {
 	SERVER_FULL_PERMISION("server_full_permission"),
 
 	/**
+	 * return type {@code Map<String, String>}
+	 */
+	SESSION_INFO("session_info"),
+
+	/**
 	 * return type {@code boolean}
 	 */
 	DEPOTS_FULL_PERMISSION("depots_full_permission"),
@@ -361,11 +366,6 @@ public enum CacheIdentifier {
 	 * return type {@code Map<String, Map<String, ConfigName2ConfigValue>>}
 	 */
 	PRODUCT_PROPERTIES("product_properties"),
-
-	/**
-	 * return type {@code Map<String, Boolean>}
-	 */
-	PRODUCT_HAVING_CLIENT_SPECIFIC_PROPERTIES("product_having_client_specific_properties"),
 
 	/**
 	 * return type {@code Map<String, Map<String, ListCellOptions>>}

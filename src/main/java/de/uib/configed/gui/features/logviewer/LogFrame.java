@@ -77,7 +77,7 @@ public class LogFrame extends JFrame {
 		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileOpen.addActionListener(actionEvent -> openFileInLogFrame());
 
-		JMenuItem jMenuFileClose = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileClose"));
+		JMenuItem jMenuFileClose = new JMenuItem(Configed.getResourceValue("buttonClose"));
 		Icons.addIntellijIconToMenuItem(jMenuFileClose, "close");
 		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileClose.addActionListener(actionEvent -> closeFile());

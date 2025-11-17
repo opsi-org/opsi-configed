@@ -66,6 +66,9 @@ public final class HealthCheckSettingsDialog {
 	}
 
 	public void showHealthCheckSettings(ConfigedMain configedMain, List<String> defaultSelection, State state) {
+		if (!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+			return;
+		}
 		this.configedMain = configedMain;
 		Logging.info(this, "show health check settings dialog");
 
@@ -96,7 +99,6 @@ public final class HealthCheckSettingsDialog {
 		hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
 
 		selectedHostList.setListData(hostNames);
-		selectedHostList.setMultiSelection();
 		if (defaultSelection != null && !defaultSelection.isEmpty()) {
 			selectedHostList.setPreviousSelectionValues(defaultSelection);
 		}

@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -53,6 +54,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -65,13 +67,13 @@ public class CSVTemplateCreatorDialog {
 
 	private JFormattedTextField otherDelimiterInput;
 
-	private List<String> columnNames;
+	private Set<String> columnNames;
 	private List<JCheckBox> headerCheckBoxes;
 
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	public CSVTemplateCreatorDialog(List<String> columnNames, Component parent) {
+	public CSVTemplateCreatorDialog(Set<String> columnNames, Component parent) {
 		this.columnNames = columnNames;
 
 		JPanel panel = initPanel();
@@ -128,8 +130,8 @@ public class CSVTemplateCreatorDialog {
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
 
-		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		quoteLabel.setFont(quoteLabel.getFont().deriveFont(Font.BOLD));
+		JLabel delimeterLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		delimeterLabel.setFont(delimeterLabel.getFont().deriveFont(Font.BOLD));
 
 		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
@@ -190,7 +192,7 @@ public class CSVTemplateCreatorDialog {
 				.addComponent(includeFormatHintOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(delimeterLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -210,7 +212,7 @@ public class CSVTemplateCreatorDialog {
 						.addGap(Globals.GAP_SIZE).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
@@ -219,7 +221,7 @@ public class CSVTemplateCreatorDialog {
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(includeFormatHintOption).addGap(Globals.GAP_SIZE)
-				.addComponent(fieldSeparatorLabel)
+				.addComponent(delimeterLabel)
 				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -230,13 +232,17 @@ public class CSVTemplateCreatorDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(otherOption)
 						.addComponent(otherDelimiterInput))
-				.addGap(Globals.GAP_SIZE).addComponent(quoteLabel).addComponent(quoteOptions));
+				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addComponent(quoteOptions));
 
 		return centerPanel;
 	}
 
 	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {
 		JCheckBox headerCheckBox = new JCheckBox(header, isImportantHeader(header));
+		if (isImportantHeader(header)) {
+			headerCheckBox.setEnabled(false);
+			headerCheckBox.setIcon(Icons.getIntellijIcon("locked"));
+		}
 		headerCheckBox.setActionCommand(header);
 
 		model.addElement(headerCheckBox);
@@ -244,8 +250,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	private static boolean isImportantHeader(String header) {
-		return HostInfo.HOSTNAME_KEY.equals(header) || "domain".equals(header)
-				|| HostInfo.DEPOT_OF_CLIENT_KEY.equals(header) || HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header);
+		return CSVImportDataModifier.getImportantHeaders().contains(header);
 	}
 
 	private static class InputListener implements DocumentListener {
@@ -331,7 +336,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	public static void displayCSVTemplateDialog(Component parent) {
-		List<String> columnNames = HostInfo.getKeysForCSV();
+		Set<String> columnNames = HostInfo.getKeysForCSV();
 		if (csvTemplateCreatorDialog == null) {
 			csvTemplateCreatorDialog = new CSVTemplateCreatorDialog(columnNames, parent);
 		}

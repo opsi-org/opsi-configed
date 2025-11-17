@@ -516,21 +516,16 @@ public class OpsiDataSerializer {
 	 * version 1
 	 */
 	private static AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
-		if (!(operation instanceof AbstractSelectGroupOperation)) {
+		return switch (operation) {
+		case AndOperation andOperation -> handleAndOperation(andOperation);
+		case AbstractSelectGroupOperation groupOp when isSpecialGroupOperation(groupOp) -> groupOp;
+		case AbstractSelectGroupOperation groupOp when !(groupOp instanceof AndOperation) -> new HostOperation(groupOp);
+		default -> {
 			Logging.debug("No group: ", operation.getClassName(), ", element path size: ",
 					operation.getElement().getPathArray().length);
-			return (operation.getElement().getPathArray().length == 1) ? new HostOperation(operation) : operation;
+			yield (operation.getElement().getPathArray().length == 1) ? new HostOperation(operation) : operation;
 		}
-
-		if (isSpecialGroupOperation(operation)) {
-			return operation;
-		}
-
-		if (!(operation instanceof AndOperation)) {
-			return new HostOperation(operation);
-		}
-
-		return handleAndOperation((AndOperation) operation);
+		};
 	}
 
 	private static boolean isSpecialGroupOperation(AbstractSelectOperation operation) {

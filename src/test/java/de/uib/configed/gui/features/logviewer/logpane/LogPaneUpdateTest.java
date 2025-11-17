@@ -229,4 +229,16 @@ class LogPaneUpdateTest {
 		assertTrue(result.model().isCaseSensitive());
 		assertFalse(result.effect().isPresent());
 	}
+
+	@Test
+	void shouldCopyContents_whenCopyContents() {
+		LogPaneModel model = baseModel();
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.COPY_CONTENTS;
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.COPY_CONTENTS, result.effect().get()));
+	}
 }

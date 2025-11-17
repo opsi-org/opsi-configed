@@ -36,6 +36,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.datachanges.UpdateCollection;
@@ -736,6 +737,15 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 			tree.scrollRowToVisible(row);
 		}
+	}
+
+	public boolean isSelected(String obj) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
+		if (node == null) {
+			return false;
+		}
+		String selectedNode = ((String) node.getUserObject()).replace("{", "").replace("}", "");
+		return selectedNode.equals(obj);
 	}
 
 	private void setRoleConfig(String name) {

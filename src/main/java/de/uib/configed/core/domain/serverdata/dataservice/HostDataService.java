@@ -9,6 +9,7 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -29,8 +30,10 @@ import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.gui.type.Object2GroupEntry;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
@@ -91,12 +94,13 @@ public class HostDataService {
 			String hostname = ((String) client.get(0)).trim();
 			String domainname = ((String) client.get(1)).trim();
 			String depotId = ((String) client.get(2)).trim();
-			String description = ((String) client.get(3)).trim();
-			String inventorynumber = ((String) client.get(4)).trim();
-			String notes = ((String) client.get(5)).trim();
-			String systemUUID = ((String) client.get(6)).trim();
-			String macaddress = ((String) client.get(7)).trim();
+			String macaddress = ((String) client.get(3)).trim();
+			String description = ((String) client.get(4)).trim();
+			String inventorynumber = ((String) client.get(5)).trim();
+			String notes = ((String) client.get(6)).trim();
+			String systemUUID = ((String) client.get(7)).trim();
 			String ipaddress = ((String) client.get(8)).trim();
+			String groups = ((String) client.get(9)).trim();
 
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
@@ -106,7 +110,7 @@ public class HostDataService {
 
 			String newClientId = hostname + "." + domainname;
 
-			Map<String, Object> hostItem = Utils.createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+			Map<String, Object> hostItem = new HashMap<>();
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -115,29 +119,26 @@ public class HostDataService {
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 			hostItem.put(HostInfo.HOST_KEY_KEY, opsiHostKey);
+			hostItem.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
+			hostItem.put(HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
 
 			clientsJsonObject.add(hostItem);
 
-			Map<String, Object> itemDepot = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 			List<String> valuesDepot = new ArrayList<>();
-			valuesDepot.add(depotId);
-			itemDepot.put(OpsiServiceNOMPersistenceController.OBJECT_ID, newClientId);
-			itemDepot.put(OpsiServiceNOMPersistenceController.VALUES_ID, valuesDepot);
-			itemDepot.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
-					OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
-
-			addGroupsToList(((String) client.get(9)), newClientId, groupsJsonObject);
-
-			HostInfo hostInfo = new HostInfo();
-			hostInfo.setValues(itemDepot);
+			ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = hostInfoCollections.getConfigServer();
 			}
-			hostInfo.setInDepot(depotId);
-			hostInfo.setWanConfig(wanConfig);
-			hostInfo.setShutdownInstall(shutdownInstall);
+			valuesDepot.add(depotId);
+			config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, valuesDepot);
+			persistenceController.getConfigDataService().setConfigStates(newClientId, config);
 
-			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
+			addGroupsToList(groups, newClientId, groupsJsonObject);
+
+			HostInfo hostInfo = new HostInfo();
+			hostInfo.setValues(hostItem);
+			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
 		}
 
 		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
@@ -164,7 +165,7 @@ public class HostDataService {
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
 			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { clientsJsonObject });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
@@ -179,6 +180,8 @@ public class HostDataService {
 						new Object[] { productsNetbootJsonObject });
 				result = result && exec.doCall(omc);
 			}
+
+			persistenceController.getConfigDataService().updateConfigStates();
 		}
 
 		return result;
@@ -195,7 +198,7 @@ public class HostDataService {
 
 		String newClientId = hostname + "." + domainname;
 
-		Map<String, Object> hostItem = Utils.createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+		Map<String, Object> hostItem = new HashMap<>();
 		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -203,7 +206,9 @@ public class HostDataService {
 		hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
 		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { hostItem });
+		hostItem.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
+		hostItem.put(HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { hostItem });
 		result = exec.doCall(omc);
 
 		if (result) {
@@ -229,10 +234,9 @@ public class HostDataService {
 			}
 			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(hostItem);
-			hostInfo.setInDepot(depotId);
-			hostInfo.setWanConfig(wanConfig);
-			hostInfo.setShutdownInstall(shutdownInstall);
-			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
+			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
+			hostInfoCollections.setDepotForClients(List.of(newClientId), depotId);
 
 			Logging.info(this, " createClient hostInfo ", hostInfo);
 		}
@@ -409,13 +413,11 @@ public class HostDataService {
 		return result;
 	}
 
-	public Map<String, String> sessionInfo(List<String> clientIds) {
-		Map<String, String> result = new HashMap<>();
+	public void retrieveSessionInfo(List<String> clientIds) {
+		Map<String, String> sessionInfo = new HashMap<>();
 
-		Object[] callParameters = new Object[] {};
-		if (clientIds != null && !clientIds.isEmpty()) {
-			callParameters = new Object[] { clientIds };
-		}
+		Object[] callParameters = clientIds != null && !clientIds.isEmpty() ? new Object[] { clientIds }
+				: new Object[] {};
 
 		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
 		Map<String, Object> sessionInfos = exec.getResponses(exec
@@ -432,10 +434,25 @@ public class HostDataService {
 				value = "";
 			}
 
-			result.put(resultEntry.getKey(), value);
+			sessionInfo.put(resultEntry.getKey(), value);
 		}
 
-		return result;
+		cacheManager.setCachedData(CacheIdentifier.SESSION_INFO, sessionInfo);
+	}
+
+	/**
+	 * Get a map of clients and their session information. If no session
+	 * information is available, an empty map is returned, because we only want
+	 * to load the data when requested by user
+	 * 
+	 * @return
+	 */
+	public Map<String, String> getSessionInfo() {
+		if (cacheManager.isDataCached(CacheIdentifier.SESSION_INFO)) {
+			return cacheManager.getCachedData(CacheIdentifier.SESSION_INFO, Map.class);
+		} else {
+			return Collections.emptyMap();
+		}
 	}
 
 	private static String createSessionInfoForList(List<?> sessionlist) {
@@ -502,9 +519,9 @@ public class HostDataService {
 
 		List<String> userSavedDisplayFields = Arrays
 				.asList(UserPreferences.get(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS).split(","));
-		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-			hostDisplayFields.put(field,
-					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
+		for (ColumnDisplayInfo info : HostInfo.ORDERED_DISPLAY_COLUMN_INFOS) {
+			hostDisplayFields.put(info.label,
+					configuredByService.indexOf(info.label) > -1 || userSavedDisplayFields.contains(info.label));
 		}
 
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);

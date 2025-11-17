@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -48,6 +49,8 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class NewClientDialog {
+	private static final Pattern NUMERIC_PATTERN = Pattern.compile("\\d+");
+
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
 	private JTextField jTextGroupSelection;
@@ -115,10 +118,9 @@ public final class NewClientDialog {
 	}
 
 	public void setDefaultValues() {
-		jCheckWan.setSelected(persistenceController.getConfigDataService()
-				.isWanConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
-		jCheckShutdownInstall.setSelected(persistenceController.getConfigDataService()
-				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
+		jCheckWan.setSelected(persistenceController.getConfigDataService().isWanConfiguredOnConfigserver());
+		jCheckShutdownInstall.setSelected(
+				persistenceController.getConfigDataService().isInstallByShutdownConfiguredOnConfigserver());
 	}
 
 	private JPanel createPanel() {
@@ -358,7 +360,6 @@ public final class NewClientDialog {
 	private void displayGroupSelectionDialog() {
 		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(dialog,
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
-		groupsSelectionDialog.setMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
 		groupsSelectionDialog
@@ -532,8 +533,8 @@ public final class NewClientDialog {
 		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
 			if (persistenceController.getHostInfoCollections().getDepotNamesList().contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(dialog,
-						opsiHostKey + "\n" + Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
-						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.WARNING_MESSAGE);
+						String.format(Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"), opsiHostKey),
+						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
@@ -557,30 +558,10 @@ public final class NewClientDialog {
 	}
 
 	private boolean checkHostname(String hostname) {
-		if (hostname.length() > 15) {
+		if (hostname.length() > 15 || NUMERIC_PATTERN.matcher(hostname).matches()) {
 			int answer = JOptionPane.showConfirmDialog(dialog,
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
-					JOptionPane.YES_NO_OPTION);
-
-			if (answer == JOptionPane.NO_OPTION) {
-				return false;
-			}
-		}
-
-		boolean onlyNumbers = true;
-		int i = 0;
-		while (onlyNumbers && i < hostname.length()) {
-			if (!Character.isDigit(hostname.charAt(i))) {
-				onlyNumbers = false;
-			}
-			i++;
-		}
-
-		if (onlyNumbers) {
-			int answer = JOptionPane.showConfirmDialog(dialog,
-					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"),
-					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question"),
 					JOptionPane.YES_NO_OPTION);
 
 			if (answer == JOptionPane.NO_OPTION) {

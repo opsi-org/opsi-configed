@@ -24,6 +24,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
@@ -113,6 +114,10 @@ public class MainFrame extends JFrame implements KeyListener {
 		return mainPanelManager.getClientConfiguration();
 	}
 
+	public ServerConfiguration getServerConfiguration() {
+		return mainPanelManager.getServerConfiguration();
+	}
+
 	public HostsStatusPanel getHostsStatusPanel() {
 		return mainPanelManager.getHostsStatusPanel();
 	}
@@ -135,6 +140,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	private static void restartConfiged(boolean checkdirty) {
+		Messagebus.getInstance().disconnect();
 		ConfigedMain.closeInstance(checkdirty);
 		ExtraFrameController.deleteInstances();
 		CommandFactory.destroyInstance();
