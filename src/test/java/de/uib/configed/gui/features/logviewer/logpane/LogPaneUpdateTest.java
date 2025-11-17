@@ -9,6 +9,7 @@ package de.uib.configed.gui.features.logviewer.logpane;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -112,38 +113,24 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerIncreaseFontSizeEffect_whenIncreaseFontSize() {
+	void shouldIncreaseFontSize_whenIncreaseFontSize() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
-		assertSame(model, result.model());
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE, result.effect().get()));
+		assertNotEquals(model.getFontSize(), result.model().getFontSize());
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
-	void shouldTriggerDecreaseFontSize_whenDecreaseFontSize() {
+	void shouldDecreaseFontSize_whenDecreaseFontSize() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
-		assertSame(model, result.model());
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE, result.effect().get()));
-	}
-
-	@Test
-	void shouldChangeFontSize_whenFontSizeChanged() {
-		LogPaneModel model = baseModel();
-		int newFontSize = 15;
-		LogPaneMsg msg = new LogPaneMsg.FontSizeChanged(newFontSize);
-
-		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
-
-		assertEquals(newFontSize, result.model().getFontSize());
+		assertNotEquals(model.getFontSize(), result.model().getFontSize());
 		assertFalse(result.effect().isPresent());
 	}
 

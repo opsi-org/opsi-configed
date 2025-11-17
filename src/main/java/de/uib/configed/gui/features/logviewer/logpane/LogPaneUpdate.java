@@ -40,8 +40,6 @@ public class LogPaneUpdate {
 				LogPaneEffect.SimpleEffect.CHANGE_EVENT_TYPE);
 		case LogPaneMsg.ChangeTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
 		case LogPaneMsg.ChangeInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));
-
-		case LogPaneMsg.FontSizeChanged(int fontSize) -> UpdateResult.noEffect(model.withFontSize(fontSize));
 		case LogPaneMsg.ChangeCaretPosition(int position) -> UpdateResult.noEffect(model.withCaretPosition(position));
 		case LogPaneMsg.ToggleCaseSensitivity(boolean caseSensitive) -> UpdateResult
 				.noEffect(model.withCaseSensitive(caseSensitive));
@@ -57,8 +55,9 @@ public class LogPaneUpdate {
 		case DOWNLOAD_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP);
 		case DOWNLOAD_ALL_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP);
 		case FLOAT_EXTERNAL -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL);
-		case INCREASE_FONT_SIZE -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.INCREASE_FONT_SIZE);
-		case DECREASE_FONT_SIZE -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DECREASE_FONT_SIZE);
+		case INCREASE_FONT_SIZE -> UpdateResult.noEffect(model.withFontSize((int) (model.getFontSize() * 1.1)));
+		case DECREASE_FONT_SIZE -> UpdateResult
+				.noEffect(model.withFontSize((int) Math.max((model.getFontSize() + 1) / 1.1, 10)));
 		};
 	}
 

@@ -282,28 +282,13 @@ public class LogTextPane extends JTextPane {
 
 	public void removeAllHighlights() {
 		highlighter.removeAllHighlights();
-		applyFontSize();
-	}
-
-	public void reduceFontSize() {
-		if (displayFontSize > 10) {
-			displayFontSize = (int) ((displayFontSize + 1) / 1.1);
-			applyFontSize();
-		}
-	}
-
-	public void increaseFontSize() {
-		displayFontSize = (int) (displayFontSize * 1.1);
-		applyFontSize();
-	}
-
-	public int getDisplayFontSize() {
-		return displayFontSize;
-	}
-
-	private void applyFontSize() {
-		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 		buildDocument();
+	}
+
+	public void applyFontSize(int size) {
+		displayFontSize = size;
+		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+		setFont(monospacedFont);
 	}
 
 	private boolean showLine(LogFileParser.LogLine line) {

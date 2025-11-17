@@ -8,10 +8,9 @@ package de.uib.configed.gui.features.logviewer.logpane;
 
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 
-public sealed interface LogPaneMsg
-		permits LogPaneMsg.SimpleMsg, LogPaneMsg.Search, LogPaneMsg.ParseLogRequested, LogPaneMsg.LogParsed,
-		LogPaneMsg.ChangeLogLevel, LogPaneMsg.ChangeEventType, LogPaneMsg.ChangeTitle, LogPaneMsg.ChangeInfo,
-		LogPaneMsg.FontSizeChanged, LogPaneMsg.ChangeCaretPosition, LogPaneMsg.ToggleCaseSensitivity {
+public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Search, LogPaneMsg.ParseLogRequested,
+		LogPaneMsg.LogParsed, LogPaneMsg.ChangeLogLevel, LogPaneMsg.ChangeEventType, LogPaneMsg.ChangeTitle,
+		LogPaneMsg.ChangeInfo, LogPaneMsg.ChangeCaretPosition, LogPaneMsg.ToggleCaseSensitivity {
 
 	enum SimpleMsg implements LogPaneMsg {
 		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD, COPY_CONTENTS, DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP,
@@ -38,9 +37,6 @@ public sealed interface LogPaneMsg
 	}
 
 	record ChangeInfo(String info) implements LogPaneMsg {
-	}
-
-	record FontSizeChanged(int fontSize) implements LogPaneMsg {
 	}
 
 	record ChangeCaretPosition(int position) implements LogPaneMsg {

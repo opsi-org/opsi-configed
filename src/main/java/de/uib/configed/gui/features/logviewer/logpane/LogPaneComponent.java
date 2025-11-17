@@ -100,6 +100,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		if (model.isWithPopup()) {
 			initPopupMenu();
 		}
+
 		return rootPanel;
 	}
 
@@ -107,6 +108,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	protected void refreshView() {
 		sliderLevel.setValue(model.getShowLevel());
 		comboType.setSelectedItem(model.getSelectedType());
+		logTextPane.applyFontSize(model.getFontSize());
 	}
 
 	@Override
@@ -121,8 +123,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		case SEARCH -> search();
 		case RELOAD -> reload();
 		case COPY_CONTENTS -> copyTextToClipboard();
-		case INCREASE_FONT_SIZE -> increaseFontSize();
-		case DECREASE_FONT_SIZE -> reduceFontSize();
 		case PARSE_LOG -> parse(model.getLogText());
 		case DISPLAY_LOG -> displayLog();
 		case CHANGE_EVENT_TYPE -> logTextPane.applyType(comboType.getSelectedItem());
@@ -314,16 +314,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	public void removeAllHighlights() {
 		logTextPane.removeAllHighlights();
-	}
-
-	private void reduceFontSize() {
-		logTextPane.reduceFontSize();
-		dispatch(new LogPaneMsg.FontSizeChanged(logTextPane.getDisplayFontSize()));
-	}
-
-	private void increaseFontSize() {
-		logTextPane.increaseFontSize();
-		dispatch(new LogPaneMsg.FontSizeChanged(logTextPane.getDisplayFontSize()));
 	}
 
 	public void setCaretPosition(int caretPosition) {
