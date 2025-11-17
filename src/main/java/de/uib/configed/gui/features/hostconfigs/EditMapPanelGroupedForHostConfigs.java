@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.hostconfigs;
 
 import java.awt.Font;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +22,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -52,7 +52,6 @@ import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 // works on a map of pairs of type String - List
@@ -97,7 +96,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		setupPopups();
 		setupPopupTexts();
-		setupPopupMouseListeners();
 	}
 
 	private void setupPopups() {
@@ -109,7 +107,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopupMenu() {
-		popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
+		popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }, null,
+				null) {
 			@Override
 			public void action(int p) {
 				Logging.debug(this, "( EditMapPanelGrouped ) popup ", p);
@@ -127,7 +126,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupPopupForUserpathes() {
 		popupForUserpathes = new PopupMenuTrait(
-				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
+				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD },
+				(MouseEvent event) -> {
+					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
+
+					return (selPath != null && isUserPath(selPath));
+				}, new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -152,7 +156,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopupForUserpath() {
-		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
+		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD },
+				(MouseEvent event) -> {
+					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
+					Logging.info(this, " sel path ", selPath);
+					return (selPath != null && isUserRoot(selPath));
+				}, new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -174,7 +183,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupPopupForRolepathes() {
 		popupForRolepathes = new PopupMenuTrait(
-				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
+				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD },
+				(MouseEvent event) -> {
+					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
+					Logging.info(this, " sel path ", selPath);
+					return (selPath != null && isRolePath(selPath, false));
+				}, new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -199,7 +213,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopupForRolepath() {
-		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
+		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD },
+				(MouseEvent event) -> {
+					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
+					Logging.info(this, " sel path ", selPath);
+					return (selPath != null && isRolePath(selPath, true));
+				}, new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -267,57 +286,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
-	}
-
-	private void setupPopupMouseListeners() {
-		MouseListener popupListenerForUserpathes = new PopupMouseListener(popupForUserpathes) {
-			@Override
-			protected void maybeShowPopup(MouseEvent e) {
-				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-
-				if (selPath != null && isUserPath(selPath)) {
-					super.maybeShowPopup(e);
-				}
-			}
-		};
-		tree.addMouseListener(popupListenerForUserpathes);
-
-		MouseListener popupListenerForUserpath = new PopupMouseListener(popupForUserpath) {
-			@Override
-			protected void maybeShowPopup(MouseEvent e) {
-				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				Logging.info(this, " sel path ", selPath);
-				if (selPath != null && isUserRoot(selPath)) {
-					super.maybeShowPopup(e);
-				}
-			}
-		};
-		tree.addMouseListener(popupListenerForUserpath);
-
-		MouseListener popupListenerForRolepathes = new PopupMouseListener(popupForRolepathes) {
-			@Override
-			protected void maybeShowPopup(MouseEvent e) {
-				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				Logging.info(this, " sel path ", selPath);
-				if (selPath != null && isRolePath(selPath, false)) {
-					super.maybeShowPopup(e);
-				}
-			}
-		};
-		tree.addMouseListener(popupListenerForRolepathes);
-
-		MouseListener popupListenerForRolepath = new PopupMouseListener(popupForRolepath) {
-			@Override
-			protected void maybeShowPopup(MouseEvent e) {
-				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				Logging.info(this, " sel path ", selPath);
-				if (selPath != null && isRolePath(selPath, true)) {
-					super.maybeShowPopup(e);
-				}
-			}
-		};
-
-		tree.addMouseListener(popupListenerForRolepath);
 	}
 
 	public void setSubpanelClasses(NavigableMap<String, String> classesMap) {

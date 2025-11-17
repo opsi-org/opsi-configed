@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -124,16 +122,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
 		multiLineEditingItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
-		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu) {
-			@Override
-			protected void maybeShowPopup(MouseEvent e) {
-				updatePopupMenu();
-				super.maybeShowPopup(e);
-			}
-		};
-
-		table.addMouseListener(popupNoEditOptionsListener);
-		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
 		if (keylistExtendible) {
 			if (popupMenu.getComponentCount() > 0) {
@@ -185,7 +173,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		propertyHandler.setMapTableModel(mapTableModel);
 	}
 
-	private void updatePopupMenu() {
+	protected void updatePopupMenu() {
 		int row = table.getSelectedRow();
 
 		if (row != -1 && modelProducer.isEditable(row)
@@ -267,21 +255,22 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JPopupMenu definePopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
 
-		if (reloadable) {
-			return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD }) {
-				@Override
-				public void action(int p) {
-					super.action(p);
-					if (p == PopupMenuTrait.POPUP_RELOAD) {
-						ConfigedMain.getMainFrame().activateLoadingCursor();
-						actor.reloadData();
-						ConfigedMain.getMainFrame().deactivateLoadingCursor();
-					}
+		Integer[] popups = reloadable ? new Integer[] { PopupMenuTrait.POPUP_RELOAD } : new Integer[] {};
+
+		return new PopupMenuTrait(popups, (MouseEvent event) -> {
+			updatePopupMenu();
+			return true;
+		}, new JComponent[] { table, jScrollPane.getViewport() }) {
+			@Override
+			public void action(int p) {
+				super.action(p);
+				if (p == PopupMenuTrait.POPUP_RELOAD) {
+					ConfigedMain.getMainFrame().activateLoadingCursor();
+					actor.reloadData();
+					ConfigedMain.getMainFrame().deactivateLoadingCursor();
 				}
-			};
-		} else {
-			return new JPopupMenu();
-		}
+			}
+		};
 	}
 
 	private void buildPanel() {

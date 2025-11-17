@@ -98,8 +98,8 @@ public class MainFrame extends JFrame implements KeyListener {
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
 
-		// We can add this listener as soon as the clientMenu has been created
-		clientTablePanel.addMouseListener(new PopupMouseListener(menuBarController.getPopupMenuClone()));
+		PopupMouseListener.addPopupMouseListenerToComponents(menuBarController.getPopupMenuClone(),
+				new JComponent[] { clientTablePanel });
 	}
 
 	public JTabbedPane getTabbedPane() {

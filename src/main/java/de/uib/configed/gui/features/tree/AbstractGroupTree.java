@@ -105,9 +105,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		setShowsRootHandles(true);
 
 		// popups on nodes
-		JPopupMenu popupMenu = new JPopupMenu();
-		TreePopupMouseListener treePopupMouseListener = new TreePopupMouseListener(popupMenu, this);
-		addMouseListener(treePopupMouseListener);
+		new TreePopupMouseListener(new JPopupMenu(), this);
 
 		// Drag and drop needs to be enabled
 		setDragEnabled(true);

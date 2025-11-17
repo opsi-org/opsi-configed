@@ -9,6 +9,7 @@ package de.uib.configed.share;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.io.BufferedReader;
@@ -31,10 +32,13 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -591,5 +595,23 @@ public final class Utils {
 		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
 		default -> Icons.getThemeIntellijIcon("questionMark", size);
 		};
+	}
+
+	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable,
+			int condition) {
+		Logging.info(keyStroke.toString(), " added to ", component.getClass().getSimpleName());
+		component.getInputMap(condition).put(keyStroke, keyStroke.toString());
+		component.getActionMap().put(keyStroke.toString(), new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				Logging.debug(component.getClass().getSimpleName(), " ", keyStroke.toString(), " triggered");
+				runnable.run();
+			}
+		});
+	}
+
+	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable) {
+		Logging.info(keyStroke.toString(), " added to ", component.getClass().getSimpleName());
+		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 }
