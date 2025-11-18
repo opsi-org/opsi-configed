@@ -23,7 +23,7 @@ public abstract class AbstractDataChangedKeeper {
 	public int askSave() {
 		// We have NO_OPTION as default result since this will mean "do not save" if no changes
 		// have been made
-		int result = JOptionPane.NO_OPTION;
+		int result = -2;
 
 		if (this.dataChanged) {
 			result = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
