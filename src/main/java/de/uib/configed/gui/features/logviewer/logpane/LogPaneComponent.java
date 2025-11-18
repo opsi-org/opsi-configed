@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -71,6 +72,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private DefaultComboBoxModel<String> comboModelTypes;
 
 	private JPanel rootPanel;
+	private ActionListener comboTypeListener;
 
 	public LogPaneComponent() {
 		super();
@@ -107,8 +109,22 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	@Override
 	protected void refreshView() {
+		adaptSlider();
+		adaptComboType();
+		Integer oldLevel = logTextPane.getShowLevel();
+		int newLevel = model.getShowLevel();
+		activateShowLevel(newLevel);
+		logTextPane.setShowLevel(newLevel);
+
+		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", newLevel, " , ", oldLevel, ", ",
+				model.getMaxExistingLevel());
+
+		if (!oldLevel.equals(newLevel)
+				&& (newLevel < model.getMaxExistingLevel() || oldLevel < model.getMaxExistingLevel())) {
+			logTextPane.buildDocument();
+		}
+
 		logTextPane.applyFontSize(model.getFontSize());
-		activateShowLevel(model.getShowLevel());
 		logTextPane.applyType(model.getSelectedType());
 	}
 
@@ -125,7 +141,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		case RELOAD_LOG -> reload();
 		case COPY_CONTENTS -> copyTextToClipboard();
 		case PARSE_LOG -> parse(model.getLogText());
-		case DISPLAY_LOG -> displayLog();
 		case DOWNLOAD_LOG -> download();
 		case DOWNLOAD_LOG_AS_ZIP -> downloadAsZip();
 		case DOWNLOAD_ALL_AS_ZIP -> downloadAllAsZip();
@@ -203,14 +218,13 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 		comboModelTypes = new DefaultComboBoxModel<>();
 		comboModelTypes.addAll(model.getTypesList());
-		comboType = new JComboBox<>(comboModelTypes);
 
+		comboType = new JComboBox<>(comboModelTypes);
 		comboType.setEnabled(!model.getTypesList().isEmpty());
 		comboType.setEditable(false);
+		comboTypeListener = event -> dispatch(new LogPaneMsg.ChangeEventType((String) comboType.getSelectedItem()));
+		comboType.addActionListener(comboTypeListener);
 		comboType.setSelectedItem(model.getSelectedType());
-
-		comboType.addActionListener(
-				actionEvent -> dispatch(new LogPaneMsg.ChangeEventType((String) comboType.getSelectedItem())));
 	}
 
 	private void setLayout() {
@@ -413,21 +427,11 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		if (Configed.getSavedStates() != null) {
 			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(level));
 		}
-
-		Integer oldLevel = logTextPane.getShowLevel();
-		logTextPane.setShowLevel(level);
-
-		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", level, " , ", oldLevel, ", ",
-				model.getMaxExistingLevel());
-
-		if (!oldLevel.equals(level)
-				&& (level < model.getMaxExistingLevel() || oldLevel < model.getMaxExistingLevel())) {
-			logTextPane.rebuildDocumentWithNewLevel(jComboBoxSearch.getSelectedItem());
-		}
 	}
 
 	private void adaptComboType() {
 		comboType.setEnabled(false);
+		comboType.removeActionListener(comboTypeListener);
 		comboModelTypes.removeAllElements();
 
 		if (!model.getTypesList().isEmpty()) {
@@ -443,6 +447,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 			comboType.setMaximumRowCount(maxRowCount);
 		}
+		comboType.addActionListener(comboTypeListener);
 	}
 
 	private void adaptSlider() {

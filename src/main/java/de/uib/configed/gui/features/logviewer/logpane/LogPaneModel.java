@@ -9,6 +9,7 @@ package de.uib.configed.gui.features.logviewer.logpane;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
@@ -30,7 +31,8 @@ public class LogPaneModel {
 	int maxExistingLevel;
 	@Builder.Default
 	List<String> typesList = List.of();
-	String selectedType;
+	@Builder.Default
+	String selectedType = LogTextPane.DEFAULT_TYPE;
 	int caretPosition;
 	@Builder.Default
 	String info = "";

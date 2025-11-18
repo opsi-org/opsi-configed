@@ -12,7 +12,7 @@ import java.util.List;
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 
-public class LogPaneUpdate {
+public final class LogPaneUpdate {
 
 	private LogPaneUpdate() {
 
@@ -23,10 +23,9 @@ public class LogPaneUpdate {
 		case LogPaneMsg.SimpleMsg m -> handleSimpleMsg(m, model);
 		case LogPaneMsg.ParseLogRequested(String text) -> UpdateResult.withEffect(model.withLogText(text),
 				LogPaneEffect.SimpleEffect.PARSE_LOG);
-		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult.withEffect(
-				model.withTypesList(data.getTypesList()).withMinLevel(data.getMinExistingLevel())
-						.withMaxExistingLevel(data.getMaxExistingLevel()).withShowLevel(level),
-				LogPaneEffect.SimpleEffect.DISPLAY_LOG);
+		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult
+				.noEffect(model.toBuilder().typesList(data.getTypesList()).minLevel(data.getMinExistingLevel())
+						.maxExistingLevel(data.getMaxExistingLevel()).showLevel(level).build());
 		case LogPaneMsg.Search(String query) -> {
 			List<String> newHistory = new ArrayList<>(model.getSearchHistory());
 			if (!newHistory.contains(query)) {

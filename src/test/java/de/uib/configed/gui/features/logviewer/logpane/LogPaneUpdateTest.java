@@ -42,7 +42,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerDisplayEffect_whenLogParsed() {
+	void shouldApplyParsedDataToModel_whenLogParsed() {
 		LogParsedData parsedData = new LogParsedData();
 		parsedData.setTypesList(List.of("INFO", "WARN"));
 		parsedData.setMinExistingLevel(1);
@@ -57,8 +57,7 @@ class LogPaneUpdateTest {
 		assertEquals(parsedData.getMinExistingLevel(), result.model().getMinLevel());
 		assertEquals(parsedData.getMaxExistingLevel(), result.model().getMaxExistingLevel());
 		assertEquals(level, result.model().getShowLevel());
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.DISPLAY_LOG, result.effect().get()));
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test

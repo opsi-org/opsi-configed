@@ -10,10 +10,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -154,14 +154,34 @@ public class LogTextPane extends JTextPane {
 	}
 
 	public void buildDocument() {
-		Logging.debug(this, "building document");
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
-		} else {
-			setCursor(Globals.WAIT_CURSOR);
-		}
-		// Switch to an blank document temporarily to avoid repaints
+		int oldCaret = getCaretPosition();
 
+		int oldLine = -1;
+		int offset = 0;
+
+		if (docLinestartPosition2lineCount != null) {
+			Map.Entry<Integer, Integer> lastEntry = docLinestartPosition2lineCount.floorEntry(oldCaret);
+			if (lastEntry != null) {
+				oldLine = lastEntry.getValue();
+				offset = oldCaret - lastEntry.getKey();
+			}
+		}
+
+		setCursor(Globals.WAIT_CURSOR);
+		ImmutableDefaultStyledDocument newDoc = buildRawDocument();
+		setDocument(newDoc);
+		setCursor(null);
+
+		if (oldLine >= 0) {
+			Integer newStart = lineCount2docLinestartPosition.get(oldLine);
+			if (newStart != null) {
+				int newCaret = Math.max(0, newStart + offset);
+				setCaretPosition(newCaret);
+			}
+		}
+	}
+
+	private ImmutableDefaultStyledDocument buildRawDocument() {
 		ImmutableDefaultStyledDocument document = new ImmutableDefaultStyledDocument(styleContext);
 
 		docLinestartPosition2lineCount = new TreeMap<>();
@@ -172,21 +192,17 @@ public class LogTextPane extends JTextPane {
 			for (int i = 0; i < logLines.size(); i++) {
 				LogFileParser.LogLine line = logLines.get(i);
 				if (showLine(line)) {
-					docLinestartPosition2lineCount.put(document.getLength(), i);
-					lineCount2docLinestartPosition.put(i, document.getLength());
-					document.insertStringTruely(document.getLength(), line.getText() + '\n', line.getStyle());
+					int pos = document.getLength();
+					docLinestartPosition2lineCount.put(pos, i);
+					lineCount2docLinestartPosition.put(i, pos);
+					document.insertStringTruely(pos, line.getText() + '\n', line.getStyle());
 				}
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, e, "BadLocationException thrown in logging");
+			Logging.warning(this, e, "BadLocationException");
 		}
 
-		setDocument(document);
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(null));
-		} else {
-			setCursor(null);
-		}
+		return document;
 	}
 
 	public void setParsedText(LogTextPane logTextPane) {
