@@ -134,7 +134,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error(this, "SAML connection failed");
 			return;
 		}
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), this.host + "_" + portHTTPS);
 		checkServerVersion();
 	}
 

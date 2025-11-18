@@ -8,10 +8,12 @@ package de.uib.configed.gui.share.swing;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -22,6 +24,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PopupMenuTrait extends JPopupMenu {
@@ -61,14 +64,22 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private JMenuItem[] menuItems;
 
-	public PopupMenuTrait(Integer[] popups) {
-		listPopups = Arrays.asList(popups);
+	private JComponent[] components;
 
+	public PopupMenuTrait(Integer[] popups, Predicate<MouseEvent> condition, JComponent[] components) {
+		listPopups = Arrays.asList(popups);
+		this.components = components;
 		menuItems = new JMenuItem[popups.length];
 
 		for (Integer popup : popups) {
 			addPopup(popup);
 		}
+
+		PopupMouseListener.addPopupMouseListenerToComponents(this, condition, components);
+	}
+
+	public PopupMenuTrait(Integer[] popups, JComponent[] components) {
+		this(popups, null, components);
 	}
 
 	private void addPopup(final int p) {
@@ -81,8 +92,15 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private void addItemReload(int p) {
 		int i = listPopups.indexOf(POPUP_RELOAD);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
+		menuItems[i] = new JMenuItem(Configed.getResourceValue("reload"));
+		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "refresh");
+
+		if (components != null) {
+			for (JComponent component : components) {
+				Utils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), () -> action(p));
+			}
+		}
 
 		// not work
 		addItem(p);
@@ -101,6 +119,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_SAVE);
 
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("save"));
+		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "save");
 		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
@@ -212,12 +231,6 @@ public class PopupMenuTrait extends JPopupMenu {
 		menuItems[i].addActionListener(actionEvent -> action(p));
 
 		add(menuItems[i]);
-	}
-
-	public void addPopupListenersTo(JComponent[] components) {
-		for (JComponent component : components) {
-			component.addMouseListener(new PopupMouseListener(this));
-		}
 	}
 
 	// should be overwritten for specific actions in subclasses

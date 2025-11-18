@@ -32,6 +32,7 @@ import de.uib.configed.gui.features.dashboard.Dashboard;
 import de.uib.configed.gui.features.licenses.LicenseManagement;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -219,8 +220,8 @@ public class MainPanelManager {
 	public JPanel getHealthCheckPanel() {
 		Logging.info(this, "init health check panel", healthCheckPanel);
 		if (healthCheckPanel == null) {
-			HealthCheck healthCheck = new HealthCheck();
-			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckButtons(healthCheck),
+			HealthCheckComponent healthCheck = new HealthCheckComponent();
+			healthCheckPanel = createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
 					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		}
 

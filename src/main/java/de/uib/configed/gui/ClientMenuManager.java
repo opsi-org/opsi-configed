@@ -40,6 +40,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
 import de.uib.configed.gui.share.table.AbstractExportTable;
 import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToCSV;
@@ -175,8 +176,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(createMenuItem(
-				ClientMenuItemConfig.item("PopupMenuTrait.reload", configedMain::reloadHosts).withIcon("refresh")));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts)
+				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
+
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
@@ -194,16 +196,17 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuClients.addSeparator();
 
-		JMenuItem jMenuInvertSelection = createMenuItem(
-				ClientMenuItemConfig.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection));
-		jMenuInvertSelection.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-
-		jMenuClients.add(jMenuInvertSelection);
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
+						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
-		JMenuItem item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));
+		JMenuItem item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
+
+		if (config.keyStroke() != null) {
+			item.setAccelerator(config.keyStroke());
+		}
 
 		if (config.icon() != null) {
 			if (config.invertedIcon()) {

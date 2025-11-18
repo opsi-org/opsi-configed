@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.share.table.gui;
 
+import java.awt.event.KeyEvent;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
@@ -24,6 +27,7 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelGenEditPopupManager {
@@ -167,9 +171,11 @@ public class PanelGenEditPopupManager {
 	}
 
 	private void addPopupItemReload() {
-		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"));
+		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reload"));
+		menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(menuItemReload, "refresh");
 
+		Utils.addKeyBindingToJComponent(panelGenEdit, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), panelGenEdit::reload);
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> panelGenEdit.reload());
 		if (popupIndex > 1) {
@@ -189,10 +195,8 @@ public class PanelGenEditPopupManager {
 		if (popupMenu == null) {
 			// for the first item, we create the menu
 			popupMenu = new JPopupMenu();
-			panelGenEdit.getGenEditTable().addMouseListener(new PopupMouseListener(popupMenu));
-
-			// add the popup to the scrollpane if the table is empty
-			panelGenEdit.getTheScrollpane().addMouseListener(new PopupMouseListener(popupMenu));
+			PopupMouseListener.addPopupMouseListenerToComponents(popupMenu,
+					new JComponent[] { panelGenEdit.getGenEditTable(), panelGenEdit.getTheScrollpane() });
 		}
 
 		if (item == null) {

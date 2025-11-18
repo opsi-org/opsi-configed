@@ -25,7 +25,7 @@ import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.HealthInfo;
+import de.uib.configed.gui.healthcheck.HealthDataProcessor;
 import de.uib.configed.share.logging.Logging;
 
 public final class Icons {
@@ -249,22 +249,22 @@ public final class Icons {
 	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
 		Color dotColor = null;
 
-		String warningLevel = HealthInfo.getMaxWarningLevel();
+		HealthDataProcessor.StatusLevel warningLevel = HealthDataProcessor.getMaxStatusLevel();
 		switch (warningLevel) {
-		case HealthInfo.ERROR:
+		case ERROR:
 			dotColor = Globals.OPSI_ERROR;
 			break;
 
-		case HealthInfo.WARNING:
+		case WARNING:
 			dotColor = Globals.OPSI_WARNING;
 			break;
 
-		case HealthInfo.OK:
+		case OK:
 			Logging.info("icon will remain null, we don't want to show a dot when health check are okay");
 			break;
 
 		default:
-			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthInfo.getMaxWarningLevel());
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
 			break;
 		}
 

@@ -33,6 +33,7 @@ import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
@@ -200,7 +201,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton
-				.addActionListener(e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain,
+				.addActionListener(e -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain,
 						configedMain.getSelectedClients(), checkBoxHealthCheckActive.getState()));
 		openHealthCheckSettingsDialogButton
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
