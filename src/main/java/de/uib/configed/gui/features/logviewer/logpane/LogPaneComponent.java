@@ -16,7 +16,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -54,8 +53,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	public static final int MAX_LEVEL = 9;
 
 	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
-
-	private static final Pattern PREFIX_PATTERN = Pattern.compile("^\\(\\d+\\)\\s*");
 
 	protected LogTextPane logTextPane;
 
@@ -338,17 +335,8 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private void copyTextToClipboard() {
 		String selectedText = logTextPane.getSelectedText();
 		String textToCopy = (selectedText != null && !selectedText.isEmpty()) ? selectedText : logTextPane.getText();
-		String cleanedText = removeLineNumbers(textToCopy);
-		StringSelection selection = new StringSelection(cleanedText);
+		StringSelection selection = new StringSelection(textToCopy);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-	}
-
-	private static String removeLineNumbers(String text) {
-		StringBuilder sb = new StringBuilder();
-		for (String line : text.split("\\R")) {
-			sb.append(PREFIX_PATTERN.matcher(line).replaceFirst("")).append('\n');
-		}
-		return sb.toString();
 	}
 
 	public void reload() {
@@ -457,15 +445,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private void parse(String s) {
 		int showLevel = logTextPane.parse(s);
 		dispatch(new LogPaneMsg.LogParsed(logTextPane.getParsedData(), showLevel));
-	}
-
-	private void displayLog() {
-		adaptSlider();
-		adaptComboType();
-
-		logTextPane.buildDocument();
-		logTextPane.setCaretPosition(0);
-		logTextPane.getCaret().setVisible(true);
 	}
 
 	private void search() {
