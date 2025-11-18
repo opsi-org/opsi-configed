@@ -87,7 +87,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerChangeLogLevelEffect_whenChangeLogLevel() {
+	void shouldChangeLogLevel_whenChangeLogLevel() {
 		LogPaneModel model = baseModel();
 		int newLevel = 4;
 		LogPaneMsg msg = new LogPaneMsg.ChangeLogLevel(newLevel);
@@ -95,12 +95,11 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newLevel, result.model().getShowLevel());
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.CHANGE_LOG_LEVEL, result.effect().get()));
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
-	void shouldTriggerChangeEventTypeEffect_whenChangeEventType() {
+	void shouldChangeEventType_whenChangeEventType() {
 		LogPaneModel model = baseModel();
 		String newType = "WARN";
 		LogPaneMsg msg = new LogPaneMsg.ChangeEventType(newType);
@@ -108,8 +107,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newType, result.model().getSelectedType());
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.CHANGE_EVENT_TYPE, result.effect().get()));
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test

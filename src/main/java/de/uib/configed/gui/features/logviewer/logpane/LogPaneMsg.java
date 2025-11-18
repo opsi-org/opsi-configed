@@ -24,7 +24,6 @@ public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Sear
 	}
 
 	record LogParsed(LogParsedData data, int level) implements LogPaneMsg {
-
 	}
 
 	record ChangeLogLevel(int level) implements LogPaneMsg {

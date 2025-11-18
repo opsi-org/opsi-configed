@@ -8,7 +8,7 @@ package de.uib.configed.gui.features.logviewer.logpane;
 
 public sealed interface LogPaneEffect permits LogPaneEffect.SimpleEffect {
 	enum SimpleEffect implements LogPaneEffect {
-		RELOAD, COPY_CONTENTS, SEARCH, PARSE_LOG, DISPLAY_LOG, CHANGE_EVENT_TYPE, CHANGE_LOG_LEVEL, DOWNLOAD,
-		DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP, FLOAT_EXTERNAL
+		RELOAD, COPY_CONTENTS, SEARCH, PARSE_LOG, DISPLAY_LOG, DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP,
+		FLOAT_EXTERNAL
 	}
 }

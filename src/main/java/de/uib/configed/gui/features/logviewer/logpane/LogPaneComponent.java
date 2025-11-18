@@ -107,9 +107,9 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	@Override
 	protected void refreshView() {
-		sliderLevel.setValue(model.getShowLevel());
-		comboType.setSelectedItem(model.getSelectedType());
 		logTextPane.applyFontSize(model.getFontSize());
+		activateShowLevel(model.getShowLevel());
+		logTextPane.applyType(model.getSelectedType());
 	}
 
 	@Override
@@ -126,8 +126,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		case COPY_CONTENTS -> copyTextToClipboard();
 		case PARSE_LOG -> parse(model.getLogText());
 		case DISPLAY_LOG -> displayLog();
-		case CHANGE_EVENT_TYPE -> logTextPane.applyType(comboType.getSelectedItem());
-		case CHANGE_LOG_LEVEL -> activateShowLevel();
 		case DOWNLOAD -> download();
 		case DOWNLOAD_AS_ZIP -> downloadAsZip();
 		case DOWNLOAD_ALL_AS_ZIP -> downloadAllAsZip();
@@ -403,12 +401,13 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		}
 	}
 
-	private void activateShowLevel() {
-		Integer level = sliderLevel.getValue();
+	private void activateShowLevel(int level) {
 		if (level > model.getMaxExistingLevel()) {
 			level = model.getMaxExistingLevel();
 			sliderLevel.setValue(level);
 			return;
+		} else {
+			sliderLevel.setValue(level);
 		}
 
 		if (Configed.getSavedStates() != null) {
