@@ -40,6 +40,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.logpane.view.AdaptingSlider;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
+import de.uib.configed.gui.features.logviewer.logpane.view.TextLineNumber;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -146,10 +147,14 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 			}
 		});
 
+		TextLineNumber lineNumber = new TextLineNumber(logTextPane);
+		lineNumber.setUpdateFont(true);
+		lineNumber.setCurrentLineForeground(Globals.OPSI_MAGENTA);
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
 		jScrollPane.getViewport().add(logTextPane);
+		jScrollPane.setRowHeaderView(lineNumber);
 		rootPanel.add(jScrollPane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("search"));
@@ -272,14 +277,12 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
-		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
+		new PopupMenuTrait(popups, new JComponent[] { logTextPane }) {
 			@Override
 			public void action(int p) {
 				treatPopupAction(p);
 			}
 		};
-
-		popupMenu.addPopupListenersTo(new JComponent[] { logTextPane });
 	}
 
 	private void treatPopupAction(int p) {

@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -17,6 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -48,8 +50,14 @@ public class LogTabComponent extends LogPaneComponent {
 		Logging.info("reload logFileType ", logFileType);
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
+		Rectangle visibleRectangle = logTextPane.getVisibleRect();
+		int caretPosition = logTextPane.getCaretPosition();
 		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType);
-		ConfigedMain.getMainFrame().deactivateLoadingCursor();
+		SwingUtilities.invokeLater(() -> {
+			logTextPane.setCaretPosition(caretPosition);
+			logTextPane.scrollRectToVisible(visibleRectangle);
+			ConfigedMain.getMainFrame().deactivateLoadingCursor();
+		});
 	}
 
 	@Override

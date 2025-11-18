@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
@@ -38,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -130,6 +132,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		complexElements = new LinkedList<>();
 		init();
 		JPanel panel = initComponents();
+		Utils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
 
 		JButton buttonSearch = new JButton(Configed.getResourceValue("search"));
 		buttonSearch.addActionListener(event -> doSearch());
@@ -201,7 +204,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		saveButton.addActionListener(actionEvent -> save());
 
 		buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
-		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
+		buttonReload.setToolTipText(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
 		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));

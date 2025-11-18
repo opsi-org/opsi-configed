@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,11 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	protected JPopupMenu definePopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 		JPopupMenu jPopupMenu = new PopupMenuTrait(
-				new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF }) {
+				new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF },
+				(MouseEvent event) -> {
+					updatePopupMenu();
+					return true;
+				}, new JComponent[] { table, jScrollPane.getViewport() }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
