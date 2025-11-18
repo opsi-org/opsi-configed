@@ -272,16 +272,16 @@ public class ConfigedMain {
 		}
 	}
 
-	public static void setEditingTarget(EditingTarget newEditingTarget) {
+	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
 		if (!ChangedDataManager.checkSaveAll(true)) {
 			Logging.info("stop changing editingTarget, unsaved data");
-			return;
+			return false;
 		}
 
 		if (newEditingTarget == editingTarget) {
 			Logging.info("stop setting editingTarget, it remains the same");
-			return;
+			return false;
 		}
 
 		editingTarget = newEditingTarget;
@@ -312,9 +312,10 @@ public class ConfigedMain {
 			break;
 
 		case LICENSE_MANAGEMENT:
-			mainFrame.startLicensingManagement();
-			break;
+			return mainFrame.startLicensingManagement();
 		}
+
+		return true;
 	}
 
 	public void actOnListSelection() {
