@@ -413,7 +413,8 @@ public class LogTextPane extends JTextPane {
 		@Override
 		public float getMinimumSpan(int axis) {
 			if (axis == View.X_AXIS) {
-				return 0; // allow wrapping
+				// allow wrapping
+				return 0;
 			}
 			return super.getMinimumSpan(axis);
 		}

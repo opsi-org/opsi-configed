@@ -121,13 +121,13 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	private void handleSimpleEffect(LogPaneEffect.SimpleEffect e) {
 		switch (e) {
-		case SEARCH -> search();
-		case RELOAD -> reload();
+		case PERFORM_SEARCH -> search();
+		case RELOAD_LOG -> reload();
 		case COPY_CONTENTS -> copyTextToClipboard();
 		case PARSE_LOG -> parse(model.getLogText());
 		case DISPLAY_LOG -> displayLog();
-		case DOWNLOAD -> download();
-		case DOWNLOAD_AS_ZIP -> downloadAsZip();
+		case DOWNLOAD_LOG -> download();
+		case DOWNLOAD_LOG_AS_ZIP -> downloadAsZip();
 		case DOWNLOAD_ALL_AS_ZIP -> downloadAllAsZip();
 		case FLOAT_EXTERNAL -> floatExternal();
 		}

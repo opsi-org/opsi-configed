@@ -71,7 +71,7 @@ class LogPaneUpdateTest {
 
 		assertTrue(result.model().getSearchHistory().contains(query));
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.SEARCH, result.effect().get()));
+				() -> assertSame(LogPaneEffect.SimpleEffect.PERFORM_SEARCH, result.effect().get()));
 	}
 
 	@Test
@@ -153,7 +153,7 @@ class LogPaneUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.RELOAD, result.effect().get()));
+				() -> assertSame(LogPaneEffect.SimpleEffect.RELOAD_LOG, result.effect().get()));
 	}
 
 	@Test
@@ -165,7 +165,7 @@ class LogPaneUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD, result.effect().get()));
+				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_LOG, result.effect().get()));
 	}
 
 	@Test
@@ -177,7 +177,7 @@ class LogPaneUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_AS_ZIP, result.effect().get()));
+				() -> assertSame(LogPaneEffect.SimpleEffect.DOWNLOAD_LOG_AS_ZIP, result.effect().get()));
 	}
 
 	@Test
