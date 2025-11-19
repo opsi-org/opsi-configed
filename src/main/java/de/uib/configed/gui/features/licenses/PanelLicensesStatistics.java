@@ -70,7 +70,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 			});
 		} else if (panelStatistics.getTableModel().getRows().isEmpty()) {
 			panelStatistics.getTableModel().resetLocally();
-			controller.refreshTables();
+			controller.refreshPanelGenEdits();
 			controller.initializeVisualSettings();
 		} else {
 			super.reset();

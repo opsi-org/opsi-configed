@@ -21,7 +21,7 @@ import de.uib.configed.share.Utils;
 public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();
 
-	protected List<PanelGenEdit> tablePanes = new ArrayList<>();
+	protected List<PanelGenEdit> panelGenEdits = new ArrayList<>();
 
 	protected List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
@@ -31,8 +31,8 @@ public abstract class AbstractControlMultiTablePanel {
 		return tableModels;
 	}
 
-	public List<PanelGenEdit> getTablePanes() {
-		return tablePanes;
+	public List<PanelGenEdit> getPanelGenEdits() {
+		return panelGenEdits;
 	}
 
 	public abstract void init();
@@ -43,21 +43,21 @@ public abstract class AbstractControlMultiTablePanel {
 	public void initializeVisualSettings() {
 	}
 
-	public void refreshTables() {
+	public void refreshPanelGenEdits() {
 		for (GenTableModel tableModel : tableModels) {
 			tableModel.invalidate();
 			tableModel.reset();
 		}
 
-		for (PanelGenEdit tablePanel : tablePanes) {
+		for (PanelGenEdit tablePanel : panelGenEdits) {
 			tablePanel.setDataChanged(false);
 		}
 	}
 
-	public boolean mayLeave() {
+	public int mayLeave() {
 		boolean change = false;
 
-		Iterator<PanelGenEdit> iterP = tablePanes.iterator();
+		Iterator<PanelGenEdit> iterP = panelGenEdits.iterator();
 
 		while (!change && iterP.hasNext()) {
 			PanelGenEdit p = iterP.next();
@@ -65,20 +65,12 @@ public abstract class AbstractControlMultiTablePanel {
 		}
 
 		if (change) {
-			int returnedOption = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
-					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
-					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-			if (returnedOption == JOptionPane.YES_OPTION) {
-				return true;
-			}
-
-			Utils.getMasterFrame().setVisible(true);
+			return JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
+					Configed.getResourceValue("ConfigedMain.confirmUnsavedChanges"),
+					Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 		} else {
-			return true;
+			return -2;
 		}
-
-		return false;
 	}
 }
