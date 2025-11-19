@@ -287,7 +287,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 				if (current) {
 					Rectangle2D r = component.modelToView2D(rowStartOffset);
 					g.setColor(getCurrentLineBackground());
-					g.fillRect(insets.left, (int) r.getY(), availableWidth, (int) r.getHeight());
+					g.fillRect(0, (int) r.getY(), getWidth(), (int) r.getHeight());
 				}
 				g.setColor(current ? getCurrentLineForeground() : Color.GRAY);
 				g.setFont(component.getFont());

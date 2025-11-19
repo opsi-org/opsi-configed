@@ -89,7 +89,6 @@ public class LogPanel extends JPanel {
 		}
 
 		TextLineNumber lineNumber = new TextLineNumber(logTextPane);
-		lineNumber.setBorderGap(0);
 		lineNumber.setUpdateFont(true);
 		lineNumber.setDigitAlignment(TextLineNumber.CENTER);
 		lineNumber.setCurrentLineForeground(Color.WHITE);
