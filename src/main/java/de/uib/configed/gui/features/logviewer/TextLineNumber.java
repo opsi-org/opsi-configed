@@ -50,6 +50,7 @@ import de.uib.configed.share.logging.Logging;
 // Modifications:
 //   - Updated depracted method usage.
 //   - Minor changes to reduce SonarQube warnings.
+@SuppressWarnings("java:S1200")
 public final class TextLineNumber extends JPanel implements CaretListener, DocumentListener, PropertyChangeListener {
 	public static final float LEFT = 0.0F;
 	public static final float CENTER = 0.5F;
