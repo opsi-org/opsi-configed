@@ -101,6 +101,8 @@ public final class Globals {
 	// also used for GlassPane...
 
 	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
+	public static final Color LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_LIGHT = new Color(178, 178, 178, 100);
+	public static final Color LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_DARK = new Color(178, 178, 178, 80);
 
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 

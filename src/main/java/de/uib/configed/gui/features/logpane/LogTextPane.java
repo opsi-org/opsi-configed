@@ -6,13 +6,20 @@
 
 package de.uib.configed.gui.features.logpane;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -26,9 +33,11 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.IconView;
 import javax.swing.text.LabelView;
 import javax.swing.text.ParagraphView;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
@@ -65,6 +74,16 @@ public class LogTextPane extends JTextPane {
 
 	private Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 
+	private final Highlighter.HighlightPainter caretPainter = new LineHighlightPainter(this,
+			FlatLaf.isLafDark() ? Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_DARK
+					: Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_LIGHT);
+
+	private Object caretLineTag;
+
+	// Track last visual row range colored white
+	private int lastHighlightStart = -1;
+	private int lastHighlightEnd = -1;
+
 	public LogTextPane(String defaultText) {
 		styleContext = new StyleContext() {
 			@Override
@@ -85,11 +104,141 @@ public class LogTextPane extends JTextPane {
 		super.setHighlighter(highlighter);
 
 		super.setEditable(true);
+		super.addCaretListener(e -> refreshCurrentLineVisuals());
+		super.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				SwingUtilities.invokeLater(() -> refreshCurrentLineVisuals());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				SwingUtilities.invokeLater(() -> refreshCurrentLineVisuals());
+			}
+		});
+		super.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				refreshCurrentLineVisuals();
+			}
+		});
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
 		return getUI().getMinimumSize(this);
+	}
+
+	private void refreshCurrentLineVisuals() {
+		repaintScrollPaneRowHeader();
+		updateCaretLineForeground();
+		updateCaretLineHighlight();
+	}
+
+	private void updateCaretLineForeground() {
+		try {
+			int caretPos = getCaretPosition();
+			int selStart = getSelectionStart();
+			int selEnd = getSelectionEnd();
+
+			// If selection includes the caret, restore previous and skip to avoid clashing with selection
+			if (selStart != selEnd && caretPos >= Math.min(selStart, selEnd)
+					&& caretPos <= Math.max(selStart, selEnd)) {
+				restorePreviousHighlight();
+				return;
+			}
+
+			// Restore previous override before applying a new one
+			restorePreviousHighlight();
+
+			Rectangle2D caretRect = modelToView2D(caretPos);
+			if (caretRect == null) {
+				return;
+			}
+
+			Element root = getDocument().getDefaultRootElement();
+			int lineIndex = root.getElementIndex(caretPos);
+			Element line = root.getElement(lineIndex);
+			int start = line.getStartOffset();
+			int end = Math.max(start, line.getEndOffset() - 1);
+
+			if (end <= start) {
+				return;
+			}
+
+			StyledDocument doc = (StyledDocument) getDocument();
+			SimpleAttributeSet white = new SimpleAttributeSet();
+			StyleConstants.setBold(white, true);
+			StyleConstants.setForeground(white, Color.WHITE);
+			white.removeAttribute(StyleConstants.Background);
+			doc.setCharacterAttributes(start, end - start, white, true);
+
+			lastHighlightStart = start;
+			lastHighlightEnd = end;
+		} catch (BadLocationException ex) {
+			Logging.warning(this, ex, "Failed to update caret line foreground");
+		}
+	}
+
+	private void restorePreviousHighlight() {
+		if (lastHighlightStart < 0 || lastHighlightEnd <= lastHighlightStart) {
+			return;
+		}
+		Element root = getDocument().getDefaultRootElement();
+		int lineIdx = root.getElementIndex(lastHighlightStart);
+		Element lineEl = root.getElement(lineIdx);
+		int lineStart = lineEl.getStartOffset();
+
+		Integer parsedIdx = docLinestartPosition2lineCount.get(lineStart);
+		StyledDocument doc = (StyledDocument) getDocument();
+		if (parsedIdx != null) {
+			Style original = parser.getParsedLogLine(parsedIdx).getStyle();
+			doc.setCharacterAttributes(lastHighlightStart, lastHighlightEnd - lastHighlightStart, original, true);
+		} else {
+			SimpleAttributeSet empty = new SimpleAttributeSet();
+			doc.setCharacterAttributes(lastHighlightStart, lastHighlightEnd - lastHighlightStart, empty, true);
+		}
+
+		lastHighlightStart = -1;
+		lastHighlightEnd = -1;
+	}
+
+	private void repaintScrollPaneRowHeader() {
+		JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
+		if (sp != null && sp.getRowHeader() != null) {
+			JViewport rh = sp.getRowHeader();
+			if (rh.getView() != null) {
+				rh.getView().repaint();
+			}
+			rh.repaint();
+		}
+	}
+
+	private void updateCaretLineHighlight() {
+		if (caretLineTag != null) {
+			highlighter.removeHighlight(caretLineTag);
+		}
+
+		int caretPos = getCaretPosition();
+		int selStart = getSelectionStart();
+		int selEnd = getSelectionEnd();
+
+		// If selection includes the caret, skip to avoid clashing with selection
+		if (selStart != selEnd && caretPos >= Math.min(selStart, selEnd) && caretPos <= Math.max(selStart, selEnd)) {
+			return;
+		}
+
+		int pos = getCaretPosition();
+		Element root = getDocument().getDefaultRootElement();
+		int line = root.getElementIndex(pos);
+		int start = root.getElement(line).getStartOffset();
+		int end = root.getElement(line).getEndOffset();
+
+		try {
+			caretLineTag = highlighter.addHighlight(start, end, caretPainter);
+		} catch (BadLocationException e) {
+			Logging.warning(this, "Failed to highlight current line", e);
+		}
 	}
 
 	public void setCaseSensitivity(boolean caseSensitivity) {
@@ -142,7 +291,7 @@ public class LogTextPane extends JTextPane {
 				scrollRectToVisible(modelToView2D(offset + selectedItem.toString().length()).getBounds());
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
-				Logging.warning(this, e, "BadLocationException for setting caret in LotPane");
+				Logging.warning(this, e, "BadLocationException for setting caret in LogPane");
 			}
 		}
 
@@ -178,9 +327,17 @@ public class LogTextPane extends JTextPane {
 		}
 
 		setDocument(document);
+		lastHighlightStart = -1;
+		lastHighlightEnd = -1;
 		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(null));
+			SwingUtilities.invokeLater(() -> {
+				highlighter.removeAllHighlights();
+				refreshCurrentLineVisuals();
+				setCursor(null);
+			});
 		} else {
+			highlighter.removeAllHighlights();
+			refreshCurrentLineVisuals();
 			setCursor(null);
 		}
 	}
@@ -418,7 +575,8 @@ public class LogTextPane extends JTextPane {
 		@Override
 		public float getMinimumSpan(int axis) {
 			if (axis == View.X_AXIS) {
-				return 0; // allow wrapping
+				// allow wrapping
+				return 0;
 			}
 			return super.getMinimumSpan(axis);
 		}

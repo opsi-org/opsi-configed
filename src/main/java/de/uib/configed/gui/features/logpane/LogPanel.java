@@ -31,6 +31,8 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.configed.app.Main;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
@@ -91,7 +93,9 @@ public class LogPanel extends JPanel {
 		lineNumber.setUpdateFont(true);
 		lineNumber.setDigitAlignment(TextLineNumber.CENTER);
 		lineNumber.setCurrentLineForeground(Color.WHITE);
-		lineNumber.setCurrentLineBackground(new Color(128, 128, 128, 80));
+		lineNumber.setCurrentLineBackground(
+				FlatLaf.isLafDark() ? Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_DARK
+						: Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_LIGHT);
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
