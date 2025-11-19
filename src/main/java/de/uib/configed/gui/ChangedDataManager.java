@@ -126,18 +126,24 @@ public final class ChangedDataManager {
 		boolean result = true;
 
 		int option = keeper.askSave();
-		if (option == JOptionPane.YES_OPTION) {
+		switch (option) {
+		case JOptionPane.YES_OPTION:
 			keeper.save();
-		} else if (option == JOptionPane.NO_OPTION) {
+			break;
+		case JOptionPane.NO_OPTION:
 			keeper.cancel();
-		} else if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+			break;
+		case JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION:
 			Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
 			result = false;
-		} else if (option == -2) {
+			break;
+		case -2:
 			// Here no changes were made, so nothing to do - and successful (result = true)
 			Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
-		} else {
+			break;
+		default:
 			Logging.error("unknown option in saveData: ", option);
+			break;
 		}
 
 		return result;
