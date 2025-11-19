@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.logpane;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -86,8 +87,11 @@ public class LogPanel extends JPanel {
 		}
 
 		TextLineNumber lineNumber = new TextLineNumber(logTextPane);
+		lineNumber.setBorderGap(0);
 		lineNumber.setUpdateFont(true);
-		lineNumber.setCurrentLineForeground(Globals.OPSI_MAGENTA);
+		lineNumber.setDigitAlignment(TextLineNumber.CENTER);
+		lineNumber.setCurrentLineForeground(Color.WHITE);
+		lineNumber.setCurrentLineBackground(new Color(128, 128, 128, 80));
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);

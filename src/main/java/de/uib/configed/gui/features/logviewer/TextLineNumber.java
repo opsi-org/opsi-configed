@@ -22,7 +22,6 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.CaretEvent;
@@ -69,6 +68,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 	private boolean updateFont;
 	private int borderGap;
 	private Color currentLineForeground;
+	private Color currentLineBackground;
 	private float digitAlignment;
 	private int minimumDisplayDigits;
 
@@ -102,6 +102,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 		this.component = component;
 
 		setFont(component.getFont());
+		setOpaque(false);
 
 		setBorderGap(5);
 		setCurrentLineForeground(Color.RED);
@@ -152,7 +153,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 	public void setBorderGap(int borderGap) {
 		this.borderGap = borderGap;
 		Border inner = new EmptyBorder(0, borderGap, 0, borderGap);
-		setBorder(new CompoundBorder(OUTER, inner));
+		setBorder(inner);
 		lastDigits = 0;
 		setPreferredWidth();
 	}
@@ -173,6 +174,19 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 	 */
 	public void setCurrentLineForeground(Color currentLineForeground) {
 		this.currentLineForeground = currentLineForeground;
+	}
+
+	/**
+	 * Current line background color in the gutter. Falls back to the text
+	 * component's selection color when unset.
+	 */
+	public Color getCurrentLineBackground() {
+		Color bg = currentLineBackground;
+		return bg != null ? bg : component.getSelectionColor();
+	}
+
+	public void setCurrentLineBackground(Color currentLineBackground) {
+		this.currentLineBackground = currentLineBackground;
 	}
 
 	/**
@@ -269,7 +283,14 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 
 		while (rowStartOffset <= endOffset) {
 			try {
-				g.setColor(isCurrentLine(rowStartOffset) ? getCurrentLineForeground() : getForeground());
+				boolean current = isCurrentLine(rowStartOffset);
+				if (current) {
+					Rectangle2D r = component.modelToView2D(rowStartOffset);
+					g.setColor(getCurrentLineBackground());
+					g.fillRect(insets.left, (int) r.getY(), availableWidth, (int) r.getHeight());
+				}
+				g.setColor(current ? getCurrentLineForeground() : Color.GRAY);
+				g.setFont(component.getFont());
 
 				//  Get the line number as a string and then determine the
 				//  "X" and "Y" offsets for drawing the string.
