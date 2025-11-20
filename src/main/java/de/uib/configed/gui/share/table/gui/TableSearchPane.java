@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
@@ -33,6 +34,7 @@ import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 
+import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
@@ -48,6 +50,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JToggleButton respectCase;
 	private JToggleButton regexActive;
 	private JToggleButton filtermark;
+	private ItemListener filtermarkListener = event -> filtermarkEvent();
 
 	private JToggleButton buttonShowHideExtraOptions;
 
@@ -200,7 +203,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filtermark.addItemListener(event -> filtermarkEvent());
+		filtermark.addItemListener(filtermarkListener);
 		filtermark.setVisible(false);
 
 		JToolBar jToolBar = new JToolBar();
@@ -507,6 +510,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	private void markAllAndFilter() {
 		Logging.info(this, " markAllAndFilter filtering active", isFiltering());
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			return;
+		}
 
 		filtermark.setSelected(false);
 		markAll();
@@ -605,6 +611,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void filtermarkEvent() {
 		Logging.info(this, "actionPerformed on filtermark, isFilteredMode ", filtermark.isSelected());
+
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			filtermark.removeItemListener(filtermarkListener);
+			filtermark.setSelected(!filtermark.isSelected());
+			filtermark.addItemListener(filtermarkListener);
+			return;
+		}
 
 		// When the filtermark is not pressed it means that this event was not evoked
 		// by a click on the button. Then we want to manually control what happens with our list
