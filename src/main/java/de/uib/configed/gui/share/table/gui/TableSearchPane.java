@@ -643,20 +643,20 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		documentChanged(e);
+		documentChanged();
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		documentChanged(e);
+		documentChanged();
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		documentChanged(e);
+		documentChanged();
 	}
 
-	private void documentChanged(DocumentEvent e) {
+	private void documentChanged() {
 		if (!ChangedDataManager.checkSaveAll(true)) {
 			flatTextFieldSearch.getDocument().removeDocumentListener(this);
 			SwingUtilities.invokeLater(() -> {
