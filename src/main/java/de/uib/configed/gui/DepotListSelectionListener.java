@@ -19,12 +19,16 @@ public class DepotListSelectionListener implements ListSelectionListener {
 	private DepotsList depotsList;
 	private InitialDataLoader initialDataLoader;
 
+	private int[] lastSelectedIndices = new int[0];
+
 	public DepotListSelectionListener(ConfigedMain configedMain, DepotsList depotsList,
 			InitialDataLoader initialDataLoader) {
 		Logging.info(this, "DepotListSelectionListener constructor called");
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
 		this.initialDataLoader = initialDataLoader;
+
+		this.lastSelectedIndices = depotsList.getSelectedIndices();
 	}
 
 	@Override
@@ -33,7 +37,15 @@ public class DepotListSelectionListener implements ListSelectionListener {
 		Logging.info(this, "depotSelection event count  ", counter);
 
 		if (!e.getValueIsAdjusting()) {
-			depotsListValueChanged();
+			if (ChangedDataManager.checkSaveAll(true)) {
+				depotsListValueChanged();
+				lastSelectedIndices = depotsList.getSelectedIndices();
+			} else {
+				Logging.info(this, "depotSelection event ignored due to unsaved changes");
+				depotsList.removeListSelectionListener(this);
+				depotsList.setSelectedIndices(lastSelectedIndices);
+				depotsList.addListSelectionListener(this);
+			}
 		}
 	}
 
