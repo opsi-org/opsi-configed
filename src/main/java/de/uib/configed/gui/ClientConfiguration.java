@@ -198,8 +198,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, "state change in clientConfiguration with selected index", getSelectedIndex());
 
-		boolean checkSaveAll = ChangedDataManager.checkSaveAll(true);
-		if (!checkSaveAll && lastSelectedIndex != getSelectedIndex()) {
+		if (lastSelectedIndex != getSelectedIndex() && !ChangedDataManager.checkSaveAll(true)) {
 			// We don't want to trigger state change events while changing the selected index
 			this.removeChangeListener(this);
 			setSelectedIndex(lastSelectedIndex);

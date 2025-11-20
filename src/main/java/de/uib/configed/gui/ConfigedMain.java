@@ -321,7 +321,6 @@ public class ConfigedMain {
 	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
-		ChangedDataManager.checkSaveAll(true);
 		Logging.checkErrorList();
 
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
