@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
+import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -41,6 +42,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -51,6 +53,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
 
 	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
+
+	private TreePath[] lastSelectionPaths = new TreePath[0];
 
 	public final GroupNode rootNode = new GroupNode("");
 
@@ -88,6 +92,21 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	public boolean isGroupNodeFullList(DefaultMutableTreeNode compareNode) {
 		return groupNodeAllObjects.equals(compareNode);
 	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		Logging.debug(this, "valueChanged ", e);
+		if (ChangedDataManager.checkSaveAll(true)) {
+			valueChanged();
+			lastSelectionPaths = getSelectionPaths();
+		} else {
+			removeTreeSelectionListener(this);
+			setSelectionPaths(lastSelectionPaths);
+			addTreeSelectionListener(this);
+		}
+	}
+
+	abstract void valueChanged();
 
 	@Override
 	public DefaultTreeModel getModel() {
