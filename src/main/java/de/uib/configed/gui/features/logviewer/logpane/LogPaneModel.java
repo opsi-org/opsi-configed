@@ -43,4 +43,5 @@ public class LogPaneModel {
 	List<String> searchHistory = new ArrayList<>();
 	@Builder.Default
 	int fontSize = 11;
+	boolean needsRebuild;
 }

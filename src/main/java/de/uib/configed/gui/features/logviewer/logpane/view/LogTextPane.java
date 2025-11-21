@@ -118,6 +118,7 @@ public class LogTextPane extends JTextPane {
 		}
 
 		setCursor(Globals.WAIT_CURSOR);
+		highlighter.removeAllHighlights();
 		ImmutableDefaultStyledDocument newDoc = buildRawDocument();
 		setDocument(newDoc);
 		setCursor(null);
@@ -181,7 +182,7 @@ public class LogTextPane extends JTextPane {
 		return showLevel;
 	}
 
-	private Integer adjustShowLevel(Integer initialLevel, LogFileParser.LogParsedData data) {
+	private static Integer adjustShowLevel(Integer initialLevel, LogFileParser.LogParsedData data) {
 		int minLevel = data.getMinExistingLevel();
 		int maxLevel = data.getMaxExistingLevel();
 
@@ -189,6 +190,8 @@ public class LogTextPane extends JTextPane {
 			return maxLevel;
 		} else if (minLevel > initialLevel) {
 			return minLevel;
+		} else {
+			// Return initial level.
 		}
 		return initialLevel;
 	}
@@ -222,18 +225,12 @@ public class LogTextPane extends JTextPane {
 	}
 
 	public void applyType(Object selectedType) {
-		int oldSelTypeIndex = selTypeIndex;
 		if (selectedType == null || selectedType.equals(DEFAULT_TYPE)) {
 			showTypeRestricted = false;
 			selTypeIndex = -1;
 		} else {
 			showTypeRestricted = true;
 			selTypeIndex = parser.getData().getTypesList().indexOf(selectedType);
-		}
-
-		if (selTypeIndex != oldSelTypeIndex) {
-			buildDocument();
-			highlighter.removeAllHighlights();
 		}
 	}
 

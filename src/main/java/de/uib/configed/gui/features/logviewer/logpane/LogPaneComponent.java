@@ -108,21 +108,15 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	protected void refreshView() {
 		adaptSlider();
 		adaptComboType();
-		Integer oldLevel = logTextPane.getShowLevel();
-		int newLevel = model.getShowLevel();
-		activateShowLevel(newLevel);
-		logTextPane.setShowLevel(newLevel);
 
-		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", newLevel, " , ", oldLevel, ", ",
-				model.getMaxExistingLevel());
+		activateShowLevel(model.getShowLevel());
+		logTextPane.applyFontSize(model.getFontSize());
+		logTextPane.setShowLevel(model.getShowLevel());
+		logTextPane.applyType(model.getSelectedType());
 
-		if (!oldLevel.equals(newLevel)
-				&& (newLevel < model.getMaxExistingLevel() || oldLevel < model.getMaxExistingLevel())) {
+		if (model.isNeedsRebuild()) {
 			logTextPane.buildDocument();
 		}
-
-		logTextPane.applyFontSize(model.getFontSize());
-		logTextPane.applyType(model.getSelectedType());
 	}
 
 	@Override
@@ -435,6 +429,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 			comboType.setMaximumRowCount(maxRowCount);
 		}
+		comboType.setSelectedItem(model.getSelectedType());
 		comboType.addActionListener(comboTypeListener);
 	}
 

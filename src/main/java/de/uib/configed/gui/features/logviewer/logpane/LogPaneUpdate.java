@@ -34,8 +34,16 @@ public final class LogPaneUpdate {
 			yield UpdateResult.withEffect(model.withSearchHistory(newHistory),
 					LogPaneEffect.SimpleEffect.PERFORM_SEARCH);
 		}
-		case LogPaneMsg.ChangeLogLevel(int level) -> UpdateResult.noEffect(model.withShowLevel(level));
-		case LogPaneMsg.ChangeEventType(String type) -> UpdateResult.noEffect(model.withSelectedType(type));
+		case LogPaneMsg.ChangeLogLevel(int level) -> {
+			int oldShowLevel = model.getShowLevel();
+			boolean needsRebuild = oldShowLevel != level;
+			yield UpdateResult.noEffect(model.withShowLevel(level).withNeedsRebuild(needsRebuild));
+		}
+		case LogPaneMsg.ChangeEventType(String type) -> {
+			String oldSelectedType = model.getSelectedType();
+			boolean needsRebuild = !type.equals(oldSelectedType);
+			yield UpdateResult.noEffect(model.withSelectedType(type).withNeedsRebuild(needsRebuild));
+		}
 		case LogPaneMsg.ChangeTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
 		case LogPaneMsg.ChangeInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));
 		case LogPaneMsg.ChangeCaretPosition(int position) -> UpdateResult.noEffect(model.withCaretPosition(position));
