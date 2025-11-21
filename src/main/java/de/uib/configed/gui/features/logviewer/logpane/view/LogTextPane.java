@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -102,55 +101,6 @@ public class LogTextPane extends JTextPane {
 
 	public String[] getLines() {
 		return lines;
-	}
-
-	public void rebuildDocumentWithNewLevel(Object selectedItem) {
-		int caretPosition = getCaretPosition();
-		int startPosition = 0;
-		int oldStartPosition = 0;
-		int offset = 0;
-		Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
-
-		while (startPosition < caretPosition && linestartIterator.hasNext()) {
-			offset = caretPosition - startPosition;
-			oldStartPosition = startPosition;
-			startPosition = linestartIterator.next();
-		}
-
-		int lineNo = 0;
-		if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
-			lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
-		}
-
-		buildDocument();
-
-		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
-			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
-		} else if (!lineCount2docLinestartPosition.isEmpty()) {
-			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-			int nextLineNo = linesIterator.next();
-
-			while (linesIterator.hasNext() && nextLineNo < lineNo) {
-				nextLineNo = linesIterator.next();
-			}
-
-			startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-		} else {
-			Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
-		}
-
-		setCaretPosition(startPosition);
-
-		if (selectedItem != null) {
-			try {
-				scrollRectToVisible(modelToView2D(offset + selectedItem.toString().length()).getBounds());
-				highlighter.removeAllHighlights();
-			} catch (BadLocationException e) {
-				Logging.warning(this, e, "BadLocationException for setting caret in LotPane");
-			}
-		}
-
-		getCaret().setVisible(true);
 	}
 
 	public void buildDocument() {
