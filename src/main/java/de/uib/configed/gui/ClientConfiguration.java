@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.util.List;
 import java.util.Map;
@@ -123,8 +122,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
 
 		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), tabbedLogPane);
-
-		setMinimumSize(new Dimension());
 	}
 
 	private void initSoftWareInfoTab() {
