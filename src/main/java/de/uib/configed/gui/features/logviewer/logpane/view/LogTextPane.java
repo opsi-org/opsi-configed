@@ -175,8 +175,9 @@ public class LogTextPane extends JTextPane {
 		if (oldLine >= 0) {
 			Integer newStart = lineCount2docLinestartPosition.get(oldLine);
 			if (newStart != null) {
-				int newCaret = Math.max(0, newStart + offset);
-				setCaretPosition(newCaret);
+				int caretPos = Math.max(0, newStart + offset);
+				setCaretPosition(caretPos);
+				getCaret().setVisible(true);
 			}
 		}
 	}
