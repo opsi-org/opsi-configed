@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -55,14 +54,7 @@ public abstract class AbstractControlMultiTablePanel {
 	}
 
 	public int mayLeave() {
-		boolean change = false;
-
-		Iterator<PanelGenEdit> iterP = panelGenEdits.iterator();
-
-		while (!change && iterP.hasNext()) {
-			PanelGenEdit p = iterP.next();
-			change = p.isDataChanged();
-		}
+		boolean change = panelGenEdits.stream().allMatch(p -> p.isDataChanged());
 
 		if (change) {
 			return JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
