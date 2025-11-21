@@ -46,7 +46,8 @@ public final class LogPaneUpdate {
 		}
 		case LogPaneMsg.ChangeTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
 		case LogPaneMsg.ChangeInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));
-		case LogPaneMsg.ChangeCaretPosition(int position) -> UpdateResult.noEffect(model.withCaretPosition(position));
+		case LogPaneMsg.ChangeCaretPosition(int position) -> UpdateResult
+				.noEffect(model.toBuilder().caretPosition(position).needsRebuild(false).build());
 		case LogPaneMsg.ToggleCaseSensitivity(boolean caseSensitive) -> UpdateResult
 				.noEffect(model.withCaseSensitive(caseSensitive));
 		};

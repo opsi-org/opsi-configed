@@ -33,6 +33,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.CaretEvent;
 
 import de.uib.configed.app.Main;
 import de.uib.configed.gui.AbstractTeaComponent;
@@ -116,6 +117,8 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 		if (model.isNeedsRebuild()) {
 			logTextPane.buildDocument();
+			logTextPane.setCaretPosition(model.getCaretPosition());
+			logTextPane.getCaret().setVisible(true);
 		}
 	}
 
@@ -148,6 +151,12 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
+			}
+		});
+		logTextPane.addCaretListener((CaretEvent e) -> {
+			int offset = e.getDot();
+			if (offset != model.getCaretPosition()) {
+				dispatch(new LogPaneMsg.ChangeCaretPosition(e.getDot()));
 			}
 		});
 
@@ -368,6 +377,8 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		logPane.logTextPane.setParsedText(logTextPane);
 		logPane.logTextPane.setShowLevel(model.getShowLevel());
 		logPane.logTextPane.buildDocument();
+		logPane.logTextPane.setCaretPosition(model.getCaretPosition());
+		logPane.logTextPane.getCaret().setVisible(true);
 	}
 
 	public void setTitle(String title) {
