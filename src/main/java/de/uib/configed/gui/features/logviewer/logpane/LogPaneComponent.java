@@ -318,10 +318,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		return model.getMaxExistingLevel();
 	}
 
-	public void removeAllHighlights() {
-		logTextPane.removeAllHighlights();
-	}
-
 	public void setCaretPosition(int caretPosition) {
 		dispatch(new LogPaneMsg.ChangeCaretPosition(caretPosition));
 	}

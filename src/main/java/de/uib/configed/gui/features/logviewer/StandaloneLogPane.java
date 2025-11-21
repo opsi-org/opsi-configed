@@ -33,14 +33,12 @@ public class StandaloneLogPane extends LogPaneComponent {
 		super.dispatch(new LogPaneMsg.ParseLogRequested(reloadFile(logFrame.getFileName())));
 		super.setTitle(logFrame.getFileName());
 		super.setCaretPosition(caretPosition);
-		super.removeAllHighlights();
 	}
 
 	public void close() {
 		LogFrame.resetFileName();
 		super.dispatch(new LogPaneMsg.ParseLogRequested(""));
 		super.setTitle(null);
-		super.removeAllHighlights();
 	}
 
 	@Override

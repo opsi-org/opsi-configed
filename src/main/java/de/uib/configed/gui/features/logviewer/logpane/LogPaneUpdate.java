@@ -25,7 +25,7 @@ public final class LogPaneUpdate {
 				LogPaneEffect.SimpleEffect.PARSE_LOG);
 		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult
 				.noEffect(model.toBuilder().typesList(data.getTypesList()).minLevel(data.getMinExistingLevel())
-						.maxExistingLevel(data.getMaxExistingLevel()).showLevel(level).build());
+						.maxExistingLevel(data.getMaxExistingLevel()).showLevel(level).needsRebuild(true).build());
 		case LogPaneMsg.Search(String query) -> {
 			List<String> newHistory = new ArrayList<>(model.getSearchHistory());
 			if (!newHistory.contains(query)) {
@@ -37,12 +37,12 @@ public final class LogPaneUpdate {
 		case LogPaneMsg.ChangeLogLevel(int level) -> {
 			int oldShowLevel = model.getShowLevel();
 			boolean needsRebuild = oldShowLevel != level;
-			yield UpdateResult.noEffect(model.withShowLevel(level).withNeedsRebuild(needsRebuild));
+			yield UpdateResult.noEffect(model.toBuilder().showLevel(level).needsRebuild(needsRebuild).build());
 		}
 		case LogPaneMsg.ChangeEventType(String type) -> {
 			String oldSelectedType = model.getSelectedType();
 			boolean needsRebuild = !type.equals(oldSelectedType);
-			yield UpdateResult.noEffect(model.withSelectedType(type).withNeedsRebuild(needsRebuild));
+			yield UpdateResult.noEffect(model.toBuilder().selectedType(type).needsRebuild(needsRebuild).build());
 		}
 		case LogPaneMsg.ChangeTitle(String title) -> UpdateResult.noEffect(model.withTitle(title));
 		case LogPaneMsg.ChangeInfo(String info) -> UpdateResult.noEffect(model.withInfo(info));

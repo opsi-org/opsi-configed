@@ -267,7 +267,6 @@ public class LogFrame extends JFrame {
 			Logging.info(this, "Used memory ", Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
-			logPane.removeAllHighlights();
 		}
 	}
 

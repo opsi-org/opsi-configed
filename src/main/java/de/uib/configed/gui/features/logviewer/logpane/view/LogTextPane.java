@@ -248,11 +248,6 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public void removeAllHighlights() {
-		highlighter.removeAllHighlights();
-		buildDocument();
-	}
-
 	public void applyFontSize(int size) {
 		displayFontSize = size;
 		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
