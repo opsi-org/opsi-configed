@@ -196,10 +196,6 @@ public class LogTextPane extends JTextPane {
 		return initialLevel;
 	}
 
-	public Integer getShowLevel() {
-		return showLevel;
-	}
-
 	public void setShowLevel(int showLevel) {
 		this.showLevel = showLevel;
 	}
@@ -339,7 +335,7 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public static class WrapEditorKit extends StyledEditorKit {
+	private static class WrapEditorKit extends StyledEditorKit {
 		private transient ViewFactory defaultFactory;
 
 		@Override
@@ -351,7 +347,7 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public static class WrapColumnFactory implements ViewFactory {
+	private static class WrapColumnFactory implements ViewFactory {
 		@Override
 		public View create(Element elem) {
 			String kind = elem.getName();
@@ -369,7 +365,7 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public static class WrapLabelView extends LabelView {
+	private static class WrapLabelView extends LabelView {
 		public WrapLabelView(Element elem) {
 			super(elem);
 		}
