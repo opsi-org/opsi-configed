@@ -268,13 +268,13 @@ public class PanelSWInfo extends JPanel {
 		setLayout(layoutEmbed);
 
 		layoutEmbed.setHorizontalGroup(layoutEmbed.createParallelGroup()
-				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(subPanelTitle, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(panelTable, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(panelTable, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
 			new PopupMenuTrait(

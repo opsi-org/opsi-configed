@@ -74,9 +74,11 @@ public class PanelHostConfig extends JPanel {
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
-		planeLayout.setHorizontalGroup(planeLayout.createParallelGroup().addComponent(editMapPanel));
+		planeLayout.setHorizontalGroup(planeLayout.createParallelGroup().addComponent(editMapPanel, 0,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addComponent(editMapPanel));
+		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addComponent(editMapPanel, 0,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public void initEditing(String labeltext, Map<String, List<Object>> configVisualMap,

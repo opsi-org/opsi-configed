@@ -136,15 +136,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		setLayout(layoutBase);
 
 		layoutBase.setHorizontalGroup(layoutBase.createParallelGroup()
-				.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE,
+				.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo, 0,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(contentPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addGap(Globals.GAP_SIZE).addComponent(contentPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
 			new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
