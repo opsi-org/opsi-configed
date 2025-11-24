@@ -312,7 +312,7 @@ public class ProductPageManager implements MessagebusListener {
 			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
 				List<?> value = (List<?>) productProperty.getValue();
 
-				if (mergedProductProperties.get(productProperty.getValue()) == null) {
+				if (mergedProductProperties.get(productProperty.getKey()) == null) {
 					// we need a new property. it is not common
 
 					ListMerger merger = new ListMerger(value);
