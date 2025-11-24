@@ -20,7 +20,15 @@ public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Sear
 	record Search(String query) implements LogPaneMsg {
 	}
 
-	record ParseLogRequested(String text) implements LogPaneMsg {
+	record ParseLogRequested(String text, boolean resetCaret) implements LogPaneMsg {
+		public ParseLogRequested(String text, boolean resetCaret) {
+			this.text = text;
+			this.resetCaret = resetCaret;
+		}
+
+		public ParseLogRequested(String text) {
+			this(text, false);
+		}
 	}
 
 	record LogParsed(LogParsedData data, int level) implements LogPaneMsg {

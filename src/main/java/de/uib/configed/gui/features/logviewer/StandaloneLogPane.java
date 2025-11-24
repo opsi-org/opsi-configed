@@ -29,7 +29,7 @@ public class StandaloneLogPane extends LogPaneComponent {
 
 	@Override
 	public void reload() {
-		super.dispatch(new LogPaneMsg.ParseLogRequested(reloadFile(logFrame.getFileName())));
+		super.dispatch(new LogPaneMsg.ParseLogRequested(reloadFile(logFrame.getFileName()), true));
 		super.setTitle(logFrame.getFileName());
 	}
 

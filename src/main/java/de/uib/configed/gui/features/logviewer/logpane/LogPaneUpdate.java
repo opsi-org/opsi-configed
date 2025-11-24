@@ -21,8 +21,11 @@ public final class LogPaneUpdate {
 	public static UpdateResult<LogPaneModel, LogPaneEffect> update(LogPaneMsg msg, LogPaneModel model) {
 		return switch (msg) {
 		case LogPaneMsg.SimpleMsg m -> handleSimpleMsg(m, model);
-		case LogPaneMsg.ParseLogRequested(String text) -> UpdateResult.withEffect(model.withLogText(text),
-				LogPaneEffect.SimpleEffect.PARSE_LOG);
+		case LogPaneMsg.ParseLogRequested(String text, boolean resetCaret) -> {
+			int caretPos = resetCaret ? model.getCaretPosition() : 0;
+			yield UpdateResult.withEffect(model.toBuilder().logText(text).caretPosition(caretPos).build(),
+					LogPaneEffect.SimpleEffect.PARSE_LOG);
+		}
 		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult
 				.noEffect(model.toBuilder().typesList(data.getTypesList()).minLevel(data.getMinExistingLevel())
 						.maxExistingLevel(data.getMaxExistingLevel()).showLevel(level).needsRebuild(true).build());

@@ -71,14 +71,18 @@ public class TabbedLogPane extends JTabbedPane {
 	}
 
 	public void setDocuments(String logtype) {
+		setDocument(logtype, logtype, false);
+	}
+
+	public void setDocuments(String logtype, final boolean resetCaret) {
 		Map<String, String> documents = getLogfilesUpdating(logtype);
 		Logging.info(this, "idents.length ", idents.length);
 		for (String ident : idents) {
-			setDocument(ident, documents.get(ident));
+			setDocument(ident, documents.get(ident), resetCaret);
 		}
 	}
 
-	private void setDocument(String ident, final String document) {
+	private void setDocument(String ident, final String document, final boolean resetCaret) {
 		int i = identsList.indexOf(ident);
 		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
 		if (i < 0 || i >= idents.length) {
@@ -86,7 +90,7 @@ public class TabbedLogPane extends JTabbedPane {
 		}
 
 		if (document == null) {
-			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
+			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
 			textPanes[i].setTitle("");
 			return;
 		}
