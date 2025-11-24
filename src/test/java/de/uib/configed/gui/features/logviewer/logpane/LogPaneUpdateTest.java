@@ -25,11 +25,11 @@ class LogPaneUpdateTest {
 	private static LogPaneModel baseModel() {
 		return LogPaneModel.builder().logText("old log").withPopup(true).showLevel(1).minLevel(1).maxLevel(5)
 				.maxExistingLevel(5).typesList(List.of("INFO")).selectedType("INFO").caretPosition(0).info("").title("")
-				.caseSensitive(false).searchHistory(List.of("foo")).fontSize(11).build();
+				.caseSensitive(false).searchHistory(List.of("foo")).fontSize(11).needsRebuild(false).build();
 	}
 
 	@Test
-	void shouldTriggerParseLogEffect_whenParseLogRequested() {
+	void shouldNotResetCaretAndTriggerParseLogEffect_whenParseLogRequested() {
 		LogPaneModel model = baseModel();
 		String newText = "new log text";
 		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText);
@@ -37,6 +37,21 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newText, result.model().getLogText());
+		assertEquals(model.getCaretPosition(), result.model().getCaretPosition());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
+	}
+
+	@Test
+	void shouldResetCaretAndTriggerParseLogEffect_whenParseLogRequested() {
+		LogPaneModel model = baseModel().withCaretPosition(50);
+		String newText = "new log text";
+		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText, true);
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertEquals(newText, result.model().getLogText());
+		assertEquals(model.getCaretPosition(), result.model().getCaretPosition());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
 	}
@@ -57,11 +72,12 @@ class LogPaneUpdateTest {
 		assertEquals(parsedData.getMinExistingLevel(), result.model().getMinLevel());
 		assertEquals(parsedData.getMaxExistingLevel(), result.model().getMaxExistingLevel());
 		assertEquals(level, result.model().getShowLevel());
+		assertTrue(result.model().isNeedsRebuild());
 		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
-	void shouldAddToHistory_whenSearch() {
+	void shouldAddToHistoryAndTriggerPerformSearchEffect_whenSearch() {
 		LogPaneModel model = baseModel();
 		String query = "bar";
 		LogPaneMsg msg = new LogPaneMsg.Search(query);
@@ -86,7 +102,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldChangeLogLevel_whenChangeLogLevel() {
+	void shouldChangeLogLevelAndSetNeedsRebuildToTrue_whenChangeLogLevel() {
 		LogPaneModel model = baseModel();
 		int newLevel = 4;
 		LogPaneMsg msg = new LogPaneMsg.ChangeLogLevel(newLevel);
@@ -94,11 +110,25 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newLevel, result.model().getShowLevel());
+		assertTrue(result.model().isNeedsRebuild());
 		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
-	void shouldChangeEventType_whenChangeEventType() {
+	void shouldChangeLogLevelAndSetNeedsRebuildToFalse_whenChangeLogLevel() {
+		LogPaneModel model = baseModel();
+		int sameLevel = 1;
+		LogPaneMsg msg = new LogPaneMsg.ChangeLogLevel(sameLevel);
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertEquals(sameLevel, result.model().getShowLevel());
+		assertFalse(result.model().isNeedsRebuild());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldChangeEventTypeAndSetNeedsRebuildToTrue_whenChangeEventType() {
 		LogPaneModel model = baseModel();
 		String newType = "WARN";
 		LogPaneMsg msg = new LogPaneMsg.ChangeEventType(newType);
@@ -106,6 +136,20 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newType, result.model().getSelectedType());
+		assertTrue(result.model().isNeedsRebuild());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldChangeEventTypeAndSetNeedsRebuildToFalse_whenChangeEventType() {
+		LogPaneModel model = baseModel();
+		String sameType = "INFO";
+		LogPaneMsg msg = new LogPaneMsg.ChangeEventType(sameType);
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertEquals(sameType, result.model().getSelectedType());
+		assertFalse(result.model().isNeedsRebuild());
 		assertFalse(result.effect().isPresent());
 	}
 
@@ -132,7 +176,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldChangeCaretPosition_whenChangeCaretPosition() {
+	void shouldChangeCaretPositionAndSetNeedsRebuildToFalse_whenChangeCaretPosition() {
 		LogPaneModel model = baseModel();
 		int newPos = 42;
 		LogPaneMsg msg = new LogPaneMsg.ChangeCaretPosition(newPos);
@@ -140,6 +184,7 @@ class LogPaneUpdateTest {
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newPos, result.model().getCaretPosition());
+		assertFalse(result.model().isNeedsRebuild());
 		assertFalse(result.effect().isPresent());
 	}
 
@@ -215,7 +260,7 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldCopyContents_whenCopyContents() {
+	void shouldTriggerCopyContentsEffect_whenCopyContents() {
 		LogPaneModel model = baseModel();
 		LogPaneMsg msg = LogPaneMsg.SimpleMsg.COPY_CONTENTS;
 
