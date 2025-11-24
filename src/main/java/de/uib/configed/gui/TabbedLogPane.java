@@ -71,7 +71,7 @@ public class TabbedLogPane extends JTabbedPane {
 	}
 
 	public void setDocuments(String logtype) {
-		setDocument(logtype, logtype, false);
+		setDocuments(logtype, false);
 	}
 
 	public void setDocuments(String logtype, final boolean resetCaret) {
