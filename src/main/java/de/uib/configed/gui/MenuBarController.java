@@ -19,7 +19,6 @@ import java.util.Locale;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -191,14 +190,6 @@ public class MenuBarController {
 		nextView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
 		nextView.addActionListener(event -> ConfigedMain.getMainFrame().nextView());
 
-		JCheckBoxMenuItem retainTableColumnWidthsDuringSessionMenuItem = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuViewRetainTableColumnWidthsDuringSession"));
-		retainTableColumnWidthsDuringSessionMenuItem
-				.setSelected(UserPreferences.getBoolean(UserPreferences.RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION));
-		retainTableColumnWidthsDuringSessionMenuItem.addActionListener(
-				event -> UserPreferences.setBoolean(UserPreferences.RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION,
-						retainTableColumnWidthsDuringSessionMenuItem.isSelected()));
-
 		jMenuView.add(jMenuViewClientsConfiguration);
 		jMenuView.add(jMenuViewDepotConfiguration);
 		jMenuView.add(jMenuViewServerConfiguration);
@@ -209,8 +200,6 @@ public class MenuBarController {
 		jMenuView.addSeparator();
 		jMenuView.add(prevView);
 		jMenuView.add(nextView);
-		jMenuView.addSeparator();
-		jMenuView.add(retainTableColumnWidthsDuringSessionMenuItem);
 
 		return jMenuView;
 	}

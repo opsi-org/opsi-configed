@@ -15,7 +15,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
 import de.uib.configed.gui.data.ListMerger;
-import de.uib.configed.share.userprefs.UserPreferences;
 
 /**
  * This class should only contain utility methods that are used for the configed
@@ -27,10 +26,6 @@ public final class ConfigedUtilityMethods {
 	}
 
 	public static int[] getTableColumnWidths(JTable table) {
-		if (Boolean.FALSE
-				.equals(UserPreferences.getBoolean(UserPreferences.RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION))) {
-			return new int[] { 0 };
-		}
 		TableColumnModel columnModel = table.getColumnModel();
 		int[] columnWidths = new int[columnModel.getColumnCount()];
 
@@ -43,10 +38,6 @@ public final class ConfigedUtilityMethods {
 
 	// only has an effect if number of table columns not changed
 	public static void setTableColumnWidths(JTable table, int[] columnWidths) {
-		if (Boolean.FALSE
-				.equals(UserPreferences.getBoolean(UserPreferences.RETAIN_TABLE_COLUMN_WIDTHS_DURING_SESSION))) {
-			return;
-		}
 		// Only do it if number of columns didn't change
 		if (columnWidths.length == table.getColumnModel().getColumnCount()) {
 			for (int i = 0; i < columnWidths.length; i++) {
