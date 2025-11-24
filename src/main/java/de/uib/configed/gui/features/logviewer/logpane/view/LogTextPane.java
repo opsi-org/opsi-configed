@@ -66,6 +66,9 @@ public class LogTextPane extends JTextPane {
 
 	private Font monospacedFont;
 
+	public record CaretContext(int line, int offset) {
+	}
+
 	public LogTextPane(int defaultFontSize) {
 		this.displayFontSize = defaultFontSize;
 		styleContext = new StyleContext() {
@@ -104,33 +107,11 @@ public class LogTextPane extends JTextPane {
 	}
 
 	public void buildDocument() {
-		int oldCaret = getCaretPosition();
-
-		int oldLine = -1;
-		int offset = 0;
-
-		if (docLinestartPosition2lineCount != null) {
-			Map.Entry<Integer, Integer> lastEntry = docLinestartPosition2lineCount.floorEntry(oldCaret);
-			if (lastEntry != null) {
-				oldLine = lastEntry.getValue();
-				offset = oldCaret - lastEntry.getKey();
-			}
-		}
-
 		setCursor(Globals.WAIT_CURSOR);
 		highlighter.removeAllHighlights();
 		ImmutableDefaultStyledDocument newDoc = buildRawDocument();
 		setDocument(newDoc);
 		setCursor(null);
-
-		if (oldLine >= 0) {
-			Integer newStart = lineCount2docLinestartPosition.get(oldLine);
-			if (newStart != null) {
-				int caretPos = Math.max(0, newStart + offset);
-				setCaretPosition(caretPos);
-				getCaret().setVisible(true);
-			}
-		}
 	}
 
 	private ImmutableDefaultStyledDocument buildRawDocument() {
@@ -151,10 +132,33 @@ public class LogTextPane extends JTextPane {
 				}
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, e, "BadLocationException");
+			Logging.warning(this, e, "Failed to build document");
 		}
 
 		return document;
+	}
+
+	public CaretContext getCaretContext(int oldCaret) {
+		int line = -1;
+		int offset = 0;
+		if (docLinestartPosition2lineCount == null) {
+			return new CaretContext(line, offset);
+		}
+
+		Map.Entry<Integer, Integer> lastEntry = docLinestartPosition2lineCount.floorEntry(oldCaret);
+		if (lastEntry != null) {
+			line = lastEntry.getValue();
+			offset = oldCaret - lastEntry.getKey();
+		}
+		return new CaretContext(line, offset);
+	}
+
+	public int computeCaretFromContext(CaretContext context) {
+		Integer newStart = lineCount2docLinestartPosition.get(context.line());
+		if (newStart != null) {
+			return Math.max(0, newStart + context.offset());
+		}
+		return 0;
 	}
 
 	public void setParsedText(LogTextPane logTextPane) {

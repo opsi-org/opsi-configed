@@ -116,8 +116,9 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		logTextPane.applyType(model.getSelectedType());
 
 		if (model.isNeedsRebuild()) {
+			LogTextPane.CaretContext context = logTextPane.getCaretContext(model.getCaretPosition());
 			logTextPane.buildDocument();
-			logTextPane.setCaretPosition(model.getCaretPosition());
+			logTextPane.setCaretPosition(logTextPane.computeCaretFromContext(context));
 			logTextPane.getCaret().setVisible(true);
 		}
 	}
