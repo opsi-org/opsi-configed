@@ -30,13 +30,13 @@ public class StandaloneLogPane extends LogPaneComponent {
 	@Override
 	public void reload() {
 		super.dispatch(new LogPaneMsg.ParseLogRequested(reloadFile(logFrame.getFileName()), true));
-		super.setTitle(logFrame.getFileName());
+		super.dispatch(new LogPaneMsg.ChangeTitle(logFrame.getFileName()));
 	}
 
 	public void close() {
 		LogFrame.resetFileName();
 		super.dispatch(new LogPaneMsg.ParseLogRequested(""));
-		super.setTitle(null);
+		super.dispatch(new LogPaneMsg.ChangeTitle(null));
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class StandaloneLogPane extends LogPaneComponent {
 		String fn = LogFrame.openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		if (fn != null && !fn.isEmpty()) {
 			saveToFile(fn, logTextPane.getLines());
-			super.setTitle(fn);
+			super.dispatch(new LogPaneMsg.ChangeTitle(fn));
 		}
 	}
 

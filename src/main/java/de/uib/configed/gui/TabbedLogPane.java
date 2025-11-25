@@ -91,15 +91,15 @@ public class TabbedLogPane extends JTabbedPane {
 
 		if (document == null) {
 			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
-			textPanes[i].setTitle("");
+			textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(""));
 			return;
 		}
 
 		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
 				: "";
 
-		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
-		textPanes[i].setInfo(selectedClient);
+		textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(idents[i] + " " + selectedClient));
+		textPanes[i].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
 		textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
 	}
 

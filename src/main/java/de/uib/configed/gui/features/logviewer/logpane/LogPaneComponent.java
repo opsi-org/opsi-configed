@@ -382,14 +382,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		logPane.logTextPane.getCaret().setVisible(true);
 	}
 
-	public void setTitle(String title) {
-		dispatch(new LogPaneMsg.ChangeTitle(title));
-	}
-
-	public void setInfo(String info) {
-		dispatch(new LogPaneMsg.ChangeInfo(info));
-	}
-
 	public String getInfo() {
 		return model.getInfo();
 	}
