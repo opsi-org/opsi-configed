@@ -189,9 +189,9 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerReloadEffect_whenReload() {
+	void shouldTriggerReloadLogEffect_whenReload() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = LogPaneMsg.SimpleMsg.RELOAD;
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.RELOAD_LOG;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
@@ -201,9 +201,9 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerDownloadEffect_whenDownload() {
+	void shouldTriggerDownloadLogEffect_whenDownload() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD;
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_LOG;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
@@ -213,9 +213,9 @@ class LogPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerDownloadAsZipEffect_whenDownloadAsZip() {
+	void shouldTriggerDownloadLogAsZipEffect_whenDownloadAsZip() {
 		LogPaneModel model = baseModel();
-		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_AS_ZIP;
+		LogPaneMsg msg = LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP;
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 

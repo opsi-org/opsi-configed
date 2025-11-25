@@ -13,8 +13,8 @@ public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Sear
 		LogPaneMsg.ChangeInfo, LogPaneMsg.ChangeCaretPosition, LogPaneMsg.ToggleCaseSensitivity {
 
 	enum SimpleMsg implements LogPaneMsg {
-		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD, COPY_CONTENTS, DOWNLOAD, DOWNLOAD_AS_ZIP, DOWNLOAD_ALL_AS_ZIP,
-		FLOAT_EXTERNAL,
+		INCREASE_FONT_SIZE, DECREASE_FONT_SIZE, RELOAD_LOG, COPY_CONTENTS, DOWNLOAD_LOG, DOWNLOAD_LOG_AS_ZIP,
+		DOWNLOAD_ALL_AS_ZIP, FLOAT_EXTERNAL,
 	}
 
 	record Search(String query) implements LogPaneMsg {

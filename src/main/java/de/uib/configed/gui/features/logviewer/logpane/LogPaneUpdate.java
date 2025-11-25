@@ -59,10 +59,10 @@ public final class LogPaneUpdate {
 	private static UpdateResult<LogPaneModel, LogPaneEffect> handleSimpleMsg(LogPaneMsg.SimpleMsg msg,
 			LogPaneModel model) {
 		return switch (msg) {
-		case RELOAD -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.RELOAD_LOG);
+		case RELOAD_LOG -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.RELOAD_LOG);
 		case COPY_CONTENTS -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.COPY_CONTENTS);
-		case DOWNLOAD -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_LOG);
-		case DOWNLOAD_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_LOG_AS_ZIP);
+		case DOWNLOAD_LOG -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_LOG);
+		case DOWNLOAD_LOG_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_LOG_AS_ZIP);
 		case DOWNLOAD_ALL_AS_ZIP -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.DOWNLOAD_ALL_AS_ZIP);
 		case FLOAT_EXTERNAL -> UpdateResult.withEffect(model, LogPaneEffect.SimpleEffect.FLOAT_EXTERNAL);
 		case INCREASE_FONT_SIZE -> UpdateResult.noEffect(model.withFontSize((int) (model.getFontSize() * 1.1)));

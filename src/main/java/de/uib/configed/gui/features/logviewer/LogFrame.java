@@ -85,7 +85,7 @@ public class LogFrame extends JFrame {
 		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSave, "save");
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSave.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD));
+		jMenuFileSave.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
@@ -160,7 +160,7 @@ public class LogFrame extends JFrame {
 		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
-				logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD);
+				logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
 			}
 		});
 
@@ -277,7 +277,7 @@ public class LogFrame extends JFrame {
 
 	private void reloadFile() {
 		if (fileName != null && !fileName.isEmpty()) {
-			logPane.dispatch(LogPaneMsg.SimpleMsg.RELOAD);
+			logPane.dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
 			setTitle(fileName);
 		}
 	}
