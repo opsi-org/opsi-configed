@@ -110,7 +110,7 @@ public class LogPanel extends JPanel {
 				String selected = logTextPane.getSelectedText();
 
 				if (selected != null && !selected.isEmpty()) {
-					jComboBoxSearch.getEditor().setItem(selected);
+					jComboBoxSearch.getEditor().setItem(selected.trim());
 				}
 
 				jComboBoxSearch.requestFocusInWindow();
