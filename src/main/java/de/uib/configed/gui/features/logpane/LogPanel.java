@@ -8,18 +8,16 @@ package de.uib.configed.gui.features.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -99,25 +97,6 @@ public class LogPanel extends JPanel {
 		jScrollPane.setRowHeaderView(lineNumber);
 		super.add(jScrollPane, BorderLayout.CENTER);
 
-		KeyStroke ctrlF = KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK);
-		InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		ActionMap am = getActionMap();
-
-		im.put(ctrlF, "focusSearchAndInsertSelection");
-		am.put("focusSearchAndInsertSelection", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String selected = logTextPane.getSelectedText();
-
-				if (selected != null && !selected.isEmpty()) {
-					jComboBoxSearch.getEditor().setItem(selected.trim());
-				}
-
-				jComboBoxSearch.requestFocusInWindow();
-				search();
-			}
-		});
-
 		labelSearch = new JLabel(Configed.getResourceValue("search"));
 
 		JToggleButton buttonCaseSensitive = new JToggleButton(Icons.getIntellijIcon("matchCase"));
@@ -194,6 +173,20 @@ public class LogPanel extends JPanel {
 
 		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
 				this::copyTextToClipboard, JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK),
+				() -> {
+					String selected = logTextPane.getSelectedText();
+
+					if (selected != null && !selected.isEmpty()) {
+						jComboBoxSearch.getEditor().setItem(selected.trim());
+					}
+
+					if (jComboBoxSearch != KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()) {
+						jComboBoxSearch.requestFocusInWindow();
+						search();
+					}
+				});
 	}
 
 	private void setLayout() {
