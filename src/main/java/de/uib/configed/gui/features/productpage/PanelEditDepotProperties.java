@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.swing.GroupLayout;
@@ -35,12 +34,13 @@ import javax.swing.event.ListSelectionListener;
 import de.uib.configed.core.domain.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.UpdateCollectionManager;
-import de.uib.configed.gui.data.ListMerger;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.share.Icons;
@@ -178,6 +178,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
+		Logging.devel("value changed");
 		Map<String, Object> visualData = mergeProperties(
 				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);
@@ -215,9 +216,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 	}
 
-	private Map<String, Object> mergeProperties(
+	private static Map<String, Object> mergeProperties(
 			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
 			String productId) {
+		List<String> filteredDepots = depots.stream().filter(depot -> depot2product2properties.get(depot) != null
+				&& depot2product2properties.get(depot).get(productId) != null).toList();
+
 		if (depots.isEmpty()) {
 			// Do nothing
 		} else if (depots.size() == 1) {
@@ -226,64 +230,14 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				return propertiesDepot0.get(productId);
 			}
 		} else {
-			// depots has at least 2 elements
-			int n = 0;
+			List<Map<String, Object>> propertiesForProductOnDepots = POJOReMapper.remap(depot2product2properties
+					.entrySet().stream().filter(entry -> filteredDepots.contains(entry.getKey()))
+					.map(entry -> entry.getValue().get(productId)).toList());
 
-			while (n < depots.size() && (depot2product2properties.get(depots.get(n)) == null
-					|| depot2product2properties.get(depots.get(n)).get(productId) == null)) {
-				n++;
-			}
-
-			if (n != depots.size()) {
-				return mergeProperties(depot2product2properties, depots, productId, n);
-			}
+			return POJOReMapper.remap(ConfigedUtilityMethods.mergeMaps(propertiesForProductOnDepots));
 		}
 
 		return new HashMap<>();
-	}
-
-	private Map<String, Object> mergeProperties(
-			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
-			String productId, int n) {
-		Map<String, Object> result = new HashMap<>();
-
-		// create start mergers
-		ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
-
-		for (Entry<String, Object> entry : properties.entrySet()) {
-			List<?> value = (List<?>) entry.getValue();
-			result.put(entry.getKey(), new ListMerger(value));
-		}
-
-		// merge the other depots
-		for (int i = 1; i < depots.size(); i++) {
-			String depot = depots.get(i);
-			properties = depot2product2properties.containsKey(depot)
-					? depot2product2properties.get(depot).get(productId)
-					: null;
-			if (properties == null) {
-				Logging.info(this, "mergeProperties, product on depot has not properties ", productId, " on ",
-						depots.get(i));
-				continue;
-			}
-
-			for (Entry<String, Object> entry : properties.entrySet()) {
-				List<?> value = (List<?>) entry.getValue();
-				if (result.get(entry.getKey()) == null) {
-					// we need a new property. it is not common
-
-					ListMerger merger = new ListMerger(value);
-
-					merger.setHavingNoCommonValue();
-					result.put(entry.getKey(), merger);
-				} else {
-					ListMerger merger = (ListMerger) result.get(entry.getKey());
-					result.put(entry.getKey(), merger.merge(value));
-				}
-			}
-		}
-
-		return result;
 	}
 
 	private void saveSelectedDepots() {
