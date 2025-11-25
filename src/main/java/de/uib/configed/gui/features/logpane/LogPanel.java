@@ -115,6 +115,10 @@ public class LogPanel extends JPanel {
 			search();
 			logTextPane.requestFocusInWindow();
 		});
+		Dimension pref = jComboBoxSearch.getPreferredSize();
+		jComboBoxSearch.setPreferredSize(pref);
+		jComboBoxSearch.setMinimumSize(pref);
+		jComboBoxSearch.setMaximumSize(new Dimension(Short.MAX_VALUE, pref.height));
 
 		JButton buttonSearch = new JButton(Icons.getIntellijIcon("search"));
 		buttonSearch.addActionListener(event -> search());
