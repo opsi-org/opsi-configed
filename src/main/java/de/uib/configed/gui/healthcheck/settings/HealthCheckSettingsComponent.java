@@ -176,10 +176,7 @@ public final class HealthCheckSettingsComponent
 
 	private JButton createSaveButton() {
 		saveButton = new JButton(Configed.getResourceValue("save"));
-		saveButton.addActionListener(actionEvent -> {
-			Logging.info(this, "User clicked save button");
-			dispatch(HealthCheckSettingsMsg.SimpleMsg.SAVE_SETTINGS);
-		});
+		saveButton.addActionListener(actionEvent -> dispatch(HealthCheckSettingsMsg.SimpleMsg.SAVE_SETTINGS));
 		saveButton.setEnabled(model.isSaveEnabled());
 		return saveButton;
 	}
@@ -188,39 +185,47 @@ public final class HealthCheckSettingsComponent
 	protected void handleEffect(HealthCheckSettingsEffect effect) {
 		switch (effect) {
 		case HealthCheckSettingsEffect.SimpleEffect e -> handleSimpleEffect(e);
-		case HealthCheckSettingsEffect.SelectDownTime(DowntimeType downtimeType) -> {
-			String downTime = "";
-			if (DowntimeType.START == downtimeType) {
-				downTime = openDateSelectionDialog(startDowntimeField.getText(),
-						Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
-			} else {
-				downTime = openDateSelectionDialog(endDowntimeField.getText(),
-						Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
-			}
-			dispatch(new HealthCheckSettingsMsg.DowntimeSelected(downtimeType, downTime));
-		}
+		case HealthCheckSettingsEffect.SelectDownTime(DowntimeType downtimeType) -> handleSelectDownTimeEffect(
+				downtimeType);
 		}
 	}
 
-	@SuppressWarnings({ "java:S1301", "java:S6916" })
+	private void handleSelectDownTimeEffect(DowntimeType downtimeType) {
+		String downTime = "";
+		if (DowntimeType.START == downtimeType) {
+			downTime = openDateSelectionDialog(startDowntimeField.getText(),
+					Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
+		} else {
+			downTime = openDateSelectionDialog(endDowntimeField.getText(),
+					Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
+		}
+		dispatch(new HealthCheckSettingsMsg.DowntimeSelected(downtimeType, downTime));
+	}
+
 	private void handleSimpleEffect(HealthCheckSettingsEffect.SimpleEffect effect) {
 		switch (effect) {
-		case SAVE_SETTINGS -> {
-			save();
-			if (configedMain != null) {
-				configedMain.reloadHosts();
-			}
+		case SAVE_SETTINGS -> handleSaveSettingsEffect();
+		case DISMISS_SETTINGS -> handleDismissSettingsEffect();
+		case OPEN_HOST_SELECTION_DIALOG -> handleOpenHostSelectionDialogEffect();
 		}
-		case DISMISS_SETTINGS -> {
-			if (dialog != null) {
-				dialog.setVisible(false);
-			}
+	}
+
+	private void handleSaveSettingsEffect() {
+		save();
+		if (configedMain != null) {
+			configedMain.reloadHosts();
 		}
-		case OPEN_HOST_SELECTION_DIALOG -> {
-			List<String> hostsSelected = openHostSelectionDialog();
-			dispatch(new HealthCheckSettingsMsg.HostsSelected(hostsSelected));
+	}
+
+	private void handleDismissSettingsEffect() {
+		if (dialog != null) {
+			dialog.setVisible(false);
 		}
-		}
+	}
+
+	private void handleOpenHostSelectionDialogEffect() {
+		List<String> hostsSelected = openHostSelectionDialog();
+		dispatch(new HealthCheckSettingsMsg.HostsSelected(hostsSelected));
 	}
 
 	@Override

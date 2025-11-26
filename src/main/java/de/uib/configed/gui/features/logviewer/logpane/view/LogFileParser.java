@@ -18,7 +18,7 @@ import lombok.Value;
 
 public class LogFileParser {
 	@Value
-	public class LogLine {
+	public static class LogLine {
 		int lineNumber;
 		int logLevel;
 		int typeIndex;
@@ -91,7 +91,7 @@ public class LogFileParser {
 		return lev < logLevelStyles.length ? logLevelStyles[lev] : logLevelStyles[logLevelStyles.length - 1];
 	}
 
-	private int getTypeIndexForLine(String line, List<String> typesList) {
+	private static int getTypeIndexForLine(String line, List<String> typesList) {
 		String type = "";
 		int typeIndex = 0;
 		int nextStartI = 0;
