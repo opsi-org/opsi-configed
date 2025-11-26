@@ -31,7 +31,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	 * If true, model was set via constructor and should not be overwritten by
 	 * {@link #initModel()}.
 	 */
-	private boolean modelProvided = false;
+	private boolean modelProvided;
 
 	/**
 	 * Represents the result of an update operation in the application state.
