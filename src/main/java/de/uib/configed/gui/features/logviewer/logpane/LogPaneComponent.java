@@ -8,16 +8,15 @@ package de.uib.configed.gui.features.logviewer.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.function.Consumer;
 
-import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -44,12 +43,11 @@ import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 import de.uib.configed.gui.features.logviewer.logpane.view.TextLineNumber;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPaneMsg, LogPaneEffect>
-		implements KeyListener {
+public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPaneMsg, LogPaneEffect> {
 	private static final int SLIDER_W = 180;
-
 	public static final int MIN_LEVEL = 1;
 	public static final int MAX_LEVEL = 9;
 
@@ -95,6 +93,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		Logging.info(this, "initializing");
 
 		initComponents();
+		addKeyBindings();
 
 		setLayout();
 
@@ -146,14 +145,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	private void initComponents() {
 		rootPanel = new JPanel();
 		logTextPane = new LogTextPane(model.getFontSize());
-		logTextPane.addKeyListener(this);
-		logTextPane.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "copyRaw");
-		logTextPane.getActionMap().put("copyRaw", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
-			}
-		});
 		logTextPane.addCaretListener((CaretEvent e) -> {
 			int offset = e.getDot();
 			if (offset != model.getCaretPosition()) {
@@ -226,6 +217,50 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		comboTypeListener = event -> dispatch(new LogPaneMsg.ChangeEventType((String) comboType.getSelectedItem()));
 		comboType.addActionListener(comboTypeListener);
 		comboType.setSelectedItem(model.getSelectedType());
+	}
+
+	private void addKeyBindings() {
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
+
+				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_N, 0),
+				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
+				JComponent.WHEN_FOCUSED);
+
+		// The Binding with KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, 0) does not work on some systems (e.g. German keyboard)
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke('/'), jComboBoxSearch::requestFocus,
+				JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane,
+				KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK),
+				() -> dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE), JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane,
+				KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK),
+				() -> dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE), JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
+				() -> dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS), JComponent.WHEN_FOCUSED);
+
+		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK),
+				() -> {
+					String selected = logTextPane.getSelectedText();
+
+					if (selected != null && !selected.isEmpty()) {
+						jComboBoxSearch.getEditor().setItem(selected.trim());
+					}
+
+					if (jComboBoxSearch != KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()) {
+						jComboBoxSearch.requestFocusInWindow();
+						dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem()));
+					}
+				});
 	}
 
 	private void setLayout() {
@@ -458,43 +493,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		}
 
 		logTextPane.search(item.toString());
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, "KeyEvent ", e);
-
-		if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
-			dispatch(new LogPaneMsg.Search(jComboBoxSearch.getEditor().getItem().toString()));
-		} else if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-			Logging.info(this, "Ctrl-Plus");
-			dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE);
-		} else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-			Logging.info(this, "Ctrl-Minus");
-			dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE);
-		} else {
-			// Do nothing on other keys on jTextPane
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if (e.getSource() == logTextPane) {
-			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') {
-				jComboBoxSearch.requestFocus();
-			}
-
-			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) {
-				search();
-				dispatch(new LogPaneMsg.Search(jComboBoxSearch.getEditor().getItem().toString()));
-			}
-			e.consume();
-		}
 	}
 
 	public String[] getLines() {
