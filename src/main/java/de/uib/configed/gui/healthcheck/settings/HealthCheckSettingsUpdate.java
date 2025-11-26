@@ -12,7 +12,7 @@ import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
-public class HealthCheckSettingsUpdate {
+public final class HealthCheckSettingsUpdate {
 
 	private HealthCheckSettingsUpdate() {
 		// Hide constructor.
@@ -29,17 +29,16 @@ public class HealthCheckSettingsUpdate {
 				model.withCheckActiveState(state).withSaveEnabled(state != FlatTriStateCheckBox.State.INDETERMINATE));
 		case HealthCheckSettingsMsg.DowntimeSelectionRequested(DowntimeType downtimeType) -> UpdateResult
 				.withEffect(model, new HealthCheckSettingsEffect.SelectDownTime(downtimeType));
-		case HealthCheckSettingsMsg.DowntimeSelected(DowntimeType downtimeType, String value) -> {
-			UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> result = null;
-			if (DowntimeType.START == downtimeType) {
-				result = UpdateResult.noEffect(model.withStartDowntime(value));
-			} else {
-				result = UpdateResult.noEffect(model.withEndDowntime(value));
-			}
-			yield result;
-		}
+		case HealthCheckSettingsMsg.DowntimeSelected(DowntimeType downtimeType, String value) -> handleDownTimeSelectedMsg(
+				model, downtimeType, value);
 		case HealthCheckSettingsMsg.SimpleMsg m -> handleSimpleMsg(m, model);
 		};
+	}
+
+	private static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> handleDownTimeSelectedMsg(
+			HealthCheckSettingsModel model, DowntimeType downtimeType, String value) {
+		return DowntimeType.START == downtimeType ? UpdateResult.noEffect(model.withStartDowntime(value))
+				: UpdateResult.noEffect(model.withEndDowntime(value));
 	}
 
 	private static UpdateResult<HealthCheckSettingsModel, HealthCheckSettingsEffect> handleSimpleMsg(
