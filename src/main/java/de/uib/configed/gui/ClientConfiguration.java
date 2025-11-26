@@ -206,7 +206,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		switch (getSelectedIndex()) {
 		case 0:
-			// This is client view, nothing needs to be done...
+			configedMain.setRebuiltClientListTableModel(true, false);
 			break;
 
 		case 1:

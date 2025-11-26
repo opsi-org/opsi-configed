@@ -25,6 +25,7 @@ public final class UserPreferences {
 	public static final String CLIENTS_TABLE_DISPLAY_FIELDS = "clients_table_display_fields";
 	public static final String LOCALBOOT_TABLE_DISPLAY_FIELDS = "localboot_table_display_fields";
 	public static final String NETBOOT_TABLE_DISPLAY_FIELDS = "netboot_table_display_fields";
+	public static final String CLIENTS_TABLE_COLUMN_WIDTHS = "clients_table.column_widths";
 	public static final String WINDOW_BOUNDS = "window_bounds";
 	public static final String WINDOW_STATE = "window_state";
 

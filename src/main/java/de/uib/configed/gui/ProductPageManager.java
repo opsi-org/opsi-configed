@@ -133,6 +133,7 @@ public class ProductPageManager implements MessagebusListener {
 					.getAllNetbootProductNames(configedMain.getDepotRepresentative());
 		}
 
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getProductTable());
 		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
 				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
 				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
@@ -155,7 +156,6 @@ public class ProductPageManager implements MessagebusListener {
 		panelProductSettings.updateSearchFields();
 		panelProductSettings.restoreFilter();
 
-		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getProductTable());
 		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getProductTable(), columnWidths);
 	}
 
