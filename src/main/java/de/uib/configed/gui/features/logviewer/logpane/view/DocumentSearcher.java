@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.util.Locale;
 
@@ -12,10 +12,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.JTextComponent;
 
 import de.uib.configed.share.logging.Logging;
-
-import javax.swing.text.JTextComponent;
 
 /**
  * A simple class that searches for an expression in a document and highlights

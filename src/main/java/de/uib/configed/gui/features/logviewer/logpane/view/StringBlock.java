@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 public class StringBlock {
 	private String s;

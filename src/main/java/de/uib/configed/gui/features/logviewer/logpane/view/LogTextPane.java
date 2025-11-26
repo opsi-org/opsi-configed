@@ -4,16 +4,15 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -37,6 +36,8 @@ import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
 import de.uib.configed.share.logging.Logging;
 
 public class LogTextPane extends JTextPane {
@@ -49,7 +50,7 @@ public class LogTextPane extends JTextPane {
 	private TreeMap<Integer, Integer> docLinestartPosition2lineCount;
 	private TreeMap<Integer, Integer> lineCount2docLinestartPosition;
 
-	private Integer showLevel = LogPanel.MIN_LEVEL;
+	private Integer showLevel = LogPaneComponent.MIN_LEVEL;
 
 	private Integer displayFontSize = 11;
 
@@ -63,12 +64,17 @@ public class LogTextPane extends JTextPane {
 
 	private LogFileParser parser;
 
-	private Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+	private Font monospacedFont;
 
-	public LogTextPane(String defaultText) {
+	public record CaretContext(int line, int offset) {
+	}
+
+	public LogTextPane(int defaultFontSize) {
+		this.displayFontSize = defaultFontSize;
 		styleContext = new StyleContext() {
 			@Override
 			public Font getFont(AttributeSet attr) {
+				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 				return monospacedFont;
 			}
 		};
@@ -100,89 +106,59 @@ public class LogTextPane extends JTextPane {
 		return lines;
 	}
 
-	public void rebuildDocumentWithNewLevel(Object selectedItem) {
-		int caretPosition = getCaretPosition();
-		int startPosition = 0;
-		int oldStartPosition = 0;
-		int offset = 0;
-		Iterator<Integer> linestartIterator = docLinestartPosition2lineCount.keySet().iterator();
-
-		while (startPosition < caretPosition && linestartIterator.hasNext()) {
-			offset = caretPosition - startPosition;
-			oldStartPosition = startPosition;
-			startPosition = linestartIterator.next();
-		}
-
-		int lineNo = 0;
-		if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
-			lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
-		}
-
-		buildDocument();
-
-		if (lineCount2docLinestartPosition.containsKey(lineNo)) {
-			startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
-		} else if (!lineCount2docLinestartPosition.isEmpty()) {
-			Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
-			int nextLineNo = linesIterator.next();
-
-			while (linesIterator.hasNext() && nextLineNo < lineNo) {
-				nextLineNo = linesIterator.next();
-			}
-
-			startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-		} else {
-			Logging.notice(this, "lineCount2docLinestartPosition is empty, so there will be no lines");
-		}
-
-		setCaretPosition(startPosition);
-
-		if (selectedItem != null) {
-			try {
-				scrollRectToVisible(modelToView2D(offset + selectedItem.toString().length()).getBounds());
-				highlighter.removeAllHighlights();
-			} catch (BadLocationException e) {
-				Logging.warning(this, e, "BadLocationException for setting caret in LotPane");
-			}
-		}
-
-		getCaret().setVisible(true);
+	public void buildDocument() {
+		setCursor(Globals.WAIT_CURSOR);
+		highlighter.removeAllHighlights();
+		ImmutableDefaultStyledDocument newDoc = buildRawDocument();
+		setDocument(newDoc);
+		setCursor(null);
 	}
 
-	public void buildDocument() {
-		Logging.debug(this, "building document");
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
-		} else {
-			setCursor(Globals.WAIT_CURSOR);
-		}
-		// Switch to an blank document temporarily to avoid repaints
-
+	private ImmutableDefaultStyledDocument buildRawDocument() {
 		ImmutableDefaultStyledDocument document = new ImmutableDefaultStyledDocument(styleContext);
 
 		docLinestartPosition2lineCount = new TreeMap<>();
 		lineCount2docLinestartPosition = new TreeMap<>();
 
 		try {
-			List<LogLine> logLines = parser.getParsedLogLines();
+			List<LogFileParser.LogLine> logLines = parser.getData().getParsedLogLines();
 			for (int i = 0; i < logLines.size(); i++) {
-				LogLine line = parser.getParsedLogLine(i);
+				LogFileParser.LogLine line = logLines.get(i);
 				if (showLine(line)) {
-					docLinestartPosition2lineCount.put(document.getLength(), i);
-					lineCount2docLinestartPosition.put(i, document.getLength());
-					document.insertStringTruely(document.getLength(), line.getText() + '\n', line.getStyle());
+					int pos = document.getLength();
+					docLinestartPosition2lineCount.put(pos, i);
+					lineCount2docLinestartPosition.put(i, pos);
+					document.insertStringTruely(pos, line.getText() + '\n', line.getStyle());
 				}
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, e, "BadLocationException thrown in logging");
+			Logging.warning(this, e, "Failed to build document");
 		}
 
-		setDocument(document);
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(null));
-		} else {
-			setCursor(null);
+		return document;
+	}
+
+	public CaretContext getCaretContext(int oldCaret) {
+		int line = -1;
+		int offset = 0;
+		if (docLinestartPosition2lineCount == null) {
+			return new CaretContext(line, offset);
 		}
+
+		Map.Entry<Integer, Integer> lastEntry = docLinestartPosition2lineCount.floorEntry(oldCaret);
+		if (lastEntry != null) {
+			line = lastEntry.getValue();
+			offset = oldCaret - lastEntry.getKey();
+		}
+		return new CaretContext(line, offset);
+	}
+
+	public int computeCaretFromContext(CaretContext context) {
+		Integer newStart = lineCount2docLinestartPosition.get(context.line());
+		if (newStart != null) {
+			return Math.max(0, newStart + context.offset());
+		}
+		return 0;
 	}
 
 	public void setParsedText(LogTextPane logTextPane) {
@@ -194,21 +170,15 @@ public class LogTextPane extends JTextPane {
 		this.selTypeIndex = logTextPane.selTypeIndex;
 	}
 
-	public int setLogText(String s) {
+	public int parse(String s) {
 		Logging.info(this, "Setting text");
 		lines = s.split("\n");
 
 		parser = new LogFileParser(lines, logLevelStyles);
 		parser.parse();
+
 		if (lines.length > 1) {
-			showLevel = produceInitialMaxShowLevel();
-			if (parser.getMaxExistingLevel() < showLevel) {
-				showLevel = parser.getMaxExistingLevel();
-			} else if (parser.getMinExistingLevel() > showLevel) {
-				showLevel = parser.getMinExistingLevel();
-			} else {
-				// Otherwise keep initially produced max level.
-			}
+			showLevel = adjustShowLevel(produceInitialMaxShowLevel(), parser.getData());
 		} else {
 			showLevel = 1;
 		}
@@ -216,8 +186,18 @@ public class LogTextPane extends JTextPane {
 		return showLevel;
 	}
 
-	public Integer getShowLevel() {
-		return showLevel;
+	private static Integer adjustShowLevel(Integer initialLevel, LogFileParser.LogParsedData data) {
+		int minLevel = data.getMinExistingLevel();
+		int maxLevel = data.getMaxExistingLevel();
+
+		if (maxLevel < initialLevel) {
+			return maxLevel;
+		} else if (minLevel > initialLevel) {
+			return minLevel;
+		} else {
+			// Return initial level.
+		}
+		return initialLevel;
 	}
 
 	public void setShowLevel(int showLevel) {
@@ -240,23 +220,17 @@ public class LogTextPane extends JTextPane {
 		return savedMaxShownLogLevel;
 	}
 
-	public List<String> getTypesList() {
-		return parser.getTypesList();
+	public LogParsedData getParsedData() {
+		return parser.getData();
 	}
 
 	public void applyType(Object selectedType) {
-		int oldSelTypeIndex = selTypeIndex;
 		if (selectedType == null || selectedType.equals(DEFAULT_TYPE)) {
 			showTypeRestricted = false;
 			selTypeIndex = -1;
 		} else {
 			showTypeRestricted = true;
-			selTypeIndex = parser.getTypesList().indexOf(selectedType);
-		}
-
-		if (selTypeIndex != oldSelTypeIndex) {
-			buildDocument();
-			highlighter.removeAllHighlights();
+			selTypeIndex = parser.getData().getTypesList().indexOf(selectedType);
 		}
 	}
 
@@ -278,33 +252,13 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public Integer getMaxExistingLevel() {
-		return parser.getMaxExistingLevel();
-	}
-
-	public void removeAllHighlights() {
-		highlighter.removeAllHighlights();
-		applyFontSize();
-	}
-
-	public void reduceFontSize() {
-		if (displayFontSize > 10) {
-			displayFontSize = (int) ((displayFontSize + 1) / 1.1);
-			applyFontSize();
-		}
-	}
-
-	public void increaseFontSize() {
-		displayFontSize = (int) (displayFontSize * 1.1);
-		applyFontSize();
-	}
-
-	private void applyFontSize() {
+	public void applyFontSize(int size) {
+		displayFontSize = size;
 		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 		setFont(monospacedFont);
 	}
 
-	private boolean showLine(LogLine line) {
+	private boolean showLine(LogFileParser.LogLine line) {
 		boolean show = false;
 
 		if (line.getLogLevel() <= showLevel) {
@@ -380,7 +334,7 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public static class WrapEditorKit extends StyledEditorKit {
+	private static class WrapEditorKit extends StyledEditorKit {
 		private transient ViewFactory defaultFactory;
 
 		@Override
@@ -392,7 +346,7 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public static class WrapColumnFactory implements ViewFactory {
+	private static class WrapColumnFactory implements ViewFactory {
 		@Override
 		public View create(Element elem) {
 			String kind = elem.getName();
@@ -410,7 +364,7 @@ public class LogTextPane extends JTextPane {
 		}
 	}
 
-	public static class WrapLabelView extends LabelView {
+	private static class WrapLabelView extends LabelView {
 		public WrapLabelView(Element elem) {
 			super(elem);
 		}
@@ -418,7 +372,8 @@ public class LogTextPane extends JTextPane {
 		@Override
 		public float getMinimumSpan(int axis) {
 			if (axis == View.X_AXIS) {
-				return 0; // allow wrapping
+				// allow wrapping
+				return 0;
 			}
 			return super.getMinimumSpan(axis);
 		}

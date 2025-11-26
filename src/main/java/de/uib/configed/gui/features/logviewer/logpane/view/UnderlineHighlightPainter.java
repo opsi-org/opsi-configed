@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -14,11 +14,10 @@ import java.awt.Shape;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.LayeredHighlighter.LayerPainter;
-
-import de.uib.configed.share.logging.Logging;
-
 import javax.swing.text.Position;
 import javax.swing.text.View;
+
+import de.uib.configed.share.logging.Logging;
 
 // Painter for underlined highlights
 public class UnderlineHighlightPainter extends LayerPainter {
