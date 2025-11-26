@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logviewer;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
@@ -54,8 +53,6 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 	public static final float LEFT = 0.0F;
 	public static final float CENTER = 0.5F;
 	public static final float RIGHT = 1.0F;
-
-	private static final MatteBorder OUTER = new MatteBorder(0, 0, 0, 2, Color.GRAY);
 
 	private static final int HEIGHT = Integer.MAX_VALUE - 100_0000;
 

@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,6 @@ import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
 import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.data.InstallationStateUpdateManager;
-import de.uib.configed.gui.data.ListMerger;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
@@ -38,7 +36,7 @@ import de.uib.configed.share.userprefs.UserPreferences;
 
 public class ProductPageManager implements MessagebusListener {
 	// the properties for one product and all selected clients
-	private Collection<Map<String, Object>> productProperties;
+	private List<Map<String, Object>> productProperties;
 	private Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
 
 	private InstallationStateUpdateManager updateManager;
@@ -57,7 +55,7 @@ public class ProductPageManager implements MessagebusListener {
 	// a map of products, product --> list of used as an indicator that a product is in the depot
 	private Map<String, List<String>> possibleActions = new HashMap<>();
 
-	private Map<String, ListMerger> mergedProductProperties;
+	private Map<String, List<Object>> mergedProductProperties;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -277,58 +275,10 @@ public class ProductPageManager implements MessagebusListener {
 		// all selected clients
 
 		Logging.info(this, "collectTheProductProperties for ", productEdited);
-		mergedProductProperties = new HashMap<>();
-		productProperties = new ArrayList<>(configedMain.getSelectedClients().size());
+		productProperties = configedMain.getSelectedClients().stream().map(clientId -> persistenceController
+				.getProductDataService().getProductPropertiesPD(clientId, productEdited)).toList();
 
-		if (!configedMain.getSelectedClients().isEmpty() && possibleActions.get(productEdited) != null) {
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(configedMain.getSelectedClients().get(0), productEdited);
-
-			if (productPropertiesFor1Client != null) {
-				productProperties.add(productPropertiesFor1Client);
-
-				for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-					// create a merger for product property
-					ListMerger merger = new ListMerger((List<?>) productProperty.getValue());
-
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				}
-
-				// merge the other clients
-				mergeOtherClients(productEdited);
-			}
-		}
-	}
-
-	private void mergeOtherClients(String productEdited) {
-		for (int i = 1; i < configedMain.getSelectedClients().size(); i++) {
-			String selectedClient = configedMain.getSelectedClients().get(i);
-
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(selectedClient, productEdited);
-
-			productProperties.add(productPropertiesFor1Client);
-
-			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-				List<?> value = (List<?>) productProperty.getValue();
-
-				if (mergedProductProperties.get(productProperty.getValue()) == null) {
-					// we need a new property. it is not common
-
-					ListMerger merger = new ListMerger(value);
-
-					merger.setHavingNoCommonValue();
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				} else {
-					ListMerger merger = mergedProductProperties.get(productProperty.getKey());
-
-					ListMerger mergedValue = merger.merge(value);
-
-					// on merging we check if the value is the same as before
-					mergedProductProperties.put(productProperty.getKey(), mergedValue);
-				}
-			}
-		}
+		mergedProductProperties = ConfigedUtilityMethods.mergeMaps(productProperties);
 	}
 
 	public void updateProductStates() {

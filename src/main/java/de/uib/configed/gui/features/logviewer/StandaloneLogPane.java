@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logviewer.gui;
+package de.uib.configed.gui.features.logviewer;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,32 +13,30 @@ import java.nio.charset.StandardCharsets;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.features.logpane.LogPanel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneModel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.logging.Logging;
 
-public class StandaloneLogPane extends LogPanel {
+public class StandaloneLogPane extends LogPaneComponent {
 	private LogFrame logFrame;
 
 	public StandaloneLogPane(LogFrame logFrame) {
-		super("", true);
+		super(LogPaneModel.builder().build());
 
 		this.logFrame = logFrame;
 	}
 
 	@Override
 	public void reload() {
-		int caretPosition = getCaretPosition();
-		super.setLogText(reloadFile(logFrame.getFileName()));
-		super.setTitle(logFrame.getFileName());
-		super.setCaretPosition(caretPosition);
-		super.removeAllHighlights();
+		super.dispatch(new LogPaneMsg.ParseLogRequested(reloadFile(logFrame.getFileName()), true));
+		super.dispatch(new LogPaneMsg.ChangeTitle(logFrame.getFileName()));
 	}
 
 	public void close() {
 		LogFrame.resetFileName();
-		super.setLogText(logFrame.getFileName());
-		super.setTitle(logFrame.getFileName());
-		super.removeAllHighlights();
+		super.dispatch(new LogPaneMsg.ParseLogRequested(""));
+		super.dispatch(new LogPaneMsg.ChangeTitle(null));
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class StandaloneLogPane extends LogPanel {
 		String fn = LogFrame.openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		if (fn != null && !fn.isEmpty()) {
 			saveToFile(fn, logTextPane.getLines());
-			super.setTitle(fn);
+			super.dispatch(new LogPaneMsg.ChangeTitle(fn));
 		}
 	}
 
@@ -55,8 +53,8 @@ public class StandaloneLogPane extends LogPanel {
 			return logFrame.readFile(fn);
 		} else {
 			Logging.error(this, "File does not exist: ", fn);
-			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn, null,
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(logFrame, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
+					null, JOptionPane.WARNING_MESSAGE);
 			return "";
 		}
 	}

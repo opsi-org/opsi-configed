@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logviewer.gui;
+package de.uib.configed.gui.features.logviewer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -37,7 +38,7 @@ import de.uib.configed.app.Main;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.MenuBarController;
-import de.uib.configed.gui.features.logviewer.Logviewer;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.ExtractorUtil;
 import de.uib.configed.share.Icons;
@@ -84,7 +85,7 @@ public class LogFrame extends JFrame {
 		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSave, "save");
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSave.addActionListener(actionEvent -> logPane.download());
+		jMenuFileSave.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
@@ -116,12 +117,14 @@ public class LogFrame extends JFrame {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"));
 		Icons.addIntellijIconToMenuItem(jMenuViewFontsizePlus, "zoomIn");
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizePlus.addActionListener(actionEvent -> logPane.increaseFontSize());
+		jMenuViewFontsizePlus
+				.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE));
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"));
 		Icons.addIntellijIconToMenuItem(jMenuViewFontsizeMinus, "zoomOut");
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizeMinus.addActionListener(actionEvent -> logPane.reduceFontSize());
+		jMenuViewFontsizeMinus
+				.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE));
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
@@ -157,13 +160,13 @@ public class LogFrame extends JFrame {
 		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
-				logPane.download();
+				logPane.dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
 			}
 		});
 
 		JButton iconButtonCopy = new JButton(Icons.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
-		iconButtonCopy.addActionListener(actionEvent -> logPane.floatExternal());
+		iconButtonCopy.addActionListener(actionEvent -> logPane.dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL));
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(iconButtonOpen);
@@ -189,15 +192,16 @@ public class LogFrame extends JFrame {
 		JToolBar jToolBar = createIconsToolbar();
 
 		logPane = new StandaloneLogPane(this);
+		JComponent panel = logPane.initUI();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layoutIconPane1);
 
 		layoutIconPane1
-				.setHorizontalGroup(layoutIconPane1.createParallelGroup().addComponent(jToolBar).addComponent(logPane));
+				.setHorizontalGroup(layoutIconPane1.createParallelGroup().addComponent(jToolBar).addComponent(panel));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jToolBar).addGap(Globals.MIN_GAP_SIZE).addComponent(logPane));
+				.addComponent(jToolBar).addGap(Globals.MIN_GAP_SIZE).addComponent(panel));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
@@ -210,9 +214,9 @@ public class LogFrame extends JFrame {
 		if (fileName != null && !fileName.isEmpty()) {
 			String logText = readFile(fileName);
 			if (!logText.isEmpty()) {
-				logPane.setTitle(fileName);
+				logPane.dispatch(new LogPaneMsg.ChangeTitle(fileName));
 				setTitle(fileName);
-				logPane.setLogText(logText);
+				logPane.dispatch(new LogPaneMsg.ParseLogRequested(logText));
 			} else {
 				setEmptyData();
 			}
@@ -222,8 +226,8 @@ public class LogFrame extends JFrame {
 	}
 
 	private void setEmptyData() {
-		logPane.setLogText("");
-		logPane.setTitle("");
+		logPane.dispatch(new LogPaneMsg.ParseLogRequested(""));
+		logPane.dispatch(new LogPaneMsg.ChangeTitle(""));
 		setTitle(null);
 	}
 
@@ -259,9 +263,9 @@ public class LogFrame extends JFrame {
 
 		if (fileName != null && !fileName.isEmpty()) {
 			Logging.info(this, "Used memory ", Utils.usedMemory());
-			logPane.setLogText(readFile(fileName));
+			logPane.dispatch(new LogPaneMsg.ParseLogRequested(readFile(fileName)));
 			Logging.info(this, "Used memory ", Utils.usedMemory());
-			logPane.setTitle(fileName);
+			logPane.dispatch(new LogPaneMsg.ChangeTitle(fileName));
 			setTitle(fileName);
 		}
 	}
@@ -273,7 +277,7 @@ public class LogFrame extends JFrame {
 
 	private void reloadFile() {
 		if (fileName != null && !fileName.isEmpty()) {
-			logPane.reload();
+			logPane.dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
 			setTitle(fileName);
 		}
 	}
@@ -353,8 +357,8 @@ public class LogFrame extends JFrame {
 		for (Entry<String, String> entry : files.entrySet()) {
 			StandaloneLogPane externalLogPane = new StandaloneLogPane(this);
 			externalLogPane.externalize(entry.getKey(), getSize());
-			externalLogPane.setTitle(entry.getKey());
-			externalLogPane.setLogText(entry.getValue());
+			externalLogPane.dispatch(new LogPaneMsg.ChangeTitle(entry.getKey()));
+			externalLogPane.dispatch(new LogPaneMsg.ParseLogRequested(entry.getValue()));
 		}
 	}
 
