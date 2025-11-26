@@ -17,12 +17,12 @@ import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.logpane.LogPanel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class TabbedLogPane extends JTabbedPane {
-	private LogPanel[] textPanes;
+	private LogTabComponent[] textPanes;
 	private String[] idents = Utils.getLogTypes();
 	private final List<String> identsList;
 
@@ -44,7 +44,7 @@ public class TabbedLogPane extends JTabbedPane {
 
 		identsList = Arrays.asList(idents);
 
-		textPanes = new LogPanel[idents.length];
+		textPanes = new LogTabComponent[idents.length];
 
 		for (int i = 0; i < idents.length; i++) {
 			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
@@ -67,18 +67,22 @@ public class TabbedLogPane extends JTabbedPane {
 				configedMain);
 		logTabComponent.setLogFileType(idents[i]);
 		textPanes[i] = logTabComponent;
-		super.addTab(idents[i], textPanes[i]);
+		super.addTab(idents[i], textPanes[i].initUI());
 	}
 
 	public void setDocuments(String logtype) {
+		setDocuments(logtype, false);
+	}
+
+	public void setDocuments(String logtype, final boolean resetCaret) {
 		Map<String, String> documents = getLogfilesUpdating(logtype);
 		Logging.info(this, "idents.length ", idents.length);
 		for (String ident : idents) {
-			setDocument(ident, documents.get(ident));
+			setDocument(ident, documents.get(ident), resetCaret);
 		}
 	}
 
-	private void setDocument(String ident, final String document) {
+	private void setDocument(String ident, final String document, final boolean resetCaret) {
 		int i = identsList.indexOf(ident);
 		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
 		if (i < 0 || i >= idents.length) {
@@ -86,17 +90,17 @@ public class TabbedLogPane extends JTabbedPane {
 		}
 
 		if (document == null) {
-			textPanes[i].setLogText("");
-			textPanes[i].setTitle("");
+			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
+			textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(""));
 			return;
 		}
 
 		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
 				: "";
 
-		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
-		textPanes[i].setInfo(selectedClient);
-		textPanes[i].setLogText(document);
+		textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(idents[i] + " " + selectedClient));
+		textPanes[i].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
+		textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
 	}
 
 	private boolean logfileExists(String logtype) {

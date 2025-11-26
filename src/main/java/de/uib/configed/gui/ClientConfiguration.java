@@ -175,9 +175,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	public void setLogFileTab(String logtype) {
+		setLogFileTab(logtype, false);
+	}
+
+	public void setLogFileTab(String logtype, final boolean resetCaret) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
 		setComponentAt(getSelectedIndex(), tabbedLogPane);
-		tabbedLogPane.setDocuments(logtype);
+		tabbedLogPane.setDocuments(logtype, resetCaret);
 	}
 
 	public void initSplitPanes() {
@@ -202,7 +206,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		switch (getSelectedIndex()) {
 		case 0:
-			// This is client view, nothing needs to be done...
+			configedMain.setRebuiltClientListTableModel(true, false);
 			break;
 
 		case 1:
