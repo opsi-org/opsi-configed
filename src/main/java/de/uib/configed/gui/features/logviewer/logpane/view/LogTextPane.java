@@ -77,8 +77,7 @@ public class LogTextPane extends JTextPane {
 	private Font monospacedFont;
 
 	private final Highlighter.HighlightPainter caretPainter = new LineHighlightPainter(this,
-			FlatLaf.isLafDark() ? Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_DARK
-					: Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_LIGHT);
+			Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR);
 
 	private Object caretLineTag;
 
@@ -104,6 +103,8 @@ public class LogTextPane extends JTextPane {
 		setLoglevelStyles();
 		parser = new LogFileParser(lines, logLevelStyles);
 
+		super.setSelectionColor(new Color(Globals.OPSI_MAGENTA.getRed(), Globals.OPSI_MAGENTA.getGreen(),
+				Globals.OPSI_MAGENTA.getBlue(), 200));
 		super.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 
 		searcher = new DocumentSearcher(this);

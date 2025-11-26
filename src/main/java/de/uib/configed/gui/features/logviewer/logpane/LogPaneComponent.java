@@ -36,8 +36,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.CaretEvent;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.app.Main;
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Configed;
@@ -168,9 +166,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		lineNumber.setUpdateFont(true);
 		lineNumber.setDigitAlignment(TextLineNumber.CENTER);
 		lineNumber.setCurrentLineForeground(Color.WHITE);
-		lineNumber.setCurrentLineBackground(
-				FlatLaf.isLafDark() ? Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_DARK
-						: Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR_LIGHT);
+		lineNumber.setCurrentLineBackground(Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR);
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
