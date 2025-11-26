@@ -15,7 +15,7 @@
         "addOverride"
     ],
     "sonarlint.connectedMode.project": {
-        "connectionId": "https-sonarqube-uib-gmbh",
+        "connectionId": "sonarqube",
         "projectKey": "configed"
     },
     "java.compile.nullAnalysis.mode": "automatic",
