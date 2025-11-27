@@ -55,7 +55,7 @@ public abstract class AbstractControlMultiTablePanel {
 	}
 
 	public int mayLeave() {
-		boolean change = panelGenEdits.stream().allMatch(p -> p.isDataChanged());
+		boolean change = panelGenEdits.stream().anyMatch(p -> p.isDataChanged());
 
 		if (change) {
 			return JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
