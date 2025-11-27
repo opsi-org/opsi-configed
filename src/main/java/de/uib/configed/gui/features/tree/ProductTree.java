@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -192,7 +191,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void valueChanged(TreeSelectionEvent event) {
+	public void valueChanged() {
 		if (ConfigedMain.getMainFrame() != null) {
 			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
 					.getTabComponentAt(2);

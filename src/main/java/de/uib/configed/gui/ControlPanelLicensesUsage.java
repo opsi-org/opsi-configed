@@ -136,7 +136,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensesUsage.setSource(modelLicensesUsage);
 
 		tableModels.add(modelLicensesUsage);
-		tablePanes.add(thePanel.getPanelUsage());
+		panelGenEdits.add(thePanel.getPanelUsage());
 
 		modelLicensesUsage.reset();
 		thePanel.getPanelUsage().setTableModel(modelLicensesUsage);
@@ -158,7 +158,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensepools.setSource(modelLicensepools);
 
 		tableModels.add(modelLicensepools);
-		tablePanes.add(thePanel.getPanelLicensePools());
+		panelGenEdits.add(thePanel.getPanelLicensePools());
 
 		modelLicensepools.reset();
 		thePanel.getPanelLicensePools().setTableModel(modelLicensepools);

@@ -267,21 +267,18 @@ public class MainFrame extends JFrame implements KeyListener {
 		}
 	}
 
-	public void startLicensingManagement() {
+	public boolean startLicensingManagement() {
 		Logging.info(this, "startLicensingManagement called");
+
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			Utils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
+			return false;
+		}
 
 		new Thread() {
 			@Override
 			public void run() {
-				persistenceController.getModuleDataService().retrieveOpsiModules();
-
-				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-					Logging.info(this, "show licensing pane");
-					showPanel(mainPanelManager.getLicenseManagementPanel());
-				} else {
-					Utils.showMissingLicenseModules(
-							Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
-				}
+				showPanel(mainPanelManager.getLicenseManagementPanel());
 
 				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
 						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
@@ -296,6 +293,8 @@ public class MainFrame extends JFrame implements KeyListener {
 				deactivateLoadingPane();
 			}
 		}.start();
+
+		return true;
 	}
 
 	@Override

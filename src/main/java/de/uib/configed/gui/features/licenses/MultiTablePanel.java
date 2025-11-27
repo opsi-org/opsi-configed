@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.AbstractControlMultiTablePanel;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 
 public class MultiTablePanel extends JPanel {
 	protected AbstractControlMultiTablePanel controller;
@@ -19,14 +21,21 @@ public class MultiTablePanel extends JPanel {
 	}
 
 	public void reset() {
-		controller.refreshTables();
+		controller.refreshPanelGenEdits();
 		controller.initializeVisualSettings();
 	}
 
-	public boolean mayLeave() {
+	/**
+	 * commits all changes in this site
+	 */
+	public void saveSettings() {
+		controller.getPanelGenEdits().stream().forEach(PanelGenEdit::commit);
+	}
+
+	public int mayLeave() {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
-			return true;
+			return AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN;
 		}
 
 		return controller.mayLeave();

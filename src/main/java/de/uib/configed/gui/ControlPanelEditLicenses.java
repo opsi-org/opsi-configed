@@ -85,7 +85,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensekeys.setSource(modelLicensekeys);
 
 		tableModels.add(modelLicensekeys);
-		tablePanes.add(thePanel.getPanelKeys());
+		panelGenEdits.add(thePanel.getPanelKeys());
 
 		modelLicensekeys.reset();
 		thePanel.getPanelKeys().setTableModel(modelLicensekeys);
@@ -158,7 +158,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		updateItemFactorySoftwarelicenses.setSource(modelSoftwarelicenses);
 
 		tableModels.add(modelSoftwarelicenses);
-		tablePanes.add(thePanel.getPanelSoftwarelicenses());
+		panelGenEdits.add(thePanel.getPanelSoftwarelicenses());
 
 		modelSoftwarelicenses.reset();
 		thePanel.getPanelSoftwarelicenses().setTableModel(modelSoftwarelicenses);
@@ -229,7 +229,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensecontracts.setSource(modelLicensecontracts);
 
 		tableModels.add(modelLicensecontracts);
-		tablePanes.add(thePanel.getPanelLicensecontracts());
+		panelGenEdits.add(thePanel.getPanelLicensecontracts());
 
 		modelLicensecontracts.reset();
 		thePanel.getPanelLicensecontracts().setTableModel(modelLicensecontracts);

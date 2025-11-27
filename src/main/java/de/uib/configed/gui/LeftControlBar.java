@@ -20,6 +20,8 @@ import de.uib.configed.share.Icons;
 public class LeftControlBar extends JToolBar {
 	private ButtonGroup buttonGroup;
 
+	JToggleButton selectedButton;
+
 	public LeftControlBar() {
 		super(SwingConstants.VERTICAL);
 
@@ -31,37 +33,42 @@ public class LeftControlBar extends JToolBar {
 		jButtonClientsConfiguration.setSelectedIcon(Icons.getSelectedThemeIntelljIcon("desktop", 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setSelected(true);
-		jButtonClientsConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.CLIENTS));
+		selectedButton = jButtonClientsConfiguration;
+		jButtonClientsConfiguration
+				.addActionListener(event -> setEditingTarget(EditingTarget.CLIENTS, jButtonClientsConfiguration));
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Icons.getIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("depotConfiguration"));
-		jButtonDepotsConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DEPOTS));
+		jButtonDepotsConfiguration
+				.addActionListener(event -> setEditingTarget(EditingTarget.DEPOTS, jButtonDepotsConfiguration));
 
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Icons.getIntellijIcon("settings", 32));
 		jButtonServerConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("settings", 32));
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
-		jButtonServerConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.SERVER));
+		jButtonServerConfiguration
+				.addActionListener(event -> setEditingTarget(EditingTarget.SERVER, jButtonServerConfiguration));
 
 		JToggleButton jButtonDashboard = new JToggleButton(Icons.getIntellijIcon("dataSchema", 32));
 		jButtonDashboard.setSelectedIcon(Icons.getSelectedIntellijIcon("dataSchema", 32));
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
-		jButtonDashboard.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DASHBOARD));
+		jButtonDashboard.addActionListener(event -> setEditingTarget(EditingTarget.DASHBOARD, jButtonDashboard));
 
 		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setSelectedIcon(Icons.getActiveOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		jButtonOpsiLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
+		jButtonOpsiLicenses
+				.addActionListener(event -> setEditingTarget(EditingTarget.OPSI_MODULES, jButtonOpsiLicenses));
 
 		JToggleButton jButtonHealthCheck = new JToggleButton();
 		Icons.addActiveHealthCheckIcon(jButtonHealthCheck, 32);
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jButtonHealthCheck.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
+		jButtonHealthCheck.addActionListener(event -> setEditingTarget(EditingTarget.HEALTH_CHECK, jButtonHealthCheck));
 
 		JToggleButton jButtonLicenses = new JToggleButton(Icons.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setSelectedIcon(Icons.getSelectedIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
+		jButtonLicenses.addActionListener(event -> setEditingTarget(EditingTarget.LICENSE_MANAGEMENT, jButtonLicenses));
 
 		buttonGroup = new ButtonGroup();
 		buttonGroup.add(jButtonClientsConfiguration);
@@ -79,6 +86,15 @@ public class LeftControlBar extends JToolBar {
 		add(jButtonOpsiLicenses);
 		add(jButtonHealthCheck);
 		add(jButtonLicenses);
+	}
+
+	private void setEditingTarget(EditingTarget editingTarget, JToggleButton selectedButton) {
+		if (ConfigedMain.setEditingTarget(editingTarget)) {
+			this.selectedButton = selectedButton;
+		} else {
+			// revert selection
+			this.selectedButton.setSelected(true);
+		}
 	}
 
 	public void selectView(EditingTarget editingTarget) {

@@ -272,12 +272,16 @@ public class ConfigedMain {
 		}
 	}
 
-	public static void setEditingTarget(EditingTarget newEditingTarget) {
+	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
-		ChangedDataManager.checkSaveAll(true);
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			Logging.info("stop changing editingTarget, unsaved data");
+			return false;
+		}
+
 		if (newEditingTarget == editingTarget) {
 			Logging.info("stop setting editingTarget, it remains the same");
-			return;
+			return false;
 		}
 
 		editingTarget = newEditingTarget;
@@ -308,15 +312,15 @@ public class ConfigedMain {
 			break;
 
 		case LICENSE_MANAGEMENT:
-			mainFrame.startLicensingManagement();
-			break;
+			return mainFrame.startLicensingManagement();
 		}
+
+		return true;
 	}
 
 	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
-		ChangedDataManager.checkSaveAll(true);
 		Logging.checkErrorList();
 
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
@@ -1009,7 +1013,10 @@ public class ConfigedMain {
 	}
 
 	private void reloadData() {
-		ChangedDataManager.checkSaveAll(true);
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			mainFrame.deactivateLoadingPane();
+			return;
+		}
 
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());

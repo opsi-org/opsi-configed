@@ -27,6 +27,7 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class DepotConfiguration extends JTabbedPane implements ChangeListener, ListSelectionListener {
+	private static final int INITIAL_SELECTED_TAB = 1;
 	private ConfigUpdateCollection configUpdateCollection;
 
 	private PanelHostConfig panelHostConfig;
@@ -39,6 +40,9 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	private ConfigedMain configedMain;
 	private DepotsList depotsList;
 
+	private int lastSelectedTab = INITIAL_SELECTED_TAB;
+	private int[] lastSelectedDepots;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -50,6 +54,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		// At the beginning, we want to have the same depots selected as in the client configuration
 		depotsList.setSelectedValues(configedMain.getSelectedDepots());
+		lastSelectedDepots = depotsList.getSelectedIndices();
 		updateTab();
 
 		depotsList.addListSelectionListener(this);
@@ -69,21 +74,35 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		Logging.info(this, "added tab  ", Configed.getResourceValue("depotConfiguration"), " index ",
 				indexOfTab(Configed.getResourceValue("depotConfiguration")));
 
-		setSelectedIndex(1);
+		setSelectedIndex(INITIAL_SELECTED_TAB);
 
 		setMinimumSize(new Dimension());
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent event) {
-		updateTab();
+		if (ChangedDataManager.checkSaveAll(true)) {
+			updateTab();
+			lastSelectedTab = getSelectedIndex();
+		} else {
+			removeChangeListener(this);
+			setSelectedIndex(lastSelectedTab);
+			addChangeListener(this);
+		}
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
 		if (!event.getValueIsAdjusting()) {
 			Logging.info(this, "value changed of depot selection, update tab in depot configuration");
-			updateTab();
+			if (ChangedDataManager.checkSaveAll(true)) {
+				updateTab();
+				lastSelectedDepots = depotsList.getSelectedIndices();
+			} else {
+				depotsList.removeListSelectionListener(this);
+				depotsList.setSelectedIndices(lastSelectedDepots);
+				depotsList.addListSelectionListener(this);
+			}
 		}
 	}
 
@@ -103,7 +122,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			panelProductProperties.setProductProperties();
 			panelProductProperties.getPaneProducts().restoreFilter();
 			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
 			break;
 
 		case 2:

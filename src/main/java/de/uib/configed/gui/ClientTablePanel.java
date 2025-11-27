@@ -41,6 +41,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	// we put a JTable on a standard JScrollPane
 	private ClientTable clientTable;
 
+	private int[] lastSelectedRows = new int[0];
+
 	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
 
@@ -125,7 +127,23 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
+		}
+	}
+
+	private void actOnListSelection() {
+		if (ChangedDataManager.checkSaveAll(true)) {
 			configedMain.actOnListSelection();
+			lastSelectedRows = clientTable.getSelectedRows();
+		} else {
+			deactivateListSelectionListener();
+			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
+			for (int row : lastSelectedRows) {
+				selectionModel.addSelectionInterval(row, row);
+			}
+			selectionModel.setValueIsAdjusting(false);
+			activateListSelectionListener();
 		}
 	}
 
@@ -194,7 +212,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			// For example when the last client is unselected in the client list,
 			// this method is not called automatically by the selection listener,
 			// so we do it manually
-			configedMain.actOnListSelection();
+			actOnListSelection();
 		} else {
 			// because of ordering , we create a TreeSet view of the list
 			selectionModel.setValueIsAdjusting(true);
