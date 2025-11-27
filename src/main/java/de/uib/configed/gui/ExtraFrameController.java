@@ -184,6 +184,7 @@ public final class ExtraFrameController {
 		savedSearchesDialog = null;
 		clientSelectionDialog = null;
 		commandControlDialog = null;
+		addClientComponent = null;
 		completeWinProductsPanel = null;
 		groupActionFrame = null;
 		remoteControlDialog = null;
