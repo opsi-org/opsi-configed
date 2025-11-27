@@ -20,9 +20,9 @@ final class AddClientUpdate {
 	@SuppressWarnings("java:S103")
 	static UpdateResult<AddClientModel, AddClientEffect> update(AddClientMsg msg, AddClientModel model) {
 		return switch (msg) {
-		case AddClientMsg.LoadInitDataRequested m -> UpdateResult.withEffect(model,
+		case AddClientMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
 				new AddClientEffect.ServiceEffect.LoadInitialData());
-		case AddClientMsg.InitDataLoaded(List<String> domains, List<String> depots, List<String> netboots, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
+		case AddClientMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
 				.noEffect(model.toBuilder().domains(domains).depots(depots).netbootProducts(netboots)
 						.wanEnabled(isWanActive).wanSelected(isWanActive && defaultWanSelected)
 						.shutdownInstallSelected(defaultShutdown)

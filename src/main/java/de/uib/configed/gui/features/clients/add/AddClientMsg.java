@@ -8,7 +8,7 @@ package de.uib.configed.gui.features.clients.add;
 
 import java.util.List;
 
-public sealed interface AddClientMsg permits AddClientMsg.LoadInitDataRequested, AddClientMsg.InitDataLoaded,
+public sealed interface AddClientMsg permits AddClientMsg.LoadInitialDataRequested, AddClientMsg.InitialDataLoaded,
 		AddClientMsg.ChangeHostname, AddClientMsg.ChangeDomain, AddClientMsg.ChangeDescription,
 		AddClientMsg.ChangeInventory, AddClientMsg.ChangeNotes, AddClientMsg.ChangeSystemUUID, AddClientMsg.ChangeMAC,
 		AddClientMsg.ChangeIP, AddClientMsg.ChangeGroups, AddClientMsg.ChangeDepot, AddClientMsg.ChangeNetboot,
@@ -16,10 +16,10 @@ public sealed interface AddClientMsg permits AddClientMsg.LoadInitDataRequested,
 		AddClientMsg.ImportCSVRequested, AddClientMsg.CSVImported, AddClientMsg.OpenGroupSelectionDialog,
 		AddClientMsg.ConfirmOverwriteHost, AddClientMsg.ConfirmIgnoreNetbios, AddClientMsg.CloseDialog {
 
-	record LoadInitDataRequested() implements AddClientMsg {
+	record LoadInitialDataRequested() implements AddClientMsg {
 	}
 
-	record InitDataLoaded(List<String> domains, List<String> depots, List<String> netboots, boolean isWanActive,
+	record InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, boolean isWanActive,
 			boolean defaultWanSelected, boolean defaultShutdown) implements AddClientMsg {
 	}
 

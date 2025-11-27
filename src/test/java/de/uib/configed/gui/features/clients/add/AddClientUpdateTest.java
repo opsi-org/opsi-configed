@@ -30,9 +30,9 @@ class AddClientUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerLoadInitDataEffect_whenLoadInitDataRequested() {
+	void shouldTriggerLoadInitDataEffect_whenLoadInitialDataRequested() {
 		AddClientModel model = baseModel();
-		AddClientMsg msg = new AddClientMsg.LoadInitDataRequested();
+		AddClientMsg msg = new AddClientMsg.LoadInitialDataRequested();
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(msg, model);
 
@@ -42,7 +42,7 @@ class AddClientUpdateTest {
 	}
 
 	@Test
-	void shouldLoadInitialData_whenInitDataLoaded() {
+	void shouldLoadInitialData_whenInitialDataLoaded() {
 		AddClientModel model = baseModel();
 		List<String> domains = List.of("domain1.local", "domain2.local");
 		List<String> depots = List.of("newdepot1", "newdepot2");
@@ -50,8 +50,8 @@ class AddClientUpdateTest {
 		boolean isWanActive = true;
 		boolean defaultWanSelected = false;
 		boolean defaultShutdown = true;
-		AddClientMsg msg = new AddClientMsg.InitDataLoaded(domains, depots, netboots, isWanActive, defaultWanSelected,
-				defaultShutdown);
+		AddClientMsg msg = new AddClientMsg.InitialDataLoaded(domains, depots, netboots, isWanActive,
+				defaultWanSelected, defaultShutdown);
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(msg, model);
 

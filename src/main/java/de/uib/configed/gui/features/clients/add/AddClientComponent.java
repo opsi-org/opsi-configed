@@ -549,7 +549,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		boolean defaultShutdown = persistenceController.getConfigDataService()
 				.isInstallByShutdownConfiguredOnConfigserver();
 
-		dispatch(new AddClientMsg.InitDataLoaded(domains, depots, netboots, isWanActive, defaultWanSelected,
+		dispatch(new AddClientMsg.InitialDataLoaded(domains, depots, netboots, isWanActive, defaultWanSelected,
 				defaultShutdown));
 	}
 
