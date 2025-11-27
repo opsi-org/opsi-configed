@@ -274,6 +274,16 @@ public class ConfigedMain {
 
 	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
+
+		if (checkNewEditingTarget(newEditingTarget)) {
+			editingTarget = newEditingTarget;
+			return updateEditingTarget();
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean checkNewEditingTarget(EditingTarget newEditingTarget) {
 		if (!ChangedDataManager.checkSaveAll(true)) {
 			Logging.info("stop changing editingTarget, unsaved data");
 			return false;
@@ -284,8 +294,10 @@ public class ConfigedMain {
 			return false;
 		}
 
-		editingTarget = newEditingTarget;
+		return true;
+	}
 
+	private static boolean updateEditingTarget() {
 		switch (editingTarget) {
 		case CLIENTS:
 			mainFrame.showClientConfiguration();
