@@ -109,10 +109,11 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 	@Override
 	protected void refreshView() {
-		// update UI components from model
 		if (jCheckWan != null) {
 			jCheckWan.setEnabled(model.isWanEnabled());
 			jCheckWan.setSelected(model.isWanSelected());
+			jCheckWan.setText(model.isWanEnabled() ? Configed.getResourceValue("NewClientDialog.wanConfig")
+					: Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
 		if (jCheckShutdownInstall != null) {
 			jCheckShutdownInstall.setSelected(model.isShutdownInstallSelected());
@@ -301,13 +302,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				a -> dispatch.accept(new AddClientMsg.ToggleShutdownInstall(jCheckShutdownInstall.isSelected())));
 
 		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
-		// if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
-		// 	jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
-		// 	jCheckWan.setEnabled(false);
-		// }
 		jCheckWan.addActionListener(a -> dispatch.accept(new AddClientMsg.ToggleWanSelected(jCheckWan.isSelected())));
 
-		// Depots and Netboot choices
 		jComboDepots = new JComboBox<>();
 		jComboDepots.addActionListener(
 				a -> dispatch.accept(new AddClientMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
@@ -318,7 +314,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jComboNetboot.addActionListener(
 				a -> dispatch.accept(new AddClientMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));
 
-		// Layout main panel (mirrors original)
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
