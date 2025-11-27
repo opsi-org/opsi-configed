@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.AbstractControlMultiTablePanel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 
 public class MultiTablePanel extends JPanel {
 	protected AbstractControlMultiTablePanel controller;
@@ -34,7 +35,7 @@ public class MultiTablePanel extends JPanel {
 	public int mayLeave() {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
-			return -2;
+			return AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN;
 		}
 
 		return controller.mayLeave();

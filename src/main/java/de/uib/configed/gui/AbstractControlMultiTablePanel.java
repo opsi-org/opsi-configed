@@ -15,6 +15,7 @@ import de.uib.configed.gui.features.licenses.MultiTablePanel;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.Utils;
 
 public abstract class AbstractControlMultiTablePanel {
@@ -62,7 +63,7 @@ public abstract class AbstractControlMultiTablePanel {
 					Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 		} else {
-			return -2;
+			return AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN;
 		}
 	}
 }

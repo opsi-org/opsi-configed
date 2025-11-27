@@ -13,6 +13,8 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.logging.Logging;
 
 public abstract class AbstractDataChangedKeeper {
+	// We use the value of this constant to indicate that no dialog has been shown
+	public static final int JOPTIONPANE_DIALOG_NOT_SHOWN = -2;
 	protected boolean dataChanged;
 
 	public void dataHaveChanged(Object source) {
@@ -23,7 +25,7 @@ public abstract class AbstractDataChangedKeeper {
 	public int askSave() {
 		// We have NO_OPTION as default result since this will mean "do not save" if no changes
 		// have been made
-		int result = -2;
+		int result = JOPTIONPANE_DIALOG_NOT_SHOWN;
 
 		if (this.dataChanged) {
 			result = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
