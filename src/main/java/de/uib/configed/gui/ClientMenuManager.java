@@ -137,7 +137,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.addSeparator();
 
 		jMenuClients.add(createMenuItem(
-				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callNewClientDialog)
+				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callAddClientDialog)
 						.withIcon("add").dependOnSelectionCount(true)
 						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
