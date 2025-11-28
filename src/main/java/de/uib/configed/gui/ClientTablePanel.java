@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,7 +28,7 @@ import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
+public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -68,7 +66,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		searchPane.setFiltering();
 
 		clientTable.addKeyListener(searchPane);
-		clientTable.addKeyListener(this);
 
 		GroupLayout layoutLeftPane = new GroupLayout(this);
 		this.setLayout(layoutLeftPane);
@@ -263,20 +260,4 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 		return result;
 	}
-
-	// KeyListener interface
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
 }
