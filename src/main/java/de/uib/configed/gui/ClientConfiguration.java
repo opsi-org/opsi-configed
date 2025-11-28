@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.InputEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import com.sun.glass.events.KeyEvent;
 
 import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -93,15 +89,14 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		return clientInfoPanel;
 	}
 
+	public JSplitPane getPanelClientSelection() {
+		return panelClientSelection;
+	}
+
 	private void init() {
 		clientInfoPanel = new ClientInfoPanel(configedMain);
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
 				clientInfoPanel);
-		Utils.addKeyBindingToJComponent(panelClientSelection, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
-				configedMain::reloadHosts);
-		Utils.addKeyBindingToJComponent(panelClientSelection,
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				configedMain::invertSelection);
 
 		panelClientSelection.setResizeWeight(1.0);
 

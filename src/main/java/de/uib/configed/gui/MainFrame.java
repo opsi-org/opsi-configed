@@ -299,10 +299,6 @@ public class MainFrame extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if ((e.isControlDown() && e.isShiftDown()) && e.getKeyCode() == KeyEvent.VK_I) {
-			configedMain.invertSelection();
-		}
-
 		if (e.isControlDown()) {
 			int keyCode = e.getKeyCode();
 			if (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_7) {
