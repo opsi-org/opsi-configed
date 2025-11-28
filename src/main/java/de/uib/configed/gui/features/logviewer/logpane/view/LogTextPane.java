@@ -8,6 +8,8 @@ package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -253,9 +255,28 @@ public class LogTextPane extends JTextPane {
 	}
 
 	public void applyFontSize(int size) {
+		Rectangle vis = getVisibleRect();
+		int topOffset = -1;
+		Point topLeft = new Point(vis.x, vis.y);
+		topOffset = viewToModel2D(topLeft);
+
 		displayFontSize = size;
 		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 		setFont(monospacedFont);
+		revalidate();
+
+		if (topOffset >= 0) {
+			restoreViewportPosition(topOffset, vis);
+		}
+	}
+
+	private void restoreViewportPosition(int topOffset, Rectangle vis) {
+		try {
+			Rectangle r = modelToView2D(topOffset).getBounds();
+			scrollRectToVisible(new Rectangle(r.x, r.y, vis.width, vis.height));
+		} catch (BadLocationException e) {
+			Logging.warning(this, e, "Failed to restore previous position in LogTextPane while chaning font size");
+		}
 	}
 
 	private boolean showLine(LogFileParser.LogLine line) {
