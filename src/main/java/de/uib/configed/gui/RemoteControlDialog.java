@@ -122,7 +122,6 @@ public class RemoteControlDialog implements DocumentListener {
 		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);
 		loggingArea.setLineWrap(true);
-		loggingArea.setWrapStyleWord(true);
 
 		JPanel topPanel = new JPanel();
 		GroupLayout layout = new GroupLayout(topPanel);
