@@ -7,28 +7,36 @@
 package de.uib.configed.gui;
 
 import java.awt.Dialog.ModalityType;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class RemoteControlDialog implements DocumentListener {
+	private static final int START_HEIGHT_LOGGING_AREA = 80;
+	private static final int START_HEIGHT_FRAME = 400;
+	private static final int START_WIDTH_FRAME = 500;
 	private Map<String, String> meanings;
 	private Map<String, Boolean> editableFields;
 	private String selText;
@@ -40,6 +48,8 @@ public class RemoteControlDialog implements DocumentListener {
 
 	private JTextArea loggingArea;
 
+	JSplitPane splitPane;
+
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
@@ -48,13 +58,15 @@ public class RemoteControlDialog implements DocumentListener {
 	public RemoteControlDialog(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
-		JPanel panel = initComponents();
+		JComponent panel = initComponents();
 
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
 		buttonExecute.addActionListener(event -> commit());
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.CLOSED_OPTION, null,
 				new Object[] { buttonExecute, Configed.getResourceValue("buttonClose") });
+
+		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
@@ -86,7 +98,7 @@ public class RemoteControlDialog implements DocumentListener {
 		return meanings.get(key);
 	}
 
-	private JPanel initComponents() {
+	private JComponent initComponents() {
 		visibleList = new JList<>();
 		visibleList
 				.addListSelectionListener(listSelectionEvent -> valueChanged(listSelectionEvent.getValueIsAdjusting()));
@@ -109,24 +121,39 @@ public class RemoteControlDialog implements DocumentListener {
 
 		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);
-		loggingArea.setColumns(50);
-		loggingArea.setRows(3);
+		loggingArea.setLineWrap(true);
+		loggingArea.setWrapStyleWord(true);
+
+		JPanel topPanel = new JPanel();
+		GroupLayout layout = new GroupLayout(topPanel);
+		topPanel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(visibleListScrollPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE).addComponent(extraField, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+
+		layout.setHorizontalGroup(
+				layout.createParallelGroup().addComponent(visibleListScrollPane, 0, 0, Short.MAX_VALUE).addComponent(
+						extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		JScrollPane loggingScrollPane = new JScrollPane(loggingArea);
+		loggingScrollPane.setMinimumSize(new Dimension());
+		loggingScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, loggingScrollPane);
+		splitPane.setResizeWeight(1.0);
+		splitPane.setDividerLocation(START_HEIGHT_FRAME - START_HEIGHT_LOGGING_AREA);
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(visibleListScrollPane).addGap(Globals.GAP_SIZE)
-						.addComponent(extraField).addGap(Globals.GAP_SIZE).addComponent(loggingScrollPane,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE));
+		JPanel mainPanel = new JPanel();
+		GroupLayout mainLayout = new GroupLayout(mainPanel);
+		mainPanel.setLayout(mainLayout);
+		mainLayout.setVerticalGroup(
+				mainLayout.createSequentialGroup().addComponent(splitPane, 0, START_HEIGHT_FRAME, Short.MAX_VALUE));
+		mainLayout.setHorizontalGroup(
+				mainLayout.createParallelGroup().addComponent(splitPane, 0, START_WIDTH_FRAME, Short.MAX_VALUE));
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(visibleListScrollPane)
-				.addComponent(extraField).addComponent(loggingScrollPane));
-
-		return panel;
+		return mainPanel;
 	}
 
 	private void noText() {
