@@ -80,7 +80,7 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 		updateItemFactoryStatistics.setSource(modelStatistics);
 
 		tableModels.add(modelStatistics);
-		tablePanes.add(thePanel.getPanelStatistics());
+		panelGenEdits.add(thePanel.getPanelStatistics());
 
 		modelStatistics.reset();
 		thePanel.getPanelStatistics().setTableModel(modelStatistics);

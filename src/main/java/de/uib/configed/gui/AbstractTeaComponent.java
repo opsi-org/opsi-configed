@@ -28,6 +28,12 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	protected M model;
 
 	/**
+	 * If true, model was set via constructor and should not be overwritten by
+	 * {@link #initModel()}.
+	 */
+	private boolean modelProvided;
+
+	/**
 	 * Represents the result of an update operation in the application state.
 	 * <p>
 	 * This immutable data holder contains:
@@ -87,6 +93,23 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	}
 
 	/**
+	 * Default constructor: model will be initialized via {@link #initModel()}.
+	 */
+	protected AbstractTeaComponent() {
+		// model will be set in initUI()
+	}
+
+	/**
+	 * Constructor accepting an initial model.
+	 * 
+	 * @param initialModel The model to use for this component.
+	 */
+	protected AbstractTeaComponent(M initialModel) {
+		this.model = initialModel;
+		this.modelProvided = true;
+	}
+
+	/**
 	 * Initializes the model state when the component is first created.
 	 *
 	 * @return The initial model instance representing the UI state.
@@ -131,7 +154,9 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	 *         component.
 	 */
 	public final JComponent initUI() {
-		this.model = initModel();
+		if (!modelProvided) {
+			this.model = initModel();
+		}
 		return renderView(model, this::dispatch);
 	}
 
@@ -141,7 +166,7 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	 *
 	 * @param msg The message/event to process.
 	 */
-	protected final void dispatch(E msg) {
+	public final void dispatch(E msg) {
 		UpdateResult<M, F> result = updateModel(msg, model);
 		this.model = result.model();
 		refreshView();

@@ -410,7 +410,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private void initializeModels() {
 		updateCollection = new ArrayList<>();
 		tableModels = new ArrayList<>();
-		tablePanes = new ArrayList<>();
+		panelGenEdits = new ArrayList<>();
 	}
 
 	private void initializePanelLicensepools() {
@@ -424,7 +424,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensepools.setSource(modelLicensepools);
 
 		tableModels.add(modelLicensepools);
-		tablePanes.add(thePanel.getPanelLicensepools());
+		panelGenEdits.add(thePanel.getPanelLicensepools());
 
 		modelLicensepools.reset();
 		thePanel.getPanelLicensepools().setTableModel(modelLicensepools);
@@ -479,7 +479,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
 		tableModels.add(modelProductId2LPool);
-		tablePanes.add(thePanel.getPanelProductId2LPool());
+		panelGenEdits.add(thePanel.getPanelProductId2LPool());
 
 		modelProductId2LPool.reset();
 		thePanel.getPanelProductId2LPool().setTableModel(modelProductId2LPool);
@@ -560,7 +560,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		Logging.info(this, "modelWindowsSoftwareIds row count ", modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);
-		tablePanes.add(thePanel.getPanelRegisteredSoftware());
+		panelGenEdits.add(thePanel.getPanelRegisteredSoftware());
 
 		modelWindowsSoftwareIds.reset();
 		modelWindowsSoftwareIds.setColMarkCursorRow(COLUMN_MARK_CURSOR_ROW);

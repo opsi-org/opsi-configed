@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -40,7 +38,7 @@ import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class MainFrame extends JFrame implements KeyListener {
+public class MainFrame extends JFrame {
 	private ConfigedMain configedMain;
 
 	private LeftControlBar leftControlBar;
@@ -267,21 +265,18 @@ public class MainFrame extends JFrame implements KeyListener {
 		}
 	}
 
-	public void startLicensingManagement() {
+	public boolean startLicensingManagement() {
 		Logging.info(this, "startLicensingManagement called");
+
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			Utils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
+			return false;
+		}
 
 		new Thread() {
 			@Override
 			public void run() {
-				persistenceController.getModuleDataService().retrieveOpsiModules();
-
-				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-					Logging.info(this, "show licensing pane");
-					showPanel(mainPanelManager.getLicenseManagementPanel());
-				} else {
-					Utils.showMissingLicenseModules(
-							Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
-				}
+				showPanel(mainPanelManager.getLicenseManagementPanel());
 
 				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
 						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
@@ -296,26 +291,8 @@ public class MainFrame extends JFrame implements KeyListener {
 				deactivateLoadingPane();
 			}
 		}.start();
-	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if ((e.isControlDown() && e.isShiftDown()) && e.getKeyCode() == KeyEvent.VK_I) {
-			configedMain.invertSelection();
-		}
-
-		if (e.isControlDown()) {
-			int keyCode = e.getKeyCode();
-			if (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_7) {
-				switchViewBasedOnViewIndex(keyCode - KeyEvent.VK_0);
-			} else if (keyCode == KeyEvent.VK_DOWN) {
-				nextView();
-			} else if (keyCode == KeyEvent.VK_UP) {
-				previousView();
-			} else {
-				Logging.info(this, "Unknown key combination");
-			}
-		}
+		return true;
 	}
 
 	public void nextView() {
@@ -355,15 +332,5 @@ public class MainFrame extends JFrame implements KeyListener {
 		case 7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
 		default -> Logging.info(this, "Unknown view index" + index);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// Not needed.
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// Not Needed.
 	}
 }

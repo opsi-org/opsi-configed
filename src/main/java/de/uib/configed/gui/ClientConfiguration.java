@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.InputEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import com.sun.glass.events.KeyEvent;
 
 import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -59,6 +55,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private ProductPageManager productPageManager;
 
+	private int lastSelectedIndex;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -90,15 +88,14 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		return clientInfoPanel;
 	}
 
+	public JSplitPane getPanelClientSelection() {
+		return panelClientSelection;
+	}
+
 	private void init() {
 		clientInfoPanel = new ClientInfoPanel(configedMain);
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
 				clientInfoPanel);
-		Utils.addKeyBindingToJComponent(panelClientSelection, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
-				configedMain::reloadHosts);
-		Utils.addKeyBindingToJComponent(panelClientSelection,
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				configedMain::invertSelection);
 
 		panelClientSelection.setResizeWeight(1.0);
 
@@ -172,9 +169,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	public void setLogFileTab(String logtype) {
+		setLogFileTab(logtype, false);
+	}
+
+	public void setLogFileTab(String logtype, final boolean resetCaret) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
 		setComponentAt(getSelectedIndex(), tabbedLogPane);
-		tabbedLogPane.setDocuments(logtype);
+		tabbedLogPane.setDocuments(logtype, resetCaret);
 	}
 
 	public void initSplitPanes() {
@@ -193,13 +194,20 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, "state change in clientConfiguration with selected index", getSelectedIndex());
 
-		ChangedDataManager.checkSaveAll(true);
+		if (lastSelectedIndex != getSelectedIndex() && !ChangedDataManager.checkSaveAll(true)) {
+			// We don't want to trigger state change events while changing the selected index
+			this.removeChangeListener(this);
+			setSelectedIndex(lastSelectedIndex);
+			this.addChangeListener(this);
+			// If switching is cancelled due to unsaved data, we abort the state change
+			return;
+		}
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		switch (getSelectedIndex()) {
 		case 0:
-			// This is client view, nothing needs to be done...
+			// Client page does not need to be updated
 			break;
 
 		case 1:
@@ -234,6 +242,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 			break;
 		}
+
+		lastSelectedIndex = getSelectedIndex();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}

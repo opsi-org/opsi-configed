@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.logpane;
+package de.uib.configed.gui.features.logviewer.logpane.view;
 
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -19,18 +19,20 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.logging.Logging;
 
 public class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {
-	private LogPanel logPane;
+	private LogPaneComponent logPane;
 
-	public AdaptingSlider(LogPanel logPane, int min, int max, int value) {
+	public AdaptingSlider(LogPaneComponent logPane, int min, int max, int value) {
 		super(min, max, value);
 
 		init(logPane);
 	}
 
-	private void init(LogPanel logPane) {
+	private void init(LogPaneComponent logPane) {
 		this.logPane = logPane;
 
 		super.addChangeListener(this);
@@ -55,7 +57,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			public void run() {
 				Logging.debug(this, "activateShowLevel call");
 
-				logPane.activateShowLevel();
+				logPane.dispatch(new LogPaneMsg.ChangeLogLevel(getValue()));
 
 				setCursor(null);
 			}
