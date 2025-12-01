@@ -6,13 +6,11 @@
 
 package de.uib.configed.gui.features.logviewer.logpane.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -33,11 +31,9 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.IconView;
 import javax.swing.text.LabelView;
 import javax.swing.text.ParagraphView;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
@@ -77,13 +73,9 @@ public class LogTextPane extends JTextPane {
 	private Font monospacedFont;
 
 	private final Highlighter.HighlightPainter caretPainter = new LineHighlightPainter(this,
-			Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR);
+			Globals.getLogPaneCurrentLineBackground());
 
 	private Object caretLineTag;
-
-	// Track last visual row range colored white
-	private int lastHighlightStart = -1;
-	private int lastHighlightEnd = -1;
 
 	public record CaretContext(int line, int offset) {
 	}
@@ -103,8 +95,8 @@ public class LogTextPane extends JTextPane {
 		setLoglevelStyles();
 		parser = new LogFileParser(lines, logLevelStyles);
 
-		super.setSelectionColor(new Color(Globals.OPSI_MAGENTA.getRed(), Globals.OPSI_MAGENTA.getGreen(),
-				Globals.OPSI_MAGENTA.getBlue(), 200));
+		super.setSelectionColor(Globals.getLogPaneSelectionBackground());
+		super.setSelectedTextColor(FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
 		super.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 
 		searcher = new DocumentSearcher(this);
@@ -139,76 +131,7 @@ public class LogTextPane extends JTextPane {
 
 	private void refreshCurrentLineVisuals() {
 		repaintScrollPaneRowHeader();
-		updateCaretLineForeground();
 		updateCaretLineHighlight();
-	}
-
-	private void updateCaretLineForeground() {
-		try {
-			int caretPos = getCaretPosition();
-			int selStart = getSelectionStart();
-			int selEnd = getSelectionEnd();
-
-			// If selection includes the caret, restore previous and skip to avoid clashing with selection
-			if (selStart != selEnd && caretPos >= Math.min(selStart, selEnd)
-					&& caretPos <= Math.max(selStart, selEnd)) {
-				restorePreviousHighlight();
-				return;
-			}
-
-			// Restore previous override before applying a new one
-			restorePreviousHighlight();
-
-			Rectangle2D caretRect = modelToView2D(caretPos);
-			if (caretRect == null) {
-				return;
-			}
-
-			Element root = getDocument().getDefaultRootElement();
-			int lineIndex = root.getElementIndex(caretPos);
-			Element line = root.getElement(lineIndex);
-			int start = line.getStartOffset();
-			int end = Math.max(start, line.getEndOffset() - 1);
-
-			if (end <= start) {
-				return;
-			}
-
-			StyledDocument doc = (StyledDocument) getDocument();
-			SimpleAttributeSet white = new SimpleAttributeSet();
-			StyleConstants.setBold(white, true);
-			StyleConstants.setForeground(white, Color.WHITE);
-			white.removeAttribute(StyleConstants.Background);
-			doc.setCharacterAttributes(start, end - start, white, true);
-
-			lastHighlightStart = start;
-			lastHighlightEnd = end;
-		} catch (BadLocationException ex) {
-			Logging.warning(this, ex, "Failed to update caret line foreground");
-		}
-	}
-
-	private void restorePreviousHighlight() {
-		if (lastHighlightStart < 0 || lastHighlightEnd <= lastHighlightStart) {
-			return;
-		}
-		Element root = getDocument().getDefaultRootElement();
-		int lineIdx = root.getElementIndex(lastHighlightStart);
-		Element lineEl = root.getElement(lineIdx);
-		int lineStart = lineEl.getStartOffset();
-
-		Integer parsedIdx = docLinestartPosition2lineCount.get(lineStart);
-		StyledDocument doc = (StyledDocument) getDocument();
-		if (parsedIdx != null) {
-			Style original = parser.getData().getParsedLogLines().get(parsedIdx).getStyle();
-			doc.setCharacterAttributes(lastHighlightStart, lastHighlightEnd - lastHighlightStart, original, true);
-		} else {
-			SimpleAttributeSet empty = new SimpleAttributeSet();
-			doc.setCharacterAttributes(lastHighlightStart, lastHighlightEnd - lastHighlightStart, empty, true);
-		}
-
-		lastHighlightStart = -1;
-		lastHighlightEnd = -1;
 	}
 
 	private void repaintScrollPaneRowHeader() {
@@ -287,8 +210,6 @@ public class LogTextPane extends JTextPane {
 		}
 
 		setDocument(document);
-		lastHighlightStart = -1;
-		lastHighlightEnd = -1;
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(() -> {
 				highlighter.removeAllHighlights();

@@ -64,7 +64,6 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 
 	private boolean updateFont;
 	private int borderGap;
-	private Color currentLineForeground;
 	private Color currentLineBackground;
 	private float digitAlignment;
 	private int minimumDisplayDigits;
@@ -102,7 +101,6 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 		setOpaque(false);
 
 		setBorderGap(5);
-		setCurrentLineForeground(Color.RED);
 		setDigitAlignment(RIGHT);
 		setMinimumDisplayDigits(minimumDisplayDigits);
 
@@ -153,24 +151,6 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 		setBorder(inner);
 		lastDigits = 0;
 		setPreferredWidth();
-	}
-
-	/**
-	 * Gets the current line rendering Color
-	 *
-	 * @return the Color used to render the current line number
-	 */
-	public Color getCurrentLineForeground() {
-		return currentLineForeground == null ? getForeground() : currentLineForeground;
-	}
-
-	/**
-	 * The Color used to render the current line digits. Default is Coolor.RED.
-	 *
-	 * @param currentLineForeground the Color used to render the current line
-	 */
-	public void setCurrentLineForeground(Color currentLineForeground) {
-		this.currentLineForeground = currentLineForeground;
 	}
 
 	/**
@@ -286,7 +266,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 					g.setColor(getCurrentLineBackground());
 					g.fillRect(0, (int) r.getY(), getWidth(), (int) r.getHeight());
 				}
-				g.setColor(current ? getCurrentLineForeground() : Color.GRAY);
+				g.setColor(current ? getForeground() : Color.GRAY);
 				g.setFont(component.getFont());
 
 				//  Get the line number as a string and then determine the

@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.logviewer.logpane;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -165,8 +164,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 		TextLineNumber lineNumber = new TextLineNumber(logTextPane);
 		lineNumber.setUpdateFont(true);
 		lineNumber.setDigitAlignment(TextLineNumber.CENTER);
-		lineNumber.setCurrentLineForeground(Color.WHITE);
-		lineNumber.setCurrentLineBackground(Globals.LOG_PANE_CURRENT_LINE_SELECTION_BACKGROUND_COLOR);
+		lineNumber.setCurrentLineBackground(Globals.getLogPaneCurrentLineBackground());
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
