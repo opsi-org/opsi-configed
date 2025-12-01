@@ -256,9 +256,8 @@ public class LogTextPane extends JTextPane {
 
 	public void applyFontSize(int size) {
 		Rectangle vis = getVisibleRect();
-		int topOffset = -1;
 		Point topLeft = new Point(vis.x, vis.y);
-		topOffset = viewToModel2D(topLeft);
+		int topOffset = viewToModel2D(topLeft);
 
 		displayFontSize = size;
 		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
