@@ -350,6 +350,8 @@ public class ConfigedMain {
 
 		clientTree.produceActiveParents();
 
+		mainFrame.getClientConfiguration().stateChanged(null);
+
 		hostInfo.resetValues();
 
 		updateHostInfo();
