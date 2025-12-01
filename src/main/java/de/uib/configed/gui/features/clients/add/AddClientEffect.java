@@ -9,11 +9,14 @@ package de.uib.configed.gui.features.clients.add;
 import java.util.List;
 
 public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddClientEffect.ServiceEffect {
-	sealed interface UIEffect extends AddClientEffect
-			permits UIEffect.ShowOverwriteHostDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCsvImportDialog,
+	sealed interface UIEffect extends AddClientEffect permits UIEffect.ShowOverwriteHostDialog,
+			UIEffect.ShowOverwriteDepotDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCsvImportDialog,
 			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage, UIEffect.CloseDialog {
 		// dialogs
 		record ShowOverwriteHostDialog(String opsiHostKey) implements UIEffect {
+		}
+
+		record ShowOverwriteDepotDialog(String opsiHostKey) implements UIEffect {
 		}
 
 		record ShowNetbiosConfirmDialog() implements UIEffect {

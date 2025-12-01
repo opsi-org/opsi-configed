@@ -11,9 +11,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
-import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.features.clients.add.AddClientValidator.BooleanValidator;
+import de.uib.configed.gui.features.clients.add.AddClientValidator.HostCollisionValidator;
+import de.uib.configed.gui.features.clients.add.AddClientValidator.HostnameDomainValidator;
+import de.uib.configed.gui.features.clients.add.AddClientValidator.NetbiosValidator;
+import de.uib.configed.gui.features.clients.add.AddClientValidator.RowValidation;
 
 final class AddClientUpdate {
+	private static final List<RowValidation> VALIDATORS = List.of(new BooleanValidator(), new HostnameDomainValidator(),
+			new HostCollisionValidator(), new NetbiosValidator());
+
 	private AddClientUpdate() {
 	}
 
@@ -22,9 +29,9 @@ final class AddClientUpdate {
 		return switch (msg) {
 		case AddClientMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
 				new AddClientEffect.ServiceEffect.LoadInitialData());
-		case AddClientMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
+		case AddClientMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
 				.noEffect(model.toBuilder().domains(domains).depots(depots).netbootProducts(netboots)
-						.wanEnabled(isWanActive).wanSelected(isWanActive && defaultWanSelected)
+						.hostnames(hostnames).wanEnabled(isWanActive).wanSelected(isWanActive && defaultWanSelected)
 						.shutdownInstallSelected(defaultShutdown)
 						.selectedDomain(domains.isEmpty() ? "" : domains.get(0)).build());
 		case AddClientMsg.ChangeHostname(String v) -> UpdateResult.noEffect(model.withHostname(v));
@@ -44,35 +51,65 @@ final class AddClientUpdate {
 		case AddClientMsg.OpenGroupSelectionDialog() -> handleOpenGroupSelectionDialogMsg(model);
 		case AddClientMsg.ImportCSVRequested() -> UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.OpenCsvImportDialog());
-		case AddClientMsg.CSVImported(List<List<Object>> rows) -> handleCSVImportedMsg(model, rows);
+		case AddClientMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(model, rows,
+				includeRow);
 		case AddClientMsg.CreateClient() -> handleCreateClientMsg(model);
-		case AddClientMsg.ConfirmOverwriteHost(boolean overwrite) -> UpdateResult.noEffect(model);
-		case AddClientMsg.ConfirmIgnoreNetbios(boolean ignore) -> UpdateResult.noEffect(model);
+		case AddClientMsg.ShowError(String title, String message) -> UpdateResult.withEffect(model,
+				new AddClientEffect.UIEffect.ShowErrorMessage(title, message));
 		case AddClientMsg.CloseDialog() -> UpdateResult.withEffect(model, new AddClientEffect.UIEffect.CloseDialog());
 		};
 	}
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleCSVImportedMsg(AddClientModel model,
-			List<List<Object>> rows) {
-		for (List<Object> client : rows) {
-			if (!AddClientValidator.isBoolean((String) client.get(10))
-					|| !AddClientValidator.isBoolean((String) client.get(11))) {
-				return UpdateResult.withEffect(model,
-						new AddClientEffect.UIEffect.ShowErrorMessage(
-								Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"),
-								Configed.getResourceValue("NewClientDialog.nonBooleanValue.message")));
-			}
+			List<List<Object>> rows, boolean includeRow) {
+		if (rows != null && !rows.isEmpty()) {
+			model = model.withRowsToImport(new ArrayList<>(rows));
 		}
-		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(rows));
+
+		if (includeRow && !model.getPendingSingleRow().isEmpty()) {
+			var accepted = new ArrayList<>(model.getAcceptedRows());
+			accepted.add(model.getPendingSingleRow());
+			model = model.withAcceptedRows(accepted).withPendingSingleRow(new ArrayList<>());
+		}
+
+		BatchProcessor processor = new BatchProcessor(VALIDATORS);
+
+		return processor.process(model);
 	}
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleCreateClientMsg(AddClientModel model) {
-		return UpdateResult.withEffect(model,
-				new AddClientEffect.ServiceEffect.CreateSingleClient(model.getHostname(), model.getSelectedDomain(),
-						model.getSelectedDepot(), model.getDescription(), model.getInventoryNumber(), model.getNotes(),
-						model.getIpAddress(), model.getSystemUUID(), model.getMacAddress(),
-						model.isShutdownInstallSelected(), model.isWanSelected(), parseGroups(model.getGroups()),
-						model.getSelectedNetbootProduct()));
+		List<Object> row = new ArrayList<>();
+		row.add(model.getHostname());
+		row.add(model.getSelectedDomain());
+		row.add(model.getSelectedDepot());
+		row.add(model.getDescription());
+		row.add(model.getInventoryNumber());
+		row.add(model.getNotes());
+		row.add(model.getIpAddress());
+		row.add(model.getSystemUUID());
+		row.add(model.getMacAddress());
+		row.add(model.getSelectedNetbootProduct());
+		row.add(Boolean.toString(model.isShutdownInstallSelected()));
+		row.add(Boolean.toString(model.isWanSelected()));
+		row.add(String.join(";", parseGroups(model.getGroups())));
+
+		for (RowValidation validator : VALIDATORS) {
+			RowValidation.Result r = validator.validate(row, model);
+
+			switch (r.type()) {
+			case SUCCESS -> {
+				continue;
+			}
+			case DROP -> {
+				return UpdateResult.withEffect(model, r.effect());
+			}
+			case PAUSE -> {
+				return UpdateResult.withEffect(model.withPendingSingleRow(row), r.effect());
+			}
+			}
+		}
+
+		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(List.of(row)));
 	}
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleOpenGroupSelectionDialogMsg(

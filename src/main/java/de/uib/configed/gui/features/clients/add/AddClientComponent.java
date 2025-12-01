@@ -145,6 +145,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		switch (effect) {
 		case AddClientEffect.UIEffect.ShowOverwriteHostDialog(String opsiHostKey) -> handleShowOverwriteHostDialogEffect(
 				opsiHostKey);
+		case AddClientEffect.UIEffect.ShowOverwriteDepotDialog(String opsiHostKey) -> handleShowOverwriteDepotDialogEffect(
+				opsiHostKey);
 		case AddClientEffect.UIEffect.ShowNetbiosConfirmDialog e -> handleShowNetbiosConfirmDialogEffect();
 		case AddClientEffect.UIEffect.OpenCsvImportDialog e -> importCSV();
 		case AddClientEffect.UIEffect.OpenGroupSelectionDialog e -> displayGroupSelectionDialog();
@@ -163,9 +165,13 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
 		int answer = JOptionPane.showConfirmDialog(dialog, message.toString(),
 				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), JOptionPane.YES_NO_OPTION);
-		if (answer == JOptionPane.YES_OPTION) {
-			// continue creation via service effect? The existence check is done there already.
-		}
+		dispatch(new AddClientMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
+	}
+
+	private void handleShowOverwriteDepotDialogEffect(String opsiHostKey) {
+		JOptionPane.showMessageDialog(dialog,
+				String.format(Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"), opsiHostKey),
+				Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void handleShowNetbiosConfirmDialogEffect() {
@@ -173,9 +179,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"),
 				Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
 				JOptionPane.YES_NO_OPTION);
-		if (answer == JOptionPane.NO_OPTION) {
-			return;
-		}
+		dispatch(new AddClientMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
 	}
 
 	private void handleCloseDialogEffect() {
@@ -188,7 +192,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
 		case AddClientEffect.ServiceEffect.LoadInitialData e -> loadInitialData();
-		case AddClientEffect.ServiceEffect.CreateSingleClient e -> createClient(e);
+		case AddClientEffect.ServiceEffect.CreateSingleClient e -> createClients(fromSingle(e));
 		case AddClientEffect.ServiceEffect.CreateMultipleClients e -> createClients(e.rows());
 		case AddClientEffect.ServiceEffect.SaveDomainsOrder e -> saveDomainsOrder(e.domains());
 		}
@@ -531,7 +535,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 			if (csvImportDataDialog.show()) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
-				dispatch(new AddClientMsg.CSVImported(rows));
+				dispatch(new AddClientMsg.CSVImported(rows, false));
 			}
 		}
 	}
@@ -543,14 +547,15 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		List<String> netboots = new ArrayList<>();
 		netboots.add(null);
 		netboots.addAll(netbootProductNames);
+		List<String> hostnames = persistenceController.getHostInfoCollections().getOpsiHostNames();
 
 		boolean isWanActive = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN);
 		boolean defaultWanSelected = persistenceController.getConfigDataService().isWanConfiguredOnConfigserver();
 		boolean defaultShutdown = persistenceController.getConfigDataService()
 				.isInstallByShutdownConfiguredOnConfigserver();
 
-		dispatch(new AddClientMsg.InitialDataLoaded(domains, depots, netboots, isWanActive, defaultWanSelected,
-				defaultShutdown));
+		dispatch(new AddClientMsg.InitialDataLoaded(domains, depots, netboots, hostnames, isWanActive,
+				defaultWanSelected, defaultShutdown));
 	}
 
 	private static void saveDomainsOrder(List<String> domains) {
@@ -569,100 +574,32 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 		while (iter.hasNext()) {
 			List<Object> client = iter.next();
-			if (!AddClientValidator.isBoolean((String) client.get(10))
-					|| !AddClientValidator.isBoolean((String) client.get(11))) {
-				JOptionPane.showMessageDialog(dialog,
-						Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"),
-						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-
-			String hostname = (String) client.get(0);
 			String selectedDomain = (String) client.get(1);
-			if (checkClientCorrectness(hostname, selectedDomain)) {
-				treatSelectedDomainForNewClient(selectedDomain);
-				modifiedClients.add(client);
-			}
+			treatSelectedDomainForNewClient(selectedDomain);
+			modifiedClients.add(client);
 		}
 
 		ServerActionManager.createClients(modifiedClients);
 	}
 
-	private void createClient(AddClientEffect.ServiceEffect.CreateSingleClient e) {
-		String hostname = e.hostname();
-		String selectedDomain = e.domain();
-
-		if (checkClientCorrectness(hostname, selectedDomain)) {
-			String newClientID = hostname + "." + selectedDomain;
-
-			persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
-			if (persistenceController.getHostDataService().createClient(e.hostname(), e.domain(), e.depotID(),
-					e.description(), e.inventoryNumber(), e.notes(), e.ipAddress(), e.systemUUID(), e.macAddress(),
-					e.shutdownInstall(), e.wanConfig(), e.groups(), e.netbootProduct())) {
-				ServerActionManager.createClient(newClientID, e.groups());
-			} else {
-				persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
-			}
-
-			treatSelectedDomainForNewClient(selectedDomain);
-		}
-	}
-
-	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
-		if (!AddClientValidator.areValuesValid(hostname, selectedDomain)) {
-			return false;
-		}
-
-		if (!checkOpsiHostKey(hostname + "." + selectedDomain)) {
-			return false;
-		}
-
-		return checkHostname(hostname);
-	}
-
-	private boolean checkOpsiHostKey(String opsiHostKey) {
-		List<String> existingHostNames = persistenceController.getHostInfoCollections().getOpsiHostNames();
-
-		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
-			if (persistenceController.getHostInfoCollections().getDepotNamesList().contains(opsiHostKey)) {
-				JOptionPane.showMessageDialog(dialog,
-						String.format(Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"), opsiHostKey),
-						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-
-			StringBuilder message = new StringBuilder();
-			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
-			message.append(" \"");
-			message.append(opsiHostKey);
-			message.append("\" \n");
-			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
-
-			int answer = JOptionPane.showConfirmDialog(dialog, message.toString(),
-					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"),
-					JOptionPane.YES_NO_OPTION);
-
-			if (answer == JOptionPane.NO_OPTION) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	private boolean checkHostname(String hostname) {
-		if (AddClientValidator.requiresNetbiosConfirmation(hostname)) {
-			int answer = JOptionPane.showConfirmDialog(dialog,
-					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"),
-					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
-					JOptionPane.YES_NO_OPTION);
-
-			if (answer == JOptionPane.NO_OPTION) {
-				return false;
-			}
-		}
-
-		return true;
+	private List<List<Object>> fromSingle(AddClientEffect.ServiceEffect.CreateSingleClient e) {
+		List<Object> row = new ArrayList<>();
+		row.add(e.hostname());
+		row.add(e.domain());
+		row.add(e.depotID());
+		row.add(e.description());
+		row.add(e.inventoryNumber());
+		row.add(e.notes());
+		row.add(e.ipAddress());
+		row.add(e.systemUUID());
+		row.add(e.macAddress());
+		row.add(e.netbootProduct());
+		row.add(Boolean.toString(e.shutdownInstall()));
+		row.add(Boolean.toString(e.wanConfig()));
+		row.add(String.join(";", e.groups()));
+		List<List<Object>> rows = new ArrayList<>();
+		rows.add(row);
+		return rows;
 	}
 
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {

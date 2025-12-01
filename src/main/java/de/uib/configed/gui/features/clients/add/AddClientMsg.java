@@ -14,13 +14,13 @@ public sealed interface AddClientMsg permits AddClientMsg.LoadInitialDataRequest
 		AddClientMsg.ChangeIP, AddClientMsg.ChangeGroups, AddClientMsg.ChangeDepot, AddClientMsg.ChangeNetboot,
 		AddClientMsg.ToggleWanSelected, AddClientMsg.ToggleShutdownInstall, AddClientMsg.CreateClient,
 		AddClientMsg.ImportCSVRequested, AddClientMsg.CSVImported, AddClientMsg.OpenGroupSelectionDialog,
-		AddClientMsg.ConfirmOverwriteHost, AddClientMsg.ConfirmIgnoreNetbios, AddClientMsg.CloseDialog {
+		AddClientMsg.CloseDialog, AddClientMsg.ShowError {
 
 	record LoadInitialDataRequested() implements AddClientMsg {
 	}
 
-	record InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, boolean isWanActive,
-			boolean defaultWanSelected, boolean defaultShutdown) implements AddClientMsg {
+	record InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames,
+			boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) implements AddClientMsg {
 	}
 
 	record ChangeHostname(String value) implements AddClientMsg {
@@ -68,18 +68,15 @@ public sealed interface AddClientMsg permits AddClientMsg.LoadInitialDataRequest
 	record ImportCSVRequested() implements AddClientMsg {
 	}
 
-	record CSVImported(List<List<Object>> rows) implements AddClientMsg {
+	record CSVImported(List<List<Object>> rows, boolean includeRow) implements AddClientMsg {
 	}
 
 	record OpenGroupSelectionDialog() implements AddClientMsg {
 	}
 
-	record ConfirmOverwriteHost(boolean overwrite) implements AddClientMsg {
-	}
-
-	record ConfirmIgnoreNetbios(boolean ignore) implements AddClientMsg {
-	}
-
 	record CloseDialog() implements AddClientMsg {
+	}
+
+	record ShowError(String title, String message) implements AddClientMsg {
 	}
 }

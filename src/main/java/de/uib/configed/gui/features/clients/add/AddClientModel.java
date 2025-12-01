@@ -53,9 +53,19 @@ public class AddClientModel {
 	List<String> depots = new ArrayList<>();
 	@Builder.Default
 	List<String> netbootProducts = new ArrayList<>();
+	@Builder.Default
+	List<String> hostnames = new ArrayList<>();
 
 	// UI flags
 	@Builder.Default
 	boolean withDialog = true;
 	boolean initialized;
+
+	// Pending state for validation/confirmations
+	@Builder.Default
+	List<Object> pendingSingleRow = new ArrayList<>();
+	@Builder.Default
+	List<List<Object>> acceptedRows = new ArrayList<>();
+	@Builder.Default
+	List<List<Object>> rowsToImport = new ArrayList<>();
 }
