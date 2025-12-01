@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.logviewer.logpane.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -96,7 +97,6 @@ public class LogTextPane extends JTextPane {
 		parser = new LogFileParser(lines, logLevelStyles);
 
 		super.setSelectionColor(Globals.getLogPaneSelectionBackground());
-		super.setSelectedTextColor(FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
 		super.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 
 		searcher = new DocumentSearcher(this);
@@ -127,6 +127,17 @@ public class LogTextPane extends JTextPane {
 	@Override
 	public Dimension getPreferredSize() {
 		return getUI().getMinimumSize(this);
+	}
+
+	@Override
+	public void setSelectedTextColor(Color c) {
+		// ignore selection foreground changes
+	}
+
+	@Override
+	public Color getSelectedTextColor() {
+		// leave the existing foreground color
+		return null;
 	}
 
 	private void refreshCurrentLineVisuals() {
