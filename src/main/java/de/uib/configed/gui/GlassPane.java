@@ -42,15 +42,9 @@ public class GlassPane extends JComponent implements KeyListener {
 	}
 
 	private static Color initBackground() {
-		Color base;
+		int brightness = FlatLaf.isLafDark() ? 0 : 255;
 
-		if (FlatLaf.isLafDark()) {
-			base = Color.BLACK;
-		} else {
-			base = Color.WHITE;
-		}
-
-		return new Color(base.getRed(), base.getGreen(), base.getBlue(), 128);
+		return new Color(brightness, brightness, brightness, 128);
 	}
 
 	private void initLayout() {
