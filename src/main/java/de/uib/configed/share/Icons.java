@@ -29,6 +29,9 @@ import de.uib.configed.gui.healthcheck.HealthDataProcessor;
 import de.uib.configed.share.logging.Logging;
 
 public final class Icons {
+	private static Color originalColorLight = new Color(206, 208, 214);
+	private static Color originalColorDark = new Color(108, 112, 126);
+
 	private static Image mainIcon;
 
 	private Icons() {
@@ -57,9 +60,9 @@ public final class Icons {
 		ColorFilter filter = new ColorFilter();
 		if (dark) {
 			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
+			filter.add(originalColorLight, Globals.OPSI_FOREGROUND_LIGHT);
 		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
+			filter.add(originalColorDark, Globals.OPSI_FOREGROUND_DARK);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
@@ -90,9 +93,9 @@ public final class Icons {
 		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
 			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_DARK);
+			filter.add(originalColorLight, Globals.OPSI_FOREGROUND_DARK);
 		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_LIGHT);
+			filter.add(originalColorDark, Globals.OPSI_FOREGROUND_LIGHT);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + folder + "/" + iconName + ".svg").setColorFilter(filter)
@@ -117,7 +120,7 @@ public final class Icons {
 
 		ColorFilter filter = new ColorFilter();
 
-		filter.add(new Color(108, 112, 126), color);
+		filter.add(originalColorDark, color);
 		FlatSVGIcon icon = new FlatSVGIcon(path);
 		icon.setColorFilter(filter);
 		return icon;
@@ -321,9 +324,9 @@ public final class Icons {
 		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
 			iconName += "_dark";
-			filter.add(new Color(206, 208, 214), Globals.ICON_ACTIVE_DARK);
+			filter.add(originalColorLight, Globals.ICON_ACTIVE_DARK);
 		} else {
-			filter.add(new Color(108, 112, 126), Globals.ICON_ACTIVE_LIGHT);
+			filter.add(originalColorDark, Globals.ICON_ACTIVE_LIGHT);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
