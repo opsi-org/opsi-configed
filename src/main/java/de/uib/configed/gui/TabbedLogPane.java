@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,10 @@ public class TabbedLogPane extends JTabbedPane {
 				setDocuments(logtype);
 			}
 		});
+
+		// We want to have no minimum size restrictions
+		// So that users can reduce the size of the client configuration as much as they want
+		super.setMinimumSize(new Dimension());
 	}
 
 	private void initLogTabComponent(int i, String defaultText) {

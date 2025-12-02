@@ -24,7 +24,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -103,7 +102,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	// interface TreeSelectionListener
 	@Override
-	public void valueChanged(TreeSelectionEvent e) {
+	public void valueChanged() {
 		if (ConfigedMain.getMainFrame() != null) {
 			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
 					.getTabComponentAt(1);

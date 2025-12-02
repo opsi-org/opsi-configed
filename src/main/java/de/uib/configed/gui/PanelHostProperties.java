@@ -20,7 +20,7 @@ import de.uib.configed.core.domain.datachanges.UpdateCollection;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
-import de.uib.configed.share.DataChangedObserver;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelHostProperties extends JPanel {
@@ -61,8 +61,8 @@ public class PanelHostProperties extends JPanel {
 	}
 
 	// delegated methods
-	public void registerDataChangedObserver(DataChangedObserver o) {
-		editMapPanel.getMapTableModel().registerDataChangedObserver(o);
+	public void registerDataChangedObserver(AbstractDataChangedKeeper keeper) {
+		editMapPanel.getMapTableModel().registerDataChangedKeeper(keeper);
 	}
 
 	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> depotMap) {

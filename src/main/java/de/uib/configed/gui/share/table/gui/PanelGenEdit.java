@@ -28,6 +28,7 @@ import javax.swing.event.TableModelListener;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.table.CursorrowObserver;
 import de.uib.configed.gui.share.table.GenTableModel;
@@ -206,9 +207,11 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		getParent().setCursor(Globals.WAIT_CURSOR);
 
 		Logging.info(this, "in PanelGenEditTable reload()");
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(genEditTable);
 		genEditTable.getGenTableModel().requestReload();
 		genEditTable.getGenTableModel().reset();
 		setDataChanged(false);
+		ConfigedUtilityMethods.setTableColumnWidths(genEditTable, columnWidths);
 
 		getParent().setCursor(null);
 	}

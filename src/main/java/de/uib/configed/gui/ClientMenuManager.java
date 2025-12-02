@@ -48,6 +48,7 @@ import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class ClientMenuManager implements MenuListener {
@@ -131,7 +132,7 @@ public final class ClientMenuManager implements MenuListener {
 								.item("MainFrame.jMenuRemoteControl",
 										() -> ExtraFrameController.startRemoteControlFrame(configedMain,
 												persistenceController))
-								.dependOnSelectionCount(true)
+								.dependOnSelectionCount(true).withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0))
 								.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 
 		jMenuClients.addSeparator();
@@ -206,6 +207,8 @@ public final class ClientMenuManager implements MenuListener {
 
 		if (config.keyStroke() != null) {
 			item.setAccelerator(config.keyStroke());
+			Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
+					config.keyStroke(), config.action());
 		}
 
 		if (config.icon() != null) {

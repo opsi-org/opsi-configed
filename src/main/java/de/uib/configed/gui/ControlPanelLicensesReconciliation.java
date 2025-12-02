@@ -137,7 +137,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		updateItemFactoryLicensesReconciliation.setSource(modelLicensesReconciliation);
 
 		tableModels.add(modelLicensesReconciliation);
-		tablePanes.add(thePanel.getPanelReconciliation());
+		panelGenEdits.add(thePanel.getPanelReconciliation());
 
 		modelLicensesReconciliation.reset();
 		thePanel.getPanelReconciliation().setTableModel(modelLicensesReconciliation);

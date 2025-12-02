@@ -68,7 +68,7 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 			});
 		} else if (panelReconciliation.getTableModel().getRows().isEmpty()) {
 			panelReconciliation.getTableModel().resetLocally();
-			controller.refreshTables();
+			controller.refreshPanelGenEdits();
 			controller.initializeVisualSettings();
 		} else {
 			super.reset();

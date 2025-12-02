@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
@@ -27,12 +28,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 
+import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
@@ -41,6 +44,8 @@ import de.uib.configed.share.logging.Logging;
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
 	private FlatTextField flatTextFieldSearch;
 
+	private String lastSearchString = "";
+
 	private JComboBox<String> comboSearchFields;
 
 	private JLabel labelSearch;
@@ -48,6 +53,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JToggleButton respectCase;
 	private JToggleButton regexActive;
 	private JToggleButton filtermark;
+	private ItemListener filtermarkListener = event -> filtermarkEvent();
 
 	private JToggleButton buttonShowHideExtraOptions;
 
@@ -200,7 +206,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filtermark.addItemListener(event -> filtermarkEvent());
+		filtermark.addItemListener(filtermarkListener);
 		filtermark.setVisible(false);
 
 		JToolBar jToolBar = new JToolBar();
@@ -507,6 +513,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	private void markAllAndFilter() {
 		Logging.info(this, " markAllAndFilter filtering active", isFiltering());
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			return;
+		}
 
 		filtermark.setSelected(false);
 		markAll();
@@ -606,6 +615,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void filtermarkEvent() {
 		Logging.info(this, "actionPerformed on filtermark, isFilteredMode ", filtermark.isSelected());
 
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			filtermark.removeItemListener(filtermarkListener);
+			filtermark.setSelected(!filtermark.isSelected());
+			filtermark.addItemListener(filtermarkListener);
+			return;
+		}
+
 		// When the filtermark is not pressed it means that this event was not evoked
 		// by a click on the button. Then we want to manually control what happens with our list
 		// and not select some elements. Usually there happens another selection anyways.
@@ -627,36 +643,45 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		documentChanged(e);
+		documentChanged();
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		documentChanged(e);
+		documentChanged();
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		documentChanged(e);
+		documentChanged();
 	}
 
-	private void documentChanged(DocumentEvent e) {
-		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			filter();
-			if (filterKey == null) {
-				Logging.info(this, "Skipping filter state change: filterKey is null");
-				return;
-			}
+	private void documentChanged() {
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			flatTextFieldSearch.getDocument().removeDocumentListener(this);
+			SwingUtilities.invokeLater(() -> {
+				flatTextFieldSearch.setText(lastSearchString);
+				flatTextFieldSearch.getDocument().addDocumentListener(this);
+			});
+			return;
+		}
 
-			String text = flatTextFieldSearch.getText();
-			boolean isBlank = text == null || text.isBlank();
-			if (isBlank) {
-				Logging.info(this, "Clearing filter state for filter key ", filterKey, " (blank search)");
-				FilterStateManager.removeFilterState(filterKey);
-			} else {
-				Logging.info(this, "Saving filter state for filter key ", filterKey);
-				FilterStateManager.saveFilterState(filterKey, getFilterState());
-			}
+		lastSearchString = flatTextFieldSearch.getText();
+
+		filter();
+		if (filterKey == null) {
+			Logging.info(this, "Skipping filter state change: filterKey is null");
+			return;
+		}
+
+		String text = flatTextFieldSearch.getText();
+		boolean isBlank = text == null || text.isBlank();
+		if (isBlank) {
+			Logging.info(this, "Clearing filter state for filter key ", filterKey, " (blank search)");
+			FilterStateManager.removeFilterState(filterKey);
+		} else {
+			Logging.info(this, "Saving filter state for filter key ", filterKey);
+			FilterStateManager.saveFilterState(filterKey, getFilterState());
 		}
 	}
 

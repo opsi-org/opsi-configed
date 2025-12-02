@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,7 +28,7 @@ import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
+public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -40,6 +38,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 	// we put a JTable on a standard JScrollPane
 	private ClientTable clientTable;
+
+	private int[] lastSelectedRows = new int[0];
 
 	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
@@ -66,7 +66,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		searchPane.setFiltering();
 
 		clientTable.addKeyListener(searchPane);
-		clientTable.addKeyListener(this);
 
 		GroupLayout layoutLeftPane = new GroupLayout(this);
 		this.setLayout(layoutLeftPane);
@@ -125,7 +124,23 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
+		}
+	}
+
+	private void actOnListSelection() {
+		if (ChangedDataManager.checkSaveAll(true)) {
 			configedMain.actOnListSelection();
+			lastSelectedRows = clientTable.getSelectedRows();
+		} else {
+			deactivateListSelectionListener();
+			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
+			for (int row : lastSelectedRows) {
+				selectionModel.addSelectionInterval(row, row);
+			}
+			selectionModel.setValueIsAdjusting(false);
+			activateListSelectionListener();
 		}
 	}
 
@@ -194,7 +209,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			// For example when the last client is unselected in the client list,
 			// this method is not called automatically by the selection listener,
 			// so we do it manually
-			configedMain.actOnListSelection();
+			actOnListSelection();
 		} else {
 			// because of ordering , we create a TreeSet view of the list
 			selectionModel.setValueIsAdjusting(true);
@@ -245,20 +260,4 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 		return result;
 	}
-
-	// KeyListener interface
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
 }

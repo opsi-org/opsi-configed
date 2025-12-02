@@ -140,11 +140,13 @@ public class MainPanelManager {
 		GroupLayout groupLayout = new GroupLayout(jPanel);
 		jPanel.setLayout(groupLayout);
 
-		groupLayout.setVerticalGroup(
-				groupLayout.createSequentialGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
+		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
+				.addComponent(jSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(hostsStatusPanel));
 
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
+				.addComponent(jSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(hostsStatusPanel, 0, 0, Short.MAX_VALUE));
 
 		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(),
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
@@ -271,7 +273,7 @@ public class MainPanelManager {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(opsiLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addComponent(component));
+				.addComponent(component, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout
 				.createParallelGroup().addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
 						// We add the gaps of the preferred sizes of the components to center the titlelabel
@@ -280,7 +282,7 @@ public class MainPanelManager {
 						.addGap(Globals.MIN_GAP_SIZE, (int) generalToolBar.getPreferredSize().getWidth(),
 								Short.MAX_VALUE)
 						.addComponent(opsiLogo).addGap(Globals.GAP_SIZE))
-				.addComponent(component));
+				.addComponent(component, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		return panel;
 	}
