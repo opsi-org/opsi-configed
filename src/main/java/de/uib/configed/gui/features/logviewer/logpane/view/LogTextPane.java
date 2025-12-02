@@ -6,15 +6,22 @@
 
 package de.uib.configed.gui.features.logviewer.logpane.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -68,6 +75,11 @@ public class LogTextPane extends JTextPane {
 
 	private Font monospacedFont;
 
+	private final Highlighter.HighlightPainter caretPainter = new LineHighlightPainter(this,
+			Globals.getLogPaneCurrentLineBackground());
+
+	private Object caretLineTag;
+
 	public record CaretContext(int line, int offset) {
 	}
 
@@ -86,6 +98,7 @@ public class LogTextPane extends JTextPane {
 		setLoglevelStyles();
 		parser = new LogFileParser(lines, logLevelStyles);
 
+		super.setSelectionColor(Globals.getLogPaneSelectionBackground());
 		super.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 
 		searcher = new DocumentSearcher(this);
@@ -93,11 +106,83 @@ public class LogTextPane extends JTextPane {
 		super.setHighlighter(highlighter);
 
 		super.setEditable(true);
+		super.addCaretListener(e -> refreshCurrentLineVisuals());
+		super.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				SwingUtilities.invokeLater(() -> refreshCurrentLineVisuals());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				SwingUtilities.invokeLater(() -> refreshCurrentLineVisuals());
+			}
+		});
+		super.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				refreshCurrentLineVisuals();
+			}
+		});
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
 		return getUI().getMinimumSize(this);
+	}
+
+	@Override
+	public void setSelectedTextColor(Color c) {
+		// ignore selection foreground changes
+	}
+
+	@Override
+	public Color getSelectedTextColor() {
+		// leave the existing foreground color
+		return null;
+	}
+
+	private void refreshCurrentLineVisuals() {
+		repaintScrollPaneRowHeader();
+		updateCaretLineHighlight();
+	}
+
+	private void repaintScrollPaneRowHeader() {
+		JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
+		if (sp != null && sp.getRowHeader() != null) {
+			JViewport rh = sp.getRowHeader();
+			if (rh.getView() != null) {
+				rh.getView().repaint();
+			}
+			rh.repaint();
+		}
+	}
+
+	private void updateCaretLineHighlight() {
+		if (caretLineTag != null) {
+			highlighter.removeHighlight(caretLineTag);
+		}
+
+		int caretPos = getCaretPosition();
+		int selStart = getSelectionStart();
+		int selEnd = getSelectionEnd();
+
+		// If selection includes the caret, skip to avoid clashing with selection
+		if (selStart != selEnd && caretPos >= Math.min(selStart, selEnd) && caretPos <= Math.max(selStart, selEnd)) {
+			return;
+		}
+
+		int pos = getCaretPosition();
+		Element root = getDocument().getDefaultRootElement();
+		int line = root.getElementIndex(pos);
+		int start = root.getElement(line).getStartOffset();
+		int end = root.getElement(line).getEndOffset();
+
+		try {
+			caretLineTag = highlighter.addHighlight(start, end, caretPainter);
+		} catch (BadLocationException e) {
+			Logging.warning(this, "Failed to highlight current line", e);
+		}
 	}
 
 	public void setCaseSensitivity(boolean caseSensitivity) {
@@ -135,6 +220,19 @@ public class LogTextPane extends JTextPane {
 			}
 		} catch (BadLocationException e) {
 			Logging.warning(this, e, "Failed to build document");
+		}
+
+		setDocument(document);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> {
+				highlighter.removeAllHighlights();
+				refreshCurrentLineVisuals();
+				setCursor(null);
+			});
+		} else {
+			highlighter.removeAllHighlights();
+			refreshCurrentLineVisuals();
+			setCursor(null);
 		}
 
 		return document;

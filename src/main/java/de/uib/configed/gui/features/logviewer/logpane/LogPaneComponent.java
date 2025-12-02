@@ -154,7 +154,8 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 		TextLineNumber lineNumber = new TextLineNumber(logTextPane);
 		lineNumber.setUpdateFont(true);
-		lineNumber.setCurrentLineForeground(Globals.OPSI_MAGENTA);
+		lineNumber.setDigitAlignment(TextLineNumber.CENTER);
+		lineNumber.setCurrentLineBackground(Globals.getLogPaneCurrentLineBackground());
 		jScrollPane = new JScrollPane();
 		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);

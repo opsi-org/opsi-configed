@@ -101,6 +101,8 @@ public final class Globals {
 	// also used for GlassPane...
 
 	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
+	public static final Color LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_DARK = new Color(87, 87, 87, 184);
+	public static final Color LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_LIGHT = new Color(87, 87, 87, 40);
 
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 
@@ -185,5 +187,14 @@ public final class Globals {
 
 	public static Color getActiveColor() {
 		return FlatLaf.isLafDark() ? ICON_ACTIVE_DARK : ICON_ACTIVE_LIGHT;
+	}
+
+	public static Color getLogPaneCurrentLineBackground() {
+		return FlatLaf.isLafDark() ? LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_DARK
+				: LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_LIGHT;
+	}
+
+	public static Color getLogPaneSelectionBackground() {
+		return FlatLaf.isLafDark() ? getMagentaCell2() : getMagentaCell1();
 	}
 }
