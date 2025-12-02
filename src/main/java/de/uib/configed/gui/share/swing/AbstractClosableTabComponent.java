@@ -19,8 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 
@@ -83,11 +81,7 @@ public abstract class AbstractClosableTabComponent extends JPanel {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setStroke(new BasicStroke(2));
-			if (FlatLaf.isLafDark()) {
-				g2.setColor(Globals.OPSI_FOREGROUND_DARK);
-			} else {
-				g2.setColor(Globals.OPSI_FOREGROUND_LIGHT);
-			}
+			g2.setColor(Globals.getForegroundColor());
 			if (getModel().isRollover()) {
 				g2.setColor(Globals.getMagentaCell1());
 			}

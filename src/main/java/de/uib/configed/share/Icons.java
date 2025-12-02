@@ -145,7 +145,7 @@ public final class Icons {
 	}
 
 	public static FlatSVGIcon getOpsiThemeIcon(int size) {
-		return getOpsiIcon(size, FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+		return getOpsiIcon(size, Globals.getForegroundColor());
 	}
 
 	public static FlatSVGIcon getOpsiIcon(int size, Color color) {
@@ -331,8 +331,7 @@ public final class Icons {
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName,
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+		return getIntellijIcon(iconName, Globals.getForegroundColor());
 	}
 
 	public static ImageIcon createImageIcon(String path, String description) {

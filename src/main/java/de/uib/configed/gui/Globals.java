@@ -197,4 +197,8 @@ public final class Globals {
 	public static Color getLogPaneSelectionBackground() {
 		return FlatLaf.isLafDark() ? getMagentaCell2() : getMagentaCell1();
 	}
+
+	public static Color getForegroundColor() {
+		return FlatLaf.isLafDark() ? OPSI_FOREGROUND_DARK : OPSI_FOREGROUND_LIGHT;
+	}
 }

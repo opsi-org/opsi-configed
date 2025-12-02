@@ -12,8 +12,6 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.gui.Globals;
 
 public class ColorTableCellRenderer extends DefaultTableCellRenderer {
@@ -31,11 +29,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	public static void colorize(Component cell, boolean isSelected, boolean isRowEven) {
-		if (FlatLaf.isLafDark()) {
-			cell.setForeground(Globals.OPSI_FOREGROUND_DARK);
-		} else {
-			cell.setForeground(Globals.OPSI_FOREGROUND_LIGHT);
-		}
+		cell.setForeground(Globals.getForegroundColor());
 
 		colorizeTableCell(cell, isSelected, isRowEven);
 	}
