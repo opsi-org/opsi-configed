@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -40,6 +41,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
@@ -613,5 +616,31 @@ public final class Utils {
 	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable) {
 		Logging.info(keyStroke.toString(), " added to ", component.getClass().getSimpleName());
 		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+	}
+
+	public static DocumentListener onDocumentChange(Consumer<DocumentEvent> consumer) {
+		return new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				consumer.accept(e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				consumer.accept(e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				consumer.accept(e);
+			}
+		};
+	}
+
+	/**
+	 * Overload that accepts a Runnable and runs it on any document change.
+	 */
+	public static javax.swing.event.DocumentListener onDocumentChange(Runnable runnable) {
+		return onDocumentChange(e -> runnable.run());
 	}
 }
