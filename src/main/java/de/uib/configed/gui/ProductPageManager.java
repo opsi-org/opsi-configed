@@ -155,6 +155,7 @@ public class ProductPageManager implements MessagebusListener {
 
 		panelProductSettings.updateSearchFields();
 		panelProductSettings.restoreFilter();
+		panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 
 		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getProductTable(), columnWidths);
 	}
