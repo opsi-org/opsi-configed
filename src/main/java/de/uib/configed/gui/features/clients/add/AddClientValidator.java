@@ -116,23 +116,7 @@ final class AddClientValidator {
 	private AddClientValidator() {
 	}
 
-	static boolean isBoolean(String bool) {
-		return bool.isEmpty() || bool.equalsIgnoreCase(Boolean.TRUE.toString())
-				|| bool.equalsIgnoreCase(Boolean.FALSE.toString());
-	}
-
-	static boolean areValuesValid(String hostname, String selectedDomain) {
-		if (hostname == null || hostname.isEmpty()) {
-			return false;
-		}
-		return selectedDomain != null && !selectedDomain.isEmpty();
-	}
-
-	static boolean requiresNetbiosConfirmation(String hostname) {
-		return hostname.length() > 15 || NUMERIC_PATTERN.matcher(hostname).matches();
-	}
-
-	public static class BooleanValidator implements RowValidation {
+	protected static class BooleanValidator implements RowValidation {
 		@Override
 		public Result validate(List<Object> row, AddClientModel model) {
 			if (!isValidBooleans(row)) {
@@ -148,26 +132,37 @@ final class AddClientValidator {
 			if (client.size() <= 11) {
 				return false;
 			}
-			return AddClientValidator.isBoolean((String) client.get(10))
-					&& AddClientValidator.isBoolean((String) client.get(11));
+			return isBoolean((String) client.get(10)) && isBoolean((String) client.get(11));
+		}
+
+		private static boolean isBoolean(String bool) {
+			return bool.isEmpty() || bool.equalsIgnoreCase(Boolean.TRUE.toString())
+					|| bool.equalsIgnoreCase(Boolean.FALSE.toString());
 		}
 	}
 
-	public static class HostnameDomainValidator implements RowValidation {
+	protected static class HostnameDomainValidator implements RowValidation {
 		@Override
 		public Result validate(List<Object> row, AddClientModel model) {
 			String hostname = (String) row.get(0);
 			String domain = (String) row.get(1);
 
-			if (!AddClientValidator.areValuesValid(hostname, domain)) {
+			if (!areValuesValid(hostname, domain)) {
 				return Result.drop(new AddClientEffect.UIEffect.ShowErrorMessage(Configed.getResourceValue("error"),
 						Configed.getResourceValue("NewClientDialog.hostnameRules")));
 			}
 			return Result.success();
 		}
+
+		private static boolean areValuesValid(String hostname, String selectedDomain) {
+			if (hostname == null || hostname.isEmpty()) {
+				return false;
+			}
+			return selectedDomain != null && !selectedDomain.isEmpty();
+		}
 	}
 
-	public static class HostCollisionValidator implements RowValidation {
+	protected static class HostCollisionValidator implements RowValidation {
 		@Override
 		public Result validate(List<Object> row, AddClientModel model) {
 			String hostname = (String) row.get(0);
@@ -188,16 +183,20 @@ final class AddClientValidator {
 		}
 	}
 
-	public static class NetbiosValidator implements RowValidation {
+	protected static class NetbiosValidator implements RowValidation {
 		@Override
 		public Result validate(List<Object> row, AddClientModel model) {
 			String hostname = (String) row.get(0);
 
-			if (!AddClientValidator.requiresNetbiosConfirmation(hostname)) {
+			if (!requiresNetbiosConfirmation(hostname)) {
 				return Result.success();
 			}
 
 			return Result.pause(new AddClientEffect.UIEffect.ShowNetbiosConfirmDialog());
+		}
+
+		private static boolean requiresNetbiosConfirmation(String hostname) {
+			return hostname.length() > 15 || NUMERIC_PATTERN.matcher(hostname).matches();
 		}
 	}
 }
