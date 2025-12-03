@@ -73,7 +73,6 @@ final class AddClientUpdate {
 		}
 
 		BatchProcessor processor = new BatchProcessor(VALIDATORS);
-
 		return processor.process(model);
 	}
 
