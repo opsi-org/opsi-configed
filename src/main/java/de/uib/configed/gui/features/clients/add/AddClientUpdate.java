@@ -88,8 +88,8 @@ final class AddClientUpdate {
 		row.add(model.getSystemUUID());
 		row.add(model.getIpAddress());
 		row.add(String.join(",", parseGroups(model.getGroups())));
-		row.add(Boolean.toString(model.isShutdownInstallSelected()));
 		row.add(Boolean.toString(model.isWanSelected()));
+		row.add(Boolean.toString(model.isShutdownInstallSelected()));
 		row.add("");
 		row.add(model.getSelectedNetbootProduct());
 

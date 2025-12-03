@@ -22,7 +22,7 @@ class RowValidationTests {
 
 	private List<Object> row(String hostname, String domain, String depot, String desc, String inv, String notes,
 			String ip, String uuid, String mac, String netboot, String shutdown, String wan, String groups) {
-		return List.of(hostname, domain, depot, desc, inv, notes, ip, uuid, mac, netboot, shutdown, wan, groups);
+		return List.of(hostname, domain, depot, mac, desc, inv, notes, uuid, ip, groups, wan, shutdown, netboot);
 	}
 
 	@Test
