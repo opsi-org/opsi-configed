@@ -142,6 +142,45 @@ class AddClientUpdateTest {
 	}
 
 	@Test
+	void shouldTriggerOpenCSVImportDailogEffect_whenCSVImportRequested() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ImportCSVRequested(), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.OpenCsvImportDialog.class, result.effect().get()));
+	}
+
+	@Test
+	void shouldTriggerOpenGroupSelectionDialogEffect_whenOpenGroupSelectionDialog() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.OpenGroupSelectionDialog(), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.OpenGroupSelectionDialog.class, result.effect().get()));
+	}
+
+	@Test
+	void shouldTriggerShowErrorMessageEffect_whenShowErrorMessage() {
+		AddClientModel model = baseModel();
+		String expectedTitle = "title";
+		String expectedMessage = "message";
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ShowError(expectedTitle, expectedMessage), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get()),
+				() -> assertEquals(expectedTitle,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect().get()).title()),
+				() -> assertEquals(expectedMessage,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect().get()).message()));
+	}
+
+	@Test
 	void shouldTriggerCreateMultipleClients_whenCSVImported() {
 		AddClientModel model = baseModel();
 		List<List<Object>> rows = new ArrayList<>();
@@ -170,6 +209,7 @@ class AddClientUpdateTest {
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.CreateClient(),
 				model);
 
+		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateMultipleClients.class,
 						result.effect().get()));
