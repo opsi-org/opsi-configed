@@ -93,23 +93,8 @@ final class AddClientUpdate {
 		row.add(Boolean.toString(model.isWanSelected()));
 		row.add(String.join(";", parseGroups(model.getGroups())));
 
-		for (RowValidation validator : VALIDATORS) {
-			RowValidation.Result r = validator.validate(row, model);
-
-			switch (r.type()) {
-			case SUCCESS -> {
-				continue;
-			}
-			case DROP -> {
-				return UpdateResult.withEffect(model, r.effect());
-			}
-			case PAUSE -> {
-				return UpdateResult.withEffect(model.withPendingSingleRow(row), r.effect());
-			}
-			}
-		}
-
-		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(List.of(row)));
+		BatchProcessor processor = new BatchProcessor(VALIDATORS);
+		return processor.processSingleRow(model, row);
 	}
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleOpenGroupSelectionDialogMsg(

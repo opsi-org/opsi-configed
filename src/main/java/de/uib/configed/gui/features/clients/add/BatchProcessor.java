@@ -35,15 +35,12 @@ public class BatchProcessor {
 
 				case SUCCESS -> {
 					// continue with next validator
-					continue;
 				}
-
 				case DROP -> {
 					// discard row, show effect
 					model = model.withRowsToImport(toImport);
 					return UpdateResult.withEffect(model, result.effect());
 				}
-
 				case PAUSE -> {
 					// keep row aside, pause import
 					model = model.withRowsToImport(toImport).withPendingSingleRow(row);
@@ -66,4 +63,31 @@ public class BatchProcessor {
 		Logging.devel(this, "rows ", finalRows);
 		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(finalRows));
 	}
+
+	public UpdateResult<AddClientModel, AddClientEffect> processSingleRow(AddClientModel model, List<Object> row) {
+		AddClientModel working = model;
+
+		for (RowValidation validator : validators) {
+			RowValidation.Result r = validator.validate(row, working);
+
+			switch (r.type()) {
+			case SUCCESS -> {
+				// continue to next validator
+			}
+			case DROP -> {
+				// Do NOT store pending row
+				return UpdateResult.withEffect(working, r.effect());
+			}
+			case PAUSE -> {
+				// Store the row as "pending"
+				working = working.withPendingSingleRow(row);
+				return UpdateResult.withEffect(working, r.effect());
+			}
+			}
+		}
+
+		// All validators passed → success
+		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(List.of(row)));
+	}
+
 }
