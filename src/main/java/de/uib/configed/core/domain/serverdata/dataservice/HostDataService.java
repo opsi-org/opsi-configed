@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
@@ -92,7 +93,7 @@ public class HostDataService {
 
 		for (List<Object> client : clients) {
 			String hostname = ((String) client.get(0)).trim();
-			String domainname = ((String) client.get(1)).trim();
+			String domain = ((String) client.get(1)).trim();
 			String depotId = ((String) client.get(2)).trim();
 			String macaddress = ((String) client.get(3)).trim();
 			String description = ((String) client.get(4)).trim();
@@ -109,7 +110,7 @@ public class HostDataService {
 			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
 			String netbootProduct = ((String) client.get(13)).trim();
 
-			String newClientId = hostname + "." + domainname;
+			String newClientId = hostname + "." + domain;
 
 			if (netbootProduct != null && !netbootProduct.isBlank()) {
 				addNetbootProductToList(netbootProduct, newClientId, productsNetbootJsonObject);
@@ -144,9 +145,23 @@ public class HostDataService {
 			hostInfo.setValues(hostItem);
 			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
+
+			prioritizeSelectedDomain(domain);
 		}
 
 		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
+	}
+
+	private void prioritizeSelectedDomain(String selectedDomain) {
+		List<String> domains = new ArrayList<>(configDataService.getDomains());
+
+		domains.remove(selectedDomain);
+		domains.add(0, selectedDomain);
+
+		List<Object> serialized = IntStream.range(0, domains.size()).mapToObj(i -> (Object) (i + ":" + domains.get(i)))
+				.toList();
+
+		configDataService.writeDomains(serialized);
 	}
 
 	private void addNetbootProductToList(String netbootProduct, String newClientId,

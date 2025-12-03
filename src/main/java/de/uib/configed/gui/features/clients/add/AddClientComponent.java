@@ -12,7 +12,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -192,8 +191,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
 		case AddClientEffect.ServiceEffect.LoadInitialData e -> loadInitialData();
-		case AddClientEffect.ServiceEffect.CreateMultipleClients e -> createClients(e.rows());
-		case AddClientEffect.ServiceEffect.SaveDomainsOrder e -> saveDomainsOrder(e.domains());
+		case AddClientEffect.ServiceEffect.CreateMultipleClients(List<List<Object>> rows) -> ServerActionManager
+				.createClients(rows);
 		}
 	}
 
@@ -555,51 +554,5 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 		dispatch(new AddClientMsg.InitialDataLoaded(domains, depots, netboots, hostnames, isWanActive,
 				defaultWanSelected, defaultShutdown));
-	}
-
-	private static void saveDomainsOrder(List<String> domains) {
-		List<Object> saveDomains = new ArrayList<>();
-		int order = 0;
-		for (String d : domains) {
-			saveDomains.add(order + ":" + d);
-			order++;
-		}
-		persistenceController.getConfigDataService().writeDomains(saveDomains);
-	}
-
-	private void createClients(List<List<Object>> clients) {
-		Iterator<List<Object>> iter = clients.iterator();
-		List<List<Object>> modifiedClients = new ArrayList<>();
-
-		while (iter.hasNext()) {
-			List<Object> client = iter.next();
-			String selectedDomain = (String) client.get(1);
-			treatSelectedDomainForNewClient(selectedDomain);
-			modifiedClients.add(client);
-		}
-
-		ServerActionManager.createClients(modifiedClients);
-	}
-
-	private void treatSelectedDomainForNewClient(final String selectedDomain) {
-		List<String> domains = new ArrayList<>(model.getDomains());
-		List<String> editableDomains = new ArrayList<>();
-		List<Object> saveDomains = new ArrayList<>();
-		int order = 0;
-		saveDomains.add("" + order + ":" + selectedDomain);
-		editableDomains.add(selectedDomain);
-
-		domains.remove(selectedDomain);
-
-		for (String domain : domains) {
-			order++;
-			saveDomains.add("" + order + ":" + domain);
-			editableDomains.add(domain);
-		}
-
-		this.model = model.toBuilder().domains(editableDomains).selectedDomain(selectedDomain).build();
-		refreshView();
-
-		persistenceController.getConfigDataService().writeDomains(saveDomains);
 	}
 }

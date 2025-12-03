@@ -81,25 +81,6 @@ public final class ServerActionManager {
 		}
 	}
 
-	public static void createClient(String newClientID, final String[] groups) {
-		Logging.checkErrorList();
-		isLocalChangeInProgress.set(true);
-		try {
-			persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
-
-			configedMain.setRebuiltClientListTableModel(true, true);
-
-			if (groups.length == 0 || groups.length > 1 || !configedMain.activateGroup(false, groups[0])) {
-				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-			}
-
-			// Sets the client on the table
-			configedMain.setClient(newClientID);
-		} finally {
-			isLocalChangeInProgress.set(false);
-		}
-	}
-
 	public static void wakeSelectedClients() {
 		Logging.info("wakeUp ", configedMain.getSelectedClients().size());
 		if (configedMain.getSelectedClients().isEmpty()) {
