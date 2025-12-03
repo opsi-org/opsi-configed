@@ -91,10 +91,13 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
 		buttonCreate.addActionListener(actionEvent -> dispatch(new AddClientMsg.CreateClient()));
 
+		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
+		buttonClose.addActionListener(actionEvent -> dispatch(new AddClientMsg.CloseDialog()));
+
 		JScrollPane scrollPane = new JScrollPane(createPanel(dispatch));
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-				null, new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
+				null, new Object[] { buttonCreate, buttonClose });
 		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
@@ -199,6 +202,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	public void show() {
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialog.setVisible(true);
+		dialog.pack();
 	}
 
 	private JPanel createPanel(Consumer<AddClientMsg> dispatch) {
