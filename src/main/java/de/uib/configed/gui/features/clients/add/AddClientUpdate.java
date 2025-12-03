@@ -81,16 +81,17 @@ final class AddClientUpdate {
 		row.add(model.getHostname());
 		row.add(model.getSelectedDomain());
 		row.add(model.getSelectedDepot());
+		row.add(model.getMacAddress());
 		row.add(model.getDescription());
 		row.add(model.getInventoryNumber());
 		row.add(model.getNotes());
-		row.add(model.getIpAddress());
 		row.add(model.getSystemUUID());
-		row.add(model.getMacAddress());
-		row.add(model.getSelectedNetbootProduct());
+		row.add(model.getIpAddress());
+		row.add(String.join(",", parseGroups(model.getGroups())));
 		row.add(Boolean.toString(model.isShutdownInstallSelected()));
 		row.add(Boolean.toString(model.isWanSelected()));
-		row.add(String.join(";", parseGroups(model.getGroups())));
+		row.add("");
+		row.add(model.getSelectedNetbootProduct());
 
 		BatchProcessor processor = new BatchProcessor(VALIDATORS);
 		return processor.processSingleRow(model, row);
@@ -98,7 +99,7 @@ final class AddClientUpdate {
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleOpenGroupSelectionDialogMsg(
 			AddClientModel model) {
-		List<String> preselected = Arrays.asList(model.getGroups().replace("; ", ";").split(";"));
+		List<String> preselected = Arrays.asList(parseGroups(model.getGroups()));
 		return UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.OpenGroupSelectionDialog(new ArrayList<>(), preselected));
 	}

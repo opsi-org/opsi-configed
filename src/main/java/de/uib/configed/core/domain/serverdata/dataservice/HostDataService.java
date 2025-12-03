@@ -107,8 +107,13 @@ public class HostDataService {
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
 			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
+			String netbootProduct = ((String) client.get(13)).trim();
 
 			String newClientId = hostname + "." + domainname;
+
+			if (netbootProduct != null && !netbootProduct.isBlank()) {
+				addNetbootProductToList(netbootProduct, newClientId, productsNetbootJsonObject);
+			}
 
 			Map<String, Object> hostItem = new HashMap<>();
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
@@ -142,6 +147,17 @@ public class HostDataService {
 		}
 
 		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
+	}
+
+	private void addNetbootProductToList(String netbootProduct, String newClientId,
+			List<Map<String, Object>> productsNetbootJsonObject) {
+		Logging.info(this, "createClient productNetboot ", netbootProduct);
+		Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
+		itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, netbootProduct);
+		itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		itemProducts.put("clientId", newClientId);
+		itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
+		productsNetbootJsonObject.add(itemProducts);
 	}
 
 	private void addGroupsToList(String groupsAsString, String newClientId,
