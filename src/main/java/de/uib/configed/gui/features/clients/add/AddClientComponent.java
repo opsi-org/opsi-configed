@@ -192,7 +192,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
 		case AddClientEffect.ServiceEffect.LoadInitialData e -> loadInitialData();
-		case AddClientEffect.ServiceEffect.CreateSingleClient e -> createClients(fromSingle(e));
 		case AddClientEffect.ServiceEffect.CreateMultipleClients e -> createClients(e.rows());
 		case AddClientEffect.ServiceEffect.SaveDomainsOrder e -> saveDomainsOrder(e.domains());
 		}
@@ -580,26 +579,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		}
 
 		ServerActionManager.createClients(modifiedClients);
-	}
-
-	private List<List<Object>> fromSingle(AddClientEffect.ServiceEffect.CreateSingleClient e) {
-		List<Object> row = new ArrayList<>();
-		row.add(e.hostname());
-		row.add(e.domain());
-		row.add(e.depotID());
-		row.add(e.description());
-		row.add(e.inventoryNumber());
-		row.add(e.notes());
-		row.add(e.ipAddress());
-		row.add(e.systemUUID());
-		row.add(e.macAddress());
-		row.add(e.netbootProduct());
-		row.add(Boolean.toString(e.shutdownInstall()));
-		row.add(Boolean.toString(e.wanConfig()));
-		row.add(String.join(";", e.groups()));
-		List<List<Object>> rows = new ArrayList<>();
-		rows.add(row);
-		return rows;
 	}
 
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {

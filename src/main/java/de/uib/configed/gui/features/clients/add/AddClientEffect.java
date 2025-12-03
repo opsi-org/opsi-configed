@@ -35,15 +35,9 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 		}
 	}
 
-	sealed interface ServiceEffect extends AddClientEffect permits ServiceEffect.LoadInitialData,
-			ServiceEffect.CreateSingleClient, ServiceEffect.CreateMultipleClients, ServiceEffect.SaveDomainsOrder {
+	sealed interface ServiceEffect extends AddClientEffect
+			permits ServiceEffect.LoadInitialData, ServiceEffect.CreateMultipleClients, ServiceEffect.SaveDomainsOrder {
 		record LoadInitialData() implements ServiceEffect {
-		}
-
-		record CreateSingleClient(String hostname, String domain, String depotID, String description,
-				String inventoryNumber, String notes, String ipAddress, String systemUUID, String macAddress,
-				boolean shutdownInstall, boolean wanConfig, String[] groups, String netbootProduct)
-				implements ServiceEffect {
 		}
 
 		record CreateMultipleClients(List<List<Object>> rows) implements ServiceEffect {
