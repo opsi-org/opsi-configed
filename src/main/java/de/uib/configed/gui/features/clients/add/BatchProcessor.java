@@ -35,7 +35,6 @@ public class BatchProcessor {
 
 				case SUCCESS -> {
 					// continue with next validator
-					continue;
 				}
 
 				case DROP -> {

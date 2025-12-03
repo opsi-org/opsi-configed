@@ -21,11 +21,6 @@ public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Sear
 	}
 
 	record ParseLogRequested(String text, boolean resetCaret) implements LogPaneMsg {
-		public ParseLogRequested(String text, boolean resetCaret) {
-			this.text = text;
-			this.resetCaret = resetCaret;
-		}
-
 		public ParseLogRequested(String text) {
 			this(text, false);
 		}

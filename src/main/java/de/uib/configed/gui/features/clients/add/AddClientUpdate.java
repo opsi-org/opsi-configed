@@ -98,7 +98,7 @@ final class AddClientUpdate {
 
 			switch (r.type()) {
 			case SUCCESS -> {
-				continue;
+				// Do nothing, continue validation
 			}
 			case DROP -> {
 				return UpdateResult.withEffect(model, r.effect());

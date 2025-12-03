@@ -582,7 +582,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		ServerActionManager.createClients(modifiedClients);
 	}
 
-	private List<List<Object>> fromSingle(AddClientEffect.ServiceEffect.CreateSingleClient e) {
+	private static List<List<Object>> fromSingle(AddClientEffect.ServiceEffect.CreateSingleClient e) {
 		List<Object> row = new ArrayList<>();
 		row.add(e.hostname());
 		row.add(e.domain());

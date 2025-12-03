@@ -484,8 +484,9 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 				int j = 0;
 				for (Integer col : genEditTable.getGenTableModel().getFinalCols()) {
-					partialkeys[j++] = genEditTable.getValueAt(genEditTable.convertRowIndexToModel(viewrow), col)
+					partialkeys[j] = genEditTable.getValueAt(genEditTable.convertRowIndexToModel(viewrow), col)
 							.toString();
+					j++;
 				}
 
 				if (keyValue.equals(Utils.pseudokey(partialkeys))) {
