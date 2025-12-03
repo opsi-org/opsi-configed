@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.RowValidation;
-import de.uib.configed.share.logging.Logging;
 
 public class BatchProcessor {
 
@@ -34,7 +33,7 @@ public class BatchProcessor {
 				switch (result.type()) {
 
 				case SUCCESS -> {
-					// continue with next validator
+					// continue to next validator
 				}
 				case DROP -> {
 					// discard row, show effect
@@ -49,18 +48,15 @@ public class BatchProcessor {
 				}
 			}
 
-			// Row passed all validators
 			List<List<Object>> accepted = new ArrayList<>(model.getAcceptedRows());
 			accepted.add(row);
 			model = model.withAcceptedRows(accepted);
 		}
 
-		// Finished
 		List<List<Object>> finalRows = new ArrayList<>(model.getAcceptedRows());
-		model = model.withAcceptedRows(new ArrayList<>()).withRowsToImport(new ArrayList<>())
-				.withPendingSingleRow(new ArrayList<>());
+		model = model.toBuilder().acceptedRows(new ArrayList<>()).rowsToImport(new ArrayList<>())
+				.pendingSingleRow(new ArrayList<>()).build();
 
-		Logging.devel(this, "rows ", finalRows);
 		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(finalRows));
 	}
 
