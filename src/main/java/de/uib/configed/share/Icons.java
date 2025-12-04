@@ -7,9 +7,7 @@
 package de.uib.configed.share;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
@@ -356,29 +354,5 @@ public final class Icons {
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(100, 36);
-	}
-
-	public static ImageIcon getReloadButton(String iconName, int size) {
-		return getReloadButton(getIntellijIcon(iconName, size), size);
-	}
-
-	public static ImageIcon getOpsiReloadIcon(int size) {
-		return getReloadButton(getOpsiThemeIcon(size), size);
-	}
-
-	private static ImageIcon getReloadButton(ImageIcon icon, int size) {
-		FlatSVGIcon refreshIcon = getIntellijIcon("refresh", size / 2);
-
-		BufferedImage iconBufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D iconBufferedGraphics = iconBufferedImage.createGraphics();
-
-		iconBufferedGraphics.drawImage(icon.getImage(), 0, 0, null);
-
-		iconBufferedGraphics.setBackground(new Color(255, 255, 255, 0));
-		iconBufferedGraphics.clearRect(size / 2, size / 2, size / 2, size / 2);
-
-		iconBufferedGraphics.drawImage(refreshIcon.getImage(), size / 2, size / 2, null);
-
-		return new ImageIcon(iconBufferedImage);
 	}
 }
