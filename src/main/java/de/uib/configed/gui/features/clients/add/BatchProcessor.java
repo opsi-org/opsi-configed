@@ -82,7 +82,6 @@ public class BatchProcessor {
 			}
 		}
 
-		// All validators passed → success
 		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(List.of(row)));
 	}
 

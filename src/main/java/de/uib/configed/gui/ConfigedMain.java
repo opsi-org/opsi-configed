@@ -1061,16 +1061,8 @@ public class ConfigedMain {
 		fetchDepots();
 
 		// if depot selection changed, we adapt the clients
-		Set<String> clientsLeft = new TreeSet<>();
-		for (String client : selValuesList) {
-			String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client);
-
-			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
-				clientsLeft.add(client);
-			}
-		}
-
-		selectedClients = new ArrayList<>(clientsLeft);
+		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(selValuesList);
+		selectedClients = clientsLeft;
 
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
@@ -1149,16 +1141,32 @@ public class ConfigedMain {
 
 	public void reloadHosts() {
 		mainFrame.activateLoadingCursor();
+		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(
+				clientTablePanel.getClientTable().getSelectedSet());
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 		updateHostInfo();
 
 		hostInfo.resetGui();
-		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
-				hostInfo);
 		clientTablePanel.restoreFilter();
+		this.selectedClients = clientsLeft;
+		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(),
+				this.selectedClients, hostInfo);
+		clientTablePanel.setSelectedValues(this.selectedClients);
 
 		mainFrame.deactivateLoadingCursor();
+	}
+
+	private List<String> getClientSelectionBasedOnDepotSelection(Set<String> selValuesList) {
+		List<String> clientsLeft = new ArrayList<>();
+		for (String client : selValuesList) {
+			String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client);
+
+			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
+				clientsLeft.add(client);
+			}
+		}
+		return clientsLeft;
 	}
 
 	public void invertSelection() {
