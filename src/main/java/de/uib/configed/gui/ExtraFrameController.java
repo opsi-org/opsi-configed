@@ -96,7 +96,7 @@ public final class ExtraFrameController {
 			addClientComponent.initUI();
 		}
 
-		addClientComponent.dispatch(new AddClientMsg.LoadInitialDataRequested());
+		addClientComponent.dispatch(new AddClientMsg.ActionMsg.LoadInitialDataRequested());
 		addClientComponent.show();
 	}
 

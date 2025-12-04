@@ -27,36 +27,64 @@ final class AddClientUpdate {
 	@SuppressWarnings({ "java:S103", "java:S1541" })
 	static UpdateResult<AddClientModel, AddClientEffect> update(AddClientMsg msg, AddClientModel model) {
 		return switch (msg) {
-		case AddClientMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
+		case AddClientMsg.FieldChangeMsg m -> handleFieldChangeMsg(m, model);
+		case AddClientMsg.ActionMsg m -> handleActionMsg(m, model);
+		case AddClientMsg.UIMsg m -> handleUIMsg(m, model);
+		};
+	}
+
+	@SuppressWarnings("java:S1541")
+	private static UpdateResult<AddClientModel, AddClientEffect> handleFieldChangeMsg(AddClientMsg.FieldChangeMsg msg,
+			AddClientModel model) {
+		return switch (msg) {
+		case AddClientMsg.FieldChangeMsg.ChangeHostname(String v) -> UpdateResult.noEffect(model.withHostname(v));
+		case AddClientMsg.FieldChangeMsg.ChangeDomain(String v) -> UpdateResult.noEffect(model.withSelectedDomain(v));
+		case AddClientMsg.FieldChangeMsg.ChangeDescription(String v) -> UpdateResult.noEffect(model.withDescription(v));
+		case AddClientMsg.FieldChangeMsg.ChangeInventory(String v) -> UpdateResult
+				.noEffect(model.withInventoryNumber(v));
+		case AddClientMsg.FieldChangeMsg.ChangeNotes(String v) -> UpdateResult.noEffect(model.withNotes(v));
+		case AddClientMsg.FieldChangeMsg.ChangeSystemUUID(String v) -> UpdateResult.noEffect(model.withSystemUUID(v));
+		case AddClientMsg.FieldChangeMsg.ChangeMAC(String v) -> UpdateResult.noEffect(model.withMacAddress(v));
+		case AddClientMsg.FieldChangeMsg.ChangeIP(String v) -> UpdateResult.noEffect(model.withIpAddress(v));
+		case AddClientMsg.FieldChangeMsg.ChangeGroups(String v) -> UpdateResult.noEffect(model.withGroups(v));
+		case AddClientMsg.FieldChangeMsg.ChangeDepot(String v) -> UpdateResult.noEffect(model.withSelectedDepot(v));
+		case AddClientMsg.FieldChangeMsg.ChangeNetboot(String v) -> UpdateResult
+				.noEffect(model.withSelectedNetbootProduct(v));
+		case AddClientMsg.FieldChangeMsg.ToggleWanSelected(boolean b) -> UpdateResult
+				.noEffect(model.withWanSelected(b));
+		case AddClientMsg.FieldChangeMsg.ToggleShutdownInstall(boolean b) -> UpdateResult
+				.noEffect(model.withShutdownInstallSelected(b));
+		};
+	}
+
+	@SuppressWarnings("java:S103")
+	private static UpdateResult<AddClientModel, AddClientEffect> handleActionMsg(AddClientMsg.ActionMsg msg,
+			AddClientModel model) {
+		return switch (msg) {
+		case AddClientMsg.ActionMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
 				new AddClientEffect.ServiceEffect.LoadInitialData());
-		case AddClientMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
+		case AddClientMsg.ActionMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
 				.noEffect(model.toBuilder().domains(domains).depots(depots).netbootProducts(netboots)
 						.hostnames(hostnames).wanEnabled(isWanActive).wanSelected(isWanActive && defaultWanSelected)
 						.shutdownInstallSelected(defaultShutdown)
 						.selectedDomain(domains.isEmpty() ? "" : domains.get(0)).build());
-		case AddClientMsg.ChangeHostname(String v) -> UpdateResult.noEffect(model.withHostname(v));
-		case AddClientMsg.ChangeDomain(String v) -> UpdateResult.noEffect(model.withSelectedDomain(v));
-		case AddClientMsg.ChangeDescription(String v) -> UpdateResult.noEffect(model.withDescription(v));
-		case AddClientMsg.ChangeInventory(String v) -> UpdateResult.noEffect(model.withInventoryNumber(v));
-		case AddClientMsg.ChangeNotes(String v) -> UpdateResult.noEffect(model.withNotes(v));
-		case AddClientMsg.ChangeSystemUUID(String v) -> UpdateResult.noEffect(model.withSystemUUID(v));
-		case AddClientMsg.ChangeMAC(String v) -> UpdateResult.noEffect(model.withMacAddress(v));
-		case AddClientMsg.ChangeIP(String v) -> UpdateResult.noEffect(model.withIpAddress(v));
-		case AddClientMsg.ChangeGroups(String v) -> UpdateResult.noEffect(model.withGroups(v));
-		case AddClientMsg.ChangeDepot(String v) -> UpdateResult.noEffect(model.withSelectedDepot(v));
-		case AddClientMsg.ChangeNetboot(String v) -> UpdateResult.noEffect(model.withSelectedNetbootProduct(v));
-		case AddClientMsg.ToggleWanSelected(boolean b) -> UpdateResult.noEffect(model.withWanSelected(b));
-		case AddClientMsg.ToggleShutdownInstall(boolean b) -> UpdateResult
-				.noEffect(model.withShutdownInstallSelected(b));
-		case AddClientMsg.OpenGroupSelectionDialog() -> handleOpenGroupSelectionDialogMsg(model);
-		case AddClientMsg.CSVImportRequested() -> UpdateResult.withEffect(model,
+		case AddClientMsg.ActionMsg.CSVImportRequested() -> UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.OpenCSVImportDialog());
-		case AddClientMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(model, rows,
-				includeRow);
-		case AddClientMsg.CreateClient() -> handleCreateClientMsg(model);
-		case AddClientMsg.ShowError(String title, String message) -> UpdateResult.withEffect(model,
+		case AddClientMsg.ActionMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(
+				model, rows, includeRow);
+		case AddClientMsg.ActionMsg.CreateClient() -> handleCreateClientMsg(model);
+		case AddClientMsg.ActionMsg.CloseDialog() -> UpdateResult.withEffect(model,
+				new AddClientEffect.UIEffect.CloseDialog());
+		};
+	}
+
+	private static UpdateResult<AddClientModel, AddClientEffect> handleUIMsg(AddClientMsg.UIMsg msg,
+			AddClientModel model) {
+		return switch (msg) {
+		case AddClientMsg.UIMsg.OpenGroupSelectionDialog() -> handleOpenGroupSelectionDialogMsg(model);
+
+		case AddClientMsg.UIMsg.ShowError(String title, String message) -> UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.ShowErrorMessage(title, message));
-		case AddClientMsg.CloseDialog() -> UpdateResult.withEffect(model, new AddClientEffect.UIEffect.CloseDialog());
 		};
 	}
 

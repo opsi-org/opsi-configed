@@ -89,10 +89,10 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		Logging.info(this, "initializing new client component");
 
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
-		buttonCreate.addActionListener(actionEvent -> dispatch(new AddClientMsg.CreateClient()));
+		buttonCreate.addActionListener(actionEvent -> dispatch(new AddClientMsg.ActionMsg.CreateClient()));
 
 		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
-		buttonClose.addActionListener(actionEvent -> dispatch(new AddClientMsg.CloseDialog()));
+		buttonClose.addActionListener(actionEvent -> dispatch(new AddClientMsg.ActionMsg.CloseDialog()));
 
 		JScrollPane scrollPane = new JScrollPane(createPanel(dispatch));
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -167,7 +167,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
 		int answer = JOptionPane.showConfirmDialog(dialog, message.toString(),
 				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), JOptionPane.YES_NO_OPTION);
-		dispatch(new AddClientMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
+		dispatch(new AddClientMsg.ActionMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
 	}
 
 	private void handleShowOverwriteDepotDialogEffect(String opsiHostKey) {
@@ -181,7 +181,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"),
 				Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
 				JOptionPane.YES_NO_OPTION);
-		dispatch(new AddClientMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
+		dispatch(new AddClientMsg.ActionMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
 	}
 
 	private void handleCloseDialogEffect() {
@@ -216,37 +216,37 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
 				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-		jTextHostname.getDocument().addDocumentListener(
-				Utils.onDocumentChange(e -> dispatch.accept(new AddClientMsg.ChangeHostname(jTextHostname.getText()))));
+		jTextHostname.getDocument().addDocumentListener(Utils.onDocumentChange(
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeHostname(jTextHostname.getText()))));
 
 		JLabel jLabelDomainname = new JLabel(Configed.getResourceValue("NewClientDialog.domain"));
 		jLabelDomainname.setFont(jLabelDomainname.getFont().deriveFont(Font.BOLD));
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
-		jComboDomain.addActionListener(
-				a -> dispatch.accept(new AddClientMsg.ChangeDomain((String) jComboDomain.getSelectedItem())));
+		jComboDomain.addActionListener(a -> dispatch
+				.accept(new AddClientMsg.FieldChangeMsg.ChangeDomain((String) jComboDomain.getSelectedItem())));
 
 		JLabel jLabelDescription = new JLabel(Configed.getResourceValue("description"));
 		jLabelDescription.setFont(jLabelDescription.getFont().deriveFont(Font.BOLD));
 
 		JTextField jTextDescription = new JTextField();
 		jTextDescription.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.ChangeDescription(jTextDescription.getText()))));
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeDescription(jTextDescription.getText()))));
 
 		JLabel jLabelInventoryNumber = new JLabel(Configed.getResourceValue("NewClientDialog.inventorynumber"));
 		jLabelInventoryNumber.setFont(jLabelInventoryNumber.getFont().deriveFont(Font.BOLD));
 
 		JTextField jTextInventoryNumber = new JTextField();
 		jTextInventoryNumber.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.ChangeInventory(jTextInventoryNumber.getText()))));
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeInventory(jTextInventoryNumber.getText()))));
 
 		JLabel jLabelDepot = new JLabel(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
 		jLabelDepot.setFont(jLabelDepot.getFont().deriveFont(Font.BOLD));
 
 		jComboDepots = new JComboBox<>();
-		jComboDepots.addActionListener(
-				a -> dispatch.accept(new AddClientMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
+		jComboDepots.addActionListener(a -> dispatch
+				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
 		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		labelGroupSelection.setFont(labelGroupSelection.getFont().deriveFont(Font.BOLD));
@@ -256,7 +256,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextGroupSelection.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				dispatch.accept(new AddClientMsg.OpenGroupSelectionDialog());
+				dispatch.accept(new AddClientMsg.UIMsg.OpenGroupSelectionDialog());
 			}
 		});
 
@@ -266,8 +266,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JTextArea jTextNotes = new JTextArea();
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
-		jTextNotes.getDocument().addDocumentListener(Utils
-				.onDocumentChange(e -> dispatch.accept(new AddClientMsg.ChangeNotes(jTextNotes.getText().trim()))));
+		jTextNotes.getDocument().addDocumentListener(Utils.onDocumentChange(
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
 
 		JScrollPane jTextNodesScrollPane = new JScrollPane(jTextNotes);
 		jTextNodesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
@@ -278,8 +278,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JTextField systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
 				Character.MIN_VALUE, 36, true), "", 36);
-		systemUUIDField.getDocument().addDocumentListener(Utils
-				.onDocumentChange(e -> dispatch.accept(new AddClientMsg.ChangeSystemUUID(systemUUIDField.getText()))));
+		systemUUIDField.getDocument().addDocumentListener(Utils.onDocumentChange(
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID(systemUUIDField.getText()))));
 
 		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
 		jLabelMacAddress.setIcon(Icons.getIntellijIcon("info"));
@@ -289,8 +289,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JTextField macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
 				2, true), "", 17);
-		macAddressField.getDocument().addDocumentListener(
-				Utils.onDocumentChange(e -> dispatch.accept(new AddClientMsg.ChangeMAC(macAddressField.getText()))));
+		macAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeMAC(macAddressField.getText()))));
 
 		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		jLabelIpAddress.setIcon(Icons.getIntellijIcon("info"));
@@ -300,25 +300,26 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JTextField ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
-		ipAddressField.getDocument().addDocumentListener(
-				Utils.onDocumentChange(e -> dispatch.accept(new AddClientMsg.ChangeIP(ipAddressField.getText()))));
+		ipAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
+				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeIP(ipAddressField.getText()))));
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
-		jCheckShutdownInstall.addActionListener(
-				a -> dispatch.accept(new AddClientMsg.ToggleShutdownInstall(jCheckShutdownInstall.isSelected())));
+		jCheckShutdownInstall.addActionListener(a -> dispatch
+				.accept(new AddClientMsg.FieldChangeMsg.ToggleShutdownInstall(jCheckShutdownInstall.isSelected())));
 
 		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
-		jCheckWan.addActionListener(a -> dispatch.accept(new AddClientMsg.ToggleWanSelected(jCheckWan.isSelected())));
+		jCheckWan.addActionListener(
+				a -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ToggleWanSelected(jCheckWan.isSelected())));
 
 		jComboDepots = new JComboBox<>();
-		jComboDepots.addActionListener(
-				a -> dispatch.accept(new AddClientMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
+		jComboDepots.addActionListener(a -> dispatch
+				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
 		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 		jLabelNetboot.setFont(jLabelNetboot.getFont().deriveFont(Font.BOLD));
 		jComboNetboot = new JComboBox<>();
-		jComboNetboot.addActionListener(
-				a -> dispatch.accept(new AddClientMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));
+		jComboNetboot.addActionListener(a -> dispatch
+				.accept(new AddClientMsg.FieldChangeMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));
 
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
@@ -464,7 +465,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Icons.getIntellijIcon("open"));
-		jImportButton.addActionListener(actionEvent -> dispatch.accept(new AddClientMsg.CSVImportRequested()));
+		jImportButton
+				.addActionListener(actionEvent -> dispatch.accept(new AddClientMsg.ActionMsg.CSVImportRequested()));
 
 		JPanel northPanel = new JPanel();
 		final GroupLayout northLayout = new GroupLayout(northPanel);
@@ -510,7 +512,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 			jTextGroupSelection.setText(selectedGroups);
 			jTextGroupSelection.setToolTipText(
 					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");
-			dispatch(new AddClientMsg.ChangeGroups(selectedGroups));
+			dispatch(new AddClientMsg.FieldChangeMsg.ChangeGroups(selectedGroups));
 		}
 	}
 
@@ -537,7 +539,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 			if (csvImportDataDialog.show()) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
-				dispatch(new AddClientMsg.CSVImported(rows, false));
+				dispatch(new AddClientMsg.ActionMsg.CSVImported(rows, false));
 			}
 		}
 	}
@@ -556,7 +558,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		boolean defaultShutdown = persistenceController.getConfigDataService()
 				.isInstallByShutdownConfiguredOnConfigserver();
 
-		dispatch(new AddClientMsg.InitialDataLoaded(domains, depots, netboots, hostnames, isWanActive,
+		dispatch(new AddClientMsg.ActionMsg.InitialDataLoaded(domains, depots, netboots, hostnames, isWanActive,
 				defaultWanSelected, defaultShutdown));
 	}
 }
