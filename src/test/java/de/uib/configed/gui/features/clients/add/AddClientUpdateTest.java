@@ -72,73 +72,133 @@ class AddClientUpdateTest {
 	}
 
 	@Test
-	void shouldUpdateSimpleFields_whenChangeMessages() {
+	void shouldUpdateHostname_whenChangeHostname() {
 		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeHostname("h"), model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r1 = AddClientUpdate.update(new AddClientMsg.ChangeHostname("h"),
+		assertEquals("h", result.model().getHostname());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateDomain_whenChangeDomain() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeDomain("d"), model);
+
+		assertEquals("d", result.model().getSelectedDomain());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateDescription_whenChangeDescription() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeDescription("desc"), model);
+
+		assertEquals("desc", result.model().getDescription());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateInventory_whenChangeInventory() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeInventory("inv"), model);
+
+		assertEquals("inv", result.model().getInventoryNumber());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateNotes_whenChangeNotes() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.ChangeNotes("n"),
 				model);
-		assertEquals("h", r1.model().getHostname());
-		assertFalse(r1.effect().isPresent());
 
-		UpdateResult<AddClientModel, AddClientEffect> r2 = AddClientUpdate.update(new AddClientMsg.ChangeDomain("d"),
-				r1.model());
-		assertEquals("d", r2.model().getSelectedDomain());
-		assertFalse(r2.effect().isPresent());
+		assertEquals("n", result.model().getNotes());
+		assertFalse(result.effect().isPresent());
+	}
 
-		UpdateResult<AddClientModel, AddClientEffect> r3 = AddClientUpdate
-				.update(new AddClientMsg.ChangeDescription("desc"), r2.model());
-		assertEquals("desc", r3.model().getDescription());
-		assertFalse(r3.effect().isPresent());
+	@Test
+	void shouldUpdateSystemUUID_whenChangeSystemUUID() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeSystemUUID("uuid"), model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r4 = AddClientUpdate
-				.update(new AddClientMsg.ChangeInventory("inv"), r3.model());
-		assertEquals("inv", r4.model().getInventoryNumber());
-		assertFalse(r4.effect().isPresent());
+		assertEquals("uuid", result.model().getSystemUUID());
+		assertFalse(result.effect().isPresent());
+	}
 
-		UpdateResult<AddClientModel, AddClientEffect> r5 = AddClientUpdate.update(new AddClientMsg.ChangeNotes("n"),
-				r4.model());
-		assertEquals("n", r5.model().getNotes());
-		assertFalse(r5.effect().isPresent());
+	@Test
+	void shouldUpdateMacAddress_whenChangeMAC() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.ChangeMAC("mac"),
+				model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r6 = AddClientUpdate
-				.update(new AddClientMsg.ChangeSystemUUID("uuid"), r5.model());
-		assertEquals("uuid", r6.model().getSystemUUID());
-		assertFalse(r6.effect().isPresent());
+		assertEquals("mac", result.model().getMacAddress());
+		assertFalse(result.effect().isPresent());
+	}
 
-		UpdateResult<AddClientModel, AddClientEffect> r7 = AddClientUpdate.update(new AddClientMsg.ChangeMAC("mac"),
-				r6.model());
-		assertEquals("mac", r7.model().getMacAddress());
-		assertFalse(r7.effect().isPresent());
+	@Test
+	void shouldUpdateIpAddress_whenChangeIP() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.ChangeIP("ip"),
+				model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r8 = AddClientUpdate.update(new AddClientMsg.ChangeIP("ip"),
-				r7.model());
-		assertEquals("ip", r8.model().getIpAddress());
-		assertFalse(r8.effect().isPresent());
+		assertEquals("ip", result.model().getIpAddress());
+		assertFalse(result.effect().isPresent());
+	}
 
-		UpdateResult<AddClientModel, AddClientEffect> r9 = AddClientUpdate
-				.update(new AddClientMsg.ChangeGroups("g1; g2"), r8.model());
-		assertEquals("g1; g2", r9.model().getGroups());
-		assertFalse(r9.effect().isPresent());
+	@Test
+	void shouldUpdateGroups_whenChangeGroups() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeGroups("g1; g2"), model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r10 = AddClientUpdate.update(new AddClientMsg.ChangeDepot("d1"),
-				r9.model());
-		assertEquals("d1", r10.model().getSelectedDepot());
-		assertFalse(r10.effect().isPresent());
+		assertEquals("g1; g2", result.model().getGroups());
+		assertFalse(result.effect().isPresent());
+	}
 
-		UpdateResult<AddClientModel, AddClientEffect> r11 = AddClientUpdate
-				.update(new AddClientMsg.ChangeNetboot("nb1"), r10.model());
-		assertEquals("nb1", r11.model().getSelectedNetbootProduct());
-		assertFalse(r11.effect().isPresent());
+	@Test
+	void shouldUpdateDepot_whenChangeDepot() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeDepot("d1"), model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r12 = AddClientUpdate
-				.update(new AddClientMsg.ToggleWanSelected(true), r11.model());
-		assertTrue(r12.model().isWanSelected());
-		assertFalse(r12.effect().isPresent());
+		assertEquals("d1", result.model().getSelectedDepot());
+		assertFalse(result.effect().isPresent());
+	}
 
-		UpdateResult<AddClientModel, AddClientEffect> r13 = AddClientUpdate
-				.update(new AddClientMsg.ToggleShutdownInstall(true), r12.model());
-		assertTrue(r13.model().isShutdownInstallSelected());
-		assertFalse(r13.effect().isPresent());
+	@Test
+	void shouldUpdateNetboot_whenChangeNetboot() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ChangeNetboot("nb1"), model);
+
+		assertEquals("nb1", result.model().getSelectedNetbootProduct());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateWanSelected_whenToggleWanSelected() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ToggleWanSelected(true), model);
+
+		assertTrue(result.model().isWanSelected());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateShutdownInstall_whenToggleShutdownInstall() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ToggleShutdownInstall(true), model);
+
+		assertTrue(result.model().isShutdownInstallSelected());
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test

@@ -12,7 +12,6 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 	sealed interface UIEffect extends AddClientEffect permits UIEffect.ShowOverwriteHostDialog,
 			UIEffect.ShowOverwriteDepotDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCsvImportDialog,
 			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage, UIEffect.CloseDialog {
-		// dialogs
 		record ShowOverwriteHostDialog(String opsiHostKey) implements UIEffect {
 		}
 
