@@ -150,7 +150,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		case AddClientEffect.UIEffect.ShowOverwriteDepotDialog(String opsiHostKey) -> handleShowOverwriteDepotDialogEffect(
 				opsiHostKey);
 		case AddClientEffect.UIEffect.ShowNetbiosConfirmDialog e -> handleShowNetbiosConfirmDialogEffect();
-		case AddClientEffect.UIEffect.OpenCsvImportDialog e -> importCSV();
+		case AddClientEffect.UIEffect.OpenCSVImportDialog e -> importCSV();
 		case AddClientEffect.UIEffect.OpenGroupSelectionDialog e -> displayGroupSelectionDialog();
 		case AddClientEffect.UIEffect.ShowErrorMessage e -> JOptionPane.showMessageDialog(dialog, e.message(),
 				e.title(), JOptionPane.ERROR_MESSAGE);
@@ -194,7 +194,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
 		case AddClientEffect.ServiceEffect.LoadInitialData e -> loadInitialData();
-		case AddClientEffect.ServiceEffect.CreateMultipleClients(List<List<Object>> rows) -> ServerActionManager
+		case AddClientEffect.ServiceEffect.CreateClients(List<List<Object>> rows) -> ServerActionManager
 				.createClients(rows);
 		}
 	}
@@ -464,7 +464,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Icons.getIntellijIcon("open"));
-		jImportButton.addActionListener(actionEvent -> dispatch.accept(new AddClientMsg.ImportCSVRequested()));
+		jImportButton.addActionListener(actionEvent -> dispatch.accept(new AddClientMsg.CSVImportRequested()));
 
 		JPanel northPanel = new JPanel();
 		final GroupLayout northLayout = new GroupLayout(northPanel);

@@ -24,7 +24,7 @@ final class AddClientUpdate {
 	private AddClientUpdate() {
 	}
 
-	@SuppressWarnings("java:S103")
+	@SuppressWarnings({ "java:S103", "java:S1541" })
 	static UpdateResult<AddClientModel, AddClientEffect> update(AddClientMsg msg, AddClientModel model) {
 		return switch (msg) {
 		case AddClientMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
@@ -49,8 +49,8 @@ final class AddClientUpdate {
 		case AddClientMsg.ToggleShutdownInstall(boolean b) -> UpdateResult
 				.noEffect(model.withShutdownInstallSelected(b));
 		case AddClientMsg.OpenGroupSelectionDialog() -> handleOpenGroupSelectionDialogMsg(model);
-		case AddClientMsg.ImportCSVRequested() -> UpdateResult.withEffect(model,
-				new AddClientEffect.UIEffect.OpenCsvImportDialog());
+		case AddClientMsg.CSVImportRequested() -> UpdateResult.withEffect(model,
+				new AddClientEffect.UIEffect.OpenCSVImportDialog());
 		case AddClientMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(model, rows,
 				includeRow);
 		case AddClientMsg.CreateClient() -> handleCreateClientMsg(model);

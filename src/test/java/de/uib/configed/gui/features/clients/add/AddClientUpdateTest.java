@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
 class AddClientUpdateTest {
-
 	private static AddClientModel baseModel() {
 		return AddClientModel.builder().hostname("").selectedDomain("").description("").inventoryNumber("").notes("")
 				.systemUUID("").macAddress("").ipAddress("").groups("").selectedDepot("").selectedNetbootProduct("")
@@ -205,11 +204,11 @@ class AddClientUpdateTest {
 	void shouldTriggerOpenCSVImportDailogEffect_whenCSVImportRequested() {
 		AddClientModel model = baseModel();
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.ImportCSVRequested(), model);
+				.update(new AddClientMsg.CSVImportRequested(), model);
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertInstanceOf(AddClientEffect.UIEffect.OpenCsvImportDialog.class, result.effect().get()));
+				() -> assertInstanceOf(AddClientEffect.UIEffect.OpenCSVImportDialog.class, result.effect().get()));
 	}
 
 	@Test
@@ -241,7 +240,7 @@ class AddClientUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerCreateMultipleClients_whenCSVImported() {
+	void shouldTriggerCreateClients_whenCSVImported() {
 		AddClientModel model = baseModel();
 		List<List<Object>> rows = new ArrayList<>();
 		rows.add(
@@ -256,12 +255,11 @@ class AddClientUpdateTest {
 				() -> assertEquals(0, result.model().getRowsToImport().size()),
 				() -> assertEquals(0, result.model().getPendingSingleRow().size()));
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateMultipleClients.class,
-						result.effect().get()));
+				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateClients.class, result.effect().get()));
 	}
 
 	@Test
-	void shouldTriggerCreateMultipleClients_whenCreateClient() {
+	void shouldTriggerCreateClients_whenCreateClient() {
 		AddClientModel model = baseModel().withHostname("host").withSelectedDomain("dom").withGroups("g1; g2")
 				.withSelectedDepot("depot1").withSelectedNetbootProduct("nb1").withShutdownInstallSelected(true)
 				.withWanSelected(true).withHostnames(List.of());
@@ -271,7 +269,6 @@ class AddClientUpdateTest {
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateMultipleClients.class,
-						result.effect().get()));
+				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateClients.class, result.effect().get()));
 	}
 }

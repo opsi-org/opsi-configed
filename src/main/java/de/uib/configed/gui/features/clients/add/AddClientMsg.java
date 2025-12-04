@@ -13,7 +13,7 @@ public sealed interface AddClientMsg permits AddClientMsg.LoadInitialDataRequest
 		AddClientMsg.ChangeInventory, AddClientMsg.ChangeNotes, AddClientMsg.ChangeSystemUUID, AddClientMsg.ChangeMAC,
 		AddClientMsg.ChangeIP, AddClientMsg.ChangeGroups, AddClientMsg.ChangeDepot, AddClientMsg.ChangeNetboot,
 		AddClientMsg.ToggleWanSelected, AddClientMsg.ToggleShutdownInstall, AddClientMsg.CreateClient,
-		AddClientMsg.ImportCSVRequested, AddClientMsg.CSVImported, AddClientMsg.OpenGroupSelectionDialog,
+		AddClientMsg.CSVImportRequested, AddClientMsg.CSVImported, AddClientMsg.OpenGroupSelectionDialog,
 		AddClientMsg.CloseDialog, AddClientMsg.ShowError {
 
 	record LoadInitialDataRequested() implements AddClientMsg {
@@ -65,7 +65,7 @@ public sealed interface AddClientMsg permits AddClientMsg.LoadInitialDataRequest
 	record CreateClient() implements AddClientMsg {
 	}
 
-	record ImportCSVRequested() implements AddClientMsg {
+	record CSVImportRequested() implements AddClientMsg {
 	}
 
 	record CSVImported(List<List<Object>> rows, boolean includeRow) implements AddClientMsg {

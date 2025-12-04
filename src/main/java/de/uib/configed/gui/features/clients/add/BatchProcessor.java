@@ -57,7 +57,7 @@ public class BatchProcessor {
 		model = model.toBuilder().acceptedRows(new ArrayList<>()).rowsToImport(new ArrayList<>())
 				.pendingSingleRow(new ArrayList<>()).build();
 
-		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(finalRows));
+		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateClients(finalRows));
 	}
 
 	public UpdateResult<AddClientModel, AddClientEffect> processSingleRow(AddClientModel model, List<Object> row) {
@@ -82,7 +82,7 @@ public class BatchProcessor {
 			}
 		}
 
-		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(List.of(row)));
+		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateClients(List.of(row)));
 	}
 
 }
