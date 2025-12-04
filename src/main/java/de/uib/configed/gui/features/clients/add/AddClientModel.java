@@ -16,6 +16,7 @@ import lombok.With;
 @Value
 @With
 @Builder(toBuilder = true)
+@SuppressWarnings("java:S1820")
 public class AddClientModel {
 	// Core input fields
 	@Builder.Default
@@ -55,11 +56,6 @@ public class AddClientModel {
 	List<String> netbootProducts = new ArrayList<>();
 	@Builder.Default
 	List<String> hostnames = new ArrayList<>();
-
-	// UI flags
-	@Builder.Default
-	boolean withDialog = true;
-	boolean initialized;
 
 	// Pending state for validation/confirmations
 	@Builder.Default

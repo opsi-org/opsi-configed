@@ -26,7 +26,7 @@ class AddClientUpdateTest {
 				.systemUUID("").macAddress("").ipAddress("").groups("").selectedDepot("").selectedNetbootProduct("")
 				.wanEnabled(true).wanSelected(false).shutdownInstallSelected(false)
 				.domains(List.of("example.com", "corp.local")).depots(List.of("depot1", "depot2"))
-				.netbootProducts(List.of("nb1", "nb2")).withDialog(true).initialized(true).build();
+				.netbootProducts(List.of("nb1", "nb2")).build();
 	}
 
 	private static List<Object> row(String hostname, String domain, String depot, String desc, String inv, String notes,
