@@ -1,13 +1,15 @@
 package de.uib.configed.gui.features.clients.add;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.RowValidation;
 
 class RowValidationTests {
@@ -27,10 +29,17 @@ class RowValidationTests {
 
 	@Test
 	void shouldReturnDropResult_whenHostnameIsEmpty() {
+		String expectedTitle = Configed.getResourceValue("error");
+		String expectedMessage = Configed.getResourceValue("NewClientDialog.hostnameRules");
 		List<Object> row = row("", "dom", "d", "desc", "inv", "notes", "ip", "uuid", "mac", "nb", "true", "false", "");
 		RowValidation.Result result = hostnameDomainValidator.validate(row, baseModel());
 		assertEquals(RowValidation.ResultType.DROP, result.type());
-		assertNotNull(result.effect());
+		assertAll(() -> assertNotNull(result.effect()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect()),
+				() -> assertEquals(expectedTitle,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect()).title()),
+				() -> assertEquals(expectedMessage,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect()).message()));
 	}
 
 	@Test
@@ -39,16 +48,24 @@ class RowValidationTests {
 				"false", "");
 		RowValidation.Result result = hostCollisionValidator.validate(row, baseModel());
 		assertEquals(RowValidation.ResultType.PAUSE, result.type());
-		assertTrue(result.effect() instanceof AddClientEffect.UIEffect.ShowOverwriteHostDialog);
+		assertAll(() -> assertNotNull(result.effect()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowOverwriteHostDialog.class, result.effect()));
 	}
 
 	@Test
 	void shouldReturnDropResult_whenBooleanFieldsAreInvalid() {
+		String expectedTitle = Configed.getResourceValue("NewClientDialog.nonBooleanValue.title");
+		String expectedMessage = Configed.getResourceValue("NewClientDialog.nonBooleanValue.message");
 		List<Object> row = row("h", "d", "d", "desc", "inv", "notes", "ip", "uuid", "mac", "nb", "invalid", "true",
 				"g1;g2");
 		RowValidation.Result result = booleanValidator.validate(row, baseModel());
 		assertEquals(RowValidation.ResultType.DROP, result.type());
-		assertNotNull(result.effect());
+		assertAll(() -> assertNotNull(result.effect()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect()),
+				() -> assertEquals(expectedTitle,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect()).title()),
+				() -> assertEquals(expectedMessage,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect()).message()));
 	}
 
 	@Test
@@ -57,7 +74,8 @@ class RowValidationTests {
 				"true", "false", "");
 		RowValidation.Result result = netbiosValidator.validate(row, baseModel());
 		assertEquals(RowValidation.ResultType.PAUSE, result.type());
-		assertNotNull(result.effect());
+		assertAll(() -> assertNotNull(result.effect()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowNetbiosConfirmDialog.class, result.effect()));
 	}
 
 	@Test
@@ -66,7 +84,8 @@ class RowValidationTests {
 				"");
 		RowValidation.Result result = netbiosValidator.validate(row, baseModel());
 		assertEquals(RowValidation.ResultType.PAUSE, result.type());
-		assertNotNull(result.effect());
+		assertAll(() -> assertNotNull(result.effect()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowNetbiosConfirmDialog.class, result.effect()));
 	}
 
 	@Test
