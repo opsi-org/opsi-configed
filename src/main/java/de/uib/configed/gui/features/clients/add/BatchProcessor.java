@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.RowValidation;
-import de.uib.configed.share.logging.Logging;
 
 public class BatchProcessor {
 
@@ -34,15 +33,13 @@ public class BatchProcessor {
 				switch (result.type()) {
 
 				case SUCCESS -> {
-					// continue with next validator
+					// continue to next validator
 				}
-
 				case DROP -> {
 					// discard row, show effect
 					model = model.withRowsToImport(toImport);
 					return UpdateResult.withEffect(model, result.effect());
 				}
-
 				case PAUSE -> {
 					// keep row aside, pause import
 					model = model.withRowsToImport(toImport).withPendingSingleRow(row);
@@ -51,18 +48,41 @@ public class BatchProcessor {
 				}
 			}
 
-			// Row passed all validators
 			List<List<Object>> accepted = new ArrayList<>(model.getAcceptedRows());
 			accepted.add(row);
 			model = model.withAcceptedRows(accepted);
 		}
 
-		// Finished
 		List<List<Object>> finalRows = new ArrayList<>(model.getAcceptedRows());
-		model = model.withAcceptedRows(new ArrayList<>()).withRowsToImport(new ArrayList<>())
-				.withPendingSingleRow(new ArrayList<>());
+		model = model.toBuilder().acceptedRows(new ArrayList<>()).rowsToImport(new ArrayList<>())
+				.pendingSingleRow(new ArrayList<>()).build();
 
-		Logging.devel(this, "rows ", finalRows);
-		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateMultipleClients(finalRows));
+		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateClients(finalRows));
 	}
+
+	public UpdateResult<AddClientModel, AddClientEffect> processSingleRow(AddClientModel model, List<Object> row) {
+		AddClientModel working = model;
+
+		for (RowValidation validator : validators) {
+			RowValidation.Result r = validator.validate(row, working);
+
+			switch (r.type()) {
+			case SUCCESS -> {
+				// continue to next validator
+			}
+			case DROP -> {
+				// Do NOT store pending row
+				return UpdateResult.withEffect(working, r.effect());
+			}
+			case PAUSE -> {
+				// Store the row as "pending"
+				working = working.withPendingSingleRow(row);
+				return UpdateResult.withEffect(working, r.effect());
+			}
+			}
+		}
+
+		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateClients(List.of(row)));
+	}
+
 }

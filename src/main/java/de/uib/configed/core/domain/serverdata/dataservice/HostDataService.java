@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
@@ -92,7 +93,7 @@ public class HostDataService {
 
 		for (List<Object> client : clients) {
 			String hostname = ((String) client.get(0)).trim();
-			String domainname = ((String) client.get(1)).trim();
+			String domain = ((String) client.get(1)).trim();
 			String depotId = ((String) client.get(2)).trim();
 			String macaddress = ((String) client.get(3)).trim();
 			String description = ((String) client.get(4)).trim();
@@ -107,8 +108,13 @@ public class HostDataService {
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
 			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
+			String netbootProduct = ((String) client.get(13)).trim();
 
-			String newClientId = hostname + "." + domainname;
+			String newClientId = hostname + "." + domain;
+
+			if (netbootProduct != null && !netbootProduct.isBlank()) {
+				addNetbootProductToList(netbootProduct, newClientId, productsNetbootJsonObject);
+			}
 
 			Map<String, Object> hostItem = new HashMap<>();
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
@@ -139,9 +145,34 @@ public class HostDataService {
 			hostInfo.setValues(hostItem);
 			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
+
+			prioritizeSelectedDomain(domain);
 		}
 
 		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
+	}
+
+	private void prioritizeSelectedDomain(String selectedDomain) {
+		List<String> domains = new ArrayList<>(configDataService.getDomains());
+
+		domains.remove(selectedDomain);
+		domains.add(0, selectedDomain);
+
+		List<Object> serialized = IntStream.range(0, domains.size()).mapToObj(i -> (Object) (i + ":" + domains.get(i)))
+				.toList();
+
+		configDataService.writeDomains(serialized);
+	}
+
+	private void addNetbootProductToList(String netbootProduct, String newClientId,
+			List<Map<String, Object>> productsNetbootJsonObject) {
+		Logging.info(this, "createClient productNetboot ", netbootProduct);
+		Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
+		itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, netbootProduct);
+		itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		itemProducts.put("clientId", newClientId);
+		itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
+		productsNetbootJsonObject.add(itemProducts);
 	}
 
 	private void addGroupsToList(String groupsAsString, String newClientId,
@@ -185,83 +216,6 @@ public class HostDataService {
 		}
 
 		return result;
-	}
-
-	public boolean createClient(String hostname, String domainname, String depotId, String description,
-			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean wanConfig, String[] groups, String productNetboot) {
-		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
-			return false;
-		}
-
-		boolean result = false;
-
-		String newClientId = hostname + "." + domainname;
-
-		Map<String, Object> hostItem = new HashMap<>();
-		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
-		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
-		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
-		hostItem.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUID);
-		hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
-		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
-		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
-		hostItem.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
-		hostItem.put(HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { hostItem });
-		result = exec.doCall(omc);
-
-		if (result) {
-			result = updateGroupsForClient(groups, newClientId);
-		}
-
-		if (result && productNetboot != null && !productNetboot.isEmpty()) {
-			Logging.info(this, "createClient productNetboot ", productNetboot);
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
-			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
-			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-			itemProducts.put("clientId", newClientId);
-			itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
-			jsonObjects.add(itemProducts);
-			omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		}
-
-		if (result) {
-			if (depotId == null || depotId.isEmpty()) {
-				depotId = hostInfoCollections.getConfigServer();
-			}
-			HostInfo hostInfo = new HostInfo();
-			hostInfo.setValues(hostItem);
-			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
-			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
-			hostInfoCollections.setDepotForClients(List.of(newClientId), depotId);
-
-			Logging.info(this, " createClient hostInfo ", hostInfo);
-		}
-
-		return result;
-	}
-
-	private boolean updateGroupsForClient(String[] groups, String newClientId) {
-		if (groups == null || groups.length == 0) {
-			return true;
-		}
-
-		Logging.info(this, "createClient group ", Arrays.toString(groups));
-		List<Map<String, Object>> jsonObjects = new ArrayList<>();
-		for (String group : groups) {
-			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-			jsonObjects.add(itemGroup);
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
-				new Object[] { jsonObjects });
-		return exec.doCall(omc);
 	}
 
 	public boolean renameClient(String hostname, String newHostname) {

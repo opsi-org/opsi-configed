@@ -8,75 +8,84 @@ package de.uib.configed.gui.features.clients.add;
 
 import java.util.List;
 
-public sealed interface AddClientMsg permits AddClientMsg.LoadInitialDataRequested, AddClientMsg.InitialDataLoaded,
-		AddClientMsg.ChangeHostname, AddClientMsg.ChangeDomain, AddClientMsg.ChangeDescription,
-		AddClientMsg.ChangeInventory, AddClientMsg.ChangeNotes, AddClientMsg.ChangeSystemUUID, AddClientMsg.ChangeMAC,
-		AddClientMsg.ChangeIP, AddClientMsg.ChangeGroups, AddClientMsg.ChangeDepot, AddClientMsg.ChangeNetboot,
-		AddClientMsg.ToggleWanSelected, AddClientMsg.ToggleShutdownInstall, AddClientMsg.CreateClient,
-		AddClientMsg.ImportCSVRequested, AddClientMsg.CSVImported, AddClientMsg.OpenGroupSelectionDialog,
-		AddClientMsg.CloseDialog, AddClientMsg.ShowError {
+public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddClientMsg.ActionMsg, AddClientMsg.UIMsg {
 
-	record LoadInitialDataRequested() implements AddClientMsg {
+	@SuppressWarnings("java:S2972")
+	sealed interface FieldChangeMsg extends AddClientMsg
+			permits FieldChangeMsg.ChangeHostname, FieldChangeMsg.ChangeDomain, FieldChangeMsg.ChangeDescription,
+			FieldChangeMsg.ChangeInventory, FieldChangeMsg.ChangeNotes, FieldChangeMsg.ChangeSystemUUID,
+			FieldChangeMsg.ChangeMAC, FieldChangeMsg.ChangeIP, FieldChangeMsg.ChangeGroups, FieldChangeMsg.ChangeDepot,
+			FieldChangeMsg.ChangeNetboot, FieldChangeMsg.ToggleWanSelected, FieldChangeMsg.ToggleShutdownInstall {
+
+		record ChangeHostname(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeDomain(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeDescription(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeInventory(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeNotes(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeSystemUUID(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeMAC(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeIP(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeGroups(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeDepot(String value) implements FieldChangeMsg {
+		}
+
+		record ChangeNetboot(String value) implements FieldChangeMsg {
+		}
+
+		record ToggleWanSelected(boolean value) implements FieldChangeMsg {
+		}
+
+		record ToggleShutdownInstall(boolean value) implements FieldChangeMsg {
+		}
 	}
 
-	record InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames,
-			boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) implements AddClientMsg {
+	sealed interface ActionMsg extends AddClientMsg
+			permits ActionMsg.LoadInitialDataRequested, ActionMsg.InitialDataLoaded, ActionMsg.CreateClient,
+			ActionMsg.CSVImportRequested, ActionMsg.CSVImported, ActionMsg.CloseDialog {
+		record LoadInitialDataRequested() implements ActionMsg {
+		}
+
+		record InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots,
+				List<String> hostnames, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown)
+				implements ActionMsg {
+		}
+
+		record CreateClient() implements ActionMsg {
+		}
+
+		record CSVImportRequested() implements ActionMsg {
+		}
+
+		record CSVImported(List<List<Object>> rows, boolean includeRow) implements ActionMsg {
+		}
+
+		record CloseDialog() implements ActionMsg {
+		}
 	}
 
-	record ChangeHostname(String value) implements AddClientMsg {
-	}
+	sealed interface UIMsg extends AddClientMsg permits UIMsg.OpenGroupSelectionDialog, UIMsg.ShowErrorMessage {
+		record OpenGroupSelectionDialog() implements UIMsg {
+		}
 
-	record ChangeDomain(String value) implements AddClientMsg {
-	}
-
-	record ChangeDescription(String value) implements AddClientMsg {
-	}
-
-	record ChangeInventory(String value) implements AddClientMsg {
-	}
-
-	record ChangeNotes(String value) implements AddClientMsg {
-	}
-
-	record ChangeSystemUUID(String value) implements AddClientMsg {
-	}
-
-	record ChangeMAC(String value) implements AddClientMsg {
-	}
-
-	record ChangeIP(String value) implements AddClientMsg {
-	}
-
-	record ChangeGroups(String value) implements AddClientMsg {
-	}
-
-	record ChangeDepot(String value) implements AddClientMsg {
-	}
-
-	record ChangeNetboot(String value) implements AddClientMsg {
-	}
-
-	record ToggleWanSelected(boolean value) implements AddClientMsg {
-	}
-
-	record ToggleShutdownInstall(boolean value) implements AddClientMsg {
-	}
-
-	record CreateClient() implements AddClientMsg {
-	}
-
-	record ImportCSVRequested() implements AddClientMsg {
-	}
-
-	record CSVImported(List<List<Object>> rows, boolean includeRow) implements AddClientMsg {
-	}
-
-	record OpenGroupSelectionDialog() implements AddClientMsg {
-	}
-
-	record CloseDialog() implements AddClientMsg {
-	}
-
-	record ShowError(String title, String message) implements AddClientMsg {
+		record ShowErrorMessage(String title, String message) implements UIMsg {
+		}
 	}
 }

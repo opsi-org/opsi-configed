@@ -10,9 +10,8 @@ import java.util.List;
 
 public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddClientEffect.ServiceEffect {
 	sealed interface UIEffect extends AddClientEffect permits UIEffect.ShowOverwriteHostDialog,
-			UIEffect.ShowOverwriteDepotDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCsvImportDialog,
+			UIEffect.ShowOverwriteDepotDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCSVImportDialog,
 			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage, UIEffect.CloseDialog {
-		// dialogs
 		record ShowOverwriteHostDialog(String opsiHostKey) implements UIEffect {
 		}
 
@@ -22,7 +21,7 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 		record ShowNetbiosConfirmDialog() implements UIEffect {
 		}
 
-		record OpenCsvImportDialog() implements UIEffect {
+		record OpenCSVImportDialog() implements UIEffect {
 		}
 
 		record OpenGroupSelectionDialog(List<String> availableGroups, List<String> preselected) implements UIEffect {
@@ -35,21 +34,12 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 		}
 	}
 
-	sealed interface ServiceEffect extends AddClientEffect permits ServiceEffect.LoadInitialData,
-			ServiceEffect.CreateSingleClient, ServiceEffect.CreateMultipleClients, ServiceEffect.SaveDomainsOrder {
+	sealed interface ServiceEffect extends AddClientEffect
+			permits ServiceEffect.LoadInitialData, ServiceEffect.CreateClients {
 		record LoadInitialData() implements ServiceEffect {
 		}
 
-		record CreateSingleClient(String hostname, String domain, String depotID, String description,
-				String inventoryNumber, String notes, String ipAddress, String systemUUID, String macAddress,
-				boolean shutdownInstall, boolean wanConfig, String[] groups, String netbootProduct)
-				implements ServiceEffect {
-		}
-
-		record CreateMultipleClients(List<List<Object>> rows) implements ServiceEffect {
-		}
-
-		record SaveDomainsOrder(List<String> domains) implements ServiceEffect {
+		record CreateClients(List<List<Object>> rows) implements ServiceEffect {
 		}
 	}
 }

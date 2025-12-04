@@ -241,6 +241,7 @@ public class HostInfo {
 		keys.add(CLIENT_WAN_CONFIG_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
+		keys.add("netbootProduct");
 		return Collections.unmodifiableSet(keys);
 	}
 

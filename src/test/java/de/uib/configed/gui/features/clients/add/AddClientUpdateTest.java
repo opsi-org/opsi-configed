@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -20,24 +21,23 @@ import org.junit.jupiter.api.Test;
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 
 class AddClientUpdateTest {
-
 	private static AddClientModel baseModel() {
 		return AddClientModel.builder().hostname("").selectedDomain("").description("").inventoryNumber("").notes("")
 				.systemUUID("").macAddress("").ipAddress("").groups("").selectedDepot("").selectedNetbootProduct("")
 				.wanEnabled(true).wanSelected(false).shutdownInstallSelected(false)
 				.domains(List.of("example.com", "corp.local")).depots(List.of("depot1", "depot2"))
-				.netbootProducts(List.of("nb1", "nb2")).withDialog(true).initialized(true).build();
+				.netbootProducts(List.of("nb1", "nb2")).build();
 	}
 
 	private static List<Object> row(String hostname, String domain, String depot, String desc, String inv, String notes,
 			String ip, String uuid, String mac, String netboot, String shutdown, String wan, String groups) {
-		return List.of(hostname, domain, depot, desc, inv, notes, ip, uuid, mac, netboot, shutdown, wan, groups);
+		return List.of(hostname, domain, depot, mac, desc, inv, notes, uuid, ip, groups, wan, shutdown, netboot);
 	}
 
 	@Test
 	void shouldTriggerLoadInitDataEffect_whenLoadInitialDataRequested() {
 		AddClientModel model = baseModel();
-		AddClientMsg msg = new AddClientMsg.LoadInitialDataRequested();
+		AddClientMsg msg = new AddClientMsg.ActionMsg.LoadInitialDataRequested();
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(msg, model);
 
@@ -56,8 +56,8 @@ class AddClientUpdateTest {
 		boolean isWanActive = true;
 		boolean defaultWanSelected = false;
 		boolean defaultShutdown = true;
-		AddClientMsg msg = new AddClientMsg.InitialDataLoaded(domains, depots, netboots, hostnames, isWanActive,
-				defaultWanSelected, defaultShutdown);
+		AddClientMsg msg = new AddClientMsg.ActionMsg.InitialDataLoaded(domains, depots, netboots, hostnames,
+				isWanActive, defaultWanSelected, defaultShutdown);
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(msg, model);
 
@@ -71,197 +71,215 @@ class AddClientUpdateTest {
 	}
 
 	@Test
-	void shouldUpdateSimpleFields_whenChangeMessages() {
+	void shouldUpdateHostname_whenChangeHostname() {
 		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeHostname("h"), model);
 
-		UpdateResult<AddClientModel, AddClientEffect> r1 = AddClientUpdate.update(new AddClientMsg.ChangeHostname("h"),
-				model);
-		assertEquals("h", r1.model().getHostname());
-		assertFalse(r1.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r2 = AddClientUpdate.update(new AddClientMsg.ChangeDomain("d"),
-				r1.model());
-		assertEquals("d", r2.model().getSelectedDomain());
-		assertFalse(r2.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r3 = AddClientUpdate
-				.update(new AddClientMsg.ChangeDescription("desc"), r2.model());
-		assertEquals("desc", r3.model().getDescription());
-		assertFalse(r3.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r4 = AddClientUpdate
-				.update(new AddClientMsg.ChangeInventory("inv"), r3.model());
-		assertEquals("inv", r4.model().getInventoryNumber());
-		assertFalse(r4.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r5 = AddClientUpdate.update(new AddClientMsg.ChangeNotes("n"),
-				r4.model());
-		assertEquals("n", r5.model().getNotes());
-		assertFalse(r5.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r6 = AddClientUpdate
-				.update(new AddClientMsg.ChangeSystemUUID("uuid"), r5.model());
-		assertEquals("uuid", r6.model().getSystemUUID());
-		assertFalse(r6.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r7 = AddClientUpdate.update(new AddClientMsg.ChangeMAC("mac"),
-				r6.model());
-		assertEquals("mac", r7.model().getMacAddress());
-		assertFalse(r7.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r8 = AddClientUpdate.update(new AddClientMsg.ChangeIP("ip"),
-				r7.model());
-		assertEquals("ip", r8.model().getIpAddress());
-		assertFalse(r8.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r9 = AddClientUpdate
-				.update(new AddClientMsg.ChangeGroups("g1; g2"), r8.model());
-		assertEquals("g1; g2", r9.model().getGroups());
-		assertFalse(r9.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r10 = AddClientUpdate.update(new AddClientMsg.ChangeDepot("d1"),
-				r9.model());
-		assertEquals("d1", r10.model().getSelectedDepot());
-		assertFalse(r10.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r11 = AddClientUpdate
-				.update(new AddClientMsg.ChangeNetboot("nb1"), r10.model());
-		assertEquals("nb1", r11.model().getSelectedNetbootProduct());
-		assertFalse(r11.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r12 = AddClientUpdate
-				.update(new AddClientMsg.ToggleWanSelected(true), r11.model());
-		assertTrue(r12.model().isWanSelected());
-		assertFalse(r12.effect().isPresent());
-
-		UpdateResult<AddClientModel, AddClientEffect> r13 = AddClientUpdate
-				.update(new AddClientMsg.ToggleShutdownInstall(true), r12.model());
-		assertTrue(r13.model().isShutdownInstallSelected());
-		assertFalse(r13.effect().isPresent());
+		assertEquals("h", result.model().getHostname());
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
-	void shouldTriggerShowErrorMessageEffect_whenCSVImportedWithNonBooleanValues() {
+	void shouldUpdateDomain_whenChangeDomain() {
 		AddClientModel model = baseModel();
-		List<List<Object>> rows = List
-				.of(row("host", "dom", "d", "i", "n", "ip", "uuid", "mac", "nbp", "depot", "invalid", "true", "g1;g2"));
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeDomain("d"), model);
+
+		assertEquals("d", result.model().getSelectedDomain());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateDescription_whenChangeDescription() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeDescription("desc"), model);
+
+		assertEquals("desc", result.model().getDescription());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateInventory_whenChangeInventory() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeInventory("inv"), model);
+
+		assertEquals("inv", result.model().getInventoryNumber());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateNotes_whenChangeNotes() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeNotes("n"), model);
+
+		assertEquals("n", result.model().getNotes());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateSystemUUID_whenChangeSystemUUID() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID("uuid"), model);
+
+		assertEquals("uuid", result.model().getSystemUUID());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateMacAddress_whenChangeMAC() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeMAC("mac"), model);
+
+		assertEquals("mac", result.model().getMacAddress());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateIpAddress_whenChangeIP() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeIP("ip"), model);
+
+		assertEquals("ip", result.model().getIpAddress());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateGroups_whenChangeGroups() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeGroups("g1; g2"), model);
+
+		assertEquals("g1; g2", result.model().getGroups());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateDepot_whenChangeDepot() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeDepot("d1"), model);
+
+		assertEquals("d1", result.model().getSelectedDepot());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateNetboot_whenChangeNetboot() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ChangeNetboot("nb1"), model);
+
+		assertEquals("nb1", result.model().getSelectedNetbootProduct());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateWanSelected_whenToggleWanSelected() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ToggleWanSelected(true), model);
+
+		assertTrue(result.model().isWanSelected());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldUpdateShutdownInstall_whenToggleShutdownInstall() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.FieldChangeMsg.ToggleShutdownInstall(true), model);
+
+		assertTrue(result.model().isShutdownInstallSelected());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldTriggerOpenCSVImportDailogEffect_whenCSVImportRequested() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ActionMsg.CSVImportRequested(), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.OpenCSVImportDialog.class, result.effect().get()));
+	}
+
+	@Test
+	void shouldTriggerOpenGroupSelectionDialogEffect_whenOpenGroupSelectionDialog() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.UIMsg.OpenGroupSelectionDialog(), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.OpenGroupSelectionDialog.class, result.effect().get()));
+	}
+
+	@Test
+	void shouldTriggerShowErrorMessageEffect_whenShowErrorMessage() {
+		AddClientModel model = baseModel();
+		String expectedTitle = "title";
+		String expectedMessage = "message";
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.UIMsg.ShowErrorMessage(expectedTitle, expectedMessage), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get()),
+				() -> assertEquals(expectedTitle,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect().get()).title()),
+				() -> assertEquals(expectedMessage,
+						((AddClientEffect.UIEffect.ShowErrorMessage) result.effect().get()).message()));
+	}
+
+	@Test
+	void shouldTriggerCreateClients_whenCSVImported() {
+		AddClientModel model = baseModel();
+		List<List<Object>> rows = new ArrayList<>();
+		rows.add(
+				row("h2", "dom", "d", "d", "i", "notes", "ip", "uuid", "mac", "netboot", "true", "false", "grp1;grp2"));
+		rows.add(
+				row("h3", "dom", "d", "d", "i", "notes", "ip", "uuid", "mac", "netboot", "true", "false", "grp1;grp2"));
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.CSVImported(rows, false), model);
+				.update(new AddClientMsg.ActionMsg.CSVImported(rows, true), model);
 
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get());
+		assertAll(() -> assertEquals(0, result.model().getAcceptedRows().size()),
+				() -> assertEquals(0, result.model().getRowsToImport().size()),
+				() -> assertEquals(0, result.model().getPendingSingleRow().size()));
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateClients.class, result.effect().get()));
 	}
 
 	@Test
-	void shouldTriggerShowErrorMessageEffect_whenCSVImportedWithInvalidHostname() {
-		AddClientModel model = baseModel();
-		List<List<Object>> rows = List
-				.of(row("", "dom", "d", "i", "n", "ip", "uuid", "mac", "nbp", "depot", "true", "false", ""));
-
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.CSVImported(rows, false), model);
-
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get());
-	}
-
-	@Test
-	void shouldTriggerShowOverwriteHostDialogEffect_whenCSVImportedWithExistingHostname() {
-		AddClientModel model = baseModel().withHostnames(List.of("h.dom"));
-		List<List<Object>> rows = List
-				.of(row("h", "dom", "d", "i", "n", "ip", "uuid", "mac", "nbp", "depot", "true", "false", ""));
-
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.CSVImported(rows, false), model);
-
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowOverwriteHostDialog.class, result.effect().get());
-		assertFalse(result.model().getPendingSingleRow().isEmpty());
-	}
-
-	@Test
-	void shouldTriggerShowErrorMessageEffect_whenCSVImportedWithTooManyItems() {
-		AddClientModel model = baseModel().withHostnames(List.of("h.dom")).withDepots(List.of("h.dom"));
-		List<List<Object>> rows = List
-				.of(row("h", "dom", "d", "i", "n", "ip", "uuid", "mac", "nbp", "depot", "true", "false", ""));
-
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.CSVImported(rows, false), model);
-
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get());
-	}
-
-	@Test
-	void shouldTriggerShowNetbiosConfirmDialogEffect_whenCSVImportedWithNonConformingHostname() {
-		AddClientModel model = baseModel();
-		// hostname longer than 15 chars triggers NetBIOS confirmation
-		List<List<Object>> rows = List.of(row("thisisaverylonghost", "dom", "d", "i", "n", "ip", "uuid", "mac", "nbp",
-				"depot", "true", "false", ""));
-
-		UpdateResult<AddClientModel, AddClientEffect> pause = AddClientUpdate
-				.update(new AddClientMsg.CSVImported(rows, false), model);
-		assertInstanceOf(AddClientEffect.UIEffect.ShowNetbiosConfirmDialog.class, pause.effect().get());
-		assertFalse(pause.model().getPendingSingleRow().isEmpty());
-	}
-
-	@Test
-	void shouldTriggerCreateMultipleClients_whenCreateClient() {
+	void shouldTriggerCreateClients_whenCreateClient() {
 		AddClientModel model = baseModel().withHostname("host").withSelectedDomain("dom").withGroups("g1; g2")
 				.withSelectedDepot("depot1").withSelectedNetbootProduct("nb1").withShutdownInstallSelected(true)
 				.withWanSelected(true).withHostnames(List.of());
 
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.CreateClient(),
-				model);
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ActionMsg.CreateClient(), model);
 
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.ServiceEffect.CreateMultipleClients.class, result.effect().get());
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateClients.class, result.effect().get()));
 	}
 
 	@Test
-	void shouldTriggerShowErrorMessageEffect_whenCreateClientWithInvalidHostnameDomain() {
-		AddClientModel model = baseModel().withHostname("").withSelectedDomain("");
+	void shouldTriggerCloseDialogEffect_whenCloseDialog() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ActionMsg.CloseDialog(), model);
 
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.CreateClient(),
-				model);
-
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get());
-	}
-
-	@Test
-	void shouldTriggerShowOverwriteHostDialogffect_whenCreateClientWithExistingHostname() {
-		AddClientModel model = baseModel().withHostname("existing").withSelectedDomain("dom")
-				.withHostnames(List.of("existing.dom"));
-
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.CreateClient(),
-				model);
-
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowOverwriteHostDialog.class, result.effect().get());
-	}
-
-	@Test
-	void shouldTriggerShowErrorMessageEffect_whenCreateClientWithHostnameMatchingDepot() {
-		// hostname equals one of depots and also listed as existing hostname
-		AddClientModel model = baseModel().withHostname("depot1").withSelectedDomain("dom")
-				.withHostnames(List.of("depot1.dom")).withDepots(List.of("depot1.dom"));
-
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate.update(new AddClientMsg.CreateClient(),
-				model);
-
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(AddClientEffect.UIEffect.ShowErrorMessage.class, result.effect().get());
-	}
-
-	@Test
-	void shouldTriggerShowNetbiosConfirmDialogEffect_whenCreateClientWithHostnameAsNumbers() {
-		AddClientModel model = baseModel().withHostname("1234567890123456").withSelectedDomain("dom");
-
-		UpdateResult<AddClientModel, AddClientEffect> pause = AddClientUpdate.update(new AddClientMsg.CreateClient(),
-				model);
-		assertInstanceOf(AddClientEffect.UIEffect.ShowNetbiosConfirmDialog.class, pause.effect().get());
-		assertFalse(pause.model().getPendingSingleRow().isEmpty());
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.CloseDialog.class, result.effect().get()));
 	}
 }
