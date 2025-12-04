@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -155,22 +156,22 @@ public final class Icons {
 		return getOpsiIcon(size).setColorFilter(new ColorFilter(oldColor -> color));
 	}
 
-	public static ImageIcon getSelectedOpsiModulesIcon(int size) {
+	public static Icon getSelectedOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon(size, Globals.OPSI_FOREGROUND_DARK);
 	}
 
-	public static ImageIcon getActiveOpsiModulesIcon(int size) {
+	public static Icon getActiveOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon(size, Globals.getActiveColor());
 	}
 
-	public static ImageIcon getOpsiModulesIcon(int size) {
+	public static Icon getOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon(size, null);
 	}
 
 	/* 
 	 * @param color the color of the opsi icon. If null, the theme color will be used.
 	 */
-	private static ImageIcon getOpsiModulesIcon(int size, Color iconColor) {
+	private static Icon getOpsiModulesIcon(int size, Color iconColor) {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
@@ -209,10 +210,16 @@ public final class Icons {
 		if (dotColor == null) {
 			return opsiIcon;
 		} else if (Globals.OPSI_FOREGROUND_DARK.equals(iconColor)) {
-			return addDotIcon(opsiIcon, size, iconColor);
+			return getDottedIcon(opsiIcon, iconColor, size);
 		} else {
-			return addDotIcon(opsiIcon, size, dotColor);
+			return getDottedIcon(opsiIcon, dotColor, size);
 		}
+	}
+
+	private static Icon getDottedIcon(Icon baseIcon, Color dotColor, int size) {
+		FlatSVGIcon point = getIntellijIcon("point", dotColor, size / 4);
+
+		return new CombinedSVGIcon(baseIcon, point, 1, 3.0 / 4, 3.0 / 4);
 	}
 
 	/**
@@ -245,11 +252,11 @@ public final class Icons {
 		}).start();
 	}
 
-	private static ImageIcon getHealthCheckIcon(int size) {
+	private static Icon getHealthCheckIcon(int size) {
 		return getHealthCheckIcon(size, null);
 	}
 
-	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
+	private static Icon getHealthCheckIcon(int size, Color iconColor) {
 		Color dotColor = null;
 
 		HealthDataProcessor.StatusLevel warningLevel = HealthDataProcessor.getMaxStatusLevel();
@@ -281,19 +288,10 @@ public final class Icons {
 		if (dotColor == null) {
 			return opsiIcon;
 		} else if (Globals.OPSI_FOREGROUND_DARK.equals(iconColor)) {
-			return addDotIcon(opsiIcon, size, iconColor);
+			return getDottedIcon(opsiIcon, iconColor, size);
 		} else {
-			return addDotIcon(opsiIcon, size, dotColor);
+			return getDottedIcon(opsiIcon, dotColor, size);
 		}
-	}
-
-	private static ImageIcon addDotIcon(ImageIcon image, int size, Color dotColor) {
-		FlatSVGIcon point = getIntellijIcon("point", dotColor, size / 4);
-
-		BufferedImage bufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-		bufferedImage.getGraphics().drawImage(image.getImage(), 0, 0, null);
-		bufferedImage.getGraphics().drawImage(point.getImage(), size / 4 * 3, size / 4 * 3, null);
-		return new ImageIcon(bufferedImage);
 	}
 
 	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
