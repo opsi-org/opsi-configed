@@ -81,11 +81,11 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		}
 	}
 
-	sealed interface UIMsg extends AddClientMsg permits UIMsg.OpenGroupSelectionDialog, UIMsg.ShowError {
+	sealed interface UIMsg extends AddClientMsg permits UIMsg.OpenGroupSelectionDialog, UIMsg.ShowErrorMessage {
 		record OpenGroupSelectionDialog() implements UIMsg {
 		}
 
-		record ShowError(String title, String message) implements UIMsg {
+		record ShowErrorMessage(String title, String message) implements UIMsg {
 		}
 	}
 }

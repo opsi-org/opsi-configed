@@ -228,7 +228,7 @@ class AddClientUpdateTest {
 		String expectedTitle = "title";
 		String expectedMessage = "message";
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.UIMsg.ShowError(expectedTitle, expectedMessage), model);
+				.update(new AddClientMsg.UIMsg.ShowErrorMessage(expectedTitle, expectedMessage), model);
 
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
@@ -270,5 +270,16 @@ class AddClientUpdateTest {
 		assertSame(model, result.model());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateClients.class, result.effect().get()));
+	}
+
+	@Test
+	void shouldTriggerCloseDialogEffect_whenCloseDialog() {
+		AddClientModel model = baseModel();
+		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
+				.update(new AddClientMsg.ActionMsg.CloseDialog(), model);
+
+		assertSame(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(AddClientEffect.UIEffect.CloseDialog.class, result.effect().get()));
 	}
 }
