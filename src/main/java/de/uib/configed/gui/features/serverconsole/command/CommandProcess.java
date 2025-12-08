@@ -39,7 +39,7 @@ public class CommandProcess {
 	}
 
 	public boolean hasFailed() {
-		boolean failed = exitCode > 1 || errorEncounteredOnStart;
+		boolean failed = exitCode > 0 || errorEncounteredOnStart;
 		Logging.info(this, "Has command failed? ", failed);
 		return failed;
 	}
