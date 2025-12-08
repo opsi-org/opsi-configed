@@ -275,6 +275,10 @@ public class MenuBarController {
 
 		jMenuHelp.addSeparator();
 
+		addToolsLinks(jMenuHelp);
+
+		jMenuHelp.addSeparator();
+
 		JMenuItem jMenuHelpOpsiVersion = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService")
 				+ ": " + ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
@@ -288,6 +292,25 @@ public class MenuBarController {
 		addCreditsMenus(jMenuHelp, mainFrame);
 
 		return jMenuHelp;
+	}
+
+	private static void addToolsLinks(JMenu jMenuHelp) {
+		ServerFacade serverFacade = PersistenceControllerFactory.getPersistenceController().getExecutioner();
+		String host = serverFacade.getHost();
+		int port = serverFacade.getPort();
+
+		JMenuItem jMenuItemAdminLink = new JMenuItem(
+				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiAdminWebPage"));
+		jMenuItemAdminLink.addActionListener(
+				actionEvent -> Utils.showExternalDocument("https://" + host + ":" + port + "/admin/"));
+
+		JMenuItem jMenuItemLicensesLink = new JMenuItem(
+				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiWebGUI"));
+		jMenuItemLicensesLink.addActionListener(
+				actionEvent -> Utils.showExternalDocument("https://" + host + ":" + port + "/addons/webgui/app/"));
+
+		jMenuHelp.add(jMenuItemAdminLink);
+		jMenuHelp.add(jMenuItemLicensesLink);
 	}
 
 	public JMenuBar initMenuBar(LeftToolBar leftToolBar, MainFrame mainFrame) {

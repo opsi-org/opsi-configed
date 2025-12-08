@@ -748,6 +748,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	/**
+	 * Retrieve used port by the connection.
+	 *
+	 * @return used port by the connection.
+	 */
+	public int getPort() {
+		return portHTTPS;
+	}
+
+	/**
 	 * Retrieve used password by the connection.
 	 *
 	 * @return used password by the connection.
