@@ -178,7 +178,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Logging.devel("value changed");
 		Map<String, Object> visualData = mergeProperties(
 				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);
