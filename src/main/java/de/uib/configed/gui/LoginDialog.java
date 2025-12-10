@@ -16,13 +16,13 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -36,6 +36,7 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.WindowsPositionManager;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
+import net.miginfocom.swing.MigLayout;
 
 public class LoginDialog extends JFrame implements KeyListener {
 	private GlassPane glassPane;
@@ -257,102 +258,41 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	private void setupLayout() {
-		((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(groupLayout);
+		JComponent cp = (JComponent) getContentPane();
+		cp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		groupLayout
-				.setVerticalGroup(
-						groupLayout.createSequentialGroup()
-								.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+		cp.setLayout(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
-								.addGap(Globals.GAP_SIZE)
+		int minGap = Globals.GAP_SIZE;
+		int prefGap = 100;
 
-								.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)
+		cp.add(jLabelLogo, "gapleft " + minGap + ":" + prefGap + ":push, gapright " + minGap + ":" + prefGap
+				+ ":push, alignx center");
+		cp.add(jLabelTitle, "gapleft " + minGap + ":" + prefGap + ":push, gapright " + minGap + ":" + prefGap
+				+ ":push, alignx center");
+		cp.add(jLabelVersion, "gapbottom " + Globals.GAP_SIZE + ", gapleft " + minGap + ":" + prefGap
+				+ ":push, gapright " + minGap + ":" + prefGap + ":push, alignx center");
 
-								.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)
+		cp.add(jLabelHost);
+		cp.add(fieldHost, "growx, pushx, gapbottom " + Globals.GAP_SIZE);
 
-								.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)
+		cp.add(jLabelUser);
+		cp.add(fieldUser, "growx, pushx, gapbottom " + Globals.GAP_SIZE);
 
-								.addComponent(jLabelOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+		cp.add(jLabelPassword);
+		cp.add(passwordField, "growx, pushx, gapbottom " + Globals.GAP_SIZE);
 
-								.addGap(Globals.GAP_SIZE * 2)
+		cp.add(checkUseOTP, "gapbottom " + Globals.GAP_SIZE);
 
-								.addGroup(groupLayout.createParallelGroup()
-										.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		cp.add(jLabelOTP, "hidemode 3");
+		cp.add(fieldOTP, "growx, pushx, hidemode 2, gapbottom " + Globals.GAP_SIZE * 2);
 
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
-						.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE))
+		JPanel buttonPanel = new JPanel(new MigLayout("insets 0, fillx"));
+		buttonPanel.add(jButtonCancel, "align left");
+		buttonPanel.add(jButtonSSO, "align center, pushx");
+		buttonPanel.add(jButtonCommit, "align right");
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
-						.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE))
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
-						.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE))
-
-				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(jLabelOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addGroup(
-						groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-								.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-								.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)));
+		cp.add(buttonPanel, "growx, pushx");
 	}
 
 	private void finishAndMakeVisible() {
