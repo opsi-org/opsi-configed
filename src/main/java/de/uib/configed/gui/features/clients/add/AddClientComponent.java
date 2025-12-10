@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -52,6 +51,7 @@ import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class AddClientComponent extends AbstractTeaComponent<AddClientModel, AddClientMsg, AddClientEffect> {
 	private static final OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -206,8 +206,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private JPanel createPanel(Consumer<AddClientMsg> dispatch) {
-		JPanel panel = new JPanel();
-
 		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
 		jLabelHostname.setFont(jLabelHostname.getFont().deriveFont(Font.BOLD));
 
@@ -269,8 +267,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextNotes.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
 
-		JScrollPane jTextNodesScrollPane = new JScrollPane(jTextNotes);
-		jTextNodesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+		JScrollPane jTextNotesScrollPane = new JScrollPane(jTextNotes);
+		jTextNotesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
 		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
 		jLabelSystemUUID.setFont(jLabelSystemUUID.getFont().deriveFont(Font.BOLD));
@@ -321,179 +319,69 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jComboNetboot.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));
 
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
 		JPanel northPanel = createNorthPanel(dispatch);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(northPanel)
-				/////// HOSTNAME
-				.addComponent(jLabelHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		JPanel panel = new JPanel(new MigLayout("wrap 1, insets 0", "[grow, fill]0", "[]0"));
 
-				.addComponent(jLabelDomainname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboDomain, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// DESCRIPTION + INVENTORY
-				.addComponent(jLabelDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(jLabelInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				/////// NOTES
-				.addComponent(jLabelNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextNodesScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				/////// SYSTEM UUID
-				.addComponent(jLabelSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// MAC-ADDRESS
-				.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// IP-ADDRESS
-				.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// InstallByShutdown and WAN
-				.addComponent(jCheckShutdownInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckWan, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				// depot
-				.addComponent(jLabelDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				// group
-				.addComponent(labelGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				// netboot
-				.addComponent(jLabelNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(northPanel)
-				/////// HOSTNAME
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelHostname)
-				.addComponent(jTextHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelDomainname)
-				.addComponent(jComboDomain, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// DESCRIPTION
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelDescription)
-				.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// INVENTORY NUMBER
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelInventoryNumber)
-				.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// NOTES
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelNotes)
-				.addComponent(jTextNodesScrollPane, 100, 100, Short.MAX_VALUE)
-
-				/////// SYSTEM UUID
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelSystemUUID)
-				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// MAC-ADDRESS
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelMacAddress)
-				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// IP-ADDRESS
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelIpAddress)
-				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// SHUTDOWN and WAN
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jCheckShutdownInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckWan, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// depot
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// group
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// netboot
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		panel.add(northPanel, "growx 0, alignx left, wrap " + Globals.GAP_SIZE);
+		addPair(panel, jLabelHostname, jTextHostname);
+		addPair(panel, jLabelDomainname, jComboDomain);
+		addPair(panel, jLabelDescription, jTextDescription);
+		addPair(panel, jLabelInventoryNumber, jTextInventoryNumber);
+		addPair(panel, jLabelNotes, jTextNotesScrollPane, "grow, pushy, hmin 100");
+		addPair(panel, jLabelSystemUUID, systemUUIDField);
+		addPair(panel, jLabelMacAddress, macAddressField);
+		addPair(panel, jLabelIpAddress, ipAddressField);
+		addPair(panel, jCheckShutdownInstall, jCheckWan);
+		addPair(panel, jLabelDepot, jComboDepots);
+		addPair(panel, labelGroupSelection, jTextGroupSelection);
+		addPair(panel, jLabelNetboot, jComboNetboot, false);
 
 		return panel;
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2) {
+		addPair(panel, comp1, comp2, true, null);
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2, String extraConstraints) {
+		addPair(panel, comp1, comp2, true, extraConstraints);
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2, boolean addGap) {
+		addPair(panel, comp1, comp2, addGap, null);
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2, boolean addGap,
+			String extraConstraints) {
+		panel.add(comp1);
+		if (extraConstraints != null) {
+			panel.add(comp2, extraConstraints);
+		} else if (addGap) {
+			panel.add(comp2, "wrap " + Globals.GAP_SIZE);
+		} else {
+			panel.add(comp2);
+		}
 	}
 
 	private JPanel createNorthPanel(Consumer<AddClientMsg> dispatch) {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Icons.getIntellijIcon("add"));
-		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog(dialog));
+		jCSVTemplateButton.addActionListener(e -> CSVTemplateCreatorDialog.displayCSVTemplateDialog(dialog));
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Icons.getIntellijIcon("open"));
 		jImportButton
 				.addActionListener(actionEvent -> dispatch.accept(new AddClientMsg.ActionMsg.CSVImportRequested()));
 
-		JPanel northPanel = new JPanel();
-		final GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
+		JPanel northPanel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[right]unrel[]", "[]rel[]"));
 		northPanel.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jCSVTemplateLabel)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCSVTemplateButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(
-						northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
-								.addGap(Globals.GAP_SIZE).addComponent(jImportButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)));
+		northPanel.add(jCSVTemplateLabel);
+		northPanel.add(jCSVTemplateButton, "wrap");
 
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jCSVTemplateLabel).addComponent(jCSVTemplateButton, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jImportLabel)
-						.addComponent(jImportButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		northPanel.add(jImportLabel);
+		northPanel.add(jImportButton);
 
 		return northPanel;
 	}
