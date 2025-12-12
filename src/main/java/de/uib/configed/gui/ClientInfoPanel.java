@@ -242,7 +242,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(labelClientOSIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelClientOSIcon, 24, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(jTextFieldClientID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
@@ -254,8 +254,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(jTextFieldDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(25, 25, 25)
-						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(25).addComponent(scrollpaneVendorModel, 0,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 				/////// DESCRIPTION
 				.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -309,10 +309,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutClientPane.createParallelGroup()
-						.addComponent(labelClientOSIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT)
-						.addComponent(jTextFieldClientID, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT))
+						.addComponent(labelClientOSIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2,
+								Globals.DEFAULT_JLABEL_HEIGHT * 2)
+						.addComponent(jTextFieldClientID, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2,
+								Globals.DEFAULT_JLABEL_HEIGHT * 2))
 				/////// Operating System (long label)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(jTextFieldClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
