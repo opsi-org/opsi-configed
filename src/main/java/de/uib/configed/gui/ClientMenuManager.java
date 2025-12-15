@@ -133,6 +133,10 @@ public final class ClientMenuManager implements MenuListener {
 				.dependOnSelectionCount(true)
 				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()));
 
+		Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
+				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
+
 		// We want to add the acceserator manually so that it will be active always, not only
 		// when the client table has focus.
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
