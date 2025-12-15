@@ -126,14 +126,17 @@ public final class ClientMenuManager implements MenuListener {
 				ClientMenuItemConfig.item("MainFrame.jMenuOpenTerminal", TerminalController::openTerminalOnClient)
 						.withIcon("terminal").dependOnSelectionCount(true)
 						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
-		jMenuClients
-				.add(createMenuItem(
-						ClientMenuItemConfig
-								.item("MainFrame.jMenuRemoteControl",
-										() -> ExtraFrameController.startRemoteControlFrame(configedMain,
-												persistenceController))
-								.dependOnSelectionCount(true).withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0))
-								.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+
+		JMenuItem jMenuRemoteControl = createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuRemoteControl",
+						() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController))
+				.dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()));
+
+		// We want to add the acceserator manually so that it will be active always, not only
+		// when the client table has focus.
+		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+		jMenuClients.add(jMenuRemoteControl);
 
 		jMenuClients.addSeparator();
 
@@ -203,12 +206,15 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
-		JMenuItem item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
+		JMenuItem item;
 
 		if (config.keyStroke() != null) {
+			item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
 			item.setAccelerator(config.keyStroke());
 			Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
 					config.keyStroke(), config.action());
+		} else {
+			item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));
 		}
 
 		if (config.icon() != null) {
