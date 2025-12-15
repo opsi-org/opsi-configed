@@ -156,7 +156,8 @@ public class PackageManagerInstallParameterDialog {
 
 	private void initLayout() {
 		downloadPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
+		jLabelInstall
+				.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstallationMethod"));
 		jLabelInstall.setFont(jLabelInstall.getFont().deriveFont(Font.BOLD));
 
 		GroupLayout downloadPanelLayout = new GroupLayout(downloadPanel);
