@@ -4,7 +4,7 @@ project:
   description: opsi-configed management interface for the client management system
     opsi
   homepage: https://www.opsi.org
-  maintainer: uib GmbH info@uib.de
+  maintainer: UIB GmbH info@uib.de
   licenses:
     - license: AGPL-3.0
   version: "4.3.17.1"
