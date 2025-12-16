@@ -95,6 +95,7 @@ public final class LicensingInfoMap {
 	private List<String> obsoleteModules;
 	private List<String> shownModules;
 	private List<String> datesKeys;
+	private Map<String, String> dateToTitleMap;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
@@ -125,6 +126,7 @@ public final class LicensingInfoMap {
 		shownModules = produceShownModules();
 
 		datesKeys = produceDatesKeys();
+		dateToTitleMap = produceDateToTitleMap();
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap();
@@ -336,6 +338,28 @@ public final class LicensingInfoMap {
 		return dates;
 	}
 
+	private Map<String, String> produceDateToTitleMap() {
+		Map<String, String> resultMap = new HashMap<>();
+		if (datesKeys.isEmpty()) {
+			return resultMap;
+		}
+
+		for (int i = 0; i < datesKeys.size() - 1; i++) {
+			String title = isoDateToGUIDate(datesKeys.get(i)) + " - "
+					+ isoDateToGUIDate(LocalDate.parse(datesKeys.get(i + 1)).minusDays(1).toString());
+			resultMap.put(datesKeys.get(i), title);
+		}
+
+		resultMap.put(datesKeys.get(datesKeys.size() - 1), Configed.getResourceValue("LicensingInfo.from") + " "
+				+ isoDateToGUIDate(datesKeys.get(datesKeys.size() - 1)));
+
+		return resultMap;
+	}
+
+	private static String isoDateToGUIDate(String isoDate) {
+		return isoDate.substring(8, 10) + '.' + isoDate.substring(5, 7) + '.' + isoDate.substring(0, 4);
+	}
+
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
 		if (currentCloseToLimitModuleList == null) {
 			currentCloseToLimitModuleList = new HashSet<>();
@@ -369,7 +393,7 @@ public final class LicensingInfoMap {
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
-			resultMap.put(key, modulesMapToDate);
+			resultMap.put(dateToTitleMap.get(key), modulesMapToDate);
 		}
 
 		return checkTimeWarning(resultMap);
