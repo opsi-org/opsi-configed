@@ -446,7 +446,7 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Object>> resultMap = new TreeMap<>();
 
 		columnNames = new ArrayList<>();
-		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
+		columnNames.add(Configed.getResourceValue("LicensingInfo.module"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
 		for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
@@ -457,7 +457,7 @@ public final class LicensingInfoMap {
 			Map<String, Object> line = new HashMap<>();
 
 			// 1st column
-			line.put(Configed.getResourceValue("LicensingInfo.modules"), currentModule);
+			line.put(Configed.getResourceValue("LicensingInfo.module"), currentModule);
 
 			// 2nd column
 

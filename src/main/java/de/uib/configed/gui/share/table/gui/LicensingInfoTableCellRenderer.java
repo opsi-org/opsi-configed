@@ -49,7 +49,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 			setText(null);
 			setToolTipText(null);
 			setAvailabilityIcon(value);
-		} else if (!columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))) {
+		} else if (!columnName.equals(Configed.getResourceValue("LicensingInfo.module"))) {
 			Map<String, Map<String, Map<String, Object>>> datesMap = licensingInfoMap.getDatesMap();
 			Map<String, Object> moduleToDateData = datesMap.get(columnName).get(rowName);
 			String state = moduleToDateData.get(LicensingInfoMap.STATE).toString();
@@ -60,7 +60,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 			setIcon(null);
 
 			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
-			if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules"))
+			if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.module"))
 					&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 				String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
 				String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
@@ -70,7 +70,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 				}
 			}
 		} else {
-			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty		
+			// columnName is Configed.getResourceValue("LicensingInfo.module"), so do nothing; should remain empty		
 			setIcon(null);
 			setToolTipText(null);
 		}
