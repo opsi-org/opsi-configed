@@ -127,7 +127,7 @@ public final class LicensingInfoMap {
 		datesKeys = produceDatesKeys();
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
-		tableMap = produceTableMapFromDatesMap(datesMap);
+		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet();
 	}
 
@@ -418,15 +418,14 @@ public final class LicensingInfoMap {
 	 * transforms datesMap to be able to use in a table, with dates as columns
 	 * and modules as rows
 	 */
-	private Map<String, Map<String, Object>> produceTableMapFromDatesMap(
-			Map<String, Map<String, Map<String, Object>>> datesM) {
+	private Map<String, Map<String, Object>> produceTableMapFromDatesMap() {
 		Map<String, Map<String, Object>> resultMap = new TreeMap<>();
 
 		columnNames = new ArrayList<>();
 		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
-		for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+		for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
 			columnNames.add(date.getKey());
 		}
 
@@ -442,7 +441,7 @@ public final class LicensingInfoMap {
 			line.put(Configed.getResourceValue("LicensingInfo.available"), availableModules.contains(currentModule));
 
 			// rest columns
-			for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+			for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
 				line.put(date.getKey(), date.getValue().get(currentModule).get(CLIENT_NUMBER).toString());
 			}
 
