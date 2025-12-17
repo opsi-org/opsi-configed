@@ -115,14 +115,10 @@ public class HardwareDataService {
 			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
 			hardwareInfo.keySet()
 					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
-			if (result.containsKey(hardwareClass)) {
-				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareClass);
-				hardwareClassInfos.add(hardwareInfo);
-			} else {
-				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
-				hardwareClassInfos.add(hardwareInfo);
-				result.put(hardwareClass, hardwareClassInfos);
-			}
+
+			List<Map<String, Object>> hardwareClassInfos = result.computeIfAbsent(hardwareClass,
+					s -> new ArrayList<>());
+			hardwareClassInfos.add(hardwareInfo);
 		}
 
 		List<Map<String, Object>> scanProperties = new ArrayList<>();
