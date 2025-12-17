@@ -20,6 +20,7 @@ import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
+import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.messages.Messages;
 
 /**
@@ -123,9 +124,9 @@ public class HardwareDataService {
 
 		List<Map<String, Object>> scanProperties = new ArrayList<>();
 		Map<String, Object> scanProperty = new HashMap<>();
-		scanProperty.put("scantime", scanTime.format(timeFormatter));
+		scanProperty.put(PanelHWInfo.SCANTIME, scanTime.format(timeFormatter));
 		scanProperties.add(scanProperty);
-		result.put("SCANPROPERTIES", scanProperties);
+		result.put(PanelHWInfo.SCANPROPERTYNAME, scanProperties);
 		return result.size() > 1 ? result : new HashMap<>();
 	}
 

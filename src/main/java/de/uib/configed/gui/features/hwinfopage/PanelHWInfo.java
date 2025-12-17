@@ -64,8 +64,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
-	private static final String SCANPROPERTYNAME = "SCANPROPERTIES";
-	private static final String SCANTIME = "scantime";
+	public static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	public static final String SCANTIME = "scantime";
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
