@@ -36,6 +36,7 @@ import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
 public class LicenseManagement extends JTabbedPane implements ChangeListener {
@@ -237,6 +238,12 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		case JOptionPane.NO_OPTION:
 			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned false");
 			licensesPanels.get(licensesStatus).reset();
+			licensesStatus = newState;
+			break;
+		case AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN:
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned no dialog shown");
+			// We want to load the data in the new panel
+			licensesPanels.get(newState).load();
 			licensesStatus = newState;
 			break;
 		case JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION:

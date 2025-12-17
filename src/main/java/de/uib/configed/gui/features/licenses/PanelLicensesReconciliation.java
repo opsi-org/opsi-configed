@@ -74,4 +74,9 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 			super.reset();
 		}
 	}
+
+	@Override
+	public void load() {
+		reset();
+	}
 }

@@ -25,6 +25,10 @@ public class MultiTablePanel extends JPanel {
 		controller.initializeVisualSettings();
 	}
 
+	public void load() {
+		// Can be overridden if needed
+	}
+
 	/**
 	 * commits all changes in this site
 	 */

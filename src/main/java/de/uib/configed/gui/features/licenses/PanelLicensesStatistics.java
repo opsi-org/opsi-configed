@@ -76,4 +76,9 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 			super.reset();
 		}
 	}
+
+	@Override
+	public void load() {
+		reset();
+	}
 }
