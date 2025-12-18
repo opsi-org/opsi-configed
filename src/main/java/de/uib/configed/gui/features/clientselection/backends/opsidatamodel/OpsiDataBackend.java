@@ -29,6 +29,7 @@ import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.opera
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterThanOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntLessOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntLessThanOperation;
+import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataBooleanEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataConnectionEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateEqualsOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.operations.OpsiDataDateGreaterOrEqualOperation;
@@ -50,6 +51,7 @@ import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.opera
 import de.uib.configed.gui.features.clientselection.elements.ConnectionElement;
 import de.uib.configed.gui.features.clientselection.elements.DescriptionElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericBigIntegerElement;
+import de.uib.configed.gui.features.clientselection.elements.GenericBooleanElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericEnumElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericIntegerElement;
 import de.uib.configed.gui.features.clientselection.elements.GenericTextElement;
@@ -79,6 +81,7 @@ import de.uib.configed.gui.features.clientselection.operations.BigIntGreaterOrEq
 import de.uib.configed.gui.features.clientselection.operations.BigIntGreaterThanOperation;
 import de.uib.configed.gui.features.clientselection.operations.BigIntLessOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.operations.BigIntLessThanOperation;
+import de.uib.configed.gui.features.clientselection.operations.BooleanEqualsOperation;
 import de.uib.configed.gui.features.clientselection.operations.DateEqualsOperation;
 import de.uib.configed.gui.features.clientselection.operations.DateGreaterOrEqualOperation;
 import de.uib.configed.gui.features.clientselection.operations.DateGreaterThanOperation;
@@ -96,6 +99,7 @@ import de.uib.configed.gui.features.clientselection.operations.OrOperation;
 import de.uib.configed.gui.features.clientselection.operations.SoftwareOperation;
 import de.uib.configed.gui.features.clientselection.operations.StringEqualsOperation;
 import de.uib.configed.gui.features.clientselection.operations.SwAuditOperation;
+import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.SWAuditClientEntry;
@@ -111,6 +115,9 @@ public final class OpsiDataBackend {
 	private boolean hasHardware;
 	private boolean hasSwAudit;
 	private boolean reloadRequested;
+
+	private Set<Class<?>> hardwareElements = Set.of(GenericTextElement.class, GenericIntegerElement.class,
+			GenericBigIntegerElement.class, GenericEnumElement.class, GenericBooleanElement.class);
 
 	// data which will be cached
 	private Map<String, HostInfo> clientMaps;
@@ -299,8 +306,7 @@ public final class OpsiDataBackend {
 		Object data = operation.getData();
 
 		// hardware
-		if (element instanceof GenericTextElement || element instanceof GenericIntegerElement
-				|| element instanceof GenericBigIntegerElement || element instanceof GenericEnumElement) {
+		if (hardwareElements.contains(element.getClass())) {
 			String map = hwUiToOpsi.get(elementPath[0]);
 			String attr = getKey(elementPath);
 
@@ -346,6 +352,10 @@ public final class OpsiDataBackend {
 
 			if (operation instanceof BigIntEqualsOperation) {
 				return new OpsiDataBigIntEqualsOperation(map, attr, (Long) data, element);
+			}
+
+			if (operation instanceof BooleanEqualsOperation) {
+				return new OpsiDataBooleanEqualsOperation(map, attr, (Boolean) data, element);
 			}
 		}
 		Logging.error("IllegalArgument: The operation ", operation, " was not found on ", element);
@@ -516,7 +526,10 @@ public final class OpsiDataBackend {
 				String type = (String) valuesMap.get("Type");
 				String name = (String) valuesMap.get("UI");
 				String localizedName = (String) valuesLocalized.get(j).get("UI");
-				if ("int".equals(type) || "tinyint".equals(type)) {
+				if (PanelHWInfo.BOOLEAN_VALUES.contains(valuesMap.get("Opsi"))) {
+					elementList.add(new GenericBooleanElement(new String[] { hardwareName, name },
+							hardwareNameLocalized, localizedName));
+				} else if ("int".equals(type) || "tinyint".equals(type)) {
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
 				} else if ("bigint".equals(type)) {

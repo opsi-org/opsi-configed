@@ -20,6 +20,7 @@ import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
+import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.messages.Messages;
 
 /**
@@ -115,21 +116,17 @@ public class HardwareDataService {
 			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
 			hardwareInfo.keySet()
 					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
-			if (result.containsKey(hardwareClass)) {
-				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareClass);
-				hardwareClassInfos.add(hardwareInfo);
-			} else {
-				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
-				hardwareClassInfos.add(hardwareInfo);
-				result.put(hardwareClass, hardwareClassInfos);
-			}
+
+			List<Map<String, Object>> hardwareClassInfos = result.computeIfAbsent(hardwareClass,
+					s -> new ArrayList<>());
+			hardwareClassInfos.add(hardwareInfo);
 		}
 
 		List<Map<String, Object>> scanProperties = new ArrayList<>();
 		Map<String, Object> scanProperty = new HashMap<>();
-		scanProperty.put("scantime", scanTime.format(timeFormatter));
+		scanProperty.put(PanelHWInfo.SCANTIME, scanTime.format(timeFormatter));
 		scanProperties.add(scanProperty);
-		result.put("SCANPROPERTIES", scanProperties);
+		result.put(PanelHWInfo.SCANPROPERTYNAME, scanProperties);
 		return result.size() > 1 ? result : new HashMap<>();
 	}
 
