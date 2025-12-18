@@ -17,7 +17,7 @@ public class SelectData {
 
 	public enum DataType {
 		TEXT_TYPE("TextType"), INTEGER_TYPE("IntegerType"), BIG_INTEGER_TYPE("BigIntegerType"),
-		DOUBLE_TYPE("DoubleType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType");
+		DOUBLE_TYPE("DoubleType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType"), BOOLEAN_TYPE("BooleanType");
 
 		private final String displayName;
 
@@ -60,6 +60,12 @@ public class SelectData {
 			if (!(data instanceof Double)) {
 				Logging.error(this, "Data is no Double");
 				throw new IllegalArgumentException("Data is no Double");
+			}
+			break;
+		case BOOLEAN_TYPE:
+			if (!(data instanceof Boolean)) {
+				Logging.error(this, "Data is no Boolean");
+				throw new IllegalArgumentException("Data is no Boolean");
 			}
 			break;
 		case NONE_TYPE:

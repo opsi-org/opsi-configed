@@ -54,7 +54,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
 	// These are the values that should be interpreted as booleans
-	private static final Set<String> BOOLEAN_VALUES = Set.of("UEFIBootActive", "SecureBootActive",
+	public static final Set<String> BOOLEAN_VALUES = Set.of("UEFIBootActive", "SecureBootActive",
 			"SecureBootWindowsCA2023");
 
 	private static final Set<String> hwClassesForByAudit = new HashSet<>();

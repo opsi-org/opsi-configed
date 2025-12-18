@@ -46,6 +46,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
+
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.clientselection.AbstractSelectElement;
@@ -686,6 +689,14 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 				return null;
 			}
 			break;
+
+		case BOOLEAN_TYPE:
+			State state = ((FlatTriStateCheckBox) group.dataComponent).getState();
+			if (FlatTriStateCheckBox.State.INDETERMINATE == state) {
+				return null;
+			}
+			data = (state == FlatTriStateCheckBox.State.SELECTED);
+			break;
 		case NONE_TYPE:
 		}
 
@@ -840,6 +851,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			addBigIntegerTypeComponent(sourceGroup);
 			break;
 
+		case BOOLEAN_TYPE:
+			addBooleanTypeComponent(sourceGroup);
+			break;
+
 		case NONE_TYPE:
 			return;
 		}
@@ -887,6 +902,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		fieldDouble.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
+	}
+
+	private static void addBooleanTypeComponent(SimpleGroup sourceGroup) {
+		FlatTriStateCheckBox checkBox = new FlatTriStateCheckBox();
+		checkBox.setFocusable(false);
+		checkBox.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.booleanInputToolTip"));
+		sourceGroup.dataComponent = checkBox;
 	}
 
 	/*
@@ -1048,6 +1070,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 						.setValue((Long) data.getData());
 		case JSpinner jSpinner when data.getType() == SelectData.DataType.INTEGER_TYPE -> jSpinner
 				.setValue(data.getData());
+		case FlatTriStateCheckBox flatTriStateCheckBox -> flatTriStateCheckBox.setSelected((Boolean) data.getData());
 		default -> Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}

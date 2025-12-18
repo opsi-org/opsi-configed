@@ -261,6 +261,10 @@ public class OpsiDataSerializer {
 			dataType = DataType.DATE_TYPE;
 			break;
 
+		case "BooleanType":
+			dataType = DataType.BOOLEAN_TYPE;
+			break;
+
 		case "NoneType":
 			dataType = DataType.NONE_TYPE;
 			break;
@@ -284,6 +288,7 @@ public class OpsiDataSerializer {
 		case DOUBLE_TYPE -> Double.valueOf(data);
 		case INTEGER_TYPE -> Integer.valueOf(data);
 		case BIG_INTEGER_TYPE -> Long.valueOf(data);
+		case BOOLEAN_TYPE -> Boolean.valueOf(data);
 		default -> throw new IllegalArgumentException("Type " + dataType + " not expected here");
 		};
 	}
