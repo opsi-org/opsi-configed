@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public class HWInfoTableModel extends AbstractTableModel {
-	private List<String[]> data;
+	private List<Object[]> data;
 	private final String[] header = { "Name", "Wert" };
 
 	public HWInfoTableModel() {
@@ -20,7 +20,7 @@ public class HWInfoTableModel extends AbstractTableModel {
 		data = new ArrayList<>();
 	}
 
-	public void setData(List<String[]> data) {
+	public void setData(List<Object[]> data) {
 		this.data = data;
 		fireTableDataChanged();
 	}
