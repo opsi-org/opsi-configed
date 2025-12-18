@@ -93,7 +93,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private String productString;
 
 	private PanelHWByAuditDriver panelByAuditInfo;
-	private HWInfoCellRenderer cellRenderer;
 
 	private boolean withPopup;
 
@@ -123,8 +122,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
-		cellRenderer = new HWInfoCellRenderer();
-		table.setDefaultRenderer(Object.class, cellRenderer);
+		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
 		table.getColumnModel().getColumn(1).setPreferredWidth(300);
