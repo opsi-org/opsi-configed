@@ -85,15 +85,15 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		LicensesTabStatus newStatus = tabOrder.get(newVisualIndex);
 
 		// report state change request to controller and look, what it produces
-		LicensesTabStatus status = reactToStateChangeRequest(newStatus);
+		licensesStatus = reactToStateChangeRequest(newStatus);
 
 		// if the controller did not accept the new index set it back
 		// observe that we get a recursion since we initiate another state change
 		// the recursion breaks since newVisualIndex is identical with
 		// the old and does not yield a different value
-		if (newStatus != status) {
+		if (newStatus != licensesStatus) {
 			super.removeChangeListener(this);
-			setSelectedIndex(tabOrder.indexOf(status));
+			setSelectedIndex(tabOrder.indexOf(licensesStatus));
 			super.addChangeListener(this);
 		}
 	}
@@ -230,34 +230,32 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 	private LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
 		Logging.debug(this, "reactToStateChangeRequest( newState: ", newState, "), current state ", licensesStatus);
 
-		switch (licensesPanels.get(licensesStatus).mayLeave()) {
-		case JOptionPane.YES_OPTION:
+		return switch (licensesPanels.get(licensesStatus).mayLeave()) {
+		case JOptionPane.YES_OPTION -> {
 			licensesPanels.get(licensesStatus).saveSettings();
-			licensesStatus = newState;
-			break;
-		case JOptionPane.NO_OPTION:
+			yield newState;
+		}
+		case JOptionPane.NO_OPTION -> {
 			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned false");
 			licensesPanels.get(licensesStatus).reset();
-			licensesStatus = newState;
-			break;
-		case AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN:
+			yield newState;
+		}
+		case AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN -> {
 			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned no dialog shown");
 			// We want to load the data in the new panel
 			licensesPanels.get(newState).load();
-			licensesStatus = newState;
-			break;
-		case JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION:
-			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned cancel");
-			// do nothing, stay in the old state
-			break;
-		default:
-			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned unknown value");
-			licensesStatus = newState;
-			break;
+			yield newState;
 		}
-
-		// otherwise we return the old status
-		return licensesStatus;
+		case JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION -> {
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned cancel");
+			// stay in the old state
+			yield licensesStatus;
+		}
+		default -> {
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned unknown value");
+			yield newState;
+		}
+		};
 	}
 
 	public boolean checkSavedLicensesPane() {

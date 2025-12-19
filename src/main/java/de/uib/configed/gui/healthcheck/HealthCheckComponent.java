@@ -310,21 +310,19 @@ public class HealthCheckComponent extends
 		Style style = null;
 
 		switch (token) {
-		case "OK":
+		case "OK" -> {
 			style = styleContext.addStyle("ok", null);
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_NOTICE);
-			break;
-		case "WARNING":
+		}
+		case "WARNING" -> {
 			style = styleContext.addStyle("warning", null);
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_WARNING);
-			break;
-		case "ERROR":
+		}
+		case "ERROR" -> {
 			style = styleContext.addStyle("error", null);
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_ERROR);
-			break;
-		default:
-			Logging.notice(this, "unsupported token: ", token);
-			break;
+		}
+		default -> Logging.notice(this, "unsupported token: ", token);
 		}
 
 		return style;

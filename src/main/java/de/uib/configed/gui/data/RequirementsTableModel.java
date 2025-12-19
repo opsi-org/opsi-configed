@@ -117,26 +117,22 @@ public class RequirementsTableModel extends AbstractTableModel {
 			result = getValueAtFirstColumn(rowTypeIndex, myKey);
 		} else {
 			switch (col) {
-			case 1:
+			case 1 -> {
 				return getValueForCol1(myKey, rowTypeIndex);
-
-			case 2:
+			}
+			case 2 -> {
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requBeforeMap != null) {
 					result = requBeforeMap.get(myKey);
 				}
-				break;
-
-			case 3:
+			}
+			case 3 -> {
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requAfterMap != null) {
 					result = requAfterMap.get(myKey);
 				}
-				break;
-
-			default:
-				Logging.warning(this, "no case found for col in getValueAt");
-				break;
+			}
+			default -> Logging.warning(this, "no case found for col in getValueAt");
 			}
 
 			if (result != null) {
