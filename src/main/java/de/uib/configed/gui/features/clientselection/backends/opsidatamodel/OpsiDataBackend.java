@@ -207,15 +207,11 @@ public final class OpsiDataBackend {
 		case ConnectionElement ce -> {
 			return new OpsiDataConnectionEqualsOperation((String) operation.getData(), ce);
 		}
-		case GroupElement ge -> {
-			if (operation instanceof StringEqualsOperation) {
-				return new OpsiDataGroupEqualsOperation((String) operation.getData(), ge);
-			}
+		case GroupElement ge when operation instanceof StringEqualsOperation -> {
+			return new OpsiDataGroupEqualsOperation((String) operation.getData(), ge);
 		}
-		case GroupWithSubgroupsElement gse -> {
-			if (operation instanceof StringEqualsOperation) {
-				return new OpsiDataSuperGroupEqualsOperation((String) operation.getData(), gse);
-			}
+		case GroupWithSubgroupsElement gse when operation instanceof StringEqualsOperation -> {
+			return new OpsiDataSuperGroupEqualsOperation((String) operation.getData(), gse);
 		}
 		default -> {
 			// continue
@@ -317,38 +313,24 @@ public final class OpsiDataBackend {
 
 	private AbstractSelectGroupOperation createGroupOperation(AbstractSelectGroupOperation operation,
 			List<AbstractSelectOperation> operations) {
-		if (operation instanceof AndOperation && operations.size() >= 2) {
-			return new AndOperation(operations);
-		}
+		int size = operations.size();
 
-		if (operation instanceof OrOperation && operations.size() >= 2) {
-			return new OrOperation(operations);
-		}
+		return switch (operation) {
+		case AndOperation ignored when size >= 2 -> new AndOperation(operations);
+		case OrOperation ignored when size >= 2 -> new OrOperation(operations);
+		case NotOperation ignored when size == 1 -> new NotOperation(operations.get(0));
+		case SoftwareOperation ignored when size == 1 -> new OpsiDataSoftwareOperation(operations.get(0));
+		case SwAuditOperation ignored when size == 1 -> new OpsiDataSwAuditOperation(operations.get(0));
+		case HardwareOperation ignored when size == 1 -> new OpsiDataHardwareOperation(operations.get(0));
+		case HostOperation ignored when size == 1 -> new HostOperation(operations.get(0));
+		default -> unsupportedOperation(operation, size);
+		};
+	}
 
-		if (operation instanceof NotOperation && operations.size() == 1) {
-			return new NotOperation(operations.get(0));
-		}
-
-		if (operation instanceof SoftwareOperation && operations.size() == 1) {
-			return new OpsiDataSoftwareOperation(operations.get(0));
-		}
-
-		if (operation instanceof SwAuditOperation && operations.size() == 1) {
-			return new OpsiDataSwAuditOperation(operations.get(0));
-		}
-
-		if (operation instanceof HardwareOperation && operations.size() == 1) {
-			return new OpsiDataHardwareOperation(operations.get(0));
-		}
-
-		if (operation instanceof HostOperation && operations.size() == 1) {
-			return new HostOperation(operations.get(0));
-		}
-
-		Logging.error(this, "IllegalArgument: The group operation ", operation, " was not found with ",
-				operations.size(), " operations");
-		throw new IllegalArgumentException(
-				"The group operation " + operation + " was not found with " + operations.size() + " operations");
+	private AbstractSelectGroupOperation unsupportedOperation(AbstractSelectGroupOperation operation, int size) {
+		String errorMessage = "The operation " + operation + " with " + size + " operations is not supported.";
+		Logging.error(this, errorMessage);
+		throw new IllegalArgumentException(errorMessage);
 	}
 
 	public void setReloadRequested() {
