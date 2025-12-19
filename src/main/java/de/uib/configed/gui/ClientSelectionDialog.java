@@ -1080,20 +1080,16 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private static void setConnectionTypes(JCheckBox andOr, AbstractButton not, ConnectionStatus status) {
 		switch (status) {
-		case AND:
-			andOr.setSelected(true);
-			break;
-		case OR:
-			andOr.setSelected(false);
-			break;
-		case AND_NOT:
+		case AND -> andOr.setSelected(true);
+		case OR -> andOr.setSelected(false);
+		case AND_NOT -> {
 			andOr.setSelected(true);
 			not.setSelected(true);
-			break;
-		case OR_NOT:
+		}
+		case OR_NOT -> {
 			andOr.setSelected(false);
 			not.setSelected(true);
-			break;
+		}
 		}
 	}
 

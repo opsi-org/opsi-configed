@@ -73,17 +73,11 @@ public final class ConnectionErrorReporter {
 
 	public void notify(String message, ConnectionErrorType errorType) {
 		switch (errorType) {
-		case FAILED_CERTIFICATE_VALIDATION_ERROR:
-			displayFailedCertificateValidationDialog(message);
-			break;
-		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR, GENERAL_ERROR:
-			displayGeneralDialog(message);
-			break;
-		case MFA_ERROR:
-			displayMFADialog();
-			break;
-		default:
-			Logging.notice(this, "unhandeld error type: ", errorType);
+		case FAILED_CERTIFICATE_VALIDATION_ERROR -> displayFailedCertificateValidationDialog(message);
+		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR, GENERAL_ERROR -> displayGeneralDialog(
+				message);
+		case MFA_ERROR -> displayMFADialog();
+		default -> Logging.notice(this, "unhandeld error type: ", errorType);
 		}
 	}
 

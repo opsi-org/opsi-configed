@@ -53,31 +53,21 @@ public final class ThemeManager {
 	}
 
 	public static String getThemeTranslation(String theme) {
-		switch (theme) {
-		case THEME_LIGHT:
-			return Configed.getResourceValue("theme.light");
-
-		case THEME_DARK:
-			return Configed.getResourceValue("theme.dark");
-
-		default:
+		return switch (theme) {
+		case THEME_LIGHT -> Configed.getResourceValue("theme.light");
+		case THEME_DARK -> Configed.getResourceValue("theme.dark");
+		default -> {
 			Logging.warning("Cannot find translation for theme ", theme);
-			return null;
+			yield null;
 		}
+		};
 	}
 
 	public static void setThemeIcon(AbstractButton abstractButton, String theme) {
 		switch (theme) {
-		case THEME_LIGHT:
-			Icons.addIntellijIconToMenuItem(abstractButton, "lightTheme");
-			break;
-
-		case THEME_DARK:
-			Icons.addIntellijIconToMenuItem(abstractButton, "darkTheme");
-			break;
-
-		default:
-			Logging.warning("Cannot find translation for theme ", theme);
+		case THEME_LIGHT -> Icons.addIntellijIconToMenuItem(abstractButton, "lightTheme");
+		case THEME_DARK -> Icons.addIntellijIconToMenuItem(abstractButton, "darkTheme");
+		default -> Logging.warning("Cannot find translation for theme ", theme);
 		}
 	}
 
@@ -102,17 +92,9 @@ public final class ThemeManager {
 		registerOpenSansFonts();
 
 		switch (getSelectedTheme()) {
-		case THEME_LIGHT:
-			FlatLightLaf.setup();
-			break;
-
-		case THEME_DARK:
-			FlatDarkLaf.setup();
-			break;
-
-		default:
-			Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
-			break;
+		case THEME_LIGHT -> FlatLightLaf.setup();
+		case THEME_DARK -> FlatDarkLaf.setup();
+		default -> Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 		}
 
 		Globals.setTableColors();

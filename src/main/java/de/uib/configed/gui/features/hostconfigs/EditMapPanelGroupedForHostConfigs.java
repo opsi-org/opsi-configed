@@ -192,21 +192,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addRole();
-					break;
-
-				case PopupMenuTrait.POPUP_DELETE:
-					deleteUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addRole();
+				case PopupMenuTrait.POPUP_DELETE -> deleteUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
 				}
 			}
 		};
@@ -222,17 +211,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addRole();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addRole();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
 				}
 			}
 		};

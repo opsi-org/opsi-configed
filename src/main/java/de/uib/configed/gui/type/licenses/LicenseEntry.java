@@ -67,25 +67,16 @@ public class LicenseEntry extends TreeMap<String, Object> {
 	}
 
 	private String translateTypeFromService(String servicetype) {
-		String result = "";
-		switch (servicetype) {
-		case VOLUME_SERVICE:
-			result = VOLUME;
-			break;
-		case OEM_SERVICE:
-			result = OEM;
-			break;
-		case RETAIL_SERVICE:
-			result = RETAIL;
-			break;
-		case CONCURRENT_SERVICE:
-			result = CONCURRENT;
-			break;
-		default:
+		return switch (servicetype) {
+		case VOLUME_SERVICE -> VOLUME;
+		case OEM_SERVICE -> OEM;
+		case RETAIL_SERVICE -> RETAIL;
+		case CONCURRENT_SERVICE -> CONCURRENT;
+		default -> {
 			Logging.warning(this, "illlegal servicetype ", servicetype);
-			result = "";
+			yield "";
 		}
-		return result;
+		};
 	}
 
 	public String getId() {

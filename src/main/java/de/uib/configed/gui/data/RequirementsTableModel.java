@@ -93,27 +93,17 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int col) {
-		String result = "";
-		switch (col) {
-		case 0:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
-			break;
+		return switch (col) {
+		case 0 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
 
-		case 1:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
-			break;
-		case 2:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
-			break;
-		case 3:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
-			break;
-		default:
+		case 1 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeSetup");
+		case 2 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
+		case 3 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
+		default -> {
 			Logging.warning(this, "no case found for col in getColumnName");
-			break;
+			yield "";
 		}
-
-		return result;
+		};
 	}
 
 	@Override
