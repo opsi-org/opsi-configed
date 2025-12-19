@@ -364,7 +364,7 @@ public final class CommandParameterParser {
 		for (String name : configedMain.getSelectedClients()) {
 			HostInfo hostInfo = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(name);
 			if (hostInfo != null) {
-				clientIPs[counter] = hostInfo.getIpAddress();
+				clientIPs[counter] = hostInfo.getString(HostInfo.CLIENT_IP_ADDRESS_KEY);
 				counter++;
 			} else {
 				Logging.debug(this, "getSelected_clientIPs host ", name, " HostInfo null");

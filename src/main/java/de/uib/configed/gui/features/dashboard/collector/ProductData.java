@@ -135,7 +135,8 @@ public final class ProductData {
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
 			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).toList();
+					.stream().filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
+					.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).toList();
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
 					.getProductDataService().getMapOfProductStatesAndActions(clientsMap);
 
@@ -197,7 +198,8 @@ public final class ProductData {
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
 		List<String> hostnames = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).toList();
+				.stream().filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
+				.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).toList();
 		for (String productId : tmpUnusedProductsList.get(depot)) {
 			addUnusedProductToList(depot, productId, hostnames, unusedProductsList);
 		}

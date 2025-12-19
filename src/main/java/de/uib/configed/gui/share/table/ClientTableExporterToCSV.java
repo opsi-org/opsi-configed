@@ -68,7 +68,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private String getRowValue(String columnName, HostInfo clientInfo) {
-		String clientName = clientInfo.getName();
+		String clientName = clientInfo.getString(HostInfo.HOSTNAME_KEY);
 
 		return switch (columnName) {
 		case "id" -> clientName.substring(0, clientName.indexOf("."));

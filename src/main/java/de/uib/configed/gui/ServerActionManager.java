@@ -234,7 +234,8 @@ public final class ServerActionManager {
 		}
 
 		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
-				.stream().filter(hostValues -> hostValues.getName().equals(configedMain.getSelectedClients().get(0)))
+				.stream().filter(hostValues -> hostValues.getString(HostInfo.HOSTNAME_KEY)
+						.equals(configedMain.getSelectedClients().get(0)))
 				.findFirst();
 
 		if (!selectedClient.isPresent()) {
@@ -246,7 +247,8 @@ public final class ServerActionManager {
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
 				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
+		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(
+				selectedClient.get().getString(HostInfo.HOSTNAME_KEY));
 		jTextHostname.setText(copySuffixAddition.add());
 
 		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
@@ -269,7 +271,7 @@ public final class ServerActionManager {
 		StringBuilder messageText = new StringBuilder();
 		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
 		messageText.append("\n");
-		messageText.append(selectedClient.get().getName());
+		messageText.append(selectedClient.get().getString(HostInfo.HOSTNAME_KEY));
 		messageText.append("\n");
 		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
 
@@ -296,7 +298,7 @@ public final class ServerActionManager {
 
 			HostInfo clientToCopy = selectedClient.get();
 			String newClientNameWithDomain = newClientName + "."
-					+ Utils.getDomainFromClientName(clientToCopy.getName());
+					+ Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
 				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 				if (!overwriteExistingHost) {

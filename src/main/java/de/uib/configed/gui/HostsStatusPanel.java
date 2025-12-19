@@ -109,22 +109,22 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	private void updateSelectedClientInfo(HostInfo hostInfo) {
-		labelOS.setText(hostInfo.getClientOS());
-		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
+		labelOS.setText(hostInfo.getString(HostInfo.CLIENT_OS_KEY));
+		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getString(HostInfo.CLIENT_OS_KEY), 20));
 
-		labelDeviceType.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
-		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
-
+		labelDeviceType
+				.setText(ClientInfoPanel.transformDeviceType(hostInfo.getString(HostInfo.CLIENT_DEVICE_TYPE_KEY)));
+		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getString(HostInfo.CLIENT_DEVICE_TYPE_KEY)));
 		StringBuilder tooltipText = new StringBuilder();
-		if (!hostInfo.getClientDeviceVendor().isBlank()) {
-			tooltipText.append(hostInfo.getClientDeviceVendor());
+		if (!hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY).isBlank()) {
+			tooltipText.append(hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY));
 		}
 
-		if (!hostInfo.getClientDeviceModel().isBlank()) {
+		if (!hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY).isBlank()) {
 			if (tooltipText.length() > 0) {
 				tooltipText.append("\n");
 			}
-			tooltipText.append(hostInfo.getClientDeviceModel());
+			tooltipText.append(hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY));
 		}
 
 		labelDeviceType.setToolTipText(tooltipText.toString());

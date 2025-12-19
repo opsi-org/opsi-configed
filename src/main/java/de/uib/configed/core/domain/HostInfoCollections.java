@@ -309,7 +309,7 @@ public class HostInfoCollections {
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(host);
-			hostInfo.setInDepot(depotId);
+			hostInfo.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 
 			host2hostInfo.put(name, hostInfo);
 			depot2Host2HostInfo.get(depotId).put(name, hostInfo);

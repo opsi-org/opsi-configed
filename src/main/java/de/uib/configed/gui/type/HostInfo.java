@@ -237,40 +237,13 @@ public class HostInfo {
 		}
 	}
 
-	public String getInDepot() {
-		return (String) data.get(DEPOT_OF_CLIENT_KEY);
-	}
-
-	public void setInDepot(String depot) {
-		data.put(DEPOT_OF_CLIENT_KEY, depot);
-	}
-
-	public String getDescription() {
-		return (String) data.get(CLIENT_DESCRIPTION_KEY);
-	}
-
-	public String getInventoryNumber() {
-		return (String) data.get(CLIENT_INVENTORY_NUMBER_KEY);
-	}
-
-	public String getMacAddress() {
-		return (String) data.get(CLIENT_MAC_ADRESS_KEY);
-	}
-
-	public String getLastSeen() {
-		return (String) data.get(LAST_SEEN_KEY);
-	}
-
-	public String getName() {
-		return (String) data.get(HOSTNAME_KEY);
-	}
-
-	public String getHostKey() {
-		return (String) data.get(HOST_KEY_KEY);
-	}
-
-	public String getIpAddress() {
-		return (String) data.get(CLIENT_IP_ADDRESS_KEY);
+	public String getString(String key) {
+		if (stringKeys.contains(key)) {
+			return (String) data.get(key);
+		} else {
+			Logging.warning(this, "key ", key, " not expected");
+			return null;
+		}
 	}
 
 	public Boolean getWanConfig() {
@@ -287,26 +260,6 @@ public class HostInfo {
 
 	public Boolean getShutdownInstall() {
 		return (Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY);
-	}
-
-	public String getClientOS() {
-		return (String) data.get(CLIENT_OS_KEY);
-	}
-
-	public String getClientOSType() {
-		return (String) data.get(CLIENT_OS_TYPE_KEY);
-	}
-
-	public String getClientDeviceType() {
-		return (String) data.get(CLIENT_DEVICE_TYPE_KEY);
-	}
-
-	public String getClientDeviceVendor() {
-		return (String) data.get(CLIENT_DEVICE_VENDOR_KEY);
-	}
-
-	public String getClientDeviceModel() {
-		return (String) data.get(CLIENT_DEVICE_MODEL_KEY);
 	}
 
 	public void setShutdownInstall(boolean b) {
