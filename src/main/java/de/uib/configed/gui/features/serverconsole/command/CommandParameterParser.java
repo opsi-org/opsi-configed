@@ -229,49 +229,42 @@ public final class CommandParameterParser {
 	}
 
 	private String formatResult(String[] result, String format) {
-		String formatedResult = "";
 		String f = format.replace(" ", "");
 		Logging.info(this, "callMethod format f ", f);
-		switch (f) {
-		case "xyz", "xyz...":
-			formatedResult = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
-			break;
-		case "x,y,z", "x,y,z,...":
-			formatedResult = Arrays.toString(result).replace("[", "").replace("]", "");
-			break;
-		case "[x,y,z]", "[x,y,z,...]":
-			formatedResult = Arrays.toString(result);
-			break;
 
-		case "'x''y''z'", "'x''y''z''...'":
+		return switch (f) {
+		case "xyz", "xyz..." -> Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
+		case "x,y,z", "x,y,z,..." -> Arrays.toString(result).replace("[", "").replace("]", "");
+		case "[x,y,z]", "[x,y,z,...]" -> Arrays.toString(result);
+		case "'x''y''z'", "'x''y''z''...'" -> {
 			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
-			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
-			break;
-		case "'x','y','z'", "'x','y','z','...'":
-			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
-			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
-			break;
-		case "\"x\"\"y\"\"z\"", "\"x\"\"y\"\"z\"\"...\"":
-			Logging.info(this, "formatResult switch case [4] \"x\"\"y\"\"z\"\"...\" || \"x\"\"y\"\"z\"");
-			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
-			break;
-		case "\"x\",\"y\",\"z\"", "\"x\",\"y\",\"z\",\"...\"":
-			Logging.info(this, "formatResult switch case [5] \"x\",\"y\",\"z\",\"...\" || \"x\",\"y\",\"z\"");
-			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
-			break;
-		case "['x','y','z']", "['x','y','z','...']":
-			Logging.info(this, "formatResult switch case [5] ['x','y','z'] || ['x','y','z','...']");
-			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
-			break;
-		case "[\"x\",\"y\",\"z\"]", "[\"x\",\"y\",\"z\",\"...\"]":
-			Logging.info(this, "formatResult switch case [5] [\"x\",\"y\",\"z\"] || [\"x\",\"y\",\"z\",\"...\"]");
-			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
-			break;
-		default:
-			Logging.warning(this, "cannot format into \"", format, "\" with \"", Arrays.toString(result), "\"");
-			break;
+			yield createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
 		}
-		return formatedResult;
+		case "'x','y','z'", "'x','y','z','...'" -> {
+			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
+			yield createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
+		}
+		case "\"x\"\"y\"\"z\"", "\"x\"\"y\"\"z\"\"...\"" -> {
+			Logging.info(this, "formatResult switch case [4] \"x\"\"y\"\"z\"\"...\" || \"x\"\"y\"\"z\"");
+			yield createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
+		}
+		case "\"x\",\"y\",\"z\"", "\"x\",\"y\",\"z\",\"...\"" -> {
+			Logging.info(this, "formatResult switch case [5] \"x\",\"y\",\"z\",\"...\" || \"x\",\"y\",\"z\"");
+			yield createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
+		}
+		case "['x','y','z']", "['x','y','z','...']" -> {
+			Logging.info(this, "formatResult switch case [5] ['x','y','z'] || ['x','y','z','...']");
+			yield createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
+		}
+		case "[\"x\",\"y\",\"z\"]", "[\"x\",\"y\",\"z\",\"...\"]" -> {
+			Logging.info(this, "formatResult switch case [5] [\"x\",\"y\",\"z\"] || [\"x\",\"y\",\"z\",\"...\"]");
+			yield createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
+		}
+		default -> {
+			Logging.warning(this, "cannot format into \"", f, "\" with \"", Arrays.toString(result), "\"");
+			yield Arrays.toString(result);
+		}
+		};
 	}
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,

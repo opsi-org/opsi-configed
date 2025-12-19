@@ -82,7 +82,6 @@ final class AddClientUpdate {
 			AddClientModel model) {
 		return switch (msg) {
 		case AddClientMsg.UIMsg.OpenGroupSelectionDialog() -> handleOpenGroupSelectionDialogMsg(model);
-
 		case AddClientMsg.UIMsg.ShowErrorMessage(String title, String message) -> UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.ShowErrorMessage(title, message));
 		};

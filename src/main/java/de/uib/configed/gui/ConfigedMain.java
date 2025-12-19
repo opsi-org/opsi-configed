@@ -298,36 +298,33 @@ public class ConfigedMain {
 	}
 
 	private static boolean updateEditingTarget() {
-		switch (editingTarget) {
-		case CLIENTS:
+		return switch (editingTarget) {
+		case CLIENTS -> {
 			mainFrame.showClientConfiguration();
-			break;
-
-		case DEPOTS:
-			mainFrame.showDepotConfiguration();
-			break;
-
-		case SERVER:
-			mainFrame.showServerConfiguration();
-			break;
-
-		case DASHBOARD:
-			mainFrame.showDashboard();
-			break;
-
-		case OPSI_MODULES:
-			mainFrame.showOpsiModules();
-			break;
-
-		case HEALTH_CHECK:
-			mainFrame.showHealthDataAction();
-			break;
-
-		case LICENSE_MANAGEMENT:
-			return mainFrame.startLicensingManagement();
+			yield true;
 		}
-
-		return true;
+		case DEPOTS -> {
+			mainFrame.showDepotConfiguration();
+			yield true;
+		}
+		case SERVER -> {
+			mainFrame.showServerConfiguration();
+			yield true;
+		}
+		case DASHBOARD -> {
+			mainFrame.showDashboard();
+			yield true;
+		}
+		case OPSI_MODULES -> {
+			mainFrame.showOpsiModules();
+			yield true;
+		}
+		case HEALTH_CHECK -> {
+			mainFrame.showHealthDataAction();
+			yield true;
+		}
+		case LICENSE_MANAGEMENT -> mainFrame.startLicensingManagement();
+		};
 	}
 
 	public void actOnListSelection() {

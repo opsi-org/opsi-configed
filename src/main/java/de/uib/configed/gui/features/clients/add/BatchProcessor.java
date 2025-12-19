@@ -31,7 +31,6 @@ public class BatchProcessor {
 				var result = validator.validate(row, model);
 
 				switch (result.type()) {
-
 				case SUCCESS -> {
 					// continue to next validator
 				}

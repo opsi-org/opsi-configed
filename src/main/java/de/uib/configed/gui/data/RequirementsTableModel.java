@@ -95,7 +95,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 		return switch (col) {
 		case 0 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
-
 		case 1 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeSetup");
 		case 2 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
 		case 3 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
@@ -149,27 +148,19 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	private String getValueAtFirstColumn(int rowTypeIndex, String myKey) {
-		String result = null;
 		final String IDENT = "     ";
 
-		switch (rowTypeIndex) {
-		case 0:
-			result = myKey;
-			break;
-		case 1:
-			result = IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-					+ " setup";
-			break;
-		case 2:
-			result = IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-					+ " uninstall";
-			break;
-		default:
+		return switch (rowTypeIndex) {
+		case 0 -> myKey;
+		case 1 -> IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				+ " setup";
+		case 2 -> IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				+ " uninstall";
+		default -> {
 			Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
-			break;
+			yield null;
 		}
-
-		return result;
+		};
 	}
 
 	private String getValueForCol1(String myKey, int rowTypeIndex) {

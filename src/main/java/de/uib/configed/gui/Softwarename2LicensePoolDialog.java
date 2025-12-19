@@ -330,15 +330,11 @@ public class Softwarename2LicensePoolDialog {
 
 	public void setPreselectionForName2Pool(Softwarename2LicensepoolRestriction val) {
 		switch (val) {
-		case SHOW_ALL_NAMES:
-			modelSWnames.clearFilter();
-			break;
-		case SHOW_ONLY_NAMES_WITH_VARIANT_LICENSEPOOLS:
-			modelSWnames.setFilterCondition(showOnlyNamesWithVariantLicenses);
-			break;
-		case SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENSEPOOL:
-			modelSWnames.setFilterCondition(showOnlyNamesWithoutLicenses);
-			break;
+		case SHOW_ALL_NAMES -> modelSWnames.clearFilter();
+		case SHOW_ONLY_NAMES_WITH_VARIANT_LICENSEPOOLS -> modelSWnames
+				.setFilterCondition(showOnlyNamesWithVariantLicenses);
+		case SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENSEPOOL -> modelSWnames
+				.setFilterCondition(showOnlyNamesWithoutLicenses);
 		}
 
 		modelSWnames.reset();

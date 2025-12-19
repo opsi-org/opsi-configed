@@ -112,26 +112,19 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		depotsList.requestFocus();
 
 		switch (getSelectedIndex()) {
-		case 0:
+		case 0 -> {
 			initHostConfigTab();
 			setHostConfigTab();
-			break;
-
-		case 1:
+		}
+		case 1 -> {
 			initProductPropertiesTab();
-			panelProductProperties.setProductProperties();
-			panelProductProperties.getPaneProducts().restoreFilter();
-			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			break;
-
-		case 2:
+			setProductPropertiesPage();
+		}
+		case 2 -> {
 			initHostParameterTab();
 			setHostParameterPage();
-			break;
-
-		default:
-			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in depots view");
-			break;
+		}
+		default -> Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in depots view");
 		}
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
@@ -154,6 +147,12 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		panelProductProperties = new PanelProductProperties(configedMain, depotsList);
 		setComponentAt(getSelectedIndex(), panelProductProperties);
+	}
+
+	private void setProductPropertiesPage() {
+		panelProductProperties.setProductProperties();
+		panelProductProperties.getPaneProducts().restoreFilter();
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	private void initHostParameterTab() {

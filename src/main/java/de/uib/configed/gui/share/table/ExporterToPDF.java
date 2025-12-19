@@ -243,7 +243,6 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static PdfPTable createTableDataElement(JTable theTable) {
 		PdfPTable table = new PdfPTable(theTable.getColumnCount());
 		PdfPCell h;
-		PdfPCell value = null;
 
 		table.setWidthPercentage(98);
 
@@ -273,19 +272,13 @@ public class ExporterToPDF extends AbstractExportTable {
 
 		for (int j = 0; j < theTable.getRowCount(); j++) {
 			for (int i = 0; i < theTable.getColumnCount(); i++) {
-				value = new PdfPCell(new Phrase(" "));
 				String s = theTable.getValueAt(j, i) != null ? theTable.getValueAt(j, i).toString() : "";
 
-				switch (s) {
-				case "true":
-					value = new PdfPCell(new Phrase("\u221a", symbolFont)); // radic
-					break;
-				case "false":
-					break;
-				default:
-					value = new PdfPCell(new Phrase(s, SMALL));
-					break;
-				}
+				PdfPCell value = switch (s) {
+				case "true" -> new PdfPCell(new Phrase("\u221a", symbolFont)); // radic
+				case "false" -> new PdfPCell(new Phrase(" "));
+				default -> new PdfPCell(new Phrase(s, SMALL));
+				};
 
 				if (j % 2 == 0) {
 					value.setBackgroundColor(new BaseColor(Globals.OPSI_LIGHT_GREY.getRed(),

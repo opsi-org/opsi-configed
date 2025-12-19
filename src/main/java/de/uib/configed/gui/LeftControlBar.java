@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class LeftControlBar extends JToolBar {
 	private ButtonGroup buttonGroup;
@@ -105,40 +106,21 @@ public class LeftControlBar extends JToolBar {
 			String toolTipText = element.getToolTipText();
 
 			switch (editingTarget) {
-			case CLIENTS:
-				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.labelClientsConfiguration"),
-						toolTipText);
-				break;
-
-			case DEPOTS:
-				activateButtonIfMatched(element, Configed.getResourceValue("depotConfiguration"), toolTipText);
-				break;
-
-			case SERVER:
-				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.labelServerConfiguration"),
-						toolTipText);
-				break;
-
-			case DASHBOARD:
-				activateButtonIfMatched(element, Configed.getResourceValue("Dashboard.title"), toolTipText);
-				break;
-
-			case OPSI_MODULES:
-				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-						toolTipText);
-				break;
-
-			case HEALTH_CHECK:
-				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"),
-						toolTipText);
-				break;
-
-			case LICENSE_MANAGEMENT:
-				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.labelLicenses"), toolTipText);
-				break;
-
-			default:
-				break;
+			case CLIENTS -> activateButtonIfMatched(element,
+					Configed.getResourceValue("MainFrame.labelClientsConfiguration"), toolTipText);
+			case DEPOTS -> activateButtonIfMatched(element, Configed.getResourceValue("depotConfiguration"),
+					toolTipText);
+			case SERVER -> activateButtonIfMatched(element,
+					Configed.getResourceValue("MainFrame.labelServerConfiguration"), toolTipText);
+			case DASHBOARD -> activateButtonIfMatched(element, Configed.getResourceValue("Dashboard.title"),
+					toolTipText);
+			case OPSI_MODULES -> activateButtonIfMatched(element,
+					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), toolTipText);
+			case HEALTH_CHECK -> activateButtonIfMatched(element,
+					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"), toolTipText);
+			case LICENSE_MANAGEMENT -> activateButtonIfMatched(element,
+					Configed.getResourceValue("MainFrame.labelLicenses"), toolTipText);
+			default -> Logging.warning(this, "no case found for editingTarget in selectView");
 			}
 		}
 	}
