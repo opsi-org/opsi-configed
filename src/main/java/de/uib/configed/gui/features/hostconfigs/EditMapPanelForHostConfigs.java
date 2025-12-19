@@ -80,20 +80,10 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
-					actor.saveData();
-					break;
-				case PopupMenuTrait.POPUP_PDF:
-					createPDF();
-					break;
-
-				default:
-					Logging.warning(this, "no case found for JPopupMenu in definePopup");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_SAVE -> actor.saveData();
+				case PopupMenuTrait.POPUP_PDF -> createPDF();
+				default -> Logging.warning(this, "no case found for JPopupMenu in definePopup");
 				}
 			}
 		};

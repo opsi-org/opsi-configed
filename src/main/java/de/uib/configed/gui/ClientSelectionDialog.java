@@ -834,32 +834,15 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-		case TEXT_TYPE:
-			addTextTypeComponent(sourceGroup);
-			break;
-
-		case DOUBLE_TYPE:
-			addDoubleTypeComponent(sourceGroup);
-			break;
-
-		case DATE_TYPE:
-			addDateTypeComponent(sourceGroup);
-			break;
-
-		case INTEGER_TYPE:
-			addIntegerTypeComponent(sourceGroup);
-			break;
-
-		case BIG_INTEGER_TYPE:
-			addBigIntegerTypeComponent(sourceGroup);
-			break;
-
-		case BOOLEAN_TYPE:
-			addBooleanTypeComponent(sourceGroup);
-			break;
-
-		case NONE_TYPE:
-			return;
+		case TEXT_TYPE -> addTextTypeComponent(sourceGroup);
+		case DOUBLE_TYPE -> addDoubleTypeComponent(sourceGroup);
+		case DATE_TYPE -> addDateTypeComponent(sourceGroup);
+		case INTEGER_TYPE -> addIntegerTypeComponent(sourceGroup);
+		case BIG_INTEGER_TYPE -> addBigIntegerTypeComponent(sourceGroup);
+		case BOOLEAN_TYPE -> addBooleanTypeComponent(sourceGroup);
+		case NONE_TYPE -> {
+			// Nothing has to be done here
+		}
 		}
 
 		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER,

@@ -336,27 +336,13 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	private void treatPopupAction(int p) {
 		switch (p) {
-		case PopupMenuTrait.POPUP_RELOAD:
-			dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
-			break;
-		case PopupMenuTrait.POPUP_COPY:
-			dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
-			break;
-		case PopupMenuTrait.POPUP_DOWNLOAD:
-			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
-			break;
-		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP:
-			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP);
-			break;
-		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP:
-			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP);
-			break;
-		case PopupMenuTrait.POPUP_FLOATING_COPY:
-			dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL);
-			break;
-		default:
-			Logging.warning(this, "no case found for popupMenuTrait in LogPane");
-			break;
+		case PopupMenuTrait.POPUP_RELOAD -> dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
+		case PopupMenuTrait.POPUP_COPY -> dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
+		case PopupMenuTrait.POPUP_DOWNLOAD -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
+		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP);
+		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP);
+		case PopupMenuTrait.POPUP_FLOATING_COPY -> dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL);
+		default -> Logging.warning(this, "no case found for popupMenuTrait in LogPane");
 		}
 	}
 

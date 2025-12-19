@@ -154,20 +154,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				@Override
 				public void action(int p) {
 					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						break;
-
-					case PopupMenuTrait.POPUP_FLOATING_COPY:
-						floatExternal();
-						break;
-					case PopupMenuTrait.POPUP_PDF:
-						exportPDF();
-						break;
-
-					default:
-						Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-						break;
+					case PopupMenuTrait.POPUP_RELOAD -> reload();
+					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
+					case PopupMenuTrait.POPUP_PDF -> exportPDF();
+					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
 					}
 				}
 			};

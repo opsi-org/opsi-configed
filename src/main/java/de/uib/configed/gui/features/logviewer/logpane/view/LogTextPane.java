@@ -468,17 +468,14 @@ public class LogTextPane extends JTextPane {
 		@Override
 		public View create(Element elem) {
 			String kind = elem.getName();
-			if (kind != null) {
-				return switch (kind) {
-				case AbstractDocument.ContentElementName -> new WrapLabelView(elem);
-				case AbstractDocument.ParagraphElementName -> new ParagraphView(elem);
-				case AbstractDocument.SectionElementName -> new BoxView(elem, View.Y_AXIS);
-				case StyleConstants.ComponentElementName -> new ComponentView(elem);
-				case StyleConstants.IconElementName -> new IconView(elem);
-				default -> new LabelView(elem);
-				};
-			}
-			return new LabelView(elem);
+			return switch (kind) {
+			case AbstractDocument.ContentElementName -> new WrapLabelView(elem);
+			case AbstractDocument.ParagraphElementName -> new ParagraphView(elem);
+			case AbstractDocument.SectionElementName -> new BoxView(elem, View.Y_AXIS);
+			case StyleConstants.ComponentElementName -> new ComponentView(elem);
+			case StyleConstants.IconElementName -> new IconView(elem);
+			case null, default -> new LabelView(elem);
+			};
 		}
 	}
 

@@ -180,22 +180,18 @@ public final class Icons {
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 					!OpsiLicensing.isExtendedView());
 
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				dotColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				dotColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
+			dotColor = switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT -> Globals.OPSI_ERROR;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT -> Globals.OPSI_WARNING;
+			case LicensingInfoMap.STATE_OKAY -> {
 				Logging.info("icon will remain null, we don't want to show a dot when modules are okay");
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
+				yield null;
 			}
+			default -> {
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
+				yield null;
+			}
+			};
 		}
 
 		FlatSVGIcon opsiIcon;
@@ -255,26 +251,20 @@ public final class Icons {
 	}
 
 	private static Icon getHealthCheckIcon(int size, Color iconColor) {
-		Color dotColor = null;
-
 		HealthDataProcessor.StatusLevel warningLevel = HealthDataProcessor.getMaxStatusLevel();
-		switch (warningLevel) {
-		case ERROR:
-			dotColor = Globals.OPSI_ERROR;
-			break;
 
-		case WARNING:
-			dotColor = Globals.OPSI_WARNING;
-			break;
-
-		case OK:
+		Color dotColor = switch (warningLevel) {
+		case ERROR -> Globals.OPSI_ERROR;
+		case WARNING -> Globals.OPSI_WARNING;
+		case OK -> {
 			Logging.info("icon will remain null, we don't want to show a dot when health check are okay");
-			break;
-
-		default:
-			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
-			break;
+			yield null;
 		}
+		default -> {
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
+			yield null;
+		}
+		};
 
 		FlatSVGIcon opsiIcon;
 		if (iconColor == null) {

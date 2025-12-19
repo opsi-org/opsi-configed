@@ -135,21 +135,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addUser();
-					break;
-
-				case PopupMenuTrait.POPUP_DELETE:
-					deleteUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addUser();
+				case PopupMenuTrait.POPUP_DELETE -> deleteUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
 				}
 			}
 		};

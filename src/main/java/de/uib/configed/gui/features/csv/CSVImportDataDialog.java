@@ -260,22 +260,14 @@ public class CSVImportDataDialog {
 
 	public void setDetectedOptions() {
 		switch (format.getDelimiterString()) {
-		case "\t":
-			tabsOption.setSelected(true);
-			break;
-		case ",":
-			commaOption.setSelected(true);
-			break;
-		case ";":
-			semicolonOption.setSelected(true);
-			break;
-		case " ":
-			spaceOption.setSelected(true);
-			break;
-		default:
+		case "\t" -> tabsOption.setSelected(true);
+		case "," -> commaOption.setSelected(true);
+		case ";" -> semicolonOption.setSelected(true);
+		case " " -> spaceOption.setSelected(true);
+		default -> {
 			otherOption.setSelected(true);
 			otherDelimiterInput.setText(String.valueOf(format.getDelimiterString()));
-			break;
+		}
 		}
 
 		quoteOptions.setSelectedItem(format.getDelimiterString());
