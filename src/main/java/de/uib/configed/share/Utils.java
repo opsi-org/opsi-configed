@@ -636,11 +636,4 @@ public final class Utils {
 			}
 		};
 	}
-
-	/**
-	 * Overload that accepts a Runnable and runs it on any document change.
-	 */
-	public static javax.swing.event.DocumentListener onDocumentChange(Runnable runnable) {
-		return onDocumentChange(e -> runnable.run());
-	}
 }
