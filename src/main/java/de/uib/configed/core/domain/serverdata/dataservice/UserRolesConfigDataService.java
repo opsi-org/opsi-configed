@@ -327,7 +327,6 @@ public class UserRolesConfigDataService {
 					Logging.info(this, "setAgainUserRegistration reactivate user check ");
 					resultVal = true;
 				}
-
 				// We pressed cancel or closed the dialog
 				default -> Logging.info(this, "setAgainUserRegistration ignore ");
 				}

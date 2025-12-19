@@ -275,7 +275,8 @@ public class ExporterToPDF extends AbstractExportTable {
 				String s = theTable.getValueAt(j, i) != null ? theTable.getValueAt(j, i).toString() : "";
 
 				PdfPCell value = switch (s) {
-				case "true" -> new PdfPCell(new Phrase("\u221a", symbolFont)); // radic
+				// radic
+				case "true" -> new PdfPCell(new Phrase("\u221a", symbolFont));
 				case "false" -> new PdfPCell(new Phrase(" "));
 				default -> new PdfPCell(new Phrase(s, SMALL));
 				};

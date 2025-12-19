@@ -681,29 +681,31 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private static Object getData(SelectData.DataType type, JComponent dataComponent) {
 		return switch (type) {
-		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE:
+		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE -> {
 			String text = ((TextInputField) dataComponent).getText();
 			yield text.isEmpty() ? null : text;
+		}
 
-		case INTEGER_TYPE:
+		case INTEGER_TYPE -> {
 			Integer integer = (Integer) ((JSpinner) dataComponent).getValue();
 			yield (integer == 0) ? null : integer;
+		}
 
-		case BIG_INTEGER_TYPE:
+		case BIG_INTEGER_TYPE -> {
 			Long longValue = (Long) ((JSpinner) dataComponent).getValue();
 			yield (longValue == 0) ? null : longValue;
+		}
 
-		case BOOLEAN_TYPE:
+		case BOOLEAN_TYPE -> {
 			State state = ((FlatTriStateCheckBox) dataComponent).getState();
 			yield state == FlatTriStateCheckBox.State.INDETERMINATE ? null
 					: (state == FlatTriStateCheckBox.State.SELECTED);
-
-		case NONE_TYPE:
-			yield null;
-
-		default:
+		}
+		case NONE_TYPE -> null;
+		default -> {
 			Logging.error("Unknown data type: ", type);
 			yield null;
+		}
 		};
 	}
 
