@@ -667,41 +667,44 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		AbstractSelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
-		Object data = null;
 		SelectData.DataType type = operation.getDataType();
-		switch (type) {
-		// Do the same for all four cases
+
+		Object data = getData(type, group.dataComponent);
+
+		if (data == null) {
+			return null;
+		} else {
+			operation.setSelectData(new SelectData(data, type));
+			return operation;
+		}
+	}
+
+	private static Object getData(SelectData.DataType type, JComponent dataComponent) {
+		return switch (type) {
 		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE:
-			data = ((TextInputField) group.dataComponent).getText();
-			if (((String) data).isEmpty()) {
-				return null;
-			}
-			break;
+			String text = ((TextInputField) dataComponent).getText();
+			yield text.isEmpty() ? null : text;
+
 		case INTEGER_TYPE:
-			data = ((JSpinner) group.dataComponent).getValue();
-			if (((Integer) data) == 0) {
-				return null;
-			}
-			break;
+			Integer integer = (Integer) ((JSpinner) dataComponent).getValue();
+			yield (integer == 0) ? null : integer;
+
 		case BIG_INTEGER_TYPE:
-			data = ((SpinnerWithExtension) group.dataComponent).getValue();
-			if (((Long) data) == 0) {
-				return null;
-			}
-			break;
+			Long longValue = (Long) ((JSpinner) dataComponent).getValue();
+			yield (longValue == 0) ? null : longValue;
 
 		case BOOLEAN_TYPE:
-			State state = ((FlatTriStateCheckBox) group.dataComponent).getState();
-			if (FlatTriStateCheckBox.State.INDETERMINATE == state) {
-				return null;
-			}
-			data = (state == FlatTriStateCheckBox.State.SELECTED);
-			break;
-		case NONE_TYPE:
-		}
+			State state = ((FlatTriStateCheckBox) dataComponent).getState();
+			yield state == FlatTriStateCheckBox.State.INDETERMINATE ? null
+					: (state == FlatTriStateCheckBox.State.SELECTED);
 
-		operation.setSelectData(new SelectData(data, type));
-		return operation;
+		case NONE_TYPE:
+			yield null;
+
+		default:
+			Logging.error("Unknown data type: ", type);
+			yield null;
+		};
 	}
 
 	/*
