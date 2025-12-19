@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -73,6 +74,19 @@ public class HostInfo {
 	public static final String CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL = "deviceVendor";
 	public static final String CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL = "deviceModel";
 
+	private static final Set<String> keys = Set.of(DEPOT_OF_CLIENT_KEY, CLIENT_DESCRIPTION_KEY,
+			CLIENT_INVENTORY_NUMBER_KEY, CLIENT_ONE_TIME_PASSWORD_KEY, CLIENT_NOTES_KEY, CLIENT_SYSTEM_UUID_KEY,
+			CLIENT_MAC_ADRESS_KEY, LAST_SEEN_KEY, CREATED_KEY, HOSTNAME_KEY, HOST_KEY_KEY, HOST_TYPE_KEY,
+			CLIENT_IP_ADDRESS_KEY, CLIENT_WAN_CONFIG_KEY, CLIENT_SHUTDOWN_INSTALL_KEY, CLIENT_OS_KEY,
+			CLIENT_OS_TYPE_KEY, CLIENT_OS_ARCHITECTURE_KEY, CLIENT_DEVICE_TYPE_KEY, CLIENT_DEVICE_VENDOR_KEY,
+			CLIENT_DEVICE_MODEL_KEY, CLIENT_MONITORING_KEY, UEFI_BOOT_KEY);
+
+	private static final Set<String> booleanKeys = Set.of(CLIENT_WAN_CONFIG_KEY, CLIENT_SHUTDOWN_INSTALL_KEY,
+			CLIENT_MONITORING_KEY, UEFI_BOOT_KEY);
+
+	private static final Set<String> stringKeys = keys.stream().filter(k -> !booleanKeys.contains(k))
+			.collect(Collectors.toSet());
+
 	public static class ColumnDisplayInfo {
 		public final String label;
 		public final String resourceKey;
@@ -132,60 +146,33 @@ public class HostInfo {
 	public static final String HOST_TYPE_VALUE_OPSI_DEPOT_SERVER = "OpsiDepotserver";
 	public static final String HOST_TYPE_VALUE_OPSI_CLIENT = "OpsiClient";
 
-	private String depotOfClient;
-	private String clientDescription;
-	private String clientInventoryNumber;
-	private String clientOneTimePassword;
-	private String clientNotes;
-
-	private String clientSystemUUID;
-	private String clientMacAddress;
-	private String lastSeen;
-	private String created;
-	private String clientName;
-	private String hostKey;
-
-	private String hostType;
-	private String clientIpAddress;
-	private Boolean clientWanConfig;
-
-	private Boolean clientShutdownInstall;
-
-	private String clientOS;
-	private String clientOSType;
-	private String clientOSArchitecture;
-	private String clientDeviceType;
-	private String clientDeviceVendor;
-	private String clientDeviceModel;
-	private Boolean clientMonitoring;
-	private Boolean uefiBoot;
+	private final Map<String, Object> data = new HashMap<>();
 
 	public Map<String, Object> getDisplayRowMap() {
 		Map<String, Object> displayRowMap = new HashMap<>();
 
-		displayRowMap.put(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, clientOSType);
-		displayRowMap.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
-		displayRowMap.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
-		displayRowMap.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
-		displayRowMap.put(LAST_SEEN_DISPLAY_FIELD_LABEL, lastSeen);
+		displayRowMap.put(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, data.get(CLIENT_OS_TYPE_KEY));
+		displayRowMap.put(HOST_NAME_DISPLAY_FIELD_LABEL, data.get(HOSTNAME_KEY));
+		displayRowMap.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, data.get(CLIENT_DESCRIPTION_KEY));
+		displayRowMap.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, data.get(CLIENT_INVENTORY_NUMBER_KEY));
+		displayRowMap.put(LAST_SEEN_DISPLAY_FIELD_LABEL, data.get(LAST_SEEN_KEY));
 
-		displayRowMap.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, clientWanConfig);
-		displayRowMap.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientIpAddress);
-		displayRowMap.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientSystemUUID);
-		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientMacAddress);
-		displayRowMap.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
+		displayRowMap.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, data.get(CLIENT_WAN_CONFIG_KEY));
+		displayRowMap.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_IP_ADDRESS_KEY));
+		displayRowMap.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, data.get(CLIENT_SYSTEM_UUID_KEY));
+		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_MAC_ADRESS_KEY));
+		displayRowMap.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
 
-		displayRowMap.put(CREATED_DISPLAY_FIELD_LABEL, created);
-		displayRowMap.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
+		displayRowMap.put(CREATED_DISPLAY_FIELD_LABEL, data.get(CREATED_KEY));
+		displayRowMap.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, data.get(DEPOT_OF_CLIENT_KEY));
 
-		displayRowMap.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
-		displayRowMap.put(CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, clientOSArchitecture);
-		displayRowMap.put(CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, clientDeviceType);
-		displayRowMap.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, clientDeviceVendor);
-		displayRowMap.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, clientDeviceModel);
-		displayRowMap.put(CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, clientMonitoring);
-
-		Logging.debug(this, "getMap clientName ", clientName, " : ", displayRowMap);
+		displayRowMap.put(CLIENT_OS_DISPLAY_FIELD_LABEL, data.get(CLIENT_OS_KEY));
+		displayRowMap.put(CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, data.get(CLIENT_OS_ARCHITECTURE_KEY));
+		displayRowMap.put(CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, data.get(CLIENT_DEVICE_TYPE_KEY));
+		displayRowMap.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, data.get(CLIENT_DEVICE_VENDOR_KEY));
+		displayRowMap.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, data.get(CLIENT_DEVICE_MODEL_KEY));
+		displayRowMap.put(CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, data.get(CLIENT_MONITORING_KEY));
+		Logging.debug(this, "getMap clientName ", data.get(HOSTNAME_KEY), " : ", displayRowMap);
 
 		return displayRowMap;
 	}
@@ -193,35 +180,32 @@ public class HostInfo {
 	public Map<String, Object> getMap() {
 		Map<String, Object> unordered = new HashMap<>();
 
-		unordered.put(DEPOT_OF_CLIENT_KEY, depotOfClient);
-		unordered.put(CLIENT_DESCRIPTION_KEY, clientDescription);
-		unordered.put(CLIENT_INVENTORY_NUMBER_KEY, clientInventoryNumber);
-		unordered.put(CLIENT_ONE_TIME_PASSWORD_KEY, clientOneTimePassword);
-		unordered.put(CLIENT_NOTES_KEY, clientNotes);
+		unordered.put(DEPOT_OF_CLIENT_KEY, data.get(DEPOT_OF_CLIENT_KEY));
+		unordered.put(CLIENT_DESCRIPTION_KEY, data.get(CLIENT_DESCRIPTION_KEY));
+		unordered.put(CLIENT_INVENTORY_NUMBER_KEY, data.get(CLIENT_INVENTORY_NUMBER_KEY));
+		unordered.put(CLIENT_ONE_TIME_PASSWORD_KEY, data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
+		unordered.put(CLIENT_NOTES_KEY, data.get(CLIENT_NOTES_KEY));
+		unordered.put(CLIENT_SYSTEM_UUID_KEY, data.get(CLIENT_SYSTEM_UUID_KEY));
+		unordered.put(CLIENT_MAC_ADRESS_KEY, data.get(CLIENT_MAC_ADRESS_KEY));
+		unordered.put(LAST_SEEN_KEY, data.get(LAST_SEEN_KEY));
+		unordered.put(CREATED_KEY, data.get(CREATED_KEY));
+		unordered.put(HOSTNAME_KEY, data.get(HOSTNAME_KEY));
+		unordered.put(HOST_KEY_KEY, data.get(HOST_KEY_KEY));
 
-		unordered.put(CLIENT_SYSTEM_UUID_KEY, clientSystemUUID);
-		unordered.put(CLIENT_MAC_ADRESS_KEY, clientMacAddress);
-		unordered.put(LAST_SEEN_KEY, lastSeen);
-		unordered.put(CREATED_KEY, created);
-		unordered.put(HOSTNAME_KEY, clientName);
-		unordered.put(HOST_KEY_KEY, hostKey);
+		unordered.put(HOST_TYPE_KEY, data.get(HOST_TYPE_KEY));
+		unordered.put(CLIENT_IP_ADDRESS_KEY, data.get(CLIENT_IP_ADDRESS_KEY));
+		unordered.put(CLIENT_WAN_CONFIG_KEY, data.get(CLIENT_WAN_CONFIG_KEY));
+		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
 
-		unordered.put(HOST_TYPE_KEY, hostType);
-		unordered.put(CLIENT_IP_ADDRESS_KEY, clientIpAddress);
-		unordered.put(CLIENT_WAN_CONFIG_KEY, clientWanConfig);
-
-		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
-
-		unordered.put(CLIENT_OS_KEY, clientOS);
-		unordered.put(CLIENT_OS_TYPE_KEY, clientOSType);
-		unordered.put(CLIENT_OS_ARCHITECTURE_KEY, clientOSArchitecture);
-		unordered.put(CLIENT_DEVICE_TYPE_KEY, clientDeviceType);
-		unordered.put(CLIENT_DEVICE_VENDOR_KEY, clientDeviceVendor);
-		unordered.put(CLIENT_DEVICE_MODEL_KEY, clientDeviceModel);
-		unordered.put(CLIENT_MONITORING_KEY, clientMonitoring);
-		unordered.put(UEFI_BOOT_KEY, uefiBoot);
-
-		Logging.debug(this, "getMap clientName ", clientName);
+		unordered.put(CLIENT_OS_KEY, data.get(CLIENT_OS_KEY));
+		unordered.put(CLIENT_OS_TYPE_KEY, data.get(CLIENT_OS_TYPE_KEY));
+		unordered.put(CLIENT_OS_ARCHITECTURE_KEY, data.get(CLIENT_OS_ARCHITECTURE_KEY));
+		unordered.put(CLIENT_DEVICE_TYPE_KEY, data.get(CLIENT_DEVICE_TYPE_KEY));
+		unordered.put(CLIENT_DEVICE_VENDOR_KEY, data.get(CLIENT_DEVICE_VENDOR_KEY));
+		unordered.put(CLIENT_DEVICE_MODEL_KEY, data.get(CLIENT_DEVICE_MODEL_KEY));
+		unordered.put(CLIENT_MONITORING_KEY, data.get(CLIENT_MONITORING_KEY));
+		unordered.put(UEFI_BOOT_KEY, data.get(UEFI_BOOT_KEY));
+		Logging.debug(this, "getMap clientName ", data.get(HOSTNAME_KEY));
 
 		return unordered;
 	}
@@ -246,171 +230,103 @@ public class HostInfo {
 	}
 
 	public void put(String key, Object value) {
-		switch (key) {
-		case DEPOT_OF_CLIENT_KEY:
-			depotOfClient = "" + value;
-			break;
-
-		case CLIENT_DESCRIPTION_KEY:
-			clientDescription = "" + value;
-			break;
-
-		case CLIENT_INVENTORY_NUMBER_KEY:
-			clientInventoryNumber = "" + value;
-			break;
-
-		case CLIENT_NOTES_KEY:
-			clientNotes = "" + value;
-			break;
-
-		case CLIENT_ONE_TIME_PASSWORD_KEY:
-			clientOneTimePassword = "" + value;
-			break;
-
-		case CLIENT_SYSTEM_UUID_KEY:
-			clientSystemUUID = "" + value;
-			break;
-
-		case CLIENT_MAC_ADRESS_KEY:
-			clientMacAddress = "" + value;
-			break;
-
-		case CLIENT_IP_ADDRESS_KEY:
-			clientIpAddress = "" + value;
-			break;
-
-		case HOST_KEY_KEY:
-			hostKey = "" + value;
-			break;
-
-		case CREATED_KEY:
-			created = "" + value;
-			break;
-
-		case LAST_SEEN_KEY:
-			lastSeen = "" + value;
-			break;
-
-		case CLIENT_WAN_CONFIG_KEY:
-			clientWanConfig = (Boolean) value;
-			break;
-
-		case CLIENT_SHUTDOWN_INSTALL_KEY:
-			clientShutdownInstall = (Boolean) value;
-			break;
-
-		case CLIENT_OS_KEY:
-			clientOS = "" + value;
-			break;
-
-		case CLIENT_OS_TYPE_KEY:
-			clientOSType = "" + value;
-			break;
-
-		case CLIENT_OS_ARCHITECTURE_KEY:
-			clientOSArchitecture = "" + value;
-			break;
-
-		case CLIENT_DEVICE_TYPE_KEY:
-			clientDeviceType = "" + value;
-			break;
-
-		case CLIENT_DEVICE_VENDOR_KEY:
-			clientDeviceVendor = "" + value;
-			break;
-
-		case CLIENT_DEVICE_MODEL_KEY:
-			clientDeviceModel = "" + value;
-			break;
-
-		case CLIENT_MONITORING_KEY:
-			clientMonitoring = (Boolean) value;
-			break;
-
-		case UEFI_BOOT_KEY:
-			uefiBoot = (Boolean) value;
-			break;
-
-		default:
+		if (keys.contains(key)) {
+			data.put(key, value);
+		} else {
 			Logging.warning(this, "key ", key, " not expected");
-			break;
 		}
 	}
 
 	public String getInDepot() {
-		return depotOfClient;
+		return (String) data.get(DEPOT_OF_CLIENT_KEY);
 	}
 
 	public void setInDepot(String depot) {
-		depotOfClient = depot;
+		data.put(DEPOT_OF_CLIENT_KEY, depot);
 	}
 
 	public String getDescription() {
-		return clientDescription;
+		return (String) data.get(CLIENT_DESCRIPTION_KEY);
 	}
 
 	public String getInventoryNumber() {
-		return clientInventoryNumber;
+		return (String) data.get(CLIENT_INVENTORY_NUMBER_KEY);
 	}
 
 	public String getMacAddress() {
-		return clientMacAddress;
+		return (String) data.get(CLIENT_MAC_ADRESS_KEY);
 	}
 
 	public String getLastSeen() {
-		return lastSeen;
+		return (String) data.get(LAST_SEEN_KEY);
 	}
 
 	public String getName() {
-		return clientName;
+		return (String) data.get(HOSTNAME_KEY);
 	}
 
 	public String getHostKey() {
-		return hostKey;
+		return (String) data.get(HOST_KEY_KEY);
 	}
 
 	public String getIpAddress() {
-		return clientIpAddress;
+		return (String) data.get(CLIENT_IP_ADDRESS_KEY);
 	}
 
 	public Boolean getWanConfig() {
-		return clientWanConfig;
+		return (Boolean) data.get(CLIENT_WAN_CONFIG_KEY);
+	}
+
+	public Boolean getMonitoring() {
+		return (Boolean) data.get(CLIENT_MONITORING_KEY);
+	}
+
+	public Boolean getUefiBoot() {
+		return (Boolean) data.get(UEFI_BOOT_KEY);
 	}
 
 	public Boolean getShutdownInstall() {
-		return clientShutdownInstall;
+		return (Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY);
 	}
 
 	public String getClientOS() {
-		return clientOS;
+		return (String) data.get(CLIENT_OS_KEY);
 	}
 
 	public String getClientOSType() {
-		return clientOSType;
+		return (String) data.get(CLIENT_OS_TYPE_KEY);
 	}
 
 	public String getClientDeviceType() {
-		return clientDeviceType;
+		return (String) data.get(CLIENT_DEVICE_TYPE_KEY);
 	}
 
 	public String getClientDeviceVendor() {
-		return clientDeviceVendor;
+		return (String) data.get(CLIENT_DEVICE_VENDOR_KEY);
 	}
 
 	public String getClientDeviceModel() {
-		return clientDeviceModel;
+		return (String) data.get(CLIENT_DEVICE_MODEL_KEY);
 	}
 
 	public void setShutdownInstall(boolean b) {
-		clientShutdownInstall = b;
+		data.put(CLIENT_SHUTDOWN_INSTALL_KEY, b);
 	}
 
 	public void setWanConfig(boolean b) {
-		clientWanConfig = b;
+		data.put(CLIENT_WAN_CONFIG_KEY, b);
 	}
 
 	public void setType(String type) {
-		hostType = type;
+		data.put(HOST_TYPE_KEY, type);
+	}
+
+	private static Object showValue(String key, Object value) {
+		if (booleanKeys.contains(key)) {
+			return showValue((Boolean) value);
+		} else {
+			return showValue((String) value);
+		}
 	}
 
 	private static String showValue(String value) {
@@ -437,34 +353,7 @@ public class HostInfo {
 			return;
 		}
 
-		// encodeStringFromService is just returning the given value but was used for
-		// switching an encoding
-		clientDescription = showValue((String) pcInfo.get(CLIENT_DESCRIPTION_KEY));
-		clientInventoryNumber = showValue((String) pcInfo.get(CLIENT_INVENTORY_NUMBER_KEY));
-		clientNotes = showValue((String) pcInfo.get(CLIENT_NOTES_KEY));
-		clientOneTimePassword = showValue((String) pcInfo.get(CLIENT_ONE_TIME_PASSWORD_KEY));
-		clientSystemUUID = showValue((String) pcInfo.get(CLIENT_SYSTEM_UUID_KEY));
-		clientMacAddress = showValue((String) pcInfo.get(CLIENT_MAC_ADRESS_KEY));
-		clientIpAddress = showValue((String) pcInfo.get(CLIENT_IP_ADDRESS_KEY));
-		hostKey = showValue((String) pcInfo.get(HOST_KEY_KEY));
-		clientName = showValue((String) pcInfo.get(HOSTNAME_KEY));
-		hostType = showValue((String) pcInfo.get(HOST_TYPE_KEY));
-		created = showValue((String) pcInfo.get(CREATED_KEY));
-		lastSeen = showValue((String) pcInfo.get(LAST_SEEN_KEY));
-		clientOS = showValue((String) pcInfo.get(CLIENT_OS_KEY));
-		clientOSType = showValue((String) pcInfo.get(CLIENT_OS_TYPE_KEY));
-		clientOSArchitecture = showValue((String) pcInfo.get(CLIENT_OS_ARCHITECTURE_KEY));
-		clientDeviceType = showValue((String) pcInfo.get(CLIENT_DEVICE_TYPE_KEY));
-		clientDeviceVendor = showValue((String) pcInfo.get(CLIENT_DEVICE_VENDOR_KEY));
-		clientDeviceModel = showValue((String) pcInfo.get(CLIENT_DEVICE_MODEL_KEY));
-		clientMonitoring = showValue((Boolean) pcInfo.get(CLIENT_MONITORING_KEY));
-		uefiBoot = showValue((Boolean) pcInfo.get(UEFI_BOOT_KEY));
-
-		depotOfClient = showValue((String) pcInfo.get(DEPOT_OF_CLIENT_KEY));
-
-		clientWanConfig = showValue((Boolean) pcInfo.get(CLIENT_WAN_CONFIG_KEY));
-
-		clientShutdownInstall = showValue((Boolean) pcInfo.get(CLIENT_SHUTDOWN_INSTALL_KEY));
+		keys.forEach(key -> put(key, showValue(key, pcInfo.get(key))));
 	}
 
 	public HostInfo combineWith(HostInfo secondInfo) {
@@ -473,36 +362,36 @@ public class HostInfo {
 		}
 
 		// save values which could be mixed
-		Boolean clientWanConfigSave = clientWanConfig;
-		Boolean clientMonitoringSave = clientMonitoring;
-		Boolean clientUefiBootSave = uefiBoot;
-		Boolean clientShutdownInstallSave = clientShutdownInstall;
+		Boolean clientWanConfigSave = (Boolean) data.get(CLIENT_WAN_CONFIG_KEY);
+		Boolean clientMonitoringSave = (Boolean) data.get(CLIENT_MONITORING_KEY);
+		Boolean clientUefiBootSave = (Boolean) data.get(UEFI_BOOT_KEY);
+		Boolean clientShutdownInstallSave = (Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY);
 
 		// empty everything
 		resetValues();
 
-		if (!secondInfo.clientWanConfig.equals(clientWanConfigSave)) {
-			clientWanConfig = null;
+		if (!secondInfo.getWanConfig().equals(clientWanConfigSave)) {
+			data.put(CLIENT_WAN_CONFIG_KEY, null);
 		} else {
-			clientWanConfig = clientWanConfigSave;
+			data.put(CLIENT_WAN_CONFIG_KEY, clientWanConfigSave);
 		}
 
-		if (!secondInfo.clientMonitoring.equals(clientMonitoringSave)) {
-			clientMonitoring = null;
+		if (!secondInfo.getMonitoring().equals(clientMonitoringSave)) {
+			data.put(CLIENT_MONITORING_KEY, null);
 		} else {
-			clientMonitoring = clientMonitoringSave;
+			data.put(CLIENT_MONITORING_KEY, clientMonitoringSave);
 		}
 
-		if (!secondInfo.uefiBoot.equals(clientUefiBootSave)) {
-			uefiBoot = null;
+		if (!secondInfo.getUefiBoot().equals(clientUefiBootSave)) {
+			data.put(UEFI_BOOT_KEY, null);
 		} else {
-			uefiBoot = clientUefiBootSave;
+			data.put(UEFI_BOOT_KEY, clientUefiBootSave);
 		}
 
-		if (!secondInfo.clientShutdownInstall.equals(clientShutdownInstallSave)) {
-			clientShutdownInstall = null;
+		if (!secondInfo.getShutdownInstall().equals(clientShutdownInstallSave)) {
+			data.put(CLIENT_SHUTDOWN_INSTALL_KEY, null);
 		} else {
-			clientShutdownInstall = clientShutdownInstallSave;
+			data.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstallSave);
 		}
 
 		return this;
@@ -513,163 +402,177 @@ public class HostInfo {
 
 		MainFrame mainFrame = ConfigedMain.getMainFrame();
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDescriptionText(clientDescription);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientInventoryNumberText(clientInventoryNumber);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientNotesText(clientNotes);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientSystemUUID(clientSystemUUID);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendorAndModel(clientDeviceVendor,
-				clientDeviceModel, clientDeviceType);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMonitoring(clientMonitoring);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientPlatform(clientOSType);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot(uefiBoot);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey(hostKey);
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientDescriptionText((String) data.get(CLIENT_DESCRIPTION_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientInventoryNumberText((String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientNotesText((String) data.get(CLIENT_NOTES_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientSystemUUID((String) data.get(CLIENT_SYSTEM_UUID_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientMacAddress((String) data.get(CLIENT_MAC_ADRESS_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientIpAddress((String) data.get(CLIENT_IP_ADDRESS_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS((String) data.get(CLIENT_OS_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendorAndModel(
+				(String) data.get(CLIENT_DEVICE_VENDOR_KEY), (String) data.get(CLIENT_DEVICE_MODEL_KEY),
+				(String) data.get(CLIENT_DEVICE_TYPE_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientMonitoring((Boolean) data.get(CLIENT_MONITORING_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setClientPlatform((String) data.get(CLIENT_OS_TYPE_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot((Boolean) data.get(UEFI_BOOT_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig((Boolean) data.get(CLIENT_WAN_CONFIG_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel()
+				.setShutdownInstall((Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
+		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey((String) data.get(HOST_KEY_KEY));
 	}
 
 	private void setClientDescription(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
-			clientDescription = (String) sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
+			data.put(CLIENT_DESCRIPTION_KEY, sourceOfChanges.get(CLIENT_DESCRIPTION_KEY));
 			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("description"));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(clientDescription, row, col);
+				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_DESCRIPTION_KEY), row, col);
 			}
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientDescriptionText(clientDescription);
+					.setClientDescriptionText((String) data.get(CLIENT_DESCRIPTION_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setHostDescription(client, clientDescription);
+			persistenceController.getHostDataService().setHostDescription(client,
+					(String) data.get(CLIENT_DESCRIPTION_KEY));
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY,
-					clientDescription);
+					data.get(CLIENT_DESCRIPTION_KEY));
 		}
 	}
 
 	private void setClientInventoryNumber(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY) != null) {
-			clientInventoryNumber = (String) sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY);
+			data.put(CLIENT_INVENTORY_NUMBER_KEY, sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY));
 
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(clientInventoryNumber, row, col);
+				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_INVENTORY_NUMBER_KEY), row, col);
 			}
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientInventoryNumberText(clientInventoryNumber);
+					.setClientInventoryNumberText((String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setClientInventoryNumber(client, clientInventoryNumber);
+			persistenceController.getHostDataService().setClientInventoryNumber(client,
+					(String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
-					clientInventoryNumber);
+					data.get(CLIENT_INVENTORY_NUMBER_KEY));
 		}
 	}
 
 	private void setOneTimePassword(String client, Map<?, ?> sourceOfChanges) {
 		if (sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY) != null) {
-			clientOneTimePassword = (String) sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
+			data.put(CLIENT_ONE_TIME_PASSWORD_KEY, sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientOneTimePasswordText(clientOneTimePassword);
-
+					.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setClientOneTimePassword(client, clientOneTimePassword);
+			persistenceController.getHostDataService().setClientOneTimePassword(client,
+					(String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
-					clientOneTimePassword);
+					data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		}
 	}
 
 	private void setClientNotes(String client, Map<?, ?> sourceOfChanges) {
 		if (sourceOfChanges.get(CLIENT_NOTES_KEY) != null) {
-			clientNotes = (String) sourceOfChanges.get(CLIENT_NOTES_KEY);
+			data.put(CLIENT_NOTES_KEY, sourceOfChanges.get(CLIENT_NOTES_KEY));
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel().setClientNotesText(clientNotes);
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+					.setClientNotesText((String) data.get(CLIENT_NOTES_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setHostNotes(client, clientNotes);
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
+			persistenceController.getHostDataService().setHostNotes(client, (String) data.get(CLIENT_NOTES_KEY));
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY,
+					data.get(CLIENT_NOTES_KEY));
 		}
 	}
 
 	private void setClientSystemUUID(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null) {
-			clientSystemUUID = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
+			data.put(CLIENT_SYSTEM_UUID_KEY, ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim());
 
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(clientMacAddress, row, col);
+				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_SYSTEM_UUID_KEY), row, col);
 			}
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientSystemUUID(clientSystemUUID);
+					.setClientSystemUUID((String) data.get(CLIENT_SYSTEM_UUID_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setSystemUUID(client, clientSystemUUID);
+			persistenceController.getHostDataService().setSystemUUID(client, (String) data.get(CLIENT_SYSTEM_UUID_KEY));
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,
-					clientSystemUUID);
+					data.get(CLIENT_SYSTEM_UUID_KEY));
 		}
 	}
 
 	private void setClientMACAddress(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null) {
-			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
+			data.put(CLIENT_MAC_ADRESS_KEY, ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim());
 
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(clientMacAddress, row, col);
+				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_MAC_ADRESS_KEY), row, col);
 			}
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientMacAddress(clientMacAddress);
+					.setClientMacAddress((String) data.get(CLIENT_MAC_ADRESS_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setMacAddress(client, clientMacAddress);
+			persistenceController.getHostDataService().setMacAddress(client, (String) data.get(CLIENT_MAC_ADRESS_KEY));
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY,
-					clientMacAddress);
+					data.get(CLIENT_MAC_ADRESS_KEY));
 		}
 	}
 
 	private void setClientIPAddress(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null) {
-			clientIpAddress = ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
+			data.put(CLIENT_IP_ADDRESS_KEY, ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim());
 
 			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("ipAddress"));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(clientIpAddress, row, col);
+				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_IP_ADDRESS_KEY), row, col);
 			}
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientIpAddress(clientIpAddress);
+					.setClientIpAddress((String) data.get(CLIENT_IP_ADDRESS_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setIpAddress(client, clientIpAddress);
+			persistenceController.getHostDataService().setIpAddress(client, (String) data.get(CLIENT_IP_ADDRESS_KEY));
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY,
-					clientIpAddress);
+					data.get(CLIENT_IP_ADDRESS_KEY));
 		}
 	}
 
@@ -756,38 +659,14 @@ public class HostInfo {
 
 	@Override
 	public String toString() {
-		return "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber + ";"
-				+ clientOneTimePassword + ";" + clientNotes + ";" + clientSystemUUID + ";" + clientMacAddress + ";"
-				+ clientIpAddress + ";" + lastSeen + ";" + created + ";" + clientWanConfig + ";" + clientShutdownInstall
-				+ ";" + clientOS + ")";
+		return data.toString();
 	}
 
 	public void resetValues() {
-		depotOfClient = "";
-		clientDescription = "";
-		clientInventoryNumber = "";
-		clientOneTimePassword = "";
-		clientNotes = "";
+		stringKeys.forEach(stringKey -> data.put(stringKey, ""));
+		booleanKeys.forEach(booleanKey -> data.put(booleanKey, false));
 
-		clientSystemUUID = "";
-		clientMacAddress = "";
-		lastSeen = "";
-		created = "";
-		clientName = "";
-		hostKey = "";
-
-		hostType = "";
-		clientIpAddress = "";
-		clientWanConfig = false;
-		clientShutdownInstall = false;
-
-		clientOS = "";
-		// unknown icon is used (e.g. multiple selected clients)
-		clientOSType = "<<intern:empty>>";
-		clientOSArchitecture = "";
-		clientDeviceVendor = "";
-		clientDeviceModel = "";
-		// empty text used (e.g. multiple selected clients)
-		clientDeviceType = "<<intern:empty>>";
+		data.put(CLIENT_OS_TYPE_KEY, "<<intern:empty>>");
+		data.put(CLIENT_DEVICE_TYPE_KEY, "<<intern:empty>>");
 	}
 }
