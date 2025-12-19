@@ -66,7 +66,7 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		if (node instanceof GroupNode) {
 			setToolTipText(abstractGroupTree.getGroupDescription(text));
 		} else if (abstractGroupTree instanceof ClientTree) {
-			setToolTipText((String) persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(text)
+			setToolTipText(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(text)
 					.getString(HostInfo.CLIENT_DESCRIPTION_KEY));
 		} else {
 			// We don't want to show the description for a Product since we only know the productId

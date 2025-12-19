@@ -64,8 +64,8 @@ public final class ClientData {
 
 				if (hostInfo.getString(HostInfo.DEPOT_OF_CLIENT_KEY).equals(depot)) {
 					Client client = new Client();
-					client.setHostname((String) hostInfo.getString(HostInfo.HOSTNAME_KEY));
-					client.setLastSeen((String) hostInfo.getString(HostInfo.LAST_SEEN_KEY));
+					client.setHostname(hostInfo.getString(HostInfo.HOSTNAME_KEY));
+					client.setLastSeen(hostInfo.getString(HostInfo.LAST_SEEN_KEY));
 					client.setConnectedWithMessagebus(connectedClientsByMessagebus.get(depot)
 							.contains(hostInfo.getString(HostInfo.HOSTNAME_KEY)));
 					clientsList.add(client);
@@ -155,12 +155,11 @@ public final class ClientData {
 
 		for (Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
 			if (!entry.getValue().getString(HostInfo.DEPOT_OF_CLIENT_KEY).equals(depot)
-					|| ((String) entry.getValue().getString(HostInfo.LAST_SEEN_KEY)).isBlank()) {
+					|| entry.getValue().getString(HostInfo.LAST_SEEN_KEY).isBlank()) {
 				continue;
 			}
 
-			String date = ((String) entry.getValue().getString(HostInfo.LAST_SEEN_KEY)).substring(0, 10);
-
+			String date = entry.getValue().getString(HostInfo.LAST_SEEN_KEY).substring(0, 10);
 			final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
 			final long days = ChronoUnit.DAYS.between(lastSeenDate, currentDate);
 
