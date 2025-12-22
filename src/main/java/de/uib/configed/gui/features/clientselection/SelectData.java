@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.features.clientselection;
 
-import java.util.Map;
-
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -47,8 +45,6 @@ public class SelectData {
 		case BOOLEAN_TYPE -> Boolean.class;
 		case NONE_TYPE -> null;
 		};
-
-		expectedClass = Map.class;
 
 		if (expectedClass != null && !expectedClass.isInstance(data)) {
 			String warningText = "data type mismatch: expected " + expectedClass.getName() + " but got "
