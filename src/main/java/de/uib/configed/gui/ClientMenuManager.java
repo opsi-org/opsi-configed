@@ -91,9 +91,7 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenuClients;
 	}
 
-	private void initJMenu() {
-		jMenuClients.addMenuListener(this);
-
+	private void addClientActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuWakeOnLan", ServerActionManager::wakeSelectedClients).dependOnSelectionCount(true)
 				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
@@ -111,9 +109,9 @@ public final class ClientMenuManager implements MenuListener {
 				.item("MainFrame.jMenuDeletePackageCaches", ServerActionManager::deletePackageCachesOfSelectedClients)
 				.dependOnSelectionCount(true)
 				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientSystemManagementActions() {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuShutdownClient", ServerActionManager::shutdownSelectedClients)
 						.dependOnSelectionCount(true)
@@ -143,9 +141,9 @@ public final class ClientMenuManager implements MenuListener {
 		// when the client table has focus.
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuClients.add(jMenuRemoteControl);
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientAdministrationActions() {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callAddClientDialog)
 						.withIcon("add").dependOnSelectionCount(true)
@@ -176,16 +174,16 @@ public final class ClientMenuManager implements MenuListener {
 							.dependOnSelectionCount(true)
 							.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 		}
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientSearchActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuClientselectionGetGroup",
 				() -> ExtraFrameController.callClientSelectionDialog(configedMain))));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuClientselectionGetSavedSearch",
 				() -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain))));
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientTableActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts)
 				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
 
@@ -195,9 +193,9 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
 						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientExportActions() {
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
@@ -207,6 +205,32 @@ public final class ClientMenuManager implements MenuListener {
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
 				mainFrame.getClientTablePanel().getClientTable());
 		clientTableExporter.addMenuItemsTo(jMenuClients);
+	}
+
+	private void initJMenu() {
+		jMenuClients.addMenuListener(this);
+
+		addClientActions();
+
+		jMenuClients.addSeparator();
+
+		addClientSystemManagementActions();
+
+		jMenuClients.addSeparator();
+
+		addClientAdministrationActions();
+
+		jMenuClients.addSeparator();
+
+		addClientSearchActions();
+
+		jMenuClients.addSeparator();
+
+		addClientTableActions();
+
+		jMenuClients.addSeparator();
+
+		addClientExportActions();
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
