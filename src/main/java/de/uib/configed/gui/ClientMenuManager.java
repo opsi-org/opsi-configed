@@ -133,7 +133,9 @@ public final class ClientMenuManager implements MenuListener {
 				.dependOnSelectionCount(true)
 				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()));
 
-		Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
+		// Space should only be active on the client table, but not on other where you 
+		// could accidently start remote control by pressing space in a text field etc.
+		Utils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
 				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
 				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
