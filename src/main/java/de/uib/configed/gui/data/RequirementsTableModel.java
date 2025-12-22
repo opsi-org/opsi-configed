@@ -95,7 +95,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 		return switch (col) {
 		case 0 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
-		case 1 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeSetup");
+		case 1 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
 		case 2 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
 		case 3 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 		default -> {
