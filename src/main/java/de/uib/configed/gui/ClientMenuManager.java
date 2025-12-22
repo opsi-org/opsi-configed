@@ -190,6 +190,15 @@ public final class ClientMenuManager implements MenuListener {
 				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
 
 		jMenuClients.add(
+				createSubMenu(ClientMenuItemConfig.submenu("MainFrame.jMenuShowColumns", this::initShowColumnsMenu)));
+
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
+						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
+
+		jMenuClients.addSeparator();
+
+		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
 		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
@@ -198,17 +207,6 @@ public final class ClientMenuManager implements MenuListener {
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
 				mainFrame.getClientTablePanel().getClientTable());
 		clientTableExporter.addMenuItemsTo(jMenuClients);
-
-		jMenuClients.addSeparator();
-
-		jMenuClients.add(
-				createSubMenu(ClientMenuItemConfig.submenu("MainFrame.jMenuShowColumns", this::initShowColumnsMenu)));
-
-		jMenuClients.addSeparator();
-
-		jMenuClients.add(createMenuItem(ClientMenuItemConfig
-				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
-						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
