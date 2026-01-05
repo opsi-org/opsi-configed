@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -135,21 +135,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addUser();
-					break;
-
-				case PopupMenuTrait.POPUP_DELETE:
-					deleteUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addUser();
+				case PopupMenuTrait.POPUP_DELETE -> deleteUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
 				}
 			}
 		};
@@ -165,17 +154,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
 				}
 			}
 		};
@@ -192,21 +173,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addRole();
-					break;
-
-				case PopupMenuTrait.POPUP_DELETE:
-					deleteUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addRole();
+				case PopupMenuTrait.POPUP_DELETE -> deleteUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
 				}
 			}
 		};
@@ -222,17 +192,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addRole();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addRole();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
 				}
 			}
 		};

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -45,7 +45,6 @@ import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
-import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -53,6 +52,10 @@ import de.uib.configed.share.logging.Logging;
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
+
+	// These are the values that should be interpreted as booleans
+	public static final Set<String> BOOLEAN_VALUES = Set.of("UEFIBootActive", "SecureBootActive",
+			"SecureBootWindowsCA2023");
 
 	private static final Set<String> hwClassesForByAudit = new HashSet<>();
 	static {
@@ -64,8 +67,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
-	private static final String SCANPROPERTYNAME = "SCANPROPERTIES";
-	private static final String SCANTIME = "scantime";
+	public static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	public static final String SCANTIME = "scantime";
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
@@ -119,7 +122,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
-		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
+		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
 		table.getColumnModel().getColumn(1).setPreferredWidth(300);
@@ -151,20 +154,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				@Override
 				public void action(int p) {
 					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						break;
-
-					case PopupMenuTrait.POPUP_FLOATING_COPY:
-						floatExternal();
-						break;
-					case PopupMenuTrait.POPUP_PDF:
-						exportPDF();
-						break;
-
-					default:
-						Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-						break;
+					case PopupMenuTrait.POPUP_RELOAD -> reload();
+					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
+					case PopupMenuTrait.POPUP_PDF -> exportPDF();
+					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
 					}
 				}
 			};
@@ -287,7 +280,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return values;
 	}
 
-	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+	private List<Object[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 		if (!hasData(node, reduceScanToByAuditClasses)) {
 			return new ArrayList<>();
 		}
@@ -301,7 +294,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
-		List<String[]> data = new ArrayList<>();
+		List<Object[]> data = new ArrayList<>();
 		for (Map<String, Object> value : values) {
 			String opsi = (String) value.get("Opsi");
 			Logging.debug(this, "opsi ", opsi);
@@ -316,9 +309,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
 				if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
-					String cv = findCV(reduceScanToByAuditClasses, hwClass, unit, opsi, deviceInfoEntry.getValue());
+					Object cv = findCV(reduceScanToByAuditClasses, hwClass, unit, opsi, deviceInfoEntry.getValue());
 
-					String[] row = { ui, cv };
+					Object[] row = { ui, cv };
 					data.add(row);
 					Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
 					break;
@@ -329,8 +322,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return data;
 	}
 
-	private String findCV(boolean reduceScanToByAuditClasses, String hwClass, String unit, String opsi,
+	private Object findCV(boolean reduceScanToByAuditClasses, String hwClass, String unit, String opsi,
 			Object deviceInfo) {
+		// First we check, if the deviceInfo should be a boolean
+		if (BOOLEAN_VALUES.contains(opsi) && deviceInfo instanceof Integer integer) {
+			return integer.intValue() != 0;
+		}
+
 		String cv = "" + deviceInfo;
 
 		// Set these values before adding ending to cv

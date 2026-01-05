@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -355,29 +355,12 @@ public class PanelSWInfo extends JPanel {
 
 	private void actionOnPopupMenu(int p) {
 		switch (p) {
-		case PopupMenuTrait.POPUP_RELOAD:
-			reload();
-			break;
-
-		case PopupMenuTrait.POPUP_FLOATING_COPY:
-			floatExternalX();
-			break;
-
-		case PopupMenuTrait.POPUP_PDF:
-			sendToPDF();
-			break;
-
-		case PopupMenuTrait.POPUP_EXPORT_CSV:
-			sendToCSV();
-			break;
-
-		case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
-			sendToCSVonlySelected();
-			break;
-
-		default:
-			Logging.warning(this, "no case found for popupmenutrait");
-			break;
+		case PopupMenuTrait.POPUP_RELOAD -> reload();
+		case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternalX();
+		case PopupMenuTrait.POPUP_PDF -> sendToPDF();
+		case PopupMenuTrait.POPUP_EXPORT_CSV -> sendToCSV();
+		case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV -> sendToCSVonlySelected();
+		default -> Logging.warning(this, "no case found for popupmenutrait");
 		}
 	}
 

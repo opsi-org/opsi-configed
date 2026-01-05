@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -206,41 +206,28 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		switch (getSelectedIndex()) {
-		case 0:
+		case 0 -> {
 			// Client page does not need to be updated
-			break;
-
-		case 1:
-			productPageManager.setLocalbootProductsPage();
-			break;
-
-		case 2:
-			productPageManager.setNetbootProductsPage();
-			break;
-
-		case 3:
+		}
+		case 1 -> productPageManager.setLocalbootProductsPage();
+		case 2 -> productPageManager.setNetbootProductsPage();
+		case 3 -> {
 			initHostConfigTab();
 			setHostConfigPage();
-			break;
-
-		case 4:
+		}
+		case 4 -> {
 			initHardwareInfoTab();
 			setHardwareInfoPage();
-			break;
-
-		case 5:
+		}
+		case 5 -> {
 			initSoftWareInfoTab();
 			setSoftwareAudit();
-			break;
-
-		case 6:
+		}
+		case 6 -> {
 			initLogTab();
 			setLogPage();
-			break;
-
-		default:
-			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
-			break;
+		}
+		default -> Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 		}
 
 		lastSelectedIndex = getSelectedIndex();

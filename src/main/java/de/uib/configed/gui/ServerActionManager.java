@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -234,69 +234,28 @@ public final class ServerActionManager {
 		}
 
 		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
-				.stream().filter(hostValues -> hostValues.getName().equals(configedMain.getSelectedClients().get(0)))
+				.stream().filter(hostValues -> hostValues.getString(HostInfo.HOSTNAME_KEY)
+						.equals(configedMain.getSelectedClients().get(0)))
 				.findFirst();
 
 		if (!selectedClient.isPresent()) {
 			return;
 		}
 
-		JTextField jTextHostname = new JTextField(new CheckedDocument(
-				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
-				-1), "", 17);
-		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
-		jTextHostname.setText(copySuffixAddition.add());
-
 		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
 
-		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
-		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
-				CopyClient.CopyOption.GROUPS);
-		JCheckBox copyProducts = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.products.option"),
-				options, CopyClient.CopyOption.PRODUCTS);
-		JCheckBox copyProductProperties = createOptionCheckBox(
-				Configed.getResourceValue("ConfigedMain.productProperties.option"), options,
-				CopyClient.CopyOption.PRODUCT_PROPERTIES);
-		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
-				CopyClient.CopyOption.CONFIG_STATES);
+		HostInfo clientToCopy = selectedClient.get();
 
-		JPanel panel = new JPanel();
-		GroupLayout groupLayout = new GroupLayout(panel);
-		panel.setLayout(groupLayout);
-
-		StringBuilder messageText = new StringBuilder();
-		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
-		messageText.append("\n");
-		messageText.append(selectedClient.get().getName());
-		messageText.append("\n");
-		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
-				.addComponent(copyProductProperties).addComponent(copyConfigs));
-		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
-				.addComponent(copyProductProperties).addComponent(copyConfigs));
-
-		Object[] message = new Object[] { messageText.toString(), panel };
-
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
-				Configed.getResourceValue("MainFrame.jMenuCopyClient"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
-
-		if (answer == 0) {
+		String newClientName = confirmCopyClient(clientToCopy, options);
+		if (newClientName != null) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			String newClientName = jTextHostname.getText();
 			boolean proceed = true;
 			if (newClientName.isEmpty()) {
 				proceed = false;
 			}
 
-			HostInfo clientToCopy = selectedClient.get();
 			String newClientNameWithDomain = newClientName + "."
-					+ Utils.getDomainFromClientName(clientToCopy.getName());
+					+ Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
 				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 				if (!overwriteExistingHost) {
@@ -316,6 +275,59 @@ public final class ServerActionManager {
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
+	}
+
+	/**
+	 * We ask the user for confirmation and options to copy a client.
+	 * 
+	 * @param clientToCopy
+	 * @param options
+	 * @return the new client name or null if the user cancelled the action
+	 */
+	private static String confirmCopyClient(HostInfo clientToCopy, EnumSet<CopyClient.CopyOption> options) {
+		JTextField jTextHostname = new JTextField(new CheckedDocument(
+				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
+				-1), "", 17);
+		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
+		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
+		jTextHostname.setText(copySuffixAddition.add());
+		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
+		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
+				CopyClient.CopyOption.GROUPS);
+		JCheckBox copyProducts = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.products.option"),
+				options, CopyClient.CopyOption.PRODUCTS);
+		JCheckBox copyProductProperties = createOptionCheckBox(
+				Configed.getResourceValue("ConfigedMain.productProperties.option"), options,
+				CopyClient.CopyOption.PRODUCT_PROPERTIES);
+		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
+				CopyClient.CopyOption.CONFIG_STATES);
+
+		JPanel panel = new JPanel();
+		GroupLayout groupLayout = new GroupLayout(panel);
+		panel.setLayout(groupLayout);
+
+		StringBuilder messageText = new StringBuilder();
+		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
+		messageText.append("\n");
+		messageText.append(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
+		messageText.append("\n");
+		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
+
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(jTextHostname)
+				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
+				.addComponent(copyProductProperties).addComponent(copyConfigs));
+		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTextHostname)
+				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
+				.addComponent(copyProductProperties).addComponent(copyConfigs));
+
+		Object[] message = new Object[] { messageText.toString(), panel };
+
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("MainFrame.jMenuCopyClient"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		return answer == JOptionPane.OK_OPTION ? jTextHostname.getText() : null;
 	}
 
 	private static JCheckBox createOptionCheckBox(String title, EnumSet<CopyClient.CopyOption> options,

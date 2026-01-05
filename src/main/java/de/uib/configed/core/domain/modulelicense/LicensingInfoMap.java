@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -95,6 +95,7 @@ public final class LicensingInfoMap {
 	private List<String> obsoleteModules;
 	private List<String> shownModules;
 	private List<String> datesKeys;
+	private Map<String, String> dateToTitleMap;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
@@ -125,9 +126,10 @@ public final class LicensingInfoMap {
 		shownModules = produceShownModules();
 
 		datesKeys = produceDatesKeys();
+		dateToTitleMap = produceDateToTitleMap();
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
-		tableMap = produceTableMapFromDatesMap(datesMap);
+		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet();
 	}
 
@@ -336,6 +338,28 @@ public final class LicensingInfoMap {
 		return dates;
 	}
 
+	private Map<String, String> produceDateToTitleMap() {
+		Map<String, String> resultMap = new HashMap<>();
+		if (datesKeys.isEmpty()) {
+			return resultMap;
+		}
+
+		for (int i = 0; i < datesKeys.size() - 1; i++) {
+			String title = isoDateToGUIDate(datesKeys.get(i)) + " - "
+					+ isoDateToGUIDate(LocalDate.parse(datesKeys.get(i + 1)).minusDays(1).toString());
+			resultMap.put(datesKeys.get(i), title);
+		}
+
+		resultMap.put(datesKeys.get(datesKeys.size() - 1), Configed.getResourceValue("LicensingInfo.from") + " "
+				+ isoDateToGUIDate(datesKeys.get(datesKeys.size() - 1)));
+
+		return resultMap;
+	}
+
+	private static String isoDateToGUIDate(String isoDate) {
+		return isoDate.substring(8, 10) + '.' + isoDate.substring(5, 7) + '.' + isoDate.substring(0, 4);
+	}
+
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
 		if (currentCloseToLimitModuleList == null) {
 			currentCloseToLimitModuleList = new HashSet<>();
@@ -369,7 +393,7 @@ public final class LicensingInfoMap {
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
-			resultMap.put(key, modulesMapToDate);
+			resultMap.put(dateToTitleMap.get(key), modulesMapToDate);
 		}
 
 		return checkTimeWarning(resultMap);
@@ -418,15 +442,14 @@ public final class LicensingInfoMap {
 	 * transforms datesMap to be able to use in a table, with dates as columns
 	 * and modules as rows
 	 */
-	private Map<String, Map<String, Object>> produceTableMapFromDatesMap(
-			Map<String, Map<String, Map<String, Object>>> datesM) {
+	private Map<String, Map<String, Object>> produceTableMapFromDatesMap() {
 		Map<String, Map<String, Object>> resultMap = new TreeMap<>();
 
 		columnNames = new ArrayList<>();
-		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
+		columnNames.add(Configed.getResourceValue("LicensingInfo.module"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
-		for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+		for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
 			columnNames.add(date.getKey());
 		}
 
@@ -434,7 +457,7 @@ public final class LicensingInfoMap {
 			Map<String, Object> line = new HashMap<>();
 
 			// 1st column
-			line.put(Configed.getResourceValue("LicensingInfo.modules"), currentModule);
+			line.put(Configed.getResourceValue("LicensingInfo.module"), currentModule);
 
 			// 2nd column
 
@@ -442,7 +465,7 @@ public final class LicensingInfoMap {
 			line.put(Configed.getResourceValue("LicensingInfo.available"), availableModules.contains(currentModule));
 
 			// rest columns
-			for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+			for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
 				line.put(date.getKey(), date.getValue().get(currentModule).get(CLIENT_NUMBER).toString());
 			}
 

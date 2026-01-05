@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -236,41 +236,21 @@ public class OpsiDataSerializer {
 			return null;
 		}
 
-		DataType dataType = null;
-
-		switch (value) {
+		return switch (value) {
 		// In old searches, we still have "EnumType", but this will now
 		// due to refactoring be replaced by "TextType"
-		case "TextType", "EnumType":
-			dataType = DataType.TEXT_TYPE;
-			break;
-
-		case "IntegerType":
-			dataType = DataType.INTEGER_TYPE;
-			break;
-
-		case "BigIntegerType":
-			dataType = DataType.BIG_INTEGER_TYPE;
-			break;
-
-		case "DoubleType":
-			dataType = DataType.DOUBLE_TYPE;
-			break;
-
-		case "DateType":
-			dataType = DataType.DATE_TYPE;
-			break;
-
-		case "NoneType":
-			dataType = DataType.NONE_TYPE;
-			break;
-
-		default:
+		case "TextType", "EnumType" -> DataType.TEXT_TYPE;
+		case "IntegerType" -> DataType.INTEGER_TYPE;
+		case "BigIntegerType" -> DataType.BIG_INTEGER_TYPE;
+		case "DoubleType" -> DataType.DOUBLE_TYPE;
+		case "DateType" -> DataType.DATE_TYPE;
+		case "BooleanType" -> DataType.BOOLEAN_TYPE;
+		case "NoneType" -> DataType.NONE_TYPE;
+		default -> {
 			Logging.error(this, "dataType for ", value, " cannot be found...)");
-			break;
+			yield null;
 		}
-
-		return dataType;
+		};
 	}
 
 	private static Object convertData(String data, DataType dataType) {
@@ -284,6 +264,7 @@ public class OpsiDataSerializer {
 		case DOUBLE_TYPE -> Double.valueOf(data);
 		case INTEGER_TYPE -> Integer.valueOf(data);
 		case BIG_INTEGER_TYPE -> Long.valueOf(data);
+		case BOOLEAN_TYPE -> Boolean.valueOf(data);
 		default -> throw new IllegalArgumentException("Type " + dataType + " not expected here");
 		};
 	}

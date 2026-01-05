@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -308,19 +308,19 @@ public class MenuBarController {
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		Icons.addOpsiIconToMenuItem(jMenuHelpDoc);
+		Icons.addIntellijIconToMenuItem(jMenuHelpDoc, "readerMode");
 		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showDocumentation());
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
-		Icons.addOpsiIconToMenuItem(jMenuHelpForum);
+		Icons.addThemeIconToMenuItem(jMenuHelpForum, "comment");
 		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		// Get the language used for the support page
 		String language = "de".equals(Messages.getLocale().getLanguage()) ? "de" : "en";
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		Icons.addOpsiIconToMenuItem(jMenuHelpSupport);
+		Icons.addIntellijIconToMenuItem(jMenuHelpSupport, "cwmEnableCall");
 		jMenuHelpSupport
 				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.UIB_PAGE + language + "/support"));
 		jMenuHelp.add(jMenuHelpSupport);

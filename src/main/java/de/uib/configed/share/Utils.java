@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -635,12 +635,5 @@ public final class Utils {
 				consumer.accept(e);
 			}
 		};
-	}
-
-	/**
-	 * Overload that accepts a Runnable and runs it on any document change.
-	 */
-	public static javax.swing.event.DocumentListener onDocumentChange(Runnable runnable) {
-		return onDocumentChange(e -> runnable.run());
 	}
 }

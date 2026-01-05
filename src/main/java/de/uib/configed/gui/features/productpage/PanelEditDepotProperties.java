@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -178,7 +178,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Logging.devel("value changed");
 		Map<String, Object> visualData = mergeProperties(
 				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);

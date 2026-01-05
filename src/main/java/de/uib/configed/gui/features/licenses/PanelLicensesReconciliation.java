@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -73,5 +73,10 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 		} else {
 			super.reset();
 		}
+	}
+
+	@Override
+	public void load() {
+		reset();
 	}
 }

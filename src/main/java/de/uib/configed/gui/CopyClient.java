@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -50,7 +50,8 @@ public class CopyClient {
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
 		this.clientToCopy = clientToCopy;
 		this.newClientName = newClientName;
-		this.newClientNameWithDomain = newClientName + "." + Utils.getDomainFromClientName(clientToCopy.getName());
+		this.newClientNameWithDomain = newClientName + "."
+				+ Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 	}
 
 	/**
@@ -76,8 +77,9 @@ public class CopyClient {
 
 	private void copyClient() {
 		List<List<Object>> clients = new ArrayList<>();
-		List<Object> client = List.of(newClientName, Utils.getDomainFromClientName(clientToCopy.getName()),
-				clientToCopy.getInDepot(), "", "", "", "", "", "", "",
+		List<Object> client = List.of(newClientName,
+				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
+				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", "",
 				Boolean.toString(clientToCopy.getShutdownInstall()), Boolean.toString(clientToCopy.getWanConfig()), "",
 				"");
 		clients.add(client);
@@ -87,7 +89,8 @@ public class CopyClient {
 	private void copyGroups() {
 		Map<String, Set<String>> fGroup2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
-				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName())).toList();
+				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getString(HostInfo.HOSTNAME_KEY)))
+				.toList();
 
 		if (clientGroups.isEmpty()) {
 			return;
@@ -99,7 +102,8 @@ public class CopyClient {
 
 	private void copyProducts() {
 		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persistenceController
-				.getProductDataService().getMapOfProductStatesAndActions(Collections.singleton(clientToCopy.getName()));
+				.getProductDataService()
+				.getMapOfProductStatesAndActions(Collections.singleton(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
 
 		if (mapOfProductStatesAndActions.isEmpty()) {
 			return;
@@ -114,7 +118,8 @@ public class CopyClient {
 				productInfo.values().removeIf(String::isEmpty);
 				productInfo.put("clientId", newClientNameWithDomain);
 				String oldIdent = productInfo.get("ident");
-				String newIdent = oldIdent.replaceFirst(clientToCopy.getName(), newClientNameWithDomain);
+				String newIdent = oldIdent.replaceFirst(clientToCopy.getString(HostInfo.HOSTNAME_KEY),
+						newClientNameWithDomain);
 				productInfo.put("ident", newIdent);
 				persistenceController.getProductDataService().updateProductOnClient(newClientNameWithDomain,
 						productInfo.get("productId"), getProductType(productInfo.get("productId")), productInfo);
@@ -135,7 +140,7 @@ public class CopyClient {
 
 	private void copyProductProperties() {
 		Map<String, ConfigName2ConfigValue> products = persistenceController.getProductDataService()
-				.getProductPropertiesPD(clientToCopy.getName());
+				.getProductPropertiesPD(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 
 		if (products.isEmpty()) {
 			return;
@@ -153,7 +158,8 @@ public class CopyClient {
 	private void copyConfigStates() {
 		ConfigDataService configDataService = persistenceController.getConfigDataService();
 
-		Map<String, Object> hostConfig = configDataService.getHostConfigsPD().get(clientToCopy.getName());
+		Map<String, Object> hostConfig = configDataService.getHostConfigsPD()
+				.get(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 		if (hostConfig == null) {
 			return;
 		}

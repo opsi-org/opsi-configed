@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -474,26 +474,16 @@ public class SoftwareDataService {
 	}
 
 	private RPCMethodName getMethodNameForLicenseType(String licenseType) {
-		RPCMethodName methodName = null;
-		switch (licenseType) {
-		case LicenseEntry.VOLUME:
-			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
-			break;
-		case LicenseEntry.OEM:
-			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
-			break;
-		case LicenseEntry.CONCURRENT:
-			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
-			break;
-		case LicenseEntry.RETAIL:
-			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
-			break;
-		default:
+		return switch (licenseType) {
+		case LicenseEntry.VOLUME -> RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
+		case LicenseEntry.OEM -> RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
+		case LicenseEntry.CONCURRENT -> RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
+		case LicenseEntry.RETAIL -> RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
+		default -> {
 			Logging.notice(this, "encountered UNKNOWN license type");
-			break;
+			yield null;
 		}
-
-		return methodName;
+		};
 	}
 
 	public boolean deleteSoftwareLicense(String softwareLicenseId) {

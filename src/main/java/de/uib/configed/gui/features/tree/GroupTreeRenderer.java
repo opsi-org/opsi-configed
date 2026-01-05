@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -18,6 +18,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
@@ -65,8 +66,8 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		if (node instanceof GroupNode) {
 			setToolTipText(abstractGroupTree.getGroupDescription(text));
 		} else if (abstractGroupTree instanceof ClientTree) {
-			setToolTipText(
-					persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(text).getDescription());
+			setToolTipText(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(text)
+					.getString(HostInfo.CLIENT_DESCRIPTION_KEY));
 		} else {
 			// We don't want to show the description for a Product since we only know the productId
 			// so the description is not clear

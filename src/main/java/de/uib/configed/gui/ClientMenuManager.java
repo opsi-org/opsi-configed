@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -91,9 +91,7 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenuClients;
 	}
 
-	private void initJMenu() {
-		jMenuClients.addMenuListener(this);
-
+	private void addClientActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuWakeOnLan", ServerActionManager::wakeSelectedClients).dependOnSelectionCount(true)
 				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
@@ -111,9 +109,9 @@ public final class ClientMenuManager implements MenuListener {
 				.item("MainFrame.jMenuDeletePackageCaches", ServerActionManager::deletePackageCachesOfSelectedClients)
 				.dependOnSelectionCount(true)
 				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientSystemManagementActions() {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuShutdownClient", ServerActionManager::shutdownSelectedClients)
 						.dependOnSelectionCount(true)
@@ -126,17 +124,26 @@ public final class ClientMenuManager implements MenuListener {
 				ClientMenuItemConfig.item("MainFrame.jMenuOpenTerminal", TerminalController::openTerminalOnClient)
 						.withIcon("terminal").dependOnSelectionCount(true)
 						.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
-		jMenuClients
-				.add(createMenuItem(
-						ClientMenuItemConfig
-								.item("MainFrame.jMenuRemoteControl",
-										() -> ExtraFrameController.startRemoteControlFrame(configedMain,
-												persistenceController))
-								.dependOnSelectionCount(true).withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0))
-								.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 
-		jMenuClients.addSeparator();
+		JMenuItem jMenuRemoteControl = createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuRemoteControl",
+						() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController))
+				.dependOnSelectionCount(true)
+				.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()));
 
+		// Space should only be active on the client table, but not on other where you 
+		// could accidently start remote control by pressing space in a text field etc.
+		Utils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
+				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
+
+		// We want to add the acceserator manually so that it will be active always, not only
+		// when the client table has focus.
+		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+		jMenuClients.add(jMenuRemoteControl);
+	}
+
+	private void addClientAdministrationActions() {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callAddClientDialog)
 						.withIcon("add").dependOnSelectionCount(true)
@@ -167,19 +174,28 @@ public final class ClientMenuManager implements MenuListener {
 							.dependOnSelectionCount(true)
 							.readOnly(persistenceController.getUserRolesConfigDataService().isGlobalReadOnly())));
 		}
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientSearchActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuClientselectionGetGroup",
 				() -> ExtraFrameController.callClientSelectionDialog(configedMain))));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuClientselectionGetSavedSearch",
 				() -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain))));
+	}
 
-		jMenuClients.addSeparator();
-
+	private void addClientTableActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts)
 				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
 
+		jMenuClients.add(
+				createSubMenu(ClientMenuItemConfig.submenu("MainFrame.jMenuShowColumns", this::initShowColumnsMenu)));
+
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
+						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
+	}
+
+	private void addClientExportActions() {
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
@@ -189,26 +205,44 @@ public final class ClientMenuManager implements MenuListener {
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
 				mainFrame.getClientTablePanel().getClientTable());
 		clientTableExporter.addMenuItemsTo(jMenuClients);
+	}
+
+	private void initJMenu() {
+		jMenuClients.addMenuListener(this);
+
+		addClientActions();
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(
-				createSubMenu(ClientMenuItemConfig.submenu("MainFrame.jMenuShowColumns", this::initShowColumnsMenu)));
+		addClientSystemManagementActions();
 
 		jMenuClients.addSeparator();
 
-		jMenuClients.add(createMenuItem(ClientMenuItemConfig
-				.item("MainFrame.jMenuInvertSelection", configedMain::invertSelection).withKeyStroke(KeyStroke
-						.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))));
+		addClientAdministrationActions();
+
+		jMenuClients.addSeparator();
+
+		addClientSearchActions();
+
+		jMenuClients.addSeparator();
+
+		addClientTableActions();
+
+		jMenuClients.addSeparator();
+
+		addClientExportActions();
 	}
 
 	private JMenuItem createMenuItem(ClientMenuItemConfig config) {
-		JMenuItem item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
+		JMenuItem item;
 
 		if (config.keyStroke() != null) {
+			item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
 			item.setAccelerator(config.keyStroke());
 			Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
 					config.keyStroke(), config.action());
+		} else {
+			item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));
 		}
 
 		if (config.icon() != null) {

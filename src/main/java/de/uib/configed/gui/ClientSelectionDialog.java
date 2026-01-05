@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -45,6 +45,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -664,33 +667,46 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		AbstractSelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
-		Object data = null;
 		SelectData.DataType type = operation.getDataType();
-		switch (type) {
-		// Do the same for all four cases
-		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE:
-			data = ((TextInputField) group.dataComponent).getText();
-			if (((String) data).isEmpty()) {
-				return null;
-			}
-			break;
-		case INTEGER_TYPE:
-			data = ((JSpinner) group.dataComponent).getValue();
-			if (((Integer) data) == 0) {
-				return null;
-			}
-			break;
-		case BIG_INTEGER_TYPE:
-			data = ((SpinnerWithExtension) group.dataComponent).getValue();
-			if (((Long) data) == 0) {
-				return null;
-			}
-			break;
-		case NONE_TYPE:
+
+		Object data = getData(type, group.dataComponent);
+
+		if (data == null) {
+			return null;
+		} else {
+			operation.setSelectData(new SelectData(data, type));
+			return operation;
+		}
+	}
+
+	private static Object getData(SelectData.DataType type, JComponent dataComponent) {
+		return switch (type) {
+		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE -> {
+			String text = ((TextInputField) dataComponent).getText();
+			yield text.isEmpty() ? null : text;
 		}
 
-		operation.setSelectData(new SelectData(data, type));
-		return operation;
+		case INTEGER_TYPE -> {
+			Integer integer = (Integer) ((JSpinner) dataComponent).getValue();
+			yield (integer == 0) ? null : integer;
+		}
+
+		case BIG_INTEGER_TYPE -> {
+			Long longValue = (Long) ((JSpinner) dataComponent).getValue();
+			yield (longValue == 0) ? null : longValue;
+		}
+
+		case BOOLEAN_TYPE -> {
+			State state = ((FlatTriStateCheckBox) dataComponent).getState();
+			yield state == FlatTriStateCheckBox.State.INDETERMINATE ? null
+					: (state == FlatTriStateCheckBox.State.SELECTED);
+		}
+		case NONE_TYPE -> null;
+		default -> {
+			Logging.error("Unknown data type: ", type);
+			yield null;
+		}
+		};
 	}
 
 	/*
@@ -820,28 +836,15 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-		case TEXT_TYPE:
-			addTextTypeComponent(sourceGroup);
-			break;
-
-		case DOUBLE_TYPE:
-			addDoubleTypeComponent(sourceGroup);
-			break;
-
-		case DATE_TYPE:
-			addDateTypeComponent(sourceGroup);
-			break;
-
-		case INTEGER_TYPE:
-			addIntegerTypeComponent(sourceGroup);
-			break;
-
-		case BIG_INTEGER_TYPE:
-			addBigIntegerTypeComponent(sourceGroup);
-			break;
-
-		case NONE_TYPE:
-			return;
+		case TEXT_TYPE -> addTextTypeComponent(sourceGroup);
+		case DOUBLE_TYPE -> addDoubleTypeComponent(sourceGroup);
+		case DATE_TYPE -> addDateTypeComponent(sourceGroup);
+		case INTEGER_TYPE -> addIntegerTypeComponent(sourceGroup);
+		case BIG_INTEGER_TYPE -> addBigIntegerTypeComponent(sourceGroup);
+		case BOOLEAN_TYPE -> addBooleanTypeComponent(sourceGroup);
+		case NONE_TYPE -> {
+			// Nothing has to be done here
+		}
 		}
 
 		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER,
@@ -887,6 +890,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		fieldDouble.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
+	}
+
+	private static void addBooleanTypeComponent(SimpleGroup sourceGroup) {
+		FlatTriStateCheckBox checkBox = new FlatTriStateCheckBox();
+		checkBox.setFocusable(false);
+		checkBox.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.booleanInputToolTip"));
+		sourceGroup.dataComponent = checkBox;
 	}
 
 	/*
@@ -1048,26 +1058,23 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 						.setValue((Long) data.getData());
 		case JSpinner jSpinner when data.getType() == SelectData.DataType.INTEGER_TYPE -> jSpinner
 				.setValue(data.getData());
+		case FlatTriStateCheckBox flatTriStateCheckBox -> flatTriStateCheckBox.setSelected((Boolean) data.getData());
 		default -> Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}
 
 	private static void setConnectionTypes(JCheckBox andOr, AbstractButton not, ConnectionStatus status) {
 		switch (status) {
-		case AND:
-			andOr.setSelected(true);
-			break;
-		case OR:
-			andOr.setSelected(false);
-			break;
-		case AND_NOT:
+		case AND -> andOr.setSelected(true);
+		case OR -> andOr.setSelected(false);
+		case AND_NOT -> {
 			andOr.setSelected(true);
 			not.setSelected(true);
-			break;
-		case OR_NOT:
+		}
+		case OR_NOT -> {
 			andOr.setSelected(false);
 			not.setSelected(true);
-			break;
+		}
 		}
 	}
 

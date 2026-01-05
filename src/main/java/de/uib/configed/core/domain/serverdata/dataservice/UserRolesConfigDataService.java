@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -318,21 +318,17 @@ public class UserRolesConfigDataService {
 				Logging.info(this, "setAgainUserRegistration, reaction via option ", answer);
 
 				switch (answer) {
-				case 1:
+				case 1 -> {
 					Logging.info(this, "setAgainUserRegistration remove warning locally ");
 					// remove from store
 					Configed.getSavedStates().remove(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER);
-					break;
-
-				case 2:
+				}
+				case 2 -> {
 					Logging.info(this, "setAgainUserRegistration reactivate user check ");
 					resultVal = true;
-					break;
-
-				default:
-					// We pressed cancel or closed the dialog
-					Logging.info(this, "setAgainUserRegistration ignore ");
-					break;
+				}
+				// We pressed cancel or closed the dialog
+				default -> Logging.info(this, "setAgainUserRegistration ignore ");
 				}
 			} else {
 				// Nothing to do here
