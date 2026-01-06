@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JMenuItem;
@@ -40,6 +37,7 @@ import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class ListSelectionDialog {
 	public static final Dimension DEFAULT_MULTI_LINE_EDITOR_SIZE = new Dimension(400, 200);
@@ -70,12 +68,7 @@ public class ListSelectionDialog {
 	private JPanel createPanel(boolean editable) {
 		Logging.info(this, "createCenterPanel");
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
 		listSelectionList = new ListSelectionList();
-
 		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -98,36 +91,20 @@ public class ListSelectionDialog {
 		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setNarrow(true);
 
-		ParallelGroup horizontalGroup = layout.createParallelGroup();
-		SequentialGroup verticalGroup = layout.createSequentialGroup();
+		JPanel panel = new JPanel();
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[]0"));
+		panel.add(searchPane, "growx");
+		panel.add(listScrollPane, "grow, gapy " + Globals.GAP_SIZE);
 
-		// Add search pane
-		horizontalGroup.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-		verticalGroup.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
-
-		// add list
-		horizontalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-
-		verticalGroup.addGap(Globals.GAP_SIZE);
-		verticalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-
-		// Add additional component if not null
-		Logging.info(this, "editable: ", editable);
 		if (editable) {
-			createEditableOptions(horizontalGroup, verticalGroup);
+			createEditableOptions();
+			panel.add(editingTextField, "growx, gapy " + Globals.GAP_SIZE);
 		}
-
-		layout.setVerticalGroup(verticalGroup);
-		layout.setHorizontalGroup(horizontalGroup);
 
 		return panel;
 	}
 
-	private void createEditableOptions(ParallelGroup horizontalGroup, SequentialGroup verticalGroup) {
+	private void createEditableOptions() {
 		editingTextField = new FlatTextField();
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
 		addValueButton.addActionListener(actionEvent -> addItem(editingTextField.getText()));
@@ -168,12 +145,6 @@ public class ListSelectionDialog {
 				// Handle popup menu cancellation
 			}
 		});
-
-		horizontalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-		verticalGroup.addGap(Globals.GAP_SIZE);
-		verticalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
 	}
 
 	private void addMultilineItem(String initialText, boolean edit) {

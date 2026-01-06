@@ -36,6 +36,7 @@ import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
@@ -137,16 +138,9 @@ public class MainPanelManager {
 		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
 		JPanel jPanel = new JPanel();
-		GroupLayout groupLayout = new GroupLayout(jPanel);
-		jPanel.setLayout(groupLayout);
-
-		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
-				.addComponent(jSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(hostsStatusPanel));
-
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
-				.addComponent(jSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(hostsStatusPanel, 0, 0, Short.MAX_VALUE));
+		jPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow][]"));
+		jPanel.add(jSplitPane, "grow");
+		jPanel.add(hostsStatusPanel, "growx");
 
 		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(),
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
