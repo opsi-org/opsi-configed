@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -32,6 +31,7 @@ import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class ProductActionPanel extends JPanel {
 	private TableSearchPane searchPane;
@@ -122,31 +122,10 @@ public class ProductActionPanel extends JPanel {
 		toolBarSetValues.add(jComboBox);
 		toolBarSetValues.add(buttonSetValues);
 
-		GroupLayout layoutMain = new GroupLayout(this);
-		this.setLayout(layoutMain);
-
-		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(
-						searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(toolBarActions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(toolBarSetValues, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
-
-		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addGroup(layoutMain.createSequentialGroup()
-						.addComponent(toolBarActions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-
-						.addComponent(toolBarSetValues, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fillx", "", "[]0"));
+		this.add(searchPane, "span, growx, gapbottom " + Globals.GAP_SIZE + ", wrap");
+		this.add(toolBarActions, "aligny center, split 2");
+		this.add(toolBarSetValues, "aligny center, pushx, gapbefore push, gapbottom " + Globals.GAP_SIZE + ", wrap");
 	}
 
 	private void addLocalbootSpecificActions(JToolBar toolBarActions) {

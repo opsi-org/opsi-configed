@@ -11,7 +11,6 @@
 
 package de.uib.configed.gui.features.licenses;
 
-import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
@@ -23,6 +22,7 @@ import de.uib.configed.gui.ControlPanelLicensesReconciliation;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelLicensesReconciliation extends MultiTablePanel {
 	private PanelGenEdit panelReconciliation;
@@ -41,17 +41,9 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 		// supply implementation of SearchTargetModelFromTable.setFiltered
 		panelReconciliation.getTableSearchPane().setFiltering();
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING).addComponent(panelReconciliation,
-						GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-						Short.MAX_VALUE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		this.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		this.add(panelReconciliation, "grow, hmin 50, gapbottom " + Globals.MIN_GAP_SIZE);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(panelReconciliation, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	public PanelGenEdit getPanelReconciliation() {

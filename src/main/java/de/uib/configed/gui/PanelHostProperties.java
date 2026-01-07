@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.core.domain.datachanges.UpdateCollection;
@@ -22,6 +21,7 @@ import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelHostProperties extends JPanel {
 	// delegate
@@ -36,13 +36,8 @@ public class PanelHostProperties extends JPanel {
 		editMapPanel = new EditMapPanelX(false, false, false);
 		editMapPanel.setShowToolTip(false);
 
-		GroupLayout planeLayout = new GroupLayout(this);
-		this.setLayout(planeLayout);
-
-		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup().addComponent(editMapPanel));
-
-		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(editMapPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));
+		this.add(editMapPanel, "grow");
 	}
 
 	public void initMultipleHostsEditing(Map<String, Object> depotMap, UpdateCollection updateCollection,

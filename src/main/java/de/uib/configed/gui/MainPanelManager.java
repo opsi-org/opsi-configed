@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -157,17 +156,11 @@ public class MainPanelManager {
 			DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 			JPanel depotsListPanel = new JPanel();
-			GroupLayout layout = new GroupLayout(depotsListPanel);
-			depotsListPanel.setLayout(layout);
+			depotsListPanel.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow, fill]",
+					"[]" + Globals.MIN_GAP_SIZE + "[]"));
 
-			layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(depotSelectionLabel).addGap(Globals.MIN_GAP_SIZE).addComponent(depotListPresenter));
-			layout.setHorizontalGroup(layout.createParallelGroup()
-					.addGroup(layout.createSequentialGroup()
-							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-							.addComponent(depotSelectionLabel)
-							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
-					.addComponent(depotListPresenter));
+			depotsListPanel.add(depotSelectionLabel, "align center, wrap");
+			depotsListPanel.add(depotListPresenter, "grow, push");
 
 			depotsListPanel.setMinimumSize(new Dimension());
 
@@ -255,28 +248,11 @@ public class MainPanelManager {
 			toolBarButtons.forEach(generalToolBar::add);
 		}
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(generalToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(titleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(opsiLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addComponent(component, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-		layout.setHorizontalGroup(layout
-				.createParallelGroup().addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
-						// We add the gaps of the preferred sizes of the components to center the titlelabel
-						.addGap(Globals.MIN_GAP_SIZE, (int) opsiLogo.getPreferredSize().getWidth(), Short.MAX_VALUE)
-						.addComponent(titleLabel)
-						.addGap(Globals.MIN_GAP_SIZE, (int) generalToolBar.getPreferredSize().getWidth(),
-								Short.MAX_VALUE)
-						.addComponent(opsiLogo).addGap(Globals.GAP_SIZE))
-				.addComponent(component, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, filly", "[pref!][grow][pref!]", "[pref!][grow]"));
+		panel.add(generalToolBar, "aligny center");
+		panel.add(titleLabel, "align center");
+		panel.add(opsiLogo, "aligny center, wrap");
+		panel.add(component, "span, grow");
 
 		return panel;
 	}
