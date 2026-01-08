@@ -22,7 +22,6 @@ import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.AbstractExportTable;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.Icons;
@@ -60,7 +59,6 @@ public class PanelGenEditPopupManager {
 	private JMenuItem menuItemCancel;
 
 	private JPopupMenu popupMenu;
-	private AbstractExportTable exportTable;
 
 	private int generalPopupPosition;
 
@@ -91,9 +89,11 @@ public class PanelGenEditPopupManager {
 
 				addPopupItem(menuItemPrint);
 			}, PopupMenuTrait.POPUP_EXPORT_CSV, () -> {
+				ExporterToCSV exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
 				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
 			}, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, () -> {
+				ExporterToCSV exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
 				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
 			}, PopupMenuTrait.POPUP_PDF, () -> {
@@ -125,8 +125,6 @@ public class PanelGenEditPopupManager {
 		this.internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
 		Logging.info(this, "internalpopups supplemented ", giveMenuitemNames(internalpopups));
-
-		exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
 	}
 
 	public void setDataChanged(boolean dataChanged) {
