@@ -12,8 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -38,6 +36,7 @@ import de.uib.configed.gui.share.table.updates.UpdateController;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelGenEdit extends JPanel implements TableModelListener, ListSelectionListener, CursorrowObserver {
 	private JScrollPane jScrollPane;
@@ -140,26 +139,12 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		JPanel controlPanel = initControlPanel();
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
+		setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", wrap 1", "[grow,fill]", "[]0"));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTitle,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jScrollPane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(jScrollPane, 20, 100, Short.MAX_VALUE)
-
-				.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		add(jLabelTitle, "gapbottom " + Globals.MIN_GAP_SIZE);
+		add(tableSearchPane, "gapbottom " + Globals.MIN_GAP_SIZE);
+		add(jScrollPane, "grow, push, gapbottom " + Globals.MIN_GAP_SIZE);
+		add(controlPanel);
 	}
 
 	private JPanel initControlPanel() {
@@ -178,21 +163,10 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		buttonCancel.setToolTipText(Configed.getResourceValue("buttonClose"));
 		buttonCancel.addActionListener(action -> cancel());
 
-		GroupLayout layout = new GroupLayout(controlPanel);
+		controlPanel.setLayout(new MigLayout("insets 0", "[][" + Globals.GAP_SIZE + "][]", "[]0"));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		controlPanel.add(buttonCancel);
+		controlPanel.add(buttonCommit);
 
 		setDataChanged(false);
 
