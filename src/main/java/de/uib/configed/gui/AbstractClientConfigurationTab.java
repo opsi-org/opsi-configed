@@ -8,6 +8,7 @@ package de.uib.configed.gui;
 
 import java.awt.CardLayout;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -27,7 +28,7 @@ public abstract class AbstractClientConfigurationTab extends JPanel {
 		super.add(generateInfoPanel(message), INFO_TAB);
 	}
 
-	protected void setComponent(JPanel component) {
+	protected void setComponent(JComponent component) {
 		super.add(component, CONTENT_TAB);
 	}
 

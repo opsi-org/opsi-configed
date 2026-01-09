@@ -129,11 +129,12 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initLogTab() {
-		if (tabbedLogPane != null) {
-			return;
+		if (tabbedLogPane == null) {
+			tabbedLogPane = new TabbedLogPane(configedMain);
+			setComponentAt(getSelectedIndex(), tabbedLogPane);
 		}
 
-		tabbedLogPane = new TabbedLogPane(configedMain);
+		tabbedLogPane.updateTab(configedMain.getSelectedClients().size());
 	}
 
 	private void setHostConfigTab() {
@@ -150,13 +151,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		showSoftwareLog.repaint();
 	}
 
-	public void setLogFileTab(String logtype) {
-		setLogFileTab(logtype, false);
-	}
-
 	public void setLogFileTab(String logtype, final boolean resetCaret) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
-		setComponentAt(getSelectedIndex(), tabbedLogPane);
 		tabbedLogPane.setDocuments(logtype, resetCaret);
 	}
 
@@ -199,10 +195,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			initSoftWareInfoTab();
 			setSoftwareAudit();
 		}
-		case 6 -> {
-			initLogTab();
-			setLogPage();
-		}
+		case 6 -> initLogTab();
 		default -> Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 		}
 
@@ -220,11 +213,5 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 			showSoftwareInfo(showSoftwareLogMultiClientReport);
 		}
-	}
-
-	private void setLogPage() {
-		Logging.debug(this, "setLogPage");
-		setLogFileTab("instlog");
-		tabbedLogPane.setLogview("instlog");
 	}
 }
