@@ -106,7 +106,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null);
 	}
 
-	private void initSoftWareInfoTab() {
+	private void setSoftwareInfoTab() {
 		if (panelSWInfo == null) {
 			panelSWInfo = new PanelSWInfo(configedMain, true);
 			showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
@@ -117,9 +117,19 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		}
 
 		panelSWInfo.updateTab(configedMain.getSelectedClients().size());
+
+		if (configedMain.getSelectedClients().size() <= 1) {
+			// Nothing will be done
+			showSoftwareInfo(panelSWInfo);
+		} else {
+			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
+
+			showSoftwareInfo(showSoftwareLogMultiClientReport);
+		}
+
 	}
 
-	private void initHardwareInfoTab() {
+	private void setHardwareInfoTab() {
 		if (panelHWInfo == null) {
 			panelHWInfo = new PanelHWInfo(true, configedMain, this);
 			setComponentAt(getSelectedIndex(), panelHWInfo);
@@ -128,7 +138,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		panelHWInfo.updateTab(configedMain.getSelectedClients().size());
 	}
 
-	private void initLogTab() {
+	private void setLogFilesTab() {
 		if (tabbedLogPane == null) {
 			tabbedLogPane = new TabbedLogPane(configedMain);
 			setComponentAt(getSelectedIndex(), tabbedLogPane);
@@ -190,28 +200,14 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		case 1 -> productPageManager.setLocalbootProductsPage();
 		case 2 -> productPageManager.setNetbootProductsPage();
 		case 3 -> setHostConfigTab();
-		case 4 -> initHardwareInfoTab();
-		case 5 -> {
-			initSoftWareInfoTab();
-			setSoftwareAudit();
-		}
-		case 6 -> initLogTab();
+		case 4 -> setHardwareInfoTab();
+		case 5 -> setSoftwareInfoTab();
+		case 6 -> setLogFilesTab();
 		default -> Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 		}
 
 		lastSelectedIndex = getSelectedIndex();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
-	}
-
-	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients().size() <= 1) {
-			// Nothing will be done
-			showSoftwareInfo(panelSWInfo);
-		} else {
-			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
-
-			showSoftwareInfo(showSoftwareLogMultiClientReport);
-		}
 	}
 }
