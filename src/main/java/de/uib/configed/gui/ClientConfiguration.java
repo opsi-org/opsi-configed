@@ -112,13 +112,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		addTab(Configed.getResourceValue("netbootProducts"), panelNetbootProductSettings);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null);
 
 		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), tabbedLogPane);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null);
 	}
 
 	private void initSoftWareInfoTab() {
