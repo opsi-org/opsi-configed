@@ -16,23 +16,19 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.hostconfigs.PanelHostConfig;
+import de.uib.configed.gui.features.hostconfigs.PanelClientHostConfig;
 import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.features.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.gui.features.tree.ProductTree;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public static final float DIVIDER_LOCATION = 0.8F;
-
-	private ConfigUpdateCollection configUpdateCollection;
 
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
@@ -40,7 +36,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private PanelProductSettings panelLocalbootProductSettings;
 	private PanelProductSettings panelNetbootProductSettings;
-	private PanelHostConfig panelHostConfig;
+	private PanelClientHostConfig panelClientHostConfig;
 
 	private PanelSWInfo panelSWInfo;
 	private JPanel showSoftwareLogNotFound;
@@ -153,14 +149,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		tabbedLogPane = new TabbedLogPane(configedMain);
 	}
 
-	private void initHostConfigTab() {
-		if (panelHostConfig != null) {
-			return;
+	private void setHostConfigTab() {
+		if (panelClientHostConfig == null) {
+			panelClientHostConfig = new PanelClientHostConfig(configedMain);
+			setComponentAt(getSelectedIndex(), panelClientHostConfig);
 		}
 
-		panelHostConfig = new PanelHostConfig(this::setHostConfigPage, false);
-
-		setComponentAt(getSelectedIndex(), panelHostConfig);
+		panelClientHostConfig.updateTab(configedMain.getSelectedClients().size());
 	}
 
 	private void showSoftwareInfo(JPanel showSoftwareLog) {
@@ -211,10 +206,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		}
 		case 1 -> productPageManager.setLocalbootProductsPage();
 		case 2 -> productPageManager.setNetbootProductsPage();
-		case 3 -> {
-			initHostConfigTab();
-			setHostConfigPage();
-		}
+		case 3 -> setHostConfigTab();
 		case 4 -> {
 			initHardwareInfoTab();
 			setHardwareInfoPage();
@@ -233,30 +225,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		lastSelectedIndex = getSelectedIndex();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
-	}
-
-	public void setHostConfigPage() {
-		Logging.info(this, "setNetworkconfigurationPage ");
-		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", configedMain.getSelectedClients());
-
-		if (configUpdateCollection != null) {
-			UpdateCollectionManager.removeFromGlobalUpdateCollection(configUpdateCollection);
-		}
-
-		configUpdateCollection = new ConfigUpdateCollection(configedMain.getSelectedClients());
-		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
-
-		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
-				.getHostsConfigsWithDefaults(configedMain.getSelectedClients());
-		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
-		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
-				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-
-		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
-				.getConfigDataService().getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
-		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients()),
-				mergedVisualMap, additionalConfigs, configUpdateCollection,
-				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 	}
 
 	public void setHardwareInfoPage() {
