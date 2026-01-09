@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -34,7 +33,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private PanelClientHostConfig panelClientHostConfig;
 
 	private PanelSWInfo panelSWInfo;
-	private JPanel showSoftwareLogNotFound;
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 
 	private PanelHWInfo panelHWInfo;
@@ -109,18 +107,16 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initSoftWareInfoTab() {
-		if (panelSWInfo != null) {
-			return;
+		if (panelSWInfo == null) {
+			panelSWInfo = new PanelSWInfo(configedMain, true);
+			showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
+			SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
+			showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
+
+			setComponentAt(getSelectedIndex(), panelSWInfo);
 		}
 
-		panelSWInfo = new PanelSWInfo(configedMain, true);
-
-		showSoftwareLogNotFound = new JPanel();
-		showSoftwareLogNotFound.add(new JLabel(Configed.getResourceValue("MainFrame.TabRequiresClientSelected")));
-
-		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
-		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
-		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
+		panelSWInfo.updateTab(configedMain.getSelectedClients().size());
 	}
 
 	private void initHardwareInfoTab() {
@@ -216,15 +212,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients().isEmpty()) {
-			showSoftwareInfo(showSoftwareLogNotFound);
-		} else if (configedMain.getSelectedClients().size() == 1) {
-			String hostId = configedMain.getSelectedClients().getFirst();
-			Logging.debug(this, "setSoftwareAudit for ", hostId);
-			panelSWInfo.setAskForOverwrite(true);
-			panelSWInfo.setHost(hostId);
-			panelSWInfo.updateModel();
-
+		if (configedMain.getSelectedClients().size() <= 1) {
+			// Nothing will be done
 			showSoftwareInfo(panelSWInfo);
 		} else {
 			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());

@@ -35,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.AbstractClientConfigurationTab;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
@@ -55,7 +56,7 @@ import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelSWInfo extends JPanel {
+public class PanelSWInfo extends AbstractClientConfigurationTab {
 	private static final String FILTER_MS_UPDATES = "withMsUpdates";
 	private static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
@@ -99,6 +100,7 @@ public class PanelSWInfo extends JPanel {
 	private ConfigedMain configedMain;
 
 	public PanelSWInfo(ConfigedMain configedMain, boolean withPopup) {
+		super(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"), false);
 		this.configedMain = configedMain;
 		this.withPopup = withPopup;
 
@@ -106,6 +108,14 @@ public class PanelSWInfo extends JPanel {
 		setupTableLayout();
 
 		buildPanel();
+	}
+
+	@Override
+	protected void updateContent() {
+		setHost(configedMain.getSelectedClients().getFirst());
+		Logging.debug(this, "setSoftwareAudit for ", hostId);
+		setAskForOverwrite(true);
+		updateModel();
 	}
 
 	private static TableModelFilter createTableModelFilter1(int indexOfColWindowsSoftwareID) {
@@ -264,14 +274,16 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-		GroupLayout layoutEmbed = new GroupLayout(this);
-		setLayout(layoutEmbed);
+		JPanel contentPanel = new JPanel();
+		setComponent(contentPanel);
+		GroupLayout contentLayout = new GroupLayout(contentPanel);
+		contentPanel.setLayout(contentLayout);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed.createParallelGroup()
+		contentLayout.setHorizontalGroup(contentLayout.createParallelGroup()
 				.addComponent(subPanelTitle, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(panelTable, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+		contentLayout.setVerticalGroup(contentLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(panelTable, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
