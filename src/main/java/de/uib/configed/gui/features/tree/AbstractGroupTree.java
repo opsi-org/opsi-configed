@@ -24,7 +24,6 @@ import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
 import javax.swing.DropMode;
-import javax.swing.GroupLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,6 +47,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.Object2GroupEntry;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
@@ -416,16 +416,12 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";
 
-			JPanel panel = new JPanel();
-			GroupLayout layout = new GroupLayout(panel);
-			panel.setLayout(layout);
+			JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
 
-			layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelGroupName)
-					.addComponent(groupNameField).addGap(Globals.GAP_SIZE).addComponent(labelDescription)
-					.addComponent(groupDescriptionField));
-			layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addComponent(labelGroupName).addComponent(groupNameField).addComponent(labelDescription)
-					.addComponent(groupDescriptionField));
+			panel.add(labelGroupName);
+			panel.add(groupNameField, "growx, gapbottom " + Globals.GAP_SIZE);
+			panel.add(labelDescription);
+			panel.add(groupDescriptionField, "growx");
 
 			String newGroupKey = null;
 			JOptionPane optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {

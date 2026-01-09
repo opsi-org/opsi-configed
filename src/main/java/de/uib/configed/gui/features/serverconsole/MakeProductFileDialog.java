@@ -187,7 +187,7 @@ public class MakeProductFileDialog {
 		panel.add(jCheckBoxOverwrite, "gaptop " + Globals.GAP_SIZE);
 		panel.add(jButtonAdvancedSettings);
 
-		panel.add(advancedOptionsPanel, "gaptop " + Globals.GAP_SIZE + ", growx, pushx");
+		panel.add(advancedOptionsPanel, "gaptop " + Globals.GAP_SIZE);
 
 		return panel;
 	}

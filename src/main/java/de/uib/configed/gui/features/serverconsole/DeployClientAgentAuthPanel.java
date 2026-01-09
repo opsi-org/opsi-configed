@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.serverconsole;
 
 import java.awt.Font;
 
-import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -22,6 +21,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent;
+import net.miginfocom.swing.MigLayout;
 
 public class DeployClientAgentAuthPanel extends JPanel {
 	private JLabel labelUser;
@@ -92,26 +92,10 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout winAuthPanelLayout = new GroupLayout(this);
-		setLayout(winAuthPanelLayout);
-
-		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(textFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup()
-				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(textFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "[grow, fill]", "[]0"));
+		add(labelUser);
+		add(textFieldUser, "growx, gapbottom " + Globals.GAP_SIZE);
+		add(labelPassword);
+		add(passwordField, "growx, gapbottom " + Globals.GAP_SIZE);
 	}
 }

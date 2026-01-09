@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,6 +14,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.configed.share.Utils;
+import net.miginfocom.swing.MigLayout;
 
 public class PMInstallServerPanel extends PMInstallPanel {
 	private JLabel jLabelServerDir = new JLabel();
@@ -59,26 +59,10 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-
-		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		setLayout(new MigLayout("insets 0, fillx, gap " + Globals.GAP_SIZE, "[grow, fill][]", "[]0"));
+		add(jLabelServerDir, "wrap");
+		add(jComboBoxAutoCompletion, "growx");
+		add(jButtonAutoCompletion);
 	}
 
 	public SingleCommandOpsiPackageManagerInstall getCommand() {
