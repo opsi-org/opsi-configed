@@ -6,9 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -16,8 +13,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.hostconfigs.PanelClientHostConfig;
 import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
@@ -43,7 +38,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 
 	private PanelHWInfo panelHWInfo;
-	private JPanel showHardwareLogNotFoundPanel;
 
 	private TabbedLogPane tabbedLogPane;
 	private JSplitPane panelClientSelection;
@@ -52,9 +46,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private ProductPageManager productPageManager;
 
 	private int lastSelectedIndex;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public ClientConfiguration(ConfigedMain configedMain, MainFrame mainFrame, ProductTree productTree) {
 		this.configedMain = configedMain;
@@ -133,12 +124,12 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initHardwareInfoTab() {
-		if (panelHWInfo != null) {
-			return;
+		if (panelHWInfo == null) {
+			panelHWInfo = new PanelHWInfo(true, configedMain, this);
+			setComponentAt(getSelectedIndex(), panelHWInfo);
 		}
 
-		panelHWInfo = new PanelHWInfo(true, configedMain, this);
-		setComponentAt(getSelectedIndex(), panelHWInfo);
+		panelHWInfo.updateTab(configedMain.getSelectedClients().size());
 	}
 
 	private void initLogTab() {
@@ -207,10 +198,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		case 1 -> productPageManager.setLocalbootProductsPage();
 		case 2 -> productPageManager.setNetbootProductsPage();
 		case 3 -> setHostConfigTab();
-		case 4 -> {
-			initHardwareInfoTab();
-			setHardwareInfoPage();
-		}
+		case 4 -> initHardwareInfoTab();
 		case 5 -> {
 			initSoftWareInfoTab();
 			setSoftwareAudit();
@@ -225,39 +213,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		lastSelectedIndex = getSelectedIndex();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
-	}
-
-	public void setHardwareInfoPage() {
-		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
-
-		if (configedMain.getSelectedClients().size() == 1) {
-			setHardwareInfo(persistenceController.getHardwareDataService()
-					.getHardwareInfo(configedMain.getSelectedClients().get(0)));
-		} else {
-			setHardwareInfoNotPossible();
-		}
-	}
-
-	private void showHardwareInfo(JPanel showHardwareLog) {
-		setComponentAt(getSelectedIndex(), showHardwareLog);
-		showHardwareLog.repaint();
-	}
-
-	private void setHardwareInfoNotPossible() {
-		Logging.info(this, "setHardwareInfoNotPossible");
-
-		if (showHardwareLogNotFoundPanel == null) {
-			showHardwareLogNotFoundPanel = new JPanel();
-			showHardwareLogNotFoundPanel
-					.add(new JLabel(Configed.getResourceValue("MainFrame.TabActiveForSingleClient")));
-		}
-
-		showHardwareInfo(showHardwareLogNotFoundPanel);
-	}
-
-	private void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
-		panelHWInfo.setHardwareInfo(hardwareInfo);
-		showHardwareInfo(panelHWInfo);
 	}
 
 	public void setSoftwareAudit() {
