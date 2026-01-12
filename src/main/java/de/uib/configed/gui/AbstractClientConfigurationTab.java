@@ -7,10 +7,13 @@
 package de.uib.configed.gui;
 
 import java.awt.CardLayout;
+import java.awt.Font;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
 
 public abstract class AbstractClientConfigurationTab extends JPanel {
 	private static final String INFO_TAB = "CLIENT_INFO_TAB";
@@ -33,13 +36,27 @@ public abstract class AbstractClientConfigurationTab extends JPanel {
 	}
 
 	private JPanel generateInfoPanel() {
-		String messageKey = multiSelectionAllowed ? "MainFrame.TabRequiresClientSelected"
-				: "MainFrame.TabActiveForSingleClient";
+		String primaryMessageKey = multiSelectionAllowed ? "ClientConfiguration.requiresClientSelected.primary"
+				: "ClientConfiguration.requiresSingleSelection.primary";
 
-		JLabel label = new JLabel(Configed.getResourceValue(messageKey));
-		JPanel panel = new JPanel();
-		panel.add(label);
-		return panel;
+		String secondaryMessageKey = multiSelectionAllowed ? "ClientConfiguration.requiresClientSelected.secondary"
+				: "ClientConfiguration.requiresSingleSelection.secondary";
+
+		JLabel labelPrimary = new JLabel(Configed.getResourceValue(primaryMessageKey));
+		labelPrimary.setFont(labelPrimary.getFont().deriveFont(Font.BOLD));
+		JLabel labelSecondary = new JLabel(Configed.getResourceValue(secondaryMessageKey));
+
+		JPanel innerPanel = new JPanel(new MigLayout("wrap 1, aligny center, alignx center", "[center]", "[]10[]"));
+		innerPanel.add(labelPrimary);
+		innerPanel.add(labelSecondary);
+
+		// We need this panel so that the outer panel can fill the available space
+		// and center the inner panel
+		JPanel outerPanel = new JPanel();
+		outerPanel.setLayout(new MigLayout("fill"));
+		outerPanel.add(innerPanel, "grow, center");
+
+		return outerPanel;
 	}
 
 	protected void updateContent() {
