@@ -52,8 +52,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		init();
 
-		productPageManager = new ProductPageManager(configedMain, this);
-
 		super.addChangeListener(this);
 	}
 
@@ -89,7 +87,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		panelNetbootProductSettings = new PanelProductSettings(configedMain, productTree,
 				ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
+
+		productPageManager = new ProductPageManager(configedMain, this);
+
+		panelLocalbootProductSettings.setUpdater(productPageManager::setLocalbootProductsPage);
+		panelNetbootProductSettings.setUpdater(productPageManager::setNetbootProductsPage);
 
 		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), panelClientSelection);
 
@@ -168,8 +172,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	public void initSplitPanes() {
 		panelClientSelection.setDividerLocation(DIVIDER_LOCATION);
-		panelLocalbootProductSettings.setDividerLocation(DIVIDER_LOCATION);
-		panelNetbootProductSettings.setDividerLocation(DIVIDER_LOCATION);
+		panelLocalbootProductSettings.getContentPane().setDividerLocation(DIVIDER_LOCATION);
+		panelNetbootProductSettings.getContentPane().setDividerLocation(DIVIDER_LOCATION);
 	}
 
 	public void updateProductTab() {
@@ -197,8 +201,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		case 0 -> {
 			// Client page does not need to be updated
 		}
-		case 1 -> productPageManager.setLocalbootProductsPage();
-		case 2 -> productPageManager.setNetbootProductsPage();
+		case 1 -> panelLocalbootProductSettings.updateTab(configedMain.getSelectedClients().size());
+		case 2 -> panelNetbootProductSettings.updateTab(configedMain.getSelectedClients().size());
 		case 3 -> setHostConfigTab();
 		case 4 -> setHardwareInfoTab();
 		case 5 -> setSoftwareInfoTab();

@@ -470,7 +470,7 @@ public class PanelSWInfo extends AbstractClientConfigurationTab {
 		Logging.debug(this, "reload action");
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-		ConfigedMain.getMainFrame().getClientConfiguration().setSoftwareAudit();
+		updateTab(configedMain.getSelectedClients().size());
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
