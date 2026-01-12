@@ -20,20 +20,23 @@ public abstract class AbstractClientConfigurationTab extends JPanel {
 
 	private CardLayout cardLayout;
 
-	protected AbstractClientConfigurationTab(String message, boolean multiSelectionAllowed) {
+	protected AbstractClientConfigurationTab(boolean multiSelectionAllowed) {
 		this.multiSelectionAllowed = multiSelectionAllowed;
 
 		cardLayout = new CardLayout();
 		super.setLayout(cardLayout);
-		super.add(generateInfoPanel(message), INFO_TAB);
+		super.add(generateInfoPanel(), INFO_TAB);
 	}
 
 	protected void setComponent(JComponent component) {
 		super.add(component, CONTENT_TAB);
 	}
 
-	static JPanel generateInfoPanel(String message) {
-		JLabel label = new JLabel(message);
+	private JPanel generateInfoPanel() {
+		String messageKey = multiSelectionAllowed ? "MainFrame.TabRequiresClientSelected"
+				: "MainFrame.TabActiveForSingleClient";
+
+		JLabel label = new JLabel(Configed.getResourceValue(messageKey));
 		JPanel panel = new JPanel();
 		panel.add(label);
 		return panel;

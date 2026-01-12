@@ -104,7 +104,7 @@ public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeS
 			.getPersistenceController();
 
 	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
-		super(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"), false);
+		super(false);
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
 		this.clientConfiguration = clientConfiguration;

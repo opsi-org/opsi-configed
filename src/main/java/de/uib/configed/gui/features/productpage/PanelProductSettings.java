@@ -80,7 +80,7 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 			.getPersistenceController();
 
 	public PanelProductSettings(ConfigedMain configedMain, ProductTree productTree, ProductSettingsType type) {
-		super(Configed.getResourceValue("HostConfigTreeModel.noClientsSelected"), true);
+		super(true);
 		this.configedMain = configedMain;
 		this.productTree = productTree;
 		this.type = type;

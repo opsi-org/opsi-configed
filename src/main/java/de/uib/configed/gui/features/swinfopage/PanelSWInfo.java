@@ -100,7 +100,7 @@ public class PanelSWInfo extends AbstractClientConfigurationTab {
 	private ConfigedMain configedMain;
 
 	public PanelSWInfo(ConfigedMain configedMain, boolean withPopup) {
-		super(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"), false);
+		super(false);
 		this.configedMain = configedMain;
 		this.withPopup = withPopup;
 

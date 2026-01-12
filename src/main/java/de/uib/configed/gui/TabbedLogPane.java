@@ -37,7 +37,7 @@ public class TabbedLogPane extends AbstractClientConfigurationTab {
 			.getPersistenceController();
 
 	public TabbedLogPane(ConfigedMain configedMain) {
-		super(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"), false);
+		super(false);
 		this.configedMain = configedMain;
 
 		tabbedPane = new JTabbedPane();

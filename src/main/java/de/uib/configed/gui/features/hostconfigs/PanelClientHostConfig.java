@@ -13,7 +13,6 @@ import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.AbstractClientConfigurationTab;
-import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.UpdateCollectionManager;
@@ -29,7 +28,7 @@ public class PanelClientHostConfig extends AbstractClientConfigurationTab {
 			.getPersistenceController();
 
 	public PanelClientHostConfig(ConfigedMain configedMain) {
-		super(Configed.getResourceValue("HostConfigTreeModel.noClientsSelected"), true);
+		super(true);
 		this.configedMain = configedMain;
 		panelHostConfig = new PanelHostConfig(this::updateContent, false);
 
