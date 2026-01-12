@@ -15,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,8 +28,8 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.data.DependenciesTreeModel;
+import net.miginfocom.swing.MigLayout;
 
 public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener {
 	private DependenciesTreeModel dependenciesTreeModel;
@@ -114,29 +113,18 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		copyListButton.addActionListener(event -> copyList());
 
-		GroupLayout dependenciesTreeGroupLayout = new GroupLayout(this);
-		this.setLayout(dependenciesTreeGroupLayout);
+		this.setLayout(new MigLayout("insets 0, fill", "[pref!][grow, fill]", "[grow, fill]0"));
 
-		// Grouplayout
-		dependenciesTreeGroupLayout.setHorizontalGroup(dependenciesTreeGroupLayout.createSequentialGroup()
-				.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
-				.addComponent(dependenciesTreeScrollPanel));
+		// this.add(dependenciesNeedsButton, "cell 0 0, growx");
+		// this.add(dependenciesNeededByButton, "cell 0 1, growx, gapafter push");
+		// this.add(copyListButton, "cell 0 3, growx, aligny bottom");
+		JPanel leftSidePanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "", "[][]push[]"));
+		leftSidePanel.add(dependenciesNeedsButton);
+		leftSidePanel.add(dependenciesNeededByButton);
+		leftSidePanel.add(copyListButton, "gapbefore push");
 
-		dependenciesTreeGroupLayout.setVerticalGroup(dependenciesTreeGroupLayout.createParallelGroup()
-				.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addComponent(dependenciesNeedsButton)
-						.addComponent(dependenciesNeededByButton).addGap(0, 0, Short.MAX_VALUE)
-						.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addComponent(dependenciesTreeScrollPanel));
+		this.add(leftSidePanel, "grow");
+		this.add(dependenciesTreeScrollPanel, "grow");
 	}
 
 	private void dependenciesNeededAction(boolean treeInverted) {

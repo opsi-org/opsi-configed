@@ -88,6 +88,7 @@ import de.uib.configed.gui.type.SavedSearch;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
@@ -190,9 +191,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JPanel initComponents() {
 		JPanel completePanel = new JPanel();
 
-		GroupLayout completeLayout = new GroupLayout(completePanel);
-		completePanel.setLayout(completeLayout);
-
 		saveNameField = new JTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
 
@@ -215,46 +213,15 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		buttonRestart.addActionListener(actionEvent -> restart());
 
-		completeLayout
-				.setHorizontalGroup(
-						completeLayout.createParallelGroup().addComponent(scrollPane)
-								.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(saveButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)));
-
-		completeLayout.setVerticalGroup(completeLayout.createSequentialGroup().addComponent(scrollPane)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(completeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveDescriptionField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		completePanel.setLayout(new MigLayout("insets 0, fillx", "", "[]0"));
+		completePanel.add(scrollPane, "grow, push, wrap, gapbottom " + Globals.GAP_SIZE);
+		completePanel.add(saveNameLabel, "split 7, gapleft " + Globals.GAP_SIZE);
+		completePanel.add(saveNameField, "wmin 40, w 100:200, gapleft " + Globals.MIN_GAP_SIZE);
+		completePanel.add(saveDescriptionLabel, "gapleft " + Globals.GAP_SIZE);
+		completePanel.add(saveDescriptionField, "wmin 40, w 200:push, growx, gapleft " + Globals.MIN_GAP_SIZE);
+		completePanel.add(saveButton, "gapleft " + Globals.GAP_SIZE);
+		completePanel.add(buttonReload, "gapleft " + Globals.GAP_SIZE);
+		completePanel.add(buttonRestart, "gapleft " + Globals.MIN_GAP_SIZE + ", wrap");
 
 		return completePanel;
 	}

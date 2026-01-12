@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.productpage;
 
-import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +17,7 @@ import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.data.DependenciesModel.DependenciesModelListener;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModelListener {
 	// The label shown on top of the dependencies-panel
@@ -46,33 +46,13 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		dependenciesPanel.setViewportView(dependenciesTable);
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelInfoProductDependenciesTable))
-
-				.addComponent(dependenciesPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelInfoProductDependenciesTree))
-
-				.addComponent(dependenciesTreePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelInfoProductDependenciesTable).addComponent(dependenciesPanel, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(labelInfoProductDependenciesTree)
-				.addComponent(dependenciesTreePanel, 0, 0, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)
-
-				// We need to add 2 to the height of the tree path panel because the border
-				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.DEFAULT_JLABEL_HEIGHT + 2,
-						Globals.DEFAULT_JLABEL_HEIGHT + 2, Globals.DEFAULT_JLABEL_HEIGHT + 2));
+		this.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]", "[][grow,fill][][grow,fill][]"));
+		this.add(labelInfoProductDependenciesTable);
+		this.add(dependenciesPanel, "grow, push");
+		this.add(labelInfoProductDependenciesTree, "gaptop " + Globals.MIN_GAP_SIZE);
+		this.add(dependenciesTreePanel, "grow, push, gapbottom " + Globals.MIN_GAP_SIZE);
+		this.add(dependenciesTreePanel.getDependenciesTreePathPanel(),
+				"height " + (Globals.DEFAULT_JLABEL_HEIGHT + 2) + "!, growx");
 	}
 
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {
