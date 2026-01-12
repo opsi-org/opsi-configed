@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -17,7 +16,6 @@ import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
-import de.uib.configed.gui.features.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.share.logging.Logging;
 
@@ -33,7 +31,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private PanelClientHostConfig panelClientHostConfig;
 
 	private PanelSWInfo panelSWInfo;
-	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 
 	private PanelHWInfo panelHWInfo;
 
@@ -112,25 +109,12 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void setSoftwareInfoTab() {
 		if (panelSWInfo == null) {
-			panelSWInfo = new PanelSWInfo(configedMain, true);
-			showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
-			SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
-			showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
+			panelSWInfo = new PanelSWInfo(configedMain);
 
 			setComponentAt(getSelectedIndex(), panelSWInfo);
 		}
 
 		panelSWInfo.updateTab(configedMain.getSelectedClients().size());
-
-		if (configedMain.getSelectedClients().size() <= 1) {
-			// Nothing will be done
-			showSoftwareInfo(panelSWInfo);
-		} else {
-			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
-
-			showSoftwareInfo(showSoftwareLogMultiClientReport);
-		}
-
 	}
 
 	private void setHardwareInfoTab() {
@@ -158,11 +142,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		}
 
 		panelClientHostConfig.updateTab(configedMain.getSelectedClients().size());
-	}
-
-	private void showSoftwareInfo(JPanel showSoftwareLog) {
-		setComponentAt(getSelectedIndex(), showSoftwareLog);
-		showSoftwareLog.repaint();
 	}
 
 	public void setLogFileTab(String logtype, final boolean resetCaret) {

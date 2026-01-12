@@ -58,6 +58,5 @@ public class PanelClientHostConfig extends AbstractClientConfigurationTab {
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients()),
 				mergedVisualMap, additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
-
 	}
 }
