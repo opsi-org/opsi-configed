@@ -8,9 +8,7 @@ package de.uib.configed.gui;
 
 import java.awt.Dimension;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
@@ -26,8 +24,6 @@ public class TabbedLogPane extends JTabbedPane {
 	private LogTabComponent[] textPanes;
 	private String[] idents = Utils.getLogTypes();
 	private final List<String> identsList;
-
-	private Map<String, String> logfiles = new HashMap<>();
 
 	private ConfigedMain configedMain;
 
@@ -56,10 +52,7 @@ public class TabbedLogPane extends JTabbedPane {
 
 			String logtype = Utils.getLogType(getSelectedIndex());
 
-			// logfile empty?
-			if (!logfileExists(logtype)) {
-				setDocuments(logtype);
-			}
+			setDocument(logtype, false);
 		});
 
 		// We want to have no minimum size restrictions
@@ -75,20 +68,12 @@ public class TabbedLogPane extends JTabbedPane {
 		super.addTab(idents[i], textPanes[i].initUI());
 	}
 
-	public void setDocuments(String logtype) {
-		setDocuments(logtype, false);
-	}
-
-	public void setDocuments(String logtype, final boolean resetCaret) {
-		Map<String, String> documents = getLogfilesUpdating(logtype);
+	public void setDocument(String logtype, final boolean resetCaret) {
+		String document = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
+				logtype);
 		Logging.info(this, "idents.length ", idents.length);
-		for (String ident : idents) {
-			setDocument(ident, documents.get(ident), resetCaret);
-		}
-	}
 
-	private void setDocument(String ident, final String document, final boolean resetCaret) {
-		int i = identsList.indexOf(ident);
+		int i = identsList.indexOf(logtype);
 		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
 		if (i < 0 || i >= idents.length) {
 			return;
@@ -106,27 +91,6 @@ public class TabbedLogPane extends JTabbedPane {
 		textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(idents[i] + " " + selectedClient));
 		textPanes[i].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
 		textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
-	}
-
-	private boolean logfileExists(String logtype) {
-		return !logfiles.get(logtype).isEmpty()
-				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-	}
-
-	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
-		Logging.info(this, "getLogfilesUpdating ", logtypeToUpdate);
-
-		if (configedMain.getSelectedClients().size() == 1) {
-			logfiles = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
-					logtypeToUpdate);
-			Logging.debug(this, "log pages set");
-		} else {
-			for (String logType : Utils.getLogTypes()) {
-				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-			}
-		}
-
-		return logfiles;
 	}
 
 	public void setLogview(String logtype) {
