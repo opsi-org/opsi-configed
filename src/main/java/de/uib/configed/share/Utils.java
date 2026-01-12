@@ -591,6 +591,7 @@ public final class Utils {
 
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
 		return switch (value) {
+		case "server" -> Icons.getThemeSVGRepoIcon("server", size);
 		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
 		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
 		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
