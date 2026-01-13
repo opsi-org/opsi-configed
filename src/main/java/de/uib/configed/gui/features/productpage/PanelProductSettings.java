@@ -35,6 +35,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.AbstractClientConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.Configed;
@@ -51,7 +52,7 @@ import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelProductSettings extends JSplitPane {
+public class PanelProductSettings extends AbstractClientConfigurationTab {
 	public enum ProductSettingsType {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
@@ -68,7 +69,10 @@ public class PanelProductSettings extends JSplitPane {
 
 	private ProductTree productTree;
 
+	private JSplitPane contentPane;
+
 	private ConfigedMain configedMain;
+	private Runnable updater;
 
 	private ProductSettingsType type;
 
@@ -76,14 +80,12 @@ public class PanelProductSettings extends JSplitPane {
 			.getPersistenceController();
 
 	public PanelProductSettings(ConfigedMain configedMain, ProductTree productTree, ProductSettingsType type) {
-		super(JSplitPane.HORIZONTAL_SPLIT);
-		this.productTree = productTree;
+		super(true);
 		this.configedMain = configedMain;
+		this.productTree = productTree;
 		this.type = type;
 
 		init();
-
-		super.setResizeWeight(1.0);
 	}
 
 	private void init() {
@@ -120,8 +122,6 @@ public class PanelProductSettings extends JSplitPane {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		setLeftComponent(leftPane);
-
 		propertiesPanel = new EditMapPanelX(false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
@@ -131,7 +131,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
-		setRightComponent(infoPane);
+		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
+		setComponent(contentPane);
 
 		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(),
 				new JComponent[] { paneProducts, productTable });
@@ -151,6 +152,19 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void enableFilterMode(boolean enable) {
 		groupPanel.setFilterMark(enable);
+	}
+
+	public JSplitPane getContentPane() {
+		return contentPane;
+	}
+
+	public void setUpdater(Runnable updater) {
+		this.updater = updater;
+	}
+
+	@Override
+	protected void updateContent() {
+		updater.run();
 	}
 
 	private JPopupMenu producePopupMenu() {

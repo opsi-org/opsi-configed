@@ -100,6 +100,13 @@
             <version>2.21.0</version>
         </dependency>
 
+        <!-- Source: https://mvnrepository.com/artifact/com.miglayout/miglayout-swing -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.4.2</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <!-- Ab Version 7 kann es inkompatibel sein... zudem neue Lizenz laut Rupert-->
         <dependency>

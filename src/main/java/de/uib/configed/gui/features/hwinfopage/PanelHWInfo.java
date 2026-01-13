@@ -36,6 +36,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
+import de.uib.configed.gui.AbstractClientConfigurationTab;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -49,7 +50,7 @@ import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelHWInfo extends JPanel implements TreeSelectionListener {
+public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
@@ -103,14 +104,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			.getPersistenceController();
 
 	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
+		super(false);
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
 		this.clientConfiguration = clientConfiguration;
 
-		buildPanel();
+		buildContentPanel();
 	}
 
-	private void buildPanel() {
+	private void buildContentPanel() {
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
 		tree = new XTree();
@@ -132,21 +134,24 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		JScrollPane jScrollPaneInfo = new JScrollPane(table);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		contentPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
+		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
-		GroupLayout layoutBase = new GroupLayout(this);
-		setLayout(layoutBase);
+		JPanel contentPanel = new JPanel();
+		setComponent(contentPanel);
+
+		GroupLayout layoutBase = new GroupLayout(contentPanel);
+		contentPanel.setLayout(layoutBase);
 
 		layoutBase.setHorizontalGroup(layoutBase.createParallelGroup()
 				.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo, 0,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(contentPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(contentPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addGap(Globals.GAP_SIZE).addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
 			new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
@@ -162,6 +167,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 			};
 		}
+	}
+
+	@Override
+	protected void updateContent() {
+		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
+		setHardwareInfo(persistenceController.getHardwareDataService()
+				.getHardwareInfo(configedMain.getSelectedClients().get(0)));
 	}
 
 	private void exportPDF() {
@@ -182,7 +194,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	/** overwrite in subclasses */
 	protected void reload() {
 		Logging.debug(this, "reload hardware info");
-		clientConfiguration.setHardwareInfoPage();
+		updateContent();
 	}
 
 	private void floatExternal() {
@@ -411,7 +423,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		productString = "";
 	}
 
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
+	private void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
 		if (hwConfig == null) {
 			hwConfig = persistenceController.getHardwareDataService()
 					.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());

@@ -16,20 +16,20 @@ import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.features.swinfopage.PanelSWMultiClientReport;
+import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.share.logging.Logging;
 
 public class SwExporter implements ActionListener {
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	private PanelSWInfo panelSWInfo;
+	private PanelSWSingleClientInfo panelSWInfo;
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
+	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWSingleClientInfo panelSWInfo,
 			ConfigedMain configedMain) {
 		this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
 		this.panelSWInfo = panelSWInfo;
