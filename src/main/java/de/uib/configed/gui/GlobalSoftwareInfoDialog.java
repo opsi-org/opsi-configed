@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.GroupLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,6 +21,7 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class GlobalSoftwareInfoDialog {
 	private PanelGenEdit panelGlobalSoftware;
@@ -45,14 +45,9 @@ public class GlobalSoftwareInfoDialog {
 
 		initDataStructure();
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(panelGlobalSoftware, 250, 250, 250)
-				.addGap(Globals.GAP_SIZE).addComponent(infoLabel));
-		layout.setHorizontalGroup(
-				layout.createParallelGroup().addComponent(panelGlobalSoftware).addComponent(infoLabel));
+		JPanel panel = new JPanel(new MigLayout("fillx, insets 0, gapy " + Globals.GAP_SIZE, "[grow, fill]", "[]"));
+		panel.add(panelGlobalSoftware, "growx, h 250!, wrap");
+		panel.add(infoLabel);
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.CLOSED_OPTION, null,
 				new String[] { Configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),

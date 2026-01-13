@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -37,6 +36,7 @@ import de.uib.configed.share.WindowsPositionManager;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import net.miginfocom.swing.MigLayout;
 
 public class MainFrame extends JFrame {
 	private ConfigedMain configedMain;
@@ -177,25 +177,23 @@ public class MainFrame extends JFrame {
 	}
 
 	private void showPanel(JComponent panel) {
+		// Ensure Swing updates happen on the EDT to avoid intermittent UI issues.
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> showPanel(panel));
+			return;
+		}
+
 		getContentPane().removeAll();
 
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
+		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow, fill]", "[grow][]"));
 
-		layout.setVerticalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(leftToolBar,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(panel));
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(leftToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addComponent(panel).addGap(Globals.MIN_GAP_SIZE));
+		getContentPane().add(leftControlBar, "cell 0 0, aligny top");
+		getContentPane().add(leftToolBar, "cell 0 1, aligny bottom, gaptop unrel");
+
+		getContentPane().add(panel, "cell 1 0 1 2, grow");
+
+		getContentPane().revalidate();
+		getContentPane().repaint();
 	}
 
 	public void saveConfigurationsSetEnabled(boolean b) {
