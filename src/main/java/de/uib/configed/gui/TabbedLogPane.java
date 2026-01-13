@@ -69,7 +69,7 @@ public class TabbedLogPane extends AbstractClientConfigurationTab {
 	@Override
 	protected void updateContent() {
 		Logging.debug(this, "setLogPage");
-		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab("instlog", false);
+		setDocument("instlog", false);
 		setLogview("instlog");
 	}
 
