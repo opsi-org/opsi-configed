@@ -16,14 +16,11 @@ import java.util.Map.Entry;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 
 public class OpsiMethodCall {
-	public static final boolean BACKGROUND_DEFAULT = true;
 	private static final int DEFAULT_JSON_ID = 1;
 
 	private String methodname;
 
 	private Object[] parameters;
-
-	private boolean background;
 
 	/**
 	 * @param rpcPath    subpath for the rpc call (not including "/rpc/")
@@ -31,31 +28,9 @@ public class OpsiMethodCall {
 	 * @param parameters the parameters for the method
 	 * @param background if background then no waiting info is shown
 	 */
-	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters, boolean background) {
+	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters) {
 		this.methodname = methodname.toString();
 		this.parameters = parameters;
-		this.background = background;
-	}
-
-	/**
-	 * @param rpcPath    subpath for the rpc call (not including "/rpc/")
-	 * @param methodName name of rpc method
-	 * @param parameters the parameters for the method
-	 */
-	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters) {
-		this(methodname, parameters, false);
-	}
-
-	public String getMethodname() {
-		return methodname;
-	}
-
-	public String getParameter() {
-		return Arrays.toString(parameters);
-	}
-
-	public boolean isBackgroundDefault() {
-		return background;
 	}
 
 	@Override

@@ -374,8 +374,8 @@ public class HostDataService {
 				: new Object[] {};
 
 		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
-		Map<String, Object> sessionInfos = exec.getResponses(exec
-				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
+		Map<String, Object> sessionInfos = exec
+				.getResponses(exec.retrieveResponse(new OpsiMethodCall(methodname, callParameters)));
 		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
 			String value;
 
