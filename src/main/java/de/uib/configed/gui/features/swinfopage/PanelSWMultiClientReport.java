@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.features.swinfopage.PanelSWInfo.KindOfExport;
+import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -36,7 +36,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	private boolean withMsUpdates2;
 	private boolean askForOverwrite;
 
-	private PanelSWInfo.KindOfExport kindOfExport;
+	private PanelSWSingleClientInfo.KindOfExport kindOfExport;
 
 	private File exportDirectory;
 	private String exportDirectoryS;
@@ -72,7 +72,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		return askForOverwrite;
 	}
 
-	public PanelSWInfo.KindOfExport wantsKindOfExport() {
+	public PanelSWSingleClientInfo.KindOfExport wantsKindOfExport() {
 		return kindOfExport;
 	}
 
@@ -188,17 +188,18 @@ public class PanelSWMultiClientReport extends JPanel {
 		});
 
 		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
-				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
-				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
+				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"),
+				PanelSWSingleClientInfo.KindOfExport.PDF, PanelSWSingleClientInfo.KindOfExport.values(),
+				PanelSWSingleClientInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
 					Logging.info(this, "change to ", val);
-					kindOfExport = (PanelSWInfo.KindOfExport) val;
+					kindOfExport = (PanelSWSingleClientInfo.KindOfExport) val;
 					Configed.getSavedStates().setProperty("swaudit_kind_of_export", "" + val);
 				}));
 
 		String koe = Configed.getSavedStates().getProperty("swaudit_kind_of_export");
 		panelSelectExportType.setValueByString(koe);
 
-		kindOfExport = (PanelSWInfo.KindOfExport) panelSelectExportType.getValue();
+		kindOfExport = (PanelSWSingleClientInfo.KindOfExport) panelSelectExportType.getValue();
 
 		Logging.info(this, "kindOfExport set from savedStates  ", koe);
 		Logging.info(this, "kindOfExport   ", kindOfExport);

@@ -201,8 +201,8 @@ public class ClientTable extends JTable implements MessagebusListener {
 	 *                  order.
 	 */
 	private int compareStringIgnoringNull(Object o1, Object o2) {
-		boolean isO1Invalid = (o1 == null || o1.toString().trim().isEmpty());
-		boolean isO2Invalid = (o2 == null || o2.toString().trim().isEmpty());
+		boolean isO1Invalid = (o1 == null || o1.toString().isBlank());
+		boolean isO2Invalid = (o2 == null || o2.toString().isBlank());
 
 		if (isO1Invalid && isO2Invalid) {
 			return 0;

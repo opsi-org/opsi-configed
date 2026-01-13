@@ -145,13 +145,13 @@ public class LogTabComponent extends LogPaneComponent {
 		Map<String, String> logFiles = new HashMap<>();
 		String[] idents = Utils.getLogTypes();
 		for (String ident : idents) {
-			Map<String, String> logFile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
+			String logfile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
 					.getLogfile(configedMain.getSelectedClients().get(0), ident);
-			if (logFile.get(ident) != null && logFile.get(ident).split("\n").length > 1) {
-				logFiles.put(ident, logFile.get(ident));
+			if (logfile.split("\n").length > 1) {
+				logFiles.put(ident, logfile);
 			}
 
-			Logging.info(this, "saveAllAsZip ", ident, " ", logFile.get(ident).split("\n").length);
+			Logging.info(this, "saveAllAsZip ", ident, " ", logfile.split("\n").length);
 		}
 		return logFiles;
 	}
