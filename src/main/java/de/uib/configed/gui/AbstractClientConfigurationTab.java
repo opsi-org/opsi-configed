@@ -60,7 +60,7 @@ public abstract class AbstractClientConfigurationTab extends JPanel {
 	}
 
 	// this is used to update the content if needed when switching to this tab
-	abstract void updateContent();
+	protected abstract void updateContent();
 
 	public void updateTab(int numberOfSelectedClients) {
 		if (numberOfSelectedClients == 1 || (numberOfSelectedClients > 1 && multiSelectionAllowed)) {
