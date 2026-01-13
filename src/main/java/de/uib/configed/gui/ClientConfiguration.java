@@ -146,7 +146,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	public void setLogFileTab(String logtype, final boolean resetCaret) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
-		tabbedLogPane.setDocuments(logtype, resetCaret);
+		tabbedLogPane.setDocument(logtype, resetCaret);
 	}
 
 	public void initSplitPanes() {

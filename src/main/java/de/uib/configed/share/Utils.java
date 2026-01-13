@@ -69,8 +69,6 @@ public final class Utils {
 	private static final int KIBI_BYTE = 1024;
 	private static final String[] LOG_TYPES = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
 			"opsiconfd" };
-	private static final int[] MAX_LOG_SIZES = new int[] { 4 * KIBI_BYTE * KIBI_BYTE, 8 * KIBI_BYTE * KIBI_BYTE,
-			8 * KIBI_BYTE * KIBI_BYTE, 0, 1 * KIBI_BYTE * KIBI_BYTE };
 
 	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
 	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
@@ -211,14 +209,6 @@ public final class Utils {
 
 	public static String getLogType(int index) {
 		return (index < 0 || index >= LOG_TYPES.length) ? "" : LOG_TYPES[index];
-	}
-
-	public static int getMaxLogSize(int index) {
-		if (index < 0 || index >= MAX_LOG_SIZES.length) {
-			Logging.warning("error with index for maxLogSizes");
-			return -1;
-		}
-		return MAX_LOG_SIZES[index];
 	}
 
 	public static void threadSleep(Object caller, long millis) {

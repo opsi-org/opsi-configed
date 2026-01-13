@@ -6,14 +6,9 @@
 
 package de.uib.configed.core.domain.serverdata.dataservice;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -36,36 +31,17 @@ public class LogDataService {
 		this.exec = exec;
 	}
 
-	public Map<String, String> getLogfile(String clientId, String logtype) {
-		Map<String, String> logfiles = getEmptyLogfiles();
-		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
-		if (i < 0) {
-			Logging.error("illegal logtype: ", logtype);
-			return logfiles;
-		}
-		Logging.debug(this, "getLogfile logtype ", logtype);
-
-		String[] logtypes = Utils.getLogTypes();
-		Logging.debug(this, "OpsiMethodCall log_read ", logtypes[i], " max size ", Utils.getMaxLogSize(i));
-		String s = "";
+	public String getLogfile(String clientId, String logtype) {
+		Logging.debug(this, "OpsiMethodCall log_read ", logtype, "for client ", clientId);
+		String logtext;
 		try {
-			s = exec.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ,
-					new String[] { logtype, clientId, String.valueOf(Utils.getMaxLogSize(i)) }));
+			logtext = exec
+					.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ, new String[] { logtype, clientId }));
 		} catch (OutOfMemoryError e) {
-			s = "--- file too big for showing, enlarge java memory  ---";
-			Logging.debug(this, "thrown exception: ", e);
+			logtext = "--- file too big for showing, enlarge java memory  ---";
+			Logging.error(this, e, "file too big for showing ", logtype);
 		}
 
-		logfiles.put(logtype, s);
-		return logfiles;
-	}
-
-	private static Map<String, String> getEmptyLogfiles() {
-		Map<String, String> logfiles = new HashMap<>();
-		String[] logtypes = Utils.getLogTypes();
-		for (String logtype : logtypes) {
-			logfiles.put(logtype, "");
-		}
-		return logfiles;
+		return logtext;
 	}
 }
