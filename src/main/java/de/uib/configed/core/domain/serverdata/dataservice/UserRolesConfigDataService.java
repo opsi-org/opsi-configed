@@ -212,8 +212,7 @@ public class UserRolesConfigDataService {
 					keyUserRegisterValue, "without given values the primary value setting is false");
 			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-			exec.doCall(omc);
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects }));
 		}
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
@@ -854,9 +853,7 @@ public class UserRolesConfigDataService {
 		if (!readyObjects.isEmpty()) {
 			Logging.notice(this, "There are ", readyObjects.size(), "configurations to update, so we do this now:");
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-
-			exec.doCall(omc);
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects }));
 		} else {
 			Logging.notice(this, "there are no configurations to update");
 		}

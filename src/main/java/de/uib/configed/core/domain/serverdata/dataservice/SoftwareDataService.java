@@ -216,9 +216,9 @@ public class SoftwareDataService {
 		}
 
 		Logging.info(this, "retrieveAuditSoftwareXLicensePool");
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_GET_OBJECTS,
-				new Object[] { AuditSoftwareXLicensePool.SERVICE_ATTRIBUTES, new HashMap<>() });
-		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
+		List<Map<String, Object>> retrieved = exec
+				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_GET_OBJECTS,
+						new Object[] { AuditSoftwareXLicensePool.SERVICE_ATTRIBUTES }));
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = new AuditSoftwareXLicensePool();
 		for (Map<String, Object> map : retrieved) {
 			auditSoftwareXLicensePool.integrateRaw(map);
@@ -301,10 +301,8 @@ public class SoftwareDataService {
 		String[] callAttributes = new String[] { SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
 				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID,
 				SWAuditEntry.IS_OPERATING_SYSTEM };
-		Map<String, Object> callFilter = new HashMap<>();
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> list = exec.getListOfMaps(omc);
+		List<Map<String, Object>> list = exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS, new Object[] { callAttributes }));
 
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
@@ -460,10 +458,8 @@ public class SoftwareDataService {
 
 		RPCMethodName methodName = getMethodNameForLicenseType(licenseType);
 
-		OpsiMethodCall omc = new OpsiMethodCall(methodName,
-				new String[] { softwareLicenseId, licenseContractId, maxInstallations, boundToHost, expirationDate });
-
-		if (exec.doCall(omc)) {
+		if (exec.doCall(new OpsiMethodCall(methodName, new String[] { softwareLicenseId, licenseContractId,
+				maxInstallations, boundToHost, expirationDate }))) {
 			return softwareLicenseId;
 		} else {
 			Logging.error(this, "could not execute ", methodName, "  with softwareLicenseId ", softwareLicenseId,
@@ -492,9 +488,8 @@ public class SoftwareDataService {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE,
-				new Object[] { softwareLicenseId });
-		return exec.doCall(omc);
+		return exec
+				.doCall(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE, new Object[] { softwareLicenseId }));
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
@@ -502,14 +497,11 @@ public class SoftwareDataService {
 			return "";
 		}
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
-					new String[] { softwareLicenseId, licensePoolId, licenseKey });
-
-			if (!exec.doCall(omc)) {
-				Logging.error(this, "cannot create softwarelicense to licensepool relation");
-				return "";
-			}
+		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				&& !exec.doCall(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
+						new String[] { softwareLicenseId, licensePoolId, licenseKey }))) {
+			Logging.error(this, "cannot create softwarelicense to licensepool relation");
+			return "";
 		}
 
 		return Utils.pseudokey(new String[] { softwareLicenseId, licensePoolId });
@@ -521,9 +513,8 @@ public class SoftwareDataService {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE,
-				new String[] { softwareLicenseId, licensePoolId });
-		return exec.doCall(omc);
+		return exec.doCall(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE,
+				new String[] { softwareLicenseId, licensePoolId }));
 	}
 
 	public void setFSoftware2LicensePool(String softwareIdent, String licensePoolId) {
@@ -550,9 +541,8 @@ public class SoftwareDataService {
 			deleteItems.add(item);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-				new Object[] { deleteItems });
-		boolean result = exec.doCall(omc);
+		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+				new Object[] { deleteItems }));
 
 		Map<String, String> fSoftware2LicensePool = cacheManager
 				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
@@ -671,9 +661,8 @@ public class SoftwareDataService {
 			Logging.info(this, "deleteItems ", deleteItems);
 
 			if (!deleteItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-						new Object[] { deleteItems });
-				result = exec.doCall(omc);
+				result = exec.doCall(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+						new Object[] { deleteItems }));
 			}
 
 			if (!result) {
@@ -695,10 +684,8 @@ public class SoftwareDataService {
 
 		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems ", createItems);
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-				new Object[] { createItems });
-
-		return exec.doCall(omc);
+		return exec.doCall(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
+				new Object[] { createItems }));
 	}
 
 	// we have got a SW from software table, therefore we do not serve the unknown
@@ -741,15 +728,8 @@ public class SoftwareDataService {
 
 			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-					new Object[] { readyObjects });
-
-			Logging.info(this, "editPool2AuditSoftware call ", omc);
-			if (exec.doCall(omc)) {
-				ok = true;
-			} else {
-				Logging.warning(this, "editPool2AuditSoftware ", omc, " failed");
-			}
+			ok = exec.doCall(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
+					new Object[] { readyObjects }));
 		}
 
 		Logging.info(this, "editPool2AuditSoftware ok ", ok);
@@ -1009,9 +989,8 @@ public class SoftwareDataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clients);
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
+		List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 		Logging.info(this, "getAuditSoftwareOnClients, finished a request, map size ", softwareAuditOnClients.size());
 
 		return softwareAuditOnClients;

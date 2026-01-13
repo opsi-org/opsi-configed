@@ -115,9 +115,8 @@ public class ModuleDataService {
 
 	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
 		if (!cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
-			Object[] callParameters = {};
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, callParameters);
-			Map<String, Object> licensingInfoNoOpsiAdmin = exec.getMapResult(omc);
+			Map<String, Object> licensingInfoNoOpsiAdmin = exec
+					.getMapResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO));
 			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, licensingInfoNoOpsiAdmin);
 		}
 	}
@@ -473,8 +472,8 @@ public class ModuleDataService {
 	}
 
 	private void retrieveIsOpsiUserAdminPD() {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN, new Object[] {});
-		Map<String, Object> json = exec.retrieveResponse(omc);
+		Map<String, Object> json = exec
+				.retrieveResponse(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN));
 
 		Boolean isOpsiUserAdmin = null;
 		if (json.containsKey("result") && json.get("result") != null) {
@@ -493,8 +492,8 @@ public class ModuleDataService {
 			return cacheManager.getCachedData(CacheIdentifier.OPSI_INFORMATION, Map.class);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, new String[] {});
-		Map<String, Object> opsiInformation = exec.getMapResult(omc);
+		Map<String, Object> opsiInformation = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO));
 
 		cacheManager.setCachedData(CacheIdentifier.OPSI_INFORMATION, opsiInformation);
 		return opsiInformation;

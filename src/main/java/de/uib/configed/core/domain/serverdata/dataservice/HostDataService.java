@@ -196,20 +196,18 @@ public class HostDataService {
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
 			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { clientsJsonObject });
-		boolean result = exec.doCall(omc);
+		boolean result = exec
+				.doCall(new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { clientsJsonObject }));
 
 		if (result) {
 			if (!groupsJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
-						new Object[] { groupsJsonObject });
-				result = exec.doCall(omc);
+				result = exec.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
+						new Object[] { groupsJsonObject }));
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
-						new Object[] { productsNetbootJsonObject });
-				result = result && exec.doCall(omc);
+				result = result && exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
+						new Object[] { productsNetbootJsonObject }));
 			}
 
 			persistenceController.getConfigDataService().updateConfigStates();
@@ -223,10 +221,9 @@ public class HostDataService {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT,
-				new String[] { hostname, newHostname });
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-		return exec.doCall(omc);
+		return exec.doCall(
+				new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT, new String[] { hostname, newHostname }));
 	}
 
 	public void deleteClients(Collection<String> hostIds) {
@@ -234,8 +231,7 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
-		exec.doCall(omc);
+		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds }));
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
@@ -252,10 +248,7 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS,
-				new Object[] { hostUpdates.values() });
-
-		if (exec.doCall(omc)) {
+		if (exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { hostUpdates.values() }))) {
 			hostUpdates.clear();
 		}
 	}
@@ -343,9 +336,8 @@ public class HostDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
+		List<Map<String, Object>> retrievedList = exec.getListOfMaps(new OpsiMethodCall(
+				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get("clientId");
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
@@ -437,8 +429,8 @@ public class HostDataService {
 	 */
 	public Set<String> getMessagebusConnectedClients() {
 		Logging.info(this, "get clients connected with messagebus");
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS, new Object[] {});
-		return new HashSet<>(exec.getStringListResult(omc));
+		return new HashSet<>(
+				exec.getStringListResult(new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS)));
 	}
 
 	public void setHostValues(Map<String, Object> settings) {
@@ -528,9 +520,7 @@ public class HostDataService {
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
-
-			exec.doCall(omc);
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item }));
 		} else {
 			result = givenList;
 		}

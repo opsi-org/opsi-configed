@@ -50,8 +50,8 @@ public class HealthDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_HEALTH_CHECK, new Object[0]);
-		cacheManager.setCachedData(CacheIdentifier.HEALTH_CHECK_DATA, exec.getListOfMaps(omc));
+		cacheManager.setCachedData(CacheIdentifier.HEALTH_CHECK_DATA,
+				exec.getListOfMaps(new OpsiMethodCall(RPCMethodName.SERVICE_HEALTH_CHECK)));
 	}
 
 	public Map<String, Object> getDiagnosticDataPD() {
@@ -64,8 +64,8 @@ public class HealthDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA, new Object[0]);
-		cacheManager.setCachedData(CacheIdentifier.DIAGNOSTIC_DATA, exec.getMapResult(omc));
+		cacheManager.setCachedData(CacheIdentifier.DIAGNOSTIC_DATA,
+				exec.getMapResult(new OpsiMethodCall(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA)));
 	}
 
 	public boolean isHealthDataAlreadyLoaded() {
