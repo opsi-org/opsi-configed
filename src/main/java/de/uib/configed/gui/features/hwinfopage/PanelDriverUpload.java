@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -46,6 +45,7 @@ import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductUtils;
 import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -319,111 +319,36 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		buttonUploadDrivers.addActionListener(actionEvent -> execute());
 
-		GroupLayout layoutByAuditInfo = new GroupLayout(this);
-		this.setLayout(layoutByAuditInfo);
-		layoutByAuditInfo.setVerticalGroup(layoutByAuditInfo.createSequentialGroup()
-				.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelDepotServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jLabelCreateDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnCreateDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
-				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonCallCreateTargetDirectory, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		this.setLayout(new MigLayout("insets 0, wrap 1", "[]" + Globals.MIN_GAP_SIZE + "[]", "[]0"));
+		this.add(jLabelTopic);
+		this.add(labelClientName, "gapbottom " + Globals.GAP_SIZE);
 
-		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup().addGroup(layoutByAuditInfo
-				.createParallelGroup()
-				.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelDepotServer)
-				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonShowDrivers, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(jLabelCreateDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(btnCreateDrivers, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallCreateTargetDirectory,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		this.add(jLabelDepotServer);
+		this.add(depot, "gapbottom " + Globals.GAP_SIZE);
+
+		this.add(jLabelWinProduct);
+		this.add(comboChooseWinProduct, "gapbottom " + Globals.GAP_SIZE);
+
+		this.add(jLabelRetrievalText, "hidemode 3, gapbottom " + Globals.GAP_SIZE);
+		this.add(jLabelShowDrivers, "split 2, gapbottom " + Globals.GAP_SIZE);
+		this.add(buttonShowDrivers, "aligny center, wrap, gapbottom " + Globals.GAP_SIZE);
+
+		this.add(jLabelCreateDrivers, "split 2, gapbottom " + Globals.GAP_SIZE);
+		this.add(btnCreateDrivers, "aligny center, wrap, gapbottom " + Globals.GAP_SIZE);
+
+		this.add(labelDriverToIntegrate);
+		this.add(fieldDriverPath, "split 2, growx, pushx, gapbottom " + Globals.GAP_SIZE);
+		this.add(buttonCallSelectDriverFiles, "aligny center, wrap, gapbottom " + Globals.GAP_SIZE);
+
+		this.add(labelDriverLocationType);
+		this.add(panelButtonGroup, "growx, pushx, gapbottom " + Globals.GAP_SIZE);
+
+		this.add(labelTargetPath);
+		this.add(fieldServerPath, "split 2, growx, pushx, gapbottom " + Globals.GAP_SIZE);
+		this.add(buttonCallCreateTargetDirectory, "aligny center, wrap, gapbottom " + Globals.GAP_SIZE);
+
+		this.add(driverPathChecked);
+		this.add(serverPathChecked);
 	}
 
 	private JPanel createPanelButtonGroup() {
@@ -467,44 +392,21 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 
 		JPanel panelButtonGroup = new JPanel();
-		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
-		panelButtonGroup.setLayout(layoutButtonGroup);
 		panelButtonGroup.setBorder(
 				BorderFactory.createCompoundBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 1, true),
 						new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 								Globals.MIN_GAP_SIZE)));
 
-		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addComponent(buttonStandard)
-				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutButtonGroup.createParallelGroup()
-						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		panelButtonGroup.setLayout(new MigLayout("insets 0, wrap 1", "", "[]0"));
 
-		layoutButtonGroup.setHorizontalGroup(layoutButtonGroup.createParallelGroup()
-				.addComponent(buttonStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutButtonGroup.createSequentialGroup().addGap(50)
-						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		panelButtonGroup.add(buttonStandard);
+		panelButtonGroup.add(buttonPreferred);
+		panelButtonGroup.add(buttonNotPreferred);
+		panelButtonGroup.add(buttonAdditional);
+		panelButtonGroup.add(buttonByAudit);
+
+		panelButtonGroup.add(jLabelByAuditDriverLocationPath, "split 2, gapleft 50, aligny center");
+		panelButtonGroup.add(fieldByAuditPath, "gapleft " + Globals.MIN_GAP_SIZE + ", wrap");
 
 		return panelButtonGroup;
 	}
