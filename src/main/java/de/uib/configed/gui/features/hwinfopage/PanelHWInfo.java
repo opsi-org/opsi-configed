@@ -135,8 +135,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
 		contentPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
-		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill", "[grow]", "[][grow]"));
-		this.add(panelByAuditInfo, "growx, wrap");
+		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
+		this.add(panelByAuditInfo);
 		this.add(contentPane, "grow");
 
 		if (withPopup) {
