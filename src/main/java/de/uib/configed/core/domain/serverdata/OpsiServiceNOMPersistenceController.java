@@ -444,7 +444,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public boolean makeConnection() {
 		Logging.info(this, "trying to make connection");
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
+		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED));
 
 		if (!result) {
 			Logging.info(this, "connection does not work");

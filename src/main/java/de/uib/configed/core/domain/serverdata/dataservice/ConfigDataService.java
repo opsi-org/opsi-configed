@@ -96,8 +96,7 @@ public class ConfigDataService {
 		if (cacheManager.isDataCached(CacheIdentifier.OPSI_DEFAULT_DOMAIN)) {
 			return;
 		}
-		Object[] params = new Object[] {};
-		String opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall(RPCMethodName.GET_DOMAIN, params));
+		String opsiDefaultDomain = exec.getStringResult(new OpsiMethodCall(RPCMethodName.GET_DOMAIN));
 		cacheManager.setCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, opsiDefaultDomain);
 	}
 
@@ -261,8 +260,7 @@ public class ConfigDataService {
 
 		Logging.debug(this, "setConfig(), usedConfigIds: ", usedConfigIds);
 
-		List<Object> existingConfigIds = exec
-				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
+		List<Object> existingConfigIds = exec.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS));
 
 		Logging.info(this, "setConfig(), existingConfigIds: ", existingConfigIds.size());
 
@@ -665,8 +663,7 @@ public class ConfigDataService {
 			}
 		}
 
-		List<Object> existingConfigIds = exec
-				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
+		List<Object> existingConfigIds = exec.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS));
 		Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: ", existingConfigIds.size());
 
 		Set<String> missingConfigIds = new HashSet<>(usedConfigIds);

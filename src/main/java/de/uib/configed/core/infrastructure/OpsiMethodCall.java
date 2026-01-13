@@ -33,6 +33,10 @@ public class OpsiMethodCall {
 		this.parameters = parameters;
 	}
 
+	public OpsiMethodCall(RPCMethodName methodname) {
+		this(methodname, new Object[0]);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("{");

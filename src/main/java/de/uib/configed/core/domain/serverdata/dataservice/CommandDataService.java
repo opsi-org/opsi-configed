@@ -57,7 +57,7 @@ public class CommandDataService {
 
 		Logging.info(this, "retrieveCommandList ");
 		List<Map<String, Object>> commands = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] {}));
+				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS));
 		Logging.debug(this, "retrieveCommandList commands ", commands);
 
 		cacheManager.setCachedData(CacheIdentifier.SSH_COMMAND_LIST, commands);
@@ -68,8 +68,8 @@ public class CommandDataService {
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects });
-		boolean result = exec.doCall(omc);
+		boolean result = exec
+				.doCall(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects }));
 		Logging.info(this, "deleteSSHCommand result ", result);
 		return result;
 	}
@@ -87,8 +87,7 @@ public class CommandDataService {
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
-		boolean result = exec.doCall(omc);
+		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { jsonObjects }));
 		Logging.info(this, "doActionSSHCommand method ", method, " result ", result);
 		return result;
 	}

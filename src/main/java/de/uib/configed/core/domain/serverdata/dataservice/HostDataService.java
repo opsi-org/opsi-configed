@@ -331,8 +331,7 @@ public class HostDataService {
 	public List<Map<String, Object>> getOpsiClients() {
 		TimeCheck timer = new TimeCheck(this, "getOpsiClients").start();
 		Logging.notice(this, "host_getClients");
-		List<Map<String, Object>> opsiClients = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.HOST_GET_CLIENTS, new Object[0]));
+		List<Map<String, Object>> opsiClients = exec.getListOfMaps(new OpsiMethodCall(RPCMethodName.HOST_GET_CLIENTS));
 		timer.stop();
 		return opsiClients;
 	}
