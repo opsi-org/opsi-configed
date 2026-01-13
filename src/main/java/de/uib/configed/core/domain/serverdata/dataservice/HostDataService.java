@@ -196,18 +196,17 @@ public class HostDataService {
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
 			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
-		boolean result = exec
-				.doCall(new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { clientsJsonObject }));
+		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, clientsJsonObject));
 
 		if (result) {
 			if (!groupsJsonObject.isEmpty()) {
-				result = exec.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
-						new Object[] { groupsJsonObject }));
+				result = exec
+						.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, groupsJsonObject));
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				result = result && exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
-						new Object[] { productsNetbootJsonObject }));
+				result = result && exec.doCall(
+						new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, productsNetbootJsonObject));
 			}
 
 			persistenceController.getConfigDataService().updateConfigStates();
@@ -222,8 +221,7 @@ public class HostDataService {
 		}
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-		return exec.doCall(
-				new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT, new String[] { hostname, newHostname }));
+		return exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT, hostname, newHostname));
 	}
 
 	public void deleteClients(Collection<String> hostIds) {
@@ -231,7 +229,7 @@ public class HostDataService {
 			return;
 		}
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_DELETE, hostIds));
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
@@ -248,7 +246,7 @@ public class HostDataService {
 			return;
 		}
 
-		if (exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { hostUpdates.values() }))) {
+		if (exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, hostUpdates.values()))) {
 			hostUpdates.clear();
 		}
 	}
@@ -315,8 +313,8 @@ public class HostDataService {
 		callFilter.put(HostInfo.HOST_TYPE_KEY, hostTypes);
 		TimeCheck timer = new TimeCheck(this, "getOpsiHosts").start();
 		Logging.notice(this, "host_getObjects");
-		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> opsiHosts = exec
+				.getListOfMaps(new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, callAttributes, callFilter));
 		timer.stop();
 		return opsiHosts;
 	}
@@ -336,8 +334,8 @@ public class HostDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		List<Map<String, Object>> retrievedList = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> retrievedList = exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter));
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get("clientId");
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
@@ -438,7 +436,7 @@ public class HostDataService {
 			return;
 		}
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, new Object[] { settings }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, settings));
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {
@@ -520,7 +518,7 @@ public class HostDataService {
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, item));
 		} else {
 			result = givenList;
 		}

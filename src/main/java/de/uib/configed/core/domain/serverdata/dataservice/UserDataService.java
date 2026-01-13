@@ -52,8 +52,8 @@ public class UserDataService {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", userId);
-		List<Map<String, Object>> result = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.USER_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> result = exec
+				.getListOfMaps(new OpsiMethodCall(RPCMethodName.USER_GET_OBJECTS, callAttributes, callFilter));
 
 		if (result.isEmpty()) {
 			return null;

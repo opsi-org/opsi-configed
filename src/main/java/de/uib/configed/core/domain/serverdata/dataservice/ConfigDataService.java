@@ -180,7 +180,7 @@ public class ConfigDataService {
 		Logging.info(this, "{ole deleteItems ", deleteItems.size());
 
 		if (!deleteItems.isEmpty()) {
-			if (exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, new Object[] { deleteItems }))) {
+			if (exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, deleteItems))) {
 				deleteItems.clear();
 			}
 		}
@@ -203,8 +203,8 @@ public class ConfigDataService {
 
 		String[] configIds = new String[] {};
 		String[] objectIds = new String[] {};
-		Map<String, Object> retrieved = exec.getMapResult(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
-				new Object[] { configIds, objectIds, false }));
+		Map<String, Object> retrieved = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds, objectIds, false));
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
 
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
@@ -300,14 +300,13 @@ public class ConfigDataService {
 			List<Map<String, Object>> callsConfigUpdateCollection) {
 		Logging.debug(this, "setConfig() createItems ", createItems);
 		if (!createItems.isEmpty()) {
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, new Object[] { createItems }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, createItems));
 		}
 
 		Logging.debug(this, "setConfig() callsConfigDeleteCollection ", callsConfigDeleteCollection);
 
 		if (!callsConfigDeleteCollection.isEmpty()) {
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-					new Object[] { callsConfigDeleteCollection }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, callsConfigDeleteCollection));
 			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 			// because of referential integrity
 			persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
@@ -316,8 +315,7 @@ public class ConfigDataService {
 		Logging.debug(this, "setConfig() callsConfigUpdateCollection ", callsConfigUpdateCollection);
 
 		if (!callsConfigUpdateCollection.isEmpty()) {
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
-					new Object[] { callsConfigUpdateCollection }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, callsConfigUpdateCollection));
 			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 	}
@@ -421,7 +419,7 @@ public class ConfigDataService {
 
 		readyObjects.add(itemRole);
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects));
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		configDefaultValues.put(configkey, selectedValuesRole);
@@ -442,7 +440,7 @@ public class ConfigDataService {
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
 		readyObjects.add(item);
 
-		if (exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, new Object[] { readyObjects }))) {
+		if (exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, readyObjects))) {
 			savedSearches.remove(name);
 			cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
 		}
@@ -460,7 +458,7 @@ public class ConfigDataService {
 				SavedSearch.CONFIG_KEY + "." + ob.getName() + "." + SavedSearch.DESCRIPTION_KEY, ob.getDescription(),
 				"", true));
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects));
 	}
 
 	protected static Map<String, Object> produceConfigEntry(String nomType, String key, Object value,
@@ -529,8 +527,8 @@ public class ConfigDataService {
 
 		List<Map<String, Object>> result = new ArrayList<>();
 		Set<String> configIds = new HashSet<>();
-		Map<String, Map<String, Object>> retrieved = exec.getMapOfMaps(
-				new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES, new Object[] { configIds, objectIds, true }));
+		Map<String, Map<String, Object>> retrieved = exec
+				.getMapOfMaps(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds, objectIds, true));
 		for (Entry<String, Map<String, Object>> entry : retrieved.entrySet()) {
 			result.add(new ConfigName2ConfigValue(entry.getValue(), getConfigOptionsPD()));
 		}
@@ -642,8 +640,7 @@ public class ConfigDataService {
 		Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  ", deleteConfigStateItems);
 		// not used
 		if (!deleteConfigStateItems.isEmpty()
-				&& exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS,
-						new Object[] { deleteConfigStateItems }))) {
+				&& exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS, deleteConfigStateItems))) {
 			deleteConfigStateItems.clear();
 			configStateCollection.removeAll(doneList);
 		}
@@ -662,15 +659,14 @@ public class ConfigDataService {
 		}
 
 		if (!createItems.isEmpty()) {
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, new Object[] { createItems }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, createItems));
 			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 
 		// do call
 		if (!configStateCollection.isEmpty()) {
 			// now we can set the values and clear the collected update items
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { configStateCollection }));
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, configStateCollection));
 		}
 	}
 
@@ -885,7 +881,7 @@ public class ConfigDataService {
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		readyObjects.add(item);
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects));
 
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
@@ -924,7 +920,7 @@ public class ConfigDataService {
 			readyObjects.add(endTimeItem);
 		}
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, new Object[] { readyObjects }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, readyObjects));
 	}
 
 	public String getConfigedWorkbenchDefaultValuePD() {

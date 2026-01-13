@@ -28,13 +28,9 @@ public class OpsiMethodCall {
 	 * @param parameters the parameters for the method
 	 * @param background if background then no waiting info is shown
 	 */
-	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters) {
+	public OpsiMethodCall(RPCMethodName methodname, Object... parameters) {
 		this.methodname = methodname.toString();
 		this.parameters = parameters;
-	}
-
-	public OpsiMethodCall(RPCMethodName methodname) {
-		this(methodname, new Object[0]);
 	}
 
 	@Override

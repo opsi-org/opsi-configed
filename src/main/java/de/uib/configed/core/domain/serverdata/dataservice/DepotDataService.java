@@ -68,8 +68,8 @@ public class DepotDataService {
 			String callReturnType = "dict";
 			Map<String, String> callFilter = new HashMap<>();
 			callFilter.put("depotId", depot);
-			List<Map<String, Object>> products = exec.getListOfMaps(new OpsiMethodCall(
-					RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, new Object[] { callReturnType, callFilter }));
+			List<Map<String, Object>> products = exec.getListOfMaps(
+					new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, callReturnType, callFilter));
 			for (Map<String, Object> product : products) {
 				productIdents.add(product.get("productId") + ";" + product.get("productVersion") + ";"
 						+ product.get("packageVersion"));

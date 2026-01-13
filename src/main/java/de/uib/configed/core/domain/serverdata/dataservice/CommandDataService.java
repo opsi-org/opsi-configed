@@ -68,8 +68,7 @@ public class CommandDataService {
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
-		boolean result = exec
-				.doCall(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects }));
+		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, jsonObjects));
 		Logging.info(this, "deleteSSHCommand result ", result);
 		return result;
 	}
@@ -87,7 +86,7 @@ public class CommandDataService {
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
-		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { jsonObjects }));
+		boolean result = exec.doCall(new OpsiMethodCall(method, jsonObjects));
 		Logging.info(this, "doActionSSHCommand method ", method, " result ", result);
 		return result;
 	}

@@ -101,8 +101,8 @@ public class ModuleDataService {
 		}
 
 		if (isOpsiUserAdminPD()) {
-			Map<String, Object> licencingInfoOpsiAdmin = exec.retrieveResponse(new OpsiMethodCall(
-					RPCMethodName.BACKEND_GET_LICENSING_INFO, new Object[] { true, false, true, false }));
+			Map<String, Object> licencingInfoOpsiAdmin = exec.retrieveResponse(
+					new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, true, false, true, false));
 			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, licencingInfoOpsiAdmin);
 		}
 	}

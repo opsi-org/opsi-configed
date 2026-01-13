@@ -61,8 +61,8 @@ public class HardwareDataService {
 		}
 		Map<String, String> filterMap = new HashMap<>();
 		filterMap.put("state", "1");
-		List<Map<String, Object>> relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
+		List<Map<String, Object>> relationsAuditHardwareOnHost = exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new String[0], filterMap));
 		cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, relationsAuditHardwareOnHost);
 	}
 
@@ -90,8 +90,8 @@ public class HardwareDataService {
 			hwAuditConf = new HashMap<>();
 		}
 
-		hwAuditConf.computeIfAbsent(locale, s -> exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
+		hwAuditConf.computeIfAbsent(locale,
+				s -> exec.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, locale)));
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
 	}
 
@@ -104,8 +104,8 @@ public class HardwareDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("hostId", clientId);
 
-		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, callAttributes, callFilter));
 
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
