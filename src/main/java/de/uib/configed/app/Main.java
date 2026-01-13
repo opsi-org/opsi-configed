@@ -17,10 +17,10 @@ import javax.swing.JOptionPane;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -115,9 +115,13 @@ public class Main {
 	public static void showHelp() {
 		Logging.essential("configed version ", Globals.VERSION, " (", Globals.VERDATE, ")");
 
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.setWidth(Integer.MAX_VALUE);
-		formatter.printHelp(Main.USAGE_INFO, options);
+		HelpFormatter formatter = HelpFormatter.builder().setShowSince(true).get();
+
+		try {
+			formatter.printHelp(Main.USAGE_INFO, "", options, "", false);
+		} catch (IOException e) {
+			Logging.error("Problem showing help:", e.getMessage());
+		}
 	}
 
 	private static void setGlobalValues() {
