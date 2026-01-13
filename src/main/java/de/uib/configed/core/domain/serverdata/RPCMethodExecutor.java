@@ -45,58 +45,56 @@ public class RPCMethodExecutor {
 	}
 
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
-
-		Map<String, Object> response = persistenceController.getExecutioner().getMapResult(omc);
+		Map<String, Object> response = persistenceController.getExecutioner()
+				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds }));
 
 		return collectErrorsFromResponsesByHost(response, "wakeOnLan");
 	}
 
 	public List<String> fireOpsiclientdEventOnClients(String event, List<String> clientIds) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_FIRE_EVENT,
-				new Object[] { event, clientIds });
-		Map<String, Object> responses = exec.getMapResult(omc);
+		Map<String, Object> responses = exec.getMapResult(
+				new OpsiMethodCall(RPCMethodName.HOST_CONTROL_FIRE_EVENT, new Object[] { event, clientIds }));
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
 
 	public List<String> processActionRequests(List<String> clientIds, Set<String> productIds, String visibility) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS,
-				new Object[] { clientIds, productIds, visibility });
-		Map<String, Object> responses = exec.getMapResult(omc);
+		Map<String, Object> responses = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS,
+						new Object[] { clientIds, productIds, visibility }));
 		return collectErrorsFromResponsesByHost(responses, "processActionRequests");
 	}
 
 	public List<String> showPopupOnClients(String message, List<String> clientIds, Float seconds) {
-		OpsiMethodCall omc;
+
+		Object[] parameters;
 
 		if (seconds == 0) {
-			omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHOW_POPUP, new Object[] { message, clientIds });
+			parameters = new Object[] { message, clientIds };
 		} else {
-			omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHOW_POPUP,
-					new Object[] { message, clientIds, "True", "True", seconds });
+			parameters = new Object[] { message, clientIds, "True", "True", seconds };
 		}
 
-		Map<String, Object> responses = exec.getMapResult(omc);
+		Map<String, Object> responses = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHOW_POPUP, parameters));
 		return collectErrorsFromResponsesByHost(responses, "showPopupOnClients");
 	}
 
 	public List<String> shutdownClients(List<String> clientIds) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHUTDOWN, new Object[] { clientIds });
-		Map<String, Object> responses = exec.getMapResult(omc);
+		Map<String, Object> responses = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHUTDOWN, new Object[] { clientIds }));
 		return collectErrorsFromResponsesByHost(responses, "shutdownClients");
 	}
 
 	public List<String> rebootClients(List<String> clientIds) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_REBOOT, new Object[] { clientIds });
-		Map<String, Object> responses = exec.getMapResult(omc);
+		Map<String, Object> responses = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_REBOOT, new Object[] { clientIds }));
 		return collectErrorsFromResponsesByHost(responses, "rebootClients");
 	}
 
 	public List<String> deletePackageCaches(List<String> hostIds) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SAFE_OPSICLIENTD_RPC,
-				new Object[] { "cacheService_deleteCache", new Object[] {}, hostIds });
-
-		Map<String, Object> responses = exec.getMapResult(omc);
+		Map<String, Object> responses = exec
+				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SAFE_OPSICLIENTD_RPC,
+						new Object[] { "cacheService_deleteCache", new Object[] {}, hostIds }));
 		return collectErrorsFromResponsesByHost(responses, "deleteCache");
 	}
 
