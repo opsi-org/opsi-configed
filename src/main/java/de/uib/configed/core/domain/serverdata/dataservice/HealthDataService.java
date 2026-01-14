@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 
 /**
@@ -30,45 +28,41 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class HealthDataService {
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-
-	public HealthDataService(AbstractPOJOExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
+public class HealthDataService extends DataService {
+	public HealthDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public List<Map<String, Object>> checkHealthPD() {
 		retrieveHealthDataPD();
-		return cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class);
 	}
 
 	public void retrieveHealthDataPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA)) {
 			return;
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.HEALTH_CHECK_DATA,
-				exec.getListOfMaps(RPCMethodName.SERVICE_HEALTH_CHECK));
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HEALTH_CHECK_DATA,
+				dataServices.exec.getListOfMaps(RPCMethodName.SERVICE_HEALTH_CHECK));
 	}
 
 	public Map<String, Object> getDiagnosticDataPD() {
 		retrieveDiagnosticDataPD();
-		return cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class);
 	}
 
 	public void retrieveDiagnosticDataPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.DIAGNOSTIC_DATA)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.DIAGNOSTIC_DATA)) {
 			return;
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.DIAGNOSTIC_DATA,
-				exec.getMapResult(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA));
+		dataServices.cacheManager.setCachedData(CacheIdentifier.DIAGNOSTIC_DATA,
+				dataServices.exec.getMapResult(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA));
 	}
 
 	public boolean isHealthDataAlreadyLoaded() {
-		return cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA);
+		return dataServices.cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA);
 	}
 
 	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {

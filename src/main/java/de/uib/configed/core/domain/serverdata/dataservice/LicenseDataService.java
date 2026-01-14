@@ -16,11 +16,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.licenses.LicenseContractEntry;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
@@ -46,78 +44,67 @@ import de.uib.configed.share.logging.Logging;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class LicenseDataService {
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-	private UserRolesConfigDataService userRolesConfigDataService;
-	private ModuleDataService moduleDataService;
-
+public class LicenseDataService extends DataService {
 	private List<LicenseUsageEntry> itemsDeletionLicenseUsage;
 
-	public LicenseDataService(AbstractPOJOExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
-	}
-
-	public void setModuleDataService(ModuleDataService moduleDataService) {
-		this.moduleDataService = moduleDataService;
+	public LicenseDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public Map<String, LicensepoolEntry> getLicensePoolsPD() {
 		retrieveLicensePoolsPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS, Map.class);
 	}
 
 	public LicensePoolXOpsiProduct getLicensePoolXOpsiProductPD() {
 		retrieveLicensePoolsPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT, LicensePoolXOpsiProduct.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT,
+				LicensePoolXOpsiProduct.class);
 	}
 
 	public void retrieveLicensePoolsPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.LICENSE_POOLS)
-				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSE_POOLS)
+				|| dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT)) {
 			return;
 		}
 
 		LicensePoolXOpsiProduct licensePoolXOpsiProduct = new LicensePoolXOpsiProduct();
 		Map<String, LicensepoolEntry> licensePools = new TreeMap<>();
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			List<Map<String, Object>> retrieved = dataServices.exec
+					.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS);
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicensepoolEntry entry = new LicensepoolEntry(POJOReMapper.remap(importedEntry));
 				licensePools.put(entry.getLicensepoolId(), entry);
 				licensePoolXOpsiProduct.integrateRawFromService(importedEntry);
 			}
 		}
-		cacheManager.setCachedData(CacheIdentifier.LICENSE_POOLS, licensePools);
-		cacheManager.setCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT, licensePoolXOpsiProduct);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_POOLS, licensePools);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT, licensePoolXOpsiProduct);
 	}
 
 	public Map<String, LicenseContractEntry> getLicenseContractsPD() {
 		retrieveLicenseContractsPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS, Map.class);
 	}
 
 	public NavigableMap<String, NavigableSet<String>> getLicenseContractsToNotifyPD() {
 		retrieveLicenseContractsPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, NavigableMap.class);
 	}
 
 	public void retrieveLicenseContractsPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS)
-				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS)
+				|| dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY)) {
 			return;
 		}
 
 		String today = new java.sql.Date(System.currentTimeMillis()).toString();
 		Map<String, LicenseContractEntry> licenseContracts = new HashMap<>();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = new TreeMap<>();
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			List<Map<String, Object>> retrieved = dataServices.exec
+					.getListOfMaps(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenseContractEntry entry = new LicenseContractEntry(importedEntry);
@@ -133,49 +120,50 @@ public class LicenseDataService {
 			}
 			Logging.info(this, "contractsToNotify ", contractsToNotify);
 		}
-		cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS, licenseContracts);
-		cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, contractsToNotify);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS, licenseContracts);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, contractsToNotify);
 	}
 
 	public Map<String, LicenseEntry> getLicensesPD() {
 		retrieveLicensesPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class);
 	}
 
 	public void retrieveLicensesPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.LICENSES)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSES)) {
 			return;
 		}
 		Map<String, LicenseEntry> licenses = new HashMap<>();
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.SOFTWARE_LICENSE_GET_OBJECTS);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			List<Map<String, Object>> retrieved = dataServices.exec
+					.getListOfMaps(RPCMethodName.SOFTWARE_LICENSE_GET_OBJECTS);
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenseEntry entry = new LicenseEntry(importedEntry);
 				licenses.put(entry.getId(), entry);
 			}
 		}
-		cacheManager.setCachedData(CacheIdentifier.LICENSES, licenses);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSES, licenses);
 	}
 
 	public List<LicenseUsableForEntry> getLicenseUsabilitiesPD() {
 		retrieveSoftwareLicense2LicensePoolPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class);
 	}
 
 	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
 		retrieveSoftwareLicense2LicensePoolPD();
-		return cacheManager.getCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, Map.class);
 	}
 
 	public void retrieveSoftwareLicense2LicensePoolPD() {
-		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_USABILITIES)
-				|| cacheManager.isDataCached(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL)) {
+		if (!dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				|| dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSE_USABILITIES)
+				|| dataServices.cacheManager.isDataCached(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL)) {
 			return;
 		}
 		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
 		List<LicenseUsableForEntry> licenseUsabilities = new ArrayList<>();
-		List<Map<String, Object>> softwareL2LPools = exec
+		List<Map<String, Object>> softwareL2LPools = dataServices.exec
 				.getListOfMaps(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS);
 		for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
 			LicenseUsableForEntry entry = LicenseUsableForEntry.produceFrom(softwareL2LPool);
@@ -185,8 +173,8 @@ public class LicenseDataService {
 			rowsSoftwareL2LPool.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
 					(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
 		}
-		cacheManager.setCachedData(CacheIdentifier.LICENSE_USABILITIES, licenseUsabilities);
-		cacheManager.setCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, rowsSoftwareL2LPool);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_USABILITIES, licenseUsabilities);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, rowsSoftwareL2LPool);
 	}
 
 	// retrieves the used software license - or tries to reserve one - for the given
@@ -195,8 +183,9 @@ public class LicenseDataService {
 		String result = null;
 		Map<String, Object> resultMap = null;
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId, licensePoolId);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId,
+					licensePoolId);
 
 			if (!resultMap.isEmpty()) {
 				result = Utils
@@ -210,16 +199,16 @@ public class LicenseDataService {
 
 	public String editLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
 			String notes) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return null;
 		}
 
 		String result = null;
 		Map<String, Object> resultMap = null;
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE, softwareLicenseId, licensePoolId,
-					hostId, licenseKey, notes);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE, softwareLicenseId,
+					licensePoolId, hostId, licenseKey, notes);
 
 			if (!resultMap.isEmpty()) {
 				result = Utils
@@ -240,8 +229,8 @@ public class LicenseDataService {
 
 	private void addDeletionLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId,
 			List<LicenseUsageEntry> deletionItems) {
-		if (deletionItems == null || !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				|| !userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (deletionItems == null || !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				|| !dataServices.userRoles.hasServerFullPermissionPD()) {
 			return;
 		}
 
@@ -255,9 +244,9 @@ public class LicenseDataService {
 		boolean result = false;
 		if (itemsDeletionLicenseUsage == null) {
 			result = true;
-		} else if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		} else if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			result = false;
-		} else if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		} else if (!dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			result = false;
 		} else {
 			List<Map<String, Object>> jsonPreparedList = new ArrayList<>();
@@ -265,12 +254,12 @@ public class LicenseDataService {
 				jsonPreparedList.add(item.getNOMobject());
 			}
 
-			result = exec.doCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE_OBJECTS, jsonPreparedList);
+			result = dataServices.exec.doCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE_OBJECTS, jsonPreparedList);
 
 			if (result) {
-				Map<String, LicenseUsageEntry> rowsLicensesUsage = cacheManager
+				Map<String, LicenseUsageEntry> rowsLicensesUsage = dataServices.cacheManager
 						.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
-				Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = cacheManager
+				Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = dataServices.cacheManager
 						.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class);
 				for (LicenseUsageEntry item : itemsDeletionLicenseUsage) {
 					String key = item.getPseudoKey();
@@ -292,18 +281,19 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
 
 		boolean result = false;
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			result = exec.doCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE, softwareLicenseId, licensePoolId, hostId);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			result = dataServices.exec.doCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE, softwareLicenseId, licensePoolId,
+					hostId);
 			if (result) {
-				Map<String, LicenseUsageEntry> rowsLicensesUsage = cacheManager
+				Map<String, LicenseUsageEntry> rowsLicensesUsage = dataServices.cacheManager
 						.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
-				Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = cacheManager
+				Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = dataServices.cacheManager
 						.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class);
 				String key = LicenseUsageEntry.produceKey(hostId, licensePoolId, softwareLicenseId);
 				LicenseUsageEntry rowmap = rowsLicensesUsage.get(key);
@@ -319,29 +309,30 @@ public class LicenseDataService {
 
 	public List<LicenseUsageEntry> getLicenseUsagesPD() {
 		retrieveLicenseUsagesPD();
-		return cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class);
 	}
 
 	public void retrieveLicenseUsagesPD() {
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& cacheManager.isDataCached(CacheIdentifier.LICENSE_USAGE)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				&& dataServices.cacheManager.isDataCached(CacheIdentifier.LICENSE_USAGE)) {
 			return;
 		}
 		Logging.info(this, "retrieveLicenseUsages");
 		List<LicenseUsageEntry> licenseUsages = new ArrayList<>();
-		List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.LICENSE_ON_CLIENT_GET_OBJECTS);
+		List<Map<String, Object>> retrieved = dataServices.exec
+				.getListOfMaps(RPCMethodName.LICENSE_ON_CLIENT_GET_OBJECTS);
 
 		for (Map<String, Object> importedEntry : retrieved) {
 			LicenseUsageEntry entry = new LicenseUsageEntry(importedEntry);
 
 			licenseUsages.add(entry);
 		}
-		cacheManager.setCachedData(CacheIdentifier.LICENSE_USAGE, licenseUsages);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_USAGE, licenseUsages);
 	}
 
 	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
 		Map<String, Map<String, String>> rowsLicensePoolXOpsiProduct = new HashMap<>();
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			Logging.info(this, "licensePoolXOpsiProduct size ", getLicensePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicensePoolXOpsiProductPD()) {
 				rowsLicensePoolXOpsiProduct
@@ -355,17 +346,18 @@ public class LicenseDataService {
 
 	public Map<String, LicenseUsageEntry> getRowsLicensesUsagePD() {
 		retrieveLicensesUsagePD();
-		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
 	}
 
 	public Map<String, List<LicenseUsageEntry>> getFClient2LicensesUsageListPD() {
 		retrieveLicensesUsagePD();
-		return cacheManager.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class);
 	}
 
 	public void retrieveLicensesUsagePD() {
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT) && cacheManager.isDataCached(
-				Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				&& dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE,
+						CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;
 		}
 
@@ -377,25 +369,26 @@ public class LicenseDataService {
 					s -> new ArrayList<>());
 			licensesUsagesForClient.add(m);
 		}
-		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, rowsLicensesUsage);
-		cacheManager.setCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, fClient2LicensesUsageList);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, rowsLicensesUsage);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST,
+				fClient2LicensesUsageList);
 	}
 
 	// returns the ID of the edited data record
 	public String editLicenseContract(String licenseContractId, String partner, String conclusionDate,
 			String notificationDate, String expirationDate, String notes) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return "";
 		}
 		String result = "";
 
 		Logging.debug(this, "editLicenseContract ", licenseContractId);
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			// the method gives the first letter instead of the complete string as return
 			// value, therefore we set it in a shortcut:
 
-			if (exec.doCall(RPCMethodName.LICENSE_CONTRACT_CREATE, licenseContractId, "", notes, partner,
+			if (dataServices.exec.doCall(RPCMethodName.LICENSE_CONTRACT_CREATE, licenseContractId, "", notes, partner,
 					conclusionDate, notificationDate, expirationDate)) {
 				result = licenseContractId;
 			} else {
@@ -409,12 +402,12 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicenseContract(String licenseContractId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			return exec.doCall(RPCMethodName.LICENSE_CONTRACT_DELETE, licenseContractId);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			return dataServices.exec.doCall(RPCMethodName.LICENSE_CONTRACT_DELETE, licenseContractId);
 		}
 
 		return false;
@@ -422,14 +415,14 @@ public class LicenseDataService {
 
 	// returns the ID of the edited data record
 	public String editLicensePool(String licensePoolId, String description) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return "";
 		}
 
 		String result = "";
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			if (exec.doCall(RPCMethodName.LICENSE_POOL_CREATE, licensePoolId, description)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			if (dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_CREATE, licensePoolId, description)) {
 				result = licensePoolId;
 			} else {
 				Logging.warning(this, "could not create licensepool ", licensePoolId);
@@ -442,25 +435,25 @@ public class LicenseDataService {
 	public boolean deleteLicensePool(String licensePoolId) {
 		Logging.info(this, "deleteLicensePool ", licensePoolId);
 
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			return exec.doCall(RPCMethodName.LICENSE_POOL_DELETE, licensePoolId);
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			return dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_DELETE, licensePoolId);
 		}
 
 		return false;
 	}
 
 	public String editRelationProductId2LPool(String productId, String licensePoolId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return "";
 		}
 
 		String result = "";
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
 
 			// Replace old product list with actualized list
@@ -468,7 +461,7 @@ public class LicenseDataService {
 			licensePoolProductIds.add(productId);
 			licensePool.put("productIds", licensePoolProductIds);
 
-			if (exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool)) {
+			if (dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool)) {
 				result = licensePoolId;
 			} else {
 				Logging.error(this, "could not update product ", productId, " to licensepool ", licensePoolId);
@@ -479,18 +472,18 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteRelationProductId2LPool(String productId, String licensePoolId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
 			// Replace old product list with actualized list
 			List<Object> licensePoolProductIds = new ArrayList<>((List<?>) licensePool.get("productIds"));
 			licensePoolProductIds.remove(productId);
 			licensePool.put("productIds", licensePoolProductIds);
 
-			return exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool);
+			return dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool);
 		}
 
 		return false;
@@ -500,6 +493,7 @@ public class LicenseDataService {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", licensePoolId);
-		return exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, callAttributes, callFilter).get(0);
+		return dataServices.exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, callAttributes, callFilter)
+				.get(0);
 	}
 }

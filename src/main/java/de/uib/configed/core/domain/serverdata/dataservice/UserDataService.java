@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 
 /**
  * Provides methods for working with user data on the server.
@@ -29,30 +27,27 @@ import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
  * retrieves or it updates internally cached data. {@code PD} stands for
  * {@code Persistent Data}.
  */
-public class UserDataService {
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-
-	public UserDataService(AbstractPOJOExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
+public class UserDataService extends DataService {
+	public UserDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public boolean usesMultiFactorAuthentication() {
-		return cacheManager.getCachedData(CacheIdentifier.MFA_ENABLED, Boolean.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.MFA_ENABLED, Boolean.class);
 	}
 
 	public void checkMultiFactorAuthenticationPD(String user) {
 		String otpSecret = getOTPSecret(user);
-		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED, (otpSecret != null && !otpSecret.isEmpty()));
+		dataServices.cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED,
+				(otpSecret != null && !otpSecret.isEmpty()));
 	}
 
 	private String getOTPSecret(String userId) {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", userId);
-		List<Map<String, Object>> result = exec.getListOfMaps(RPCMethodName.USER_GET_OBJECTS, callAttributes,
-				callFilter);
+		List<Map<String, Object>> result = dataServices.exec.getListOfMaps(RPCMethodName.USER_GET_OBJECTS,
+				callAttributes, callFilter);
 
 		if (result.isEmpty()) {
 			return null;
@@ -68,6 +63,6 @@ public class UserDataService {
 	}
 
 	public String getCACerts() {
-		return exec.getStringResult(RPCMethodName.GET_CA_CERTS);
+		return dataServices.exec.getStringResult(RPCMethodName.GET_CA_CERTS);
 	}
 }

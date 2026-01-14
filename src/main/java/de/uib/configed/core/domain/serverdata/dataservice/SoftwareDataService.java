@@ -26,15 +26,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JOptionPane;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -67,7 +64,7 @@ import de.uib.configed.share.logging.Logging;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class SoftwareDataService {
+public class SoftwareDataService extends DataService {
 	private static final String LINUX_SUBVERSION_MARKER = "lin:";
 
 	private static final Set<String> linuxSWnameMarkers = new HashSet<>();
@@ -78,45 +75,19 @@ public class SoftwareDataService {
 		linuxSWnameMarkers.add("ubuntu");
 	}
 
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-	private OpsiServiceNOMPersistenceController persistenceController;
-	private ModuleDataService moduleDataService;
-	private UserRolesConfigDataService userRolesConfigDataService;
-	private LicenseDataService licenseDataService;
-	private HostInfoCollections hostInfoCollections;
-
-	public SoftwareDataService(AbstractPOJOExecutioner exec,
-			OpsiServiceNOMPersistenceController persistenceController) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-		this.persistenceController = persistenceController;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
-	}
-
-	public void setModuleDataService(ModuleDataService moduleDataService) {
-		this.moduleDataService = moduleDataService;
-	}
-
-	public void setLicenseDataService(LicenseDataService licenseDataService) {
-		this.licenseDataService = licenseDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
+	public SoftwareDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public NavigableSet<Object> getSoftwareWithoutAssociatedLicensePoolPD() {
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
-		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+				NavigableSet.class);
 	}
 
 	public List<String> getSoftwareListByLicensePoolPD(String licensePoolId) {
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
-		Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+		Map<String, List<String>> fLicensePool2SoftwareList = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
 		List<String> result = fLicensePool2SoftwareList.get(licensePoolId);
 		return result == null ? new ArrayList<>() : result;
@@ -124,7 +95,7 @@ public class SoftwareDataService {
 
 	public List<String> getUnknownSoftwareListForLicensePoolPD(String licensePoolId) {
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
-		Map<String, List<String>> fLicensePool2UnknownSoftwareList = cacheManager
+		Map<String, List<String>> fLicensePool2UnknownSoftwareList = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
 		List<String> result = fLicensePool2UnknownSoftwareList.get(licensePoolId);
 		return result == null ? new ArrayList<>() : result;
@@ -132,18 +103,19 @@ public class SoftwareDataService {
 
 	public Map<String, String> getFSoftware2LicensePoolPD() {
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
-		return cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 	}
 
 	public String getFSoftware2LicensePoolPD(String softwareIdent) {
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
-		Map<String, String> fSoftware2LicensePool = cacheManager
+		Map<String, String> fSoftware2LicensePool = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 		return fSoftware2LicensePool.get(softwareIdent);
 	}
 
 	public void retrieveRelationsAuditSoftwareToLicensePoolsPD() {
-		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+		if (dataServices.cacheManager.isDataCached(Arrays.asList(
+				CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
 				CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL))) {
 			return;
@@ -155,14 +127,15 @@ public class SoftwareDataService {
 		NavigableSet<String> softwareWithoutAssociatedLicensePool = new TreeSet<>(
 				getInstalledSoftwareInformationForLicensingPD().keySet());
 
-		cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicensePool);
-		cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
-		cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
+		dataServices.cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicensePool);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST,
+				fLicensePool2SoftwareList);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
 				fLicensePool2UnknownSoftwareList);
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				softwareWithoutAssociatedLicensePool);
 
-		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return;
 		}
 
@@ -205,50 +178,53 @@ public class SoftwareDataService {
 
 	public AuditSoftwareXLicensePool getAuditSoftwareXLicensePoolPD() {
 		retrieveAuditSoftwareXLicensePoolPD();
-		return cacheManager.getCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL,
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL,
 				AuditSoftwareXLicensePool.class);
 	}
 
 	public void retrieveAuditSoftwareXLicensePoolPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL)) {
 			return;
 		}
 
 		Logging.info(this, "retrieveAuditSoftwareXLicensePool");
-		List<Map<String, Object>> retrieved = exec.getListOfMaps(
+		List<Map<String, Object>> retrieved = dataServices.exec.getListOfMaps(
 				RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_GET_OBJECTS, AuditSoftwareXLicensePool.SERVICE_ATTRIBUTES);
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = new AuditSoftwareXLicensePool();
 		for (Map<String, Object> map : retrieved) {
 			auditSoftwareXLicensePool.integrateRaw(map);
 		}
-		cacheManager.setCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL, auditSoftwareXLicensePool);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL,
+				auditSoftwareXLicensePool);
 		Logging.info(this, "retrieveAuditSoftwareXLicensePool retrieved ");
 	}
 
 	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+				NavigableMap.class);
 	}
 
 	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensingPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
 				NavigableMap.class);
 	}
 
 	public NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfoPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
+				NavigableMap.class);
 	}
 
 	public NavigableMap<String, Set<String>> getName2SWIdentsPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class);
 	}
 
 	public Set<String> getSoftwareListPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, Set.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, Set.class);
 	}
 
 	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
@@ -269,7 +245,7 @@ public class SoftwareDataService {
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				Logging.info(this, "Reloading installed software information");
-				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+				dataServices.persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 				softwareList = getSoftwareListPD();
 				Logging.info(this, "Now existing installed software entries ", softwareList.size());
 				if (softwareList.contains(swAuditClientEntry.getSWIdent())) {
@@ -289,7 +265,7 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
-		if (cacheManager.isDataCached(
+		if (dataServices.cacheManager.isDataCached(
 				Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
 						CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
 						CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
@@ -300,7 +276,8 @@ public class SoftwareDataService {
 		List<Object> callAttributes = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
 				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID,
 				SWAuditEntry.IS_OPERATING_SYSTEM);
-		List<Map<String, Object>> list = exec.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS, callAttributes);
+		List<Map<String, Object>> list = dataServices.exec.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
+				callAttributes);
 
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
@@ -348,13 +325,15 @@ public class SoftwareDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, installedSoftwareInformation.keySet());
-		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, installedSoftwareInformation);
-		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, installedSoftwareInformation.keySet());
+		dataServices.cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+				installedSoftwareInformation);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
 				installedSoftwareInformationForLicensing);
-		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO, installedSoftwareName2SWinfo);
-		cacheManager.setCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, name2SWIdents);
-		persistenceController.notifyPanelCompleteWinProducts();
+		dataServices.cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
+				installedSoftwareName2SWinfo);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, name2SWIdents);
+		dataServices.persistenceController.notifyPanelCompleteWinProducts();
 	}
 
 	private static boolean showForLicensing(SWAuditEntry entry, String swName) {
@@ -436,8 +415,8 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicense(String softwareLicenseId, String licenseContractId, String licenseType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()
+				|| !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return "";
 		}
 
@@ -456,7 +435,7 @@ public class SoftwareDataService {
 
 		RPCMethodName methodName = getMethodNameForLicenseType(licenseType);
 
-		if (exec.doCall(methodName, softwareLicenseId, licenseContractId, maxInstallations, boundToHost,
+		if (dataServices.exec.doCall(methodName, softwareLicenseId, licenseContractId, maxInstallations, boundToHost,
 				expirationDate)) {
 			return softwareLicenseId;
 		} else {
@@ -481,22 +460,22 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteSoftwareLicense(String softwareLicenseId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()
+				|| !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
-		return exec.doCall(RPCMethodName.SOFTWARE_LICENSE_DELETE, softwareLicenseId);
+		return dataServices.exec.doCall(RPCMethodName.SOFTWARE_LICENSE_DELETE, softwareLicenseId);
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return "";
 		}
 
-		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& !exec.doCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE, softwareLicenseId, licensePoolId,
-						licenseKey)) {
+		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				&& !dataServices.exec.doCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE, softwareLicenseId,
+						licensePoolId, licenseKey)) {
 			Logging.error(this, "cannot create softwarelicense to licensepool relation");
 			return "";
 		}
@@ -505,26 +484,27 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()
+				|| !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
-		return exec.doCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE, softwareLicenseId, licensePoolId);
+		return dataServices.exec.doCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE, softwareLicenseId,
+				licensePoolId);
 	}
 
 	public void setFSoftware2LicensePool(String softwareIdent, String licensePoolId) {
-		Map<String, String> fSoftware2LicensePool = cacheManager
+		Map<String, String> fSoftware2LicensePool = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 		fSoftware2LicensePool.put(softwareIdent, licensePoolId);
-		cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicensePool);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicensePool);
 	}
 
 	public boolean removeAssociations(String licensePoolId, List<String> softwareIds) {
 		Logging.info(this, "removeAssociations licensePoolId, softwareIds ", licensePoolId, ", ", softwareIds);
 
-		if (licensePoolId == null || softwareIds == null || !userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (licensePoolId == null || softwareIds == null || !dataServices.userRoles.hasServerFullPermissionPD()
+				|| !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
@@ -537,13 +517,14 @@ public class SoftwareDataService {
 			deleteItems.add(item);
 		}
 
-		boolean result = exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS, deleteItems);
+		boolean result = dataServices.exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+				deleteItems);
 
-		Map<String, String> fSoftware2LicensePool = cacheManager
+		Map<String, String> fSoftware2LicensePool = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
-		Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+		Map<String, List<String>> fLicensePool2SoftwareList = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
-		Map<String, List<String>> fLicensePool2UnknownSoftwareList = cacheManager
+		Map<String, List<String>> fLicensePool2UnknownSoftwareList = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
 
 		if (result) {
@@ -574,14 +555,14 @@ public class SoftwareDataService {
 		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:", licensePoolId, " , ",
 				softwareToAssign);
 
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()
+				|| !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
 		Map<String, SWAuditEntry> instSwI = getInstalledSoftwareInformationForLicensingPD();
 
-		Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+		Map<String, List<String>> fLicensePool2SoftwareList = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
 		List<String> oldEntries = fLicensePool2SoftwareList.computeIfAbsent(licensePoolId, arg -> new ArrayList<>());
 
@@ -609,7 +590,7 @@ public class SoftwareDataService {
 			List<String> newList = new ArrayList<>(intermediateSet);
 			fLicensePool2SoftwareList.put(licensePoolId, newList);
 
-			NavigableSet<Object> softwareWithoutAssociatedLicensePool = cacheManager
+			NavigableSet<Object> softwareWithoutAssociatedLicensePool = dataServices.cacheManager
 					.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
 			softwareWithoutAssociatedLicensePool.addAll(entriesToRemove);
 			softwareWithoutAssociatedLicensePool.removeAll(softwareToAssign);
@@ -656,7 +637,8 @@ public class SoftwareDataService {
 			Logging.info(this, "deleteItems ", deleteItems);
 
 			if (!deleteItems.isEmpty()) {
-				result = exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS, deleteItems);
+				result = dataServices.exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+						deleteItems);
 			}
 
 			if (!result) {
@@ -678,14 +660,14 @@ public class SoftwareDataService {
 
 		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems ", createItems);
 
-		return exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, createItems);
+		return dataServices.exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, createItems);
 	}
 
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licensePoolIDNew) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!dataServices.userRoles.hasServerFullPermissionPD()
+				|| !dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return "";
 		}
 
@@ -721,15 +703,15 @@ public class SoftwareDataService {
 
 			readyObjects.add(item);
 
-			ok = exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, readyObjects);
+			ok = dataServices.exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, readyObjects);
 		}
 
 		Logging.info(this, "editPool2AuditSoftware ok ", ok);
 
 		if (ok) {
-			Map<String, String> fSoftware2LicensePool = cacheManager
+			Map<String, String> fSoftware2LicensePool = dataServices.cacheManager
 					.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
-			Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+			Map<String, List<String>> fLicensePool2SoftwareList = dataServices.cacheManager
 					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
 			Logging.info(this, "fSoftware2LicensePool == null ", fSoftware2LicensePool == null);
 
@@ -743,7 +725,8 @@ public class SoftwareDataService {
 			Logging.info(this, "fLicensePool2SoftwareList.get( licensePoolIDNew ) ", fLicensePoolSoftwareList);
 
 			fLicensePoolSoftwareList.add(softwareID);
-			cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST,
+					fLicensePool2SoftwareList);
 		}
 
 		return "";
@@ -751,24 +734,26 @@ public class SoftwareDataService {
 
 	public Map<String, Map<String, Object>> getLicensesReconciliationPD() {
 		retrieveLicenseStatisticsPD();
-		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 	}
 
 	public Map<String, LicenseStatisticsRow> getLicenseStatistics() {
 		retrieveLicenseStatisticsPD();
-		return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class);
 	}
 
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
-		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT) || cacheManager.isDataCached(Arrays
-				.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
+		if (!dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				|| dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+						CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}
 
 		Logging.info(this, "retrieveLicenseStatistics");
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = getRowsLicenseReconciliation();
-		Map<String, Set<String>> swId2Clients = getSoftwareIdentOnClients(hostInfoCollections.getOpsiHostNames());
+		Map<String, Set<String>> swId2Clients = getSoftwareIdentOnClients(
+				dataServices.hostInfoCollections.getOpsiHostNames());
 		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation, swId2Clients);
 
 		retrieveInstalledSoftwareInformationPD();
@@ -780,7 +765,7 @@ public class SoftwareDataService {
 
 		// table LICENSE_ON_CLIENT
 		Logging.info(this, " license usages ");
-		List<LicenseUsageEntry> licenseUsages = licenseDataService.getLicenseUsagesPD();
+		List<LicenseUsageEntry> licenseUsages = dataServices.license.getLicenseUsagesPD();
 		TreeMap<String, Integer> pool2opsiUsagesCount = new TreeMap<>();
 		Map<String, Set<String>> pool2opsiUsages = new TreeMap<>();
 		for (LicenseUsageEntry licenseUsage : licenseUsages) {
@@ -800,7 +785,7 @@ public class SoftwareDataService {
 		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount(swId2Clients);
 		Map<String, LicenseStatisticsRow> rowsLicenseStatistics = new TreeMap<>();
 		// table LICENSE_POOL
-		Map<String, LicensepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
+		Map<String, LicensepoolEntry> licensePools = dataServices.license.getLicensePoolsPD();
 		for (String licensePoolId : licensePools.keySet()) {
 			LicenseStatisticsRow rowMap = new LicenseStatisticsRow(licensePoolId);
 			rowsLicenseStatistics.put(licensePoolId, rowMap);
@@ -814,8 +799,9 @@ public class SoftwareDataService {
 			setUsedByOpsiToTrue(licensePoolId, listOfUsingClients, rowsLicensesReconciliation);
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
-		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, rowsLicenseStatistics);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+				rowsLicensesReconciliation);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, rowsLicenseStatistics);
 
 		Logging.debug(this, "rowsLicenseStatistics ", rowsLicenseStatistics);
 	}
@@ -838,17 +824,17 @@ public class SoftwareDataService {
 	}
 
 	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {
-		if (cacheManager.isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
-			return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
+			return dataServices.cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 		}
 
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = new HashMap<>();
-		Map<String, LicensepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
-		Map<String, List<Object>> configDefaultValues = cacheManager
+		Map<String, LicensepoolEntry> licensePools = dataServices.license.getLicensePoolsPD();
+		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		List<String> extraHostFields = POJOReMapper.remap(configDefaultValues.get(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION));
-		Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
+		Map<String, HostInfo> clientMap = dataServices.hostInfoCollections.getMapOfAllPCInfoMaps();
 		for (Entry<String, HostInfo> clientEntry : clientMap.entrySet()) {
 			for (String pool : licensePools.keySet()) {
 				Map<String, Object> rowMap = new HashMap<>();
@@ -895,7 +881,7 @@ public class SoftwareDataService {
 
 	private Map<String, ExtendedInteger> getPool2AllowedUsagesCount() {
 		Logging.info(this, " license usabilities ");
-		List<LicenseUsableForEntry> licenseUsabilities = licenseDataService.getLicenseUsabilitiesPD();
+		List<LicenseUsableForEntry> licenseUsabilities = dataServices.license.getLicenseUsabilitiesPD();
 		TreeMap<String, ExtendedInteger> pool2allowedUsagesCount = new TreeMap<>();
 		for (LicenseUsableForEntry licenseUsability : licenseUsabilities) {
 			String pool = licenseUsability.getLicensePoolId();
@@ -904,8 +890,7 @@ public class SoftwareDataService {
 			// value up this step
 			ExtendedInteger count = pool2allowedUsagesCount.get(pool);
 
-			Map<String, LicenseEntry> licenses = licenseDataService.getLicensesPD();
-
+			Map<String, LicenseEntry> licenses = dataServices.license.getLicensesPD();
 			// not yet initialized
 			if (count == null) {
 				count = licenses.get(licenseId).getMaxInstallations();
@@ -970,7 +955,7 @@ public class SoftwareDataService {
 		executor.waitForCompletion();
 
 		Logging.info(this, "getSoftwareIdentOnClients used memory on end ", Utils.usedMemory());
-		persistenceController.notifyPanelCompleteWinProducts();
+		dataServices.persistenceController.notifyPanelCompleteWinProducts();
 
 		return softwareIdent2clients;
 	}
@@ -981,7 +966,7 @@ public class SoftwareDataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clients);
 
-		List<Map<String, Object>> softwareAuditOnClients = exec
+		List<Map<String, Object>> softwareAuditOnClients = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
 		Logging.info(this, "getAuditSoftwareOnClients, finished a request, map size ", softwareAuditOnClients.size());
 

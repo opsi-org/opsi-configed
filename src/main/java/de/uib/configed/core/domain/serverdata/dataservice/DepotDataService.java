@@ -15,11 +15,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.logging.Logging;
 
@@ -36,28 +33,9 @@ import de.uib.configed.share.logging.Logging;
  * retrieves or it updates internally cached data. {@code PD} stands for
  * {@code Persistent Data}.
  */
-public class DepotDataService {
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-	private UserRolesConfigDataService userRolesConfigDataService;
-	private ProductDataService productDataService;
-	private HostInfoCollections hostInfoCollections;
-
-	public DepotDataService(AbstractPOJOExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
-	}
-
-	public void setProductDataService(ProductDataService productDataService) {
-		this.productDataService = productDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
+public class DepotDataService extends DataService {
+	public DepotDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public boolean areDepotsSynchronous(Iterable<String> depots) {
@@ -67,8 +45,8 @@ public class DepotDataService {
 			String callReturnType = "dict";
 			Map<String, String> callFilter = new HashMap<>();
 			callFilter.put("depotId", depot);
-			List<Map<String, Object>> products = exec.getListOfMaps(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
-					callReturnType, callFilter);
+			List<Map<String, Object>> products = dataServices.exec
+					.getListOfMaps(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, callReturnType, callFilter);
 			for (Map<String, Object> product : products) {
 				productIdents.add(product.get("productId") + ";" + product.get("productVersion") + ";"
 						+ product.get("packageVersion"));
@@ -84,17 +62,17 @@ public class DepotDataService {
 	}
 
 	public Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
-		Map<String, Map<String, Object>> depotProperties = hostInfoCollections.getAllDepots();
+		Map<String, Map<String, Object>> depotProperties = dataServices.hostInfoCollections.getAllDepots();
 		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
 
-		String configServer = hostInfoCollections.getConfigServer();
-		if (userRolesConfigDataService.hasDepotPermission(configServer)) {
+		String configServer = dataServices.hostInfoCollections.getConfigServer();
+		if (dataServices.userRoles.hasDepotPermission(configServer)) {
 			depotPropertiesForPermittedDepots.put(configServer, depotProperties.get(configServer));
 		}
 
 		for (Entry<String, Map<String, Object>> depotProperty : depotProperties.entrySet()) {
 			if (!depotProperty.getKey().equals(configServer)
-					&& userRolesConfigDataService.hasDepotPermission(depotProperty.getKey())) {
+					&& dataServices.userRoles.hasDepotPermission(depotProperty.getKey())) {
 				depotPropertiesForPermittedDepots.put(depotProperty.getKey(), depotProperty.getValue());
 			}
 		}
@@ -105,12 +83,12 @@ public class DepotDataService {
 	public List<String> getAllDepotsWithIdenticalProductStock(String depot) {
 		List<String> result = new ArrayList<>();
 
-		TreeSet<OpsiPackage> originalProductStock = productDataService.getDepot2PackagesPD().get(depot);
+		TreeSet<OpsiPackage> originalProductStock = dataServices.product.getDepot2PackagesPD().get(depot);
 		Logging.info(this, "getAllDepotsWithIdenticalProductStock ", originalProductStock);
 
-		for (String testDepot : hostInfoCollections.getAllDepots().keySet()) {
+		for (String testDepot : dataServices.hostInfoCollections.getAllDepots().keySet()) {
 			if (depot.equals(testDepot) || areProductStocksIdentical(originalProductStock,
-					productDataService.getDepot2PackagesPD().get(testDepot))) {
+					dataServices.product.getDepot2PackagesPD().get(testDepot))) {
 				result.add(testDepot);
 			}
 		}
@@ -127,10 +105,10 @@ public class DepotDataService {
 
 	public void setDepot(String depotId) {
 		Logging.info(this, "setDepot: ", depotId);
-		cacheManager.setCachedData(CacheIdentifier.DEPOT, depotId);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.DEPOT, depotId);
 	}
 
 	public String getDepot() {
-		return cacheManager.getCachedData(CacheIdentifier.DEPOT, String.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOT, String.class);
 	}
 }

@@ -19,11 +19,9 @@ import de.uib.configed.core.domain.RemoteControls;
 import de.uib.configed.core.domain.SavedSearches;
 import de.uib.configed.core.domain.permission.UserConfig;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.ConfigOption;
@@ -48,7 +46,7 @@ import de.uib.configed.share.logging.TimeCheck;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class ConfigDataService {
+public class ConfigDataService extends DataService {
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
@@ -60,23 +58,12 @@ public class ConfigDataService {
 	private static final String KEY_DOWNTIME_END = "opsi.check.downtime.end";
 	private static final String KEY_DOWNTIME_ENABLED = "opsi.check.enabled";
 
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-	private OpsiServiceNOMPersistenceController persistenceController;
-	private UserRolesConfigDataService userRolesConfigDataService;
-
 	private List<Map<String, Object>> configCollection;
 	private List<Map<String, Object>> configStateCollection;
 	private List<Map<String, Object>> deleteConfigStateItems;
 
-	public ConfigDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-		this.persistenceController = persistenceController;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
+	public ConfigDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	/**
@@ -85,42 +72,42 @@ public class ConfigDataService {
 	 */
 	public String getOpsiDefaultDomainPD() {
 		retrieveOpsiDefaultDomainPD();
-		return cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class);
 	}
 
 	/**
 	 * retrieves default domain from service
 	 */
 	public void retrieveOpsiDefaultDomainPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.OPSI_DEFAULT_DOMAIN)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.OPSI_DEFAULT_DOMAIN)) {
 			return;
 		}
-		String opsiDefaultDomain = exec.getStringResult(RPCMethodName.GET_DOMAIN);
-		cacheManager.setCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, opsiDefaultDomain);
+		String opsiDefaultDomain = dataServices.exec.getStringResult(RPCMethodName.GET_DOMAIN);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, opsiDefaultDomain);
 	}
 
 	public Map<String, List<Object>> getConfigDefaultValuesPD() {
 		retrieveConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 	}
 
 	public Map<String, RemoteControl> getRemoteControlsPD() {
 		retrieveConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.REMOTE_CONTROLS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.REMOTE_CONTROLS, Map.class);
 	}
 
 	public SavedSearches getSavedSearchesPD() {
 		retrieveConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.SAVED_SEARCHES, SavedSearches.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.SAVED_SEARCHES, SavedSearches.class);
 	}
 
 	public Map<String, ConfigOption> getConfigOptionsPD() {
 		retrieveConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 	}
 
 	public void retrieveConfigOptionsPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			return;
 		}
 
@@ -137,7 +124,7 @@ public class ConfigDataService {
 		// metaConfig for wan configuration is rebuilt in
 		// getWANConfigOptions
 
-		List<Map<String, Object>> retrievedList = exec.getListOfMaps(RPCMethodName.CONFIG_GET_OBJECTS);
+		List<Map<String, Object>> retrievedList = dataServices.exec.getListOfMaps(RPCMethodName.CONFIG_GET_OBJECTS);
 		Logging.info(this, "configOptions retrieved ");
 		for (Map<String, Object> configItem : retrievedList) {
 			String key = (String) configItem.get("ident");
@@ -170,14 +157,14 @@ public class ConfigDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
-		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
-		cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
-		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 
 		Logging.info(this, "{ole deleteItems ", deleteItems.size());
 
-		if (!deleteItems.isEmpty() && exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, deleteItems)) {
+		if (!deleteItems.isEmpty() && dataServices.exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, deleteItems)) {
 			deleteItems.clear();
 		}
 
@@ -186,11 +173,11 @@ public class ConfigDataService {
 
 	public Map<String, Map<String, Object>> getHostConfigsPD() {
 		retrieveHostConfigsPD();
-		return cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class);
 	}
 
 	public void retrieveHostConfigsPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
 			return;
 		}
 
@@ -199,8 +186,8 @@ public class ConfigDataService {
 
 		String[] configIds = new String[] {};
 		String[] objectIds = new String[] {};
-		Map<String, Object> retrieved = exec.getMapResult(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds, objectIds,
-				false);
+		Map<String, Object> retrieved = dataServices.exec.getMapResult(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds,
+				objectIds, false);
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
 
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {
@@ -218,8 +205,8 @@ public class ConfigDataService {
 		timeCheck.stop();
 		Logging.info(this, "retrieveHostConfigs retrieved ", hostConfigs.keySet());
 
-		cacheManager.setCachedData(CacheIdentifier.HOST_CONFIGS, hostConfigs);
-		persistenceController.notifyPanelCompleteWinProducts();
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HOST_CONFIGS, hostConfigs);
+		dataServices.persistenceController.notifyPanelCompleteWinProducts();
 	}
 
 	// send config updates and clear the collection
@@ -230,7 +217,7 @@ public class ConfigDataService {
 	// send config updates, possibly not updating existing
 
 	private void setConfig(boolean restrictToMissing) {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly()) {
 			return;
 		}
 
@@ -252,7 +239,7 @@ public class ConfigDataService {
 
 		Logging.debug(this, "setConfig(), usedConfigIds: ", usedConfigIds);
 
-		List<Object> existingConfigIds = exec.getListResult(RPCMethodName.CONFIG_GET_IDENTS);
+		List<Object> existingConfigIds = dataServices.exec.getListResult(RPCMethodName.CONFIG_GET_IDENTS);
 
 		Logging.info(this, "setConfig(), existingConfigIds: ", existingConfigIds.size());
 
@@ -296,23 +283,23 @@ public class ConfigDataService {
 			List<Map<String, Object>> callsConfigUpdateCollection) {
 		Logging.debug(this, "setConfig() createItems ", createItems);
 		if (!createItems.isEmpty()) {
-			exec.doCall(RPCMethodName.CONFIG_CREATE_OBJECTS, createItems);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_CREATE_OBJECTS, createItems);
 		}
 
 		Logging.debug(this, "setConfig() callsConfigDeleteCollection ", callsConfigDeleteCollection);
 
 		if (!callsConfigDeleteCollection.isEmpty()) {
-			exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, callsConfigDeleteCollection);
-			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+			dataServices.exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, callsConfigDeleteCollection);
+			dataServices.persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 			// because of referential integrity
-			persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
+			dataServices.persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 		}
 
 		Logging.debug(this, "setConfig() callsConfigUpdateCollection ", callsConfigUpdateCollection);
 
 		if (!callsConfigUpdateCollection.isEmpty()) {
-			exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, callsConfigUpdateCollection);
-			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, callsConfigUpdateCollection);
+			dataServices.persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 	}
 
@@ -415,11 +402,11 @@ public class ConfigDataService {
 
 		readyObjects.add(itemRole);
 
-		exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		configDefaultValues.put(configkey, selectedValuesRole);
-		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 	}
 
 	public void deleteSavedSearch(String name) {
@@ -436,9 +423,9 @@ public class ConfigDataService {
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
 		readyObjects.add(item);
 
-		if (exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, readyObjects)) {
+		if (dataServices.exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, readyObjects)) {
 			savedSearches.remove(name);
-			cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
 		}
 	}
 
@@ -454,7 +441,7 @@ public class ConfigDataService {
 				SavedSearch.CONFIG_KEY + "." + ob.getName() + "." + SavedSearch.DESCRIPTION_KEY, ob.getDescription(),
 				"", true));
 
-		exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 	}
 
 	protected static Map<String, Object> produceConfigEntry(String nomType, String key, Object value,
@@ -486,10 +473,10 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDisabledClientMenuEntries() {
-		if (!cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
+		if (!dataServices.cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			retrieveConfigOptionsPD();
 		}
-		Map<String, List<Object>> configDefaultValues = cacheManager
+		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 
 		return POJOReMapper.remap(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
@@ -498,11 +485,11 @@ public class ConfigDataService {
 	public List<String> getOpsiclientdExtraEvents() {
 		Logging.debug(this, "getOpsiclientdExtraEvents");
 
-		if (!cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
+		if (!dataServices.cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			retrieveConfigOptionsPD();
 		}
 
-		Map<String, List<Object>> configDefaultValues = cacheManager
+		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		if (configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS) == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
@@ -523,8 +510,8 @@ public class ConfigDataService {
 
 		List<Map<String, Object>> result = new ArrayList<>();
 		Set<String> configIds = new HashSet<>();
-		Map<String, Map<String, Object>> retrieved = exec.getMapOfMaps(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds,
-				objectIds, true);
+		Map<String, Map<String, Object>> retrieved = dataServices.exec
+				.getMapOfMaps(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds, objectIds, true);
 		for (Entry<String, Map<String, Object>> entry : retrieved.entrySet()) {
 			result.add(new ConfigName2ConfigValue(entry.getValue(), getConfigOptionsPD()));
 		}
@@ -586,7 +573,7 @@ public class ConfigDataService {
 
 	// send config updates and clear the collection
 	public void updateConfigStates() {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly()) {
 			return;
 		}
 
@@ -636,12 +623,12 @@ public class ConfigDataService {
 		Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  ", deleteConfigStateItems);
 		// not used
 		if (!deleteConfigStateItems.isEmpty()
-				&& exec.doCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS, deleteConfigStateItems)) {
+				&& dataServices.exec.doCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS, deleteConfigStateItems)) {
 			deleteConfigStateItems.clear();
 			configStateCollection.removeAll(doneList);
 		}
 
-		List<Object> existingConfigIds = exec.getListResult(RPCMethodName.CONFIG_GET_IDENTS);
+		List<Object> existingConfigIds = dataServices.exec.getListResult(RPCMethodName.CONFIG_GET_IDENTS);
 		Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: ", existingConfigIds.size());
 
 		Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
@@ -655,19 +642,19 @@ public class ConfigDataService {
 		}
 
 		if (!createItems.isEmpty()) {
-			exec.doCall(RPCMethodName.CONFIG_CREATE_OBJECTS, createItems);
-			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+			dataServices.exec.doCall(RPCMethodName.CONFIG_CREATE_OBJECTS, createItems);
+			dataServices.persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 
 		// do call
 		if (!configStateCollection.isEmpty()) {
 			// now we can set the values and clear the collected update items
-			exec.doCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, configStateCollection);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, configStateCollection);
 		}
 	}
 
 	public Boolean isInstallByShutdownConfiguredOnConfigserver() {
-		final String configserver = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
+		final String configserver = dataServices.hostInfoCollections.getConfigServer();
 		String key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
 		Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", configserver, "'");
 		Boolean value = null;
@@ -693,7 +680,7 @@ public class ConfigDataService {
 	}
 
 	public Boolean isWanConfiguredOnConfigserver() {
-		final String CONFIG_SERVER = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
+		final String CONFIG_SERVER = dataServices.hostInfoCollections.getConfigServer();
 		final String NET_CONNECTION_ACTIVE_KEY = "opsiclientd.event_net_connection.active";
 		final String TIMER_ACTIVE_KEY = "opsiclientd.event_timer.active";
 		final String GUI_STARTUP_ACTIVE_KEY = "opsiclientd.event_gui_startup.active";
@@ -804,7 +791,7 @@ public class ConfigDataService {
 				configs.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER),
 				configs.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL) };
 
-		persistenceController.getExecutioner().doCall(RPCMethodName.CONFIG_UPDATE_MESSAGE_OF_THE_DAY, data);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_MESSAGE_OF_THE_DAY, data);
 
 		String possibleValues = "possibleValues";
 		for (int i = 0; i < keys.length; i++) {
@@ -876,12 +863,12 @@ public class ConfigDataService {
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		readyObjects.add(item);
 
-		exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 
-		Map<String, List<Object>> configDefaultValues = cacheManager
+		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		configDefaultValues.put(key, domains);
-		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 	}
 
 	public void writeDownTime(Collection<String> hostIds, boolean enabled, String startTime, String endTime) {
@@ -915,14 +902,15 @@ public class ConfigDataService {
 			readyObjects.add(endTimeItem);
 		}
 
-		exec.doCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, readyObjects);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS, readyObjects);
 	}
 
 	public String getConfigedWorkbenchDefaultValuePD() {
-		return cacheManager.getCachedData(CacheIdentifier.CONFIGED_WORKBENCH_DEFAULT_VALUE, String.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.CONFIGED_WORKBENCH_DEFAULT_VALUE, String.class);
 	}
 
 	public void setConfigedWorkbenchDefaultValuePD(String defaultWorkbenchValue) {
-		cacheManager.setCachedData(CacheIdentifier.CONFIGED_WORKBENCH_DEFAULT_VALUE, defaultWorkbenchValue);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.CONFIGED_WORKBENCH_DEFAULT_VALUE,
+				defaultWorkbenchValue);
 	}
 }

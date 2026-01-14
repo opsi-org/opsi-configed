@@ -7,8 +7,10 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import de.uib.configed.core.domain.HostInfoCollections;
+import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodExecutor;
+import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.ServerFacade;
 
 public class DataServices {
@@ -29,60 +31,30 @@ public class DataServices {
 	public final UserDataService user;
 	public final RPCMethodExecutor rpcMethodExecutor;
 
-	public DataServices(ServerFacade exec, OpsiServiceNOMPersistenceController ctx) {
-		hostInfoCollections = new HostInfoCollections(ctx);
-		userRoles = new UserRolesConfigDataService(exec, ctx);
-		config = new ConfigDataService(exec, ctx);
-		depot = new DepotDataService(exec);
-		group = new GroupDataService(exec, ctx);
-		hardware = new HardwareDataService(exec);
-		health = new HealthDataService(exec);
-		host = new HostDataService(exec, ctx);
-		license = new LicenseDataService(exec);
-		log = new LogDataService(exec);
-		module = new ModuleDataService(exec);
-		product = new ProductDataService(exec, ctx);
-		software = new SoftwareDataService(exec, ctx);
-		command = new CommandDataService(exec);
-		user = new UserDataService(exec);
-		rpcMethodExecutor = new RPCMethodExecutor(exec, ctx);
+	public final AbstractPOJOExecutioner exec;
+	public final OpsiServiceNOMPersistenceController persistenceController;
 
-		wireServices();
-	}
+	public final CacheManager cacheManager = CacheManager.getInstance();
 
-	private void wireServices() {
-		config.setUserRolesConfigDataService(userRoles);
+	public DataServices(ServerFacade exec, OpsiServiceNOMPersistenceController persistenceController) {
+		this.exec = exec;
+		this.persistenceController = persistenceController;
 
-		depot.setUserRolesConfigDataService(userRoles);
-		depot.setProductDataService(product);
-		depot.setHostInfoCollections(hostInfoCollections);
-
-		group.setUserRolesConfigDataService(userRoles);
-
-		host.setConfigDataService(config);
-		host.setHostInfoCollections(hostInfoCollections);
-		host.setHostInfoCollections(hostInfoCollections);
-		host.setUserRolesConfigDataService(userRoles);
-
-		license.setUserRolesConfigDataService(userRoles);
-		license.setModuleDataService(module);
-
-		module.setUserRolesConfigDataService(userRoles);
-		module.setHostInfoCollections(hostInfoCollections);
-
-		product.setConfigDataService(config);
-		product.setDepotDataService(depot);
-		product.setHostInfoCollections(hostInfoCollections);
-		product.setUserRolesConfigDataService(userRoles);
-
-		software.setModuleDataService(module);
-		software.setLicenseDataService(license);
-		software.setUserRolesConfigDataService(userRoles);
-		software.setHostInfoCollections(hostInfoCollections);
-
-		command.setUserRolesConfigDataService(userRoles);
-
-		rpcMethodExecutor.setHostDataService(host);
-		rpcMethodExecutor.setHostInfoCollections(hostInfoCollections);
+		hostInfoCollections = new HostInfoCollections(this);
+		userRoles = new UserRolesConfigDataService(this);
+		config = new ConfigDataService(this);
+		depot = new DepotDataService(this);
+		group = new GroupDataService(this);
+		hardware = new HardwareDataService(this);
+		health = new HealthDataService(this);
+		host = new HostDataService(this);
+		license = new LicenseDataService(this);
+		log = new LogDataService(this);
+		module = new ModuleDataService(this);
+		product = new ProductDataService(this);
+		software = new SoftwareDataService(this);
+		command = new CommandDataService(this);
+		user = new UserDataService(this);
+		rpcMethodExecutor = new RPCMethodExecutor(this);
 	}
 }
