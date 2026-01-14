@@ -463,25 +463,11 @@ public class ModuleDataService {
 
 	public boolean isOpsiUserAdminPD() {
 		if (!cacheManager.isDataCached(CacheIdentifier.IS_OPSI_ADMIN_USER)) {
-			retrieveIsOpsiUserAdminPD();
+			cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER,
+					exec.getBooleanResult(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN));
 		}
 
 		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, Boolean.class));
-	}
-
-	private void retrieveIsOpsiUserAdminPD() {
-		Map<String, Object> json = exec.retrieveResponse(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN);
-
-		Boolean isOpsiUserAdmin = null;
-		if (json.containsKey("result") && json.get("result") != null) {
-			isOpsiUserAdmin = (Boolean) json.get("result");
-		} else {
-			Logging.warning(this, "cannot check if user is admin, fallback to false...");
-
-			isOpsiUserAdmin = false;
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, isOpsiUserAdmin);
 	}
 
 	private Map<String, Object> produceOpsiInformationPD() {
