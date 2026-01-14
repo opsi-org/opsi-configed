@@ -7,15 +7,11 @@
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
 public class InstalledSoftwareDataReloadHandler extends AbstractReloadHandler {
-	private CacheManager cacheManager;
-
 	public InstalledSoftwareDataReloadHandler(DataServices dataServices) {
 		super(dataServices);
-		this.cacheManager = CacheManager.getInstance();
 	}
 
 	@Override

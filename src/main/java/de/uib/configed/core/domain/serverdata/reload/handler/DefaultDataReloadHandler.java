@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 import de.uib.configed.gui.type.Object2GroupEntry;
 
@@ -24,13 +23,10 @@ import de.uib.configed.gui.type.Object2GroupEntry;
  * in this {@link AbstractReloadHandler}, only those that are required.
  */
 public class DefaultDataReloadHandler extends AbstractReloadHandler {
-	private CacheManager cacheManager;
-
 	private Map<String, Consumer<Void>> eventHandlers;
 
 	public DefaultDataReloadHandler(DataServices dataServices) {
 		super(dataServices);
-		this.cacheManager = CacheManager.getInstance();
 		this.eventHandlers = new HashMap<>();
 		registerHandlers();
 	}

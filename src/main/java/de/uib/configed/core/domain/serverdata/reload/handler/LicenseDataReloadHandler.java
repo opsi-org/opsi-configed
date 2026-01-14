@@ -9,16 +9,12 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 import java.util.Arrays;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
 public class LicenseDataReloadHandler extends AbstractReloadHandler {
-	private CacheManager cacheManager;
-
 	public LicenseDataReloadHandler(DataServices dataServices) {
 		super(dataServices);
-		this.cacheManager = CacheManager.getInstance();
 	}
 
 	@Override
