@@ -30,13 +30,13 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 		List<SWAuditClientEntry> auditList = client.getSwAuditList();
 		for (SWAuditClientEntry swEntry : auditList) {
 			String swIdent = swEntry.getSWIdent();
-			if (!persistenceController.getSoftwareDataService().swEntryExists(swEntry)) {
+			if (!persistenceController.getDataServices().software.swEntryExists(swEntry)) {
 				Logging.info(this, "no swIdent ", swIdent);
 				return false;
 			}
 
 			client.setCurrentSwAuditValue(
-					persistenceController.getSoftwareDataService().getInstalledSoftwareInformationPD().get(swIdent));
+					persistenceController.getDataServices().software.getInstalledSoftwareInformationPD().get(swIdent));
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 				return true;
 			}

@@ -125,7 +125,7 @@ public class HostInfoCollections {
 			return;
 		}
 
-		List<Map<String, Object>> opsiHosts = persistenceController.getHostDataService().getOpsiHosts();
+		List<Map<String, Object>> opsiHosts = persistenceController.getDataServices().host.getOpsiHosts();
 
 		// find opsi configserver and give it the top position
 		retrieveConfigServerPD(opsiHosts);
@@ -138,7 +138,7 @@ public class HostInfoCollections {
 
 		// find depots and build entries for them
 		retrieveDepotsPD(opsiHosts);
-		retrieveClientsPD(persistenceController.getHostDataService().getOpsiClients());
+		retrieveClientsPD(persistenceController.getDataServices().host.getOpsiClients());
 
 		Map<String, Map<String, Object>> masterDepots = cacheManager.getCachedData(CacheIdentifier.MASTER_DEPOTS,
 				Map.class);
@@ -203,7 +203,7 @@ public class HostInfoCollections {
 				String workbenchPath = retrieveWorkbenchPath(host);
 
 				if (!workbenchPath.isEmpty()) {
-					persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchPath);
+					persistenceController.getDataServices().config.setConfigedWorkbenchDefaultValuePD(workbenchPath);
 				}
 
 				retrieveConfigServerWebDavURLPD(host);
@@ -291,8 +291,8 @@ public class HostInfoCollections {
 				Logging.debug(this, "retrieveOpsiHosts client  ", name, " has no config for ",
 						OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
-				depotId = (String) ((List<?>) persistenceController.getConfigDataService().getHostConfigsPD().get(name)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).get(0);
+				depotId = (String) ((List<?>) persistenceController.getDataServices().config.getHostConfigsPD()
+						.get(name).get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).get(0);
 			}
 
 			if (depotId != null && masterDepots.keySet().contains(depotId)) {
@@ -320,10 +320,10 @@ public class HostInfoCollections {
 	}
 
 	private boolean hasConfig(String clientId) {
-		return persistenceController.getConfigDataService().getHostConfigsPD().get(clientId) != null
-				&& persistenceController.getConfigDataService().getHostConfigsPD().get(clientId)
+		return persistenceController.getDataServices().config.getHostConfigsPD().get(clientId) != null
+				&& persistenceController.getDataServices().config.getHostConfigsPD().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID) != null
-				&& !((List<?>) (persistenceController.getConfigDataService()).getHostConfigsPD().get(clientId)
+				&& !((List<?>) (persistenceController.getDataServices().config).getHostConfigsPD().get(clientId)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).isEmpty();
 	}
 
@@ -354,7 +354,7 @@ public class HostInfoCollections {
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {
-			if (persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
+			if (persistenceController.getDataServices().userRoles.hasDepotPermission(depot)) {
 				depotList.add(depot);
 			}
 		}
@@ -402,12 +402,12 @@ public class HostInfoCollections {
 
 	private void setDepot(String clientName, String depotId) {
 		// set config
-		if (persistenceController.getConfigDataService().getHostConfigsPD().get(clientName) == null) {
-			persistenceController.getConfigDataService().getHostConfigsPD().put(clientName, new HashMap<>());
+		if (persistenceController.getDataServices().config.getHostConfigsPD().get(clientName) == null) {
+			persistenceController.getDataServices().config.getHostConfigsPD().put(clientName, new HashMap<>());
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		persistenceController.getConfigDataService().getHostConfigsPD().get(clientName)
+		persistenceController.getDataServices().config.getHostConfigsPD().get(clientName)
 				.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, depotList);
 
 		// set in mapPC_Infomap
@@ -435,7 +435,7 @@ public class HostInfoCollections {
 	}
 
 	public void setDepotForClients(Iterable<String> clients, String depotId) {
-		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depotId)) {
+		if (!persistenceController.getDataServices().userRoles.hasDepotPermission(depotId)) {
 			return;
 		}
 
@@ -447,10 +447,10 @@ public class HostInfoCollections {
 		for (String client : clients) {
 			setDepot(client, depotId);
 			// collect data
-			persistenceController.getConfigDataService().setConfigStates(client, config);
+			persistenceController.getDataServices().config.setConfigStates(client, config);
 		}
 		// send data
-		persistenceController.getConfigDataService().updateConfigStates();
+		persistenceController.getDataServices().config.updateConfigStates();
 	}
 
 	// update derived data (caution!), does not create a HostInfo

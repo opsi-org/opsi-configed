@@ -239,7 +239,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void showHealthDataAction() {
-		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
+		if (!persistenceController.getDataServices().health.isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
 
@@ -247,8 +247,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void showOpsiModules() {
-		if (!persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			Map<String, Object> modulesInfo = persistenceController.getModuleDataService().getOpsiModulesInfosPD();
+		if (!persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
+			Map<String, Object> modulesInfo = persistenceController.getDataServices().module.getOpsiModulesInfosPD();
 
 			StringJoiner message = new StringJoiner("\n");
 			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
@@ -268,7 +268,7 @@ public class MainFrame extends JFrame {
 	public boolean startLicensingManagement() {
 		Logging.info(this, "startLicensingManagement called");
 
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			Utils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
 			return false;
 		}
@@ -278,7 +278,7 @@ public class MainFrame extends JFrame {
 			public void run() {
 				showPanel(mainPanelManager.getLicenseManagementPanel());
 
-				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
+				if (Boolean.TRUE.equals(persistenceController.getDataServices().config.getGlobalBooleanConfigValue(
 						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
 						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
 					// Starting JavaFX-Thread by creating a new JFXPanel, but not

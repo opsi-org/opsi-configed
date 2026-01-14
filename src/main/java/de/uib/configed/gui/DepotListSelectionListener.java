@@ -58,7 +58,7 @@ public class DepotListSelectionListener implements ListSelectionListener {
 
 		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
-			PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+			PersistenceControllerFactory.getPersistenceController().getDataServices().hostInfoCollections
 					.updateClientsForDepots(depotsList.getSelectedValuesList(), configedMain.getAllowedClients());
 			configedMain.initialTreeActivation();
 

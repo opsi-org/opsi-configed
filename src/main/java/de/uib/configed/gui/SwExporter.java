@@ -63,9 +63,9 @@ public class SwExporter implements ActionListener {
 			panelSWInfo.setHost(client);
 			panelSWInfo.updateModel();
 
-			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
-					.getSoftwareAuditOnClients(Collections.singletonList(client));
-			String scandate = persistenceController.getSoftwareDataService()
+			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+					.getDataServices().software.getSoftwareAuditOnClients(Collections.singletonList(client));
+			String scandate = persistenceController.getDataServices().software
 					.getLastSoftwareAuditModification(swAuditClientEntries, client);
 			if (scandate != null) {
 				int timePos = scandate.indexOf(' ');

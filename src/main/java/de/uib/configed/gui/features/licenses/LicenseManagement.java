@@ -114,7 +114,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 
 			@Override
 			public Map<String, Map<String, Object>> retrieveMap() {
-				return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
+				return (Map) persistenceController.getDataServices().license.getLicensePoolsPD();
 			}
 		}));
 
@@ -131,7 +131,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 
 			@Override
 			public Map<String, Map<String, Object>> retrieveMap() {
-				return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
+				return persistenceController.getDataServices().license.getRelationsSoftwareL2LPool();
 			}
 		}));
 
@@ -152,7 +152,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicenseContractsPD();
+						return (Map) persistenceController.getDataServices().license.getLicenseContractsPD();
 					}
 				}));
 
@@ -173,7 +173,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicensesPD();
+						return (Map) persistenceController.getDataServices().license.getLicensesPD();
 					}
 				}));
 	}
@@ -194,7 +194,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 				Configed.getResourceValue("ConfigedMain.Licenses.TabNewLicense"));
 		ControlPanelEnterLicense controlPanelEnterLicense = new ControlPanelEnterLicense(configedMain, this);
 		addTab(LicensesTabStatus.ENTER_LICENSE, controlPanelEnterLicense.getTabClient());
-		setEnabledAt(getTabCount() - 1, !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		setEnabledAt(getTabCount() - 1, !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		allControlMultiTablePanels.add(controlPanelEnterLicense);
 
 		// panelEditLicense
@@ -202,7 +202,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 				Configed.getResourceValue("ConfigedMain.Licenses.TabEditLicense"));
 		ControlPanelEditLicenses controlPanelEditLicenses = new ControlPanelEditLicenses(configedMain, this);
 		addTab(LicensesTabStatus.EDIT_LICENSE, controlPanelEditLicenses.getTabClient());
-		setEnabledAt(getTabCount() - 1, !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		setEnabledAt(getTabCount() - 1, !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		allControlMultiTablePanels.add(controlPanelEditLicenses);
 
 		// panelUsage

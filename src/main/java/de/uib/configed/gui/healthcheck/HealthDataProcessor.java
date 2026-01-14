@@ -56,7 +56,7 @@ public final class HealthDataProcessor {
 	 */
 	public static String buildHealthDataForExport() {
 		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
-				.getHealthDataService().checkHealthPD();
+				.getDataServices().health.checkHealthPD();
 		StringBuilder healthDataBuilder = new StringBuilder();
 
 		sortHealthDataBasedOnStatusLevel(healthData);
@@ -84,7 +84,7 @@ public final class HealthDataProcessor {
 	private static Map<String, Map<String, Object>> produceMap(boolean includeDetailedInformation) {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
-				.getHealthDataService().checkHealthPD();
+				.getDataServices().health.checkHealthPD();
 
 		sortHealthDataBasedOnStatusLevel(healthData);
 
@@ -117,8 +117,8 @@ public final class HealthDataProcessor {
 
 	private static String produceHealthDetails(Map<String, Object> healthData) {
 		List<Map<String, Object>> healthDetails = PersistenceControllerFactory.getPersistenceController()
-				.getHealthDataService()
-				.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get(KEY_CHECK)).get(KEY_ID));
+				.getDataServices().health
+						.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get(KEY_CHECK)).get(KEY_ID));
 
 		sortHealthDataBasedOnStatusLevel(healthDetails);
 
@@ -150,7 +150,7 @@ public final class HealthDataProcessor {
 
 	public static StatusLevel getMaxStatusLevel() {
 		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
-				.getHealthDataService().checkHealthPD();
+				.getDataServices().health.checkHealthPD();
 
 		return healthData.stream()
 				.map(m -> StatusLevel.valueOf(((String) m.get(KEY_CHECK_STATUS)).toUpperCase(Locale.ROOT)))

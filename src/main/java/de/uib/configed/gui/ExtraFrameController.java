@@ -138,8 +138,8 @@ public final class ExtraFrameController {
 		}
 
 		if (remoteControls == null
-				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
-			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
+				|| !remoteControls.equals(persistenceController.getDataServices().config.getRemoteControlsPD())) {
+			remoteControls = persistenceController.getDataServices().config.getRemoteControlsPD();
 
 			Logging.debug("remoteControls ", remoteControls);
 

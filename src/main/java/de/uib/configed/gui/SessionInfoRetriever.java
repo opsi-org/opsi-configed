@@ -26,7 +26,7 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		persistenceController.getHostDataService().retrieveSessionInfo(configedMain.getSelectedClients());
+		persistenceController.getDataServices().host.retrieveSessionInfo(configedMain.getSelectedClients());
 		return null;
 	}
 
@@ -35,7 +35,7 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		Logging.info(this, "Session information retrieved");
 
 		// update column
-		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
+		if (Boolean.TRUE.equals(persistenceController.getDataServices().host.getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
 			ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
 			DefaultTableModel model = configedMain.getClientTablePanel().getTableModel();
@@ -44,20 +44,20 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 
 			for (int row = 0; row < clientTable.getRowCount(); row++) {
 				String clientId = clientTable.getClientName(row);
-				clientTable.setValueAt(persistenceController.getHostDataService().getSessionInfo().get(clientId), row,
+				clientTable.setValueAt(persistenceController.getDataServices().host.getSessionInfo().get(clientId), row,
 						col);
 			}
 
 			model.fireTableDataChanged();
 			configedMain.getClientTablePanel()
-					.setSelectedValues(persistenceController.getHostDataService().getSessionInfo().keySet());
+					.setSelectedValues(persistenceController.getDataServices().host.getSessionInfo().keySet());
 		}
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
 	public static void retrieveSessionInfo(ConfigedMain configedMain) {
 		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
-		boolean visible = PersistenceControllerFactory.getPersistenceController().getHostDataService()
+		boolean visible = PersistenceControllerFactory.getPersistenceController().getDataServices().host
 				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		if (!visible) {
 			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);

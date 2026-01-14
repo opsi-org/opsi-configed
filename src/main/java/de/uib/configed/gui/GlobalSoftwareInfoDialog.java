@@ -93,7 +93,7 @@ public class GlobalSoftwareInfoDialog {
 		Logging.info(this, "removeAssociations for ", " licensePool ", myController.getSelectedLicensePool(),
 				" selected SW keys ", panelGlobalSoftware.getSelectedKeys());
 
-		boolean success = persistenceController.getSoftwareDataService()
+		boolean success = persistenceController.getDataServices().software
 				.removeAssociations(myController.getSelectedLicensePool(), panelGlobalSoftware.getSelectedKeys());
 
 		if (success) {

@@ -113,7 +113,7 @@ public class CopySuffixAddition {
 	}
 
 	private boolean clientExists(String clientName) {
-		List<String> opsiHostNames = persistenceController.getHostInfoCollections().getOpsiHostNames();
+		List<String> opsiHostNames = persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames();
 		return opsiHostNames.stream().anyMatch(opsiHostName -> opsiHostName.equals(clientName));
 	}
 }

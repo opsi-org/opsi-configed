@@ -80,8 +80,8 @@ public class TabbedLogPane extends AbstractClientConfigurationTab {
 	}
 
 	public void setDocument(String logtype, final boolean resetCaret) {
-		String document = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
-				logtype);
+		String document = persistenceController.getDataServices().log
+				.getLogfile(configedMain.getSelectedClients().get(0), logtype);
 		Logging.info(this, "logTypes.length ", logTypes.length);
 
 		int index = logTypesList.indexOf(logtype);

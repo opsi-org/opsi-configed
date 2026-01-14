@@ -103,7 +103,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 			thePanel.getPanelKeys().moveToLastRow();
 			thePanel.getPanelKeys().moveToValue("" + a[0], 0);
 		});
-		menuItemAddKey.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemAddKey.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		thePanel.getPanelKeys().addPopupItem(menuItemAddKey);
 
@@ -127,7 +127,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 					public String sendUpdate(Map<String, Object> rowmap) {
 						Logging.info(this, "sendUpdate ", rowmap);
 
-						return persistenceController.getSoftwareDataService().editRelationSoftwareL2LPool(
+						return persistenceController.getDataServices().software.editRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
 								(String) rowmap.get("licenseKey"));
 					}
@@ -136,7 +136,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						Logging.info(this, "sendDelete ", rowmap);
 						modelLicensekeys.requestReload();
-						return persistenceController.getSoftwareDataService().deleteRelationSoftwareL2LPool(
+						return persistenceController.getDataServices().software.deleteRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
 					}
 				}, updateCollection));
@@ -172,7 +172,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		col = thePanel.getPanelSoftwarelicenses().getGenEditTable().getColumnModel().getColumn(4);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
+			List<String> choicesAllHosts = new ArrayList<>(persistenceController.getDataServices().hostInfoCollections
 					.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()));
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
@@ -184,7 +184,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddLicense = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewSoftwarelicense"));
 		menuItemAddLicense.addActionListener(actionEvent -> addLicense());
-		menuItemAddLicense.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemAddLicense.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		thePanel.getPanelSoftwarelicenses().addPopupItem(menuItemAddLicense);
 
@@ -198,7 +198,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 				thePanel.getPanelSoftwarelicenses(), modelSoftwarelicenses, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> m) {
-						return persistenceController.getSoftwareDataService().editSoftwareLicense(
+						return persistenceController.getDataServices().software.editSoftwareLicense(
 								(String) m.get("softwareLicenseId"), (String) m.get("licenseContractId"),
 								(String) m.get("licenseType"),
 								LicenseEntry.produceNormalizedCount("" + m.get("maxInstallations")),
@@ -208,7 +208,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> m) {
 						modelSoftwarelicenses.requestReload();
-						return persistenceController.getSoftwareDataService()
+						return persistenceController.getDataServices().software
 								.deleteSoftwareLicense((String) m.get("softwareLicenseId"));
 					}
 				}, updateCollection));
@@ -239,7 +239,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
 		menuItemAddContract.addActionListener(actionEvent -> addContract());
-		menuItemAddContract.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemAddContract.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemAddContract);
 
@@ -269,7 +269,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 				thePanel.getPanelLicensecontracts(), modelLicensecontracts, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.getLicenseDataService().editLicenseContract(
+						return persistenceController.getDataServices().license.editLicenseContract(
 								(String) rowmap.get("licenseContractId"), (String) rowmap.get("partner"),
 								(String) rowmap.get("conclusionDate"), (String) rowmap.get("notificationDate"),
 								(String) rowmap.get("expirationDate"), (String) rowmap.get("notes"));
@@ -278,7 +278,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicensecontracts.requestReload();
-						return persistenceController.getLicenseDataService()
+						return persistenceController.getDataServices().license
 								.deleteLicenseContract((String) rowmap.get("licenseContractId"));
 					}
 				}, updateCollection));

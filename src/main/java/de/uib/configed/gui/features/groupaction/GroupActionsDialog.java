@@ -87,7 +87,7 @@ public class GroupActionsDialog {
 
 	private void setImages() {
 		Set<String> imagesCollection = new TreeSet<>(
-				persistenceController.getProductDataService().getCommonProductPropertyValues(associatedClients,
+				persistenceController.getDataServices().product.getCommonProductPropertyValues(associatedClients,
 						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY));
 
@@ -123,14 +123,14 @@ public class GroupActionsDialog {
 
 		dialog.setCursor(Globals.WAIT_CURSOR);
 
-		persistenceController.getProductDataService().setCommonProductPropertyValue(associatedClients,
+		persistenceController.getDataServices().product.setCommonProductPropertyValue(associatedClients,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persistenceController.getProductDataService().updateProductOnClients(associatedClients,
+		persistenceController.getDataServices().product.updateProductOnClients(associatedClients,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 

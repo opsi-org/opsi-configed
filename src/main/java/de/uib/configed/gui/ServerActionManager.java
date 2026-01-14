@@ -63,8 +63,8 @@ public final class ServerActionManager {
 		isLocalChangeInProgress.set(true);
 
 		try {
-			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
-			if (persistenceController.getHostDataService().createClients(clients)) {
+			persistenceController.getDataServices().hostInfoCollections.addOpsiHostNames(createdClientNames);
+			if (persistenceController.getDataServices().host.createClients(clients)) {
 				Logging.debug("createClients", clients);
 				Logging.checkErrorList();
 
@@ -74,7 +74,7 @@ public final class ServerActionManager {
 				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 				configedMain.setClients(createdClientNames);
 			} else {
-				persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
+				persistenceController.getDataServices().hostInfoCollections.removeOpsiHostNames(createdClientNames);
 			}
 		} finally {
 			isLocalChangeInProgress.set(false);
@@ -90,7 +90,8 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(configedMain.getSelectedClients());
+				return persistenceController.getDataServices().rpcMethodExecutor
+						.wakeOnLanOpsi43(configedMain.getSelectedClients());
 			}
 		}.start();
 	}
@@ -103,7 +104,7 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor()
+				return persistenceController.getDataServices().rpcMethodExecutor
 						.deletePackageCaches(configedMain.getSelectedClients());
 			}
 		}.start();
@@ -117,7 +118,7 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer("opsiclientd " + event) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().fireOpsiclientdEventOnClients(event,
+				return persistenceController.getDataServices().rpcMethodExecutor.fireOpsiclientdEventOnClients(event,
 						configedMain.getSelectedClients());
 			}
 		}.start();
@@ -142,7 +143,7 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer("opsiclientd processActionRequests") {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor()
+				return persistenceController.getDataServices().rpcMethodExecutor
 						.processActionRequests(configedMain.getSelectedClients(), products, visibility);
 			}
 		}.start();
@@ -156,14 +157,14 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().showPopupOnClients(message,
+				return persistenceController.getDataServices().rpcMethodExecutor.showPopupOnClients(message,
 						configedMain.getSelectedClients(), seconds);
 			}
 		}.start();
 	}
 
 	public static void shutdownSelectedClients() {
-		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+		if (persistenceController.getDataServices().userRoles.isGlobalReadOnly()
 				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
@@ -173,7 +174,7 @@ public final class ServerActionManager {
 			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
 				@Override
 				protected List<String> getErrors() {
-					return persistenceController.getRPCMethodExecutor()
+					return persistenceController.getDataServices().rpcMethodExecutor
 							.shutdownClients(configedMain.getSelectedClients());
 				}
 			}.start();
@@ -181,7 +182,7 @@ public final class ServerActionManager {
 	}
 
 	public static void rebootSelectedClients() {
-		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+		if (persistenceController.getDataServices().userRoles.isGlobalReadOnly()
 				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
@@ -190,7 +191,7 @@ public final class ServerActionManager {
 			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
 				@Override
 				protected List<String> getErrors() {
-					return persistenceController.getRPCMethodExecutor()
+					return persistenceController.getDataServices().rpcMethodExecutor
 							.rebootClients(configedMain.getSelectedClients());
 				}
 			}.start();
@@ -209,7 +210,7 @@ public final class ServerActionManager {
 		isLocalChangeInProgress.set(true);
 
 		try {
-			persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
+			persistenceController.getDataServices().host.deleteClients(configedMain.getSelectedClients());
 			configedMain.deactivateFilter();
 			configedMain.refreshClientListKeepingGroup();
 
@@ -233,8 +234,8 @@ public final class ServerActionManager {
 			return;
 		}
 
-		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
-				.stream().filter(hostValues -> hostValues.getString(HostInfo.HOSTNAME_KEY)
+		Optional<HostInfo> selectedClient = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfPCInfoMaps().values().stream().filter(hostValues -> hostValues.getString(HostInfo.HOSTNAME_KEY)
 						.equals(configedMain.getSelectedClients().get(0)))
 				.findFirst();
 
@@ -256,7 +257,8 @@ public final class ServerActionManager {
 
 			String newClientNameWithDomain = newClientName + "."
 					+ Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
-			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
+			if (persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames()
+					.contains(newClientNameWithDomain)) {
 				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 				if (!overwriteExistingHost) {
 					proceed = false;
@@ -265,7 +267,7 @@ public final class ServerActionManager {
 
 			Logging.info("copy client with new name ", newClientName);
 			if (proceed) {
-				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
+				persistenceController.getDataServices().hostInfoCollections.addOpsiHostName(newClientNameWithDomain);
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy(options);
 
@@ -373,12 +375,12 @@ public final class ServerActionManager {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		if (resetLocalbootProducts) {
-			persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(),
+			persistenceController.getDataServices().product.resetProducts(configedMain.getSelectedClients(),
 					withDependencies, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		}
 
 		if (resetNetbootProducts) {
-			persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(),
+			persistenceController.getDataServices().product.resetProducts(configedMain.getSelectedClients(),
 					withDependencies, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		}
 
@@ -416,15 +418,15 @@ public final class ServerActionManager {
 
 		for (String client : configedMain.getSelectedClients()) {
 			Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = persistenceController
-					.getLicenseDataService().getFClient2LicensesUsageListPD();
+					.getDataServices().license.getFClient2LicensesUsageListPD();
 
 			for (LicenseUsageEntry m : fClient2LicensesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenseId(),
+				persistenceController.getDataServices().license.addDeletionLicenseUsage(client, m.getLicenseId(),
 						m.getLicensePool());
 			}
 		}
 
-		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenseUsage();
+		return persistenceController.getDataServices().license.executeCollectedDeletionsLicenseUsage();
 	}
 
 	public static void callChangeClientIDDialog() {
@@ -440,7 +442,7 @@ public final class ServerActionManager {
 		if (newClientName != null) {
 			Logging.debug("new name ", newClientName);
 
-			persistenceController.getHostDataService().renameClient(configedMain.getSelectedClients().get(0),
+			persistenceController.getDataServices().host.renameClient(configedMain.getSelectedClients().get(0),
 					newClientName);
 
 			SwingUtilities.invokeLater(() -> {
@@ -461,9 +463,8 @@ public final class ServerActionManager {
 		// We use the StringJoiner to separate these strings of clients with depots with a newline
 		StringJoiner stringJoiner = new StringJoiner("\n");
 		for (String selectedClient : configedMain.getSelectedClients()) {
-			stringJoiner.add(selectedClient + "  ("
-					+ persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient)
-					+ ")");
+			stringJoiner.add(selectedClient + "  (" + persistenceController.getDataServices().hostInfoCollections
+					.getMapPcBelongsToDepot().get(selectedClient) + ")");
 		}
 
 		JTextArea selectedClientsArea = new JTextArea(stringJoiner.toString());
@@ -481,8 +482,8 @@ public final class ServerActionManager {
 
 		if (answer == JOptionPane.OK_OPTION) {
 			Logging.debug(" start moving to another depot");
-			persistenceController.getHostInfoCollections().setDepotForClients(configedMain.getSelectedClients(),
-					(String) depotCombo.getSelectedItem());
+			persistenceController.getDataServices().hostInfoCollections
+					.setDepotForClients(configedMain.getSelectedClients(), (String) depotCombo.getSelectedItem());
 			Logging.checkErrorList();
 			configedMain.refreshClientListKeepingGroup();
 		}

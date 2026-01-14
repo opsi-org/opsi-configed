@@ -345,7 +345,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		if (answer != null) {
 			groups.get(groupId).put("description", answer);
-			persistenceController.getGroupDataService().updateGroup(groupId, groups.get(groupId),
+			persistenceController.getDataServices().group.updateGroup(groupId, groups.get(groupId),
 					this instanceof ClientTree);
 		}
 	}
@@ -387,7 +387,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		} else {
 			// client node
 			removeNodeInternally(nodeID, parent);
-			persistenceController.getGroupDataService().removeObject2Group(nodeID, parentID);
+			persistenceController.getDataServices().group.removeObject2Group(nodeID, parentID);
 		}
 		return true;
 	}
@@ -462,7 +462,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			newGroup.put("description", description);
 
 			// send data to server
-			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
+			if (persistenceController.getDataServices().group.addGroup(newGroup, this instanceof ClientTree)) {
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
 
 				result = produceGroupNode(newGroupKey, description, node.toString());
@@ -553,7 +553,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
 				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
 
-		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries, groupType);
+		return persistenceController.getDataServices().group.removeHostGroupElements(groupEntries, groupType);
 	}
 
 	protected GroupNode produceGroupNode(String groupId, String description) {
@@ -584,7 +584,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		while (e.hasMoreElements()) {
 			DefaultMutableTreeNode nextNode = (DefaultMutableTreeNode) e.nextElement();
 			if (nextNode.getAllowsChildren()) {
-				persistenceController.getGroupDataService().deleteGroup(nextNode.toString());
+				persistenceController.getDataServices().group.deleteGroup(nextNode.toString());
 			}
 		}
 	}
@@ -623,7 +623,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		Map<String, String> theGroup = getGroups().get(importID);
 		theGroup.put("parentGroupId", dropParentID);
-		persistenceController.getGroupDataService().updateGroup(importID, theGroup, this instanceof ClientTree);
+		persistenceController.getDataServices().group.updateGroup(importID, theGroup, this instanceof ClientTree);
 	}
 
 	public TreePath getActiveTreePath(String id) {

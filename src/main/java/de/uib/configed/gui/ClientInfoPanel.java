@@ -192,19 +192,19 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive.setAllowIndeterminate(false);
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
-		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
+		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getDataServices().host
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 
 		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
 		openHealthCheckSettingsDialogButton
 				.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
-		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
+		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getDataServices().host
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton
 				.addActionListener(e -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain,
 						configedMain.getSelectedClients(), checkBoxHealthCheckActive.getState()));
 		openHealthCheckSettingsDialogButton
-				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		checkBoxInstallByShutdown = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.installByShutdown"));
@@ -535,7 +535,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	public void updateClientCheckboxText() {
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+		if (persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN)) {
 			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -611,8 +611,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly();
+		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+				.isGlobalReadOnly();
 
 		jTextFieldDescription.setEnabled(singleClient);
 		jTextFieldDescription.setEditable(writingAllowed);
@@ -630,7 +630,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		ipAddressField.setEditable(writingAllowed);
 
 		checkBoxWANConfig.setEnabled(writingAllowed && !clientSelectionEmpty
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
+				&& persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN));
 		checkBoxInstallByShutdown.setEnabled(writingAllowed && !clientSelectionEmpty);
 
 		hostKeyField.setEnabled(singleClient);

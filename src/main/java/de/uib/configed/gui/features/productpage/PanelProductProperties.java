@@ -191,7 +191,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 						"" + genEditTable.getValueAt(row, columnNames.indexOf("productVersion")),
 						"" + genEditTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
+				List<String> depotsOfPackageAsRetrieved = persistenceController.getDataServices().product
 						.getProduct2VersionInfo2DepotsPD()
 						.get(genEditTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
@@ -199,7 +199,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 				depotsOfPackage = new LinkedList<>();
 
-				for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
+				for (String depot : persistenceController.getDataServices().hostInfoCollections.getDepots().keySet()) {
 					if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
 						depotsOfPackage.add(depot);
 					}

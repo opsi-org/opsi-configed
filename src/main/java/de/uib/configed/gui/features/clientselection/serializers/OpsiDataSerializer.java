@@ -103,7 +103,7 @@ public class OpsiDataSerializer {
 	public Set<String> getSaved() {
 		Set<String> set = new TreeSet<>();
 		set.addAll(searches.keySet());
-		set.addAll(persistenceController.getConfigDataService().getSavedSearchesPD().keySet());
+		set.addAll(persistenceController.getDataServices().config.getSavedSearchesPD().keySet());
 		return set;
 	}
 
@@ -195,7 +195,7 @@ public class OpsiDataSerializer {
 	private OperationNode getData(String name) {
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name,
-				persistenceController.getConfigDataService().getSavedSearchesPD().get(name).getSerialization());
+				persistenceController.getDataServices().config.getSavedSearchesPD().get(name).getSerialization());
 
 		String serialization = searches.get(name);
 		return decipher(serialization);
@@ -210,7 +210,7 @@ public class OpsiDataSerializer {
 			Logging.info(this, name, ": ", jsonString);
 			searches.put(name, jsonString);
 			SavedSearch saveObj = new SavedSearch(name, jsonString, description);
-			persistenceController.getConfigDataService().saveSearch(saveObj);
+			persistenceController.getDataServices().config.saveSearch(saveObj);
 		} catch (IOException e) {
 			Logging.error(this, e, e.getMessage());
 		}
@@ -372,7 +372,7 @@ public class OpsiDataSerializer {
 			element = switch (elementName) {
 			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
 			case ELEMENT_NAME_GROUP_WITH_SUBGROUPS -> new GroupWithSubgroupsElement(
-					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+					persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]));
 			case ELEMENT_NAME_GROUP -> getGroupElement(subelementName);
 			default -> getDefaultElement(elementName, hardware, elementPath, elementPathS);
 			};
@@ -425,10 +425,10 @@ public class OpsiDataSerializer {
 		Logging.info(this, "getGroupElement subelementName ", subelementName);
 		if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 			return new GroupWithSubgroupsElement(
-					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+					persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]));
 		} else {
 			return new GroupElement(
-					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+					persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]));
 		}
 	}
 

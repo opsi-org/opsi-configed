@@ -149,7 +149,7 @@ public class GroupDataService {
 			directoryGroup.put("parentGroupId", null);
 			directoryGroup.put("description", "root of directory");
 
-			persistenceController.getGroupDataService().addGroup(directoryGroup, true);
+			persistenceController.getDataServices().group.addGroup(directoryGroup, true);
 
 			return directoryGroup;
 		});

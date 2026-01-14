@@ -667,7 +667,7 @@ public class ConfigDataService {
 	}
 
 	public Boolean isInstallByShutdownConfiguredOnConfigserver() {
-		final String configserver = persistenceController.getHostInfoCollections().getConfigServer();
+		final String configserver = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
 		String key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
 		Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", configserver, "'");
 		Boolean value = null;
@@ -693,7 +693,7 @@ public class ConfigDataService {
 	}
 
 	public Boolean isWanConfiguredOnConfigserver() {
-		final String CONFIG_SERVER = persistenceController.getHostInfoCollections().getConfigServer();
+		final String CONFIG_SERVER = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
 		final String NET_CONNECTION_ACTIVE_KEY = "opsiclientd.event_net_connection.active";
 		final String TIMER_ACTIVE_KEY = "opsiclientd.event_timer.active";
 		final String GUI_STARTUP_ACTIVE_KEY = "opsiclientd.event_gui_startup.active";

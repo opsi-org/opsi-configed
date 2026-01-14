@@ -55,7 +55,7 @@ public class SelectionManager {
 	 * data.
 	 */
 	public SoftwareNameElement getNewSoftwareNameElement() {
-		return new SoftwareNameElement(persistenceController.getProductDataService().getProductIdsPD());
+		return new SoftwareNameElement(persistenceController.getDataServices().product.getProductIdsPD());
 	}
 
 	public OpsiDataBackend getBackend() {

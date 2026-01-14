@@ -136,7 +136,7 @@ public class HostDataService {
 			}
 			valuesDepot.add(depotId);
 			config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, valuesDepot);
-			persistenceController.getConfigDataService().setConfigStates(newClientId, config);
+			persistenceController.getDataServices().config.setConfigStates(newClientId, config);
 
 			addGroupsToList(groups, newClientId, groupsJsonObject);
 
@@ -207,7 +207,7 @@ public class HostDataService {
 						&& exec.doCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, productsNetbootJsonObject);
 			}
 
-			persistenceController.getConfigDataService().updateConfigStates();
+			persistenceController.getDataServices().config.updateConfigStates();
 		}
 
 		return result;

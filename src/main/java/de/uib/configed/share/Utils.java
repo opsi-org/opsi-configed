@@ -522,7 +522,7 @@ public final class Utils {
 	public static String getServerPathFromWebDAVPath(String webDAVPath) {
 		String dir = "";
 		if (webDAVPath.startsWith("workbench")) {
-			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			dir = PersistenceControllerFactory.getPersistenceController().getDataServices().config
 					.getConfigedWorkbenchDefaultValuePD();
 			if (dir.charAt(dir.length() - 1) != '/') {
 				dir = dir + "/";

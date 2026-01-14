@@ -47,14 +47,15 @@ public class PanelClientHostConfig extends AbstractClientConfigurationTab {
 		configUpdateCollection = new ConfigUpdateCollection(configedMain.getSelectedClients());
 		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
-		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
+		List<Map<String, Object>> additionalConfigs = persistenceController.getDataServices().config
 				.getHostsConfigsWithDefaults(configedMain.getSelectedClients());
 		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 
-		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
-				.getConfigDataService().getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
+		Map<String, List<Object>> originalMap = ConfigedUtilityMethods
+				.mergeMaps(persistenceController.getDataServices().config
+						.getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients()),
 				mergedVisualMap, additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);

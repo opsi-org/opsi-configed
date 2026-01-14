@@ -56,8 +56,9 @@ public class PanelSoftwareLicencepool extends PanelGenEdit {
 
 		if (val != null && genEditTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
 				&& !((String) val).equals(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL)) {
-			buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(!PersistenceControllerFactory
-					.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly());
+			buttonSetAllAssignmentsToPoolFromSelectedRow
+					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 			labelSetAllAssignmentsToPoolFromSelectedRow
 					.setText(labelText + " " + getValueAt(genEditTable.getSelectedRow(), 1));
 		} else {

@@ -48,12 +48,12 @@ public final class TerminalFrame implements MessagebusListener {
 			.getPersistenceController();
 
 	// User roles configs
-	private boolean fullDepotsPermission = persistenceController.getUserRolesConfigDataService()
+	private boolean fullDepotsPermission = persistenceController.getDataServices().userRoles
 			.hasDepotsFullPermissionPD();
-	private boolean fullClientsPermission = persistenceController.getUserRolesConfigDataService()
+	private boolean fullClientsPermission = persistenceController.getDataServices().userRoles
 			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
-	private Set<Object> allowedDepots = persistenceController.getUserRolesConfigDataService().getPermittedDepots();
-	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
+	private Set<Object> allowedDepots = persistenceController.getDataServices().userRoles.getPermittedDepots();
+	private List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
@@ -226,12 +226,12 @@ public final class TerminalFrame implements MessagebusListener {
 		}
 
 		// Don't allow connection to clients when VPN module is not available
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN)) {
 			return resultListAllowedDevices;
 		}
 
 		// list of *all depots* to e.g. distinguish between depots and clients in list of connected devices
-		List<String> depotsList = persistenceController.getHostInfoCollections().getAllDepotNamesList();
+		List<String> depotsList = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		Logging.info(this, "terminal, depotsList: ", depotsList);
 
 		Set<String> allowedHosts = getAllowedHostsByUserRolesHosts(depotsList);
@@ -275,7 +275,7 @@ public final class TerminalFrame implements MessagebusListener {
 	private boolean isConfigServerAllowed(boolean forbiddenConfigServer, boolean fullDepotsPermission,
 			Set<Object> allowedDepots) {
 		Logging.debug(this, "terminal, allowedDepots: ", allowedDepots);
-		String configserverName = persistenceController.getHostInfoCollections().getConfigServer();
+		String configserverName = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
 		boolean allowed = (!forbiddenConfigServer
 				&& (fullDepotsPermission || allowedDepots.contains(configserverName)));
 		Logging.debug(this, "terminal, configserver allowed (", allowed, "): ", configserverName,
@@ -297,13 +297,13 @@ public final class TerminalFrame implements MessagebusListener {
 	 * @return Set of clients and depots allowed by user roles
 	 */
 	private Set<String> getAllowedHostsByUserRolesHosts(List<String> allDepots) {
-		Set<String> allClientsDepotsConnected2Msgbus = persistenceController.getHostDataService()
+		Set<String> allClientsDepotsConnected2Msgbus = persistenceController.getDataServices().host
 				.getMessagebusConnectedClients();
 		Set<String> allClientsDepotsConnected2MsgbusCopy = new HashSet<>(allClientsDepotsConnected2Msgbus);
 		Logging.info(this, "terminal, allClientsDepotsConnected2Msgbus: ", allClientsDepotsConnected2Msgbus);
 
 		// list of clients allowed by user roles
-		Set<String> clientsOfAllowedDepots = persistenceController.getHostInfoCollections()
+		Set<String> clientsOfAllowedDepots = persistenceController.getDataServices().hostInfoCollections
 				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients());
 		Logging.info(this, "terminal, clientsForDepots: ", clientsOfAllowedDepots);
 

@@ -419,7 +419,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 		Logging.info(this, "entry ", partialPanelEntry, " key ", key);
 
-		if (isServerConfig && !persistenceController.getUserRolesConfigDataService().hasServerFullPermissionPD()) {
+		if (isServerConfig && !persistenceController.getDataServices().userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -443,7 +443,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		// rolekey may be edited
 		if (!(key.equals(rolekey))) {
-			List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			List<Object> values = PersistenceControllerFactory.getPersistenceController().getDataServices().config
 					.getConfigDefaultValuesPD().get(rolekey);
 
 			boolean obeyToRole = values != null && !values.isEmpty()
@@ -611,12 +611,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void buildUserConfig() {
-		new UserConfigProducing(false, persistenceController.getHostInfoCollections().getConfigServer(),
-				persistenceController.getHostInfoCollections().getDepotNamesList(),
-				persistenceController.getGroupDataService().getHostGroupIds(),
-				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
-				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
+		new UserConfigProducing(false, persistenceController.getDataServices().hostInfoCollections.getConfigServer(),
+				persistenceController.getDataServices().hostInfoCollections.getDepotNamesList(),
+				persistenceController.getDataServices().group.getHostGroupIds(),
+				persistenceController.getDataServices().group.getProductGroupsPD().keySet(),
+				persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
+				persistenceController.getDataServices().config.getConfigOptionsPD()).produce();
 	}
 
 	private void addRole() {
@@ -675,12 +675,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setRoleConfig(String name) {
 		Logging.info(this, "setRoleConfig ", name);
-		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name);
+		PersistenceControllerFactory.getPersistenceController().getDataServices().config.addRoleConfig(name);
 	}
 
 	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig ", name, ",", rolename);
-		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addUserConfig(name, rolename);
+		PersistenceControllerFactory.getPersistenceController().getDataServices().config.addUserConfig(name, rolename);
 	}
 
 	public void setOriginalMap(Map<String, Object> originalMap) {

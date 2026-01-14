@@ -74,7 +74,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.addKeyListener(this);
 
 		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer(configedMain);
-		myListCellRenderer.setInfo(persistenceController.getHostInfoCollections().getDepots());
+		myListCellRenderer.setInfo(persistenceController.getDataServices().hostInfoCollections.getDepots());
 		listDepots.setCellRenderer(myListCellRenderer);
 
 		JScrollPane scrollpaneDepots = new JScrollPane();
@@ -179,7 +179,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		Map<String, Object> visualData = mergeProperties(
-				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
+				persistenceController.getDataServices().product.getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);
 
 		// no properties
@@ -189,13 +189,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		if (!listDepots.getSelectedValuesList().isEmpty()) {
-			productPropertiesPanel.setEditableMap(visualData, persistenceController.getProductDataService()
+			productPropertiesPanel.setEditableMap(visualData, persistenceController.getDataServices().product
 					.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
 			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
-				Map<String, ConfigName2ConfigValue> product2properties = persistenceController.getProductDataService()
+				Map<String, ConfigName2ConfigValue> product2properties = persistenceController.getDataServices().product
 						.getDepot2product2propertiesPD().get(depot);
 
 				if (product2properties == null) {
@@ -325,7 +325,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		ConfigName2ConfigValue properties0 = persistenceController.getProductDataService()
+		ConfigName2ConfigValue properties0 = persistenceController.getDataServices().product
 				.getDefaultProductPropertiesPD(selectedDepot0).get(productEdited);
 
 		int startDepotIndex = listDepots.getSelectedIndex();
@@ -338,7 +338,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				continue;
 			}
 
-			ConfigName2ConfigValue compareProperties = persistenceController.getProductDataService()
+			ConfigName2ConfigValue compareProperties = persistenceController.getDataServices().product
 					.getDefaultProductPropertiesPD(compareDepot).get(productEdited);
 
 			// True if both objects are equal or both null

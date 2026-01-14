@@ -26,6 +26,6 @@ public class ConfigStateUpdateCommand implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		persistenceController.getConfigDataService().setConfigStates(objectId, new ConfigName2ConfigValue(newdata));
+		persistenceController.getDataServices().config.setConfigStates(objectId, new ConfigName2ConfigValue(newdata));
 	}
 }

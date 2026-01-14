@@ -80,8 +80,7 @@ public class DeployClientAgentParameterDialog {
 			.getPersistenceController();
 
 	public DeployClientAgentParameterDialog(ConfigedMain configedMain) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -244,7 +243,7 @@ public class DeployClientAgentParameterDialog {
 			return nonExistingHostNames;
 		}
 		nonExistingHostNames.addAll(hostNames);
-		nonExistingHostNames.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		nonExistingHostNames.removeAll(persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames());
 		return nonExistingHostNames;
 	}
 

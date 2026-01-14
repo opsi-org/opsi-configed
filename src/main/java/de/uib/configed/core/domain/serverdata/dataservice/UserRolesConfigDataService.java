@@ -164,7 +164,7 @@ public class UserRolesConfigDataService {
 	public boolean canEditOwnServerRole() {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().hasServerFullPermissionPD();
+				.getDataServices().userRoles.hasServerFullPermissionPD();
 		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
 		boolean isCurrentUserRoleSelected = serverConfiguration != null
 				&& serverConfiguration.isCurrentUserRoleSelected();
@@ -173,11 +173,11 @@ public class UserRolesConfigDataService {
 
 	public final void checkConfigurationPD() {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
-		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
-		executor.runInParallel(() -> persistenceController.getModuleDataService().retrieveOpsiModules());
+		executor.runInParallel(() -> persistenceController.getDataServices().group.retrieveAllObject2GroupsPD());
+		executor.runInParallel(() -> persistenceController.getDataServices().module.retrieveOpsiModules());
 
 		// Load all data together to prevent an extra RPC-call
-		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
+		executor.runInParallel(() -> persistenceController.getDataServices().group.retrieveAllGroupsPD());
 		executor.runInParallel(() -> cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY,
 				doesUserBelongToSystemsReadOnlyGroup()));
 		executor.waitForCompletion();
@@ -204,7 +204,7 @@ public class UserRolesConfigDataService {
 			keyUserRegisterValue = checkUserRolesModulePD();
 		}
 
-		if (persistenceController.getConfigDataService().getConfigDefaultValuesPD()
+		if (persistenceController.getDataServices().config.getConfigDefaultValuesPD()
 				.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null || setUserRegisterVal) {
 			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
@@ -215,12 +215,12 @@ public class UserRolesConfigDataService {
 		}
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
-				persistenceController.getHostInfoCollections().getConfigServer(),
-				persistenceController.getHostInfoCollections().getDepotNamesList(),
-				persistenceController.getGroupDataService().getHostGroupIds(),
-				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
-				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
+				persistenceController.getDataServices().hostInfoCollections.getConfigServer(),
+				persistenceController.getDataServices().hostInfoCollections.getDepotNamesList(),
+				persistenceController.getDataServices().group.getHostGroupIds(),
+				persistenceController.getDataServices().group.getProductGroupsPD().keySet(),
+				persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
+				persistenceController.getDataServices().config.getConfigOptionsPD()).produce();
 
 		checkPermissions();
 
@@ -231,7 +231,7 @@ public class UserRolesConfigDataService {
 
 	private boolean isUserRegisterActivated() {
 		boolean result = false;
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 		// dont do anything if we have not got the config
 		if (serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) != null
@@ -246,7 +246,7 @@ public class UserRolesConfigDataService {
 		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
 				Boolean.class);
 		if (Boolean.TRUE.equals(keyUserRegisterValue)
-				&& !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+				&& !persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			keyUserRegisterValue = false;
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
 			SwingUtilities.invokeLater(this::callOpsiLicenseMissingText);
@@ -275,7 +275,8 @@ public class UserRolesConfigDataService {
 
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
-		boolean withUserRoles = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES);
+		boolean withUserRoles = persistenceController.getDataServices().module
+				.isOpsiModuleActive(OpsiModule.USER_ROLES);
 		Logging.info(this, "setAgainUserRegistration, userRoles can be used ", withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
@@ -346,7 +347,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkServerAccessPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 
 		// variable for simplifying the use of the map
@@ -381,7 +382,7 @@ public class UserRolesConfigDataService {
 	private void checkKeyPermission(Map<String, List<Object>> serverPropertyMap, String configKey,
 			CacheIdentifier cacheIdentifier) {
 		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+				&& persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> items = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(cacheIdentifier, items.get(0));
@@ -394,7 +395,7 @@ public class UserRolesConfigDataService {
 	private void checkTerminalPermissions() {
 		Logging.debug(this, "checkTerminalPermissions");
 
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 
 		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE,
@@ -407,7 +408,7 @@ public class UserRolesConfigDataService {
 
 		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
 		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+				&& persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, "checkPermissions value:", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
@@ -417,12 +418,12 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkFeaturesPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 		String configKey = userPartPD() + UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN;
 
 		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+				&& persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, forbiddenItems);
@@ -432,13 +433,13 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkCreateClientPermission() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 		String configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		Logging.info(this, " checkPermissions key ", configKey);
 
 		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+				&& persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
@@ -462,7 +463,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkDepotPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 		String configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
@@ -480,7 +481,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkHostGroupPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 
 		String configKeyUseList = userPartPD()
@@ -502,7 +503,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkProductPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 
 		String configKeyUseList = userPartPD()
@@ -515,7 +516,7 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productGroupsFullPermission);
 
 		// Add subgroups of permitted groups to permitted groups
-		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
+		Map<String, Map<String, String>> productGroups = persistenceController.getDataServices().group
 				.getProductGroupsPD();
 		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
 			if (!productGroupsPermitted.contains(groupEntry.getKey())
@@ -576,7 +577,7 @@ public class UserRolesConfigDataService {
 			return applyUserSpecializedConfig;
 		}
 
-		applyUserSpecializedConfig = persistenceController.getModuleDataService()
+		applyUserSpecializedConfig = persistenceController.getDataServices().module
 				.isOpsiModuleActive(OpsiModule.USER_ROLES) && hasKeyUserRegisterValuePD();
 		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
 		Logging.info(this, "applyUserSpecializedConfig initialized, ", applyUserSpecializedConfig);
@@ -622,10 +623,10 @@ public class UserRolesConfigDataService {
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 
 		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add(persistenceController.getConfigDataService().getOpsiDefaultDomainPD());
+		defaultValues.add(persistenceController.getDataServices().config.getOpsiDefaultDomainPD());
 
 		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(persistenceController.getConfigDataService().getOpsiDefaultDomainPD());
+		possibleValues.add(persistenceController.getDataServices().config.getOpsiDefaultDomainPD());
 
 		item.put("ident", OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
 		item.put("description", "saved domains for creating clients");
@@ -793,7 +794,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private boolean checkStandardConfigs() {
-		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
+		boolean result = persistenceController.getDataServices().config.getConfigOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {
@@ -825,11 +826,11 @@ public class UserRolesConfigDataService {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
 					CONFIGED_WORKBENCH_KEY);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
-					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
+					persistenceController.getDataServices().config.getConfigedWorkbenchDefaultValuePD(),
 					"default path to opsiproducts"));
 		} else {
 			String workbenchDefaultValue = configDefaultValues.get(CONFIGED_WORKBENCH_KEY).isEmpty()
-					? persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD()
+					? persistenceController.getDataServices().config.getConfigedWorkbenchDefaultValuePD()
 					: (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0);
 			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ", workbenchDefaultValue);
 
@@ -838,7 +839,7 @@ public class UserRolesConfigDataService {
 						workbenchDefaultValue, "default path to opsiproducts"));
 			}
 
-			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchDefaultValue);
+			persistenceController.getDataServices().config.setConfigedWorkbenchDefaultValuePD(workbenchDefaultValue);
 		}
 
 		// configuration of opsiclientd extra events

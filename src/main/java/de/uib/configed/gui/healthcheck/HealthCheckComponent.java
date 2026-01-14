@@ -336,7 +336,7 @@ public class HealthCheckComponent extends
 
 	private void saveDiagnosticDataToFile() {
 		File diagnosticDataFile = new File(getDirectoryLocation(), Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
-		JSONObject jo = new JSONObject(persistenceController.getHealthDataService().getDiagnosticDataPD());
+		JSONObject jo = new JSONObject(persistenceController.getDataServices().health.getDiagnosticDataPD());
 		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
 	}
 

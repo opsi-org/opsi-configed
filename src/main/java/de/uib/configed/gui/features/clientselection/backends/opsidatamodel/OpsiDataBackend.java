@@ -358,25 +358,25 @@ public final class OpsiDataBackend {
 
 		// take always the current host infos
 
-		clientMaps = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
+		clientMaps = persistenceController.getDataServices().hostInfoCollections.getMapOfPCInfoMaps();
 		Logging.info(this, "client maps size ", clientMaps.size());
 
 		if (groups == null || reloadRequested) {
-			groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+			groups = persistenceController.getDataServices().group.getFObject2GroupsPD();
 		}
 
 		if (superGroups == null || reloadRequested) {
-			superGroups = persistenceController.getHostInfoCollections().getFNode2TreeparentsPD();
+			superGroups = persistenceController.getDataServices().hostInfoCollections.getFNode2TreeparentsPD();
 		}
 
 		if (clientsConnectedByMessagebus == null || reloadRequested) {
-			clientsConnectedByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
+			clientsConnectedByMessagebus = persistenceController.getDataServices().host.getMessagebusConnectedClients();
 		}
 
 		Set<String> clientNames = clientMaps.keySet();
 
 		if (hasSoftware) {
-			softwareMap = persistenceController.getProductDataService().getMapOfProductStatesAndActions(clientNames);
+			softwareMap = persistenceController.getDataServices().product.getMapOfProductStatesAndActions(clientNames);
 			Logging.debug(this, "getClients softwareMap ");
 		}
 
@@ -501,7 +501,7 @@ public final class OpsiDataBackend {
 	}
 
 	private void getHardwareOnClient(Set<String> clientNames) {
-		hardwareOnClient = persistenceController.getHardwareDataService().getHardwareOnClientPD();
+		hardwareOnClient = persistenceController.getDataServices().hardware.getHardwareOnClientPD();
 		clientToHardware = new HashMap<>();
 		for (String clientName : clientNames) {
 			clientToHardware.put(clientName, new LinkedList<>());
@@ -520,15 +520,15 @@ public final class OpsiDataBackend {
 		if (!hasSwAudit) {
 			return new HashMap<>();
 		} else {
-			return persistenceController.getSoftwareDataService().getSoftwareAuditOnClients(clientNames);
+			return persistenceController.getDataServices().software.getSoftwareAuditOnClients(clientNames);
 		}
 	}
 
 	private void getHardwareConfig() {
 		String locale = Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry();
 		Logging.debug(this, locale);
-		hwConfig = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD("en_");
-		hwConfigLocalized = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD(locale);
+		hwConfig = persistenceController.getDataServices().hardware.getOpsiHWAuditConfPD("en_");
+		hwConfigLocalized = persistenceController.getDataServices().hardware.getOpsiHWAuditConfPD(locale);
 		Logging.debug(this, "", hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();

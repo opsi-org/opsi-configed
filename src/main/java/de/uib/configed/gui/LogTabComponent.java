@@ -145,7 +145,7 @@ public class LogTabComponent extends LogPaneComponent {
 		Map<String, String> logFiles = new HashMap<>();
 		String[] idents = Utils.getLogTypes();
 		for (String ident : idents) {
-			String logfile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
+			String logfile = PersistenceControllerFactory.getPersistenceController().getDataServices().log
 					.getLogfile(configedMain.getSelectedClients().get(0), ident);
 			if (logfile.split("\n").length > 1) {
 				logFiles.put(ident, logfile);

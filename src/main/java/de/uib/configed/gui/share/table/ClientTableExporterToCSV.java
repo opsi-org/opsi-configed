@@ -50,7 +50,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 
 	@Override
 	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
-		Map<String, HostInfo> clientInfos = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps();
+		Map<String, HostInfo> clientInfos = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfAllPCInfoMaps();
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			if (!theTable.isRowSelected(rowI) && selectedOnly) {
 				continue;
@@ -79,7 +80,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private String getGroupsValue(String clientName) {
-		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+		Map<String, Set<String>> fObject2Groups = persistenceController.getDataServices().group.getFObject2GroupsPD();
 
 		// We need to add an empty set if there are no groups
 		if (fObject2Groups.containsKey(clientName)) {

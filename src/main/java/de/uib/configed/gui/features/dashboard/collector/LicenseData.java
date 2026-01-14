@@ -40,7 +40,7 @@ public final class LicenseData {
 			return;
 		}
 
-		Map<String, LicenseContractEntry> licenseContracts = persistenceController.getLicenseDataService()
+		Map<String, LicenseContractEntry> licenseContracts = persistenceController.getDataServices().license
 				.getLicenseContractsPD();
 
 		if (licenseContracts.isEmpty()) {
@@ -76,7 +76,7 @@ public final class LicenseData {
 		expiredLicenses.clear();
 
 		NavigableMap<String, NavigableSet<String>> expiredLicenseContracts = persistenceController
-				.getLicenseDataService().getLicenseContractsToNotifyPD();
+				.getDataServices().license.getLicenseContractsToNotifyPD();
 
 		if (expiredLicenseContracts.isEmpty()) {
 			return;

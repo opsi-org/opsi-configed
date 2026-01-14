@@ -235,8 +235,8 @@ public class MenuBarController {
 		JMenu jMenuExtras = new JMenu(Configed.getResourceValue("MainFrame.jMenuExtras"));
 
 		JMenuItem jMenuWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnGroups"));
-		jMenuWorkOnGroups
-				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
+		jMenuWorkOnGroups.setEnabled(
+				persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
 		jMenuWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JMenuItem jMenuWorkOnProducts = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnProducts"));
@@ -246,7 +246,7 @@ public class MenuBarController {
 		jMenuExtras.add(jMenuWorkOnProducts);
 
 		JMenuItem jMenuFrameMsgOfTheDay = null;
-		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
+		List<Object> forbiddenItemsMOTD = persistenceController.getDataServices().userRoles.getForbiddenMOTD();
 		boolean forbiddenMOTD = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE)
 				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 
@@ -415,7 +415,7 @@ public class MenuBarController {
 	}
 
 	public void saveConfigurationsSetEnabled(boolean enabled) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
 				&& enabled) {
 			return;
 		}

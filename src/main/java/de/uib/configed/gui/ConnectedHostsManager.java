@@ -31,7 +31,7 @@ public class ConnectedHostsManager implements MessagebusListener {
 	public ConnectedHostsManager(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
-		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
+		connectedHostsByMessagebus = persistenceController.getDataServices().host.getMessagebusConnectedClients();
 	}
 
 	public boolean isHostConnected(String hostId) {

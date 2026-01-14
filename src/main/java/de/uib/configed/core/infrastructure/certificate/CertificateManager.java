@@ -226,7 +226,7 @@ public final class CertificateManager {
 		File certificateFile = getCertificates();
 
 		if (certificateFile != null) {
-			String certificateContent = PersistenceControllerFactory.getPersistenceController().getUserDataService()
+			String certificateContent = PersistenceControllerFactory.getPersistenceController().getDataServices().user
 					.getCACerts();
 
 			Collection<? extends Certificate> tmpCertificates = createTmpCertificate(certificateContent);

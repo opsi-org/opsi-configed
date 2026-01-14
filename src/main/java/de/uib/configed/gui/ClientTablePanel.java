@@ -86,7 +86,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 			return;
 		}
 
-		if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
+		if (persistenceController.getDataServices().hostInfoCollections.getCountClients() == 0) {
 			setMissingDataPanel();
 		} else {
 			scrollpane.getViewport().setView(clientTable);

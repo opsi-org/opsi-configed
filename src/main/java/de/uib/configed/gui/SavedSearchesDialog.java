@@ -139,7 +139,7 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 
 	// overwrite to implement persistency
 	private void removeSavedSearch(String name) {
-		persistenceController.getConfigDataService().deleteSavedSearch(name);
+		persistenceController.getDataServices().config.deleteSavedSearch(name);
 
 		manager.removeSearch(name);
 	}
@@ -154,7 +154,7 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		Logging.info(this, "resetModel");
 		model.removeAllElements();
 
-		SavedSearches savedSearches = persistenceController.getConfigDataService().getSavedSearchesPD();
+		SavedSearches savedSearches = persistenceController.getDataServices().config.getSavedSearchesPD();
 		Set<String> nameSet = manager.getSavedSearchesNames();
 		Map<String, String> descMap = new TreeMap<>();
 

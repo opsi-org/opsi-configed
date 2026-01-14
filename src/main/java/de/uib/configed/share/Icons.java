@@ -174,10 +174,10 @@ public final class Icons {
 				.getPersistenceController();
 
 		Color dotColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+		if (persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
 			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					persistenceController.getDataServices().module.getOpsiLicensingInfoOpsiAdminPD(),
+					persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 					!OpsiLicensing.isExtendedView());
 
 			dotColor = switch (licensingInfoMap.getWarningLevel()) {

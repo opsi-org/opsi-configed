@@ -28,7 +28,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 	public OpsiDataSoftwareOperation(AbstractSelectOperation operation) {
 		super(operation);
 
-		productDefaultStates = persistenceController.getProductDataService().getProductDefaultStatesPD();
+		productDefaultStates = persistenceController.getDataServices().product.getProductDefaultStatesPD();
 		productsWithDefaultValues = new HashSet<>(productDefaultStates.keySet());
 	}
 

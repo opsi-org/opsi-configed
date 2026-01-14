@@ -43,16 +43,16 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	protected void createTree() {
 		List<String> depotIds = configedMain.getSelectedDepots();
-		Set<String> productIds = persistenceController.getProductDataService().getAllLocalbootProductNames(depotIds);
-		productIds.addAll(persistenceController.getProductDataService().getAllNetbootProductNames(depotIds));
+		Set<String> productIds = persistenceController.getDataServices().product.getAllLocalbootProductNames(depotIds);
+		productIds.addAll(persistenceController.getDataServices().product.getAllNetbootProductNames(depotIds));
 
 		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
 
-		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
+		Map<String, Map<String, String>> productGroups = persistenceController.getDataServices().group
 				.getProductGroupsPD();
 
-		if (!persistenceController.getUserRolesConfigDataService().hasProductGroupsFullPermissionPD()) {
-			Set<String> permittedProductGroups = persistenceController.getUserRolesConfigDataService()
+		if (!persistenceController.getDataServices().userRoles.hasProductGroupsFullPermissionPD()) {
+			Set<String> permittedProductGroups = persistenceController.getDataServices().userRoles
 					.getPermittedProductGroupsPD();
 			productGroups.keySet().retainAll(permittedProductGroups);
 		}
@@ -84,7 +84,7 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		Map<String, Set<String>> allowedGroups2Members = persistenceController.getGroupDataService()
+		Map<String, Set<String>> allowedGroups2Members = persistenceController.getDataServices().group
 				.getFProductGroup2Members();
 		allowedGroups2Members.keySet().retainAll(nodeMap.keySet());
 
@@ -128,7 +128,7 @@ public class ProductTree extends AbstractGroupTree {
 		if (getChildWithUserObjectString(objectID, newParentNode) == null) {
 			newParentNode.add(new DefaultMutableTreeNode(objectID, false));
 
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID,
+			persistenceController.getDataServices().group.addObject2Group(objectID, newParentID,
 					Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 
 			model.nodeStructureChanged(newParentNode);

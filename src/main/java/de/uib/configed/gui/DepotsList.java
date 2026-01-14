@@ -134,7 +134,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		private void selectAllowedDepots(int index0, int index1) {
 			for (int i = index0; i <= index1; i++) {
 				Object value = getModel().getElementAt(i);
-				if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 						.hasDepotPermission((String) value)) {
 					super.setSelectionInterval(index0, index1);
 				}

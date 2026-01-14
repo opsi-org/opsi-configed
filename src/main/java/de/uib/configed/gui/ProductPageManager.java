@@ -71,7 +71,7 @@ public class ProductPageManager implements MessagebusListener {
 				clientConfiguration.getPanelLocalbootProductSettings().getProductTable(),
 				clientConfiguration.getPanelNetbootProductSettings().getProductTable());
 
-		possibleActions = persistenceController.getProductDataService()
+		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
 
 		Messagebus.getInstance().getWebSocket().registerListener(this);
@@ -99,14 +99,14 @@ public class ProductPageManager implements MessagebusListener {
 			return;
 		}
 
-		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getProductDataService()
+		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getDataServices().product
 				.getMapOfProductStatesAndActions(configedMain.getSelectedClients(), attributes, productServerString);
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
 		panelProductSettings.clearEditing();
 
 		Logging.debug(this, "setProductsPage,  depotRepresentative:", configedMain.getDepotRepresentative());
-		possibleActions = persistenceController.getProductDataService()
+		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
 
 		// we retrieve the properties for all clients and products
@@ -115,7 +115,7 @@ public class ProductPageManager implements MessagebusListener {
 		// listener is triggered
 		// which loads the productProperties for each client separately
 
-		persistenceController.getProductDataService()
+		persistenceController.getDataServices().product
 				.retrieveProductPropertiesPD(configedMain.getClientTablePanel().getClientTable().getSelectedSet());
 
 		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
@@ -126,10 +126,10 @@ public class ProductPageManager implements MessagebusListener {
 
 		Set<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = persistenceController.getProductDataService()
+			productNames = persistenceController.getDataServices().product
 					.getAllLocalbootProductNames(configedMain.getDepotRepresentative());
 		} else {
-			productNames = persistenceController.getProductDataService()
+			productNames = persistenceController.getDataServices().product
 					.getAllNetbootProductNames(configedMain.getDepotRepresentative());
 		}
 
@@ -139,7 +139,7 @@ public class ProductPageManager implements MessagebusListener {
 				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(
 				configedMain.getSelectedClients(), changedProductStates, productNames, statesAndActions,
-				possibleActions, persistenceController.getProductDataService()
+				possibleActions, persistenceController.getDataServices().product
 						.getProductGlobalInfosPD(configedMain.getDepotRepresentative()),
 				displayFields);
 		panelProductSettings.setTableModel(istmForSelectedClients);
@@ -177,7 +177,7 @@ public class ProductPageManager implements MessagebusListener {
 
 	private List<String> getLocalbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
+		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
 				.getProductOnClientsDisplayFieldsLocalbootProducts().entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
@@ -209,7 +209,7 @@ public class ProductPageManager implements MessagebusListener {
 	private List<String> getNetbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
 
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
+		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
 				.getProductOnClientsDisplayFieldsNetbootProducts().entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
@@ -276,8 +276,10 @@ public class ProductPageManager implements MessagebusListener {
 		// all selected clients
 
 		Logging.info(this, "collectTheProductProperties for ", productEdited);
-		productProperties = configedMain.getSelectedClients().stream().map(clientId -> persistenceController
-				.getProductDataService().getProductPropertiesPD(clientId, productEdited)).toList();
+		productProperties = configedMain.getSelectedClients().stream()
+				.map(clientId -> persistenceController.getDataServices().product.getProductPropertiesPD(clientId,
+						productEdited))
+				.toList();
 
 		mergedProductProperties = ConfigedUtilityMethods.mergeMaps(productProperties);
 	}

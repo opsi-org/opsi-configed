@@ -63,8 +63,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 
 		initComponents();
 		defineLayout();
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			disableComponents(true);
 		} else {
 			disableComponents(disabled);

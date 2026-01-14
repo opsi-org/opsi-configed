@@ -18,7 +18,7 @@ public class HealthCheckDataLoader extends SwingWorker<Void, Void> {
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		persistenceController.getHealthDataService().retrieveHealthDataPD();
+		persistenceController.getDataServices().health.retrieveHealthDataPD();
 		return null;
 	}
 

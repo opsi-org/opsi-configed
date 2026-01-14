@@ -120,8 +120,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
 		Icons.addIntellijIconToMenuItem(multiLineEditingItem, "edit");
 		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
-		multiLineEditingItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		multiLineEditingItem
+				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 
 		if (keylistExtendible) {
 			if (popupMenu.getComponentCount() > 0) {
@@ -131,15 +132,17 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			popupItemAddStringListEntry = new JMenuItem(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 			popupItemAddStringListEntry.addActionListener(actionEvent -> new CreateConfigDialog(this));
-			popupItemAddStringListEntry.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			popupItemAddStringListEntry
+					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 			popupMenu.add(popupItemAddStringListEntry);
 
 			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
 			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
-			popupItemDeleteEntry0.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			popupItemDeleteEntry0
+					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 
 			popupMenu.add(popupItemDeleteEntry0);
 			// the menu item seems to work only for one menu
@@ -184,13 +187,15 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		if (setDefaultValue != null) {
-			setDefaultValue.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			setDefaultValue.setEnabled(
+					row != -1 && !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 		}
 
 		if (popupRemoveSpecificEntry != null) {
-			popupRemoveSpecificEntry.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			popupRemoveSpecificEntry.setEnabled(
+					row != -1 && !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 		}
 	}
 

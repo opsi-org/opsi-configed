@@ -97,8 +97,8 @@ public class WinProductUploadWorker extends SwingWorker<Void, Void> {
 	private void handleProductKeyUpdate() {
 		List<String> values = Collections.singletonList(ctx.productKey);
 
-		Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(
-				persistenceController.getHostInfoCollections().getConfigServer(), ctx.winProduct);
+		Map<String, Object> propsMap = persistenceController.getDataServices().product.getProductPropertiesPD(
+				persistenceController.getDataServices().hostInfoCollections.getConfigServer(), ctx.winProduct);
 		Logging.debug(this, " getProductproperties ", propsMap);
 
 		String oldProductKey = getOldProductKey(propsMap);
@@ -106,7 +106,7 @@ public class WinProductUploadWorker extends SwingWorker<Void, Void> {
 		if (!oldProductKey.equals(ctx.productKey) && confirmProductKeyChange()) {
 			setWaitCursor(true);
 			Logging.info(this, "setCommonProductPropertyValue ", ctx.depot, ", ", ctx.winProduct, ", ", values);
-			persistenceController.getProductDataService().setCommonProductPropertyValue(
+			persistenceController.getDataServices().product.setCommonProductPropertyValue(
 					Collections.singleton(ctx.depot), ctx.winProduct, "productkey", values);
 		}
 	}
