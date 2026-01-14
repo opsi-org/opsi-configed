@@ -132,13 +132,13 @@ public final class LicensingInfoMap {
 		customerNames = produceCustomerNameSet();
 	}
 
-	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,
+	public static LicensingInfoMap getInstance(Map<String, Object> licensingInfo, Map<String, List<Object>> configVals,
 			boolean reduced) {
 		Logging.info("reduced, instance here ", reduced, ", ", instance);
 
 		if (instance == null || instanceComplete == null || instanceReduced == null) {
-			instanceComplete = new LicensingInfoMap(jsonObj, configVals, false);
-			instanceReduced = new LicensingInfoMap(jsonObj, configVals, true);
+			instanceComplete = new LicensingInfoMap(licensingInfo, configVals, false);
+			instanceReduced = new LicensingInfoMap(licensingInfo, configVals, true);
 		}
 
 		if (reduced) {
