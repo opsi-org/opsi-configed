@@ -25,7 +25,7 @@ import de.uib.configed.share.logging.Logging;
 public abstract class AbstractPOJOExecutioner {
 	private final AtomicReference<ConnectionState> conStat = new AtomicReference<>();
 
-	public abstract Map<String, Object> retrieveResponse(RPCMethodName methodname, Object... parameters);
+	public abstract Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters);
 
 	public ConnectionState getConnectionState() {
 		return conStat.get();

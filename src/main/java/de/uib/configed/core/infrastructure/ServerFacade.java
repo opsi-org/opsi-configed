@@ -399,7 +399,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 */
 	@Override
 	@SuppressWarnings("java:S1168")
-	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object... parameters) {
+	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters) {
 		Logging.info(this, "retrieveResponse started");
 
 		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
