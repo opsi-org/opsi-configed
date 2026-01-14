@@ -7,7 +7,6 @@
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 import de.uib.configed.core.domain.serverdata.reload.ReloadDispatcher;
@@ -25,12 +24,10 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadDispatcher;
  * {@link AbstractReloadHandler} is based on event bus design pattern.
  */
 public abstract class AbstractReloadHandler {
-	protected CacheManager cacheManager;
 	protected DataServices dataServices;
 
 	AbstractReloadHandler(DataServices dataServices) {
 		this.dataServices = dataServices;
-		cacheManager = CacheManager.getInstance();
 	}
 
 	/**

@@ -16,8 +16,8 @@ public class StatisticsDataReloadHandler extends AbstractReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
-		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
 		dataServices.software.retrieveLicenseStatisticsPD();
 	}
 }

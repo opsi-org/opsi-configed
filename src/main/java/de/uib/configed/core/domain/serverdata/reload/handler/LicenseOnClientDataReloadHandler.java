@@ -16,9 +16,9 @@ public class LicenseOnClientDataReloadHandler extends AbstractReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
-		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSE_USAGE);
-		cacheManager.clearCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSE_USAGE);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST);
 		dataServices.license.retrieveLicensesUsagePD();
 	}
 }

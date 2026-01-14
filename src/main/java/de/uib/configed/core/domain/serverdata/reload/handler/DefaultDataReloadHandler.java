@@ -33,31 +33,31 @@ public class DefaultDataReloadHandler extends AbstractReloadHandler {
 
 	private void registerHandlers() {
 		eventHandlers.put(CacheIdentifier.LICENSE_USAGE.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
 			dataServices.license.retrieveLicenseUsagesPD();
 		});
 		eventHandlers.put(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 			dataServices.hardware.retrieveHardwareOnClientPD();
 		});
 		eventHandlers.put(CacheIdentifier.FHOST_TO_GROUPS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
 			dataServices.group.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
 					CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 		});
 		eventHandlers.put(CacheIdentifier.HOST_GROUPS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
 			dataServices.group.retrieveHostGroupsPD();
 		});
 		eventHandlers.put(CacheIdentifier.HOST_CONFIGS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
 			dataServices.config.retrieveHostConfigsPD();
 		});
 		eventHandlers.put(CacheIdentifier.PRODUCT_PROPERTIES.toString(),
-				(Void v) -> cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
-		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> cacheManager.clearForReload());
+				(Void v) -> dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
+		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> dataServices.cacheManager.clearForReload());
 		eventHandlers.put(CacheIdentifier.LICENSES.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.LICENSES);
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSES);
 			dataServices.license.retrieveLicensesPD();
 		});
 	}

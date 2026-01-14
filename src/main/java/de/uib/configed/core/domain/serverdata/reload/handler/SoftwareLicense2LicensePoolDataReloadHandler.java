@@ -16,8 +16,8 @@ public class SoftwareLicense2LicensePoolDataReloadHandler extends AbstractReload
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USABILITIES);
-		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_USABILITIES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
 		dataServices.license.retrieveSoftwareLicense2LicensePoolPD();
 	}
 }

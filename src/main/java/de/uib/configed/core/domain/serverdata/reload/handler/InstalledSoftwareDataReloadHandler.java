@@ -16,11 +16,11 @@ public class InstalledSoftwareDataReloadHandler extends AbstractReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
-		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
-		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
-		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
-		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
 		dataServices.software.retrieveInstalledSoftwareInformationPD();
 	}
 }

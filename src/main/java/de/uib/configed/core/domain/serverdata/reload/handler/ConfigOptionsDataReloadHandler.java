@@ -16,10 +16,10 @@ public class ConfigOptionsDataReloadHandler extends AbstractReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
-		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
-		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
-		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
 		dataServices.config.retrieveConfigOptionsPD();
 	}
 }

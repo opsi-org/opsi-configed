@@ -16,8 +16,8 @@ public class LicensePoolDataReloadHandler extends AbstractReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOLS);
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOLS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT);
 		dataServices.license.retrieveLicensePoolsPD();
 	}
 }

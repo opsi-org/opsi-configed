@@ -16,8 +16,8 @@ public class LicenseContractDataReloadHandler extends AbstractReloadHandler {
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
 		dataServices.license.retrieveLicenseContractsPD();
 	}
 }

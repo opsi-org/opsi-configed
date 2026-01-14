@@ -18,13 +18,13 @@ public class DepotChangeReloadHandler extends AbstractReloadHandler {
 	@Override
 	public void handle(String event) {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS);
-		cacheManager.clearCachedData(CacheIdentifier.POSSIBLE_ACTIONS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.POSSIBLE_ACTIONS);
 		executor.runInParallel(() -> dataServices.product.checkProductGlobalInfosPD(dataServices.depot.getDepot()));
 
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_IDS);
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_IDS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
 		executor.runInParallel(dataServices.product::retrieveProductIdsAndDefaultStatesPD);
 
 		executor.waitForCompletion();

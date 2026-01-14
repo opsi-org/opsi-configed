@@ -18,13 +18,13 @@ public class HardwareConfDataReloadHandler extends AbstractReloadHandler {
 	@Override
 	public void handle(String event) {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
-		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
 		executor.runInParallel(dataServices.hardware::retrieveOpsiHWAuditConfPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
-		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
-		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
-		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
 		executor.runInParallel(dataServices.config::retrieveConfigOptionsPD);
 	}
 }

@@ -19,10 +19,10 @@ public class OpsiLicenseReloadHandler extends AbstractReloadHandler {
 	public void handle(String event) {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 
-		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN);
 		executor.runInParallel(dataServices.module::retrieveOpsiLicensingInfoOpsiAdminPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN);
 		executor.runInParallel(dataServices.module::retrieveOpsiLicensingInfoNoOpsiAdminPD);
 
 		executor.waitForCompletion();

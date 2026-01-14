@@ -18,17 +18,17 @@ public class DepotProductPropertiesDataReloadHandler extends AbstractReloadHandl
 	@Override
 	public void handle(String event) {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PACKAGES);
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PACKAGES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
 		executor.runInParallel(dataServices.product::retrieveProductsAllDepotsPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
 		executor.runInParallel(dataServices.product::retrieveAllProductPropertyDefinitionsPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
 		executor.runInParallel(dataServices.product::retrieveDepotProductPropertiesPD);
 
 		executor.waitForCompletion();

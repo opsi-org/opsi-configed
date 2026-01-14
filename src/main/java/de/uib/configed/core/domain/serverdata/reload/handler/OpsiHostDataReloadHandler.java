@@ -17,12 +17,12 @@ public class OpsiHostDataReloadHandler extends AbstractReloadHandler {
 	@Override
 	public void handle(String event) {
 		// This must be cleared so that the clients for the depots are updated
-		cacheManager.clearCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS);
 
 		// Both of these caches will be reloaded in the method 
 		// retrieveFNode2TreeparentsPD. That's why it should not be parallelized.
-		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
-		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
 		dataServices.hostInfoCollections.retrieveFNode2TreeparentsPD();
 	}
 }
