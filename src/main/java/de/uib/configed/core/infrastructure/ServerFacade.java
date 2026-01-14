@@ -357,26 +357,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private static Map<String, Object> createMap(RPCMethodName methodname, Object[] parameters) {
-		Map<String, Object> map = new HashMap<>();
 		List<Object> params = new ArrayList<>();
 
 		for (Object parameter : parameters) {
-			if (parameter instanceof Object[] arrayParameter) {
-				List<Object> list = Arrays.asList(arrayParameter);
-
-				params.add(list);
-			} else if (parameter instanceof Map) {
-				params.add(parameter);
-			} else {
-				params.add(parameter);
-			}
+			params.add(parameter instanceof Object[] array ? Arrays.asList(array) : parameter);
 		}
 
-		map.put("id", DEFAULT_JSON_ID);
-		map.put("method", methodname.toString());
-		map.put("params", params);
-
-		return map;
+		return Map.of("id", DEFAULT_JSON_ID, "method", methodname.toString(), "params", params);
 	}
 
 	public boolean testConnection(boolean notifyUserOfErrors) {
