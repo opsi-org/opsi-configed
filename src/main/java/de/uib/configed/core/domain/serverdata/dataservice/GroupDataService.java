@@ -21,7 +21,6 @@ import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ClientTree;
@@ -71,8 +70,8 @@ public class GroupDataService {
 		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
-		Map<String, Map<String, String>> result = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, callAttributes, callFilter), "ident",
+		Map<String, Map<String, String>> result = exec.getStringMappedObjectsByKey(RPCMethodName.GROUP_GET_OBJECTS,
+				new Object[] { callAttributes, callFilter }, "ident",
 				new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" });
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, result);
@@ -91,8 +90,8 @@ public class GroupDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 
-		List<Map<String, Object>> result = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, callAttributes, callFilter));
+		List<Map<String, Object>> result = exec.getListOfMaps(RPCMethodName.GROUP_GET_OBJECTS, callAttributes,
+				callFilter);
 
 		Map<String, Map<String, String>> hostGroups = new HashMap<>();
 
@@ -115,7 +114,7 @@ public class GroupDataService {
 			return;
 		}
 
-		List<Map<String, Object>> resultlist = exec.getListOfMaps(new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS));
+		List<Map<String, Object>> resultlist = exec.getListOfMaps(RPCMethodName.GROUP_GET_OBJECTS);
 
 		Map<String, Map<String, String>> hostGroups = new TreeMap<>();
 		Map<String, Map<String, String>> productGroups = new TreeMap<>();
@@ -196,7 +195,7 @@ public class GroupDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("groupType", groupType);
 		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, callAttributes, callFilter), "ident",
+				RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }, "ident",
 				new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
 		cacheManager.setCachedData(cacheId, projectToFunction(mappedRelations, "groupId", memberIdName));
 	}
@@ -234,8 +233,7 @@ public class GroupDataService {
 			return;
 		}
 
-		List<Map<String, Object>> resultlist = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS));
+		List<Map<String, Object>> resultlist = exec.getListOfMaps(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS);
 
 		Map<String, Set<String>> hostGroups2Members = new TreeMap<>();
 		Map<String, Set<String>> productGroups2Members = new TreeMap<>();
@@ -303,7 +301,7 @@ public class GroupDataService {
 		}
 
 		Logging.info(this, "addHosts2Group persistentGroupId ", persistentGroupId);
-		return exec.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, data));
+		return exec.doCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, data);
 	}
 
 	public boolean addHost2Groups(String objectId, List<String> groupIds) {
@@ -323,7 +321,7 @@ public class GroupDataService {
 			data.add(item);
 		}
 
-		return exec.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, data));
+		return exec.doCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, data);
 	}
 
 	public boolean addObject2Group(String objectId, String groupId, String groupType) {
@@ -334,8 +332,7 @@ public class GroupDataService {
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		Logging.debug(this, "addObject2Group persistentGroupId ", persistentGroupId);
 
-		boolean result = exec.doCall(
-				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE, groupType, persistentGroupId, objectId));
+		boolean result = exec.doCall(RPCMethodName.OBJECT_TO_GROUP_CREATE, groupType, persistentGroupId, objectId);
 
 		if (result) {
 			persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
@@ -361,7 +358,7 @@ public class GroupDataService {
 
 		boolean result = true;
 		if (!deleteItems.isEmpty()) {
-			result = exec.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS, deleteItems));
+			result = exec.doCall(RPCMethodName.OBJECT_TO_GROUP_DELETE_OBJECTS, deleteItems);
 
 			if (result) {
 				persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
@@ -378,8 +375,7 @@ public class GroupDataService {
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 
-		boolean result = exec
-				.doCall(new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_DELETE, null, persistentGroupId, objectId));
+		boolean result = exec.doCall(RPCMethodName.OBJECT_TO_GROUP_DELETE, null, persistentGroupId, objectId);
 
 		if (result) {
 			persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
@@ -415,7 +411,7 @@ public class GroupDataService {
 		map.put("description", description);
 		map.put("parentGroupId", parentId);
 
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.GROUP_CREATE_OBJECTS, map));
+		boolean result = exec.doCall(RPCMethodName.GROUP_CREATE_OBJECTS, map);
 		if (result) {
 			CacheIdentifier identifier = isHostGroup ? CacheIdentifier.HOST_GROUPS : CacheIdentifier.PRODUCT_GROUPS;
 			persistenceController.reloadData(identifier.toString());
@@ -433,7 +429,7 @@ public class GroupDataService {
 			return false;
 		}
 
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.GROUP_DELETE, groupId));
+		boolean result = exec.doCall(RPCMethodName.GROUP_DELETE, groupId);
 
 		if (result) {
 			persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
@@ -468,7 +464,7 @@ public class GroupDataService {
 
 		Logging.debug(this, "updateGroup ", parentGroupId);
 
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.GROUP_UPDATE_OBJECT, updateInfo));
+		boolean result = exec.doCall(RPCMethodName.GROUP_UPDATE_OBJECT, updateInfo);
 
 		if (result) {
 			CacheIdentifier identifier = isHostGroup ? CacheIdentifier.HOST_GROUPS : CacheIdentifier.PRODUCT_GROUPS;

@@ -14,7 +14,6 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 
 /**
@@ -51,7 +50,7 @@ public class HealthDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.HEALTH_CHECK_DATA,
-				exec.getListOfMaps(new OpsiMethodCall(RPCMethodName.SERVICE_HEALTH_CHECK)));
+				exec.getListOfMaps(RPCMethodName.SERVICE_HEALTH_CHECK));
 	}
 
 	public Map<String, Object> getDiagnosticDataPD() {
@@ -65,7 +64,7 @@ public class HealthDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.DIAGNOSTIC_DATA,
-				exec.getMapResult(new OpsiMethodCall(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA)));
+				exec.getMapResult(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA));
 	}
 
 	public boolean isHealthDataAlreadyLoaded() {

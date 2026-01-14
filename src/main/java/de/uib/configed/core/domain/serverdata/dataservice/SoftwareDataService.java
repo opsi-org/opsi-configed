@@ -35,7 +35,6 @@ import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -216,9 +215,8 @@ public class SoftwareDataService {
 		}
 
 		Logging.info(this, "retrieveAuditSoftwareXLicensePool");
-		List<Map<String, Object>> retrieved = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_GET_OBJECTS,
-						AuditSoftwareXLicensePool.SERVICE_ATTRIBUTES));
+		List<Map<String, Object>> retrieved = exec.getListOfMaps(
+				RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_GET_OBJECTS, AuditSoftwareXLicensePool.SERVICE_ATTRIBUTES);
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = new AuditSoftwareXLicensePool();
 		for (Map<String, Object> map : retrieved) {
 			auditSoftwareXLicensePool.integrateRaw(map);
@@ -302,8 +300,7 @@ public class SoftwareDataService {
 		List<Object> callAttributes = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
 				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID,
 				SWAuditEntry.IS_OPERATING_SYSTEM);
-		List<Map<String, Object>> list = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS, callAttributes));
+		List<Map<String, Object>> list = exec.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS, callAttributes);
 
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
 		NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
@@ -459,8 +456,8 @@ public class SoftwareDataService {
 
 		RPCMethodName methodName = getMethodNameForLicenseType(licenseType);
 
-		if (exec.doCall(new OpsiMethodCall(methodName, softwareLicenseId, licenseContractId, maxInstallations,
-				boundToHost, expirationDate))) {
+		if (exec.doCall(methodName, softwareLicenseId, licenseContractId, maxInstallations, boundToHost,
+				expirationDate)) {
 			return softwareLicenseId;
 		} else {
 			Logging.error(this, "could not execute ", methodName, "  with softwareLicenseId ", softwareLicenseId,
@@ -489,7 +486,7 @@ public class SoftwareDataService {
 			return false;
 		}
 
-		return exec.doCall(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE, softwareLicenseId));
+		return exec.doCall(RPCMethodName.SOFTWARE_LICENSE_DELETE, softwareLicenseId);
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
@@ -498,8 +495,8 @@ public class SoftwareDataService {
 		}
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& !exec.doCall(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
-						softwareLicenseId, licensePoolId, licenseKey))) {
+				&& !exec.doCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE, softwareLicenseId, licensePoolId,
+						licenseKey)) {
 			Logging.error(this, "cannot create softwarelicense to licensepool relation");
 			return "";
 		}
@@ -513,8 +510,7 @@ public class SoftwareDataService {
 			return false;
 		}
 
-		return exec.doCall(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE, softwareLicenseId,
-				licensePoolId));
+		return exec.doCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE, softwareLicenseId, licensePoolId);
 	}
 
 	public void setFSoftware2LicensePool(String softwareIdent, String licensePoolId) {
@@ -541,8 +537,7 @@ public class SoftwareDataService {
 			deleteItems.add(item);
 		}
 
-		boolean result = exec
-				.doCall(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS, deleteItems));
+		boolean result = exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS, deleteItems);
 
 		Map<String, String> fSoftware2LicensePool = cacheManager
 				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
@@ -661,8 +656,7 @@ public class SoftwareDataService {
 			Logging.info(this, "deleteItems ", deleteItems);
 
 			if (!deleteItems.isEmpty()) {
-				result = exec.doCall(
-						new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS, deleteItems));
+				result = exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS, deleteItems);
 			}
 
 			if (!result) {
@@ -684,8 +678,7 @@ public class SoftwareDataService {
 
 		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems ", createItems);
 
-		return exec
-				.doCall(new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, createItems));
+		return exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, createItems);
 	}
 
 	// we have got a SW from software table, therefore we do not serve the unknown
@@ -728,8 +721,7 @@ public class SoftwareDataService {
 
 			readyObjects.add(item);
 
-			ok = exec.doCall(
-					new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, readyObjects));
+			ok = exec.doCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS, readyObjects);
 		}
 
 		Logging.info(this, "editPool2AuditSoftware ok ", ok);
@@ -989,8 +981,8 @@ public class SoftwareDataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clients);
 
-		List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter));
+		List<Map<String, Object>> softwareAuditOnClients = exec
+				.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
 		Logging.info(this, "getAuditSoftwareOnClients, finished a request, map size ", softwareAuditOnClients.size());
 
 		return softwareAuditOnClients;

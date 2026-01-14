@@ -25,7 +25,6 @@ import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.ExtendedDate;
@@ -101,8 +100,8 @@ public class ModuleDataService {
 		}
 
 		if (isOpsiUserAdminPD()) {
-			Map<String, Object> licencingInfoOpsiAdmin = exec.retrieveResponse(
-					new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, true, false, true, false));
+			Map<String, Object> licencingInfoOpsiAdmin = exec.retrieveResponse(RPCMethodName.BACKEND_GET_LICENSING_INFO,
+					true, false, true, false);
 			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, licencingInfoOpsiAdmin);
 		}
 	}
@@ -115,8 +114,7 @@ public class ModuleDataService {
 
 	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
 		if (!cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
-			Map<String, Object> licensingInfoNoOpsiAdmin = exec
-					.getMapResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO));
+			Map<String, Object> licensingInfoNoOpsiAdmin = exec.getMapResult(RPCMethodName.BACKEND_GET_LICENSING_INFO);
 			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, licensingInfoNoOpsiAdmin);
 		}
 	}
@@ -472,8 +470,7 @@ public class ModuleDataService {
 	}
 
 	private void retrieveIsOpsiUserAdminPD() {
-		Map<String, Object> json = exec
-				.retrieveResponse(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN));
+		Map<String, Object> json = exec.retrieveResponse(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN);
 
 		Boolean isOpsiUserAdmin = null;
 		if (json.containsKey("result") && json.get("result") != null) {
@@ -492,8 +489,7 @@ public class ModuleDataService {
 			return cacheManager.getCachedData(CacheIdentifier.OPSI_INFORMATION, Map.class);
 		}
 
-		Map<String, Object> opsiInformation = exec
-				.getMapResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO));
+		Map<String, Object> opsiInformation = exec.getMapResult(RPCMethodName.BACKEND_GET_LICENSING_INFO);
 
 		cacheManager.setCachedData(CacheIdentifier.OPSI_INFORMATION, opsiInformation);
 		return opsiInformation;

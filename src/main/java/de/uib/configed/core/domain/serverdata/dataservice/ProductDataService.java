@@ -29,7 +29,6 @@ import de.uib.configed.core.domain.serverdata.Object2Product2VersionList;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.ConfigOption;
@@ -181,8 +180,7 @@ public class ProductDataService {
 
 		Logging.info(this, "retrieveProductsAllDepotsPD");
 
-		List<Map<String, Object>> packages = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_OBJECTS));
+		List<Map<String, Object>> packages = exec.getListOfMaps(RPCMethodName.PRODUCT_ON_DEPOT_GET_OBJECTS);
 
 		Map<String, TreeSet<OpsiPackage>> depot2Packages = new HashMap<>();
 		Object2Product2VersionList depot2NetbootProducts = new Object2Product2VersionList();
@@ -297,8 +295,7 @@ public class ProductDataService {
 
 		Logging.debug(this, "retrieveProductInfos callAttributes ", attribs);
 
-		List<Map<String, Object>> retrievedList = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.PRODUCT_GET_OBJECTS, attribs));
+		List<Map<String, Object>> retrievedList = exec.getListOfMaps(RPCMethodName.PRODUCT_GET_OBJECTS, attribs);
 
 		Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = new HashMap<>();
 
@@ -335,8 +332,7 @@ public class ProductDataService {
 		}
 
 		Map<String, Map<String, Map<String, ConfigOption>>> depot2Product2PropertyDefinitions = new HashMap<>();
-		List<Map<String, Object>> retrieved = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_GET_OBJECTS));
+		List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_GET_OBJECTS);
 
 		for (Map<String, Object> retrievedMap : retrieved) {
 			String propertyId = (String) retrievedMap.get("propertyId");
@@ -385,8 +381,7 @@ public class ProductDataService {
 
 		Map<String, Map<String, List<Map<String, String>>>> depot2product2dependencyInfos = new HashMap<>();
 
-		List<Map<String, Object>> retrievedList = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.PRODUCT_DEPENDENCY_GET_OBJECTS));
+		List<Map<String, Object>> retrievedList = exec.getListOfMaps(RPCMethodName.PRODUCT_DEPENDENCY_GET_OBJECTS);
 
 		for (Map<String, Object> dependencyItem : retrievedList) {
 			String productId = "" + dependencyItem.get(OpsiPackage.DB_KEY_PRODUCT_ID);
@@ -474,8 +469,7 @@ public class ProductDataService {
 			Map<String, Object> callFilter = new HashMap<>();
 			callFilter.put("objectId", newClients);
 
-			result = exec.getListOfMaps(
-					new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, callAttributes, callFilter));
+			result = exec.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, callAttributes, callFilter);
 		}
 
 		return result;
@@ -842,8 +836,8 @@ public class ProductDataService {
 		callFilter.put("objectId", clients);
 		callFilter.put("productId", product);
 		callFilter.put("propertyId", property);
-		List<Map<String, Object>> properties = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, callAttributes, callFilter));
+		List<Map<String, Object>> properties = exec.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS,
+				callAttributes, callFilter);
 		Set<String> resultSet = new HashSet<>();
 		boolean starting = true;
 		for (Map<String, Object> map : properties) {
@@ -879,7 +873,7 @@ public class ProductDataService {
 
 		List<Map<String, String>> result = new ArrayList<>();
 
-		for (Map<String, Object> m : exec.getListOfMaps(new OpsiMethodCall(methodName, attributes, callFilter))) {
+		for (Map<String, Object> m : exec.getListOfMaps(methodName, attributes, callFilter)) {
 			result.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 
@@ -901,8 +895,7 @@ public class ProductDataService {
 
 		RPCMethodName methodName = !attributes.isEmpty() ? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
-		List<Map<String, Object>> productOnClients = exec
-				.getListOfMaps(new OpsiMethodCall(methodName, attributes, callFilter));
+		List<Map<String, Object>> productOnClients = exec.getListOfMaps(methodName, attributes, callFilter);
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -928,8 +921,8 @@ public class ProductDataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", clientIds);
-		List<Map<String, Object>> productOnClients = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter));
+		List<Map<String, Object>> productOnClients = exec.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
+				callAttributes, callFilter);
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
@@ -942,7 +935,7 @@ public class ProductDataService {
 	}
 
 	public List<Map<String, Object>> getAllProducts() {
-		return exec.getListOfMaps(new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, "dict"));
+		return exec.getListOfMaps(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, "dict");
 	}
 
 	public void updateProductOnClient(String pcname, String productname, int producttype,
@@ -996,7 +989,7 @@ public class ProductDataService {
 
 		if (updateItems != null && !updateItems.isEmpty()) {
 			Logging.info(this, "updateProductOnClients  updateItems.size ", updateItems.size());
-			result = exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_UPDATE_OBJECTS, updateItems));
+			result = exec.doCall(RPCMethodName.PRODUCT_ON_CLIENT_UPDATE_OBJECTS, updateItems);
 			// at any rate
 			updateItems.clear();
 		}
@@ -1042,8 +1035,7 @@ public class ProductDataService {
 		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", productType);
 
-		return exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter));
+		return exec.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
 	}
 
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
@@ -1056,14 +1048,14 @@ public class ProductDataService {
 		Logging.info(this, "resetProducts productItems.size ", productItems.size());
 
 		if (!productItems.isEmpty()) {
-			result = exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_DELETE_OBJECTS, productItems));
+			result = exec.doCall(RPCMethodName.PRODUCT_ON_CLIENT_DELETE_OBJECTS, productItems);
 
 			Logging.debug(this, "resetProducts result ", result);
 
 			if (result && withDependencies) {
-				result = exec.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE,
+				result = exec.doCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE,
 						productItems.stream().map(p -> p.get("productId")).toArray(), "*",
-						productItems.stream().map(p -> p.get("clientId")).toArray()));
+						productItems.stream().map(p -> p.get("clientId")).toArray());
 			}
 		}
 
@@ -1183,13 +1175,13 @@ public class ProductDataService {
 			return;
 		}
 
-		if (updateCollection != null && !updateCollection.isEmpty() && exec
-				.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_UPDATE_OBJECTS, updateCollection))) {
+		if (updateCollection != null && !updateCollection.isEmpty()
+				&& exec.doCall(RPCMethodName.PRODUCT_PROPERTY_STATE_UPDATE_OBJECTS, updateCollection)) {
 			updateCollection.clear();
 		}
 
-		if (deleteCollection != null && !deleteCollection.isEmpty() && exec
-				.doCall(new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE_OBJECTS, deleteCollection))) {
+		if (deleteCollection != null && !deleteCollection.isEmpty()
+				&& exec.doCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE_OBJECTS, deleteCollection)) {
 			deleteCollection.clear();
 		}
 	}
@@ -1486,7 +1478,7 @@ public class ProductDataService {
 		item.put("multiValue", true);
 
 		Logging.info(this, "produceProductOnClientDisplayfields");
-		exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, item));
+		exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, item);
 		return result;
 	}
 

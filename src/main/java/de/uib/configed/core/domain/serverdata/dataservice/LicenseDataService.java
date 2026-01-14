@@ -21,7 +21,6 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.licenses.LicenseContractEntry;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
@@ -87,8 +86,7 @@ public class LicenseDataService {
 		LicensePoolXOpsiProduct licensePoolXOpsiProduct = new LicensePoolXOpsiProduct();
 		Map<String, LicensepoolEntry> licensePools = new TreeMap<>();
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			List<Map<String, Object>> retrieved = exec
-					.getListOfMaps(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_GET_OBJECTS));
+			List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS);
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicensepoolEntry entry = new LicensepoolEntry(POJOReMapper.remap(importedEntry));
 				licensePools.put(entry.getLicensepoolId(), entry);
@@ -119,8 +117,7 @@ public class LicenseDataService {
 		Map<String, LicenseContractEntry> licenseContracts = new HashMap<>();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = new TreeMap<>();
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			List<Map<String, Object>> retrieved = exec
-					.getListOfMaps(new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS));
+			List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS);
 
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenseContractEntry entry = new LicenseContractEntry(importedEntry);
@@ -151,8 +148,7 @@ public class LicenseDataService {
 		}
 		Map<String, LicenseEntry> licenses = new HashMap<>();
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			List<Map<String, Object>> retrieved = exec
-					.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_GET_OBJECTS));
+			List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.SOFTWARE_LICENSE_GET_OBJECTS);
 			for (Map<String, Object> importedEntry : retrieved) {
 				LicenseEntry entry = new LicenseEntry(importedEntry);
 				licenses.put(entry.getId(), entry);
@@ -180,7 +176,7 @@ public class LicenseDataService {
 		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
 		List<LicenseUsableForEntry> licenseUsabilities = new ArrayList<>();
 		List<Map<String, Object>> softwareL2LPools = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS));
+				.getListOfMaps(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_GET_OBJECTS);
 		for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
 			LicenseUsableForEntry entry = LicenseUsableForEntry.produceFrom(softwareL2LPool);
 			licenseUsabilities.add(entry);
@@ -200,8 +196,7 @@ public class LicenseDataService {
 		Map<String, Object> resultMap = null;
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = exec.getMapResult(
-					new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId, licensePoolId));
+			resultMap = exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId, licensePoolId);
 
 			if (!resultMap.isEmpty()) {
 				result = Utils
@@ -223,8 +218,8 @@ public class LicenseDataService {
 		Map<String, Object> resultMap = null;
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = exec.getMapResult(new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_CREATE, softwareLicenseId,
-					licensePoolId, hostId, licenseKey, notes));
+			resultMap = exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE, softwareLicenseId, licensePoolId,
+					hostId, licenseKey, notes);
 
 			if (!resultMap.isEmpty()) {
 				result = Utils
@@ -270,7 +265,7 @@ public class LicenseDataService {
 				jsonPreparedList.add(item.getNOMobject());
 			}
 
-			result = exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE_OBJECTS, jsonPreparedList));
+			result = exec.doCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE_OBJECTS, jsonPreparedList);
 
 			if (result) {
 				Map<String, LicenseUsageEntry> rowsLicensesUsage = cacheManager
@@ -304,8 +299,7 @@ public class LicenseDataService {
 		boolean result = false;
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			result = exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE, softwareLicenseId,
-					licensePoolId, hostId));
+			result = exec.doCall(RPCMethodName.LICENSE_ON_CLIENT_DELETE, softwareLicenseId, licensePoolId, hostId);
 			if (result) {
 				Map<String, LicenseUsageEntry> rowsLicensesUsage = cacheManager
 						.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class);
@@ -335,8 +329,7 @@ public class LicenseDataService {
 		}
 		Logging.info(this, "retrieveLicenseUsages");
 		List<LicenseUsageEntry> licenseUsages = new ArrayList<>();
-		List<Map<String, Object>> retrieved = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.LICENSE_ON_CLIENT_GET_OBJECTS));
+		List<Map<String, Object>> retrieved = exec.getListOfMaps(RPCMethodName.LICENSE_ON_CLIENT_GET_OBJECTS);
 
 		for (Map<String, Object> importedEntry : retrieved) {
 			LicenseUsageEntry entry = new LicenseUsageEntry(importedEntry);
@@ -402,8 +395,8 @@ public class LicenseDataService {
 			// the method gives the first letter instead of the complete string as return
 			// value, therefore we set it in a shortcut:
 
-			if (exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_CREATE, licenseContractId, "", notes,
-					partner, conclusionDate, notificationDate, expirationDate))) {
+			if (exec.doCall(RPCMethodName.LICENSE_CONTRACT_CREATE, licenseContractId, "", notes, partner,
+					conclusionDate, notificationDate, expirationDate)) {
 				result = licenseContractId;
 			} else {
 				Logging.error(this, "could not create license ", licenseContractId);
@@ -421,7 +414,7 @@ public class LicenseDataService {
 		}
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			return exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_DELETE, licenseContractId));
+			return exec.doCall(RPCMethodName.LICENSE_CONTRACT_DELETE, licenseContractId);
 		}
 
 		return false;
@@ -436,7 +429,7 @@ public class LicenseDataService {
 		String result = "";
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			if (exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_CREATE, licensePoolId, description))) {
+			if (exec.doCall(RPCMethodName.LICENSE_POOL_CREATE, licensePoolId, description)) {
 				result = licensePoolId;
 			} else {
 				Logging.warning(this, "could not create licensepool ", licensePoolId);
@@ -454,7 +447,7 @@ public class LicenseDataService {
 		}
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			return exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_DELETE, licensePoolId));
+			return exec.doCall(RPCMethodName.LICENSE_POOL_DELETE, licensePoolId);
 		}
 
 		return false;
@@ -475,7 +468,7 @@ public class LicenseDataService {
 			licensePoolProductIds.add(productId);
 			licensePool.put("productIds", licensePoolProductIds);
 
-			if (exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool))) {
+			if (exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool)) {
 				result = licensePoolId;
 			} else {
 				Logging.error(this, "could not update product ", productId, " to licensepool ", licensePoolId);
@@ -497,7 +490,7 @@ public class LicenseDataService {
 			licensePoolProductIds.remove(productId);
 			licensePool.put("productIds", licensePoolProductIds);
 
-			return exec.doCall(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool));
+			return exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool);
 		}
 
 		return false;
@@ -507,8 +500,6 @@ public class LicenseDataService {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", licensePoolId);
-		return exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.LICENSE_POOL_GET_OBJECTS, callAttributes, callFilter))
-				.get(0);
+		return exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, callAttributes, callFilter).get(0);
 	}
 }

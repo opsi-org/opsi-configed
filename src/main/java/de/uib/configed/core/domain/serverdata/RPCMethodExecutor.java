@@ -16,7 +16,6 @@ import java.util.Set;
 import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.serverdata.dataservice.HostDataService;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.share.logging.Logging;
 
@@ -46,20 +45,19 @@ public class RPCMethodExecutor {
 
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
 		Map<String, Object> response = persistenceController.getExecutioner()
-				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, hostIds));
+				.getMapResult(RPCMethodName.HOST_CONTROL_START, hostIds);
 
 		return collectErrorsFromResponsesByHost(response, "wakeOnLan");
 	}
 
 	public List<String> fireOpsiclientdEventOnClients(String event, List<String> clientIds) {
-		Map<String, Object> responses = exec
-				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_FIRE_EVENT, event, clientIds));
+		Map<String, Object> responses = exec.getMapResult(RPCMethodName.HOST_CONTROL_FIRE_EVENT, event, clientIds);
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
 
 	public List<String> processActionRequests(List<String> clientIds, Set<String> productIds, String visibility) {
-		Map<String, Object> responses = exec.getMapResult(new OpsiMethodCall(
-				RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS, clientIds, productIds, visibility));
+		Map<String, Object> responses = exec.getMapResult(RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS, clientIds,
+				productIds, visibility);
 		return collectErrorsFromResponsesByHost(responses, "processActionRequests");
 	}
 
@@ -73,26 +71,23 @@ public class RPCMethodExecutor {
 			parameters = new Object[] { message, clientIds, "True", "True", seconds };
 		}
 
-		Map<String, Object> responses = exec
-				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHOW_POPUP, parameters));
+		Map<String, Object> responses = exec.getMapResult(RPCMethodName.HOST_CONTROL_SHOW_POPUP, parameters);
 		return collectErrorsFromResponsesByHost(responses, "showPopupOnClients");
 	}
 
 	public List<String> shutdownClients(List<String> clientIds) {
-		Map<String, Object> responses = exec
-				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_SHUTDOWN, clientIds));
+		Map<String, Object> responses = exec.getMapResult(RPCMethodName.HOST_CONTROL_SHUTDOWN, clientIds);
 		return collectErrorsFromResponsesByHost(responses, "shutdownClients");
 	}
 
 	public List<String> rebootClients(List<String> clientIds) {
-		Map<String, Object> responses = exec
-				.getMapResult(new OpsiMethodCall(RPCMethodName.HOST_CONTROL_REBOOT, clientIds));
+		Map<String, Object> responses = exec.getMapResult(RPCMethodName.HOST_CONTROL_REBOOT, clientIds);
 		return collectErrorsFromResponsesByHost(responses, "rebootClients");
 	}
 
 	public List<String> deletePackageCaches(List<String> hostIds) {
-		Map<String, Object> responses = exec.getMapResult(new OpsiMethodCall(
-				RPCMethodName.HOST_CONTROL_SAFE_OPSICLIENTD_RPC, "cacheService_deleteCache", new Object[] {}, hostIds));
+		Map<String, Object> responses = exec.getMapResult(RPCMethodName.HOST_CONTROL_SAFE_OPSICLIENTD_RPC,
+				"cacheService_deleteCache", new Object[0], hostIds);
 		return collectErrorsFromResponsesByHost(responses, "deleteCache");
 	}
 

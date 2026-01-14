@@ -13,7 +13,6 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -56,8 +55,7 @@ public class CommandDataService {
 		}
 
 		Logging.info(this, "retrieveCommandList ");
-		List<Map<String, Object>> commands = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS));
+		List<Map<String, Object>> commands = exec.getListOfMaps(RPCMethodName.SSH_COMMAND_GET_OBJECTS);
 		Logging.debug(this, "retrieveCommandList commands ", commands);
 
 		cacheManager.setCachedData(CacheIdentifier.SSH_COMMAND_LIST, commands);
@@ -68,7 +66,7 @@ public class CommandDataService {
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, jsonObjects));
+		boolean result = exec.doCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, jsonObjects);
 		Logging.info(this, "deleteSSHCommand result ", result);
 		return result;
 	}
@@ -86,7 +84,7 @@ public class CommandDataService {
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
-		boolean result = exec.doCall(new OpsiMethodCall(method, jsonObjects));
+		boolean result = exec.doCall(method, jsonObjects);
 		Logging.info(this, "doActionSSHCommand method ", method, " result ", result);
 		return result;
 	}

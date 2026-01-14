@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
+import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.ConnectionHandler.RequestMethod;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
@@ -60,15 +62,16 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
  * <p>
  * Before establishing connection with the server, it check server's version to
  * disable/enable features according to the server's version. Once the
- * connection is established it sends a {@code POST} request, to send
- * {@code OpsiMethodCall}, and retrieves data from the response send by the
- * server.
+ * connection is established it sends a {@code POST} request, to send and
+ * retrieve data from the response sent by the server.
  *
  * @author Rupert Roeder, Naglis Vidziunas
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
 	private static final int COMPRESS_MIN_SIZE = 10000;
 	private static final Pattern userPattern = Pattern.compile("user:");
+
+	private static final int DEFAULT_JSON_ID = 1;
 
 	private static OpsiServerVersionRetriever versionRetriever;
 	private CountDownLatch otpWaiter;
@@ -342,16 +345,38 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return serviceURL;
 	}
 
-	private byte[] produceMessagePack(OpsiMethodCall omc) {
-		Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
+	private byte[] produceMessagePack(RPCMethodName methodname, Object[] parameters) {
 		byte[] result = new byte[0];
 		try {
-			result = new MessagePackMapper().writeValueAsBytes(omcMap);
+			result = new MessagePackMapper().writeValueAsBytes(createMap(methodname, parameters));
 		} catch (JsonProcessingException e) {
 			Logging.error(this, e, "unable to process JSON");
 		}
 
 		return result;
+	}
+
+	private static Map<String, Object> createMap(RPCMethodName methodname, Object[] parameters) {
+		Map<String, Object> map = new HashMap<>();
+		List<Object> params = new ArrayList<>();
+
+		for (Object parameter : parameters) {
+			if (parameter instanceof Object[] arrayParameter) {
+				List<Object> list = Arrays.asList(arrayParameter);
+
+				params.add(list);
+			} else if (parameter instanceof Map) {
+				params.add(parameter);
+			} else {
+				params.add(parameter);
+			}
+		}
+
+		map.put("id", DEFAULT_JSON_ID);
+		map.put("method", methodname.toString());
+		map.put("params", params);
+
+		return map;
 	}
 
 	public boolean testConnection(boolean notifyUserOfErrors) {
@@ -374,7 +399,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 */
 	@Override
 	@SuppressWarnings("java:S1168")
-	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
+	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object... parameters) {
 		Logging.info(this, "retrieveResponse started");
 
 		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
@@ -385,14 +410,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 		}
 
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + methodname);
 		timeCheck.start();
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(),
-				produceGeneralRequestProperties(produceMessagePack(omc)));
+				produceGeneralRequestProperties(produceMessagePack(methodname, parameters)));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
-		sendPostRequest(connection, omc);
+		sendPostRequest(connection, methodname, parameters);
 
 		if (connection == null) {
 			return null;
@@ -507,19 +532,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 	}
 
-	private void sendPostRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
+	private void sendPostRequest(HttpsURLConnection connection, RPCMethodName methodname, Object[] parameters) {
 		if (connection == null) {
 			return;
 		}
 
-		byte[] message = produceMessagePack(omc);
+		byte[] message = produceMessagePack(methodname, parameters);
 
 		try (OutputStream writer = getOutputStreamWriterForConnection(connection, message.length)) {
 			writer.write(message);
 			writer.flush();
 
-			Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
-			Logging.debug(this, "(POST) sending: ", omcMap);
+			Logging.debug(this, "(POST) sending: ", methodname);
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request ", iox);
 		}
