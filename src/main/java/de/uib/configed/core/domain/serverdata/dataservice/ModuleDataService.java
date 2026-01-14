@@ -100,7 +100,7 @@ public class ModuleDataService {
 		}
 
 		if (isOpsiUserAdminPD()) {
-			Map<String, Object> licencingInfoOpsiAdmin = exec.retrieveResponse(RPCMethodName.BACKEND_GET_LICENSING_INFO,
+			Map<String, Object> licencingInfoOpsiAdmin = exec.getMapResult(RPCMethodName.BACKEND_GET_LICENSING_INFO,
 					true, false, true, false);
 			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, licencingInfoOpsiAdmin);
 		}
@@ -516,7 +516,7 @@ public class ModuleDataService {
 	private Map<String, Object> retrieveProducedLicensingInfo() {
 		Map<String, Object> producedLicencingInfo;
 		if (isOpsiUserAdminPD() && getOpsiLicensingInfoOpsiAdminPD() != null) {
-			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"));
+			producedLicencingInfo = getOpsiLicensingInfoOpsiAdminPD();
 		} else {
 			producedLicencingInfo = getOpsiLicensingInfoNoOpsiAdminPD();
 		}
