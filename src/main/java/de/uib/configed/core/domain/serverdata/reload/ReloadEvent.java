@@ -22,17 +22,17 @@ import de.uib.configed.core.domain.serverdata.reload.handler.OpsiHostDataReloadH
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
-import de.uib.configed.core.domain.serverdata.reload.handler.ReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.StatisticsDataReloadHandler;
 
 /**
  * Events that trigger specifc reload handlers, that reload required data.
  * <p>
- * {@link ReloadEvent} and {@link ReloadHandler} implementations are used to
- * reload persistent data that are closely related or have to be reloaded
- * together. Data that only consist of one entry in internal cache is reloaded
- * using {@link DefaultDataReloadHandler} and is identified by the
+ * {@link ReloadEvent} and {@link AbstractReloadHandler} implementations are
+ * used to reload persistent data that are closely related or have to be
+ * reloaded together. Data that only consist of one entry in internal cache is
+ * reloaded using {@link DefaultDataReloadHandler} and is identified by the
  * {@link CacheIdentifier}.
  */
 public enum ReloadEvent {

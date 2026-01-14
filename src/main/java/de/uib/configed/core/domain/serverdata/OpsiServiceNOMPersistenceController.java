@@ -157,93 +157,61 @@ public class OpsiServiceNOMPersistenceController {
 		return dataServices;
 	}
 
-	@SuppressWarnings({ "java:S103" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
-		HostDataReloadHandler hostDataReloadHandler = new HostDataReloadHandler();
-		hostDataReloadHandler.setConfigDataService(dataServices.config);
-		hostDataReloadHandler.setGroupDataService(dataServices.group);
-		hostDataReloadHandler.setHostInfoCollections(dataServices.hostInfoCollections);
-		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(), hostDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(),
+				new HostDataReloadHandler(dataServices));
 
-		ConfigOptionsDataReloadHandler configOptionsDataReloadHandler = new ConfigOptionsDataReloadHandler();
-		configOptionsDataReloadHandler.setConfigDataService(dataServices.config);
-		reloadDispatcher.registerHandler(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString(), configOptionsDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString(),
+				new ConfigOptionsDataReloadHandler(dataServices));
 
-		HardwareConfDataReloadHandler hardwareConfDataReloadHandler = new HardwareConfDataReloadHandler();
-		hardwareConfDataReloadHandler.setConfigDataService(dataServices.config);
-		hardwareConfDataReloadHandler.setHardwareDataService(dataServices.hardware);
-		reloadDispatcher.registerHandler(ReloadEvent.HARDWARE_CONF_RELOAD.toString(), hardwareConfDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.HARDWARE_CONF_RELOAD.toString(),
+				new HardwareConfDataReloadHandler(dataServices));
 
-		InstalledSoftwareDataReloadHandler installedSoftwareDataReloadHandler = new InstalledSoftwareDataReloadHandler();
-		installedSoftwareDataReloadHandler.setSoftwareDataService(dataServices.software);
 		reloadDispatcher.registerHandler(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString(),
-				installedSoftwareDataReloadHandler);
+				new InstalledSoftwareDataReloadHandler(dataServices));
 
-		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
-		licenseDataReloadHandler.setLicenseDataService(dataServices.license);
-		licenseDataReloadHandler.setHostInfoCollections(dataServices.hostInfoCollections);
-		licenseDataReloadHandler.setSoftwareDataService(dataServices.software);
-		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(),
+				new LicenseDataReloadHandler(dataServices));
 
-		OpsiLicenseReloadHandler opsiLicenseReloadHandler = new OpsiLicenseReloadHandler();
-		opsiLicenseReloadHandler.setModuleDataService(dataServices.module);
-		reloadDispatcher.registerHandler(ReloadEvent.OPSI_LICENSE_RELOAD.toString(), opsiLicenseReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.OPSI_LICENSE_RELOAD.toString(),
+				new OpsiLicenseReloadHandler(dataServices));
 
-		ProductDataReloadHandler productDataReloadHandler = new ProductDataReloadHandler();
-		productDataReloadHandler.setGroupDataService(dataServices.group);
-		productDataReloadHandler.setProductDataService(dataServices.product);
-		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_DATA_RELOAD.toString(), productDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_DATA_RELOAD.toString(),
+				new ProductDataReloadHandler(dataServices));
 
-		DepotChangeReloadHandler depotChangeReloadHandler = new DepotChangeReloadHandler();
-		depotChangeReloadHandler.setDepotDataService(dataServices.depot);
-		depotChangeReloadHandler.setProductDataService(dataServices.product);
-		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_CHANGE_RELOAD.toString(), depotChangeReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_CHANGE_RELOAD.toString(),
+				new DepotChangeReloadHandler(dataServices));
 
-		RelationsASWToLPDataReloadHandler relationsASWToLPDataReloadHandler = new RelationsASWToLPDataReloadHandler();
-		relationsASWToLPDataReloadHandler.setSoftwareDataService(dataServices.software);
 		reloadDispatcher.registerHandler(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString(),
-				relationsASWToLPDataReloadHandler);
+				new RelationsASWToLPDataReloadHandler(dataServices));
 
-		OpsiHostDataReloadHandler opsiHostDataReloadHandler = new OpsiHostDataReloadHandler();
-		opsiHostDataReloadHandler.setHostInfoCollections(dataServices.hostInfoCollections);
-		reloadDispatcher.registerHandler(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString(), opsiHostDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString(),
+				new OpsiHostDataReloadHandler(dataServices));
 
-		LicenseContractDataReloadHandler licenseContractDataReloadHandler = new LicenseContractDataReloadHandler();
-		licenseContractDataReloadHandler.setLicenseDataService(dataServices.license);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString(),
-				licenseContractDataReloadHandler);
+				new LicenseContractDataReloadHandler(dataServices));
 
-		LicensePoolDataReloadHandler licensePoolDataReloadHandler = new LicensePoolDataReloadHandler();
-		licensePoolDataReloadHandler.setLicenseDataService(dataServices.license);
-		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(), licensePoolDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(),
+				new LicensePoolDataReloadHandler(dataServices));
 
-		@SuppressWarnings({ "java:S103" })
-		SoftwareLicense2LicensePoolDataReloadHandler softwareLicense2LicensePoolDataReloadHandler = new SoftwareLicense2LicensePoolDataReloadHandler();
-		softwareLicense2LicensePoolDataReloadHandler.setLicenseDataService(dataServices.license);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(),
+				new LicensePoolDataReloadHandler(dataServices));
+
 		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
-				softwareLicense2LicensePoolDataReloadHandler);
+				new SoftwareLicense2LicensePoolDataReloadHandler(dataServices));
 
-		LicenseOnClientDataReloadHandler licenseOnClientDataReloadHandler = new LicenseOnClientDataReloadHandler();
-		licenseOnClientDataReloadHandler.setLicenseDataService(dataServices.license);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD.toString(),
-				licenseOnClientDataReloadHandler);
+				new LicenseOnClientDataReloadHandler(dataServices));
 
-		StatisticsDataReloadHandler statisticsDataReloadHandler = new StatisticsDataReloadHandler();
-		statisticsDataReloadHandler.setSoftwareDataService(dataServices.software);
-		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(), statisticsDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(),
+				new StatisticsDataReloadHandler(dataServices));
 
-		DepotProductPropertiesDataReloadHandler depotProductPropertiesDataReloadHandler = new DepotProductPropertiesDataReloadHandler();
-		depotProductPropertiesDataReloadHandler.setProductDataService(dataServices.product);
 		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString(),
-				depotProductPropertiesDataReloadHandler);
+				new DepotProductPropertiesDataReloadHandler(dataServices));
 
-		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
-		defaultDataReloadHandler.setGroupDataService(dataServices.group);
-		defaultDataReloadHandler.setHardwareDataService(dataServices.hardware);
-		defaultDataReloadHandler.setConfigDataService(dataServices.config);
-		defaultDataReloadHandler.setLicenseDataService(dataServices.license);
+		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler(dataServices);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
 				defaultDataReloadHandler);

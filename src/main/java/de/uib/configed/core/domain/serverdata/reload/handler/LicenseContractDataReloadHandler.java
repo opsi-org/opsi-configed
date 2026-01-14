@@ -8,24 +8,20 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.LicenseDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class LicenseContractDataReloadHandler implements ReloadHandler {
+public class LicenseContractDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private LicenseDataService licenseDataService;
 
-	public LicenseContractDataReloadHandler() {
+	public LicenseContractDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setLicenseDataService(LicenseDataService licenseDataService) {
-		this.licenseDataService = licenseDataService;
 	}
 
 	@Override
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
-		licenseDataService.retrieveLicenseContractsPD();
+		dataServices.license.retrieveLicenseContractsPD();
 	}
 }

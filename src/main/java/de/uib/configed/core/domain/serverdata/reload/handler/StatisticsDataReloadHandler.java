@@ -8,24 +8,20 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.SoftwareDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class StatisticsDataReloadHandler implements ReloadHandler {
+public class StatisticsDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private SoftwareDataService softwareDataService;
 
-	public StatisticsDataReloadHandler() {
+	public StatisticsDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
-		this.softwareDataService = softwareDataService;
 	}
 
 	@Override
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
 		cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
-		softwareDataService.retrieveLicenseStatisticsPD();
+		dataServices.software.retrieveLicenseStatisticsPD();
 	}
 }

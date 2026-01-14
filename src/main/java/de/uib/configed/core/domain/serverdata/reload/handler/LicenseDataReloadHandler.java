@@ -8,33 +8,17 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import java.util.Arrays;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.dataservice.LicenseDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.SoftwareDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class LicenseDataReloadHandler implements ReloadHandler {
+public class LicenseDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private LicenseDataService licenseDataService;
-	private SoftwareDataService softwareDataService;
-	private HostInfoCollections hostInfoCollections;
 
-	public LicenseDataReloadHandler() {
+	public LicenseDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setLicenseDataService(LicenseDataService licenseDataService) {
-		this.licenseDataService = licenseDataService;
-	}
-
-	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
-		this.softwareDataService = softwareDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	@Override
@@ -49,28 +33,27 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL);
-		executor.runInParallel(softwareDataService::retrieveRelationsAuditSoftwareToLicensePoolsPD);
+		executor.runInParallel(dataServices.software::retrieveRelationsAuditSoftwareToLicensePoolsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL);
-		executor.runInParallel(softwareDataService::retrieveAuditSoftwareXLicensePoolPD);
+		executor.runInParallel(dataServices.software::retrieveAuditSoftwareXLicensePoolPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSES);
-		executor.runInParallel(licenseDataService::retrieveLicensesPD);
+		executor.runInParallel(dataServices.license::retrieveLicensesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
-		executor.runInParallel(licenseDataService::retrieveLicenseUsagesPD);
+		executor.runInParallel(dataServices.license::retrieveLicenseUsagesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOLS);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT);
-		executor.runInParallel(licenseDataService::retrieveLicensePoolsPD);
+		executor.runInParallel(dataServices.license::retrieveLicensePoolsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USABILITIES);
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
-		licenseDataService.retrieveSoftwareLicense2LicensePoolPD();
-		executor.runInParallel(licenseDataService::retrieveSoftwareLicense2LicensePoolPD);
-
+		dataServices.license.retrieveSoftwareLicense2LicensePoolPD();
+		executor.runInParallel(dataServices.license::retrieveSoftwareLicense2LicensePoolPD);
 		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
 				CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			// This must be cleared so that the clients for the depots are updated
@@ -78,11 +61,11 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 
 			// Reload this to update the clients that we have to get audit data from (for statistics and reconciliation)
 			cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
-			executor.runInParallel(hostInfoCollections::retrieveOpsiHostsPD);
+			executor.runInParallel(dataServices.hostInfoCollections::retrieveOpsiHostsPD);
 
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
-			executor.runInParallel(softwareDataService::retrieveLicenseStatisticsPD);
+			executor.runInParallel(dataServices.software::retrieveLicenseStatisticsPD);
 		}
 
 		executor.waitForCompletion();

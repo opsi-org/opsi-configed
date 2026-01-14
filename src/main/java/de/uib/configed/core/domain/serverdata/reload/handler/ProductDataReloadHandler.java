@@ -9,24 +9,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.dataservice.GroupDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class ProductDataReloadHandler implements ReloadHandler {
+public class ProductDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private ProductDataService productDataService;
-	private GroupDataService groupDataService;
 
-	public ProductDataReloadHandler() {
+	public ProductDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setProductDataService(ProductDataService productDataService) {
-		this.productDataService = productDataService;
-	}
-
-	public void setGroupDataService(GroupDataService groupDataService) {
-		this.groupDataService = groupDataService;
 	}
 
 	@Override
@@ -37,16 +27,16 @@ public class ProductDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
-		executor.runInParallel(productDataService::retrieveProductsAllDepotsPD);
+		executor.runInParallel(dataServices.product::retrieveProductsAllDepotsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS);
-		executor.runInParallel(productDataService::retrieveAllProductDependenciesPD);
+		executor.runInParallel(dataServices.product::retrieveAllProductDependenciesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
-		executor.runInParallel(productDataService::retrieveDepotProductPropertiesPD);
+		executor.runInParallel(dataServices.product::retrieveDepotProductPropertiesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
-		executor.runInParallel(groupDataService::retrieveProductGroupsPD);
+		executor.runInParallel(dataServices.group::retrieveProductGroupsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES);
 

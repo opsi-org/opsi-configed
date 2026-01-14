@@ -9,24 +9,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.dataservice.DepotDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class DepotChangeReloadHandler implements ReloadHandler {
+public class DepotChangeReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private ProductDataService productDataService;
-	private DepotDataService depotDataService;
 
-	public DepotChangeReloadHandler() {
+	public DepotChangeReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setProductDataService(ProductDataService productDataService) {
-		this.productDataService = productDataService;
-	}
-
-	public void setDepotDataService(DepotDataService depotDataService) {
-		this.depotDataService = depotDataService;
 	}
 
 	@Override
@@ -34,12 +24,12 @@ public class DepotChangeReloadHandler implements ReloadHandler {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS);
 		cacheManager.clearCachedData(CacheIdentifier.POSSIBLE_ACTIONS);
-		executor.runInParallel(() -> productDataService.checkProductGlobalInfosPD(depotDataService.getDepot()));
+		executor.runInParallel(() -> dataServices.product.checkProductGlobalInfosPD(dataServices.depot.getDepot()));
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_IDS);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		executor.runInParallel(() -> productDataService.retrieveProductIdsAndDefaultStatesPD());
+		executor.runInParallel(dataServices.product::retrieveProductIdsAndDefaultStatesPD);
 
 		executor.waitForCompletion();
 	}

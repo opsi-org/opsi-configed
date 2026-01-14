@@ -6,20 +6,16 @@
 
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class OpsiHostDataReloadHandler implements ReloadHandler {
+public class OpsiHostDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private HostInfoCollections hostInfoCollections;
 
-	public OpsiHostDataReloadHandler() {
+	public OpsiHostDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	@Override
@@ -31,6 +27,6 @@ public class OpsiHostDataReloadHandler implements ReloadHandler {
 		// retrieveFNode2TreeparentsPD. That's why it should not be parallelized.
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
 		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
-		hostInfoCollections.retrieveFNode2TreeparentsPD();
+		dataServices.hostInfoCollections.retrieveFNode2TreeparentsPD();
 	}
 }

@@ -9,18 +9,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.dataservice.ModuleDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class OpsiLicenseReloadHandler implements ReloadHandler {
+public class OpsiLicenseReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private ModuleDataService moduleDataService;
 
-	public OpsiLicenseReloadHandler() {
+	public OpsiLicenseReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setModuleDataService(ModuleDataService moduleDataService) {
-		this.moduleDataService = moduleDataService;
 	}
 
 	@Override
@@ -28,10 +24,10 @@ public class OpsiLicenseReloadHandler implements ReloadHandler {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN);
-		executor.runInParallel(moduleDataService::retrieveOpsiLicensingInfoOpsiAdminPD);
+		executor.runInParallel(dataServices.module::retrieveOpsiLicensingInfoOpsiAdminPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN);
-		executor.runInParallel(moduleDataService::retrieveOpsiLicensingInfoNoOpsiAdminPD);
+		executor.runInParallel(dataServices.module::retrieveOpsiLicensingInfoNoOpsiAdminPD);
 
 		executor.waitForCompletion();
 	}

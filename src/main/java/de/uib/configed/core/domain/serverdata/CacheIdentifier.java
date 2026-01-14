@@ -8,7 +8,7 @@ package de.uib.configed.core.domain.serverdata;
 
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
-import de.uib.configed.core.domain.serverdata.reload.handler.ReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
 
 /**
  * Identifiers for internally cached data.
@@ -18,8 +18,8 @@ import de.uib.configed.core.domain.serverdata.reload.handler.ReloadHandler;
  * realoding data, only those that are required. The reason is to reduce the
  * size of {@link DefaultDataReloadHandler} and for adherence to the principle
  * of YAGNI (You Aren't Gonna Need It). Also, the cached data is usually
- * reloaded using specific {@link ReloadHandler} implementations, that are
- * triggered by {@link ReloadEvent}.
+ * reloaded using specific {@link AbstractReloadHandler} implementations, that
+ * are triggered by {@link ReloadEvent}.
  */
 public enum CacheIdentifier {
 	/**

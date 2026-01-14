@@ -8,18 +8,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.SoftwareDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class RelationsASWToLPDataReloadHandler implements ReloadHandler {
+public class RelationsASWToLPDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private SoftwareDataService softwareDataService;
 
-	public RelationsASWToLPDataReloadHandler() {
+	public RelationsASWToLPDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
-		this.softwareDataService = softwareDataService;
 	}
 
 	@Override
@@ -28,6 +24,6 @@ public class RelationsASWToLPDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL);
-		softwareDataService.retrieveRelationsAuditSoftwareToLicensePoolsPD();
+		dataServices.software.retrieveRelationsAuditSoftwareToLicensePoolsPD();
 	}
 }

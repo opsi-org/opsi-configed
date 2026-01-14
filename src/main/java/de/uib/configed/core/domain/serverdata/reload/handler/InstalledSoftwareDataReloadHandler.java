@@ -8,18 +8,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.SoftwareDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class InstalledSoftwareDataReloadHandler implements ReloadHandler {
+public class InstalledSoftwareDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private SoftwareDataService softwareDataService;
 
-	public InstalledSoftwareDataReloadHandler() {
+	public InstalledSoftwareDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
-		this.softwareDataService = softwareDataService;
 	}
 
 	@Override
@@ -29,6 +25,6 @@ public class InstalledSoftwareDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
 		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
-		softwareDataService.retrieveInstalledSoftwareInformationPD();
+		dataServices.software.retrieveInstalledSoftwareInformationPD();
 	}
 }

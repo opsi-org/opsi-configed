@@ -8,18 +8,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class ConfigOptionsDataReloadHandler implements ReloadHandler {
+public class ConfigOptionsDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private ConfigDataService configDataService;
 
-	public ConfigOptionsDataReloadHandler() {
+	public ConfigOptionsDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
 	}
 
 	@Override
@@ -28,6 +24,6 @@ public class ConfigOptionsDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
-		configDataService.retrieveConfigOptionsPD();
+		dataServices.config.retrieveConfigOptionsPD();
 	}
 }

@@ -9,18 +9,14 @@ package de.uib.configed.core.domain.serverdata.reload.handler;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class DepotProductPropertiesDataReloadHandler implements ReloadHandler {
+public class DepotProductPropertiesDataReloadHandler extends AbstractReloadHandler {
 	private CacheManager cacheManager;
-	private ProductDataService productDataService;
 
-	public DepotProductPropertiesDataReloadHandler() {
+	public DepotProductPropertiesDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setProductDataService(ProductDataService productDataService) {
-		this.productDataService = productDataService;
 	}
 
 	@Override
@@ -31,13 +27,13 @@ public class DepotProductPropertiesDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
-		executor.runInParallel(() -> productDataService.retrieveProductsAllDepotsPD());
+		executor.runInParallel(dataServices.product::retrieveProductsAllDepotsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
-		executor.runInParallel(() -> productDataService.retrieveAllProductPropertyDefinitionsPD());
+		executor.runInParallel(dataServices.product::retrieveAllProductPropertyDefinitionsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
-		executor.runInParallel(() -> productDataService.retrieveDepotProductPropertiesPD());
+		executor.runInParallel(dataServices.product::retrieveDepotProductPropertiesPD);
 
 		executor.waitForCompletion();
 	}
