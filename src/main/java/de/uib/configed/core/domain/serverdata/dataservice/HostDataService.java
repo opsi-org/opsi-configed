@@ -360,18 +360,16 @@ public class HostDataService {
 		Object[] callParameters = clientIds != null && !clientIds.isEmpty() ? new Object[] { clientIds }
 				: new Object[] {};
 
-		Map<String, Object> sessionInfos = exec
-				.getResponses(exec.retrieveResponse(RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS, callParameters));
-		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
+		Map<String, Map<String, Object>> sessionInfos = exec
+				.getMapOfMaps(RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS, callParameters);
+		for (Entry<String, Map<String, Object>> resultEntry : sessionInfos.entrySet()) {
 			String value;
 
-			if (resultEntry.getValue() instanceof String errorString) {
-				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorString;
-			} else if (resultEntry.getValue() instanceof List<?> sessionlist) {
-				value = createSessionInfoForList(sessionlist);
+			Object error = resultEntry.getValue().get("error");
+			if (error != null) {
+				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + error;
 			} else {
-				Logging.warning(this, "resultEntry's value is neither a String nor a List");
-				value = "";
+				value = createSessionInfoForList(POJOReMapper.remap(resultEntry.getValue().get("result")));
 			}
 
 			sessionInfo.put(resultEntry.getKey(), value);
@@ -395,11 +393,9 @@ public class HostDataService {
 		}
 	}
 
-	private static String createSessionInfoForList(List<?> sessionlist) {
+	private static String createSessionInfoForList(List<Map<String, Object>> sessionList) {
 		StringBuilder value = new StringBuilder();
-		for (Object element : sessionlist) {
-			Map<String, Object> session = POJOReMapper.remap(element);
-
+		for (Map<String, Object> session : sessionList) {
 			String username = "" + session.get("UserName");
 			String logondomain = "" + session.get("LogonDomain");
 

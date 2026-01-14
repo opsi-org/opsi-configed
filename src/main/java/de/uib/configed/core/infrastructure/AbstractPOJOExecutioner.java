@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -102,25 +101,6 @@ public abstract class AbstractPOJOExecutioner {
 		}
 
 		return errorMessage;
-	}
-
-	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
-		Map<String, Object> result = new HashMap<>();
-		Map<String, Map<String, Object>> responses = POJOReMapper.remap(retrieved.get("result"));
-
-		for (Entry<String, Map<String, Object>> entry : responses.entrySet()) {
-			if (entry.getValue().get("error") == null) {
-				List<Object> list = POJOReMapper.remap(entry.getValue().get("result"));
-				result.put(entry.getKey(), list);
-			} else {
-				String str = "" + entry.getValue().get("error");
-				result.put(entry.getKey(), str);
-			}
-		}
-
-		Logging.debug(this, "getResponses  result ", result);
-
-		return result;
 	}
 
 	// returns false if the "error" key does not exist or is null
