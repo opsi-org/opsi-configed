@@ -28,7 +28,6 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
@@ -196,20 +195,16 @@ public class HostDataService {
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
 			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { clientsJsonObject });
-		boolean result = exec.doCall(omc);
+		boolean result = exec.doCall(RPCMethodName.HOST_CREATE_CLIENTS, clientsJsonObject);
 
 		if (result) {
 			if (!groupsJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
-						new Object[] { groupsJsonObject });
-				result = exec.doCall(omc);
+				result = exec.doCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, groupsJsonObject);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
-						new Object[] { productsNetbootJsonObject });
-				result = result && exec.doCall(omc);
+				result = result
+						&& exec.doCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, productsNetbootJsonObject);
 			}
 
 			persistenceController.getConfigDataService().updateConfigStates();
@@ -223,10 +218,8 @@ public class HostDataService {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT,
-				new String[] { hostname, newHostname });
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-		return exec.doCall(omc);
+		return exec.doCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT, hostname, newHostname);
 	}
 
 	public void deleteClients(Collection<String> hostIds) {
@@ -234,8 +227,7 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
-		exec.doCall(omc);
+		exec.doCall(RPCMethodName.HOST_DELETE, hostIds);
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
@@ -252,10 +244,7 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS,
-				new Object[] { hostUpdates.values() });
-
-		if (exec.doCall(omc)) {
+		if (exec.doCall(RPCMethodName.HOST_UPDATE_CLIENTS, hostUpdates.values())) {
 			hostUpdates.clear();
 		}
 	}
@@ -322,8 +311,8 @@ public class HostDataService {
 		callFilter.put(HostInfo.HOST_TYPE_KEY, hostTypes);
 		TimeCheck timer = new TimeCheck(this, "getOpsiHosts").start();
 		Logging.notice(this, "host_getObjects");
-		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(RPCMethodName.HOST_GET_OBJECTS, callAttributes,
+				callFilter);
 		timer.stop();
 		return opsiHosts;
 	}
@@ -331,8 +320,7 @@ public class HostDataService {
 	public List<Map<String, Object>> getOpsiClients() {
 		TimeCheck timer = new TimeCheck(this, "getOpsiClients").start();
 		Logging.notice(this, "host_getClients");
-		List<Map<String, Object>> opsiClients = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.HOST_GET_CLIENTS, new Object[0]));
+		List<Map<String, Object>> opsiClients = exec.getListOfMaps(RPCMethodName.HOST_GET_CLIENTS);
 		timer.stop();
 		return opsiClients;
 	}
@@ -344,9 +332,8 @@ public class HostDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
+		List<Map<String, Object>> retrievedList = exec.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
+				callAttributes, callFilter);
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get("clientId");
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
@@ -373,19 +360,16 @@ public class HostDataService {
 		Object[] callParameters = clientIds != null && !clientIds.isEmpty() ? new Object[] { clientIds }
 				: new Object[] {};
 
-		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
-		Map<String, Object> sessionInfos = exec.getResponses(exec
-				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
-		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
+		Map<String, Map<String, Object>> sessionInfos = exec
+				.getMapOfMaps(RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS, callParameters);
+		for (Entry<String, Map<String, Object>> resultEntry : sessionInfos.entrySet()) {
 			String value;
 
-			if (resultEntry.getValue() instanceof String errorString) {
-				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorString;
-			} else if (resultEntry.getValue() instanceof List<?> sessionlist) {
-				value = createSessionInfoForList(sessionlist);
+			Object error = resultEntry.getValue().get("error");
+			if (error != null) {
+				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + error;
 			} else {
-				Logging.warning(this, "resultEntry's value is neither a String nor a List");
-				value = "";
+				value = createSessionInfoForList(POJOReMapper.remap(resultEntry.getValue().get("result")));
 			}
 
 			sessionInfo.put(resultEntry.getKey(), value);
@@ -409,11 +393,9 @@ public class HostDataService {
 		}
 	}
 
-	private static String createSessionInfoForList(List<?> sessionlist) {
+	private static String createSessionInfoForList(List<Map<String, Object>> sessionList) {
 		StringBuilder value = new StringBuilder();
-		for (Object element : sessionlist) {
-			Map<String, Object> session = POJOReMapper.remap(element);
-
+		for (Map<String, Object> session : sessionList) {
 			String username = "" + session.get("UserName");
 			String logondomain = "" + session.get("LogonDomain");
 
@@ -438,8 +420,7 @@ public class HostDataService {
 	 */
 	public Set<String> getMessagebusConnectedClients() {
 		Logging.info(this, "get clients connected with messagebus");
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS, new Object[] {});
-		return new HashSet<>(exec.getStringListResult(omc));
+		return new HashSet<>(exec.getStringListResult(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS));
 	}
 
 	public void setHostValues(Map<String, Object> settings) {
@@ -447,7 +428,7 @@ public class HostDataService {
 			return;
 		}
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, new Object[] { settings }));
+		exec.doCall(RPCMethodName.HOST_UPDATE_OBJECTS, settings);
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {
@@ -529,9 +510,7 @@ public class HostDataService {
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
-
-			exec.doCall(omc);
+			exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, item);
 		} else {
 			result = givenList;
 		}

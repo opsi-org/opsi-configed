@@ -48,7 +48,6 @@ import de.uib.configed.core.domain.serverdata.reload.handler.SoftwareLicense2Lic
 import de.uib.configed.core.domain.serverdata.reload.handler.StatisticsDataReloadHandler;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.ConnectionState;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.features.productaction.CompleteWinProductsDialog;
 import de.uib.configed.gui.type.RemoteControl;
@@ -444,7 +443,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public boolean makeConnection() {
 		Logging.info(this, "trying to make connection");
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
+		boolean result = exec.doCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED);
 
 		if (!result) {
 			Logging.info(this, "connection does not work");

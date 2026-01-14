@@ -15,7 +15,6 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 
 /**
  * Provides methods for working with user data on the server.
@@ -52,9 +51,8 @@ public class UserDataService {
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("id", userId);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.USER_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> result = exec.getListOfMaps(omc);
+		List<Map<String, Object>> result = exec.getListOfMaps(RPCMethodName.USER_GET_OBJECTS, callAttributes,
+				callFilter);
 
 		if (result.isEmpty()) {
 			return null;
@@ -70,7 +68,6 @@ public class UserDataService {
 	}
 
 	public String getCACerts() {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_CA_CERTS, new Object[0]);
-		return exec.getStringResult(omc);
+		return exec.getStringResult(RPCMethodName.GET_CA_CERTS);
 	}
 }

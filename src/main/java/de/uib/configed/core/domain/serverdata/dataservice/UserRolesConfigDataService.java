@@ -31,7 +31,6 @@ import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
@@ -212,8 +211,7 @@ public class UserRolesConfigDataService {
 					keyUserRegisterValue, "without given values the primary value setting is false");
 			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-			exec.doCall(omc);
+			exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 		}
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
@@ -270,8 +268,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
-		boolean isUserReadOnlyUser = exec.getBooleanResult(
-				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}));
+		boolean isUserReadOnlyUser = exec.getBooleanResult(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER);
 		Logging.info(this, "does user belong to system's read-only group? ", isUserReadOnlyUser);
 		return isUserReadOnlyUser;
 	}
@@ -854,9 +851,7 @@ public class UserRolesConfigDataService {
 		if (!readyObjects.isEmpty()) {
 			Logging.notice(this, "There are ", readyObjects.size(), "configurations to update, so we do this now:");
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-
-			exec.doCall(omc);
+			exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 		} else {
 			Logging.notice(this, "there are no configurations to update");
 		}
@@ -884,8 +879,7 @@ public class UserRolesConfigDataService {
 		Logging.info(this, "Obsolete default user configs ", defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-					new Object[] { defaultUserConfigsObsolete }));
+			exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, defaultUserConfigsObsolete);
 		}
 	}
 

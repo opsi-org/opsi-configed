@@ -8,7 +8,6 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -35,8 +34,7 @@ public class LogDataService {
 		Logging.debug(this, "OpsiMethodCall log_read ", logtype, "for client ", clientId);
 		String logtext;
 		try {
-			logtext = exec
-					.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ, new String[] { logtype, clientId }));
+			logtext = exec.getStringResult(RPCMethodName.LOG_READ, logtype, clientId);
 		} catch (OutOfMemoryError e) {
 			logtext = "--- file too big for showing, enlarge java memory  ---";
 			Logging.error(this, e, "file too big for showing ", logtype);
