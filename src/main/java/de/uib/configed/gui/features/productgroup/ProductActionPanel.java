@@ -122,9 +122,9 @@ public class ProductActionPanel extends JPanel {
 		toolBarSetValues.add(jComboBox);
 		toolBarSetValues.add(buttonSetValues);
 
-		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fillx", "", "[]0"));
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx", "", "[]0"));
 		this.add(searchPane, "span, growx, gapbottom " + Globals.GAP_SIZE + ", wrap");
-		this.add(toolBarActions, "aligny center, split 2");
+		this.add(toolBarActions, "aligny center, split 2, gapbottom " + Globals.GAP_SIZE);
 		this.add(toolBarSetValues, "aligny center, pushx, gapbefore push, gapbottom " + Globals.GAP_SIZE + ", wrap");
 	}
 

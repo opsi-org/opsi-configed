@@ -248,10 +248,11 @@ public class MainPanelManager {
 			toolBarButtons.forEach(generalToolBar::add);
 		}
 
-		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, filly", "[pref!][grow][pref!]", "[pref!][grow]"));
+		JPanel panel = new JPanel(new MigLayout("insets 0 0 0 " + Globals.MIN_GAP_SIZE + ", fillx, filly",
+				"[pref!][grow][pref!]", "[pref!][grow]"));
 		panel.add(generalToolBar, "aligny center");
 		panel.add(titleLabel, "align center");
-		panel.add(opsiLogo, "aligny center, wrap");
+		panel.add(opsiLogo, "aligny center, wrap, gapright " + Globals.GAP_SIZE);
 		panel.add(component, "span, grow");
 
 		return panel;

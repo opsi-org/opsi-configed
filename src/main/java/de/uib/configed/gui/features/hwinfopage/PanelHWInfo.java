@@ -140,7 +140,8 @@ public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeS
 		JPanel contentPanel = new JPanel();
 		setComponent(contentPanel);
 
-		contentPanel.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
+		contentPanel
+				.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
 		contentPanel.add(panelByAuditInfo);
 		contentPanel.add(splitPane, "grow");
 

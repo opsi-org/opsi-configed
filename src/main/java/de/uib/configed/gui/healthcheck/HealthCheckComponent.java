@@ -91,8 +91,8 @@ public class HealthCheckComponent extends
 	@Override
 	protected JComponent renderView(HealthCheckUpdate.HealthCheckModel model, Consumer<HealthCheckMsg> dispatch) {
 		JPanel rootPanel = new JPanel();
-		rootPanel.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fill, wrap 1", "",
-				"[] " + Globals.GAP_SIZE + " [] " + Globals.GAP_SIZE));
+		rootPanel.setLayout(
+				new MigLayout("insets 0, fill, wrap 1", "", "[] " + Globals.GAP_SIZE + " [] " + Globals.GAP_SIZE));
 		rootPanel.add(createHealthCheckPanel(), "grow");
 		rootPanel.add(createButtonPanel(), "growx");
 

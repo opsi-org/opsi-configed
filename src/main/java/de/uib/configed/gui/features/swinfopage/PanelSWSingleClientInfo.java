@@ -243,8 +243,9 @@ public class PanelSWSingleClientInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-		this.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[]0"));
-		this.add(subPanelTitle, "growx, gapy " + Globals.MIN_GAP_SIZE + ", wrap");
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow, fill]",
+				"[]" + Globals.MIN_GAP_SIZE + "[grow]"));
+		this.add(subPanelTitle, "growx");
 		this.add(panelTable, "grow, push");
 
 		if (withPopup) {

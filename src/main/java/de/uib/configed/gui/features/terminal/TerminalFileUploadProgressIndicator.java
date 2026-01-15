@@ -32,14 +32,12 @@ public class TerminalFileUploadProgressIndicator extends JPanel {
 		fileUploadProgressBar = new JProgressBar();
 		fileUploadProgressBar.setStringPainted(true);
 
-		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, wrap 4", "[pref!]rel[pref!]rel[pref!][pref!]",
-				"[]0"));
-		add(uploadingFileLabel, "aligny center, wmin 10, shrink 1, gapbottom " + Globals.GAP_SIZE);
-		add(fileNameLabel, "aligny center, wmin 10, shrink 1, gapbottom " + Globals.GAP_SIZE);
-		add(uploadedFilesLabel,
-				"aligny center, wmin 10, shrink 1, gapbottom " + Globals.GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
-		add(fileUploadProgressBar,
-				"aligny center, wmin 10, gapbottom " + Globals.GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", fillx, wrap 4",
+				"[pref!]push[pref!]push[pref!][pref!]", "[center]"));
+		add(uploadingFileLabel, "aligny center, hmin 10, shrink 1");
+		add(fileNameLabel, "aligny center, hmin 10, shrink 1");
+		add(uploadedFilesLabel, "aligny center, hmin 10, shrink 1");
+		add(fileUploadProgressBar, "aligny center, hmin 10");
 	}
 
 	public void indicateFileUpload(File file, int uploadedFiles, int totalFiles) {
