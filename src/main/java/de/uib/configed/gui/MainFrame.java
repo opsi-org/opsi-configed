@@ -17,7 +17,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -203,39 +202,22 @@ public class MainFrame extends JFrame {
 	}
 
 	public void activateLoadingPane(String infoText) {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> {
-				glassPane.activate(true);
-				glassPane.setInfoText(infoText);
-			});
-		} else {
+		Utils.runOnEventDispatchThread(() -> {
 			glassPane.activate(true);
 			glassPane.setInfoText(infoText);
-		}
+		});
 	}
 
 	public void deactivateLoadingPane() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> glassPane.activate(false));
-		} else {
-			glassPane.activate(false);
-		}
+		Utils.runOnEventDispatchThread(() -> glassPane.activate(false));
 	}
 
 	public void activateLoadingCursor() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
-		} else {
-			setCursor(Globals.WAIT_CURSOR);
-		}
+		Utils.runOnEventDispatchThread(() -> setCursor(Globals.WAIT_CURSOR));
 	}
 
 	public void deactivateLoadingCursor() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(null));
-		} else {
-			setCursor(null);
-		}
+		Utils.runOnEventDispatchThread(() -> setCursor(null));
 	}
 
 	public void showHealthDataAction() {

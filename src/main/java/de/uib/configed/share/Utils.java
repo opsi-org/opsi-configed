@@ -627,4 +627,12 @@ public final class Utils {
 			}
 		};
 	}
+
+	public static void runOnEventDispatchThread(Runnable runnable) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(runnable);
+		} else {
+			runnable.run();
+		}
+	}
 }
