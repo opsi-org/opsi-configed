@@ -67,8 +67,8 @@ import javafx.stage.Stage;
 public final class Utils {
 	private static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 	private static final int KIBI_BYTE = 1024;
-	private static final String[] LOG_TYPES = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
-			"opsiconfd" };
+	private static final String[] LOG_TYPES = new String[] { "bootimage", "clientconnect", "instlog", "opsiconfd",
+			"userlogin" };
 
 	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
 	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
@@ -204,7 +204,7 @@ public final class Utils {
 	}
 
 	public static String[] getLogTypes() {
-		return LOG_TYPES.clone();
+		return LOG_TYPES;
 	}
 
 	public static String getLogType(int index) {
@@ -522,7 +522,7 @@ public final class Utils {
 	public static String getServerPathFromWebDAVPath(String webDAVPath) {
 		String dir = "";
 		if (webDAVPath.startsWith("workbench")) {
-			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			dir = PersistenceControllerFactory.getPersistenceController().getDataServices().config
 					.getConfigedWorkbenchDefaultValuePD();
 			if (dir.charAt(dir.length() - 1) != '/') {
 				dir = dir + "/";
@@ -626,5 +626,13 @@ public final class Utils {
 				consumer.accept(e);
 			}
 		};
+	}
+
+	public static void runOnEventDispatchThread(Runnable runnable) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(runnable);
+		} else {
+			runnable.run();
+		}
 	}
 }

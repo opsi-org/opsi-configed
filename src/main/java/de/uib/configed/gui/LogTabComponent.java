@@ -145,7 +145,7 @@ public class LogTabComponent extends LogPaneComponent {
 		Map<String, String> logFiles = new HashMap<>();
 		String[] idents = Utils.getLogTypes();
 		for (String ident : idents) {
-			String logfile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
+			String logfile = PersistenceControllerFactory.getPersistenceController().getDataServices().log
 					.getLogfile(configedMain.getSelectedClients().get(0), ident);
 			if (logfile.split("\n").length > 1) {
 				logFiles.put(ident, logfile);
@@ -169,8 +169,7 @@ public class LogTabComponent extends LogPaneComponent {
 	private void saveAllToZipFile(String filePath, Map<String, String> logFiles) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			String[] idents = Utils.getLogTypes();
-			for (String ident : idents) {
+			for (String ident : Utils.getLogTypes()) {
 				if (logFiles.get(ident) != null && logFiles.get(ident).split("\n").length > 1) {
 					String fileName = retrieveFileName(configedMain.getSelectedClients().get(0).replace(".", "_"),
 							ident);

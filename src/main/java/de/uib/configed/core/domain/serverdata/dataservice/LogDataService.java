@@ -7,8 +7,6 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -24,19 +22,16 @@ import de.uib.configed.share.logging.Logging;
  * retrieves or it updates internally cached data. {@code PD} stands for
  * {@code Persistent Data}.
  */
-public class LogDataService {
-	private AbstractPOJOExecutioner exec;
-
-	public LogDataService(AbstractPOJOExecutioner exec) {
-		this.exec = exec;
+public class LogDataService extends DataService {
+	public LogDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public String getLogfile(String clientId, String logtype) {
 		Logging.debug(this, "OpsiMethodCall log_read ", logtype, "for client ", clientId);
 		String logtext;
 		try {
-			logtext = exec
-					.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ, new String[] { logtype, clientId }));
+			logtext = dataServices.exec.getStringResult(RPCMethodName.LOG_READ, logtype, clientId);
 		} catch (OutOfMemoryError e) {
 			logtext = "--- file too big for showing, enlarge java memory  ---";
 			Logging.error(this, e, "file too big for showing ", logtype);

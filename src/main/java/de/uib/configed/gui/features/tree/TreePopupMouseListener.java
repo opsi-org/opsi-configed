@@ -44,29 +44,32 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
 		Icons.addIntellijIconToMenuItem(menuItemCreateNode, "add");
 		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
-		menuItemCreateNode.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemCreateNode
+				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 		jPopupMenu.add(menuItemCreateNode);
 
 		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editGroup"));
 		Icons.addIntellijIconToMenuItem(menuItemEditNode, "edit");
 		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(mousePath));
-		menuItemEditNode.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemEditNode.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+				.isGlobalReadOnly());
 		jPopupMenu.add(menuItemEditNode);
 
 		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"));
 		Icons.addIntellijIconToMenuItem(menuItemDeleteNode, "remove");
 		menuItemDeleteNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
-		menuItemDeleteNode.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemDeleteNode
+				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 		jPopupMenu.add(menuItemDeleteNode);
 
 		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
 		Icons.addIntellijIconToMenuItem(menuItemDeleteGroupNode, "delete");
 		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
-		menuItemDeleteGroupNode.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemDeleteGroupNode
+				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 		jPopupMenu.add(menuItemDeleteGroupNode);
 
 		String removeAllKey = tree instanceof ClientTree ? "ClientTree.removeAllElements"
@@ -74,8 +77,9 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey));
 		Icons.addIntellijIconToMenuItem(menuItemRemoveElements, "remove");
 		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
-		menuItemRemoveElements.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemRemoveElements
+				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 		jPopupMenu.add(menuItemRemoveElements);
 	}
 

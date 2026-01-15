@@ -163,7 +163,7 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
 		Icons.addIntellijIconToMenuItem(save, "save");
-		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		save.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
 		save.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
@@ -174,7 +174,7 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.addActionListener(actionEvent -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
-				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		popup.add(itemOnDemand);
 
@@ -182,11 +182,11 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
 		Icons.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
 		itemOnDemandForSelectedProducts
-				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		itemOnDemandForSelectedProducts.addActionListener(
 				actionEvent -> ServerActionManager.processActionRequestsSelectedProducts(groupPanel.getVisibility()));
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
-				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		popup.add(itemOnDemandForSelectedProducts);
 
@@ -198,7 +198,7 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 		} else {
 			resetProductsMenu = ClientMenuManager.createResetNetbootProductsMenuItemsTo();
 		}
-		resetProductsMenu.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		resetProductsMenu.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		popup.add(resetProductsMenu);
 
 		popup.addSeparator();
@@ -246,8 +246,8 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
 		return type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
-				? persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts()
-				: persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
+				? persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsLocalbootProducts()
+				: persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsNetbootProducts();
 	}
 
 	private void createReport() {
@@ -347,17 +347,17 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
 			Map<String, Object> editableProductProperties, ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setProductId(productID);
-		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
-		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
-		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
+		infoPane.setProductName(persistenceController.getDataServices().product.getProductTitle(productID));
+		infoPane.setProductInfo(persistenceController.getDataServices().product.getProductInfo(productID));
+		infoPane.setProductVersion(persistenceController.getDataServices().product.getProductVersion(productID)
 				+ ProductDataService.FOR_DISPLAY
-				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
-				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
+				+ persistenceController.getDataServices().product.getProductPackageVersion(productID) + "   "
+				+ persistenceController.getDataServices().product.getProductLockedInfo(productID));
 
-		infoPane.setProductAdvice(persistenceController.getProductDataService().getProductAdvice(productID));
+		infoPane.setProductAdvice(persistenceController.getDataServices().product.getProductAdvice(productID));
 
 		propertiesPanel.setEditableMap(editableProductProperties,
-				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
+				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
 		propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 

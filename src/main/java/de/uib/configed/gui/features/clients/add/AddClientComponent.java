@@ -390,7 +390,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(dialog,
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
 		groupsSelectionDialog.setListData(
-				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
+				PersistenceControllerFactory.getPersistenceController().getDataServices().group.getHostGroupIds());
 		groupsSelectionDialog
 				.setPreviousSelectionValues(List.of(jTextGroupSelection.getText().replace("; ", ";").split(";")));
 		groupsSelectionDialog.show();
@@ -433,17 +433,17 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private void loadInitialData() {
-		List<String> domains = persistenceController.getConfigDataService().getDomains();
-		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
-		Set<String> netbootProductNames = persistenceController.getProductDataService().getAllNetbootProductNames();
+		List<String> domains = persistenceController.getDataServices().config.getDomains();
+		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getDepotNamesList();
+		Set<String> netbootProductNames = persistenceController.getDataServices().product.getAllNetbootProductNames();
 		List<String> netboots = new ArrayList<>();
 		netboots.add(null);
 		netboots.addAll(netbootProductNames);
-		List<String> hostnames = persistenceController.getHostInfoCollections().getOpsiHostNames();
+		List<String> hostnames = persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames();
 
-		boolean isWanActive = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN);
-		boolean defaultWanSelected = persistenceController.getConfigDataService().isWanConfiguredOnConfigserver();
-		boolean defaultShutdown = persistenceController.getConfigDataService()
+		boolean isWanActive = persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN);
+		boolean defaultWanSelected = persistenceController.getDataServices().config.isWanConfiguredOnConfigserver();
+		boolean defaultShutdown = persistenceController.getDataServices().config
 				.isInstallByShutdownConfiguredOnConfigserver();
 
 		dispatch(new AddClientMsg.ActionMsg.InitialDataLoaded(domains, depots, netboots, hostnames, isWanActive,

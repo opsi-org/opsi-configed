@@ -7,37 +7,29 @@
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class DepotProductPropertiesDataReloadHandler implements ReloadHandler {
-	private CacheManager cacheManager;
-	private ProductDataService productDataService;
-
-	public DepotProductPropertiesDataReloadHandler() {
-		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setProductDataService(ProductDataService productDataService) {
-		this.productDataService = productDataService;
+public class DepotProductPropertiesDataReloadHandler extends AbstractReloadHandler {
+	public DepotProductPropertiesDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	@Override
 	public void handle(String event) {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PACKAGES);
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
-		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
-		executor.runInParallel(() -> productDataService.retrieveProductsAllDepotsPD());
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PACKAGES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
+		executor.runInParallel(dataServices.product::retrieveProductsAllDepotsPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
-		executor.runInParallel(() -> productDataService.retrieveAllProductPropertyDefinitionsPD());
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS);
+		executor.runInParallel(dataServices.product::retrieveAllProductPropertyDefinitionsPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
-		executor.runInParallel(() -> productDataService.retrieveDepotProductPropertiesPD());
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
+		executor.runInParallel(dataServices.product::retrieveDepotProductPropertiesPD);
 
 		executor.waitForCompletion();
 	}

@@ -81,8 +81,8 @@ public class OpsiLicensing extends JPanel {
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
-						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+						persistenceController.getDataServices().module.getOpsiLicensingInfoOpsiAdminPD(),
+						persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 						!OpsiLicensing.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, theSourceMap, false);
@@ -127,6 +127,7 @@ public class OpsiLicensing extends JPanel {
 		JLabel warningLevelDays = new JLabel(Configed.getResourceValue("LicensingInfo.warning.levels.days") + ": "
 				+ licenseMap.getClientLimitWarningDays());
 
+		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
 		JLabel checksumTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.checksum"));
 		JLabel checksum = new JLabel(licenseMap.getCheckSum());
 
@@ -181,7 +182,7 @@ public class OpsiLicensing extends JPanel {
 	private JPanel initOSInstallationPanel() {
 		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
 		JLabel clientTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.title") + "  ("
-				+ persistenceController.getHostInfoCollections().getConfigServer() + ")");
+				+ persistenceController.getDataServices().hostInfoCollections.getConfigServer() + ")");
 		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
 		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
 		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");

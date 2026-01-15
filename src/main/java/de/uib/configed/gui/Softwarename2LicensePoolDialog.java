@@ -116,8 +116,7 @@ public class Softwarename2LicensePoolDialog {
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(VALUE_NO_LICENSE_POOL)));
-		buttonRemoveAllAssignments
-				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		buttonRemoveAllAssignments.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
@@ -240,7 +239,8 @@ public class Softwarename2LicensePoolDialog {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+						return (Map) persistenceController.getDataServices().software
+								.getInstalledSoftwareName2SWinfoPD();
 					}
 				})), 0, new int[] {}, panelSWnames, updateCollection, true) {
 			@Override
@@ -286,8 +286,8 @@ public class Softwarename2LicensePoolDialog {
 
 		Set<String> range = new HashSet<>();
 
-		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+		for (String swID : persistenceController.getDataServices().software.getName2SWIdentsPD().get(swName)) {
+			String licpool = persistenceController.getDataServices().software.getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(VALUE_NO_LICENSE_POOL);
@@ -333,7 +333,7 @@ public class Softwarename2LicensePoolDialog {
 		Logging.info(this, "setGlobalPool  labelSetAllAssignmentsToGloballySelectedPool", labelText);
 		labelSetAllAssignmentsToGloballySelectedPool.setText(labelText);
 		buttonSetAllAssignmentsToGloballySelectedPool
-				.setEnabled(buttonActive && !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				.setEnabled(buttonActive && !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 	}
 
 	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {
@@ -341,10 +341,10 @@ public class Softwarename2LicensePoolDialog {
 
 		Map<String, Map<String, Object>> result = new TreeMap<>();
 
-		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
+		for (String swID : persistenceController.getDataServices().software.getName2SWIdentsPD().get(swName)) {
 			Map<String, Object> rowMap = new HashMap<>();
 			rowMap.put(AuditSoftwareXLicensePool.SW_ID, swID);
-			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+			String licpool = persistenceController.getDataServices().software.getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				rowMap.put(LicensepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENSE_POOL);
@@ -394,11 +394,11 @@ public class Softwarename2LicensePoolDialog {
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicensePool.SW_ID);
-						String licensePoolIDOld = persistenceController.getSoftwareDataService()
+						String licensePoolIDOld = persistenceController.getDataServices().software
 								.getFSoftware2LicensePoolPD(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicensepoolEntry.ID_SERVICE_KEY);
 
-						return persistenceController.getSoftwareDataService().editPool2AuditSoftware(swID,
+						return persistenceController.getDataServices().software.editPool2AuditSoftware(swID,
 								licensePoolIDOld, licensePoolIDNew);
 					}
 

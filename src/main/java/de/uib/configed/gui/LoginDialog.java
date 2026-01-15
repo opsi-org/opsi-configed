@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Font;
+import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -65,12 +66,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 	private Boolean ssoActiveByServer;
 	private FocusListener myFocusListener = new FocusListener() {
 		@Override
-		public void focusGained(java.awt.event.FocusEvent e) {
+		public void focusGained(FocusEvent e) {
 			fieldHost.getEditor().selectAll();
 		}
 
 		@Override
-		public void focusLost(java.awt.event.FocusEvent e) {
+		public void focusLost(FocusEvent e) {
 			initSSO();
 		}
 	};

@@ -37,7 +37,7 @@ public class DependenciesModel {
 	}
 
 	public void setActualProduct(String productId) {
-		String depotId = persistenceController.getDepotDataService().getDepot();
+		String depotId = persistenceController.getDataServices().depot.getDepot();
 
 		setActualProduct(depotId, productId);
 	}

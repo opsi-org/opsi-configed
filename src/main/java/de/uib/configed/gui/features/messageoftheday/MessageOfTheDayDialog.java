@@ -48,7 +48,7 @@ public class MessageOfTheDayDialog {
 	private JScrollPane scrollpane = new JScrollPane();
 
 	public MessageOfTheDayDialog() {
-		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
+		List<Object> forbiddenItemsMOTD = persistenceController.getDataServices().userRoles.getForbiddenMOTD();
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
 		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 		if (forbiddenDevice && forbiddenUser) {
@@ -57,7 +57,7 @@ public class MessageOfTheDayDialog {
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
+		motdData = persistenceController.getDataServices().config.getMessageOfTheDayConfigs();
 		define();
 		init();
 
@@ -123,7 +123,7 @@ public class MessageOfTheDayDialog {
 
 	private void resetData() {
 		Logging.debug("FMessageOfTheDay resetData(both)");
-		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
+		motdData = persistenceController.getDataServices().config.getMessageOfTheDayConfigs();
 		if (!forbiddenDevice) {
 			pMsgInfoGeneral.setDataMap(motdData);
 			pMsgInfoGeneral.resetData();
@@ -151,7 +151,7 @@ public class MessageOfTheDayDialog {
 			Logging.error("FMessageOfTheDay saveData no data", data);
 			return;
 		}
-		persistenceController.getConfigDataService().setMessageOfTheDayConfigs(data);
+		persistenceController.getDataServices().config.setMessageOfTheDayConfigs(data);
 		Logging.info("FMessageOfTheDay saveData done: ", data);
 		resetData();
 	}

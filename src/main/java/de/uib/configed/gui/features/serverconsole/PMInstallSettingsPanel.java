@@ -101,7 +101,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private List<String> getAllowedInstallTargets() {
 		List<String> result = new ArrayList<>();
 
-		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+		if (persistenceController.getDataServices().userRoles.hasDepotsFullPermissionPD()) {
 			jTextFieldSelecteddepots.setEditable(true);
 			result.add(DEPOT_SELECTION_NODEPOTS);
 			result.add(DEPOT_SELECTION_ALL);
@@ -109,8 +109,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostInfoCollections().getAllDepotNamesList()) {
-			if (persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
+		for (String depot : persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList()) {
+			if (persistenceController.getDataServices().userRoles.hasDepotPermission(depot)) {
 				result.add(depot);
 			}
 		}
@@ -125,7 +125,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		List<String> selectedDepots = depotSelection.getSelectedValues();
 
 		if (selectedDepots.isEmpty()) {
-			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+			if (persistenceController.getDataServices().userRoles.hasDepotsFullPermissionPD()) {
 				depotParameter = DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);

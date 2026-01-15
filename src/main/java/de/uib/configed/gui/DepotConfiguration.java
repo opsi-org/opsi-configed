@@ -170,8 +170,8 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
-				.getDepotPropertiesForPermittedDepots();
+		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
+				.getDataServices().depot.getDepotPropertiesForPermittedDepots();
 
 		if (hostUpdateCollection != null) {
 			UpdateCollectionManager.removeFromGlobalUpdateCollection(hostUpdateCollection);
@@ -201,13 +201,14 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
+		List<Map<String, Object>> additionalConfigs = persistenceController.getDataServices().config
 				.getHostsConfigsWithDefaults(depotsList.getSelectedValuesList());
 		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
-				.getConfigDataService().getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
+		Map<String, List<Object>> originalMap = ConfigedUtilityMethods
+				.mergeMaps(persistenceController.getDataServices().config
+						.getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList()),
 				mergedVisualMap, additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);

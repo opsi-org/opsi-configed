@@ -297,10 +297,10 @@ public class PanelSWSingleClientInfo extends JPanel {
 		}
 
 		Logging.info(this, "retrieving data for ", hostId);
-		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
+		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getDataServices().software
 				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
 
-		Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
+		Map<String, Map<String, Object>> tableData = persistenceController.getDataServices().software
 				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
 		if (tableData == null || tableData.isEmpty()) {
@@ -311,7 +311,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 					.filter(innerMap -> Boolean.TRUE.equals(innerMap.get(SWAuditEntry.IS_OPERATING_SYSTEM)))
 					.map(innerMap -> (String) innerMap.get(SWAuditEntry.NAME)).findFirst();
 			Logging.debug(this, "retrieved size  ", tableData.size());
-			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
+			scanInfo = "Scan " + persistenceController.getDataServices().software
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 			if (osName.isPresent()) {
 				scanInfo += " on " + osName.get();

@@ -51,10 +51,11 @@ public final class ClientData {
 			return;
 		}
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getDataServices().hostInfoCollections
 				.getMapOfAllPCInfoMaps();
 
-		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 
 		for (String depot : depots) {
 			List<Client> clientsList = new ArrayList<>();
@@ -101,13 +102,14 @@ public final class ClientData {
 		notConnectedClientsByMessagebus.clear();
 
 		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
-				persistenceController.getHostDataService().getMessagebusConnectedClients());
-		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+				persistenceController.getDataServices().host.getMessagebusConnectedClients());
+		List<String> depots = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 		for (String depot : depots) {
-			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()
-					.getMapOfAllPCInfoMaps().values().stream()
-					.filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
-					.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).collect(Collectors.toList());
+			List<String> notConnectedClientsByMessagebusInDepot = persistenceController
+					.getDataServices().hostInfoCollections.getMapOfAllPCInfoMaps().values().stream()
+							.filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
+							.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).collect(Collectors.toList());
 			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
 					.filter(notConnectedClientsByMessagebusInDepot::contains).toList();
 			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
@@ -135,9 +137,10 @@ public final class ClientData {
 
 		clientLastSeen.clear();
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getDataServices().hostInfoCollections
 				.getMapOfAllPCInfoMaps();
-		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 
 		for (String depot : depots) {
 			Helper.fillMapOfMapsForDepots(clientLastSeen, produceLastSeenData(mapOfAllPCInfoMaps, depot), depot);

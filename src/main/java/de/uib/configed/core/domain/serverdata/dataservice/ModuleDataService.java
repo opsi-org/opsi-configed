@@ -16,16 +16,12 @@ import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.modulelicense.LicensingInfoMap;
 import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
 import de.uib.configed.core.domain.permission.ModulePermissionValue;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.ExtendedDate;
@@ -47,7 +43,7 @@ import de.uib.configed.share.logging.Logging;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class ModuleDataService {
+public class ModuleDataService extends DataService {
 	// opsi module information
 	private static final int CLIENT_COUNT_WARNING_LIMIT = 10;
 	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
@@ -56,23 +52,8 @@ public class ModuleDataService {
 			"monitoring", "wim-capture", "scalability1", "linux_agent", "vpn", "mysql_backend", "uefi", "userroles",
 			"directory-connector", "macos_agent", "secureboot", "win-vhd", "os_install_by_wlan");
 
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-
-	private UserRolesConfigDataService userRolesConfigDataService;
-	private HostInfoCollections hostInfoCollections;
-
-	public ModuleDataService(AbstractPOJOExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
+	public ModuleDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public final void retrieveOpsiModules() {
@@ -92,35 +73,34 @@ public class ModuleDataService {
 
 	public final Map<String, Object> getOpsiLicensingInfoOpsiAdminPD() {
 		retrieveOpsiLicensingInfoOpsiAdminPD();
-		return cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class);
 	}
 
 	public final void retrieveOpsiLicensingInfoOpsiAdminPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
 			return;
 		}
 
 		if (isOpsiUserAdminPD()) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO,
-					new Object[] { true, false, true, false });
-			Map<String, Object> licencingInfoOpsiAdmin = exec.retrieveResponse(omc);
-			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, licencingInfoOpsiAdmin);
+			Map<String, Object> licencingInfoOpsiAdmin = dataServices.exec
+					.getMapResult(RPCMethodName.BACKEND_GET_LICENSING_INFO, true, false, true, false);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN,
+					licencingInfoOpsiAdmin);
 		}
 	}
 
 	public Map<String, Object> getOpsiLicensingInfoNoOpsiAdminPD() {
 		Logging.info(this, "getLicensingInfoNoOpsiAdmin");
 		retrieveOpsiLicensingInfoNoOpsiAdminPD();
-		return cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class);
 	}
 
 	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
-		if (!cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
-			Object[] callParameters = {};
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, callParameters,
-					OpsiMethodCall.BACKGROUND_DEFAULT);
-			Map<String, Object> licensingInfoNoOpsiAdmin = exec.getMapResult(omc);
-			cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, licensingInfoNoOpsiAdmin);
+		if (!dataServices.cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
+			Map<String, Object> licensingInfoNoOpsiAdmin = dataServices.exec
+					.getMapResult(RPCMethodName.BACKEND_GET_LICENSING_INFO);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN,
+					licensingInfoNoOpsiAdmin);
 		}
 	}
 
@@ -131,8 +111,8 @@ public class ModuleDataService {
 		// opsiinformation which delivers the service information on checked modules
 		// displaying to the user
 
-		hostInfoCollections.retrieveOpsiHostsPD();
-		Map<String, List<Object>> configDefaultValues = cacheManager
+		dataServices.hostInfoCollections.retrieveOpsiHostsPD();
+		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		Logging.info(this, "getOverLimitModuleList() ",
 				LicensingInfoMap.getInstance(getOpsiLicensingInfoOpsiAdminPD(), configDefaultValues, true)
@@ -147,7 +127,7 @@ public class ModuleDataService {
 			opsiModules.put(mod, availableModules.indexOf(mod) != -1);
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 
 		Logging.info(this, "opsiModules result ", opsiModules);
 
@@ -161,7 +141,7 @@ public class ModuleDataService {
 
 	public Map<String, Object> getOpsiModulesInfosPD() {
 		retrieveOpsiModules();
-		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, Map.class);
 	}
 
 	private Map<String, Object> createOpsiModulesInformation(Map<String, Boolean> opsiModules,
@@ -180,7 +160,7 @@ public class ModuleDataService {
 		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"));
 
 		opsiCountModules.keySet().removeAll(POJOReMapper.remap(opsiInformation.get("obsolete_modules")));
-		hostInfoCollections.retrieveOpsiHostsPD();
+		dataServices.hostInfoCollections.retrieveOpsiHostsPD();
 
 		Logging.info(this, "opsiModulesInfo ", opsiModulesInfo);
 
@@ -226,7 +206,7 @@ public class ModuleDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, opsiModulesDisplayInfo);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, opsiModulesDisplayInfo);
 
 		return opsiCountModules;
 	}
@@ -336,7 +316,7 @@ public class ModuleDataService {
 			}
 
 			if (problemToIndicate && ("linux_agent".equals(key)
-					|| ("userroles".equals(key) && !userRolesConfigDataService.hasKeyUserRegisterValuePD()))) {
+					|| ("userroles".equals(key) && !dataServices.userRoles.hasKeyUserRegisterValuePD()))) {
 				problemToIndicate = false;
 			}
 
@@ -421,7 +401,7 @@ public class ModuleDataService {
 		Logging.info(this, "retrieveOpsiModules opsiCountModules ", opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions ", opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules ", opsiModules);
-		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 	}
 
 	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
@@ -467,38 +447,23 @@ public class ModuleDataService {
 	}
 
 	public boolean isOpsiUserAdminPD() {
-		if (!cacheManager.isDataCached(CacheIdentifier.IS_OPSI_ADMIN_USER)) {
-			retrieveIsOpsiUserAdminPD();
+		if (!dataServices.cacheManager.isDataCached(CacheIdentifier.IS_OPSI_ADMIN_USER)) {
+			dataServices.cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER,
+					dataServices.exec.getBooleanResult(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN));
 		}
 
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, Boolean.class));
-	}
-
-	private void retrieveIsOpsiUserAdminPD() {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_ADMIN, new Object[] {});
-		Map<String, Object> json = exec.retrieveResponse(omc);
-
-		Boolean isOpsiUserAdmin = null;
-		if (json.containsKey("result") && json.get("result") != null) {
-			isOpsiUserAdmin = (Boolean) json.get("result");
-		} else {
-			Logging.warning(this, "cannot check if user is admin, fallback to false...");
-
-			isOpsiUserAdmin = false;
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, isOpsiUserAdmin);
+		return Boolean.TRUE
+				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, Boolean.class));
 	}
 
 	private Map<String, Object> produceOpsiInformationPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.OPSI_INFORMATION)) {
-			return cacheManager.getCachedData(CacheIdentifier.OPSI_INFORMATION, Map.class);
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.OPSI_INFORMATION)) {
+			return dataServices.cacheManager.getCachedData(CacheIdentifier.OPSI_INFORMATION, Map.class);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, new String[] {});
-		Map<String, Object> opsiInformation = exec.getMapResult(omc);
+		Map<String, Object> opsiInformation = dataServices.exec.getMapResult(RPCMethodName.BACKEND_GET_LICENSING_INFO);
 
-		cacheManager.setCachedData(CacheIdentifier.OPSI_INFORMATION, opsiInformation);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.OPSI_INFORMATION, opsiInformation);
 		return opsiInformation;
 	}
 
@@ -511,7 +476,7 @@ public class ModuleDataService {
 	}
 
 	private Map<String, Boolean> getOpsiModulesPD() {
-		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class);
 	}
 
 	public List<Map<String, Object>> getModules() {
@@ -523,7 +488,7 @@ public class ModuleDataService {
 	private Map<String, Object> retrieveProducedLicensingInfo() {
 		Map<String, Object> producedLicencingInfo;
 		if (isOpsiUserAdminPD() && getOpsiLicensingInfoOpsiAdminPD() != null) {
-			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"));
+			producedLicencingInfo = getOpsiLicensingInfoOpsiAdminPD();
 		} else {
 			producedLicencingInfo = getOpsiLicensingInfoNoOpsiAdminPD();
 		}

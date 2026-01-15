@@ -47,6 +47,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class LogTextPane extends JTextPane {
@@ -223,17 +224,12 @@ public class LogTextPane extends JTextPane {
 		}
 
 		setDocument(document);
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> {
-				highlighter.removeAllHighlights();
-				refreshCurrentLineVisuals();
-				setCursor(null);
-			});
-		} else {
+
+		Utils.runOnEventDispatchThread(() -> {
 			highlighter.removeAllHighlights();
 			refreshCurrentLineVisuals();
 			setCursor(null);
-		}
+		});
 
 		return document;
 	}

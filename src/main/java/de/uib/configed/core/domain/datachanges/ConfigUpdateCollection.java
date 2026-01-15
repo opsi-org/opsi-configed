@@ -63,8 +63,8 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 		if (configUpdates != null) {
 			configUpdates.clear();
 		}
-		persistenceController.getConfigDataService().updateConfigs();
-		persistenceController.getConfigDataService().updateConfigStates();
+		persistenceController.getDataServices().config.updateConfigs();
+		persistenceController.getDataServices().config.updateConfigStates();
 
 		clear();
 	}

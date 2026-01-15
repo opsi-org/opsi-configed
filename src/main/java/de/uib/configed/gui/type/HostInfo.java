@@ -398,10 +398,10 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setHostDescription(client,
+			persistenceController.getDataServices().host.setHostDescription(client,
 					(String) data.get(CLIENT_DESCRIPTION_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY,
-					data.get(CLIENT_DESCRIPTION_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_DESCRIPTION_KEY, data.get(CLIENT_DESCRIPTION_KEY));
 		}
 	}
 
@@ -422,10 +422,10 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setClientInventoryNumber(client,
+			persistenceController.getDataServices().host.setClientInventoryNumber(client,
 					(String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
-					data.get(CLIENT_INVENTORY_NUMBER_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_INVENTORY_NUMBER_KEY, data.get(CLIENT_INVENTORY_NUMBER_KEY));
 		}
 	}
 
@@ -438,10 +438,10 @@ public class HostInfo {
 					.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setClientOneTimePassword(client,
+			persistenceController.getDataServices().host.setClientOneTimePassword(client,
 					(String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
-					data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_ONE_TIME_PASSWORD_KEY, data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		}
 	}
 
@@ -455,8 +455,8 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setHostNotes(client, (String) data.get(CLIENT_NOTES_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY,
+			persistenceController.getDataServices().host.setHostNotes(client, (String) data.get(CLIENT_NOTES_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, CLIENT_NOTES_KEY,
 					data.get(CLIENT_NOTES_KEY));
 		}
 	}
@@ -478,9 +478,10 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setSystemUUID(client, (String) data.get(CLIENT_SYSTEM_UUID_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,
-					data.get(CLIENT_SYSTEM_UUID_KEY));
+			persistenceController.getDataServices().host.setSystemUUID(client,
+					(String) data.get(CLIENT_SYSTEM_UUID_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_SYSTEM_UUID_KEY, data.get(CLIENT_SYSTEM_UUID_KEY));
 		}
 	}
 
@@ -501,9 +502,10 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setMacAddress(client, (String) data.get(CLIENT_MAC_ADRESS_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY,
-					data.get(CLIENT_MAC_ADRESS_KEY));
+			persistenceController.getDataServices().host.setMacAddress(client,
+					(String) data.get(CLIENT_MAC_ADRESS_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_MAC_ADRESS_KEY, data.get(CLIENT_MAC_ADRESS_KEY));
 		}
 	}
 
@@ -523,9 +525,9 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setIpAddress(client, (String) data.get(CLIENT_IP_ADDRESS_KEY));
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY,
-					data.get(CLIENT_IP_ADDRESS_KEY));
+			persistenceController.getDataServices().host.setIpAddress(client, (String) data.get(CLIENT_IP_ADDRESS_KEY));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_IP_ADDRESS_KEY, data.get(CLIENT_IP_ADDRESS_KEY));
 		}
 	}
 
@@ -548,9 +550,9 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setInstallOnShutdown(client, shutdownInstall);
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY,
-					shutdownInstall);
+			persistenceController.getDataServices().host.setInstallOnShutdown(client, shutdownInstall);
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
 		}
 	}
 
@@ -571,9 +573,9 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getHostDataService().setWanConfig(client, wanStandard);
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY,
-					wanStandard);
+			persistenceController.getDataServices().host.setWanConfig(client, wanStandard);
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
+					CLIENT_WAN_CONFIG_KEY, wanStandard);
 		}
 	}
 

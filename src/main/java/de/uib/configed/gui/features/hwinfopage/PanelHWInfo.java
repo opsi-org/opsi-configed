@@ -164,7 +164,7 @@ public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeS
 	@Override
 	protected void updateContent() {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
-		setHardwareInfo(persistenceController.getHardwareDataService()
+		setHardwareInfo(persistenceController.getDataServices().hardware
 				.getHardwareInfo(configedMain.getSelectedClients().get(0)));
 	}
 
@@ -417,7 +417,7 @@ public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeS
 
 	private void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
 		if (hwConfig == null) {
-			hwConfig = persistenceController.getHardwareDataService()
+			hwConfig = persistenceController.getDataServices().hardware
 					.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
 		}
 

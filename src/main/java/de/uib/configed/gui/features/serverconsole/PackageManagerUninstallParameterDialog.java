@@ -65,8 +65,7 @@ public class PackageManagerUninstallParameterDialog {
 	private ConfigedMain configedMain;
 
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -102,7 +101,7 @@ public class PackageManagerUninstallParameterDialog {
 		Logging.debug(this, "produceDepotParameter, selectedDepots ", selectedDepots);
 
 		if (selectedDepots.isEmpty()) {
-			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+			if (persistenceController.getDataServices().userRoles.hasDepotsFullPermissionPD()) {
 				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
@@ -134,7 +133,7 @@ public class PackageManagerUninstallParameterDialog {
 
 		List<String> result = new ArrayList<>();
 
-		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+		if (persistenceController.getDataServices().userRoles.hasDepotsFullPermissionPD()) {
 			textFieldSelectedDepots.setEditable(true);
 			result.add(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS);
 			result.add(DEPOT_SELECTION_ALL_WHERE_INSTALLED);
@@ -142,7 +141,7 @@ public class PackageManagerUninstallParameterDialog {
 			textFieldSelectedDepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostInfoCollections().getAllDepotNamesList()) {
+		for (String depot : persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList()) {
 			if (isPossibleDepot(depot, selectedProduct)) {
 				Logging.info(this, "taking this depot ", depot);
 				result.add(depot);
@@ -155,18 +154,18 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private boolean isPossibleDepot(String depot, String selectedProduct) {
-		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
+		if (!persistenceController.getDataServices().userRoles.hasDepotPermission(depot)) {
 			return false;
 		}
 
-		if (persistenceController.getProductDataService().getDepot2LocalbootProductsPD().get(depot) != null
-				&& persistenceController.getProductDataService().getDepot2LocalbootProductsPD().get(depot)
+		if (persistenceController.getDataServices().product.getDepot2LocalbootProductsPD().get(depot) != null
+				&& persistenceController.getDataServices().product.getDepot2LocalbootProductsPD().get(depot)
 						.containsKey(selectedProduct)) {
 			return true;
 		}
 
-		return persistenceController.getProductDataService().getDepot2NetbootProductsPD().get(depot) != null
-				&& persistenceController.getProductDataService().getDepot2NetbootProductsPD().get(depot)
+		return persistenceController.getDataServices().product.getDepot2NetbootProductsPD().get(depot) != null
+				&& persistenceController.getDataServices().product.getDepot2NetbootProductsPD().get(depot)
 						.containsKey(selectedProduct);
 	}
 
@@ -234,7 +233,7 @@ public class PackageManagerUninstallParameterDialog {
 		Logging.info(this, "resetProducts in combobox opsi products");
 		jComboBoxOpsiProducts.removeAllItems();
 
-		for (String item : persistenceController.getProductDataService().getProductIdsPD()) {
+		for (String item : persistenceController.getDataServices().product.getProductIdsPD()) {
 			jComboBoxOpsiProducts.addItem(item);
 		}
 	}

@@ -52,7 +52,7 @@ public class ProductpropertiesUpdateCollection extends DefaultUpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion");
-		persistenceController.getProductDataService().setProductProperties();
+		persistenceController.getDataServices().product.setProductProperties();
 	}
 
 	@Override

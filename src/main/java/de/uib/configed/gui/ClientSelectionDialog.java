@@ -168,7 +168,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		manager.loadSearch(name);
 		loadFromManager();
-		SavedSearch search = persistenceController.getConfigDataService().getSavedSearchesPD().get(name);
+		SavedSearch search = persistenceController.getDataServices().config.getSavedSearchesPD().get(name);
 		saveNameField.setText(search.getName());
 		saveDescriptionField.setText(search.getDescription());
 	}
@@ -492,9 +492,9 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
 
 		result.groupList.add(createSimpleGroup(new GroupElement(
-				persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]))));
+				persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(new GroupWithSubgroupsElement(
-				persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]))));
+				persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(
 				new NameElement(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
 		result.groupList.add(createSimpleGroup(new IPElement()));

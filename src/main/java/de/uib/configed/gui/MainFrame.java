@@ -6,37 +6,28 @@
 
 package de.uib.configed.gui;
 
+import java.awt.CardLayout;
 import java.awt.event.WindowEvent;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.StringJoiner;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
-import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
-import de.uib.configed.gui.features.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
-import de.uib.configed.gui.healthcheck.HealthCheckDataLoader;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WindowsPositionManager;
-import de.uib.configed.share.logging.Logging;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import net.miginfocom.swing.MigLayout;
 
 public class MainFrame extends JFrame {
@@ -52,6 +43,11 @@ public class MainFrame extends JFrame {
 	private MenuBarController menuBarController;
 
 	private GlassPane glassPane;
+
+	private CardLayout cardLayout;
+	private JPanel contentPanel;
+
+	private Map<EditingTarget, Boolean> initializedPanels = new EnumMap<>(EditingTarget.class);
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -90,7 +86,19 @@ public class MainFrame extends JFrame {
 		// initialized at this point.
 		setJMenuBar(menuBarController.initMenuBar(leftToolBar, this));
 
-		showClientConfiguration();
+		cardLayout = new CardLayout();
+		contentPanel = new JPanel(cardLayout);
+
+		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow]", "[grow]"));
+		JPanel controlPanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "[pref!]", "[pref!]push[pref!]"));
+
+		controlPanel.add(leftControlBar, "aligny top");
+		controlPanel.add(leftToolBar, "aligny bottom, gaptop unrel");
+
+		getContentPane().add(controlPanel, "growy");
+		getContentPane().add(contentPanel, "grow");
+
+		showPanel(EditingTarget.CLIENTS);
 
 		setTitle("(" + persistenceController.getExecutioner().getUsername() + ") "
 				+ persistenceController.getExecutioner().getHost() + " - " + Globals.APPNAME);
@@ -128,7 +136,8 @@ public class MainFrame extends JFrame {
 	// menus
 
 	public void resetData() {
-		mainPanelManager.resetData();
+		initializedPanels.clear();
+		contentPanel.removeAll();
 	}
 
 	public boolean checkSaveLicenses() {
@@ -157,47 +166,21 @@ public class MainFrame extends JFrame {
 		leftToolBar.reloadServerConsoleMenu();
 	}
 
-	public void showDashboard() {
-		showPanel(mainPanelManager.getDashBoardPanel());
-	}
-
-	public void showHealthCheckPanel() {
-		showPanel(mainPanelManager.getHealthCheckPanel());
-	}
-
-	public void showClientConfiguration() {
-		showPanel(mainPanelManager.getClientConfigurationPanel());
-	}
-
-	public void showDepotConfiguration() {
-		showPanel(mainPanelManager.getDepotConfigurationSplitPane());
-	}
-
-	public void showServerConfiguration() {
-		showPanel(mainPanelManager.getServerConfigurationPanel());
-	}
-
-	private void showPanel(JComponent panel) {
-		// Ensure Swing updates happen on the EDT to avoid intermittent UI issues.
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> showPanel(panel));
-			return;
+	public boolean showPanel(EditingTarget editingTarget) {
+		if (!Boolean.TRUE.equals(initializedPanels.get(editingTarget))) {
+			activateLoadingCursor();
+			JPanel panel = mainPanelManager.getPanelForEditingTarget(editingTarget);
+			if (panel == null) {
+				deactivateLoadingCursor();
+				return false;
+			}
+			contentPanel.add(panel, editingTarget.name());
+			initializedPanels.put(editingTarget, true);
+			deactivateLoadingCursor();
 		}
 
-		getContentPane().removeAll();
-
-		// getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow, fill]", "[grow][]"));
-		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow]", "[grow]"));
-		JPanel controlPanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "[pref!]", "[pref!]push[pref!]"));
-
-		controlPanel.add(leftControlBar, "aligny top");
-		controlPanel.add(leftToolBar, "aligny bottom, gaptop unrel");
-
-		getContentPane().add(controlPanel, "growy");
-		getContentPane().add(panel, "grow");
-
-		getContentPane().revalidate();
-		getContentPane().repaint();
+		cardLayout.show(contentPanel, editingTarget.name());
+		return true;
 	}
 
 	public void saveConfigurationsSetEnabled(boolean b) {
@@ -205,96 +188,22 @@ public class MainFrame extends JFrame {
 	}
 
 	public void activateLoadingPane(String infoText) {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> {
-				glassPane.activate(true);
-				glassPane.setInfoText(infoText);
-			});
-		} else {
+		Utils.runOnEventDispatchThread(() -> {
 			glassPane.activate(true);
 			glassPane.setInfoText(infoText);
-		}
+		});
 	}
 
 	public void deactivateLoadingPane() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> glassPane.activate(false));
-		} else {
-			glassPane.activate(false);
-		}
+		Utils.runOnEventDispatchThread(() -> glassPane.activate(false));
 	}
 
 	public void activateLoadingCursor() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(Globals.WAIT_CURSOR));
-		} else {
-			setCursor(Globals.WAIT_CURSOR);
-		}
+		Utils.runOnEventDispatchThread(() -> setCursor(Globals.WAIT_CURSOR));
 	}
 
 	public void deactivateLoadingCursor() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(() -> setCursor(null));
-		} else {
-			setCursor(null);
-		}
-	}
-
-	public void showHealthDataAction() {
-		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
-			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
-		}
-
-		new HealthCheckDataLoader().execute();
-	}
-
-	public void showOpsiModules() {
-		if (!persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			Map<String, Object> modulesInfo = persistenceController.getModuleDataService().getOpsiModulesInfosPD();
-
-			StringJoiner message = new StringJoiner("\n");
-			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
-				message.add(modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
-			}
-
-			JTextArea textArea = new JTextArea(message.toString());
-			textArea.setEditable(false);
-
-			JOptionPane.showMessageDialog(this, textArea,
-					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), JOptionPane.PLAIN_MESSAGE);
-		} else {
-			showPanel(mainPanelManager.getOpsiLicensingPanel());
-		}
-	}
-
-	public boolean startLicensingManagement() {
-		Logging.info(this, "startLicensingManagement called");
-
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			Utils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
-			return false;
-		}
-
-		new Thread() {
-			@Override
-			public void run() {
-				showPanel(mainPanelManager.getLicenseManagementPanel());
-
-				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
-					// Starting JavaFX-Thread by creating a new JFXPanel, but not
-					// using it since it is not needed.
-					new JFXPanel();
-
-					Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
-				}
-
-				deactivateLoadingPane();
-			}
-		}.start();
-
-		return true;
+		Utils.runOnEventDispatchThread(() -> setCursor(null));
 	}
 
 	public void nextView() {
@@ -306,33 +215,12 @@ public class MainFrame extends JFrame {
 	}
 
 	private void switchView(boolean isNext) {
-		EditingTarget editingTarget = ConfigedMain.getEditingTarget();
-		int currentView = editingTarget.ordinal() + 1;
-		int targetView = currentView;
+		int nextView = ConfigedMain.getEditingTarget().ordinal() + (isNext ? 1 : -1);
 
-		targetView += isNext ? 1 : -1;
+		// Move targetView within bounds
+		nextView = (nextView + EditingTarget.values().length) % EditingTarget.values().length;
 
-		if (targetView < 1) {
-			targetView = 7;
-		} else if (targetView > 7) {
-			targetView = 1;
-		} else {
-			// Not needed.
-		}
-
-		switchViewBasedOnViewIndex(targetView);
-	}
-
-	private void switchViewBasedOnViewIndex(int index) {
-		switch (index) {
-		case 1 -> leftControlBar.selectView(EditingTarget.CLIENTS);
-		case 2 -> leftControlBar.selectView(EditingTarget.DEPOTS);
-		case 3 -> leftControlBar.selectView(EditingTarget.SERVER);
-		case 4 -> leftControlBar.selectView(EditingTarget.DASHBOARD);
-		case 5 -> leftControlBar.selectView(EditingTarget.OPSI_MODULES);
-		case 6 -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK);
-		case 7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
-		default -> Logging.info(this, "Unknown view index" + index);
-		}
+		EditingTarget targetEditingTarget = EditingTarget.values()[nextView];
+		leftControlBar.selectView(targetEditingTarget);
 	}
 }

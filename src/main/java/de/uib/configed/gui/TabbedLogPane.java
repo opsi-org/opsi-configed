@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -21,9 +20,11 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class TabbedLogPane extends AbstractClientConfigurationTab {
+	// This is the index of "instlog" in Utils.getLogTypes()
+	private static final int DEFAULT_SELECTED_INDEX = 2;
 	private LogTabComponent[] textPanes;
-	private String[] idents = Utils.getLogTypes();
-	private final List<String> identsList;
+	private String[] logTypes = Utils.getLogTypes();
+	private final List<String> logTypesList;
 
 	private ConfigedMain configedMain;
 
@@ -45,21 +46,19 @@ public class TabbedLogPane extends AbstractClientConfigurationTab {
 		// We want a small gap on top, between the client tabs and the log tabs
 		tabbedPane.setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE, 0, 0, 0));
 
-		identsList = Arrays.asList(idents);
+		logTypesList = Arrays.asList(logTypes);
 
-		textPanes = new LogTabComponent[idents.length];
+		textPanes = new LogTabComponent[logTypes.length];
 
-		for (int i = 0; i < idents.length; i++) {
+		for (int i = 0; i < logTypes.length; i++) {
 			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
 		}
 
-		tabbedPane.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex ", tabbedPane.getSelectedIndex());
+		// We need to set the index before adding the change listener
+		// to avoid triggering the action on startup
+		tabbedPane.setSelectedIndex(DEFAULT_SELECTED_INDEX);
 
-			String logtype = Utils.getLogType(tabbedPane.getSelectedIndex());
-
-			setDocument(logtype, false);
-		});
+		tabbedPane.addChangeListener(event -> updateContent());
 
 		// We want to have no minimum size restrictions
 		// So that users can reduce the size of the client configuration as much as they want
@@ -69,49 +68,39 @@ public class TabbedLogPane extends AbstractClientConfigurationTab {
 	@Override
 	protected void updateContent() {
 		Logging.debug(this, "setLogPage");
-		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab("instlog", false);
-		setLogview("instlog");
+		setDocument(logTypes[tabbedPane.getSelectedIndex()], false);
 	}
 
 	private void initLogTabComponent(int i, String defaultText) {
 		LogTabComponent logTabComponent = new LogTabComponent(defaultText, getFocusTraversalKeysEnabled(),
 				configedMain);
-		logTabComponent.setLogFileType(idents[i]);
+		logTabComponent.setLogFileType(logTypes[i]);
 		textPanes[i] = logTabComponent;
-		tabbedPane.addTab(idents[i], textPanes[i].initUI());
+		tabbedPane.addTab(logTypes[i], textPanes[i].initUI());
 	}
 
 	public void setDocument(String logtype, final boolean resetCaret) {
-		String document = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
-				logtype);
-		Logging.info(this, "idents.length ", idents.length);
+		String document = persistenceController.getDataServices().log
+				.getLogfile(configedMain.getSelectedClients().get(0), logtype);
+		Logging.info(this, "logTypes.length ", logTypes.length);
 
-		int i = identsList.indexOf(logtype);
-		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
-		if (i < 0 || i >= idents.length) {
+		int index = logTypesList.indexOf(logtype);
+		Logging.info(this, "setDocument ", index, " document == null ", (document == null));
+		if (index < 0 || index >= logTypes.length) {
 			return;
 		}
 
 		if (document == null) {
-			textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
-			textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(""));
+			textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
+			textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(""));
 			return;
 		}
 
 		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
 				: "";
 
-		textPanes[i].dispatch(new LogPaneMsg.ChangeTitle(idents[i] + " " + selectedClient));
-		textPanes[i].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
-		textPanes[i].dispatch(new LogPaneMsg.ParseLogRequested(document));
-	}
-
-	public void setLogview(String logtype) {
-		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
-		if (i < 0) {
-			return;
-		}
-
-		tabbedPane.setSelectedIndex(i);
+		textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(logTypes[index] + " " + selectedClient));
+		textPanes[index].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
+		textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document));
 	}
 }

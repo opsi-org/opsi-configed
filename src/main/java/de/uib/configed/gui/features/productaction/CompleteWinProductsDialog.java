@@ -67,7 +67,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		defineChoosers();
 		initComponentsForNameProducer();
 
-		String webDavPath = persistenceController.getHostInfoCollections().getConfigServerWebDavPath();
+		String webDavPath = persistenceController.getDataServices().hostInfoCollections.getConfigServerWebDavPath();
 		depotProductDirectory = webDavPath != null && !webDavPath.isEmpty() ? webDavPath : "depot/";
 		if (!depotProductDirectory.endsWith("/")) {
 			depotProductDirectory += "/";
@@ -119,7 +119,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Configed.getResourceValue("CompleteWinProducts.chooser"));
 
-		depot = new JLabel(persistenceController.getHostInfoCollections().getConfigServer());
+		depot = new JLabel(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {

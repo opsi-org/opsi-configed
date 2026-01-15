@@ -90,13 +90,13 @@ public class InstallationStateUpdateManager {
 				for (Entry<String, Map<String, String>> productState : clientValues.entrySet()) {
 					Map<String, String> productValues = productState.getValue();
 
-					persistenceController.getProductDataService().updateProductOnClient(changedClientState.getKey(),
+					persistenceController.getDataServices().product.updateProductOnClient(changedClientState.getKey(),
 							productState.getKey(), productType, productValues);
 				}
 			}
 
 			// send the collected items
-			persistenceController.getProductDataService().updateProductOnClients();
+			persistenceController.getDataServices().product.updateProductOnClients();
 		}
 
 		clearCollectChangedStates(productType);

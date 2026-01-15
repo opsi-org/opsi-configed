@@ -7,27 +7,19 @@
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class ConfigOptionsDataReloadHandler implements ReloadHandler {
-	private CacheManager cacheManager;
-	private ConfigDataService configDataService;
-
-	public ConfigOptionsDataReloadHandler() {
-		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
+public class ConfigOptionsDataReloadHandler extends AbstractReloadHandler {
+	public ConfigOptionsDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
-		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
-		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
-		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
-		configDataService.retrieveConfigOptionsPD();
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
+		dataServices.config.retrieveConfigOptionsPD();
 	}
 }

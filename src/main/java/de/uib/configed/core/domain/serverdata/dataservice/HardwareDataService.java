@@ -16,10 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.messages.Messages;
 
@@ -37,39 +34,36 @@ import de.uib.configed.gui.messages.Messages;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class HardwareDataService {
+public class HardwareDataService extends DataService {
 	// constants for building hw queries
 	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
 	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
 
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-
-	public HardwareDataService(AbstractPOJOExecutioner exec) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
+	public HardwareDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public List<Map<String, Object>> getHardwareOnClientPD() {
 		retrieveHardwareOnClientPD();
-		return cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class);
 	}
 
 	public void retrieveHardwareOnClientPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST)) {
 			return;
 		}
 		Map<String, String> filterMap = new HashMap<>();
 		filterMap.put("state", "1");
-		List<Map<String, Object>> relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
-		cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, relationsAuditHardwareOnHost);
+		List<Map<String, Object>> relationsAuditHardwareOnHost = dataServices.exec
+				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new String[0], filterMap);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST,
+				relationsAuditHardwareOnHost);
 	}
 
 	public List<Map<String, Object>> getOpsiHWAuditConfPD(String locale) {
 		retrieveOpsiHWAuditConfPD(locale);
-		Map<String, List<Map<String, Object>>> hwAuditConf = cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF,
-				Map.class);
+		Map<String, List<Map<String, Object>>> hwAuditConf = dataServices.cacheManager
+				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
 		return hwAuditConf.get(locale);
 	}
 
@@ -78,21 +72,21 @@ public class HardwareDataService {
 	}
 
 	public void retrieveOpsiHWAuditConfPD(String locale) {
-		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)
-				&& cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class).get(locale) != null) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF) && dataServices.cacheManager
+				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class).get(locale) != null) {
 			return;
 		}
 
 		Map<String, List<Map<String, Object>>> hwAuditConf;
-		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)) {
-			hwAuditConf = cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)) {
+			hwAuditConf = dataServices.cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
 		} else {
 			hwAuditConf = new HashMap<>();
 		}
 
-		hwAuditConf.computeIfAbsent(locale, s -> exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
-		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
+		hwAuditConf.computeIfAbsent(locale,
+				s -> dataServices.exec.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, locale));
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
 	}
 
 	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId) {
@@ -104,8 +98,8 @@ public class HardwareDataService {
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("hostId", clientId);
 
-		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(new OpsiMethodCall(
-				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> hardwareInfos = dataServices.exec
+				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, callAttributes, callFilter);
 
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);

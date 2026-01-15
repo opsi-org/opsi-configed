@@ -11,81 +11,55 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.GroupDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.HardwareDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.LicenseDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 import de.uib.configed.gui.type.Object2GroupEntry;
 
 /**
- * Implementation of {@link ReloadHandler} which is responsible for reloading
- * one entry in the internal cache.
+ * Implementation of {@link AbstractReloadHandler} which is responsible for
+ * reloading one entry in the internal cache.
  * <p>
- * This {@link ReloadHandler} implementation is triggered by
+ * This {@link AbstractReloadHandler} implementation is triggered by
  * {@link CacheIdentifier}. Not all {@link CacheIdentifier} have to be handled
- * in this {@link ReloadHandler}, only those that are required.
+ * in this {@link AbstractReloadHandler}, only those that are required.
  */
-public class DefaultDataReloadHandler implements ReloadHandler {
-	private CacheManager cacheManager;
-	private ConfigDataService configDataService;
-	private HardwareDataService hardwareDataService;
-	private GroupDataService groupDataService;
-	private LicenseDataService licenseDataService;
-
+public class DefaultDataReloadHandler extends AbstractReloadHandler {
 	private Map<String, Consumer<Void>> eventHandlers;
 
-	public DefaultDataReloadHandler() {
-		this.cacheManager = CacheManager.getInstance();
+	public DefaultDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 		this.eventHandlers = new HashMap<>();
 		registerHandlers();
 	}
 
 	private void registerHandlers() {
 		eventHandlers.put(CacheIdentifier.LICENSE_USAGE.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
-			licenseDataService.retrieveLicenseUsagesPD();
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
+			dataServices.license.retrieveLicenseUsagesPD();
 		});
 		eventHandlers.put(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
-			hardwareDataService.retrieveHardwareOnClientPD();
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
+			dataServices.hardware.retrieveHardwareOnClientPD();
 		});
 		eventHandlers.put(CacheIdentifier.FHOST_TO_GROUPS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
-			groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
+			dataServices.group.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
 					CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 		});
 		eventHandlers.put(CacheIdentifier.HOST_GROUPS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
-			groupDataService.retrieveHostGroupsPD();
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
+			dataServices.group.retrieveHostGroupsPD();
 		});
 		eventHandlers.put(CacheIdentifier.HOST_CONFIGS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
-			configDataService.retrieveHostConfigsPD();
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
+			dataServices.config.retrieveHostConfigsPD();
 		});
 		eventHandlers.put(CacheIdentifier.PRODUCT_PROPERTIES.toString(),
-				(Void v) -> cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
-		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> cacheManager.clearForReload());
+				(Void v) -> dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
+		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> dataServices.cacheManager.clearForReload());
 		eventHandlers.put(CacheIdentifier.LICENSES.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.LICENSES);
-			licenseDataService.retrieveLicensesPD();
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSES);
+			dataServices.license.retrieveLicensesPD();
 		});
-	}
-
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
-	}
-
-	public void setHardwareDataService(HardwareDataService hardwareDataService) {
-		this.hardwareDataService = hardwareDataService;
-	}
-
-	public void setGroupDataService(GroupDataService groupDataService) {
-		this.groupDataService = groupDataService;
-	}
-
-	public void setLicenseDataService(LicenseDataService licenseDataService) {
-		this.licenseDataService = licenseDataService;
 	}
 
 	@Override

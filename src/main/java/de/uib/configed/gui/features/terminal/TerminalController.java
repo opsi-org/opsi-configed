@@ -45,8 +45,8 @@ public final class TerminalController {
 		if (connectToHost == null) {
 			throw new IllegalArgumentException("host must not be null. (type: " + type + ")");
 		}
-		if ("ConfigserverOrDepot".equals(type)
-				&& connectToHost.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
+		if ("ConfigserverOrDepot".equals(type) && connectToHost
+				.equals(persistenceController.getDataServices().hostInfoCollections.getConfigServer())) {
 			connectToHost = "Configserver";
 		}
 

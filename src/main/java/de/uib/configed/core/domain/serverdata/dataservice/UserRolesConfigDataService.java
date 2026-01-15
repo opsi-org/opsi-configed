@@ -24,14 +24,11 @@ import de.uib.configed.core.domain.permission.UserFeaturesConfig;
 import de.uib.configed.core.domain.permission.UserOpsipermission;
 import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
@@ -55,7 +52,7 @@ import de.uib.configed.share.logging.Logging;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class UserRolesConfigDataService {
+public class UserRolesConfigDataService extends DataService {
 	private static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
 
 	private static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
@@ -70,54 +67,52 @@ public class UserRolesConfigDataService {
 	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
 	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
 
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-	private OpsiServiceNOMPersistenceController persistenceController;
-
-	public UserRolesConfigDataService(AbstractPOJOExecutioner exec,
-			OpsiServiceNOMPersistenceController persistenceController) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-		this.persistenceController = persistenceController;
+	public UserRolesConfigDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public boolean isGlobalReadOnly() {
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class));
+		return Boolean.TRUE
+				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class));
 	}
 
 	public boolean hasServerFullPermissionPD() {
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
+		return Boolean.TRUE
+				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
 	public boolean hasCreateClientPermissionPD() {
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
+		return Boolean.TRUE.equals(
+				dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
 	}
 
 	public boolean hasDepotsFullPermissionPD() {
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
+		return Boolean.TRUE
+				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
 	}
 
 	public boolean hasProductGroupsFullPermissionPD() {
-		return Boolean.TRUE
-				.equals(cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class));
+		return Boolean.TRUE.equals(
+				dataServices.cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class));
 	}
 
 	public boolean hasKeyUserRegisterValuePD() {
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, Boolean.class));
+		return Boolean.TRUE.equals(
+				dataServices.cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, Boolean.class));
 	}
 
 	public Set<String> getPermittedProductsPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
 	public Set<String> getPermittedProductGroupsPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
 	}
 
 	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-			result = cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, Set.class);
+			result = dataServices.cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, Set.class);
 		}
 
 		Logging.info(this, "getHostgroupsPermitted ", result);
@@ -126,8 +121,8 @@ public class UserRolesConfigDataService {
 	}
 
 	public boolean isAccessToHostgroupsOnlyIfExplicitlyStatedPD() {
-		return Boolean.TRUE.equals(
-				cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, Boolean.class));
+		return Boolean.TRUE.equals(dataServices.cacheManager
+				.getCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, Boolean.class));
 	}
 
 	/**
@@ -165,7 +160,7 @@ public class UserRolesConfigDataService {
 	public boolean canEditOwnServerRole() {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().hasServerFullPermissionPD();
+				.getDataServices().userRoles.hasServerFullPermissionPD();
 		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
 		boolean isCurrentUserRoleSelected = serverConfiguration != null
 				&& serverConfiguration.isCurrentUserRoleSelected();
@@ -174,23 +169,22 @@ public class UserRolesConfigDataService {
 
 	public final void checkConfigurationPD() {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
-		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
-		executor.runInParallel(() -> persistenceController.getModuleDataService().retrieveOpsiModules());
+		executor.runInParallel(dataServices.group::retrieveAllObject2GroupsPD);
+		executor.runInParallel(dataServices.module::retrieveOpsiModules);
 
 		// Load all data together to prevent an extra RPC-call
-		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
-		executor.runInParallel(() -> cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY,
+		executor.runInParallel(dataServices.group::retrieveAllGroupsPD);
+		executor.runInParallel(() -> dataServices.cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY,
 				doesUserBelongToSystemsReadOnlyGroup()));
 		executor.waitForCompletion();
 
 		// We need to set default data in case the user roles are deactivated
-		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
-		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
-		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
-		cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, true);
-		cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, isUserRegisterActivated());
-
-		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
+		dataServices.cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, true);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, isUserRegisterActivated());
+		boolean keyUserRegisterValue = dataServices.cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
 				Boolean.class);
 		boolean correctedUserRegisterVal = setAgainUserRegistration(keyUserRegisterValue);
 
@@ -201,29 +195,24 @@ public class UserRolesConfigDataService {
 		}
 
 		if (keyUserRegisterValue) {
-			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
 			keyUserRegisterValue = checkUserRolesModulePD();
 		}
 
-		if (persistenceController.getConfigDataService().getConfigDefaultValuesPD()
+		if (dataServices.config.getConfigDefaultValuesPD()
 				.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null || setUserRegisterVal) {
 			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
 					keyUserRegisterValue, "without given values the primary value setting is false");
 			readyObjects.add(item);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-			exec.doCall(omc);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 		}
 
-		new UserConfigProducing(applyUserSpecializedConfigPD(),
-				persistenceController.getHostInfoCollections().getConfigServer(),
-				persistenceController.getHostInfoCollections().getDepotNamesList(),
-				persistenceController.getGroupDataService().getHostGroupIds(),
-				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
-				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
-
+		new UserConfigProducing(applyUserSpecializedConfigPD(), dataServices.hostInfoCollections.getConfigServer(),
+				dataServices.hostInfoCollections.getDepotNamesList(), dataServices.group.getHostGroupIds(),
+				dataServices.group.getProductGroupsPD().keySet(), dataServices.config.getConfigDefaultValuesPD(),
+				dataServices.config.getConfigOptionsPD()).produce();
 		checkPermissions();
 
 		if (hasServerFullPermissionPD()) {
@@ -233,8 +222,7 @@ public class UserRolesConfigDataService {
 
 	private boolean isUserRegisterActivated() {
 		boolean result = false;
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 		// dont do anything if we have not got the config
 		if (serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) != null
 				&& !serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER).isEmpty()) {
@@ -245,12 +233,12 @@ public class UserRolesConfigDataService {
 	}
 
 	private final boolean checkUserRolesModulePD() {
-		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
+		boolean keyUserRegisterValue = dataServices.cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
 				Boolean.class);
 		if (Boolean.TRUE.equals(keyUserRegisterValue)
-				&& !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+				&& !dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			keyUserRegisterValue = false;
-			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
 			SwingUtilities.invokeLater(this::callOpsiLicenseMissingText);
 		}
 
@@ -270,15 +258,15 @@ public class UserRolesConfigDataService {
 	}
 
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
-		boolean isUserReadOnlyUser = exec.getBooleanResult(
-				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}));
+		boolean isUserReadOnlyUser = dataServices.exec
+				.getBooleanResult(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER);
 		Logging.info(this, "does user belong to system's read-only group? ", isUserReadOnlyUser);
 		return isUserReadOnlyUser;
 	}
 
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
-		boolean withUserRoles = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES);
+		boolean withUserRoles = dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES);
 		Logging.info(this, "setAgainUserRegistration, userRoles can be used ", withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
@@ -349,8 +337,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkServerAccessPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 
 		// variable for simplifying the use of the map
 		String configKey;
@@ -363,7 +350,7 @@ public class UserRolesConfigDataService {
 			Logging.info(this, "checkPermissions  configKey ", configKey);
 			globalReadOnly = serverPropertyMap.get(configKey) != null
 					&& (Boolean) serverPropertyMap.get(configKey).get(0);
-			cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, globalReadOnly);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, globalReadOnly);
 		}
 
 		Logging.info(this, " checkPermissions globalReadOnly ", globalReadOnly);
@@ -378,27 +365,25 @@ public class UserRolesConfigDataService {
 			serverActionPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);
 	}
 
 	private void checkKeyPermission(Map<String, List<Object>> serverPropertyMap, String configKey,
 			CacheIdentifier cacheIdentifier) {
-		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+		if (serverPropertyMap.get(configKey) != null && dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> items = serverPropertyMap.get(configKey);
-			cacheManager.setCachedData(cacheIdentifier, items.get(0));
+			dataServices.cacheManager.setCachedData(cacheIdentifier, items.get(0));
 		} else {
 			Logging.info(this, " checkPermissions default value ", configKey);
-			cacheManager.setCachedData(cacheIdentifier, true);
+			dataServices.cacheManager.setCachedData(cacheIdentifier, true);
 		}
 	}
 
 	private void checkTerminalPermissions() {
 		Logging.debug(this, "checkTerminalPermissions");
 
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 
 		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE,
 				CacheIdentifier.TERMINAL_MENU_ACTIVE);
@@ -409,42 +394,37 @@ public class UserRolesConfigDataService {
 				CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE);
 
 		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
-		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+		if (serverPropertyMap.get(configKey) != null && dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, "checkPermissions value:", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
-			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
 		} else {
-			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
+			dataServices.cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
 		}
 	}
 
 	private void checkFeaturesPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 		String configKey = userPartPD() + UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN;
 
-		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+		if (serverPropertyMap.get(configKey) != null && dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
-			cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, forbiddenItems);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, forbiddenItems);
 		} else {
-			cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, new ArrayList<>());
+			dataServices.cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, new ArrayList<>());
 		}
 	}
 
 	private void checkCreateClientPermission() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 		String configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		Logging.info(this, " checkPermissions key ", configKey);
 
-		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+		if (serverPropertyMap.get(configKey) != null && dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
-			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
 		}
 	}
 
@@ -452,21 +432,20 @@ public class UserRolesConfigDataService {
 		Set<String> permittedProducts = new HashSet<>();
 
 		for (String group : productGroupsPermitted) {
-			Map<String, Set<String>> fProductGroup2Members = cacheManager
+			Map<String, Set<String>> fProductGroup2Members = dataServices.cacheManager
 					.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
 			Set<String> products = fProductGroup2Members.get(group);
 			if (products != null) {
 				permittedProducts.addAll(products);
 			}
 		}
-		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
 
 		Logging.info(this, "checkPermissions permittedProducts ", permittedProducts);
 	}
 
 	private void checkDepotPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 		String configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
 		String configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
@@ -475,16 +454,15 @@ public class UserRolesConfigDataService {
 
 		boolean depotsFullPermission = checkFullPermission(depotsPermitted, configKeyUseList, configKeyList,
 				serverPropertyMap);
-		cacheManager.setCachedData(CacheIdentifier.DEPOTS_PERMITTED, depotsPermitted);
-		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, depotsFullPermission);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.DEPOTS_PERMITTED, depotsPermitted);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, depotsFullPermission);
 		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) ",
 				depotsFullPermission);
 		Logging.info(this, "checkPermissions depotsPermitted ", depotsPermitted);
 	}
 
 	private void checkHostGroupPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 
 		String configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
@@ -497,16 +475,15 @@ public class UserRolesConfigDataService {
 		if (hostgroupsOnlyIfExplicitlyStated) {
 			hostgroupsPermitted = null;
 		}
-		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, hostgroupsPermitted);
-		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED,
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, hostgroupsPermitted);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED,
 				hostgroupsOnlyIfExplicitlyStated);
 
 		Logging.info(this, "checkPermissions hostgroupsPermitted ", hostgroupsPermitted);
 	}
 
 	private void checkProductPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 
 		String configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
@@ -515,11 +492,10 @@ public class UserRolesConfigDataService {
 
 		boolean productGroupsFullPermission = checkFullPermission(productGroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productGroupsFullPermission);
-
+		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION,
+				productGroupsFullPermission);
 		// Add subgroups of permitted groups to permitted groups
-		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
-				.getProductGroupsPD();
+		Map<String, Map<String, String>> productGroups = dataServices.group.getProductGroupsPD();
 		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
 			if (!productGroupsPermitted.contains(groupEntry.getKey())
 					&& hasPermittedParentGroup(productGroups, productGroupsPermitted, groupEntry.getKey())) {
@@ -528,7 +504,7 @@ public class UserRolesConfigDataService {
 		}
 
 		if (!productGroupsFullPermission) {
-			cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
+			dataServices.cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 			setProductsPermitted(productGroupsPermitted);
 		}
 	}
@@ -554,34 +530,35 @@ public class UserRolesConfigDataService {
 	}
 
 	private String userPartPD() {
-		String userConfigPart = cacheManager.getCachedData(CacheIdentifier.USER_CONFIG_PART, String.class);
+		String userConfigPart = dataServices.cacheManager.getCachedData(CacheIdentifier.USER_CONFIG_PART, String.class);
 		if (userConfigPart != null) {
 			return userConfigPart;
 		}
 
 		if (applyUserSpecializedConfigPD()) {
 			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-					+ persistenceController.getExecutioner().getUsername() + "}.";
+					+ dataServices.persistenceController.getExecutioner().getUsername() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.USER_CONFIG_PART, userConfigPart);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.USER_CONFIG_PART, userConfigPart);
 		Logging.info(this, "userConfigPart initialized, ", userConfigPart);
 
 		return userConfigPart;
 	}
 
 	private boolean applyUserSpecializedConfigPD() {
-		Boolean applyUserSpecializedConfig = cacheManager.getCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG,
-				Boolean.class);
+		Boolean applyUserSpecializedConfig = dataServices.cacheManager
+				.getCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, Boolean.class);
 		if (applyUserSpecializedConfig != null) {
 			return applyUserSpecializedConfig;
 		}
 
-		applyUserSpecializedConfig = persistenceController.getModuleDataService()
-				.isOpsiModuleActive(OpsiModule.USER_ROLES) && hasKeyUserRegisterValuePD();
-		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
+		applyUserSpecializedConfig = dataServices.module.isOpsiModuleActive(OpsiModule.USER_ROLES)
+				&& hasKeyUserRegisterValuePD();
+		dataServices.cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG,
+				applyUserSpecializedConfig);
 		Logging.info(this, "applyUserSpecializedConfig initialized, ", applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;
@@ -625,10 +602,10 @@ public class UserRolesConfigDataService {
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 
 		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add(persistenceController.getConfigDataService().getOpsiDefaultDomainPD());
+		defaultValues.add(dataServices.config.getOpsiDefaultDomainPD());
 
 		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(persistenceController.getConfigDataService().getOpsiDefaultDomainPD());
+		possibleValues.add(dataServices.config.getOpsiDefaultDomainPD());
 
 		item.put("ident", OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
 		item.put("description", "saved domains for creating clients");
@@ -796,7 +773,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private boolean checkStandardConfigs() {
-		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
+		boolean result = dataServices.config.getConfigOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {
@@ -805,7 +782,7 @@ public class UserRolesConfigDataService {
 
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 
-		Map<String, List<Object>> configDefaultValues = cacheManager
+		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 
 		// list of domains for new clients
@@ -828,11 +805,10 @@ public class UserRolesConfigDataService {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
 					CONFIGED_WORKBENCH_KEY);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
-					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
-					"default path to opsiproducts"));
+					dataServices.config.getConfigedWorkbenchDefaultValuePD(), "default path to opsiproducts"));
 		} else {
 			String workbenchDefaultValue = configDefaultValues.get(CONFIGED_WORKBENCH_KEY).isEmpty()
-					? persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD()
+					? dataServices.config.getConfigedWorkbenchDefaultValuePD()
 					: (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0);
 			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ", workbenchDefaultValue);
 
@@ -841,7 +817,7 @@ public class UserRolesConfigDataService {
 						workbenchDefaultValue, "default path to opsiproducts"));
 			}
 
-			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchDefaultValue);
+			dataServices.config.setConfigedWorkbenchDefaultValuePD(workbenchDefaultValue);
 		}
 
 		// configuration of opsiclientd extra events
@@ -854,9 +830,7 @@ public class UserRolesConfigDataService {
 		if (!readyObjects.isEmpty()) {
 			Logging.notice(this, "There are ", readyObjects.size(), "configurations to update, so we do this now:");
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-
-			exec.doCall(omc);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
 		} else {
 			Logging.notice(this, "there are no configurations to update");
 		}
@@ -884,8 +858,7 @@ public class UserRolesConfigDataService {
 		Logging.info(this, "Obsolete default user configs ", defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
-			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-					new Object[] { defaultUserConfigsObsolete }));
+			dataServices.exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, defaultUserConfigsObsolete);
 		}
 	}
 
@@ -894,51 +867,55 @@ public class UserRolesConfigDataService {
 			return true;
 		}
 
-		Set<String> depotsPermitted = cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
+		Set<String> depotsPermitted = dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED,
+				Set.class);
 
 		return depotsPermitted != null && depotsPermitted.contains(depotId);
 	}
 
 	public boolean terminalMenuIsActive() {
-		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class) == null) {
-			checkTerminalPermissions();
-		}
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class));
-	}
-
-	public boolean terminalCommandsIsActive() {
-		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class) == null) {
-			checkTerminalPermissions();
-		}
-		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class));
-	}
-
-	public boolean terminalCommandControlIsActive() {
-		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE, Boolean.class) == null) {
+		if (dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class) == null) {
 			checkTerminalPermissions();
 		}
 		return Boolean.TRUE
-				.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE, Boolean.class));
+				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class));
+	}
+
+	public boolean terminalCommandsIsActive() {
+		if (dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE.equals(
+				dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class));
+	}
+
+	public boolean terminalCommandControlIsActive() {
+		if (dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE,
+				Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE.equals(dataServices.cacheManager
+				.getCachedData(CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE, Boolean.class));
 	}
 
 	public List<Object> terminalsForbidden() {
-		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class) == null) {
+		if (dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class) == null) {
 			checkTerminalPermissions();
 		}
-		return cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class);
 	}
 
 	public List<Object> getForbiddenMOTD() {
-		if (cacheManager.getCachedData(CacheIdentifier.MOTD_FORBIDDEN, List.class) == null) {
+		if (dataServices.cacheManager.getCachedData(CacheIdentifier.MOTD_FORBIDDEN, List.class) == null) {
 			checkFeaturesPermissions();
 		}
-		return cacheManager.getCachedData(CacheIdentifier.MOTD_FORBIDDEN, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.MOTD_FORBIDDEN, List.class);
 	}
 
 	public Set<Object> getPermittedDepots() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class) == null) {
+		if (dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class) == null) {
 			checkDepotPermissions();
 		}
-		return cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 	}
 }

@@ -7,28 +7,20 @@
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.SoftwareDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class InstalledSoftwareDataReloadHandler implements ReloadHandler {
-	private CacheManager cacheManager;
-	private SoftwareDataService softwareDataService;
-
-	public InstalledSoftwareDataReloadHandler() {
-		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setSoftwareDataService(SoftwareDataService softwareDataService) {
-		this.softwareDataService = softwareDataService;
+public class InstalledSoftwareDataReloadHandler extends AbstractReloadHandler {
+	public InstalledSoftwareDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
-		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
-		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
-		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
-		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
-		softwareDataService.retrieveInstalledSoftwareInformationPD();
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
+		dataServices.software.retrieveInstalledSoftwareInformationPD();
 	}
 }

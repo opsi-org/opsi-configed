@@ -36,6 +36,9 @@ public class Dashboard extends JFXPanel {
 		mainView = null;
 		this.configedMain = configedMain;
 
+		// We need to make sure that all data is cleared when re-initializing the dashboard
+		clearAllData();
+
 		init();
 	}
 
@@ -58,7 +61,7 @@ public class Dashboard extends JFXPanel {
 		});
 	}
 
-	public void clearAllData() {
+	private static void clearAllData() {
 		ClientData.clear();
 		ProductData.clear();
 		ModuleData.clear();

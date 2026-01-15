@@ -336,7 +336,7 @@ public final class CommandParameterParser {
 	}
 
 	private String getConfigServerName() {
-		List<String> depots = persistenceController.getHostInfoCollections().getAllDepotNamesList();
+		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(persistenceController.getExecutioner().getHost())) {
 				Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHost());
@@ -355,7 +355,8 @@ public final class CommandParameterParser {
 		String[] clientIPs = new String[configedMain.getSelectedClients().size()];
 		int counter = 0;
 		for (String name : configedMain.getSelectedClients()) {
-			HostInfo hostInfo = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(name);
+			HostInfo hostInfo = persistenceController.getDataServices().hostInfoCollections.getMapOfAllPCInfoMaps()
+					.get(name);
 			if (hostInfo != null) {
 				clientIPs[counter] = hostInfo.getString(HostInfo.CLIENT_IP_ADDRESS_KEY);
 				counter++;
@@ -382,7 +383,7 @@ public final class CommandParameterParser {
 		String[] depotIPs = new String[configedMain.getSelectedDepots().size()];
 		int counter = 0;
 		for (String name : configedMain.getSelectedDepots()) {
-			String depotip = (String) persistenceController.getHostInfoCollections().getDepots().get(name)
+			String depotip = (String) persistenceController.getDataServices().hostInfoCollections.getDepots().get(name)
 					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host ", name, " depotip ", depotip);
 			if (depotip != null) {

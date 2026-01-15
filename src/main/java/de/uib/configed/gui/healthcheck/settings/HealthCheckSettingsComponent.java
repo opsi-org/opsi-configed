@@ -95,8 +95,9 @@ public final class HealthCheckSettingsComponent
 
 		selectedHostList = new ListSelectionDialog(null,
 				Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
-		List<String> hostNames = new ArrayList<>(persistenceController.getHostInfoCollections().getDepotNamesList());
-		hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		List<String> hostNames = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getDepotNamesList());
+		hostNames.addAll(persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames());
 		selectedHostList.setListData(hostNames);
 		selectedHostList.setMultiSelection();
 		if (model.getSelectedHosts() != null && !model.getSelectedHosts().isEmpty()) {
@@ -311,7 +312,7 @@ public final class HealthCheckSettingsComponent
 		String endDownTime = model.getEndDowntime();
 		endDownTime = (endDownTime == null || endDownTime.isBlank()) ? "" : (endDownTime + END_OF_DAY_STRING);
 
-		persistenceController.getConfigDataService().writeDownTime(model.getSelectedHosts(),
+		persistenceController.getDataServices().config.writeDownTime(model.getSelectedHosts(),
 				model.getCheckActiveState() == State.SELECTED, startDownTime, endDownTime);
 	}
 }

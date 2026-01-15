@@ -50,6 +50,6 @@ public class HostUpdate implements UpdateCommand {
 		// Without the type, the method will not work on the server
 		newdata.put("type", type);
 
-		persistenceController.getHostDataService().setHostValues(newdata);
+		persistenceController.getDataServices().host.setHostValues(newdata);
 	}
 }

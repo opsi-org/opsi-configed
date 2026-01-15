@@ -137,7 +137,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		defineChoosers();
 
-		String webDavPath = persistenceController.getHostInfoCollections().getConfigServerWebDavPath();
+		String webDavPath = persistenceController.getDataServices().hostInfoCollections.getConfigServerWebDavPath();
 		depotProductDirectory = webDavPath != null && !webDavPath.isEmpty() ? webDavPath : "depot/";
 		if (!depotProductDirectory.endsWith("/")) {
 			depotProductDirectory += "/";
@@ -174,7 +174,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void defineChoosers() {
-		depot = new JLabel(persistenceController.getHostInfoCollections().getDepotNamesList().getFirst());
+		depot = new JLabel(persistenceController.getDataServices().hostInfoCollections.getDepotNamesList().getFirst());
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
@@ -232,7 +232,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
 
 			if (stateServerPath && stateDriverPath
-					&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+					&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly()) {
 				result = true;
 			}
 		}
@@ -468,7 +468,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	public void setDepot() {
-		depot.setText(persistenceController.getHostInfoCollections().getConfigServer());
+		depot.setText(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 	}
 
 	private void produceTarget() {

@@ -121,7 +121,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("save"));
 		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "save");
-		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 
 		addItem(p);
@@ -190,7 +190,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_DELETE);
 		menuItems[i] = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItems[i], "remove");
-		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 
 		addItem(p);
@@ -200,7 +200,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		int i = listPopups.indexOf(POPUP_ADD);
 		menuItems[i] = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItems[i], "add");
-		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 
 		addItem(p);

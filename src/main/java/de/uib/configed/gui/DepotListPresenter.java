@@ -81,7 +81,7 @@ public class DepotListPresenter extends JPanel {
 
 	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
-		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
+		if (persistenceController.getDataServices().hostInfoCollections.getDepots().size() != 1) {
 			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 			selectAll.addActionListener(event -> depotslist.selectAll());
 			JMenuItem selectWithEqualProperties = new JMenuItem(
@@ -149,18 +149,18 @@ public class DepotListPresenter extends JPanel {
 	private boolean selectedServerForbidden() {
 		Logging.info("selectedServerForbidden.....");
 		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().terminalsForbidden();
+				.getDataServices().userRoles.terminalsForbidden();
 		Logging.info("forbiddenItems ", forbiddenItems);
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenConfigDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 
 		boolean isConfigserverAndForbidden = forbiddenConfigServer && depotslist.getSelectedValuesList()
-				.contains(persistenceController.getHostInfoCollections().getConfigServer());
+				.contains(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 		boolean isDepotAndForbidden = forbiddenConfigDepots && !depotslist.getSelectedValuesList().isEmpty()
 				&& !depotslist.getSelectedValuesList()
-						.contains(persistenceController.getHostInfoCollections().getConfigServer());
+						.contains(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 
-		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly();
 
 		return isConfigserverAndForbidden || isDepotAndForbidden || isReadOnly;
@@ -187,7 +187,7 @@ public class DepotListPresenter extends JPanel {
 
 		if (depotslist.getSelectedIndex() > -1) {
 			String depotSelected = depotslist.getSelectedValue();
-			List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
+			List<String> depotsWithEqualStock = persistenceController.getDataServices().depot
 					.getAllDepotsWithIdenticalProductStock(depotSelected);
 			depotslist.addToSelection(depotsWithEqualStock);
 		}

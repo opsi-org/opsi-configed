@@ -161,17 +161,17 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public Set<String> getAllowedClients() {
-		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()
+		if (!persistenceController.getDataServices().userRoles.isAccessToHostgroupsOnlyIfExplicitlyStatedPD()
 				&& allowedClients == null) {
-			Map<String, Set<String>> group2Members = persistenceController.getGroupDataService()
+			Map<String, Set<String>> group2Members = persistenceController.getDataServices().group
 					.getFHostGroup2MembersPD();
 			group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 
-			Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+			Map<String, Map<String, String>> hostGroups = persistenceController.getDataServices().group
+					.getHostGroupsPD();
 			Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
 			allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
-		} else if (persistenceController.getUserRolesConfigDataService()
-				.isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
+		} else if (persistenceController.getDataServices().userRoles.isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
 			allowedClients = null;
 		} else {
 			// Not needed.
@@ -180,17 +180,18 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public void build() {
-		Set<String> allPCs = persistenceController.getHostInfoCollections()
+		Set<String> allPCs = persistenceController.getDataServices().hostInfoCollections
 				.getClientsForDepots(configedMain.getSelectedDepots(), getAllowedClients());
 
 		produceTreeForALL(allPCs);
 
-		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+		Map<String, Map<String, String>> hostGroups = persistenceController.getDataServices().group.getHostGroupsPD();
 		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
-		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
+		produceAndLinkGroups(persistenceController.getDataServices().group.getHostGroupsPD(),
 				expandedPermittedHostGroups);
 
-		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
+		Map<String, Set<String>> group2Members = persistenceController.getDataServices().group
+				.getFHostGroup2MembersPD();
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 		associateClientsToGroups(allPCs, group2Members);
 
@@ -201,7 +202,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	@SuppressWarnings("java:S1168")
 	private Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups) {
-		Set<String> permittedGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
+		Set<String> permittedGroups = persistenceController.getDataServices().userRoles.getHostGroupsPermitted();
 		if (permittedGroups == null) {
 			return null;
 		}
@@ -501,7 +502,7 @@ public class ClientTree extends AbstractGroupTree {
 			model.nodeStructureChanged(sourceParentNode);
 
 			if (!DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID,
+				persistenceController.getDataServices().group.addObject2Group(importID, dropParentID,
 						Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			}
 
@@ -518,7 +519,7 @@ public class ClientTree extends AbstractGroupTree {
 					" clientNode, sourceParentNode ", clientNode, ", ", sourceParentNode);
 
 			// persistent removal
-			persistenceController.getGroupDataService().removeObject2Group(importID, sourceParentID);
+			persistenceController.getDataServices().group.removeObject2Group(importID, sourceParentID);
 			removeNodeInternally(importID, sourceParentNode);
 
 			makeVisible(dropPath.pathByAddingChild(clientNode));
@@ -539,7 +540,7 @@ public class ClientTree extends AbstractGroupTree {
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID,
+			persistenceController.getDataServices().group.addObject2Group(objectID, newParentID,
 					Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 		}
 
@@ -581,7 +582,7 @@ public class ClientTree extends AbstractGroupTree {
 
 			for (GroupNode node : groupsInDIRECTORY) {
 				removeNodeInternally(clientID, node);
-				persistenceController.getGroupDataService().removeObject2Group(clientID,
+				persistenceController.getDataServices().group.removeObject2Group(clientID,
 						node.getUserObject().toString());
 			}
 

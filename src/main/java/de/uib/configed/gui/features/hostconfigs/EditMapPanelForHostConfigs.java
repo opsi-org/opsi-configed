@@ -102,7 +102,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
-						.getPersistenceController().getUserRolesConfigDataService();
+						.getPersistenceController().getDataServices().userRoles;
 				boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
 						|| userRolesConfigDataService.canEditOwnServerRole();
 				Component saveComponent = jPopupMenu.getComponent(0);
@@ -176,7 +176,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 
 	private String getPropertyOrigin(String propertyName) {
 		Map<String, ConfigOption> serverConfigs = PersistenceControllerFactory.getPersistenceController()
-				.getConfigDataService().getConfigOptionsPD();
+				.getDataServices().config.getConfigOptionsPD();
 
 		if (serverConfigs != null && serverConfigs.containsKey(propertyName)
 				&& !serverConfigs.get(propertyName).getDefaultValues().equals(defaultsMap.get(propertyName))) {

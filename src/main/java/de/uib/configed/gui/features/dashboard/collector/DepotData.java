@@ -34,7 +34,7 @@ public final class DepotData {
 		}
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-		depots = persistenceController.getHostInfoCollections().getDepots();
+		depots = persistenceController.getDataServices().hostInfoCollections.getDepots();
 	}
 
 	public static void clear() {

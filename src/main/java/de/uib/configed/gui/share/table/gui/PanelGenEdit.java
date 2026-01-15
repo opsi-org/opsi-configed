@@ -79,7 +79,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		this.editing = editing;
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		if (!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.hasServerFullPermissionPD()) {
 			this.editing = false;
 		}
