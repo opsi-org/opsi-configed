@@ -276,12 +276,13 @@ public class ConfigedMain {
 	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
 
-		if (checkNewEditingTarget(newEditingTarget)) {
+		boolean ok = checkNewEditingTarget(newEditingTarget) && mainFrame.showPanel(newEditingTarget);
+
+		if (ok) {
 			editingTarget = newEditingTarget;
-			return mainFrame.showPanel(editingTarget);
-		} else {
-			return false;
 		}
+
+		return ok;
 	}
 
 	private static boolean checkNewEditingTarget(EditingTarget newEditingTarget) {
