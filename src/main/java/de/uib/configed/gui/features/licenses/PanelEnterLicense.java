@@ -47,7 +47,6 @@ import javafx.scene.control.DatePicker;
 import net.miginfocom.swing.MigLayout;
 
 public class PanelEnterLicense extends MultiTablePanel {
-	private static final int MIN_HEIGHT = 50;
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
 
 	private static final int MIN_FIELD_WIDTH = 40;
