@@ -147,7 +147,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	public Map<String, List<String>> getHeaders() {
 		if (getConnectionState() != null && getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
-			return new HashMap<>();
+			return Map.of();
 		}
 		Logging.info("getHeaders started");
 		int timeout = 2000;
@@ -165,9 +165,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.warning("try to get headers, but no connection. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
 			System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
-			return new HashMap<>();
+			return Map.of();
 		}
-		Map<String, List<String>> result = new HashMap<>();
+		Map<String, List<String>> result = Map.of();
 		try {
 			handleResponseCode(connection);
 			result = connection.getHeaderFields();
@@ -393,7 +393,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
 				ParallelTaskExecutor.allowNewTasks(true);
 			} else {
-				return new HashMap<>();
+				return Map.of();
 			}
 		}
 
@@ -421,8 +421,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private Map<String, Object> retrieveResponse(HttpsURLConnection connection) {
-		Map<String, Object> result = new HashMap<>();
-
 		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING
 				|| getConnectionState().getState() == ConnectionState.CONNECTED) {
 			try {
@@ -434,7 +432,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
-					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
+					return retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				} else {
 					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
@@ -447,7 +445,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 		}
 
-		return result;
+		return Map.of();
 	}
 
 	public Map<String, Object> retrieveResponse(URL url, RequestMethod requestMethod,
@@ -469,7 +467,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
 		if (connection == null) {
-			return new HashMap<>();
+			return Map.of();
 		}
 		// sending data
 		if (json != null) {
@@ -484,7 +482,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = Map.of();
 		// receiving data
 
 		if (getConnectionState().getState() == ConnectionState.CONNECTED) {
@@ -547,21 +545,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, Object> retrieveResponseBasedOnContentType(String contentType, InputStream stream)
 			throws IOException {
-		Map<String, Object> result = new HashMap<>();
-
 		if (contentType.contains("application/json")) {
 			ObjectMapper mapper = new ObjectMapper();
-			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
+			return mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else if (contentType.contains("application/msgpack")) {
 			ObjectMapper mapper = new MessagePackMapper();
-			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
+			return mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
+			return Map.of();
 		}
-
-		return result;
 	}
 
 	private static String readInputStream(InputStream fis) {
