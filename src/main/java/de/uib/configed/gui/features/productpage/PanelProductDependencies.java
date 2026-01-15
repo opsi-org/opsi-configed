@@ -46,11 +46,12 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		dependenciesPanel.setViewportView(dependenciesTable);
 
-		this.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]", "[][grow,fill][][grow,fill][]"));
-		this.add(labelInfoProductDependenciesTable);
+		this.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]",
+				"[]0[grow,fill]" + Globals.MIN_GAP_SIZE + "[]0[grow,fill]" + Globals.MIN_GAP_SIZE + "[]"));
+		this.add(labelInfoProductDependenciesTable, "gapleft " + Globals.MIN_GAP_SIZE);
 		this.add(dependenciesPanel, "grow, push");
-		this.add(labelInfoProductDependenciesTree, "gaptop " + Globals.MIN_GAP_SIZE);
-		this.add(dependenciesTreePanel, "grow, push, gapbottom " + Globals.MIN_GAP_SIZE);
+		this.add(labelInfoProductDependenciesTree, "gapleft " + Globals.MIN_GAP_SIZE);
+		this.add(dependenciesTreePanel, "grow, push, gapleft " + Globals.MIN_GAP_SIZE);
 		this.add(dependenciesTreePanel.getDependenciesTreePathPanel(),
 				"height " + (Globals.DEFAULT_JLABEL_HEIGHT + 2) + "!, growx");
 	}

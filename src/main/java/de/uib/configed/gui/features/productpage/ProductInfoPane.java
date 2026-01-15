@@ -141,14 +141,14 @@ public class ProductInfoPane extends JSplitPane {
 		bottomComponent.add(dependenciesTextLabel, "gapright push");
 		bottomComponent.add(depotForDependenciesLabel, "alignx right, gapright " + Globals.MIN_GAP_SIZE + ", wrap");
 
-		bottomComponent.add(panelProductDependencies,
-				"hidemode 3, grow, pushy 50, sgy vshare, hmin 0, gapbefore " + Globals.MIN_GAP_SIZE);
+		bottomComponent.add(panelProductDependencies, "hidemode 3, grow, pushy 50, sgy vshare, hmin 0, gaptop "
+				+ Globals.MIN_GAP_SIZE + ", gapbottom " + Globals.MIN_GAP_SIZE);
 
 		bottomComponent.add(propertiesActivateButton, "split 2, gapleft " + Globals.GAP_SIZE);
 		bottomComponent.add(panelEditProperties.getTitlePanel(), "growx, wrap");
 
 		bottomComponent.add(panelEditProperties,
-				"hidemode 3, grow, pushy 50, sgy vshare, hmin 0, gapbefore " + Globals.MIN_GAP_SIZE);
+				"hidemode 3, grow, pushy 50, sgy vshare, hmin 0, gaptop " + Globals.MIN_GAP_SIZE);
 
 		setBottomComponent(bottomComponent);
 	}

@@ -14,6 +14,7 @@ import java.util.StringJoiner;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -185,12 +186,15 @@ public class MainFrame extends JFrame {
 
 		getContentPane().removeAll();
 
-		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow, fill]", "[grow][]"));
+		// getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow, fill]", "[grow][]"));
+		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow]", "[grow]"));
+		JPanel controlPanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "[pref!]", "[pref!]push[pref!]"));
 
-		getContentPane().add(leftControlBar, "cell 0 0, aligny top");
-		getContentPane().add(leftToolBar, "cell 0 1, aligny bottom, gaptop unrel");
+		controlPanel.add(leftControlBar, "aligny top");
+		controlPanel.add(leftToolBar, "aligny bottom, gaptop unrel");
 
-		getContentPane().add(panel, "cell 1 0 1 2, grow");
+		getContentPane().add(controlPanel, "growy");
+		getContentPane().add(panel, "grow");
 
 		getContentPane().revalidate();
 		getContentPane().repaint();

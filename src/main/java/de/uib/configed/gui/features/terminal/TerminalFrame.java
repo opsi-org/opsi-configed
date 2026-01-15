@@ -109,7 +109,7 @@ public final class TerminalFrame implements MessagebusListener {
 		fileUploadProgressIndicator.init();
 		fileUploadProgressIndicator.setVisible(false);
 
-		JPanel allPane = new JPanel(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow][pref!]"));
+		JPanel allPane = new JPanel(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow]0[pref!]"));
 		allPane.add(northPanel, "grow");
 		allPane.add(fileUploadProgressIndicator, "growx, hidemode 3");
 
@@ -377,7 +377,7 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		JPanel northPanel = new JPanel();
-		northPanel.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		northPanel.setLayout(new MigLayout("insets 0, fill", "[grow]", "[grow]"));
 		northPanel.add(tabbedPane, "grow, hmin 0, wmin 0");
 
 		return northPanel;

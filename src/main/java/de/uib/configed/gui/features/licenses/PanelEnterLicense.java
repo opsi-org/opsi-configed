@@ -394,12 +394,11 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private JPanel createPanelLicenseModel() {
-		JPanel panelLicenseModel = new JPanel(
-				new MigLayout("insets " + Globals.GAP_SIZE, "[grow]rel[pref!]unrel", "[]0"));
+		JPanel panelLicenseModel = new JPanel(new MigLayout("insets " + Globals.GAP_SIZE, "[pref!]50[pref!]", "[]0"));
 		panelLicenseModel.setBorder(BorderFactory.createEtchedBorder());
 
-		panelLicenseModel.add(createLeftBlock(), "cell 0 0, growx");
-		panelLicenseModel.add(createRightBlock(), "cell 2 0");
+		panelLicenseModel.add(createLeftBlock());
+		panelLicenseModel.add(createRightBlock());
 
 		return panelLicenseModel;
 	}
@@ -407,18 +406,18 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private JPanel createLeftBlock() {
 		JPanel left = new JPanel(new MigLayout("insets 0", "[left, 120!][grow]", "[]0"));
 		left.add(jLabelSLid1);
-		left.add(jTextFieldLicenseID, "growx, pushx, w 208, wrap");
+		left.add(jTextFieldLicenseID, "growx, pushx, w 326!, wrap");
 		left.add(jLabelSLid2);
-		left.add(jTextFieldLicenseType, "w 239!, wrap");
+		left.add(jTextFieldLicenseType, "w 326!, wrap");
 
-		JPanel maxPanel = new JPanel(new MigLayout("insets 0", "[112!][112!]", "[]"));
+		JPanel maxPanel = new JPanel(new MigLayout("insets 0", "[112!][grow]", "[]"));
 		maxPanel.add(jTextFieldMaxInstallations, "cell 0 0, growx");
-		maxPanel.add(jLabelSLid3info, "cell 1 0, w 112!, gapleft " + Globals.MIN_GAP_SIZE);
+		maxPanel.add(jLabelSLid3info, "cell 1 0, growx, gapleft " + Globals.MIN_GAP_SIZE);
 		left.add(jLabelSLid3, "alignx left");
 		left.add(maxPanel, "wrap");
 
 		left.add(jLabelSLid4);
-		left.add(comboClient, "growx, pushx, w 208, wrap");
+		left.add(comboClient, "growx, pushx, w 326!, wrap");
 
 		return left;
 	}
@@ -436,9 +435,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 		JPanel panelEnterKey = new JPanel(new MigLayout("insets 0", "[]", "[]"));
 		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
 
-		panelEnterKey.add(jLabelLKey, "w 133!, gapleft " + Globals.MIN_GAP_SIZE);
-		panelEnterKey.add(jTextFieldLKey,
-				"wmin " + MIN_FIELD_WIDTH + ", w 326!, growx, gapleft " + Globals.MIN_GAP_SIZE + ", gapright 10");
+		panelEnterKey.add(jLabelLKey, "w 120!, gapleft " + Globals.GAP_SIZE);
+		panelEnterKey.add(jTextFieldLKey, "wmin " + MIN_FIELD_WIDTH + ", w 326, growx");
 
 		return panelEnterKey;
 	}

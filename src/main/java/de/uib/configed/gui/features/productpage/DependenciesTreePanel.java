@@ -115,13 +115,10 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		this.setLayout(new MigLayout("insets 0, fill", "[pref!][grow, fill]", "[grow, fill]0"));
 
-		// this.add(dependenciesNeedsButton, "cell 0 0, growx");
-		// this.add(dependenciesNeededByButton, "cell 0 1, growx, gapafter push");
-		// this.add(copyListButton, "cell 0 3, growx, aligny bottom");
-		JPanel leftSidePanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "", "[][]push[]"));
+		JPanel leftSidePanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "", "[]0[]push[]"));
 		leftSidePanel.add(dependenciesNeedsButton);
 		leftSidePanel.add(dependenciesNeededByButton);
-		leftSidePanel.add(copyListButton, "gapbefore push");
+		leftSidePanel.add(copyListButton, "gapafter push, align left");
 
 		this.add(leftSidePanel, "grow");
 		this.add(dependenciesTreeScrollPanel, "grow");
