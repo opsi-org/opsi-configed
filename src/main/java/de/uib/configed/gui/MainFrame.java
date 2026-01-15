@@ -286,33 +286,12 @@ public class MainFrame extends JFrame {
 	}
 
 	private void switchView(boolean isNext) {
-		EditingTarget editingTarget = ConfigedMain.getEditingTarget();
-		int currentView = editingTarget.ordinal() + 1;
-		int targetView = currentView;
+		int nextView = ConfigedMain.getEditingTarget().ordinal() + (isNext ? 1 : -1);
 
-		targetView += isNext ? 1 : -1;
+		// Move targetView within bounds
+		nextView = (nextView + EditingTarget.values().length) % EditingTarget.values().length;
 
-		if (targetView < 1) {
-			targetView = 7;
-		} else if (targetView > 7) {
-			targetView = 1;
-		} else {
-			// Not needed.
-		}
-
-		switchViewBasedOnViewIndex(targetView);
-	}
-
-	private void switchViewBasedOnViewIndex(int index) {
-		switch (index) {
-		case 1 -> leftControlBar.selectView(EditingTarget.CLIENTS);
-		case 2 -> leftControlBar.selectView(EditingTarget.DEPOTS);
-		case 3 -> leftControlBar.selectView(EditingTarget.SERVER);
-		case 4 -> leftControlBar.selectView(EditingTarget.DASHBOARD);
-		case 5 -> leftControlBar.selectView(EditingTarget.OPSI_MODULES);
-		case 6 -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK);
-		case 7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
-		default -> Logging.info(this, "Unknown view index" + index);
-		}
+		EditingTarget targetEditingTarget = EditingTarget.values()[nextView];
+		leftControlBar.selectView(targetEditingTarget);
 	}
 }
