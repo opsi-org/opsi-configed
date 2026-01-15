@@ -61,10 +61,6 @@ public class HealthDataService extends DataService {
 				dataServices.exec.getMapResult(RPCMethodName.SERVICE_GET_DIAGNOSTIC_DATA));
 	}
 
-	public boolean isHealthDataAlreadyLoaded() {
-		return dataServices.cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA);
-	}
-
 	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		for (Map<String, Object> data : checkHealthPD()) {

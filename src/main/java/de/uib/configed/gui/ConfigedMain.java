@@ -278,7 +278,7 @@ public class ConfigedMain {
 
 		if (checkNewEditingTarget(newEditingTarget)) {
 			editingTarget = newEditingTarget;
-			return updateEditingTarget();
+			return mainFrame.showPanel(editingTarget);
 		} else {
 			return false;
 		}
@@ -296,36 +296,6 @@ public class ConfigedMain {
 		}
 
 		return true;
-	}
-
-	private static boolean updateEditingTarget() {
-		return switch (editingTarget) {
-		case CLIENTS -> {
-			mainFrame.showClientConfiguration();
-			yield true;
-		}
-		case DEPOTS -> {
-			mainFrame.showDepotConfiguration();
-			yield true;
-		}
-		case SERVER -> {
-			mainFrame.showServerConfiguration();
-			yield true;
-		}
-		case DASHBOARD -> {
-			mainFrame.showDashboard();
-			yield true;
-		}
-		case OPSI_MODULES -> {
-			mainFrame.showOpsiModules();
-			yield true;
-		}
-		case HEALTH_CHECK -> {
-			mainFrame.showHealthDataAction();
-			yield true;
-		}
-		case LICENSE_MANAGEMENT -> mainFrame.startLicensingManagement();
-		};
 	}
 
 	public void actOnListSelection() {

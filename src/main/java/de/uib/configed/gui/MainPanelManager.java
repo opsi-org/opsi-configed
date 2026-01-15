@@ -9,33 +9,43 @@ package de.uib.configed.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.StringJoiner;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
+import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.dashboard.Dashboard;
+import de.uib.configed.gui.features.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.features.licenses.LicenseManagement;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
@@ -47,17 +57,8 @@ public class MainPanelManager {
 	private HostsStatusPanel hostsStatusPanel;
 	private JTabbedPane leftTabs;
 
-	private JSplitPane depotConfigurationSplitPane;
 	private ServerConfiguration serverConfiguration;
 
-	private JPanel dashboardPanel;
-	private Dashboard dashboard;
-
-	private JPanel licensingInfoPanel;
-
-	private JPanel healthCheckPanel;
-
-	private JPanel licenseManagementPanel;
 	private LicenseManagement licenseManagement;
 
 	private TopToolBarManager topToolBarManager;
@@ -132,7 +133,19 @@ public class MainPanelManager {
 		return leftTabs;
 	}
 
-	public JPanel getClientConfigurationPanel() {
+	public JPanel getPanelForEditingTarget(EditingTarget editingTarget) {
+		return switch (editingTarget) {
+		case CLIENTS -> getClientConfigurationPanel();
+		case DEPOTS -> getDepotConfigurationSplitPane();
+		case SERVER -> getServerConfigurationPanel();
+		case DASHBOARD -> getDashBoardPanel();
+		case OPSI_MODULES -> getOpsiLicensingPanel();
+		case HEALTH_CHECK -> getHealthCheckPanel();
+		case LICENSE_MANAGEMENT -> getLicenseManagementPanel();
+		};
+	}
+
+	private JPanel getClientConfigurationPanel() {
 		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, clientConfiguration);
 		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
@@ -152,100 +165,109 @@ public class MainPanelManager {
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 	}
 
-	public JPanel getDepotConfigurationSplitPane() {
-		if (depotConfigurationSplitPane == null) {
-			DepotsList depotsList = new DepotsList(configedMain);
-			depotsList.setListData(persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList());
-			depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
-			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
+	private JPanel getDepotConfigurationSplitPane() {
+		DepotsList depotsList = new DepotsList(configedMain);
+		depotsList.setListData(persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList());
+		depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
+		DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
-			JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("depotSelection"));
-			DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
+		JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("depotSelection"));
+		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
-			JPanel depotsListPanel = new JPanel();
-			GroupLayout layout = new GroupLayout(depotsListPanel);
-			depotsListPanel.setLayout(layout);
+		JPanel depotsListPanel = new JPanel();
+		GroupLayout layout = new GroupLayout(depotsListPanel);
+		depotsListPanel.setLayout(layout);
 
-			layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(depotSelectionLabel).addGap(Globals.MIN_GAP_SIZE).addComponent(depotListPresenter));
-			layout.setHorizontalGroup(layout.createParallelGroup()
-					.addGroup(layout.createSequentialGroup()
-							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-							.addComponent(depotSelectionLabel)
-							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
-					.addComponent(depotListPresenter));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(depotSelectionLabel).addGap(Globals.MIN_GAP_SIZE).addComponent(depotListPresenter));
+		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(depotSelectionLabel)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)).addComponent(depotListPresenter));
 
-			depotsListPanel.setMinimumSize(new Dimension());
+		depotsListPanel.setMinimumSize(new Dimension());
 
-			depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, depotsListPanel,
-					depotConfiguration);
+		JSplitPane depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, depotsListPanel,
+				depotConfiguration);
 
-			depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
-			depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
-		}
+		depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
+		depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 
 		return createPanel(depotConfigurationSplitPane, null, Configed.getResourceValue("depotConfiguration"));
 	}
 
-	public JPanel getServerConfigurationPanel() {
-		if (serverConfiguration == null) {
-			// We start the loading animation because this takes a lot of time
-			ConfigedMain.getMainFrame().activateLoadingCursor();
-			serverConfiguration = new ServerConfiguration();
-			serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
-			ConfigedMain.getMainFrame().deactivateLoadingCursor();
-		}
-
+	private JPanel getServerConfigurationPanel() {
+		serverConfiguration = new ServerConfiguration();
+		serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 		return createPanel(serverConfiguration, null, Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 	}
 
 	public JPanel getDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
-		if (dashboardPanel == null) {
-			dashboard = new Dashboard(configedMain);
-			dashboardPanel = createPanel(dashboard, null, Configed.getResourceValue("Dashboard.title"));
-		}
-
-		return dashboardPanel;
+		return createPanel(new Dashboard(configedMain), null, Configed.getResourceValue("Dashboard.title"));
 	}
 
 	public JPanel getOpsiLicensingPanel() {
-		if (licensingInfoPanel == null) {
+		if (!persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
+			Map<String, Object> modulesInfo = persistenceController.getDataServices().module.getOpsiModulesInfosPD();
+
+			StringJoiner message = new StringJoiner("\n");
+			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
+				message.add(modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
+			}
+
+			JTextArea textArea = new JTextArea(message.toString());
+			textArea.setEditable(false);
+
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), textArea,
+					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), JOptionPane.PLAIN_MESSAGE);
+			return null;
+		} else {
 			OpsiLicensing opsiLicensing = new OpsiLicensing();
-			licensingInfoPanel = createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingButtons(opsiLicensing),
+			return createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingButtons(opsiLicensing),
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		}
-
-		return licensingInfoPanel;
 	}
 
 	public JPanel getHealthCheckPanel() {
-		Logging.info(this, "init health check panel", healthCheckPanel);
-		if (healthCheckPanel == null) {
-			HealthCheckComponent healthCheck = new HealthCheckComponent();
-			healthCheckPanel = createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
-					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		}
-
-		return healthCheckPanel;
+		Logging.info(this, "init health check panel");
+		HealthCheckComponent healthCheck = new HealthCheckComponent();
+		return createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
+				Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 	}
 
 	public JPanel getLicenseManagementPanel() {
-		if (licenseManagementPanel == null) {
-			// show Loading pane only when something needs to be loaded from server
-			ConfigedMain.getMainFrame().activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
-			long startmillis = System.currentTimeMillis();
-			Logging.info(this, "initLicensesFrame start ");
-			licenseManagement = new LicenseManagement(configedMain);
-			long endmillis = System.currentTimeMillis();
-			Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
+		Logging.info(this, "startLicensingManagement called");
 
-			licenseManagementPanel = createPanel(licenseManagement,
-					topToolBarManager.getLicensingManagementButtons(this),
-					Configed.getResourceValue("MainFrame.labelLicenses"));
+		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+			Utils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
+			return null;
 		}
 
-		return licenseManagementPanel;
+		new Thread() {
+			@Override
+			public void run() {
+
+				if (Boolean.TRUE.equals(persistenceController.getDataServices().config.getGlobalBooleanConfigValue(
+						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
+						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
+					// Starting JavaFX-Thread by creating a new JFXPanel, but not
+					// using it since it is not needed.
+					new JFXPanel();
+
+					Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
+				}
+			}
+		}.start();
+
+		// show Loading pane only when something needs to be loaded from server
+		long startmillis = System.currentTimeMillis();
+		Logging.info(this, "initLicensesFrame start ");
+		licenseManagement = new LicenseManagement(configedMain);
+		long endmillis = System.currentTimeMillis();
+		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
+
+		return createPanel(licenseManagement, topToolBarManager.getLicensingManagementButtons(this),
+				Configed.getResourceValue("MainFrame.labelLicenses"));
 	}
 
 	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String title) {
@@ -299,22 +321,6 @@ public class MainPanelManager {
 		return hostsStatusPanel;
 	}
 
-	public void resetData() {
-		depotConfigurationSplitPane = null;
-		serverConfiguration = null;
-
-		if (dashboardPanel != null) {
-			// We need to clear all data, otherwise they will be kept
-			dashboard.clearAllData();
-			dashboardPanel = null;
-		}
-
-		licensingInfoPanel = null;
-		healthCheckPanel = null;
-
-		licenseManagementPanel = null;
-	}
-
 	public void reloadLicensesAction() {
 		ConfigedMain.getMainFrame()
 				.activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
@@ -322,8 +328,7 @@ public class MainPanelManager {
 			@Override
 			public void run() {
 				persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-				licenseManagementPanel = null;
-				ConfigedMain.getMainFrame().startLicensingManagement();
+				ConfigedMain.getMainFrame().showPanel(EditingTarget.LICENSE_MANAGEMENT);
 				ConfigedMain.getMainFrame().deactivateLoadingPane();
 			}
 		}.start();
