@@ -109,7 +109,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JPanel contentPane;
 	private JComboBox<String> newElementBox;
 	private JButton buttonReload;
-	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 
@@ -123,13 +122,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	private ConfigedMain configedMain;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSelectionDialog(ConfigedMain configedMain, SavedSearchesDialog savedSearchesDialog) {
-		this.configedMain = configedMain;
+	public ClientSelectionDialog(SavedSearchesDialog savedSearchesDialog) {
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
 		complexElements = new LinkedList<>();
@@ -210,33 +206,20 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		buttonReload.setToolTipText(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
-		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
-		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
-
-		buttonRestart.addActionListener(actionEvent -> restart());
-
-		completeLayout
-				.setHorizontalGroup(
-						completeLayout.createParallelGroup().addComponent(scrollPane)
-								.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(saveButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)));
+		completeLayout.setHorizontalGroup(completeLayout.createParallelGroup().addComponent(scrollPane)
+				.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
+						.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(saveButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonReload, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)));
 
 		completeLayout.setVerticalGroup(completeLayout.createSequentialGroup().addComponent(scrollPane)
 				.addGap(Globals.GAP_SIZE)
@@ -252,8 +235,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 						.addComponent(saveButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)));
 
 		return completePanel;
@@ -346,26 +327,11 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private void reload() {
 		Logging.info(this, "actionPerformed");
 		buttonReload.setEnabled(false);
-		buttonRestart.setEnabled(false);
 		dialog.setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
 			buttonReload.setEnabled(true);
-			buttonRestart.setEnabled(true);
 			dialog.setCursor(null);
-		});
-	}
-
-	private void restart() {
-		Logging.info(this, "actionPerformed");
-		buttonRestart.setEnabled(false);
-		buttonReload.setEnabled(false);
-		dialog.setCursor(Globals.WAIT_CURSOR);
-		SwingUtilities.invokeLater(() -> {
-			manager.getBackend().setReloadRequested();
-			ExtraFrameController.callNewClientSelectionDialog(configedMain);
-			dialog.setCursor(null);
-			// we lose all components of this dialog, there is nothing to reset
 		});
 	}
 
