@@ -139,6 +139,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		dialog.setModalityType(ModalityType.MODELESS);
 		dialog.pack();
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		resizeScrollPane();
 	}
 
 	public void show(String searchName) {
@@ -193,20 +194,20 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		buttonReload.setToolTipText(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
-		completePanel.setLayout(new MigLayout("insets 0, fill, novisualpadding", "", "[grow][pref!]"));
-		completePanel.add(scrollPane, "grow, push, span, wrap, gapbottom " + Globals.GAP_SIZE);
+		completePanel.setLayout(new MigLayout("insets 0, fill", "", "[grow][pref!]"));
+		completePanel.add(scrollPane, "grow, span, wrap, gapbottom " + Globals.GAP_SIZE);
 		completePanel.add(saveNameLabel, "split 7, gapleft " + Globals.GAP_SIZE);
 		completePanel.add(saveNameField, "wmin 40, w 100:200, gapleft " + Globals.MIN_GAP_SIZE);
 		completePanel.add(saveDescriptionLabel, "gapleft " + Globals.GAP_SIZE);
-		completePanel.add(saveDescriptionField, "wmin 40, w 200:push, growx, gapleft " + Globals.MIN_GAP_SIZE);
+		completePanel.add(saveDescriptionField, "wmin 40, w 200, growx, gapleft " + Globals.MIN_GAP_SIZE);
 		completePanel.add(saveButton, "gapleft " + Globals.GAP_SIZE);
 		completePanel.add(buttonReload, "gapleft " + Globals.GAP_SIZE + ", wrap");
 		return completePanel;
 	}
 
 	private void init() {
-		contentPane = new JPanel(new MigLayout("insets 0, fillx, wrap 8",
-				"[20!,center][40!,center][pref,left][70!,center][100:100,grow,center][20!,center][100!,center][pref!,right]",
+		contentPane = new JPanel(new MigLayout("insets 0, wrap 8",
+				"[20!,center][40!,center][pref,left][70!,center][100,grow,center][20!,center][100!,center][pref!,right]",
 				"[center]0"));
 
 		newElementBox = new JComboBox<>(
@@ -986,6 +987,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		newElementBox.setSelectedIndex(0);
 		complexElements.getLast().connectionType.setVisible(false);
 
+		resizeScrollPane();
+	}
+
+	private void resizeScrollPane() {
 		// This will change the width of the dialog so that all the content will be visible
 		// and we only need a vertical scrollbar
 		int diffSize = scrollPane.getPreferredSize().width - scrollPane.getSize().width
