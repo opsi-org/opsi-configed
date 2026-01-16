@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -97,16 +96,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
-	private GroupLayout layout;
-	private GroupLayout.SequentialGroup vGroup;
-	private GroupLayout.ParallelGroup hGroupParenthesisClose;
-	private GroupLayout.ParallelGroup hGroupParenthesisOpen;
-	private GroupLayout.ParallelGroup hGroupRemoveBtn;
-	private GroupLayout.ParallelGroup hGroupNegate;
-	private GroupLayout.ParallelGroup hGroupConnections;
-	private GroupLayout.ParallelGroup hGroupElements;
-	private GroupLayout.ParallelGroup hGroupOperations;
-	private GroupLayout.ParallelGroup hGroupData;
 	private JPanel contentPane;
 	private JComboBox<String> newElementBox;
 	private JButton buttonReload;
@@ -213,8 +202,8 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		buttonRestart.addActionListener(actionEvent -> restart());
 
-		completePanel.setLayout(new MigLayout("insets 0, fillx", "", "[]0"));
-		completePanel.add(scrollPane, "grow, push, wrap, gapbottom " + Globals.GAP_SIZE);
+		completePanel.setLayout(new MigLayout("insets 0, fill, novisualpadding", "", "[grow][pref!]"));
+		completePanel.add(scrollPane, "grow, push, span, wrap, gapbottom " + Globals.GAP_SIZE);
 		completePanel.add(saveNameLabel, "split 7, gapleft " + Globals.GAP_SIZE);
 		completePanel.add(saveNameField, "wmin 40, w 100:200, gapleft " + Globals.MIN_GAP_SIZE);
 		completePanel.add(saveDescriptionLabel, "gapleft " + Globals.GAP_SIZE);
@@ -227,63 +216,12 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	}
 
 	private void init() {
-		contentPane = new JPanel();
-
-		layout = new GroupLayout(contentPane);
-		contentPane.setLayout(layout);
-
-		layout.setAutoCreateContainerGaps(true);
-		layout.setHonorsVisibility(false);
-
-		GroupLayout.SequentialGroup vMainGroup = layout.createSequentialGroup();
-		GroupLayout.ParallelGroup hMainGroup = layout.createParallelGroup();
-
-		vGroup = layout.createSequentialGroup();
-		GroupLayout.ParallelGroup vHeadlines = layout.createParallelGroup();
-		vGroup.addGroup(vHeadlines);
-		vMainGroup.addGroup(vGroup);
-
-		layout.setVerticalGroup(vMainGroup);
-		hGroupParenthesisClose = layout.createParallelGroup();
-		hGroupParenthesisOpen = layout.createParallelGroup();
-		hGroupRemoveBtn = layout.createParallelGroup();
-		hGroupNegate = layout.createParallelGroup();
-		hGroupConnections = layout.createParallelGroup();
-		hGroupElements = layout.createParallelGroup();
-		hGroupOperations = layout.createParallelGroup();
-		hGroupData = layout.createParallelGroup();
-		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(hGroupNegate).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupElements)
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupOperations).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(hGroupData).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupParenthesisClose)
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupConnections).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(hGroupRemoveBtn));
-		layout.setHorizontalGroup(hMainGroup);
-
-		// columns headline
-		JLabel negationLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.negateColumn"));
-
-		JLabel nameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.nameColumn"));
-
-		JLabel dataLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.dataColumn"));
-
-		JLabel connectionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
-
-		vHeadlines.addComponent(negationLabel);
-		vHeadlines.addComponent(nameLabel);
-
-		vHeadlines.addComponent(dataLabel);
-		vHeadlines.addComponent(connectionLabel);
-
-		hGroupNegate.addComponent(negationLabel, GroupLayout.Alignment.CENTER);
-		hGroupElements.addComponent(nameLabel, GroupLayout.Alignment.CENTER);
-
-		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
-		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
+		contentPane = new JPanel(new MigLayout("insets 0, fillx, wrap 8",
+				"[20!,center][40!,center][pref,left][70!,center][100:100,grow,center][20!,center][100!,center][pref!,right]",
+				"[center]0"));
 
 		newElementBox = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
-
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 		newElementBox.addItem(Configed.getResourceValue("hostName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwareName"));
@@ -295,19 +233,16 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		for (String hardware : hardwareList) {
 			newElementBox.addItem(hardware);
 		}
-
 		newElementBox.addActionListener(actionEvent -> addElement());
-
-		vMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
-		hMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
 		complexElements.getLast().connectionType.setVisible(false);
+
 		scrollPane = new JScrollPane(contentPane);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+		renderAll();
 	}
 
 	private void reload() {
@@ -347,7 +282,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		}
 
 		result.negateButton = createNOTCheckBox();
-
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
 
@@ -364,6 +298,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 				box.addItem(op.getOperationString());
 			}
 			result.operationComponent = box;
+			((JComboBox<?>) result.operationComponent).addActionListener(this::selectOperation);
 		} else {
 			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
 		}
@@ -371,7 +306,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 
-		// to reserve the place
+		// placeholder for data component; will be replaced depending on operation
 		result.dataComponent = new JLabel();
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
@@ -382,32 +317,11 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.closeParenthesis = createParenthesisCheckBox(")", false);
 		result.closeParenthesis.setVisible(false);
 
-		result.vRow = layout.createParallelGroup();
-		result.vRow.addComponent(result.negateButton, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.connectionType, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.elementLabel, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.operationComponent, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.dataComponent, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.openParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		result.vRow.addComponent(result.closeParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-
-		vGroup.addGroup(result.vRow);
-
-		hGroupNegate.addComponent(result.negateButton, 10, 40, 50);
-		hGroupConnections.addComponent(result.connectionType, 100, 100, 100);
-		hGroupElements.addComponent(result.elementLabel);
-		hGroupOperations.addComponent(result.operationComponent, 65, 70, 70);
-		hGroupData.addComponent(result.dataComponent, 100, 100, Short.MAX_VALUE);
-		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
-		hGroupParenthesisClose.addComponent(result.closeParenthesis, 20, 20, 20);
-
-		if (operations.length > 1) {
-			((JComboBox<?>) result.operationComponent).addActionListener(this::selectOperation);
-			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
-		} else if (operations.length == 1) {
-			addDataComponent(result, 0);
-		} else {
-			// Do nothing with no operations
+		if (operations.length >= 1) {
+			addDataComponent(result,
+					(result.operationComponent instanceof JComboBox)
+							? ((JComboBox<?>) result.operationComponent).getSelectedIndex()
+							: 0);
 		}
 
 		return result;
@@ -443,7 +357,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private static JCheckBox createANDORCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
-		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
 		jCheckBox.addChangeListener(changeEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
@@ -583,24 +496,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 				result.negateButton.getPreferredSize().height));
 
 		result.topLabel = new JLabel();
-		result.topLabel.setMaximumSize(
-				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
-
 		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
 		result.openParenthesis = createParenthesisCheckBox("(", true);
 		result.openParenthesis.setSelected(false);
-
-		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
-		vRow.addComponent(result.topLabel, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		vRow.addComponent(result.removeButton, GroupLayout.Alignment.CENTER);
-		vRow.addComponent(result.negateButton, GroupLayout.Alignment.CENTER);
-		vRow.addComponent(result.openParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		vGroup.addGroup(vRow);
-		hGroupNegate.addComponent(result.negateButton, 10, 40, 50);
-		hGroupRemoveBtn.addComponent(result.removeButton);
-		hGroupElements.addComponent(result.topLabel);
-		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
 
 		result.groupList = new LinkedList<>();
 		return result;
@@ -615,12 +514,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
 				group.connectionType.getPreferredSize().height));
-		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
-		vRow.addComponent(group.connectionType, GroupLayout.Alignment.CENTER);
-		vRow.addComponent(group.closeParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		vGroup.addGroup(vRow);
-		hGroupConnections.addComponent(group.connectionType, 100, 100, 100);
-		hGroupParenthesisClose.addComponent(group.closeParenthesis, 20, 20, 20);
 	}
 
 	/* Gets the selected operation and adds the given data to it. */
@@ -721,17 +614,43 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		return conStatus;
 	}
 
-	/* Remove a simple group from the display */
-	private void removeGroup(SimpleGroup group) {
-		contentPane.remove(group.negateButton);
-		contentPane.remove(group.connectionType);
-		contentPane.remove(group.elementLabel);
-		contentPane.remove(group.operationComponent);
-		if (group.dataComponent != null) {
-			contentPane.remove(group.dataComponent);
+	private void renderAll() {
+		JLabel negationLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.negateColumn"));
+		JLabel nameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.nameColumn"));
+		JLabel dataLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.dataColumn"));
+		JLabel connectionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
+
+		contentPane.removeAll();
+
+		contentPane.add(negationLabel, "skip 1");
+		contentPane.add(nameLabel);
+		contentPane.add(dataLabel, "skip 1");
+		contentPane.add(connectionLabel, "skip 1, w 100!, wrap");
+
+		for (ComplexGroup complex : complexElements) {
+			contentPane.add(complex.openParenthesis);
+			contentPane.add(complex.negateButton);
+			contentPane.add(complex.topLabel, "spanx 4, growx");
+			contentPane.add(complex.connectionType, "w 100!");
+			contentPane.add(complex.removeButton, "align right, wrap");
+
+			for (SimpleGroup simple : complex.groupList) {
+				contentPane.add(simple.openParenthesis);
+				contentPane.add(simple.negateButton);
+				contentPane.add(simple.elementLabel);
+				contentPane.add(simple.operationComponent, "w 70!");
+				contentPane.add(simple.dataComponent, "w 100:100, growx");
+				contentPane.add(simple.closeParenthesis);
+				contentPane.add(simple.connectionType, "w 100!, wrap");
+			}
+
+			contentPane.add(complex.closeParenthesis, "skip 5");
+			contentPane.add(complex.connectionType, "w 100!, wrap");
 		}
-		contentPane.remove(group.openParenthesis);
-		contentPane.remove(group.closeParenthesis);
+
+		contentPane.add(newElementBox, "span 8, align left, gapleft " + Globals.MIN_GAP_SIZE + ", gaptop "
+				+ Globals.GAP_SIZE + ", gapbottom " + Globals.GAP_SIZE + ", wrap");
+
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
@@ -813,10 +732,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			// Nothing has to be done here
 		}
 		}
-
-		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);
 	}
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
@@ -902,25 +817,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	 */
 	private void reset() {
 		Logging.debug(this, "RESET");
-		for (ComplexGroup group : complexElements) {
-			contentPane.remove(group.topLabel);
-			contentPane.remove(group.removeButton);
-			contentPane.remove(group.connectionType);
-			contentPane.remove(group.negateButton);
-			contentPane.remove(group.openParenthesis);
-			contentPane.remove(group.closeParenthesis);
-			for (SimpleGroup simple : group.groupList) {
-				removeGroup(simple);
-			}
-		}
 		saveNameField.setText("");
 		saveDescriptionField.setText("");
 		complexElements.clear();
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
 		buildParentheses();
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 	}
 
 	/*
@@ -928,17 +831,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	 * in the interface.
 	 */
 	private void loadFromManager() {
-		for (ComplexGroup group : complexElements) {
-			contentPane.remove(group.topLabel);
-			contentPane.remove(group.removeButton);
-			contentPane.remove(group.connectionType);
-			contentPane.remove(group.negateButton);
-			contentPane.remove(group.openParenthesis);
-			contentPane.remove(group.closeParenthesis);
-			for (SimpleGroup simple : group.groupList) {
-				removeGroup(simple);
-			}
-		}
 		complexElements.clear();
 
 		List<OperationWithStatus> topList;
@@ -978,8 +870,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			complexElements.getLast().connectionType.setVisible(false);
 		}
 		buildParentheses();
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 	}
 
 	private static AbstractSelectOperation getNonGroupOperation(AbstractSelectGroupOperation operation) {
@@ -1054,7 +945,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		// may be JLabel or JComboBox
 		private JComponent operationComponent;
 		private JComponent dataComponent;
-		private GroupLayout.ParallelGroup vRow;
 		private JCheckBox openParenthesis;
 		private JCheckBox closeParenthesis;
 	}
@@ -1087,17 +977,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			Logging.info(this, "removing group of type ", group.type);
 
 			if (group.removeButton == e.getSource()) {
-				contentPane.remove(group.topLabel);
-				contentPane.remove(group.removeButton);
-				contentPane.remove(group.connectionType);
-				contentPane.remove(group.negateButton);
-				contentPane.remove(group.openParenthesis);
-				contentPane.remove(group.closeParenthesis);
-				for (SimpleGroup simple : group.groupList) {
-					removeGroup(simple);
-				}
-				contentPane.revalidate();
-				contentPane.repaint();
 				complexIterator.remove();
 				buildParentheses();
 				break;
@@ -1107,6 +986,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		if (!complexElements.isEmpty()) {
 			complexElements.getLast().connectionType.setVisible(false);
 		}
+		renderAll();
 	}
 
 	private void addElement() {
@@ -1128,8 +1008,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			complexElements.add(complexGroup);
 		}
 
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 		newElementBox.setSelectedIndex(0);
 		complexElements.getLast().connectionType.setVisible(false);
 
@@ -1161,10 +1040,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 
-		if (sourceGroup.dataComponent != null) {
-			contentPane.remove(sourceGroup.dataComponent);
-			sourceGroup.dataComponent = null;
-		}
+		sourceGroup.dataComponent = null;
 
 		int index = 0;
 		if (source instanceof JComboBox) {
@@ -1178,8 +1054,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		buildParentheses();
 
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 	}
 
 	private void save() {
