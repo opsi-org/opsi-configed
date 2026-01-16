@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTabbedPane;
@@ -17,20 +16,17 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.hostconfigs.PanelHostConfig;
+import de.uib.configed.gui.features.hostconfigs.PanelConfigurationHostConfig;
 import de.uib.configed.gui.features.productpage.PanelProductProperties;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class DepotConfiguration extends JTabbedPane implements ChangeListener, ListSelectionListener {
 	private static final int INITIAL_SELECTED_TAB = 1;
-	private ConfigUpdateCollection configUpdateCollection;
 
-	private PanelHostConfig panelHostConfig;
+	private PanelConfigurationHostConfig panelHostConfig;
 
 	private PanelHostProperties panelHostProperties;
 	private HostUpdateCollection hostUpdateCollection;
@@ -114,11 +110,13 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		switch (getSelectedIndex()) {
 		case 0 -> {
 			initHostConfigTab();
-			setHostConfigTab();
+			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			panelHostConfig.updateTab(depotsList.getSelectedIndices().length);
 		}
 		case 1 -> {
 			initProductPropertiesTab();
-			setProductPropertiesPage();
+			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			panelProductProperties.updateTab(depotsList.getSelectedIndices().length);
 		}
 		case 2 -> {
 			initHostParameterTab();
@@ -135,7 +133,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(this::setHostConfigTab, false);
+		panelHostConfig = new PanelConfigurationHostConfig(false, depotsList::getSelectedValuesList);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
@@ -147,11 +145,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		panelProductProperties = new PanelProductProperties(configedMain, depotsList);
 		setComponentAt(getSelectedIndex(), panelProductProperties);
-	}
-
-	private void setProductPropertiesPage() {
-		panelProductProperties.updateTab(depotsList.getSelectedIndices().length);
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	private void initHostParameterTab() {
@@ -186,30 +179,5 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		panelHostProperties.initMultipleHostsEditing(depotPropertiesForPermittedDepots.get(depot), hostUpdateCollection,
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
-	}
-
-	private void setHostConfigTab() {
-		Logging.info(this, "setHostConfigTab  selected Depots ", depotsList.getSelectedValuesList());
-
-		if (configUpdateCollection != null) {
-			UpdateCollectionManager.removeFromGlobalUpdateCollection(configUpdateCollection);
-		}
-
-		configUpdateCollection = new ConfigUpdateCollection(depotsList.getSelectedValuesList());
-		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
-
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		List<Map<String, Object>> additionalConfigs = persistenceController.getDataServices().config
-				.getHostsConfigsWithDefaults(depotsList.getSelectedValuesList());
-		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
-		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
-				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-		Map<String, List<Object>> originalMap = ConfigedUtilityMethods
-				.mergeMaps(persistenceController.getDataServices().config
-						.getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
-		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList()),
-				mergedVisualMap, additionalConfigs, configUpdateCollection,
-				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
 	}
 }

@@ -20,13 +20,13 @@ public abstract class AbstractConfigurationTab extends JPanel {
 	private static final String CONTENT_TAB = "CLIENT_CONTENT_TAB";
 
 	private boolean multiSelectionAllowed;
-	private boolean clientConfiguration;
+	protected boolean isClientConfig;
 
 	private CardLayout cardLayout;
 
-	protected AbstractConfigurationTab(boolean multiSelectionAllowed, boolean clientConfiguration) {
+	protected AbstractConfigurationTab(boolean multiSelectionAllowed, boolean isClientConfig) {
 		this.multiSelectionAllowed = multiSelectionAllowed;
-		this.clientConfiguration = clientConfiguration;
+		this.isClientConfig = isClientConfig;
 
 		cardLayout = new CardLayout();
 		super.setLayout(cardLayout);
@@ -38,7 +38,7 @@ public abstract class AbstractConfigurationTab extends JPanel {
 	}
 
 	private String getLabel(boolean primary) {
-		String clientOrDepot = clientConfiguration ? "Client" : "Depot";
+		String clientOrDepot = isClientConfig ? "Client" : "Depot";
 		String singleSelection = multiSelectionAllowed ? "Selected" : "SingleSelection";
 		String primaryOrSecondary = primary ? "primary" : "secondary";
 
