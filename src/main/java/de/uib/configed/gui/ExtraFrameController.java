@@ -60,7 +60,7 @@ public final class ExtraFrameController {
 		initSavedSearchesDialog(configedMain);
 
 		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(configedMain, savedSearchesDialog);
+			clientSelectionDialog = new ClientSelectionDialog(savedSearchesDialog);
 		}
 
 		clientSelectionDialog.show(searchName);
