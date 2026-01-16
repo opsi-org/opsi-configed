@@ -168,8 +168,7 @@ public class MainPanelManager {
 		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 		JPanel depotsListPanel = new JPanel();
-		depotsListPanel.setLayout(
-				new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow, fill]", "[]" + Globals.MIN_GAP_SIZE + "[]"));
+		depotsListPanel.setLayout(new MigLayout("insets 0", "[grow, fill]", "[]" + Globals.MIN_GAP_SIZE + "[]"));
 
 		depotsListPanel.add(depotSelectionLabel, "align center, wrap");
 		depotsListPanel.add(depotListPresenter, "grow, push");

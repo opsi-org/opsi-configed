@@ -376,8 +376,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 				"[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]2[]2[]"));
 
 		panelTask.add(jLabelTask, "wrap");
-		panelTask.add(panelLicenseContracts,
-				"grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", h " + MIN_PANEL_TABLE_HEIGHT + ", wrap");
+		panelTask.add(panelLicenseContracts, "grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", wrap");
 		panelTask.add(jLabelConfigure, "wrap");
 
 		panelTask.add(jButtonCreateStandard, "split 4, sizegroup btns");
