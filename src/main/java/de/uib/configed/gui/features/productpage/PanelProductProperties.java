@@ -24,7 +24,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.gui.AbstractClientConfigurationTab;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.ConfigedMain;
@@ -41,7 +41,7 @@ import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelProductProperties extends AbstractClientConfigurationTab implements AncestorListener {
+public class PanelProductProperties extends AbstractConfigurationTab implements AncestorListener {
 	private PanelGenEdit paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
@@ -53,7 +53,7 @@ public class PanelProductProperties extends AbstractClientConfigurationTab imple
 			.getPersistenceController();
 
 	public PanelProductProperties(ConfigedMain configedMain, DepotsList depotsList) {
-		super(true);
+		super(true, false);
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
 

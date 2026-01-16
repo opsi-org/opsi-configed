@@ -35,7 +35,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.gui.AbstractClientConfigurationTab;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.Configed;
@@ -52,7 +52,7 @@ import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelProductSettings extends AbstractClientConfigurationTab {
+public class PanelProductSettings extends AbstractConfigurationTab {
 	public enum ProductSettingsType {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
@@ -80,7 +80,7 @@ public class PanelProductSettings extends AbstractClientConfigurationTab {
 			.getPersistenceController();
 
 	public PanelProductSettings(ConfigedMain configedMain, ProductTree productTree, ProductSettingsType type) {
-		super(true);
+		super(true, true);
 		this.configedMain = configedMain;
 		this.productTree = productTree;
 		this.type = type;

@@ -15,16 +15,18 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
-public abstract class AbstractClientConfigurationTab extends JPanel {
+public abstract class AbstractConfigurationTab extends JPanel {
 	private static final String INFO_TAB = "CLIENT_INFO_TAB";
 	private static final String CONTENT_TAB = "CLIENT_CONTENT_TAB";
 
 	private boolean multiSelectionAllowed;
+	private boolean clientConfiguration;
 
 	private CardLayout cardLayout;
 
-	protected AbstractClientConfigurationTab(boolean multiSelectionAllowed) {
+	protected AbstractConfigurationTab(boolean multiSelectionAllowed, boolean clientConfiguration) {
 		this.multiSelectionAllowed = multiSelectionAllowed;
+		this.clientConfiguration = clientConfiguration;
 
 		cardLayout = new CardLayout();
 		super.setLayout(cardLayout);
@@ -35,16 +37,18 @@ public abstract class AbstractClientConfigurationTab extends JPanel {
 		super.add(component, CONTENT_TAB);
 	}
 
+	private String getLabel(boolean primary) {
+		String clientOrDepot = clientConfiguration ? "Client" : "Depot";
+		String singleSelection = multiSelectionAllowed ? "Selected" : "SingleSelection";
+		String primaryOrSecondary = primary ? "primary" : "secondary";
+
+		return "Configuration.requires" + clientOrDepot + singleSelection + "." + primaryOrSecondary;
+	}
+
 	private JPanel generateInfoPanel() {
-		String primaryMessageKey = multiSelectionAllowed ? "ClientConfiguration.requiresClientSelected.primary"
-				: "ClientConfiguration.requiresSingleSelection.primary";
-
-		String secondaryMessageKey = multiSelectionAllowed ? "ClientConfiguration.requiresClientSelected.secondary"
-				: "ClientConfiguration.requiresSingleSelection.secondary";
-
-		JLabel labelPrimary = new JLabel(Configed.getResourceValue(primaryMessageKey));
+		JLabel labelPrimary = new JLabel(Configed.getResourceValue(getLabel(true)));
 		labelPrimary.setFont(labelPrimary.getFont().deriveFont(Font.BOLD));
-		JLabel labelSecondary = new JLabel(Configed.getResourceValue(secondaryMessageKey));
+		JLabel labelSecondary = new JLabel(Configed.getResourceValue(getLabel(false)));
 
 		JPanel innerPanel = new JPanel(new MigLayout("wrap 1, aligny center, alignx center", "[center]", "[]10[]"));
 		innerPanel.add(labelPrimary);

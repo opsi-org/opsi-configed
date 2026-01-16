@@ -12,14 +12,14 @@ import java.util.Map;
 import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.AbstractClientConfigurationTab;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.UpdateCollectionManager;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelClientHostConfig extends AbstractClientConfigurationTab {
+public class PanelClientHostConfig extends AbstractConfigurationTab {
 	private PanelHostConfig panelHostConfig;
 	private ConfigedMain configedMain;
 
@@ -28,7 +28,7 @@ public class PanelClientHostConfig extends AbstractClientConfigurationTab {
 			.getPersistenceController();
 
 	public PanelClientHostConfig(ConfigedMain configedMain) {
-		super(true);
+		super(true, true);
 		this.configedMain = configedMain;
 		panelHostConfig = new PanelHostConfig(this::updateContent, false);
 

@@ -36,7 +36,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
-import de.uib.configed.gui.AbstractClientConfigurationTab;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -50,7 +50,7 @@ import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeSelectionListener {
+public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
@@ -104,7 +104,7 @@ public class PanelHWInfo extends AbstractClientConfigurationTab implements TreeS
 			.getPersistenceController();
 
 	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
-		super(false);
+		super(false, true);
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
 		this.clientConfiguration = clientConfiguration;
