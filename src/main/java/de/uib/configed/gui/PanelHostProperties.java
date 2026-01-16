@@ -11,53 +11,74 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.function.Supplier;
 
-import javax.swing.JPanel;
-
-import de.uib.configed.core.domain.datachanges.UpdateCollection;
+import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
-import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
-import net.miginfocom.swing.MigLayout;
 
-public class PanelHostProperties extends JPanel {
+public class PanelHostProperties extends AbstractConfigurationTab {
 	// delegate
 	private EditMapPanelX editMapPanel;
 
-	public PanelHostProperties() {
+	private HostUpdateCollection hostUpdateCollection;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
+	private Supplier<String> depotSupplier;
+
+	public PanelHostProperties(Supplier<String> depotSupplier) {
+		super(false, false);
+		this.depotSupplier = depotSupplier;
+
 		buildPanel();
 	}
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
 		editMapPanel = new EditMapPanelX(false, false, false);
+		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		editMapPanel.setShowToolTip(false);
 
-		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));
-		this.add(editMapPanel, "grow");
+		setComponent(editMapPanel);
 	}
 
-	public void initMultipleHostsEditing(Map<String, Object> depotMap, UpdateCollection updateCollection,
-			Set<String> keysOfReadOnlyEntries) {
+	@Override
+	protected void updateContent() {
+		Logging.debug(this, "setHostPropertiesPage");
+
+		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
+				.getDataServices().depot.getDepotPropertiesForPermittedDepots();
+
+		if (hostUpdateCollection != null) {
+			UpdateCollectionManager.removeFromGlobalUpdateCollection(hostUpdateCollection);
+		}
+
+		String depot = depotSupplier.get();
+
+		hostUpdateCollection = new HostUpdateCollection(depot, depotPropertiesForPermittedDepots.get(depot));
+		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
+
+		Map<String, Object> depotMap = depotPropertiesForPermittedDepots.get(depot);
+
 		Logging.debug(this, "initMultipleHosts ", " configs  ", depotMap);
 
-		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
+		editMapPanel.getMapTableModel()
+				.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		Logging.debug(this, "derive Map ", depotMap);
 
 		deriveDepotMap(depotMap);
 		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
-		editMapPanel.updateData(updateCollection, Collections.singletonList(depotMap));
+		editMapPanel.updateData(hostUpdateCollection, Collections.singletonList(depotMap));
 
-		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
-	}
-
-	// delegated methods
-	public void registerDataChangedObserver(AbstractDataChangedKeeper keeper) {
-		editMapPanel.getMapTableModel().registerDataChangedKeeper(keeper);
+		editMapPanel.getMapTableModel()
+				.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 	}
 
 	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> depotMap) {

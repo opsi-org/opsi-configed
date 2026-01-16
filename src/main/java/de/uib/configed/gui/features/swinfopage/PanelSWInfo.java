@@ -10,12 +10,12 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
-import de.uib.configed.gui.AbstractClientConfigurationTab;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.SwExporter;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelSWInfo extends AbstractClientConfigurationTab {
+public class PanelSWInfo extends AbstractConfigurationTab {
 	private static final String SINGLE_CLIENT_SW_INFO = "SINGLE_CLIENT_SW_INFO";
 	private static final String MULTI_CLIENT_SW_REPORT = "MULTI_CLIENT_SW_REPORT";
 
@@ -27,7 +27,7 @@ public class PanelSWInfo extends AbstractClientConfigurationTab {
 	private ConfigedMain configedMain;
 
 	public PanelSWInfo(ConfigedMain configedMain) {
-		super(true);
+		super(true, true);
 		this.configedMain = configedMain;
 
 		panelSWSingleClientInfo = new PanelSWSingleClientInfo(configedMain, true);

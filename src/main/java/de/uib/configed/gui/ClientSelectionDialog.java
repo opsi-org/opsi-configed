@@ -99,7 +99,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JPanel contentPane;
 	private JComboBox<String> newElementBox;
 	private JButton buttonReload;
-	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 
@@ -113,13 +112,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	private ConfigedMain configedMain;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSelectionDialog(ConfigedMain configedMain, SavedSearchesDialog savedSearchesDialog) {
-		this.configedMain = configedMain;
+	public ClientSelectionDialog(SavedSearchesDialog savedSearchesDialog) {
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
 		complexElements = new LinkedList<>();
@@ -197,11 +193,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		buttonReload.setToolTipText(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
-		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
-		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
-
-		buttonRestart.addActionListener(actionEvent -> restart());
-
 		completePanel.setLayout(new MigLayout("insets 0, fill, novisualpadding", "", "[grow][pref!]"));
 		completePanel.add(scrollPane, "grow, push, span, wrap, gapbottom " + Globals.GAP_SIZE);
 		completePanel.add(saveNameLabel, "split 7, gapleft " + Globals.GAP_SIZE);
@@ -209,9 +200,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		completePanel.add(saveDescriptionLabel, "gapleft " + Globals.GAP_SIZE);
 		completePanel.add(saveDescriptionField, "wmin 40, w 200:push, growx, gapleft " + Globals.MIN_GAP_SIZE);
 		completePanel.add(saveButton, "gapleft " + Globals.GAP_SIZE);
-		completePanel.add(buttonReload, "gapleft " + Globals.GAP_SIZE);
-		completePanel.add(buttonRestart, "gapleft " + Globals.MIN_GAP_SIZE + ", wrap");
-
+		completePanel.add(buttonReload, "gapleft " + Globals.GAP_SIZE + ", wrap");
 		return completePanel;
 	}
 
@@ -248,26 +237,11 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private void reload() {
 		Logging.info(this, "actionPerformed");
 		buttonReload.setEnabled(false);
-		buttonRestart.setEnabled(false);
 		dialog.setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
 			buttonReload.setEnabled(true);
-			buttonRestart.setEnabled(true);
 			dialog.setCursor(null);
-		});
-	}
-
-	private void restart() {
-		Logging.info(this, "actionPerformed");
-		buttonRestart.setEnabled(false);
-		buttonReload.setEnabled(false);
-		dialog.setCursor(Globals.WAIT_CURSOR);
-		SwingUtilities.invokeLater(() -> {
-			manager.getBackend().setReloadRequested();
-			ExtraFrameController.callNewClientSelectionDialog(configedMain);
-			dialog.setCursor(null);
-			// we lose all components of this dialog, there is nothing to reset
 		});
 	}
 

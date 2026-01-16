@@ -11,7 +11,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.gui.features.hostconfigs.PanelClientHostConfig;
+import de.uib.configed.gui.features.hostconfigs.PanelConfigurationHostConfig;
 import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
@@ -28,7 +28,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private PanelProductSettings panelLocalbootProductSettings;
 	private PanelProductSettings panelNetbootProductSettings;
-	private PanelClientHostConfig panelClientHostConfig;
+	private PanelConfigurationHostConfig panelClientHostConfig;
 
 	private PanelSWInfo panelSWInfo;
 
@@ -137,7 +137,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void setHostConfigTab() {
 		if (panelClientHostConfig == null) {
-			panelClientHostConfig = new PanelClientHostConfig(configedMain);
+			panelClientHostConfig = new PanelConfigurationHostConfig(true, configedMain::getSelectedClients);
 			setComponentAt(getSelectedIndex(), panelClientHostConfig);
 		}
 

@@ -19,7 +19,7 @@ import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class TabbedLogPane extends AbstractClientConfigurationTab {
+public class TabbedLogPane extends AbstractConfigurationTab {
 	// This is the index of "instlog" in Utils.getLogTypes()
 	private static final int DEFAULT_SELECTED_INDEX = 2;
 	private LogTabComponent[] textPanes;
@@ -34,7 +34,7 @@ public class TabbedLogPane extends AbstractClientConfigurationTab {
 			.getPersistenceController();
 
 	public TabbedLogPane(ConfigedMain configedMain) {
-		super(false);
+		super(false, true);
 		this.configedMain = configedMain;
 
 		tabbedPane = new JTabbedPane();
