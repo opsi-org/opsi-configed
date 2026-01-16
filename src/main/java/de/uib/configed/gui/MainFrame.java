@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
 
-		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!][grow]", "[grow]"));
+		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!]0[grow]", "[grow]"));
 		JPanel controlPanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "[pref!]", "[pref!]push[pref!]"));
 
 		controlPanel.add(leftControlBar, "aligny top");
