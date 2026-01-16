@@ -37,6 +37,7 @@ public class PanelConfigurationHostConfig extends AbstractConfigurationTab {
 
 	@Override
 	protected void updateContent() {
+		// This will get the selected hosts or selected depots depending on the context
 		List<String> selectedHosts = getSelectedHosts.get();
 		Logging.info(this, "setNetworkconfigurationPage, selectedHosts ", selectedHosts);
 

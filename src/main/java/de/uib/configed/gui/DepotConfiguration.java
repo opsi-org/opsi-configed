@@ -7,18 +7,13 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.util.Map;
 
 import javax.swing.JTabbedPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
-import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.hostconfigs.PanelConfigurationHostConfig;
 import de.uib.configed.gui.features.productpage.PanelProductProperties;
 import de.uib.configed.share.logging.Logging;
@@ -29,7 +24,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	private PanelConfigurationHostConfig panelHostConfig;
 
 	private PanelHostProperties panelHostProperties;
-	private HostUpdateCollection hostUpdateCollection;
 
 	private PanelProductProperties panelProductProperties;
 
@@ -38,9 +32,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 	private int lastSelectedTab = INITIAL_SELECTED_TAB;
 	private int[] lastSelectedDepots;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public DepotConfiguration(ConfigedMain configedMain, DepotsList depotsList) {
 		this.configedMain = configedMain;
@@ -110,17 +101,15 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		switch (getSelectedIndex()) {
 		case 0 -> {
 			initHostConfigTab();
-			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			panelHostConfig.updateTab(depotsList.getSelectedIndices().length);
 		}
 		case 1 -> {
 			initProductPropertiesTab();
-			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			panelProductProperties.updateTab(depotsList.getSelectedIndices().length);
 		}
 		case 2 -> {
 			initHostParameterTab();
-			setHostParameterPage();
+			panelHostProperties.updateTab(depotsList.getSelectedIndices().length);
 		}
 		default -> Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in depots view");
 		}
@@ -134,7 +123,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		}
 
 		panelHostConfig = new PanelConfigurationHostConfig(false, depotsList::getSelectedValuesList);
-
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
 
@@ -152,32 +140,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			return;
 		}
 
-		panelHostProperties = new PanelHostProperties();
-		panelHostProperties.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
+		panelHostProperties = new PanelHostProperties(depotsList::getSelectedValue);
 		setComponentAt(getSelectedIndex(), panelHostProperties);
-	}
-
-	private void setHostParameterPage() {
-		Logging.debug(this, "setHostPropertiesPage");
-
-		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController
-				.getDataServices().depot.getDepotPropertiesForPermittedDepots();
-
-		if (hostUpdateCollection != null) {
-			UpdateCollectionManager.removeFromGlobalUpdateCollection(hostUpdateCollection);
-		}
-
-		String depot = "";
-		if (!depotsList.getSelectedValuesList().isEmpty()) {
-			depot = depotsList.getSelectedValuesList().get(0);
-		}
-
-		hostUpdateCollection = new HostUpdateCollection(depot, depotPropertiesForPermittedDepots.get(depot));
-		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
-
-		panelHostProperties.initMultipleHostsEditing(depotPropertiesForPermittedDepots.get(depot), hostUpdateCollection,
-				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 	}
 }
