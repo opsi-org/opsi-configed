@@ -24,6 +24,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.AbstractClientConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.ConfigedMain;
@@ -40,17 +41,19 @@ import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelProductProperties extends JSplitPane implements AncestorListener {
+public class PanelProductProperties extends AbstractClientConfigurationTab implements AncestorListener {
 	private PanelGenEdit paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
 	private DepotsList depotsList;
 
+	private JSplitPane splitPane;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public PanelProductProperties(ConfigedMain configedMain, DepotsList depotsList) {
-		super(JSplitPane.HORIZONTAL_SPLIT);
+		super(true);
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
 
@@ -81,13 +84,15 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		paneProducts.setSortOrder(sortDescriptor);
 
-		setLeftComponent(paneProducts);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setLeftComponent(paneProducts);
 
 		infoPane = new ProductInfoPane(panelEditProperties);
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
-		setRightComponent(infoPane);
+		splitPane.setRightComponent(infoPane);
+		splitPane.setResizeWeight(1.0);
 
-		setResizeWeight(1.0);
+		setComponent(splitPane);
 	}
 
 	private GenTableModel createTableModel() {
@@ -105,6 +110,13 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 				paneProducts, updateCollection);
 	}
 
+	@Override
+	public void updateContent() {
+		Logging.info(this, "updateContent()");
+		setProductProperties();
+		paneProducts.restoreFilter();
+	}
+
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
 		int saveSelectedRow = paneProducts.getGenEditTable().getSelectedRow();
@@ -117,10 +129,6 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 				paneProducts.setSelectedRow(saveSelectedRow);
 			}
 		}
-	}
-
-	public PanelGenEdit getPaneProducts() {
-		return paneProducts;
 	}
 
 	@SuppressWarnings({ "java:S2972" })
@@ -221,7 +229,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	@Override
 	public void ancestorAdded(AncestorEvent event) {
-		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
+		splitPane.setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
 	}
 
 	@Override

@@ -150,8 +150,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	}
 
 	private void setProductPropertiesPage() {
-		panelProductProperties.setProductProperties();
-		panelProductProperties.getPaneProducts().restoreFilter();
+		panelProductProperties.updateTab(depotsList.getSelectedIndices().length);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
