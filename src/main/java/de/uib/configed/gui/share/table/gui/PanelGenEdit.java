@@ -410,8 +410,10 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		} else {
 			int[] selectedRows = genEditTable.getSelectedRows();
 			for (int selectedRow : selectedRows) {
-				result.add(
-						genEditTable.getValueAt(selectedRow, genEditTable.getGenTableModel().getKeyCol()).toString());
+				if (selectedRow >= 0 && selectedRow < genEditTable.getRowCount()) {
+					result.add(genEditTable.getValueAt(selectedRow, genEditTable.getGenTableModel().getKeyCol())
+							.toString());
+				}
 			}
 		}
 
