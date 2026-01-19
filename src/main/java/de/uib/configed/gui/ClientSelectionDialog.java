@@ -658,7 +658,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		}
 
 		case BIG_INTEGER_TYPE -> {
-			Long longValue = (Long) ((JSpinner) dataComponent).getValue();
+			Long longValue = (Long) ((SpinnerWithExtension) dataComponent).getValue();
 			yield (longValue == 0) ? null : longValue;
 		}
 
