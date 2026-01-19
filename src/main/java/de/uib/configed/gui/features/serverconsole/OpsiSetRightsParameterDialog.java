@@ -7,12 +7,10 @@
 package de.uib.configed.gui.features.serverconsole;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -30,6 +28,7 @@ import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class OpsiSetRightsParameterDialog {
 	private static final int COMBOBOX_LIST_WIDTH = 200;
@@ -79,8 +78,7 @@ public class OpsiSetRightsParameterDialog {
 		additionalDefaultPaths.add(CommandFactory.WEBDAV_OPSI_PATH_VAR_DEPOT);
 		completion = new CompletionComboButton(additionalDefaultPaths);
 
-		jLabelInfo = new JLabel(Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath"));
-		jLabelInfo.setFont(jLabelInfo.getFont().deriveFont(Font.BOLD));
+		jLabelInfo = Utils.createBoldLabel("SingleCommandOpsiSetRights.additionalPath");
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();
@@ -106,25 +104,9 @@ public class OpsiSetRightsParameterDialog {
 	}
 
 	private void initLayout() {
-		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
-		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(inputPanelLayout.createSequentialGroup()
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addComponent(
-						jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		inputPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE, "", "[]0"));
+		inputPanel.add(jLabelInfo, "wrap");
+		inputPanel.add(jComboBoxAutoCompletion, "split 2, growx, gapright " + Globals.GAP_SIZE);
+		inputPanel.add(jButtonSearchDir, "wrap");
 	}
 }

@@ -6,12 +6,10 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -25,7 +23,9 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PMInstallSettingsPanel extends PMInstallPanel {
 	public static final String DEPOT_SELECTION_NODEPOTS = Configed
@@ -33,8 +33,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private static final String DEPOT_SELECTION_ALL = Configed
 			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL");
 
-	private JLabel jLabelOn = new JLabel();
-	private JLabel jLabelLoglevel = new JLabel();
+	private JLabel jLabelOn;
+	private JLabel jLabelLoglevel;
 
 	private JComboBox<Integer> jComboBoxLoglevel;
 
@@ -57,11 +57,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelOn.setText(Configed.getResourceValue("PMInstallSettingsPanel.jLabelOn"));
-		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
-
-		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelOn = Utils.createBoldLabel("PMInstallSettingsPanel.jLabelOn");
+		jLabelLoglevel = Utils.createBoldLabel("loglevel");
 
 		jButtonDepotselection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {
@@ -88,46 +85,14 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		layout.setVerticalGroup(
-				layout.createSequentialGroup()
-						.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-
-						.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE));
+		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		add(jLabelOn);
+		add(jTextFieldSelecteddepots, "split 2, growx");
+		add(jButtonDepotselection, "wrap, gapbottom " + Globals.GAP_SIZE);
+		add(jLabelLoglevel);
+		add(jComboBoxLoglevel, "gapbottom " + Globals.GAP_SIZE);
+		add(jCheckBoxSetupInstalled);
+		add(jCheckBoxUpdateInstalled);
 	}
 
 	private List<String> getAllowedInstallTargets() {

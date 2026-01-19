@@ -8,6 +8,7 @@ package de.uib.configed.share;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
@@ -41,6 +42,7 @@ import java.util.function.Consumer;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -633,6 +635,12 @@ public final class Utils {
 				consumer.accept(e);
 			}
 		};
+	}
+
+	public static JLabel createBoldLabel(String ressourceId) {
+		JLabel label = new JLabel(Configed.getResourceValue(ressourceId));
+		label.setFont(label.getFont().deriveFont(Font.BOLD));
+		return label;
 	}
 
 	public static void runOnEventDispatchThread(Runnable runnable) {

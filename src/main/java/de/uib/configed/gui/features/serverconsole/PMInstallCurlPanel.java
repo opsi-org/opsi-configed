@@ -6,11 +6,9 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ItemEvent;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -23,13 +21,15 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PMInstallCurlPanel extends PMInstallPanel {
-	private JLabel jLabelURL = new JLabel();
+	private JLabel jLabelURL;
 	private JTextField jTextFieldURL;
 
-	private JLabel jLabelDir = new JLabel();
+	private JLabel jLabelDir;
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
 
@@ -50,12 +50,9 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelURL.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlUrl"));
-		jLabelURL.setFont(jLabelURL.getFont().deriveFont(Font.BOLD));
+		jLabelURL = Utils.createBoldLabel("PMInstallCurlPanel.jLabelCurlUrl");
 
-		jLabelDir.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlDir"));
-		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
-
+		jLabelDir = Utils.createBoldLabel("PMInstallCurlPanel.jLabelCurlDir");
 		CompletionComboButton autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.addItem(workbench);
@@ -168,51 +165,16 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-
-		layout.setVerticalGroup(
-				layout.createSequentialGroup()
-						.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckBoxIncludeZSync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxCompareMD5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jCheckBoxCompareMD5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckBoxIncludeZSync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "[grow, fill][]",
+				"[]0[]0[]0[]0[]"));
+		add(jLabelURL);
+		add(jTextFieldURL, "growx, gapbottom " + Globals.GAP_SIZE);
+		add(jLabelDir);
+		add(jComboBoxAutoCompletion, "split 2, growx");
+		add(jButtonAutoCompletion, "gapbottom " + Globals.GAP_SIZE + ", wrap");
+		add(jCheckBoxIncludeZSync);
+		add(jCheckBoxCompareMD5, "gapbottom " + Globals.GAP_SIZE);
+		add(curlAuthPanel.getCheckBox());
+		add(curlAuthPanel, "growx, hidemode 3");
 	}
 }

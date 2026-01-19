@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.csv;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,15 +16,15 @@ import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -57,6 +56,7 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CSVTemplateCreatorDialog {
 	private static CSVTemplateCreatorDialog csvTemplateCreatorDialog;
@@ -82,40 +82,23 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	private JPanel initPanel() {
-		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').get();
+		format = CSVFormat.DEFAULT.builder().setDelimiter(';').setCommentMarker('#').get();
 
-		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-		numberFormat.setGroupingUsed(false);
-
-		NumberFormatter formatter = new NumberFormatter(numberFormat);
+		NumberFormatter formatter = new NumberFormatter(NumberFormat.getIntegerInstance());
+		((NumberFormat) formatter.getFormat()).setGroupingUsed(false);
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		JRadioButton tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
-		tabsOption.setActionCommand("\t");
-
-		JRadioButton commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
-		commaOption.setActionCommand(",");
-
-		JRadioButton semicolonOption = new JRadioButton(
-				Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
-		semicolonOption.setActionCommand(";");
-		semicolonOption.setSelected(true);
-
-		JRadioButton spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
-		spaceOption.setActionCommand(" ");
-
-		JRadioButton otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
-		otherOption.setActionCommand("");
+		JRadioButton tabsOption = radio("CSVImportDataDialog.tabsOption", "\t", false);
+		JRadioButton commaOption = radio("CSVImportDataDialog.commaOption", ",", false);
+		JRadioButton semicolonOption = radio("CSVImportDataDialog.semicolonOption", ";", true);
+		JRadioButton spaceOption = radio("CSVImportDataDialog.spaceOption", " ", false);
+		JRadioButton otherOption = radio("CSVImportDataDialog.otherOption", "", false);
 
 		ButtonGroup delimiterOptions = new ButtonGroup();
-		delimiterOptions.add(tabsOption);
-		delimiterOptions.add(commaOption);
-		delimiterOptions.add(semicolonOption);
-		delimiterOptions.add(spaceOption);
-		delimiterOptions.add(otherOption);
+		Stream.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
 
-		MaskFormatter maskFormatter = null;
+		MaskFormatter maskFormatter;
 		try {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
@@ -130,8 +113,7 @@ public class CSVTemplateCreatorDialog {
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
 
-		JLabel delimeterLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		delimeterLabel.setFont(delimeterLabel.getFont().deriveFont(Font.BOLD));
+		JLabel delimiterLabel = Utils.createBoldLabel("CSVImportDataDialog.stringSeparatorLabel");
 
 		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
@@ -141,11 +123,7 @@ public class CSVTemplateCreatorDialog {
 			}
 		});
 
-		Enumeration<AbstractButton> iter = delimiterOptions.getElements();
-
-		while (iter.hasMoreElements()) {
-			AbstractButton button = iter.nextElement();
-
+		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
 			button.addItemListener((ItemEvent e) -> {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
@@ -164,17 +142,10 @@ public class CSVTemplateCreatorDialog {
 			}
 		});
 
-		JPanel centerPanel = new JPanel();
-		GroupLayout centerLayout = new GroupLayout(centerPanel);
-		centerPanel.setLayout(centerLayout);
+		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
-		JLabel dataSelectionLabel = new JLabel(
-				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
-		dataSelectionLabel.setFont(dataSelectionLabel.getFont().deriveFont(Font.BOLD));
-		JLabel fieldSeparatorLabel = new JLabel(
-				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
-		fieldSeparatorLabel.setFont(fieldSeparatorLabel.getFont().deriveFont(Font.BOLD));
-
+		JLabel dataSelectionLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
+		JLabel fieldSeparatorLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.fieldSeparatorLabel");
 		includeFormatHintOption = new JCheckBox(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
 
@@ -187,54 +158,35 @@ public class CSVTemplateCreatorDialog {
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(-1);
 
-		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup().addComponent(dataSelectionLabel)
-				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(includeFormatHintOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(dataSelectionLabel, "gapbottom " + Globals.MIN_GAP_SIZE);
 
-				.addComponent(delimeterLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(list);
 
-				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(includeFormatHintOption, "gaptop " + Globals.GAP_SIZE);
 
-				.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(delimiterLabel, "gaptop " + Globals.GAP_SIZE);
 
-				.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(tabsOption);
+		centerPanel.add(commaOption);
+		centerPanel.add(semicolonOption);
+		centerPanel.add(spaceOption);
 
-				.addGroup(centerLayout.createSequentialGroup()
-						.addComponent(otherOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		centerPanel.add(otherOption, "split 2, gapright " + Globals.GAP_SIZE);
+		centerPanel.add(otherDelimiterInput, "wrap");
 
-				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		centerPanel.add(fieldSeparatorLabel, "gaptop " + Globals.GAP_SIZE);
 
-		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addComponent(dataSelectionLabel)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(includeFormatHintOption).addGap(Globals.GAP_SIZE)
-				.addComponent(delimeterLabel)
-				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(otherOption)
-						.addComponent(otherDelimiterInput))
-				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addComponent(quoteOptions));
+		centerPanel.add(quoteOptions);
 
 		return centerPanel;
+	}
+
+	private static JRadioButton radio(String key, String cmd, boolean selected) {
+		JRadioButton b = new JRadioButton(Configed.getResourceValue(key));
+		b.setActionCommand(cmd);
+		b.setSelected(selected);
+		return b;
+
 	}
 
 	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {

@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,7 +17,6 @@ import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -52,6 +50,7 @@ import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class AddClientComponent extends AbstractTeaComponent<AddClientModel, AddClientMsg, AddClientEffect> {
 	private static final OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -206,10 +205,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private JPanel createPanel(Consumer<AddClientMsg> dispatch) {
-		JPanel panel = new JPanel();
-
-		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
-		jLabelHostname.setFont(jLabelHostname.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelHostname = Utils.createBoldLabel("NewClientDialog.hostname");
 
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -219,37 +215,32 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextHostname.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeHostname(jTextHostname.getText()))));
 
-		JLabel jLabelDomainname = new JLabel(Configed.getResourceValue("NewClientDialog.domain"));
-		jLabelDomainname.setFont(jLabelDomainname.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDomainname = Utils.createBoldLabel("NewClientDialog.domain");
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
 		jComboDomain.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDomain((String) jComboDomain.getSelectedItem())));
 
-		JLabel jLabelDescription = new JLabel(Configed.getResourceValue("description"));
-		jLabelDescription.setFont(jLabelDescription.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDescription = Utils.createBoldLabel("description");
 
 		JTextField jTextDescription = new JTextField();
 		jTextDescription.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeDescription(jTextDescription.getText()))));
 
-		JLabel jLabelInventoryNumber = new JLabel(Configed.getResourceValue("NewClientDialog.inventorynumber"));
-		jLabelInventoryNumber.setFont(jLabelInventoryNumber.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelInventoryNumber = Utils.createBoldLabel("NewClientDialog.inventorynumber");
 
 		JTextField jTextInventoryNumber = new JTextField();
 		jTextInventoryNumber.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeInventory(jTextInventoryNumber.getText()))));
 
-		JLabel jLabelDepot = new JLabel(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
-		jLabelDepot.setFont(jLabelDepot.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDepot = Utils.createBoldLabel("NewClientDialog.belongsToDepot");
 
 		jComboDepots = new JComboBox<>();
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
-		labelGroupSelection.setFont(labelGroupSelection.getFont().deriveFont(Font.BOLD));
+		JLabel labelGroupSelection = Utils.createBoldLabel("NewClientDialog.primaryGroup");
 
 		jTextGroupSelection = new JTextField();
 		jTextGroupSelection.setEnabled(false);
@@ -260,8 +251,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 			}
 		});
 
-		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));
-		jLabelNotes.setFont(jLabelNotes.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelNotes = Utils.createBoldLabel("NewClientDialog.notes");
 
 		JTextArea jTextNotes = new JTextArea();
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
@@ -269,11 +259,10 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextNotes.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
 
-		JScrollPane jTextNodesScrollPane = new JScrollPane(jTextNotes);
-		jTextNodesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+		JScrollPane jTextNotesScrollPane = new JScrollPane(jTextNotes);
+		jTextNotesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
-		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
-		jLabelSystemUUID.setFont(jLabelSystemUUID.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelSystemUUID = Utils.createBoldLabel("NewClientDialog.SystemUUID");
 
 		JTextField systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
@@ -281,10 +270,9 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		systemUUIDField.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID(systemUUIDField.getText()))));
 
-		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
+		JLabel jLabelMacAddress = Utils.createBoldLabel("NewClientDialog.HardwareAddress");
 		jLabelMacAddress.setIcon(Icons.getIntellijIcon("info"));
 		jLabelMacAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoMac"));
-		jLabelMacAddress.setFont(jLabelMacAddress.getFont().deriveFont(Font.BOLD));
 
 		JTextField macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
@@ -292,10 +280,9 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		macAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeMAC(macAddressField.getText()))));
 
-		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		JLabel jLabelIpAddress = Utils.createBoldLabel("ipAddress");
 		jLabelIpAddress.setIcon(Icons.getIntellijIcon("info"));
 		jLabelIpAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
-		jLabelIpAddress.setFont(jLabelIpAddress.getFont().deriveFont(Font.BOLD));
 
 		JTextField ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
@@ -315,185 +302,74 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
-		jLabelNetboot.setFont(jLabelNetboot.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelNetboot = Utils.createBoldLabel("NewClientDialog.netbootProduct");
 		jComboNetboot = new JComboBox<>();
 		jComboNetboot.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));
 
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
 		JPanel northPanel = createNorthPanel(dispatch);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(northPanel)
-				/////// HOSTNAME
-				.addComponent(jLabelHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		JPanel panel = new JPanel(new MigLayout("wrap 1, insets 0", "[grow, fill]0", "[]0"));
 
-				.addComponent(jLabelDomainname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboDomain, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// DESCRIPTION + INVENTORY
-				.addComponent(jLabelDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				.addComponent(jLabelInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				/////// NOTES
-				.addComponent(jLabelNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextNodesScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				/////// SYSTEM UUID
-				.addComponent(jLabelSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// MAC-ADDRESS
-				.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// IP-ADDRESS
-				.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				/////// InstallByShutdown and WAN
-				.addComponent(jCheckShutdownInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckWan, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				// depot
-				.addComponent(jLabelDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-				// group
-				.addComponent(labelGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-
-				// netboot
-				.addComponent(jLabelNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(northPanel)
-				/////// HOSTNAME
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelHostname)
-				.addComponent(jTextHostname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelDomainname)
-				.addComponent(jComboDomain, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// DESCRIPTION
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelDescription)
-				.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// INVENTORY NUMBER
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelInventoryNumber)
-				.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// NOTES
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelNotes)
-				.addComponent(jTextNodesScrollPane, 100, 100, Short.MAX_VALUE)
-
-				/////// SYSTEM UUID
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelSystemUUID)
-				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// MAC-ADDRESS
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelMacAddress)
-				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// IP-ADDRESS
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelIpAddress)
-				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// SHUTDOWN and WAN
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jCheckShutdownInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckWan, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// depot
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// group
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// netboot
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		panel.add(northPanel, "growx 0, alignx left, wrap " + Globals.GAP_SIZE);
+		addPair(panel, jLabelHostname, jTextHostname);
+		addPair(panel, jLabelDomainname, jComboDomain);
+		addPair(panel, jLabelDescription, jTextDescription);
+		addPair(panel, jLabelInventoryNumber, jTextInventoryNumber);
+		addPair(panel, jLabelNotes, jTextNotesScrollPane, "grow, pushy, hmin 100");
+		addPair(panel, jLabelSystemUUID, systemUUIDField);
+		addPair(panel, jLabelMacAddress, macAddressField);
+		addPair(panel, jLabelIpAddress, ipAddressField);
+		addPair(panel, jCheckShutdownInstall, jCheckWan);
+		addPair(panel, jLabelDepot, jComboDepots);
+		addPair(panel, labelGroupSelection, jTextGroupSelection);
+		addPair(panel, jLabelNetboot, jComboNetboot, false);
 
 		return panel;
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2) {
+		addPair(panel, comp1, comp2, true, null);
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2, String extraConstraints) {
+		addPair(panel, comp1, comp2, true, extraConstraints);
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2, boolean addGap) {
+		addPair(panel, comp1, comp2, addGap, null);
+	}
+
+	private static void addPair(JPanel panel, JComponent comp1, JComponent comp2, boolean addGap,
+			String extraConstraints) {
+		panel.add(comp1);
+		if (extraConstraints != null) {
+			panel.add(comp2, extraConstraints);
+		} else if (addGap) {
+			panel.add(comp2, "wrap " + Globals.GAP_SIZE);
+		} else {
+			panel.add(comp2);
+		}
 	}
 
 	private JPanel createNorthPanel(Consumer<AddClientMsg> dispatch) {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Icons.getIntellijIcon("add"));
-		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog(dialog));
+		jCSVTemplateButton.addActionListener(e -> CSVTemplateCreatorDialog.displayCSVTemplateDialog(dialog));
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Icons.getIntellijIcon("open"));
 		jImportButton
 				.addActionListener(actionEvent -> dispatch.accept(new AddClientMsg.ActionMsg.CSVImportRequested()));
 
-		JPanel northPanel = new JPanel();
-		final GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
+		JPanel northPanel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[right]unrel[]", "[]rel[]"));
 		northPanel.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jCSVTemplateLabel)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCSVTemplateButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(
-						northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
-								.addGap(Globals.GAP_SIZE).addComponent(jImportButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)));
+		northPanel.add(jCSVTemplateLabel);
+		northPanel.add(jCSVTemplateButton, "wrap");
 
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jCSVTemplateLabel).addComponent(jCSVTemplateButton, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jImportLabel)
-						.addComponent(jImportButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		northPanel.add(jImportLabel);
+		northPanel.add(jImportButton);
 
 		return northPanel;
 	}

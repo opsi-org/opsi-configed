@@ -184,10 +184,8 @@ public class ConfigDataService extends DataService {
 		TimeCheck timeCheck = new TimeCheck(this, " retrieveHostConfigs");
 		timeCheck.start();
 
-		String[] configIds = new String[] {};
-		String[] objectIds = new String[] {};
-		Map<String, Object> retrieved = dataServices.exec.getMapResult(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds,
-				objectIds, false);
+		Map<String, Object> retrieved = dataServices.exec.getMapResult(RPCMethodName.CONFIG_STATE_GET_VALUES,
+				new String[0], new String[0], false);
 		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
 
 		for (Entry<String, Object> hostConfig : retrieved.entrySet()) {

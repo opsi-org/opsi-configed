@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.util.EnumMap;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,6 +28,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WindowsPositionManager;
+import net.miginfocom.swing.MigLayout;
 
 public class MainFrame extends JFrame {
 	private ConfigedMain configedMain;
@@ -89,22 +89,14 @@ public class MainFrame extends JFrame {
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
 
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setVerticalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(leftToolBar,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(contentPanel));
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(leftToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addComponent(contentPanel).addGap(Globals.MIN_GAP_SIZE));
+		getContentPane().setLayout(new MigLayout("insets 0, fill", "[pref!]0[grow]", "[grow]"));
+		JPanel controlPanel = new JPanel(new MigLayout("insets 0, filly, wrap 1", "[pref!]", "[pref!]push[pref!]"));
+
+		controlPanel.add(leftControlBar, "aligny top");
+		controlPanel.add(leftToolBar, "aligny bottom, gaptop unrel");
+
+		getContentPane().add(controlPanel, "growy");
+		getContentPane().add(contentPanel, "grow");
 
 		showPanel(EditingTarget.CLIENTS);
 

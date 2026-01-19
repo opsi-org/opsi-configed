@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -24,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 /*
 *	PanelStateSwitch.java
@@ -140,32 +140,14 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	private void initLayout() {
 		JLabel labelTitle = new JLabel(title);
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-
-		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		layout.setVerticalGroup(vGroup);
+		this.setLayout(new MigLayout("insets 0, wrap 1", "[pref!]", "[]0"));
 
 		if (title != null) {
-			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
-					GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+			add(labelTitle, "wmin 20");
 		}
 
 		for (Enum<E> val : values) {
-			vGroup.addGroup(
-					layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(groupedButtons.get(val),
-							GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-		}
-
-		GroupLayout.ParallelGroup hGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-		layout.setHorizontalGroup(hGroup);
-
-		if (title != null) {
-			hGroup.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-		}
-
-		for (Enum<E> val : values) {
-			hGroup.addComponent(groupedButtons.get(val), 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
+			add(groupedButtons.get(val), "wmin 20");
 		}
 	}
 

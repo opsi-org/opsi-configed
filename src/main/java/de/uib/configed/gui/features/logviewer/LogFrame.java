@@ -22,7 +22,6 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -45,6 +44,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WindowsPositionManager;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class LogFrame extends JFrame {
 	private static final Pattern IS_FILE_EXTENSION_NUMBER_PATTERN = Pattern.compile("\\d+");
@@ -194,14 +194,9 @@ public class LogFrame extends JFrame {
 		logPane = new StandaloneLogPane(this);
 		JComponent panel = logPane.initUI();
 
-		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layoutIconPane1);
-
-		layoutIconPane1
-				.setHorizontalGroup(layoutIconPane1.createParallelGroup().addComponent(jToolBar).addComponent(panel));
-
-		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jToolBar).addGap(Globals.MIN_GAP_SIZE).addComponent(panel));
+		getContentPane().setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", fill", "", "[]0"));
+		getContentPane().add(jToolBar, "growx, gapbottom " + Globals.MIN_GAP_SIZE + ", wrap");
+		getContentPane().add(panel, "grow, push");
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());

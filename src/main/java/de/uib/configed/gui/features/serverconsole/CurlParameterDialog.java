@@ -6,10 +6,8 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -30,14 +28,15 @@ import de.uib.configed.gui.features.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandHelp;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CurlParameterDialog {
 	private JPanel inputPanel = new JPanel();
 
-	private JLabel jLabelURL = new JLabel();
-	private JLabel jLabelDir = new JLabel();
-	private JLabel jLabelLoglevel = new JLabel();
-	private JLabel jLabelFreeInput = new JLabel();
+	private JLabel jLabelURL;
+	private JLabel jLabelDir;
+	private JLabel jLabelLoglevel;
+	private JLabel jLabelFreeInput;
 
 	private JButton jButtonSearchDir;
 
@@ -98,19 +97,16 @@ public class CurlParameterDialog {
 	}
 
 	private void init() {
-		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
-		jLabelURL.setFont(jLabelURL.getFont().deriveFont(Font.BOLD));
+		jLabelURL = Utils.createBoldLabel("CurlParameterDialog.jLabelUrl");
 
 		jTextFieldURL = new JTextField();
 
-		jLabelDir.setText(Configed.getResourceValue("CurlParameterDialog.jLabelDirectory"));
-		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
+		jLabelDir = Utils.createBoldLabel("CurlParameterDialog.jLabelDirectory");
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelLoglevel = Utils.createBoldLabel("loglevel");
 
 		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -121,8 +117,7 @@ public class CurlParameterDialog {
 		jComboBoxLoglevel
 				.addItemListener(itemEvent -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
 
-		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
-		jLabelFreeInput.setFont(jLabelFreeInput.getFont().deriveFont(Font.BOLD));
+		jLabelFreeInput = Utils.createBoldLabel("CurlParameterDialog.jLabelFreeInput");
 
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));
@@ -181,60 +176,18 @@ public class CurlParameterDialog {
 	}
 
 	private void initLayout() {
-		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
-		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(inputPanelLayout.createSequentialGroup()
-						.addComponent(jComboBoxDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
-
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		inputPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		inputPanel.add(jLabelURL);
+		inputPanel.add(jTextFieldURL, "growx, gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(jLabelDir);
+		inputPanel.add(jComboBoxDir, "split 2, growx, gapright " + Globals.GAP_SIZE);
+		inputPanel.add(jButtonSearchDir, "wrap, gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(jLabelLoglevel);
+		inputPanel.add(jComboBoxLoglevel, "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(curlAuthPanel.getCheckBox(), "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(curlAuthPanel, "growx, hidemode 3");
+		inputPanel.add(jLabelFreeInput);
+		inputPanel.add(jTextFieldFreeInput, "growx");
 	}
 
 	private static class DocumentListenerAdapter implements DocumentListener {

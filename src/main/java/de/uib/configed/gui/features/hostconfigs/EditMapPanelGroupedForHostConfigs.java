@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +20,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -52,7 +50,9 @@ import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {
@@ -282,14 +282,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		splitPane.setRightComponent(emptyRightPane);
 		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(splitPane, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(splitPane, 50,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));
+		this.add(splitPane, "grow");
 	}
 
 	/**
@@ -568,14 +562,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		JLabel userLabel = new JLabel(Configed.getResourceValue("FramingNewUser.textfieldLabel"));
-		userLabel.setFont(userLabel.getFont().deriveFont(Font.BOLD));
+		JLabel userLabel = Utils.createBoldLabel("FramingNewUser.textfieldLabel");
 
 		JTextField userField = new JTextField();
 
-		JLabel userRolesLabel = new JLabel(Configed.getResourceValue("FramingNewUser.listLabel"));
+		JLabel userRolesLabel = Utils.createBoldLabel("FramingNewUser.listLabel");
 		userRolesLabel.setToolTipText(Configed.getResourceValue("FramingNewUser.listLabel.ToolTip"));
-		userRolesLabel.setFont(userRolesLabel.getFont().deriveFont(Font.BOLD));
 
 		JList<String> userRolesList = new JList<>(theRoles.toArray(new String[0]));
 
@@ -589,15 +581,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		}
 		userRolesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "[]", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(userLabel).addComponent(userField)
-				.addGap(Globals.GAP_SIZE).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+		panel.add(userLabel);
+		panel.add(userField, "growx");
 
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(userLabel)
-				.addComponent(userField).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+		panel.add(userRolesLabel, "gapy " + Globals.GAP_SIZE);
+		panel.add(userRolesScrollPane, "grow");
 
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), panel,
 				Configed.getResourceValue("FramingNewUser.title"), JOptionPane.OK_CANCEL_OPTION,
@@ -620,8 +610,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		JLabel roleLabel = new JLabel(Configed.getResourceValue("FramingNewRole.textfieldLabel"));
-		roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
+		JLabel roleLabel = Utils.createBoldLabel("FramingNewRole.textfieldLabel");
 
 		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), roleLabel,
 				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);

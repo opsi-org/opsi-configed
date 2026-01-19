@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -30,6 +27,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Represents the overall dialog for the "message of the day" (motd)
@@ -103,41 +101,22 @@ public class MessageOfTheDayDialog {
 		}
 
 		JPanel panel = new JPanel();
-		GroupLayout gpl = new GroupLayout(panel);
-		panel.setLayout(gpl);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
 		resetButton.addActionListener(e -> resetData());
 		JLabel frameTitleLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.title"));
 
-		SequentialGroup seqGroup = gpl.createSequentialGroup();
-		seqGroup.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(frameTitleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(resetButton,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		ParallelGroup vertGroup = gpl.createParallelGroup();
-		vertGroup.addGroup(gpl.createSequentialGroup()
-				.addComponent(frameTitleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addGroup(gpl.createSequentialGroup().addComponent(resetButton,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		panel.add(frameTitleLabel, "split 2, gapright " + Globals.GAP_SIZE);
+		panel.add(resetButton, "wrap");
 
 		if (!forbiddenDevice) {
-			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
-			vertGroup.addComponent(pMsgInfoGeneral, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					Short.MAX_VALUE);
+			panel.add(pMsgInfoGeneral, "grow, pushy, gapy " + Globals.GAP_SIZE);
 		}
+
 		if (!forbiddenUser) {
-			vertGroup.addComponent(pMsgInfoUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					Short.MAX_VALUE);
-			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
+			panel.add(pMsgInfoUser, "grow, pushy, gapy " + Globals.GAP_SIZE);
 		}
-		gpl.setVerticalGroup(seqGroup);
-		gpl.setHorizontalGroup(vertGroup);
+
 		scrollpane.getViewport().add(panel);
 		scrollpane.setBorder(null);
 	}

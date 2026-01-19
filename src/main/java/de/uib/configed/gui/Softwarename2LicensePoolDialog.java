@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -44,6 +42,7 @@ import de.uib.configed.gui.type.licenses.AuditSoftwareXLicensePool;
 import de.uib.configed.gui.type.licenses.LicensepoolEntry;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class Softwarename2LicensePoolDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
@@ -137,89 +136,28 @@ public class Softwarename2LicensePoolDialog {
 
 	private JPanel createPanelAction() {
 		JPanel panelAction = new JPanel();
-		GroupLayout panelActionLayout = new GroupLayout(panelAction);
-		panelAction.setLayout(panelActionLayout);
-		panelActionLayout
-				.setVerticalGroup(
-						panelActionLayout.createSequentialGroup()
-								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-										.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-										.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)));
+		panelAction.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, wrap 2", "", "[]0"));
 
-		panelActionLayout
-				.setHorizontalGroup(
-						panelActionLayout.createParallelGroup()
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(
-												labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE))
-								.addGroup(
-										panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-												.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE))
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)));
+		panelAction.add(buttonRemoveAllAssignments, "aligny center");
+		panelAction.add(labelRemoveAllAssignments, "aligny center");
+
+		panelAction.add(buttonSetAllAssignmentsToGloballySelectedPool, "aligny center");
+		panelAction.add(labelSetAllAssignmentsToGloballySelectedPool, "aligny center");
+
+		panelAction.add(buttonSetAllAssignmentsToPoolFromSelectedRow, "aligny center");
+		panelAction.add(labelSetAllAssignmentsToPoolFromSelectedRow, "aligny center");
+
 		return panelAction;
 	}
 
 	private JPanel createPanel(JPanel panelAction) {
 		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]",
+				"[200!]" + Globals.GAP_SIZE + "[200!]" + Globals.GAP_SIZE + "[pref]"));
+		panel.add(panelSWnames, "grow");
+		panel.add(panelSWxLicensepool, "grow");
+		panel.add(panelAction, "growx");
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(panelSWnames, 200, 200, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool, 200, 200, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelAction, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(panelSWnames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout
-						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)));
 		return panel;
 	}
 

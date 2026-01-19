@@ -444,11 +444,10 @@ public class ProductDataService extends DataService {
 			// look if propstates is initialized
 			result = new ArrayList<>();
 		} else {
-			String[] callAttributes = new String[] {};
 			Map<String, Object> callFilter = new HashMap<>();
 			callFilter.put("objectId", newClients);
 
-			result = dataServices.exec.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, callAttributes,
+			result = dataServices.exec.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, new String[0],
 					callFilter);
 		}
 
@@ -813,13 +812,12 @@ public class ProductDataService extends DataService {
 	public List<String> getCommonProductPropertyValues(Collection<String> clients, String product, String property) {
 		Logging.info(this, "getCommonProductPropertyValues for product, property, clients ", product, ", ", property,
 				"  -- ", clients);
-		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("objectId", clients);
 		callFilter.put("productId", product);
 		callFilter.put("propertyId", property);
 		List<Map<String, Object>> properties = dataServices.exec
-				.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, callAttributes, callFilter);
+				.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, new String[0], callFilter);
 		Set<String> resultSet = new HashSet<>();
 		boolean starting = true;
 		for (Map<String, Object> map : properties) {
@@ -898,11 +896,10 @@ public class ProductDataService extends DataService {
 	}
 
 	public Map<String, List<Map<String, String>>> getProductStatesNOM(Collection<String> clientIds) {
-		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", clientIds);
-		List<Map<String, Object>> productOnClients = getProductOnClientsWithAdjustedTime(callAttributes, callFilter,
+		List<Map<String, Object>> productOnClients = getProductOnClientsWithAdjustedTime(new String[0], callFilter,
 				false);
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
@@ -1025,12 +1022,11 @@ public class ProductDataService extends DataService {
 	}
 
 	private List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds, String productType) {
-		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", productType);
 
-		return dataServices.exec.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
+		return dataServices.exec.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new String[0], callFilter);
 	}
 
 	private boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {

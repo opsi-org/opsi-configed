@@ -6,13 +6,11 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -31,7 +29,9 @@ import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PackageManagerUninstallParameterDialog {
 	private static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
@@ -39,10 +39,10 @@ public class PackageManagerUninstallParameterDialog {
 
 	private JPanel uninstallPanel = new JPanel();
 
-	private JLabel jLabelUninstall = new JLabel();
-	private JLabel jLabelOn = new JLabel();
+	private JLabel jLabelUninstall;
+	private JLabel jLabelOn;
 
-	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
+	protected JLabel jLabelLoglevel;
 
 	private JComboBox<String> jComboBoxOpsiProducts;
 	private JComboBox<Integer> jComboBoxLogLevel;
@@ -182,10 +182,8 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private void init() {
-		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
-		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
-
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelUninstall = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
+		jLabelLoglevel = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelLoglevel");
 
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -207,8 +205,7 @@ public class PackageManagerUninstallParameterDialog {
 
 		jComboBoxOpsiProducts.addItemListener(itemEvent -> textFieldSelectedDepots.setText(""));
 
-		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
-		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
+		jLabelOn = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelOn");
 
 		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
@@ -303,47 +300,14 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(uninstallPanel);
-		uninstallPanel.setLayout(layout);
-
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxLogLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(jLabelUninstall)
-						.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxLogLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		uninstallPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		uninstallPanel.add(jLabelUninstall);
+		uninstallPanel.add(jComboBoxOpsiProducts, "growx, gapbottom " + Globals.GAP_SIZE);
+		uninstallPanel.add(jLabelOn);
+		uninstallPanel.add(textFieldSelectedDepots, "split 2, growx, gapright " + Globals.GAP_SIZE);
+		uninstallPanel.add(jButtonDepotSelection, "wrap, gapbottom " + Globals.GAP_SIZE);
+		uninstallPanel.add(jLabelLoglevel);
+		uninstallPanel.add(jComboBoxLogLevel, "gapbottom " + Globals.GAP_SIZE);
+		uninstallPanel.add(checkBoxKeepFiles);
 	}
 }

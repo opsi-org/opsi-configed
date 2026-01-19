@@ -8,12 +8,13 @@ package de.uib.configed.gui;
 
 import java.awt.Dimension;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
+
+import net.miginfocom.swing.MigLayout;
 
 /* ActionEvent -> parenthesisAction(actionEvent)
 	 * A spinner for big numbers, with a metric prefix (kilo, mega, ...) selection.
@@ -28,10 +29,9 @@ public class SpinnerWithExtension extends JPanel {
 		spinner.setMinimumSize(new Dimension());
 		box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
 		box.setMinimumSize(new Dimension(50, 0));
-		GroupLayout spinnerLayout = new GroupLayout(this);
-		super.setLayout(spinnerLayout);
-		spinnerLayout.setVerticalGroup(spinnerLayout.createParallelGroup().addComponent(spinner).addComponent(box));
-		spinnerLayout.setHorizontalGroup(spinnerLayout.createSequentialGroup().addComponent(spinner).addComponent(box));
+		super.setLayout(new MigLayout("insets 0", "[]0[]", "[]0"));
+		super.add(spinner);
+		super.add(box);
 	}
 
 	public long getValue() {

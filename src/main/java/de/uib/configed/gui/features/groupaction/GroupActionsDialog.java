@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.groupaction;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +16,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -35,6 +33,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class GroupActionsDialog {
 	private JLabel groupNameLabel;
@@ -144,35 +143,17 @@ public class GroupActionsDialog {
 		groupNameLabel = new JLabel();
 		clientsCountLabel = new JLabel();
 
-		JLabel labelCombo = new JLabel(Configed.getResourceValue("FGroupAction.existingImages"));
-		labelCombo.setFont(labelCombo.getFont().deriveFont(Font.BOLD));
+		JLabel labelCombo = Utils.createBoldLabel("FGroupAction.existingImages");
 
 		comboSelectImage = new JComboBox<>();
 
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fillx", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(groupNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(clientsCountLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		panel.add(groupNameLabel, "split 2");
+		panel.add(clientsCountLabel, "wrap, gapleft " + Globals.GAP_SIZE);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
-				.addComponent(groupNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(clientsCountLabel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+		panel.add(labelCombo, "gapy " + Globals.GAP_SIZE + ", wrap");
+		panel.add(comboSelectImage, "growx");
 
 		return panel;
 	}

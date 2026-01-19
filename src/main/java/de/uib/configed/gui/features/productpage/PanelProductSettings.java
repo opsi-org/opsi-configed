@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -51,6 +49,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelProductSettings extends AbstractConfigurationTab {
 	public enum ProductSettingsType {
@@ -110,17 +109,9 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		productSettingsTableModel = new ProductSettingsTableModel(productTable);
 
 		JPanel leftPane = new JPanel();
-		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
-		leftPane.setLayout(layoutLeftPane);
-
-		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(groupPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(paneProducts, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
-				.addComponent(groupPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		leftPane.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]", "[]0"));
+		leftPane.add(groupPanel, "growx");
+		leftPane.add(paneProducts, "grow, push, hmin 100");
 
 		propertiesPanel = new EditMapPanelX(false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
