@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -82,40 +83,23 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	private JPanel initPanel() {
-		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').get();
+		format = CSVFormat.DEFAULT.builder().setDelimiter(';').setCommentMarker('#').get();
 
-		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-		numberFormat.setGroupingUsed(false);
-
-		NumberFormatter formatter = new NumberFormatter(numberFormat);
+		NumberFormatter formatter = new NumberFormatter(NumberFormat.getIntegerInstance());
+		((NumberFormat) formatter.getFormat()).setGroupingUsed(false);
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		JRadioButton tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
-		tabsOption.setActionCommand("\t");
-
-		JRadioButton commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
-		commaOption.setActionCommand(",");
-
-		JRadioButton semicolonOption = new JRadioButton(
-				Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
-		semicolonOption.setActionCommand(";");
-		semicolonOption.setSelected(true);
-
-		JRadioButton spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
-		spaceOption.setActionCommand(" ");
-
-		JRadioButton otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
-		otherOption.setActionCommand("");
+		JRadioButton tabsOption = radio("CSVImportDataDialog.tabsOption", "\t", false);
+		JRadioButton commaOption = radio("CSVImportDataDialog.commaOption", ",", false);
+		JRadioButton semicolonOption = radio("CSVImportDataDialog.semicolonOption", ";", true);
+		JRadioButton spaceOption = radio("CSVImportDataDialog.spaceOption", " ", false);
+		JRadioButton otherOption = radio("CSVImportDataDialog.otherOption", "", false);
 
 		ButtonGroup delimiterOptions = new ButtonGroup();
-		delimiterOptions.add(tabsOption);
-		delimiterOptions.add(commaOption);
-		delimiterOptions.add(semicolonOption);
-		delimiterOptions.add(spaceOption);
-		delimiterOptions.add(otherOption);
+		Stream.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
 
-		MaskFormatter maskFormatter = null;
+		MaskFormatter maskFormatter;
 		try {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
@@ -206,6 +190,14 @@ public class CSVTemplateCreatorDialog {
 		centerPanel.add(quoteOptions);
 
 		return centerPanel;
+	}
+
+	private static JRadioButton radio(String key, String cmd, boolean selected) {
+		JRadioButton b = new JRadioButton(Configed.getResourceValue(key));
+		b.setActionCommand(cmd);
+		b.setSelected(selected);
+		return b;
+
 	}
 
 	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {
