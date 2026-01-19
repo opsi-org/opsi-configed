@@ -29,9 +29,9 @@ public class SpinnerWithExtension extends JPanel {
 		spinner.setMinimumSize(new Dimension());
 		box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
 		box.setMinimumSize(new Dimension(50, 0));
-		setLayout(new MigLayout("insets 0", "[]0[]", "[]0"));
-		add(spinner);
-		add(box);
+		super.setLayout(new MigLayout("insets 0", "[]0[]", "[]0"));
+		super.add(spinner);
+		super.add(box);
 	}
 
 	public long getValue() {

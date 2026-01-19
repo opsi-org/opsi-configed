@@ -45,7 +45,6 @@ import net.miginfocom.swing.MigLayout;
 
 public final class HealthCheckSettingsComponent
 		extends AbstractTeaComponent<HealthCheckSettingsModel, HealthCheckSettingsMsg, HealthCheckSettingsEffect> {
-	private static final int TEXT_LABEL_WIDTH = 200;
 	private static final String ZERO_HOUR_STRING = "00:00:00";
 	private static final String END_OF_DAY_STRING = "23:59:59";
 

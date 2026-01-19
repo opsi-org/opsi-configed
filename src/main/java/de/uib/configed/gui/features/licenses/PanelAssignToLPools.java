@@ -124,18 +124,16 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		return panel;
 	}
 
-	private PanelStateSwitch<Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction> createNamePreselectionPanel() {
-		return new PanelStateSwitch<>(null,
-				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.SHOW_ALL_NAMES,
-				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.values(),
+	private PanelStateSwitch<Softwarename2LicensepoolRestriction> createNamePreselectionPanel() {
+		return new PanelStateSwitch<>(null, Softwarename2LicensepoolRestriction.SHOW_ALL_NAMES,
+				Softwarename2LicensepoolRestriction.values(),
 				new String[] { text("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showAllSwNames"), text(
 						"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithNotUniformAssignments"),
 						text("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments") },
-				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.class, null) {
+				Softwarename2LicensepoolRestriction.class, null) {
 			@Override
 			protected void notifyChangeListeners(ChangeEvent e) {
-				fSoftwarename2LicensePool.setPreselectionForName2Pool(
-						(Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction) getValue());
+				fSoftwarename2LicensePool.setPreselectionForName2Pool((Softwarename2LicensepoolRestriction) getValue());
 				super.notifyChangeListeners(e);
 			}
 		};
@@ -217,15 +215,15 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelRegisteredSoftware.getTableSearchPane().setFiltering();
 	}
 
-	private JLabel label(String key) {
+	private static JLabel label(String key) {
 		return new JLabel(text(key));
 	}
 
-	private String text(String key) {
+	private static String text(String key) {
 		return Configed.getResourceValue(key);
 	}
 
-	private JButton button(String key, String tooltipKey, Runnable action) {
+	private static JButton button(String key, String tooltipKey, Runnable action) {
 		JButton btn = new JButton(Configed.getResourceValue(key));
 		btn.setToolTipText(Configed.getResourceValue(tooltipKey));
 		btn.addActionListener(e -> action.run());

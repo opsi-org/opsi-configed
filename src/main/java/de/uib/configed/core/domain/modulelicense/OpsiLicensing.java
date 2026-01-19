@@ -56,10 +56,10 @@ public class OpsiLicensing extends JPanel {
 		PanelGenEdit mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
 
-		setLayout(new MigLayout("insets 0, wrap 1", "[grow]", "[grow]0[]"));
+		super.setLayout(new MigLayout("insets 0, wrap 1", "[grow]", "[grow]0[]"));
 
-		add(mainPanel, "grow, push");
-		add(clientInfo, "gapbottom " + Globals.MIN_GAP_SIZE);
+		super.add(mainPanel, "grow, push");
+		super.add(clientInfo, "gapbottom " + Globals.MIN_GAP_SIZE);
 	}
 
 	private void retrieveData() {
@@ -127,7 +127,6 @@ public class OpsiLicensing extends JPanel {
 		JLabel warningLevelDays = new JLabel(Configed.getResourceValue("LicensingInfo.warning.levels.days") + ": "
 				+ licenseMap.getClientLimitWarningDays());
 
-		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
 		JLabel checksumTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.checksum"));
 		JLabel checksum = new JLabel(licenseMap.getCheckSum());
 

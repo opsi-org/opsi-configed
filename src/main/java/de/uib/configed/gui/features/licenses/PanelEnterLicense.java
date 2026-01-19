@@ -1,7 +1,7 @@
 /**
  * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
- * This file is part of opsi - https:
+ * This file is part of opsi - https://www.opsi.org
  */
 
 /*
