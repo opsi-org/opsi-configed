@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.swinfopage;
 
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -27,16 +26,14 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class PanelSWMultiClientReport extends JPanel {
-	public static final String FILENAME_PREFIX_DEFAULT = "report_";
-
 	private JButton buttonStart;
 	private ActionListener actionListenerForStart;
 
-	private boolean withMsUpdates;
-	private boolean withMsUpdates2;
-	private boolean askForOverwrite;
+	private JCheckBox checkWithMsUpdates;
+	private JCheckBox checkWithMsUpdates2;
+	private JCheckBox checkAskForOverwrite;
 
-	private PanelSWSingleClientInfo.KindOfExport kindOfExport;
+	private KindOfExport kindOfExport;
 
 	private File exportDirectory;
 	private String exportDirectoryS;
@@ -61,18 +58,18 @@ public class PanelSWMultiClientReport extends JPanel {
 	}
 
 	public boolean wantsWithMsUpdates() {
-		return withMsUpdates;
+		return checkWithMsUpdates.isSelected();
 	}
 
 	public boolean wantsWithMsUpdates2() {
-		return withMsUpdates2;
+		return checkWithMsUpdates2.isSelected();
 	}
 
 	public boolean wantsAskForOverwrite() {
-		return askForOverwrite;
+		return checkAskForOverwrite.isSelected();
 	}
 
-	public PanelSWSingleClientInfo.KindOfExport wantsKindOfExport() {
+	public KindOfExport wantsKindOfExport() {
 		return kindOfExport;
 	}
 
@@ -105,15 +102,8 @@ public class PanelSWMultiClientReport extends JPanel {
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
-		String filenamePrefix = Configed.getSavedStates().getProperty("swaudit_export_file_prefix");
-
-		if (filenamePrefix == null || filenamePrefix.length() == 0) {
-			filenamePrefix = Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
-		}
-
-		if (filenamePrefix == null) {
-			filenamePrefix = FILENAME_PREFIX_DEFAULT;
-		}
+		String filenamePrefix = Configed.getSavedStates().getProperty("swaudit_export_file_prefix",
+				Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix"));
 
 		fieldFilenamePrefix = new JTextField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);
@@ -122,36 +112,17 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
 
-		JCheckBox checkAskForOverwrite = new JCheckBox("", askForOverwrite);
-
-		checkAskForOverwrite.addItemListener((ItemEvent e) -> {
-			askForOverwrite = checkAskForOverwrite.isSelected();
-			Logging.info(this, "askForOverwrite new value : ", askForOverwrite);
-		});
+		checkAskForOverwrite = new JCheckBox();
 
 		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
 
-		exportDirectory = null;
+		exportDirectoryS = Configed.getSavedStates().getProperty("swaudit_export_dir", "");
 
-		exportDirectoryS = Configed.getSavedStates().getProperty("swaudit_export_dir");
-		if (exportDirectoryS == null) {
-			exportDirectoryS = "";
-		}
+		File dir = exportDirectoryS.isEmpty() ? null : new File(exportDirectoryS);
 
-		boolean found = false;
-
-		if (exportDirectoryS.length() > 0) {
-			File f = new File(exportDirectoryS);
-			if (f.exists() && f.isDirectory()) {
-				found = true;
-			}
-		}
-
-		if (found) {
-			exportDirectory = new File(exportDirectoryS);
-		} else {
-			exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
-		}
+		// We will get the default directory from user.dir if the saved one is invalid
+		exportDirectory = (dir != null && dir.isDirectory()) ? dir
+				: new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 
 		chooserDirectory = new JFileChooser();
 		chooserDirectory.setFileHidingEnabled(false);
@@ -175,33 +146,21 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
 
-		JCheckBox checkWithMsUpdates = new JCheckBox("", withMsUpdates);
-		checkWithMsUpdates.addItemListener((ItemEvent e) -> {
-			withMsUpdates = checkWithMsUpdates.isSelected();
-			Logging.info(this, "withMsUpdates new value : ", withMsUpdates);
-		});
-
-		JCheckBox checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
-		checkWithMsUpdates2.addItemListener((ItemEvent e) -> {
-			withMsUpdates2 = checkWithMsUpdates2.isSelected();
-			Logging.info(this, "withMsUpdates2 new value : ", withMsUpdates2);
-		});
+		checkWithMsUpdates = new JCheckBox();
+		checkWithMsUpdates2 = new JCheckBox();
 
 		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
-				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"),
-				PanelSWSingleClientInfo.KindOfExport.PDF, PanelSWSingleClientInfo.KindOfExport.values(),
-				PanelSWSingleClientInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
+				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), KindOfExport.PDF,
+				KindOfExport.values(), KindOfExport.class, ((Enum<KindOfExport> val) -> {
 					Logging.info(this, "change to ", val);
-					kindOfExport = (PanelSWSingleClientInfo.KindOfExport) val;
+					kindOfExport = (KindOfExport) val;
 					Configed.getSavedStates().setProperty("swaudit_kind_of_export", "" + val);
 				}));
 
-		String koe = Configed.getSavedStates().getProperty("swaudit_kind_of_export");
-		panelSelectExportType.setValueByString(koe);
+		panelSelectExportType.setValueByString(Configed.getSavedStates().getProperty("swaudit_kind_of_export"));
 
-		kindOfExport = (PanelSWSingleClientInfo.KindOfExport) panelSelectExportType.getValue();
+		kindOfExport = (KindOfExport) panelSelectExportType.getValue();
 
-		Logging.info(this, "kindOfExport set from savedStates  ", koe);
 		Logging.info(this, "kindOfExport   ", kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel(
