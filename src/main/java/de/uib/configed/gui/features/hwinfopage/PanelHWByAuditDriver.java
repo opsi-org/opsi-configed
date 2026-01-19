@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.hwinfopage;
 
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +16,7 @@ import javax.swing.JTextField;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelHWByAuditDriver extends JPanel {
 	private String byAuditPath;
@@ -78,79 +78,26 @@ public class PanelHWByAuditDriver extends JPanel {
 	}
 
 	private void setupLayout() {
-		GroupLayout layoutByAuditInfo = new GroupLayout(this);
-		this.setLayout(layoutByAuditInfo);
+		setLayout(new MigLayout("insets 0", "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.GAP_SIZE + "[]"
+				+ Globals.GAP_SIZE + "[pref!]" + Globals.GAP_SIZE + "[]", "[]0[]" + Globals.MIN_GAP_SIZE + "[]0[]"));
 
-		layoutByAuditInfo
-				.setVerticalGroup(
-						layoutByAuditInfo.createSequentialGroup()
-								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelComputerSystemVendor, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelProductOrModel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(selectionComputerSystem, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldComputerSystemVendor, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelSeparator, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldComputerSystemLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(selectionBaseBoard, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelSeparator2, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldBaseBoardLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		add(labelInfo, "cell 0 0");
+		add(labelComputerSystemVendor, "cell 2 0");
+		add(labelProductOrModel, "cell 4 0");
 
-		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(selectionComputerSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(selectionBaseBoard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelComputerSystemVendor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldComputerSystemVendor, 0, 0, Short.MAX_VALUE)
-						.addComponent(labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldBaseBoardVendor, 0, 0, Short.MAX_VALUE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layoutByAuditInfo
-						.createParallelGroup().addComponent(labelSeparator).addComponent(labelSeparator2))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelProductOrModel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldComputerSystemLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldBaseBoardLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE));
+		add(selectionComputerSystem, "cell 1 1");
+		add(fieldComputerSystemVendor, "cell 2 1, growx");
+		add(labelSeparator, "cell 3 1");
+		add(fieldComputerSystemLabel, "cell 4 1, growx");
+
+		add(labelBaseBoardVendor, "cell 2 3");
+		add(labelProductOrModel2, "cell 4 3");
+
+		add(buttonUploadDrivers, "cell 0 4");
+		add(selectionBaseBoard, "cell 1 4");
+		add(fieldBaseBoardVendor, "cell 2 4, growx");
+		add(labelSeparator2, "cell 3 4");
+		add(fieldBaseBoardLabel, "cell 4 4, growx");
 	}
 
 	public void emptyByAuditStrings() {

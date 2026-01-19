@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -39,6 +38,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class TerminalFrame implements MessagebusListener {
 	private JFrame frame;
@@ -104,24 +104,14 @@ public final class TerminalFrame implements MessagebusListener {
 		menuBar.init();
 		frame.setJMenuBar(menuBar);
 
-		JPanel allPane = new JPanel();
-
-		GroupLayout allLayout = new GroupLayout(allPane);
-		allPane.setLayout(allLayout);
-
 		JPanel northPanel = createNorthPanel();
 		fileUploadProgressIndicator = new TerminalFileUploadProgressIndicator();
 		fileUploadProgressIndicator.init();
 		fileUploadProgressIndicator.setVisible(false);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(fileUploadProgressIndicator));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup().addComponent(northPanel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(allLayout.createSequentialGroup().addComponent(fileUploadProgressIndicator)));
+		JPanel allPane = new JPanel(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow]0[pref!]"));
+		allPane.add(northPanel, "grow");
+		allPane.add(fileUploadProgressIndicator, "growx, hidemode 3");
 
 		frame.add(allPane);
 
@@ -378,10 +368,6 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	private JPanel createNorthPanel() {
-		JPanel northPanel = new JPanel();
-
-		GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
 
 		tabbedPane = new TerminalTabbedPane(this);
 		tabbedPane.setMessagebus(messagebus);
@@ -390,11 +376,9 @@ public final class TerminalFrame implements MessagebusListener {
 
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
-		northLayout
-				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE));
-
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
-				.addGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE)));
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new MigLayout("insets 0, fill", "[grow]", "[grow]"));
+		northPanel.add(tabbedPane, "grow, hmin 0, wmin 0");
 
 		return northPanel;
 	}

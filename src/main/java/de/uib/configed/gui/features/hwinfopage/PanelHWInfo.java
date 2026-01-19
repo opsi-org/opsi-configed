@@ -17,7 +17,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -49,6 +48,7 @@ import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
@@ -140,18 +140,10 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		JPanel contentPanel = new JPanel();
 		setComponent(contentPanel);
 
-		GroupLayout layoutBase = new GroupLayout(contentPanel);
-		contentPanel.setLayout(layoutBase);
-
-		layoutBase.setHorizontalGroup(layoutBase.createParallelGroup()
-				.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo, 0,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		contentPanel
+				.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
+		contentPanel.add(panelByAuditInfo);
+		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
 			new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,

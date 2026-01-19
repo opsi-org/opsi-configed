@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -39,12 +37,12 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.DepotListCellRenderer;
-import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.UpdateCollectionManager;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, MouseListener, KeyListener {
@@ -101,45 +99,23 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();
-		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
-		panelTop.setLayout(layoutEditProperties);
-
-		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(scrollpaneDepots, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(scrollpaneDepots, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));
+		panelTop.add(scrollpaneDepots, "growx");
+		panelTop.add(buttonSetValuesFromPackage, "aligny bottom");
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setResizeWeight(0.3);
 		splitter.setTopComponent(panelTop);
 		splitter.setBottomComponent(productPropertiesPanel);
 
-		GroupLayout layoutAll = new GroupLayout(this);
-		setLayout(layoutAll);
-
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[grow, fill]"));
+		this.add(splitter, "grow, push");
 	}
 
 	private void initTitlePanel() {
 		titlePanel = new JPanel();
-
-		GroupLayout titleLayout = new GroupLayout(titlePanel);
-		titlePanel.setLayout(titleLayout);
-
-		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelEditDepotProductProperties, 0, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE));
+		titlePanel.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[]0"));
+		titlePanel.add(jLabelEditDepotProductProperties, "growx");
 	}
 
 	@Override

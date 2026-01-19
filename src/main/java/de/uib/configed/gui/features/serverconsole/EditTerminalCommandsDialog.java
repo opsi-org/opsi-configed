@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -38,6 +37,7 @@ import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class EditTerminalCommandsDialog {
 	private JPanel parameterPanel;
@@ -99,17 +99,9 @@ public final class EditTerminalCommandsDialog {
 		JPanel commandPanel = initCommandsPanel();
 
 		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(controlPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(commandPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(commandPanel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		panel.setLayout(new MigLayout("insets 0, fill, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0[grow]"));
+		panel.add(controlPanel, "growx");
+		panel.add(commandPanel, "grow");
 
 		((CommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
 				actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(dialog));
@@ -168,63 +160,22 @@ public final class EditTerminalCommandsDialog {
 		labelPriority.setFont(labelPriority.getFont().deriveFont(Font.BOLD));
 
 		JPanel controlPanel = new JPanel();
-		GroupLayout controlPanelLayout = new GroupLayout(controlPanel);
-		controlPanel.setLayout(controlPanelLayout);
-
-		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createParallelGroup()
-				.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(controlPanelLayout.createSequentialGroup()
-						.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup()
-				.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(controlPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		controlPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		controlPanel.add(labelMenuText);
+		controlPanel.add(jComboBoxMenuText, "split 2, growx");
+		controlPanel.add(buttonDelete, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
+		controlPanel.add(labelParentMenuText);
+		controlPanel.add(jComboBoxParentMenuText, "growx, gapbottom " + Globals.GAP_SIZE);
+		controlPanel.add(labelTooltipText);
+		controlPanel.add(jTextFieldDescription, "growx, gapbottom " + Globals.GAP_SIZE);
+		controlPanel.add(labelPriority);
+		controlPanel.add(jTextFieldPriority, "gapbottom " + Globals.GAP_SIZE);
 
 		return controlPanel;
 	}
 
 	private JPanel initCommandsPanel() {
 		parameterPanel = new CommandControlParameterMethodsPanel(this, configedMain);
-
-		JPanel commandListPanel = new JPanel();
-		GroupLayout commandlistPanelLayout = new GroupLayout(commandListPanel);
-		commandListPanel.setLayout(commandlistPanelLayout);
 
 		JLabel labelCommands = new JLabel(Configed.getResourceValue("CommandControlDialog.commands"));
 		labelCommands.setFont(labelCommands.getFont().deriveFont(Font.BOLD));
@@ -239,25 +190,12 @@ public final class EditTerminalCommandsDialog {
 		jTextAreaCommands.setColumns(30);
 		JScrollPane jScrollPane = new JScrollPane(jTextAreaCommands);
 
-		commandlistPanelLayout.setHorizontalGroup(commandlistPanelLayout.createParallelGroup()
-				.addGroup(commandlistPanelLayout.createSequentialGroup()
-						.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(buttonTestCommand,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(parameterPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
-				.addGroup(commandlistPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonTestCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(parameterPanel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		JPanel commandListPanel = new JPanel();
+		commandListPanel.setLayout(new MigLayout("insets 0, fill, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		commandListPanel.add(labelCommands, "split 2");
+		commandListPanel.add(buttonTestCommand, "align right, gapbefore push, wrap");
+		commandListPanel.add(jScrollPane, "grow, push, gapbottom " + Globals.GAP_SIZE);
+		commandListPanel.add(parameterPanel);
 
 		return commandListPanel;
 	}

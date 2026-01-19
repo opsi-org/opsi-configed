@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.licenses;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -20,11 +19,11 @@ import javax.swing.event.ChangeListener;
 import de.uib.configed.gui.AbstractControlMultiTablePanel;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ControlPanelAssignToLPools;
+import de.uib.configed.gui.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
+import de.uib.configed.gui.ControlPanelAssignToLPools.SoftwareShowAllMeans;
 import de.uib.configed.gui.GlobalSoftwareInfoDialog;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog;
-import de.uib.configed.gui.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
-import de.uib.configed.gui.ControlPanelAssignToLPools.SoftwareShowAllMeans;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction;
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
@@ -33,6 +32,7 @@ import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	private JLabel fieldSelectedLicensePoolId;
@@ -63,319 +63,150 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private void initComponents() {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setResizeWeight(0.7);
+		splitPane.setResizeWeight(0.5);
 
-		JPanel topPane = new JPanel();
-		JPanel bottomPane = new JPanel();
+		createLicenseTables();
 
-		JPanel panelInfoWindowsSoftware = new JPanel();
+		JPanel topPane = new JPanel(new MigLayout("insets 0, wrap 1", "[grow, fill]", "[grow][grow]"));
+		topPane.add(panelLicensepools, "grow, push, hmin 0");
+		topPane.add(panelProductId2LPool, "grow, push, hmin 0");
 
-		JPanel panelInfoConfigWindowsSoftware = new JPanel();
+		JPanel bottomPane = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", wrap 2", "[grow, fill]",
+				"[0:pref:pref, shp 100][0:0:max, grow, shp 110]"));
 
-		JLabel titleWindowsSoftware = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.Licenses.SectiontitleWindowsSoftware2LPool"));
+		bottomPane.add(createInfoWindowsSoftwarePanel(), "growx, pushx");
+		bottomPane.add(createInfoConfigWindowsSoftwarePanel(), "growx, pushx, aligny top");
 
-		JLabel titleWindowsSoftware2 = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.Licenses.SectiontitleWindowsSoftware2LPool.supplement"));
+		bottomPane.add(panelRegisteredSoftware, "span 2, grow, push");
 
-		JLabel labelSelectedLicensePoolId = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicensePoolId"));
+		splitPane.setTopComponent(topPane);
+		splitPane.setBottomComponent(bottomPane);
 
+		setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow, fill]", "[grow, fill]"));
+		add(splitPane, "grow, push");
+	}
+
+	private JPanel createInfoWindowsSoftwarePanel() {
+		JPanel panel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", wrap 1", "[grow, fill]", "[]0"));
+
+		panel.add(label("PanelAssignToLPools.Licenses.SectiontitleWindowsSoftware2LPool"));
+
+		JLabel labelSelectedLicensePoolId = label("PanelAssignToLPools.labelSelectedLicensePoolId");
 		fieldSelectedLicensePoolId = new JLabel();
+		panel.add(labelSelectedLicensePoolId, "split 2");
+		panel.add(fieldSelectedLicensePoolId, "growx, wrap");
 
-		JLabel labelCountAllWindowsSoftware = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
+		panel.add(label("PanelAssignToLPools.Licenses.SectiontitleWindowsSoftware2LPool.supplement"));
+		panel.add(createWorkNameBasedPanel(), "growx, push");
+		panel.add(createDirectionOfAssignmentPanelPanel(), "growx, push");
 
-		fieldCountAllWindowsSoftware = new JLabel();
+		return panel;
+	}
 
-		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
+	private JPanel createWorkNameBasedPanel() {
+		JPanel panel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow, fill]", "[]0"));
+		panel.setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 3, true));
 
-		fieldCountDisplayedWindowsSoftware = new JLabel();
-
-		JLabel labelCountNotAssignedSoftware = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
-
-		fieldCountNotAssignedSoftware = new JLabel();
-
-		JLabel labelCountAssignedStatus = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
-
-		fieldCountAssignedStatus = new JLabel();
-
-		JLabel labelCountAssignedInEditing = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
-
-		fieldCountAssignedInEditing = new JLabel();
-
-		buttonShowAssignedNotExisting = new JButton(
-				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"));
-
-		buttonShowAssignedNotExisting
-				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
-
-		buttonShowAssignedNotExisting.addActionListener(actionEvent -> fMissingSoftwareInfo.show());
-
-		JLabel labelSupplementSimilar = new JLabel(
-				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries"));
-
-		labelSupplementSimilar.setVisible(true);
-
-		JButton buttonSupplementSimilar = new JButton(
-				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.button"));
-
-		buttonSupplementSimilar.setToolTipText(
-				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.tooltip"));
-
-		buttonSupplementSimilar.addActionListener(actionEvents -> buttonSupplementSimilarAction());
+		JLabel labelSupplementSimilar = label("PanelAssignToLPools.Licenses.supplementSimilarSWEntries");
+		JButton buttonSupplementSimilar = button("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.button",
+				"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.tooltip", this::buttonSupplementSimilarAction);
 
 		jCheckBoxSimilarEntriesExist = new JCheckBox();
 		jCheckBoxSimilarEntriesExist.setEnabled(false);
 
-		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(null,
+		panel.add(labelSupplementSimilar, "split 3");
+		panel.add(buttonSupplementSimilar);
+		panel.add(jCheckBoxSimilarEntriesExist, "gapleft push, wrap");
+
+		panelRadiobuttonsPreselectionForName2Pool = createNamePreselectionPanel();
+		panel.add(panelRadiobuttonsPreselectionForName2Pool, "span, growx, gaptop " + Globals.MIN_GAP_SIZE);
+
+		return panel;
+	}
+
+	private PanelStateSwitch<Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction> createNamePreselectionPanel() {
+		return new PanelStateSwitch<>(null,
 				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.SHOW_ALL_NAMES,
 				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.values(),
-				new String[] {
-						Configed.getResourceValue(
-								"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showAllSwNames"),
-						Configed.getResourceValue(
-								"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithNotUniformAssignments"),
-						Configed.getResourceValue(
-								"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments") },
-
+				new String[] { text("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showAllSwNames"), text(
+						"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithNotUniformAssignments"),
+						text("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments") },
 				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.class, null) {
 			@Override
 			protected void notifyChangeListeners(ChangeEvent e) {
 				fSoftwarename2LicensePool.setPreselectionForName2Pool(
-						(Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction) this.getValue());
+						(Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction) getValue());
 				super.notifyChangeListeners(e);
 			}
 		};
+	}
 
-		panelRadiobuttonsPreselectionForName2Pool.addChangeListener(this);
+	private JPanel createDirectionOfAssignmentPanelPanel() {
+		PanelStateSwitch<SoftwareDirectionOfAssignment> dirSwitch = createDirectionOfAssignmentPanel();
+		JPanel panel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow, fill]", ""));
+		panel.add(dirSwitch, "growx, pushx");
+		return panel;
+	}
 
-		JPanel panelWorkNamebased = new JPanel();
-		panelWorkNamebased.setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 3, true));
-		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
-		panelWorkNamebased.setLayout(layoutNamebased);
-
-		layoutNamebased.setVerticalGroup(layoutNamebased.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutNamebased.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSupplementSimilar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSupplementSimilar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(panelRadiobuttonsPreselectionForName2Pool, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		layoutNamebased
-				.setHorizontalGroup(layoutNamebased.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layoutNamebased.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelSupplementSimilar, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(buttonSupplementSimilar, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-								.addComponent(jCheckBoxSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE))
-						.addGroup(
-								layoutNamebased.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(panelRadiobuttonsPreselectionForName2Pool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.MIN_GAP_SIZE)));
-
-		PanelStateSwitch<SoftwareDirectionOfAssignment> panelRadiobuttonsDirectionOfAssignment = new PanelStateSwitch<>(
+	private PanelStateSwitch<ControlPanelAssignToLPools.SoftwareDirectionOfAssignment> createDirectionOfAssignmentPanel() {
+		return new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE,
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.values(),
-				new String[] {
-						Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
-						Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL") },
-
+				new String[] { text("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
+						text("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL") },
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.class,
+				val -> ((ControlPanelAssignToLPools) controller).setSoftwareDirectionOfAssignment(
+						(ControlPanelAssignToLPools.SoftwareDirectionOfAssignment) val));
+	}
 
-				(Enum<SoftwareDirectionOfAssignment> val) -> {
-					Logging.info(this, " produced ", val);
-					((ControlPanelAssignToLPools) controller).setSoftwareDirectionOfAssignment(
-							(ControlPanelAssignToLPools.SoftwareDirectionOfAssignment) val);
-				});
+	private JPanel createInfoConfigWindowsSoftwarePanel() {
+		JPanel panel = new JPanel(new MigLayout("insets 0", "", "[]0"));
+		fieldCountAllWindowsSoftware = new JLabel();
+		fieldCountDisplayedWindowsSoftware = new JLabel();
+		fieldCountNotAssignedSoftware = new JLabel();
 
-		JPanel panelRadiobuttonsDirectionOfAssignmentX = new JPanel();
+		panel.add(label("PanelAssignToLPools.labelCountAllWindowsSoftware"),
+				"split 6, gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(fieldCountAllWindowsSoftware, " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(label("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"), " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(fieldCountDisplayedWindowsSoftware, " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(label("PanelAssignToLPools.labelCountNotAssignedSoftware"), " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(fieldCountNotAssignedSoftware, " gapright " + Globals.MIN_GAP_SIZE + ", wrap");
 
-		GroupLayout layoutBorder = new GroupLayout(panelRadiobuttonsDirectionOfAssignmentX);
-		panelRadiobuttonsDirectionOfAssignmentX.setLayout(layoutBorder);
-		layoutBorder
-				.setVerticalGroup(
-						layoutBorder.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(panelRadiobuttonsDirectionOfAssignment, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE));
+		fieldCountAssignedStatus = new JLabel();
+		fieldCountAssignedInEditing = new JLabel();
+		buttonShowAssignedNotExisting = button("PanelAssignToLPools.buttonAssignedButMissing",
+				"PanelAssignToLPools.buttonAssignedButMissing.tooltip", () -> fMissingSoftwareInfo.show());
 
-		layoutBorder
-				.setHorizontalGroup(
-						layoutBorder.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(panelRadiobuttonsDirectionOfAssignment, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE));
+		panel.add(label("PanelAssignToLPools.labelCountAssignedStatus"), "split 5, gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(fieldCountAssignedStatus, " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(label("PanelAssignToLPools.labelCountAssignedInEditing"), " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(fieldCountAssignedInEditing, " gapright " + Globals.MIN_GAP_SIZE);
+		panel.add(buttonShowAssignedNotExisting, " gapright " + Globals.MIN_GAP_SIZE + ", wrap");
 
-		GroupLayout layoutPanelInfo = new GroupLayout(panelInfoWindowsSoftware);
-		panelInfoWindowsSoftware.setLayout(layoutPanelInfo);
+		panel.add(createSoftwareSelectionPanel(), "gaptop " + Globals.GAP_SIZE);
 
-		layoutPanelInfo.setHorizontalGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-								titleWindowsSoftware, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-								panelWorkNamebased, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelSelectedLicensePoolId, 0, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedLicensePoolId,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-								titleWindowsSoftware2, 50, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-								panelRadiobuttonsDirectionOfAssignmentX, 20, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))));
+		return panel;
+	}
 
-		layoutPanelInfo.setVerticalGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-						titleWindowsSoftware, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE))
+	private PanelStateSwitch<ControlPanelAssignToLPools.SoftwareShowAllMeans> createSoftwareSelectionPanel() {
+		return new PanelStateSwitch<>(null, SoftwareShowAllMeans.ALL, SoftwareShowAllMeans.values(),
+				new String[] { text("PanelAssignToLPools.radiobuttonALL"),
+						text("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
+						text("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING") },
+				ControlPanelAssignToLPools.SoftwareShowAllMeans.class, val -> ((ControlPanelAssignToLPools) controller)
+						.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val));
+	}
 
-				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSelectedLicensePoolId, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldSelectedLicensePoolId, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-						titleWindowsSoftware2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE))
-
-				.addComponent(panelWorkNamebased, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addComponent(panelRadiobuttonsDirectionOfAssignmentX, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		PanelStateSwitch<SoftwareShowAllMeans> panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null,
-				SoftwareShowAllMeans.ALL, SoftwareShowAllMeans.values(),
-
-				new String[] { Configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
-						Configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
-						Configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING") },
-
-				ControlPanelAssignToLPools.SoftwareShowAllMeans.class,
-
-				(Enum<SoftwareShowAllMeans> val) -> {
-					Logging.info(this, " produced ", val);
-					((ControlPanelAssignToLPools) controller)
-							.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val);
-				});
-
-		GroupLayout layoutPanelInfoConfig = new GroupLayout(panelInfoConfigWindowsSoftware);
-		panelInfoConfigWindowsSoftware.setLayout(layoutPanelInfoConfig);
-
-		int col0width = labelCountAssignedStatus.getPreferredSize().width;
-		if (labelCountAllWindowsSoftware.getPreferredSize().width > col0width) {
-			col0width = labelCountAllWindowsSoftware.getPreferredSize().width;
-		}
-
-		layoutPanelInfoConfig.setHorizontalGroup(layoutPanelInfoConfig.createSequentialGroup()
-				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutPanelInfoConfig.createSequentialGroup()
-								.addComponent(labelCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(buttonShowAssignedNotExisting, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE))
-
-						.addGroup(layoutPanelInfoConfig.createSequentialGroup()
-								.addComponent(labelCountAllWindowsSoftware, col0width, col0width, col0width)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountAllWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelCountDisplayedWindowsSoftware, 5, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountDisplayedWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE))
-
-						.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-				));
-		layoutPanelInfoConfig
-				.setVerticalGroup(
-						layoutPanelInfoConfig.createSequentialGroup()
-								.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(labelCountAllWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldCountAllWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelCountDisplayedWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldCountDisplayedWindowsSoftware, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-								// to get the level of the components of the left side
-								.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(labelCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonShowAssignedNotExisting, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.GAP_SIZE)
-
-								.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-								.addGap(Globals.GAP_SIZE));
-
-		panelLicensepools = new PanelGenEdit(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
+	private void createLicenseTables() {
+		panelLicensepools = new PanelGenEdit(text("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
 				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicensepools.setFilterKey(FilterKey.LICENSE_POOL_POOLS_TABLE);
 
-		panelProductId2LPool = new PanelGenEdit(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
+		panelProductId2LPool = new PanelGenEdit(text("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
 				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
@@ -384,49 +215,21 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFilterKey(FilterKey.LICENSE_REGISTERED_SOFTWARE_TABLE);
 		panelRegisteredSoftware.getTableSearchPane().setFiltering();
+	}
 
-		GroupLayout layoutTopPane = new GroupLayout(topPane);
-		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(panelLicensepools, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(panelProductId2LPool, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+	private JLabel label(String key) {
+		return new JLabel(text(key));
+	}
 
-		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createSequentialGroup().addComponent(panelLicensepools, 0, 0, Short.MAX_VALUE)
-						.addComponent(panelProductId2LPool, 0, 0, Short.MAX_VALUE));
+	private String text(String key) {
+		return Configed.getResourceValue(key);
+	}
 
-		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
-		bottomPane.setLayout(layoutBottomPane);
-
-		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutBottomPane.createSequentialGroup()
-						.addComponent(panelInfoWindowsSoftware, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(panelInfoConfigWindowsSoftware, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addComponent(panelRegisteredSoftware, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-						Short.MAX_VALUE));
-
-		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup()
-				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(panelInfoWindowsSoftware, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelInfoConfigWindowsSoftware, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addComponent(panelRegisteredSoftware, 0, 0, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
-
-		splitPane.setTopComponent(topPane);
-		splitPane.setBottomComponent(bottomPane);
-
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
-
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	private JButton button(String key, String tooltipKey, Runnable action) {
+		JButton btn = new JButton(Configed.getResourceValue(key));
+		btn.setToolTipText(Configed.getResourceValue(tooltipKey));
+		btn.addActionListener(e -> action.run());
+		return btn;
 	}
 
 	private void buttonSupplementSimilarAction() {

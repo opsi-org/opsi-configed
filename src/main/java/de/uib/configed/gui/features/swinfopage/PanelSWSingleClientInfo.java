@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -54,6 +53,7 @@ import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelSWSingleClientInfo extends JPanel {
 	private static final String FILTER_MS_UPDATES = "withMsUpdates";
@@ -208,42 +208,14 @@ public class PanelSWSingleClientInfo extends JPanel {
 	private void setupTableLayout() {
 		subPanelTitle = new JPanel();
 
-		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
-		subPanelTitle.setLayout(layoutSubPanelTitle);
+		subPanelTitle.setLayout(new MigLayout("insets 0, wrap 3", "[pref!]50[pref!][pref!]", "[]0"));
 
-		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup()
-				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(0, 50, 50)
-				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+		subPanelTitle.add(labelSuperTitle, "cell 0 0, aligny center");
+		subPanelTitle.add(labelWithMSUpdates, "cell 1 0, aligny center");
+		subPanelTitle.add(checkWithMsUpdates, "cell 2 0, aligny center");
 
-				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
-		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-
-				.addGroup(layoutSubPanelTitle.createParallelGroup()
-						.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-
-				.addGap(Globals.MIN_GAP_SIZE)
-
-				.addGroup(layoutSubPanelTitle.createParallelGroup()
-						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		subPanelTitle.add(labelWithMSUpdates2, "cell 1 1, aligny center");
+		subPanelTitle.add(checkWithMsUpdates2, "cell 2 1, aligny center");
 
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
@@ -271,17 +243,10 @@ public class PanelSWSingleClientInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-		GroupLayout contentLayout = new GroupLayout(this);
-		setLayout(contentLayout);
-
-		contentLayout.setHorizontalGroup(contentLayout.createParallelGroup()
-				.addComponent(subPanelTitle, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(panelTable, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		contentLayout.setVerticalGroup(contentLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(panelTable, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow, fill]",
+				"[]" + Globals.MIN_GAP_SIZE + "[grow]"));
+		this.add(subPanelTitle, "growx");
+		this.add(panelTable, "grow, push");
 
 		if (withPopup) {
 			new PopupMenuTrait(

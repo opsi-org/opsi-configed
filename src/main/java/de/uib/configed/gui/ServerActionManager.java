@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -36,6 +35,7 @@ import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.gui.type.licenses.LicenseUsageEntry;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class ServerActionManager {
 	public static final String KEY_PROCESS_ACTION_REQUEST_DEFAULT = "";
@@ -305,9 +305,14 @@ public final class ServerActionManager {
 		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
 				CopyClient.CopyOption.CONFIG_STATES);
 
-		JPanel panel = new JPanel();
-		GroupLayout groupLayout = new GroupLayout(panel);
-		panel.setLayout(groupLayout);
+		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
+
+		panel.add(jTextHostname, "growx");
+		panel.add(label, "gapy " + Globals.GAP_SIZE + "");
+		panel.add(copyGroups);
+		panel.add(copyProducts);
+		panel.add(copyProductProperties);
+		panel.add(copyConfigs);
 
 		StringBuilder messageText = new StringBuilder();
 		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
@@ -315,13 +320,6 @@ public final class ServerActionManager {
 		messageText.append(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 		messageText.append("\n");
 		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
-				.addComponent(copyProductProperties).addComponent(copyConfigs));
-		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
-				.addComponent(copyProductProperties).addComponent(copyConfigs));
 
 		Object[] message = new Object[] { messageText.toString(), panel };
 

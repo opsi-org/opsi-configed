@@ -9,7 +9,6 @@ package de.uib.configed.gui.features.productaction;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -32,6 +31,7 @@ import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CompleteWinProductsDialog implements NameProducer {
 	private String winProduct = "";
@@ -267,89 +267,31 @@ public class CompleteWinProductsDialog implements NameProducer {
 		labelProductKey.setFont(labelProductKey.getFont().deriveFont(Font.BOLD));
 
 		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		panel.add(topicLabel, "gapbottom " + Globals.GAP_SIZE);
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		panel.add(labelServer);
+		panel.add(depot, "gapbottom " + Globals.GAP_SIZE);
 
-				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		panel.add(labelWinProduct);
+		panel.add(comboChooseWinProduct, "growx, gapbottom " + Globals.GAP_SIZE);
 
-				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		panel.add(jLabelRetrievalText, "hidemode 3");
 
-				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		panel.add(labelFolderWinPE);
+		panel.add(fieldPathWinPE, "growx, split 2");
+		panel.add(buttonCallSelectFolderWinPE, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
 
-				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderInstallFiles,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+		panel.add(labelFolderInstallFiles);
+		panel.add(fieldPathInstallFiles, "growx, split 2");
+		panel.add(buttonCallSelectFolderInstallFiles, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
+
+		panel.add(labelTargetPath);
+		panel.add(fieldTargetPath, "growx, gapbottom " + Globals.GAP_SIZE);
+
+		panel.add(labelProductKey);
+		panel.add(fieldProductKey, "growx");
 
 		return panel;
 	}

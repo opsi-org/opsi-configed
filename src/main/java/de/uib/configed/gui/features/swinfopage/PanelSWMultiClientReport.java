@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -25,6 +24,7 @@ import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExp
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelSWMultiClientReport extends JPanel {
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
@@ -85,15 +85,23 @@ public class PanelSWMultiClientReport extends JPanel {
 	}
 
 	private void setupPanel() {
-		GroupLayout glGlobal = new GroupLayout(this);
-		this.setLayout(glGlobal);
+		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
-
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title2"));
 
+		this.add(labelSwauditMultiClientReport1);
+		this.add(labelSwauditMultiClientReport2);
+
+		JPanel subpanelPreConfig = setupSubPanelPreConfig();
+		this.add(subpanelPreConfig, "growx, pushx, gaptop " + Globals.GAP_SIZE + ", gapbottom " + Globals.GAP_SIZE);
+
+		this.add(buttonStart, "gaptop " + Globals.GAP_SIZE);
+	}
+
+	private JPanel setupSubPanelPreConfig() {
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
@@ -196,142 +204,33 @@ public class PanelSWMultiClientReport extends JPanel {
 		Logging.info(this, "kindOfExport set from savedStates  ", koe);
 		Logging.info(this, "kindOfExport   ", kindOfExport);
 
-		JPanel subpanelPreConfig = new JPanel();
+		JPanel subpanelPreConfig = new JPanel(
+				new MigLayout("insets " + Globals.GAP_SIZE + ", hidemode 2", "[grow]", "[]0"));
 
-		GroupLayout glPreConfig = new GroupLayout(subpanelPreConfig);
-		subpanelPreConfig.setLayout(glPreConfig);
-		glPreConfig.setVerticalGroup(glPreConfig.createSequentialGroup()
+		subpanelPreConfig.add(labelExportDirectory, "split 3");
+		subpanelPreConfig.add(buttonCallSelectExportDirectory, "gapleft " + Globals.GAP_SIZE + ", wmin 0, wmax pref");
+		subpanelPreConfig.add(fieldExportDirectory, "span, growx, pushx, wrap");
 
-				.addGap(Globals.GAP_SIZE)
+		subpanelPreConfig.add(panelSelectExportType, "span, growx, pushx, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelExportDirectory, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectExportDirectory, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldExportDirectory, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
+		subpanelPreConfig.add(labelFilenamePrefix,
+				"split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		subpanelPreConfig.add(fieldFilenamePrefix, "span, growx, pushx, wrap");
 
-				.addComponent(panelSelectExportType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		subpanelPreConfig.add(labelFilenameInformation, "span, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 
-				.addGap(Globals.MIN_GAP_SIZE)
+		subpanelPreConfig.add(checkWithMsUpdates,
+				"split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		subpanelPreConfig.add(labelWithMsUpdates, "align left, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFilenamePrefix, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldFilenamePrefix, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
+		subpanelPreConfig.add(checkWithMsUpdates2, "split 2, gapright " + Globals.GAP_SIZE);
+		subpanelPreConfig.add(labelWithMsUpdates2, "align left, wrap");
 
-				.addGroup(glPreConfig
-						.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelFilenameInformation,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+		subpanelPreConfig.add(checkAskForOverwrite,
+				"split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		subpanelPreConfig.add(labelAskForOverwrite, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 
-				.addGap(Globals.GAP_SIZE));
-
-		glPreConfig.setHorizontalGroup(glPreConfig.createParallelGroup()
-
-				.addGroup(glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelExportDirectory, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addGap(Globals.GAP_SIZE)
-
-						.addComponent(buttonCallSelectExportDirectory, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(fieldExportDirectory, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-
-				.addGroup(
-						glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(panelSelectExportType,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-				.addGroup(glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelFilenamePrefix, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addGap(Globals.GAP_SIZE)
-
-						.addComponent(fieldFilenamePrefix, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-						labelFilenameInformation, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE))
-				.addGroup(glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(glPreConfig.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(labelAskForOverwrite, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		glGlobal.setVerticalGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-						labelSwauditMultiClientReport1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE))
-				.addGroup(glGlobal
-						.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelSwauditMultiClientReport2,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-
-				.addComponent(subpanelPreConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addGap(Globals.GAP_SIZE)
-
-				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonStart,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		glGlobal.setHorizontalGroup(glGlobal.createParallelGroup()
-				.addGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelSwauditMultiClientReport1, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-
-				.addGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelSwauditMultiClientReport2, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(subpanelPreConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-
-				.addGroup(glGlobal.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(buttonStart,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		return subpanelPreConfig;
 	}
 
 	private void buttonCallSelectExportDirectory() {

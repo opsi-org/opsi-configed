@@ -25,7 +25,6 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -57,6 +56,7 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CSVTemplateCreatorDialog {
 	private static CSVTemplateCreatorDialog csvTemplateCreatorDialog;
@@ -164,9 +164,7 @@ public class CSVTemplateCreatorDialog {
 			}
 		});
 
-		JPanel centerPanel = new JPanel();
-		GroupLayout centerLayout = new GroupLayout(centerPanel);
-		centerPanel.setLayout(centerLayout);
+		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
 		JLabel dataSelectionLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
@@ -187,52 +185,25 @@ public class CSVTemplateCreatorDialog {
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(-1);
 
-		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup().addComponent(dataSelectionLabel)
-				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(includeFormatHintOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(dataSelectionLabel, "gapbottom " + Globals.MIN_GAP_SIZE);
 
-				.addComponent(delimeterLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(list);
 
-				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(includeFormatHintOption, "gaptop " + Globals.GAP_SIZE);
 
-				.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(delimeterLabel, "gaptop " + Globals.GAP_SIZE);
 
-				.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		centerPanel.add(tabsOption);
+		centerPanel.add(commaOption);
+		centerPanel.add(semicolonOption);
+		centerPanel.add(spaceOption);
 
-				.addGroup(centerLayout.createSequentialGroup()
-						.addComponent(otherOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		centerPanel.add(otherOption, "split 2, gapright " + Globals.GAP_SIZE);
+		centerPanel.add(otherDelimiterInput, "wrap");
 
-				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		centerPanel.add(fieldSeparatorLabel, "gaptop " + Globals.GAP_SIZE);
 
-		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addComponent(dataSelectionLabel)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(includeFormatHintOption).addGap(Globals.GAP_SIZE)
-				.addComponent(delimeterLabel)
-				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(otherOption)
-						.addComponent(otherDelimiterInput))
-				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addComponent(quoteOptions));
+		centerPanel.add(quoteOptions);
 
 		return centerPanel;
 	}

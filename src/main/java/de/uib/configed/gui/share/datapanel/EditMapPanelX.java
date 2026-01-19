@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -40,6 +39,7 @@ import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel {
@@ -317,12 +317,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		jScrollPane = new JScrollPane(table);
 
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(jScrollPane, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane, 0,
-				GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		add(jScrollPane, "grow, hmin 0");
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {

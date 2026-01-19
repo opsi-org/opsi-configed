@@ -1,7 +1,7 @@
 /**
  * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
- * This file is part of opsi - https://www.opsi.org
+ * This file is part of opsi - https:
  */
 
 /*
@@ -22,8 +22,6 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,7 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.gui.Configed;
@@ -47,9 +44,9 @@ import de.uib.configed.gui.type.licenses.LicenseEntry;
 import de.uib.configed.share.Utils;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelEnterLicense extends MultiTablePanel {
-	private static final int MIN_HEIGHT = 50;
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
 
 	private static final int MIN_FIELD_WIDTH = 40;
@@ -288,8 +285,6 @@ public class PanelEnterLicense extends MultiTablePanel {
 						Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.LabelSLid5"),
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-				// answer == 0 means OK
-				// if the value is not null, the user did not select a date
 				if (answer == 0 && datePicker.getValue() != null) {
 					jTextFieldEndOfLicense.setText(datePicker.getValue().toString());
 				}
@@ -347,195 +342,101 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private void setupLayout() {
-		JPanel panelLicenseModel = new JPanel();
-		panelLicenseModel.setBorder(BorderFactory.createEtchedBorder());
+		JSplitPane splitPane = createSplitPane();
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow,fill]", "[grow,fill]"));
+		this.add(splitPane, "grow, push");
+	}
 
-		GroupLayout panelLicenseModelLayout = new GroupLayout(panelLicenseModel);
-		panelLicenseModel.setLayout(panelLicenseModelLayout);
-		panelLicenseModelLayout.setHorizontalGroup(panelLicenseModelLayout.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(jLabelSLid4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(jLabelSLid3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(jLabelSLid2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(jLabelSLid1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-
-				.addGroup(panelLicenseModelLayout.createSequentialGroup().addGroup(panelLicenseModelLayout
-						.createParallelGroup(Alignment.LEADING, true)
-						.addComponent(comboClient, MIN_FIELD_WIDTH, 208, Short.MAX_VALUE)
-						.addGroup(panelLicenseModelLayout.createSequentialGroup()
-								.addComponent(jTextFieldMaxInstallations, MIN_FIELD_WIDTH, 112,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jLabelSLid3info, MIN_FIELD_WIDTH, 112, GroupLayout.PREFERRED_SIZE))
-						.addComponent(jTextFieldLicenseID, MIN_FIELD_WIDTH, 208, Short.MAX_VALUE)
-						.addComponent(jTextFieldLicenseType, MIN_FIELD_WIDTH, 239, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.LEADING, true)
-								.addGroup(panelLicenseModelLayout.createSequentialGroup()
-										.addComponent(jLabelSLid6, GroupLayout.PREFERRED_SIZE, 120,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-
-										.addComponent(jTextFieldLicenseContract, MIN_FIELD_WIDTH, 200,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(panelLicenseModelLayout.createSequentialGroup()
-										.addComponent(jLabelSLid5, GroupLayout.PREFERRED_SIZE, 120,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-
-										.addComponent(jTextFieldEndOfLicense, MIN_FIELD_WIDTH, 200,
-												GroupLayout.PREFERRED_SIZE))))
-				.addContainerGap(10, Short.MAX_VALUE));
-
-		panelLicenseModelLayout
-				.setVerticalGroup(panelLicenseModelLayout.createSequentialGroup()
-						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabelSLid1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldLicenseID, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelSLid5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldEndOfLicense, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabelSLid2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldLicenseType, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabelSLid3, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldMaxInstallations, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelSLid3info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelSLid6, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldLicenseContract, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabelSLid4, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)));
-
-		JPanel panelEnterKey = new JPanel();
-		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
-
-		GroupLayout panelEnterKeyLayout = new GroupLayout(panelEnterKey);
-		panelEnterKey.setLayout(panelEnterKeyLayout);
-		panelEnterKeyLayout.setHorizontalGroup(panelEnterKeyLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jTextFieldLKey, MIN_FIELD_WIDTH, 326, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(10, Short.MAX_VALUE));
-
-		panelEnterKeyLayout.setVerticalGroup(panelEnterKeyLayout.createParallelGroup(Alignment.BASELINE)
-				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldLKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		JPanel panelTask = new JPanel();
-		GroupLayout layoutTask = new GroupLayout(panelTask);
-		panelTask.setLayout(layoutTask);
-
-		layoutTask.setHorizontalGroup(layoutTask.createSequentialGroup().addGroup(layoutTask
-				.createParallelGroup(Alignment.LEADING)
-				.addGroup(layoutTask.createParallelGroup(Alignment.LEADING).addComponent(panelLicenseContracts, 50, 300,
-						Short.MAX_VALUE))
-
-				.addGroup(layoutTask.createSequentialGroup()
-						.addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(1587, Short.MAX_VALUE))
-				.addGroup(layoutTask.createSequentialGroup()
-						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addComponent(jButtonCreateVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addComponent(jButtonCreateOEM, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(1226, Short.MAX_VALUE))
-				.addGroup(layoutTask.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTask)
-						.addContainerGap(1515, Short.MAX_VALUE))
-				.addGroup(layoutTask.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelConfigure)
-						.addContainerGap(1515, Short.MAX_VALUE))
-				.addGroup(layoutTask.createSequentialGroup()
-						.addGroup(layoutTask.createParallelGroup(Alignment.TRAILING, true)
-								.addComponent(panelEnterKey, Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(panelLicenseModel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE))));
-
-		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelTask).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(panelLicenseContracts, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelConfigure).addGap(2)
-				.addGroup(layoutTask.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCreateOEM, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCreateVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(panelLicenseModel, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(2)
-				.addComponent(panelEnterKey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(2).addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE));
-
+	private JSplitPane createSplitPane() {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3);
 
-		JPanel topPane = new JPanel();
-		JPanel bottomPane = new JPanel();
-		splitPane.setTopComponent(topPane);
-		splitPane.setBottomComponent(bottomPane);
+		splitPane.setTopComponent(createTopPane());
+		splitPane.setBottomComponent(createBottomPane());
 
-		GroupLayout layoutTopPane = new GroupLayout(topPane);
-		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addComponent(panelLicensePools,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
-				.addComponent(panelLicensePools, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE));
+		return splitPane;
+	}
 
-		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
-		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup()
-				.addGroup(layoutBottomPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelTask, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(panelKeys, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+	private JPanel createTopPane() {
+		JPanel topPane = new JPanel(new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]" + Globals.MIN_GAP_SIZE));
+		topPane.add(panelLicensePools, "grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", h " + MIN_PANEL_TABLE_HEIGHT);
+		return topPane;
+	}
 
-		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelKeys, 0, 0, Short.MAX_VALUE));
+	private JPanel createBottomPane() {
+		JPanel bottomPane = new JPanel(
+				new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]" + Globals.GAP_SIZE + "[]"));
+		bottomPane.add(createPanelTask(), "grow, push");
+		bottomPane.add(panelKeys, "grow, push, hmin 0");
+		return bottomPane;
+	}
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
+	private JPanel createPanelTask() {
+		JPanel panelTask = new JPanel(new MigLayout("insets 0", "[grow]",
+				"[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]2[]2[]"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
+		panelTask.add(jLabelTask, "wrap");
+		panelTask.add(panelLicenseContracts, "grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", wrap");
+		panelTask.add(jLabelConfigure, "wrap");
+
+		panelTask.add(jButtonCreateStandard, "split 4, sizegroup btns");
+		panelTask.add(jButtonCreateVolume, "gapleft 18, sizegroup btns");
+		panelTask.add(jButtonCreateOEM, "gapleft 18, sizegroup btns");
+		panelTask.add(jButtonCreateConcurrent, "gapleft 18, sizegroup btns, wrap");
+
+		panelTask.add(createPanelLicenseModel(), "growx, wrap");
+		panelTask.add(createPanelEnterKey(), "growx, wrap");
+		panelTask.add(jButtonSend, "wrap");
+
+		return panelTask;
+	}
+
+	private JPanel createPanelLicenseModel() {
+		JPanel panelLicenseModel = new JPanel(new MigLayout("insets " + Globals.GAP_SIZE, "[pref!]50[pref!]", "[]0"));
+		panelLicenseModel.setBorder(BorderFactory.createEtchedBorder());
+
+		panelLicenseModel.add(createLeftBlock());
+		panelLicenseModel.add(createRightBlock());
+
+		return panelLicenseModel;
+	}
+
+	private JPanel createLeftBlock() {
+		JPanel left = new JPanel(new MigLayout("insets 0", "[left, 120!][grow]", "[]0"));
+		left.add(jLabelSLid1);
+		left.add(jTextFieldLicenseID, "growx, pushx, w 326!, wrap");
+		left.add(jLabelSLid2);
+		left.add(jTextFieldLicenseType, "w 326!, wrap");
+
+		JPanel maxPanel = new JPanel(new MigLayout("insets 0", "[112!][grow]", "[]"));
+		maxPanel.add(jTextFieldMaxInstallations, "cell 0 0, growx");
+		maxPanel.add(jLabelSLid3info, "cell 1 0, growx, gapleft " + Globals.MIN_GAP_SIZE);
+		left.add(jLabelSLid3, "alignx left");
+		left.add(maxPanel, "wrap");
+
+		left.add(jLabelSLid4);
+		left.add(comboClient, "growx, pushx, w 326!, wrap");
+
+		return left;
+	}
+
+	private JPanel createRightBlock() {
+		JPanel right = new JPanel(new MigLayout("insets 0", "[left, 120!][200!]", "[]10[]"));
+		right.add(jLabelSLid5);
+		right.add(jTextFieldEndOfLicense, "growx, wrap");
+		right.add(jLabelSLid6);
+		right.add(jTextFieldLicenseContract, "growx, wrap");
+		return right;
+	}
+
+	private JPanel createPanelEnterKey() {
+		JPanel panelEnterKey = new JPanel(new MigLayout("insets 0", "[]", "[]"));
+		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
+
+		panelEnterKey.add(jLabelLKey, "w 120!, gapleft " + Globals.GAP_SIZE);
+		panelEnterKey.add(jTextFieldLKey, "wmin " + MIN_FIELD_WIDTH + ", w 326, growx");
+
+		return panelEnterKey;
 	}
 
 	private void saveCurrentLicenseData() {
