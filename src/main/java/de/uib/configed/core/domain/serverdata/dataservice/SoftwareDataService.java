@@ -962,12 +962,11 @@ public class SoftwareDataService extends DataService {
 
 	private List<Map<String, Object>> getAuditSoftwareOnClients(List<String> clients) {
 		Logging.info(this, "getAuditSoftwareOnClients request started");
-		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clients);
 
 		List<Map<String, Object>> softwareAuditOnClients = dataServices.exec
-				.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
+				.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, new String[0], callFilter);
 		Logging.info(this, "getAuditSoftwareOnClients, finished a request, map size ", softwareAuditOnClients.size());
 
 		return softwareAuditOnClients;

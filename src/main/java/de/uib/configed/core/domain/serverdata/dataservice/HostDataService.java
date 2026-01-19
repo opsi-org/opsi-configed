@@ -154,7 +154,7 @@ public class HostDataService extends DataService {
 		if (!groupsAsString.isEmpty()) {
 			groups = groupsAsString.replace("\\s,\\s", ",").trim().split(",");
 		} else {
-			groups = new String[] {};
+			groups = new String[0];
 		}
 
 		Logging.info(this, "createClient", " group ", Arrays.toString(groups));
@@ -277,7 +277,6 @@ public class HostDataService extends DataService {
 	}
 
 	public List<Map<String, Object>> getOpsiHosts() {
-		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		List<String> hostTypes = new ArrayList<>();
 		hostTypes.add(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER);
@@ -286,7 +285,7 @@ public class HostDataService extends DataService {
 		TimeCheck timer = new TimeCheck(this, "getOpsiHosts").start();
 		Logging.notice(this, "host_getObjects");
 		List<Map<String, Object>> opsiHosts = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_OBJECTS,
-				callAttributes, callFilter);
+				new String[0], callFilter);
 		timer.stop();
 		return opsiHosts;
 	}
@@ -302,12 +301,11 @@ public class HostDataService extends DataService {
 	public List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations) {
 		List<String> result = new ArrayList<>();
-		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		List<Map<String, Object>> retrievedList = dataServices.exec
-				.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
+				.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new String[0], callFilter);
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get("clientId");
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);

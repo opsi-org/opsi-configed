@@ -914,7 +914,7 @@ public class ConfigedMain {
 
 	public String[] getDepotArray() {
 		if (depots == null) {
-			return new String[] {};
+			return new String[0];
 		}
 
 		return depots.keySet().toArray(new String[0]);

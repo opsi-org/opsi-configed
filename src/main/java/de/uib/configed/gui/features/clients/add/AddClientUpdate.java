@@ -133,7 +133,7 @@ final class AddClientUpdate {
 
 	private static String[] parseGroups(String groupsText) {
 		if (groupsText == null || groupsText.isEmpty()) {
-			return new String[] {};
+			return new String[0];
 		}
 		return groupsText.replace("; ", ";").split(";");
 	}
