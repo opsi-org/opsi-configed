@@ -16,7 +16,7 @@ import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -123,11 +123,7 @@ public class CSVTemplateCreatorDialog {
 			}
 		});
 
-		Enumeration<AbstractButton> iter = delimiterOptions.getElements();
-
-		while (iter.hasMoreElements()) {
-			AbstractButton button = iter.nextElement();
-
+		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
 			button.addItemListener((ItemEvent e) -> {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
