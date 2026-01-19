@@ -33,7 +33,6 @@ public class PackageManagerInstallParameterDialog {
 	private PMInstallServerPanel installServerPanel;
 	private PMInstallCurlPanel installCurlPanel;
 	private PMInstallSettingsPanel installSettingsPanel;
-	private JLabel jLabelInstall;
 
 	private JComboBox<String> jComboBoxPackageSource;
 
@@ -153,7 +152,7 @@ public class PackageManagerInstallParameterDialog {
 
 	private void initLayout() {
 		downloadPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInstall = Utils.createBoldLabel("PackageManagerInstallParameterDialog.jLabelInstallationMethod");
+		JLabel jLabelInstall = Utils.createBoldLabel("PackageManagerInstallParameterDialog.jLabelInstallationMethod");
 
 		downloadPanel.setLayout(
 				new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, gapy " + Globals.GAP_SIZE + ", wrap 1",
