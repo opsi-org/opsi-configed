@@ -182,20 +182,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection));
 		}
 
-		thePanel.getFieldCountAssignedStatus().setToolTipText(" <html><br /></html>");
-
 		thePanel.getFieldCountAssignedStatus().setText(produceCount(softwareIdsForPool.size(), poolID == null));
 
-		StringBuilder b = new StringBuilder("<html>");
-		b.append(Configed.getResourceValue("PanelAssignToLPools.assignedStatusListTitle"));
-		b.append("<br />");
-		b.append("<br />");
-		for (Object ident : softwareIdsForPool) {
-			b.append(ident.toString());
-			b.append("<br />");
-		}
-		b.append("</html>");
-		thePanel.getFieldCountAssignedStatus().setToolTipText(b.toString());
+		thePanel.getFieldCountAssignedStatus().setToolTipText(createTooltip(softwareIdsForPool));
 
 		Integer totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 
@@ -245,6 +234,19 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
+	}
+
+	private static String createTooltip(List<String> softwareIdsForPool) {
+		StringBuilder b = new StringBuilder("<html>");
+		b.append(Configed.getResourceValue("PanelAssignToLPools.assignedStatusListTitle"));
+		b.append("<br />");
+		b.append("<br />");
+		for (String ident : softwareIdsForPool) {
+			b.append(ident);
+			b.append("<br />");
+		}
+		b.append("</html>");
+		return b.toString();
 	}
 
 	private Map<String, Map<String, Object>> getMissingSoftwareMap(String poolID) {
@@ -730,14 +732,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "sendUpdate, setSoftwareIdsFromLicensePool poolId ", poolId);
 		setSoftwareIdsFromLicensePool(poolId);
 
-		Logging.info(this, "sendUpdate, adapt Softwarename2LicensePool");
-		Logging.info(this, "sendUpdate, we have software ids ", softwareIds.size());
-		Logging.info(this, "sendUpdate, we have software ids ",
-				persistenceController.getDataServices().software.getSoftwareListByLicensePoolPD(poolId).size(),
-				" they are ", persistenceController.getDataServices().software.getSoftwareListByLicensePoolPD(poolId));
-
 		List<String> oldSWListForPool = persistenceController.getDataServices().software
 				.getSoftwareListByLicensePoolPD(poolId);
+
+		Logging.info(this, "sendUpdate, adapt Softwarename2LicensePool");
+		Logging.info(this, "sendUpdate, we have software ids ", softwareIds.size());
+		Logging.info(this, "sendUpdate, we have software ids ", oldSWListForPool.size(), " they are ",
+				oldSWListForPool);
 
 		Logging.info(this, "sendUpdate remove ", oldSWListForPool, " from Software2LicensePool ");
 		persistenceController.getDataServices().software.getFSoftware2LicensePoolPD().keySet()
