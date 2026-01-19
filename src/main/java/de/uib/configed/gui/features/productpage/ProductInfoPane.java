@@ -118,11 +118,12 @@ public class ProductInfoPane extends JSplitPane {
 		productDescriptionsPanel.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]",
 				"[center]" + Globals.GAP_SIZE + "[]0[]" + Globals.GAP_SIZE + "[grow]"));
 
-		productDescriptionsPanel.add(jLabelProductID, "align center");
+		productDescriptionsPanel.add(jLabelProductID, "gap top " + Globals.GAP_SIZE + ", align center");
 
-		productDescriptionsPanel.add(jLabelProductName, "h " + Globals.DEFAULT_JLABEL_HEIGHT + "!, align left");
+		productDescriptionsPanel.add(jLabelProductName,
+				"h " + Globals.DEFAULT_JLABEL_HEIGHT + "!, gap left " + Globals.GAP_SIZE + ", align left");
 
-		productDescriptionsPanel.add(jLabelLabelProductVersion, "split 2");
+		productDescriptionsPanel.add(jLabelLabelProductVersion, "split 2, gap left " + Globals.GAP_SIZE);
 		productDescriptionsPanel.add(jLabelProductVersion, "align left, growx");
 
 		productDescriptionsPanel.add(productSplitPane, "grow, push, hmin 160");
