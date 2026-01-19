@@ -164,11 +164,11 @@ public class MainPanelManager {
 		depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
 		DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
-		JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("depotSelection"));
+		JLabel depotSelectionLabel = Utils.createBoldLabel(Configed.getResourceValue("depotSelection"));
 		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 		JPanel depotsListPanel = new JPanel();
-		depotsListPanel.setLayout(new MigLayout("insets 0", "[grow, fill]", "[]" + Globals.MIN_GAP_SIZE + "[]"));
+		depotsListPanel.setLayout(new MigLayout("insets 0", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[]"));
 
 		depotsListPanel.add(depotSelectionLabel, "align center, wrap");
 		depotsListPanel.add(depotListPresenter, "grow, push");
