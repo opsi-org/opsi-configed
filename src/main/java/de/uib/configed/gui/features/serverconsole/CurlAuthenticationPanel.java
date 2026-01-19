@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 
 import javax.swing.JCheckBox;
@@ -16,6 +15,7 @@ import javax.swing.JTextField;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
 public class CurlAuthenticationPanel extends PMInstallPanel {
@@ -44,12 +44,10 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			}
 		});
 
-		labelUser = new JLabel(Configed.getResourceValue("username"));
-		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+		labelUser = Utils.createBoldLabel("username");
 		jTextFieldUser = new JTextField();
 
-		labelPassword = new JLabel(Configed.getResourceValue("password"));
-		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		labelPassword = Utils.createBoldLabel("password");
 		jPasswordField = new JPasswordField();
 	}
 

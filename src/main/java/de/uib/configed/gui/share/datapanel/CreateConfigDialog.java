@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.share.datapanel;
 
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -83,8 +83,7 @@ public class CreateConfigDialog {
 	}
 
 	private void initBooleanDetailsPanel() {
-		JLabel defaultLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValue"));
-		defaultLabel.setFont(defaultLabel.getFont().deriveFont(Font.BOLD));
+		JLabel defaultLabel = Utils.createBoldLabel("CreateConfigDialog.defaultValue");
 
 		isBooleanTrue = new JRadioButton("true", true);
 		JRadioButton isBooleanFalse = new JRadioButton("false", false);
@@ -104,8 +103,7 @@ public class CreateConfigDialog {
 	}
 
 	private void initUnicodeDetailsPanel() {
-		JLabel propertiesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.properties"));
-		propertiesLabel.setFont(propertiesLabel.getFont().deriveFont(Font.BOLD));
+		JLabel propertiesLabel = Utils.createBoldLabel("CreateConfigDialog.properties");
 		isEditable = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.editable"), true);
 		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
 
@@ -122,11 +120,8 @@ public class CreateConfigDialog {
 
 		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
 
-		JLabel defaultValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValues"));
-		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
-
-		JLabel possibleValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.possibleValues"));
-		possibleValuesLabel.setFont(possibleValuesLabel.getFont().deriveFont(Font.BOLD));
+		JLabel defaultValuesLabel = Utils.createBoldLabel("CreateConfigDialog.defaultValues");
+		JLabel possibleValuesLabel = Utils.createBoldLabel("CreateConfigDialog.possibleValues");
 
 		unicodeDetailsPanel = new JPanel();
 		unicodeDetailsPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
@@ -186,8 +181,7 @@ public class CreateConfigDialog {
 	}
 
 	private void initGeneralPanel() {
-		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
-		labelConfigEntry.setFont(labelConfigEntry.getFont().deriveFont(Font.BOLD));
+		JLabel labelConfigEntry = Utils.createBoldLabel("EditMapPanelX.configName");
 
 		int selectionIndex = editMapPanelX.table.getSelectionModel().getMinSelectionIndex();
 		String value = selectionIndex >= 0 ? (String) editMapPanelX.table.getValueAt(selectionIndex, 0) : null;
@@ -195,13 +189,11 @@ public class CreateConfigDialog {
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 
-		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+		JLabel labelDescription = Utils.createBoldLabel("description");
 
 		textFieldDescription = new JTextField();
 
-		JLabel labelDataType = new JLabel(Configed.getResourceValue("CreateConfigDialog.dataType"));
-		labelDataType.setFont(labelDataType.getFont().deriveFont(Font.BOLD));
+		JLabel labelDataType = Utils.createBoldLabel("CreateConfigDialog.dataType");
 
 		booleanButton = new JRadioButton("boolean", false);
 		unicodeButton = new JRadioButton("unicode", true);

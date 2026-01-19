@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.healthcheck.settings;
 
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -79,8 +78,7 @@ public final class HealthCheckSettingsComponent
 
 	@Override
 	protected JComponent renderView(HealthCheckSettingsModel model, Consumer<HealthCheckSettingsMsg> dispatch) {
-		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
-		labelSelectedHosts.setFont(labelSelectedHosts.getFont().deriveFont(Font.BOLD));
+		JLabel labelSelectedHosts = Utils.createBoldLabel("HealthCheckSettingsDialog.selectedHosts");
 
 		selectedHosts = new JTextField();
 		selectedHosts.setEditable(false);
@@ -109,8 +107,7 @@ public final class HealthCheckSettingsComponent
 		checkBoxCheckActive.addItemListener(itemEvent -> dispatch
 				.accept(new HealthCheckSettingsMsg.ToggleActivity(checkBoxCheckActive.getState())));
 
-		labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
-		labelStartDowntime.setFont(labelStartDowntime.getFont().deriveFont(Font.BOLD));
+		labelStartDowntime = Utils.createBoldLabel("HealthCheckSettingsDialog.startDowntime");
 
 		startDowntimeField = new JTextField();
 		startDowntimeField.setEditable(false);
@@ -123,8 +120,7 @@ public final class HealthCheckSettingsComponent
 			}
 		});
 
-		labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
-		labelEndDowntime.setFont(labelEndDowntime.getFont().deriveFont(Font.BOLD));
+		labelEndDowntime = Utils.createBoldLabel("HealthCheckSettingsDialog.endDowntime");
 
 		endDowntimeField = new JTextField();
 		endDowntimeField.setEditable(false);

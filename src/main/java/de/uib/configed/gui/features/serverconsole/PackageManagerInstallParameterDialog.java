@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -35,7 +33,7 @@ public class PackageManagerInstallParameterDialog {
 	private PMInstallServerPanel installServerPanel;
 	private PMInstallCurlPanel installCurlPanel;
 	private PMInstallSettingsPanel installSettingsPanel;
-	private JLabel jLabelInstall = new JLabel();
+	private JLabel jLabelInstall;
 
 	private JComboBox<String> jComboBoxPackageSource;
 
@@ -155,9 +153,7 @@ public class PackageManagerInstallParameterDialog {
 
 	private void initLayout() {
 		downloadPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInstall
-				.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstallationMethod"));
-		jLabelInstall.setFont(jLabelInstall.getFont().deriveFont(Font.BOLD));
+		jLabelInstall = Utils.createBoldLabel("PackageManagerInstallParameterDialog.jLabelInstallationMethod");
 
 		downloadPanel.setLayout(
 				new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, gapy " + Globals.GAP_SIZE + ", wrap 1",

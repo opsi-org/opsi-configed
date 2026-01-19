@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -114,8 +113,7 @@ public class MakeProductFileDialog {
 	}
 
 	private void initComponents() {
-		jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
-		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
+		jLabelDir = Utils.createBoldLabel("MakeProductFileDialog.serverDir");
 
 		autocompletion.setCombobox(new AutoCompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
@@ -135,17 +133,10 @@ public class MakeProductFileDialog {
 			doSetActionGetVersions();
 		});
 
-		jLabelPackageVersion = new JLabel("    " + Configed.getResourceValue("MakeProductFileDialog.packageVersion"));
-		jLabelPackageVersion.setFont(jLabelPackageVersion.getFont().deriveFont(Font.BOLD));
-
-		jLabelProductVersion = new JLabel("    " + Configed.getResourceValue("MakeProductFileDialog.productVersion"));
-		jLabelProductVersion.setFont(jLabelProductVersion.getFont().deriveFont(Font.BOLD));
-
-		jLabelVersionsControlFile = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions_controlfile"));
-		jLabelVersionsControlFile.setFont(jLabelVersionsControlFile.getFont().deriveFont(Font.BOLD));
-
-		jLabelVersions = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions"));
-		jLabelVersions.setFont(jLabelVersions.getFont().deriveFont(Font.BOLD));
+		jLabelPackageVersion = Utils.createBoldLabel("MakeProductFileDialog.packageVersion");
+		jLabelProductVersion = Utils.createBoldLabel("MakeProductFileDialog.productVersion");
+		jLabelVersionsControlFile = Utils.createBoldLabel("MakeProductFileDialog.versions_controlfile");
+		jLabelVersions = Utils.createBoldLabel("MakeProductFileDialog.versions");
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();

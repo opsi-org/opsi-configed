@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ItemEvent;
 
@@ -22,14 +21,15 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class PMInstallCurlPanel extends PMInstallPanel {
-	private JLabel jLabelURL = new JLabel();
+	private JLabel jLabelURL;
 	private JTextField jTextFieldURL;
 
-	private JLabel jLabelDir = new JLabel();
+	private JLabel jLabelDir;
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
 
@@ -50,12 +50,9 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelURL.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlUrl"));
-		jLabelURL.setFont(jLabelURL.getFont().deriveFont(Font.BOLD));
+		jLabelURL = Utils.createBoldLabel("PMInstallCurlPanel.jLabelCurlUrl");
 
-		jLabelDir.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlDir"));
-		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
-
+		jLabelDir = Utils.createBoldLabel("PMInstallCurlPanel.jLabelCurlDir");
 		CompletionComboButton autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.addItem(workbench);

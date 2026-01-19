@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.groupaction;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -144,8 +143,7 @@ public class GroupActionsDialog {
 		groupNameLabel = new JLabel();
 		clientsCountLabel = new JLabel();
 
-		JLabel labelCombo = new JLabel(Configed.getResourceValue("FGroupAction.existingImages"));
-		labelCombo.setFont(labelCombo.getFont().deriveFont(Font.BOLD));
+		JLabel labelCombo = Utils.createBoldLabel("FGroupAction.existingImages");
 
 		comboSelectImage = new JComboBox<>();
 

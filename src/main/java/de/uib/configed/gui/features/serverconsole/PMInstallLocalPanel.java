@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.nio.file.Paths;
 
@@ -21,6 +20,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
@@ -41,11 +41,8 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelUploadFrom = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalFrom"));
-		jLabelUploadFrom.setFont(jLabelUploadFrom.getFont().deriveFont(Font.BOLD));
-
-		jLabelUploadTo = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalTo"));
-		jLabelUploadTo.setFont(jLabelUploadTo.getFont().deriveFont(Font.BOLD));
+		jLabelUploadFrom = Utils.createBoldLabel("PMInstallLocalPanel.jLabelLocalFrom");
+		jLabelUploadTo = Utils.createBoldLabel("PMInstallLocalPanel.jLabelLocalTo");
 
 		jTextFieldPath = new JTextField();
 

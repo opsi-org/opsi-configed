@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -33,8 +33,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private static final String DEPOT_SELECTION_ALL = Configed
 			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL");
 
-	private JLabel jLabelOn = new JLabel();
-	private JLabel jLabelLoglevel = new JLabel();
+	private JLabel jLabelOn;
+	private JLabel jLabelLoglevel;
 
 	private JComboBox<Integer> jComboBoxLoglevel;
 
@@ -57,11 +57,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelOn.setText(Configed.getResourceValue("PMInstallSettingsPanel.jLabelOn"));
-		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
-
-		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelOn = Utils.createBoldLabel("PMInstallSettingsPanel.jLabelOn");
+		jLabelLoglevel = Utils.createBoldLabel("loglevel");
 
 		jButtonDepotselection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {

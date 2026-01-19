@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.serverconsole;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,8 +78,7 @@ public class OpsiSetRightsParameterDialog {
 		additionalDefaultPaths.add(CommandFactory.WEBDAV_OPSI_PATH_VAR_DEPOT);
 		completion = new CompletionComboButton(additionalDefaultPaths);
 
-		jLabelInfo = new JLabel(Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath"));
-		jLabelInfo.setFont(jLabelInfo.getFont().deriveFont(Font.BOLD));
+		jLabelInfo = Utils.createBoldLabel("SingleCommandOpsiSetRights.additionalPath");
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();

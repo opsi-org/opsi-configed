@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,7 @@ import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -39,10 +39,10 @@ public class PackageManagerUninstallParameterDialog {
 
 	private JPanel uninstallPanel = new JPanel();
 
-	private JLabel jLabelUninstall = new JLabel();
-	private JLabel jLabelOn = new JLabel();
+	private JLabel jLabelUninstall;
+	private JLabel jLabelOn;
 
-	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
+	protected JLabel jLabelLoglevel;
 
 	private JComboBox<String> jComboBoxOpsiProducts;
 	private JComboBox<Integer> jComboBoxLogLevel;
@@ -182,10 +182,8 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private void init() {
-		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
-		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
-
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelUninstall = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
+		jLabelLoglevel = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelLoglevel");
 
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -207,8 +205,7 @@ public class PackageManagerUninstallParameterDialog {
 
 		jComboBoxOpsiProducts.addItemListener(itemEvent -> textFieldSelectedDepots.setText(""));
 
-		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
-		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
+		jLabelOn = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelOn");
 
 		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {

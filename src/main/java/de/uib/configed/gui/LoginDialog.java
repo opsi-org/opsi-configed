@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -173,17 +172,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
 
-		jLabelHost = new JLabel(Configed.getResourceValue("LoginDialog.placeholderHost"));
-		jLabelHost.setFont(jLabelHost.getFont().deriveFont(Font.BOLD));
+		jLabelHost = Utils.createBoldLabel("LoginDialog.placeholderHost");
 
-		jLabelUser = new JLabel(Configed.getResourceValue("username"));
-		jLabelUser.setFont(jLabelUser.getFont().deriveFont(Font.BOLD));
+		jLabelUser = Utils.createBoldLabel("username");
+		jLabelPassword = Utils.createBoldLabel("password");
 
-		jLabelPassword = new JLabel(Configed.getResourceValue("password"));
-		jLabelPassword.setFont(jLabelPassword.getFont().deriveFont(Font.BOLD));
-
-		jLabelOTP = new JLabel(Configed.getResourceValue("LoginDialog.placeholderOTP"));
-		jLabelOTP.setFont(jLabelOTP.getFont().deriveFont(Font.BOLD));
+		jLabelOTP = Utils.createBoldLabel("LoginDialog.placeholderOTP");
 		jLabelOTP.setVisible(false);
 
 		fieldHost.setEditable(true);

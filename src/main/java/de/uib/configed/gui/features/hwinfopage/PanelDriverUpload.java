@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.hwinfopage;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -41,6 +40,7 @@ import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.NameProducer;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductUtils;
 import de.uib.configed.share.WinProductsRetriever;
@@ -144,12 +144,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
-		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
-		jLabelTopic.setFont(jLabelTopic.getFont().deriveFont(Font.BOLD));
+		jLabelTopic = Utils.createBoldLabel("PanelDriverUpload.topic");
 
-		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
-		labelDriverToIntegrate.setFont(labelDriverToIntegrate.getFont().deriveFont(Font.BOLD));
-
+		labelDriverToIntegrate = Utils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 		jLabelRetrievalText.setVisible(false);
 
 		webDAVClient = new WebDAVClient();
@@ -252,18 +249,15 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		return result;
 	}
 
-	@SuppressWarnings("java:S138")
 	private void buildPanel() {
 		fieldByAuditPath = new JTextField();
 		fieldByAuditPath.setEditable(false);
 
 		labelClientName = new JLabel();
 
-		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
-		jLabelDepotServer.setFont(jLabelDepotServer.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDepotServer = Utils.createBoldLabel("PanelDriverUpload.DepotServer");
 
-		JLabel jLabelWinProduct = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
-		jLabelWinProduct.setFont(jLabelWinProduct.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelWinProduct = Utils.createBoldLabel("PanelDriverUpload.labelWinProduct");
 
 		JButton buttonCallSelectDriverFiles = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallSelectDriverFiles
@@ -290,8 +284,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			executor.execute();
 		});
 
-		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
-		labelTargetPath.setFont(labelTargetPath.getFont().deriveFont(Font.BOLD));
+		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
@@ -303,8 +296,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
-		JLabel labelDriverLocationType = new JLabel(Configed.getResourceValue("PanelDriverUpload.type"));
-		labelDriverLocationType.setFont(labelDriverLocationType.getFont().deriveFont(Font.BOLD));
+		JLabel labelDriverLocationType = Utils.createBoldLabel("PanelDriverUpload.type");
 
 		JPanel panelButtonGroup = createPanelButtonGroup();
 

@@ -7,12 +7,12 @@
 package de.uib.configed.gui;
 
 import java.awt.CardLayout;
-import java.awt.Font;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
 public abstract class AbstractConfigurationTab extends JPanel {
@@ -46,8 +46,7 @@ public abstract class AbstractConfigurationTab extends JPanel {
 	}
 
 	private JPanel generateInfoPanel() {
-		JLabel labelPrimary = new JLabel(Configed.getResourceValue(getLabel(true)));
-		labelPrimary.setFont(labelPrimary.getFont().deriveFont(Font.BOLD));
+		JLabel labelPrimary = Utils.createBoldLabel(getLabel(true));
 		JLabel labelSecondary = new JLabel(Configed.getResourceValue(getLabel(false)));
 
 		JPanel innerPanel = new JPanel(new MigLayout("wrap 1, aligny center, alignx center", "[center]", "[]10[]"));

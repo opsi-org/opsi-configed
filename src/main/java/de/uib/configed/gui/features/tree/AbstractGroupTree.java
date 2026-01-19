@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.tree;
 
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -46,6 +45,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.Object2GroupEntry;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -336,8 +336,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+		JLabel labelDescription = Utils.createBoldLabel("description");
 
 		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), labelDescription,
 				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
@@ -405,13 +404,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (node.getAllowsChildren()) {
-			JLabel labelGroupName = new JLabel(Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-			labelGroupName.setFont(labelGroupName.getFont().deriveFont(Font.BOLD));
+			JLabel labelGroupName = Utils.createBoldLabel("ClientTree.editNode.label.groupname");
 
 			JTextField groupNameField = new JTextField();
 
-			JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-			labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+			JLabel labelDescription = Utils.createBoldLabel("description");
 
 			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";

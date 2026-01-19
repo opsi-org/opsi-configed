@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.productaction;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -28,6 +27,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.NameProducer;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
@@ -242,29 +242,14 @@ public class CompleteWinProductsDialog implements NameProducer {
 		new WinProductUploadWorker(ctx).execute();
 	}
 
-	@SuppressWarnings("java:S138")
 	private JPanel initLayout() {
-		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
-		topicLabel.setFont(topicLabel.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));
-		labelServer.setFont(labelServer.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelWinProduct = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelWinProduct"));
-		labelWinProduct.setFont(labelWinProduct.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelFolderWinPE = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelFolderWinPE"));
-		labelFolderWinPE.setFont(labelFolderWinPE.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelFolderInstallFiles = new JLabel(
-				Configed.getResourceValue("CompleteWinProducts.labelFolderInstallFiles"));
-		labelFolderInstallFiles.setFont(labelFolderInstallFiles.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
-		labelTargetPath.setFont(labelTargetPath.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelProductKey = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelProductKey"));
-		labelProductKey.setFont(labelProductKey.getFont().deriveFont(Font.BOLD));
+		JLabel topicLabel = Utils.createBoldLabel("CompleteWinProducts.topic");
+		JLabel labelServer = Utils.createBoldLabel("CompleteWinProducts.labelServer");
+		JLabel labelWinProduct = Utils.createBoldLabel("CompleteWinProducts.labelWinProduct");
+		JLabel labelFolderWinPE = Utils.createBoldLabel("CompleteWinProducts.labelFolderWinPE");
+		JLabel labelFolderInstallFiles = Utils.createBoldLabel("CompleteWinProducts.labelFolderInstallFiles");
+		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
+		JLabel labelProductKey = Utils.createBoldLabel("CompleteWinProducts.labelProductKey");
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));

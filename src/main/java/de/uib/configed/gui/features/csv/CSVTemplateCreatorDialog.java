@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.csv;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -114,8 +113,7 @@ public class CSVTemplateCreatorDialog {
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
 
-		JLabel delimeterLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		delimeterLabel.setFont(delimeterLabel.getFont().deriveFont(Font.BOLD));
+		JLabel delimiterLabel = Utils.createBoldLabel("CSVImportDataDialog.stringSeparatorLabel");
 
 		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
@@ -150,13 +148,8 @@ public class CSVTemplateCreatorDialog {
 
 		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
-		JLabel dataSelectionLabel = new JLabel(
-				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
-		dataSelectionLabel.setFont(dataSelectionLabel.getFont().deriveFont(Font.BOLD));
-		JLabel fieldSeparatorLabel = new JLabel(
-				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
-		fieldSeparatorLabel.setFont(fieldSeparatorLabel.getFont().deriveFont(Font.BOLD));
-
+		JLabel dataSelectionLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
+		JLabel fieldSeparatorLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.fieldSeparatorLabel");
 		includeFormatHintOption = new JCheckBox(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
 
@@ -175,7 +168,7 @@ public class CSVTemplateCreatorDialog {
 
 		centerPanel.add(includeFormatHintOption, "gaptop " + Globals.GAP_SIZE);
 
-		centerPanel.add(delimeterLabel, "gaptop " + Globals.GAP_SIZE);
+		centerPanel.add(delimiterLabel, "gaptop " + Globals.GAP_SIZE);
 
 		centerPanel.add(tabsOption);
 		centerPanel.add(commaOption);

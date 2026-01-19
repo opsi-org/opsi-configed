@@ -99,25 +99,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextFieldClientID = createUneditableTextField();
 		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
-		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
-		labelClientDescription.setFont(labelClientDescription.getFont().deriveFont(Font.BOLD));
+		labelClientDescription = Utils.createBoldLabel("description");
 
-		labelClientInventoryNumber = new JLabel(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
-		labelClientInventoryNumber.setFont(labelClientInventoryNumber.getFont().deriveFont(Font.BOLD));
+		labelClientInventoryNumber = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber");
 
-		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
-		labelClientNotes.setFont(labelClientNotes.getFont().deriveFont(Font.BOLD));
+		labelClientNotes = Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes");
 
-		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
-		labelClientSystemUUID.setFont(labelClientSystemUUID.getFont().deriveFont(Font.BOLD));
+		labelClientSystemUUID = Utils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID");
 
-		labelClientMacAddress = new JLabel(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-		labelClientMacAddress.setFont(labelClientMacAddress.getFont().deriveFont(Font.BOLD));
+		labelClientMacAddress = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress");
 
-		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
-		labelClientIPAddress.setFont(labelClientIPAddress.getFont().deriveFont(Font.BOLD));
+		labelClientIPAddress = Utils.createBoldLabel("ipAddress");
 
 		jTextFieldClientOS = createUneditableTextField();
 		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
@@ -136,11 +128,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
 
-		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
-		labelOneTimePassword.setFont(labelOneTimePassword.getFont().deriveFont(Font.BOLD));
+		labelOneTimePassword = Utils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword");
 
-		labelOpsiHostKey = new JLabel("opsi-host-key");
-		labelOpsiHostKey.setFont(labelOpsiHostKey.getFont().deriveFont(Font.BOLD));
+		labelOpsiHostKey = Utils.createBoldLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);

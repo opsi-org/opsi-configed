@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -18,9 +16,9 @@ import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
-import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent;
+import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
 public class DeployClientAgentAuthPanel extends JPanel {
@@ -38,8 +36,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void init() {
-		labelUser = new JLabel(Configed.getResourceValue("username"));
-		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+		labelUser = Utils.createBoldLabel("username");
 
 		textFieldUser = new FlatTextField();
 		textFieldUser.getDocument().addDocumentListener(new DocumentListener() {
@@ -59,8 +56,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		labelPassword = new JLabel(Configed.getResourceValue("password"));
-		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		labelPassword = Utils.createBoldLabel("password");
 		passwordField = new FlatPasswordField();
 
 		passwordField.getDocument().addDocumentListener(new DocumentListener() {

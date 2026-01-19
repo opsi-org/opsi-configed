@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,14 +149,10 @@ public final class EditTerminalCommandsDialog {
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.addActionListener(actionEvent -> deleteCommand());
 
-		JLabel labelMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.menuText"));
-		labelMenuText.setFont(labelMenuText.getFont().deriveFont(Font.BOLD));
-		JLabel labelParentMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.parentMenuText"));
-		labelParentMenuText.setFont(labelParentMenuText.getFont().deriveFont(Font.BOLD));
-		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("description"));
-		labelTooltipText.setFont(labelTooltipText.getFont().deriveFont(Font.BOLD));
-		JLabel labelPriority = new JLabel(Configed.getResourceValue("CommandControlDialog.priority"));
-		labelPriority.setFont(labelPriority.getFont().deriveFont(Font.BOLD));
+		JLabel labelMenuText = Utils.createBoldLabel("CommandControlDialog.menuText");
+		JLabel labelParentMenuText = Utils.createBoldLabel("CommandControlDialog.parentMenuText");
+		JLabel labelTooltipText = Utils.createBoldLabel("description");
+		JLabel labelPriority = Utils.createBoldLabel("CommandControlDialog.priority");
 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
@@ -177,8 +172,7 @@ public final class EditTerminalCommandsDialog {
 	private JPanel initCommandsPanel() {
 		parameterPanel = new CommandControlParameterMethodsPanel(this, configedMain);
 
-		JLabel labelCommands = new JLabel(Configed.getResourceValue("CommandControlDialog.commands"));
-		labelCommands.setFont(labelCommands.getFont().deriveFont(Font.BOLD));
+		JLabel labelCommands = Utils.createBoldLabel("CommandControlDialog.commands");
 		labelCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 
 		JButton buttonTestCommand = new JButton(Icons.getIntellijIcon("run"));

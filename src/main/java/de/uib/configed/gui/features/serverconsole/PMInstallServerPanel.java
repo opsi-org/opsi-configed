@@ -17,7 +17,7 @@ import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
 public class PMInstallServerPanel extends PMInstallPanel {
-	private JLabel jLabelServerDir = new JLabel();
+	private JLabel jLabelServerDir;
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
 	private CompletionComboButton autocompletion;
@@ -43,8 +43,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelServerDir.setText(Configed.getResourceValue("PMInstallServerPanel.jLabelOtherPath"));
-		jLabelServerDir.setFont(jLabelServerDir.getFont().deriveFont(java.awt.Font.BOLD));
+		jLabelServerDir = Utils.createBoldLabel("PMInstallServerPanel.jLabelOtherPath");
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.setToolTipText(

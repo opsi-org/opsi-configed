@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -34,10 +33,10 @@ import net.miginfocom.swing.MigLayout;
 public class CurlParameterDialog {
 	private JPanel inputPanel = new JPanel();
 
-	private JLabel jLabelURL = new JLabel();
-	private JLabel jLabelDir = new JLabel();
-	private JLabel jLabelLoglevel = new JLabel();
-	private JLabel jLabelFreeInput = new JLabel();
+	private JLabel jLabelURL;
+	private JLabel jLabelDir;
+	private JLabel jLabelLoglevel;
+	private JLabel jLabelFreeInput;
 
 	private JButton jButtonSearchDir;
 
@@ -98,19 +97,16 @@ public class CurlParameterDialog {
 	}
 
 	private void init() {
-		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
-		jLabelURL.setFont(jLabelURL.getFont().deriveFont(Font.BOLD));
+		jLabelURL = Utils.createBoldLabel("CurlParameterDialog.jLabelUrl");
 
 		jTextFieldURL = new JTextField();
 
-		jLabelDir.setText(Configed.getResourceValue("CurlParameterDialog.jLabelDirectory"));
-		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
+		jLabelDir = Utils.createBoldLabel("CurlParameterDialog.jLabelDirectory");
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelLoglevel = Utils.createBoldLabel("loglevel");
 
 		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -121,8 +117,7 @@ public class CurlParameterDialog {
 		jComboBoxLoglevel
 				.addItemListener(itemEvent -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
 
-		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
-		jLabelFreeInput.setFont(jLabelFreeInput.getFont().deriveFont(Font.BOLD));
+		jLabelFreeInput = Utils.createBoldLabel("CurlParameterDialog.jLabelFreeInput");
 
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));

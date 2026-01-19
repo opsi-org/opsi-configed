@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -206,8 +205,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private JPanel createPanel(Consumer<AddClientMsg> dispatch) {
-		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
-		jLabelHostname.setFont(jLabelHostname.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelHostname = Utils.createBoldLabel("NewClientDialog.hostname");
 
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -217,37 +215,32 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextHostname.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeHostname(jTextHostname.getText()))));
 
-		JLabel jLabelDomainname = new JLabel(Configed.getResourceValue("NewClientDialog.domain"));
-		jLabelDomainname.setFont(jLabelDomainname.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDomainname = Utils.createBoldLabel("NewClientDialog.domain");
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
 		jComboDomain.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDomain((String) jComboDomain.getSelectedItem())));
 
-		JLabel jLabelDescription = new JLabel(Configed.getResourceValue("description"));
-		jLabelDescription.setFont(jLabelDescription.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDescription = Utils.createBoldLabel("description");
 
 		JTextField jTextDescription = new JTextField();
 		jTextDescription.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeDescription(jTextDescription.getText()))));
 
-		JLabel jLabelInventoryNumber = new JLabel(Configed.getResourceValue("NewClientDialog.inventorynumber"));
-		jLabelInventoryNumber.setFont(jLabelInventoryNumber.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelInventoryNumber = Utils.createBoldLabel("NewClientDialog.inventorynumber");
 
 		JTextField jTextInventoryNumber = new JTextField();
 		jTextInventoryNumber.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeInventory(jTextInventoryNumber.getText()))));
 
-		JLabel jLabelDepot = new JLabel(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
-		jLabelDepot.setFont(jLabelDepot.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelDepot = Utils.createBoldLabel("NewClientDialog.belongsToDepot");
 
 		jComboDepots = new JComboBox<>();
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
-		labelGroupSelection.setFont(labelGroupSelection.getFont().deriveFont(Font.BOLD));
+		JLabel labelGroupSelection = Utils.createBoldLabel("NewClientDialog.primaryGroup");
 
 		jTextGroupSelection = new JTextField();
 		jTextGroupSelection.setEnabled(false);
@@ -258,8 +251,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 			}
 		});
 
-		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));
-		jLabelNotes.setFont(jLabelNotes.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelNotes = Utils.createBoldLabel("NewClientDialog.notes");
 
 		JTextArea jTextNotes = new JTextArea();
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
@@ -270,8 +262,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JScrollPane jTextNotesScrollPane = new JScrollPane(jTextNotes);
 		jTextNotesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
-		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
-		jLabelSystemUUID.setFont(jLabelSystemUUID.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelSystemUUID = Utils.createBoldLabel("NewClientDialog.SystemUUID");
 
 		JTextField systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
@@ -279,10 +270,9 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		systemUUIDField.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID(systemUUIDField.getText()))));
 
-		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
+		JLabel jLabelMacAddress = Utils.createBoldLabel("NewClientDialog.HardwareAddress");
 		jLabelMacAddress.setIcon(Icons.getIntellijIcon("info"));
 		jLabelMacAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoMac"));
-		jLabelMacAddress.setFont(jLabelMacAddress.getFont().deriveFont(Font.BOLD));
 
 		JTextField macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
@@ -290,10 +280,9 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		macAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeMAC(macAddressField.getText()))));
 
-		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		JLabel jLabelIpAddress = Utils.createBoldLabel("ipAddress");
 		jLabelIpAddress.setIcon(Icons.getIntellijIcon("info"));
 		jLabelIpAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
-		jLabelIpAddress.setFont(jLabelIpAddress.getFont().deriveFont(Font.BOLD));
 
 		JTextField ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
@@ -313,8 +302,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
-		jLabelNetboot.setFont(jLabelNetboot.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelNetboot = Utils.createBoldLabel("NewClientDialog.netbootProduct");
 		jComboNetboot = new JComboBox<>();
 		jComboNetboot.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));

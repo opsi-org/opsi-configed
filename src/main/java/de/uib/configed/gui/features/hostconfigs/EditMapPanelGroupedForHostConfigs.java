@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,6 +50,7 @@ import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -562,14 +562,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		JLabel userLabel = new JLabel(Configed.getResourceValue("FramingNewUser.textfieldLabel"));
-		userLabel.setFont(userLabel.getFont().deriveFont(Font.BOLD));
+		JLabel userLabel = Utils.createBoldLabel("FramingNewUser.textfieldLabel");
 
 		JTextField userField = new JTextField();
 
-		JLabel userRolesLabel = new JLabel(Configed.getResourceValue("FramingNewUser.listLabel"));
+		JLabel userRolesLabel = Utils.createBoldLabel("FramingNewUser.listLabel");
 		userRolesLabel.setToolTipText(Configed.getResourceValue("FramingNewUser.listLabel.ToolTip"));
-		userRolesLabel.setFont(userRolesLabel.getFont().deriveFont(Font.BOLD));
 
 		JList<String> userRolesList = new JList<>(theRoles.toArray(new String[0]));
 
@@ -612,8 +610,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		JLabel roleLabel = new JLabel(Configed.getResourceValue("FramingNewRole.textfieldLabel"));
-		roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
+		JLabel roleLabel = Utils.createBoldLabel("FramingNewRole.textfieldLabel");
 
 		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), roleLabel,
 				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);

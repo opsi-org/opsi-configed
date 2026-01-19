@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 
@@ -24,14 +23,15 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandParameterParser;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
 	private EditTerminalCommandsDialog editTerminalCommandsDialog;
 
-	private JLabel jLabelParamMethods = new JLabel();
-	private JLabel jLabelParamFormats = new JLabel();
+	private JLabel jLabelParamMethods;
+	private JLabel jLabelParamFormats;
 	private JComboBox<String> jComboBoxParameterMethods;
 	private JComboBox<String> jComboBoxParameterFormats;
 	private JButton jButtonAddParam;
@@ -52,11 +52,8 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	private void init() {
 		Logging.debug(this, "init setting up components ");
-		jLabelParamMethods.setText(Configed.getResourceValue("CommandControlDialog.parameterMethods"));
-		jLabelParamMethods.setFont(jLabelParamMethods.getFont().deriveFont(Font.BOLD));
-
-		jLabelParamFormats.setText(Configed.getResourceValue("CommandControlDialog.parameterFormats"));
-		jLabelParamFormats.setFont(jLabelParamFormats.getFont().deriveFont(Font.BOLD));
+		jLabelParamMethods = Utils.createBoldLabel("CommandControlDialog.parameterMethods");
+		jLabelParamFormats = Utils.createBoldLabel("CommandControlDialog.parameterFormats");
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
