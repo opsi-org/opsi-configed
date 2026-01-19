@@ -288,9 +288,7 @@ public class HostDataService extends DataService {
 		List<Map<String, Object>> opsiHosts = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_OBJECTS,
 				callAttributes, callFilter);
 
-		long start = System.nanoTime();
 		transformTimestampsToLocal(opsiHosts);
-		Logging.devel(this, System.nanoTime() - start, "ns for transforming timestamps to local");
 		timer.stop();
 		return opsiHosts;
 	}
@@ -299,24 +297,15 @@ public class HostDataService extends DataService {
 		TimeCheck timer = new TimeCheck(this, "getOpsiClients").start();
 		Logging.notice(this, "host_getClients");
 		List<Map<String, Object>> opsiClients = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_CLIENTS);
-		long start = System.nanoTime();
 		transformTimestampsToLocal(opsiClients);
-		Logging.devel(this, System.nanoTime() - start, "ns for transforming timestamps to local");
 		timer.stop();
 		return opsiClients;
 	}
 
 	private static void transformTimestampsToLocal(List<Map<String, Object>> hostList) {
 		for (Map<String, Object> host : hostList) {
-			transformTimeStampForHost(host, HostInfo.LAST_SEEN_KEY);
-			transformTimeStampForHost(host, HostInfo.CREATED_KEY);
-		}
-	}
-
-	private static void transformTimeStampForHost(Map<String, Object> host, String key) {
-		Object timestamp = host.get(key);
-		if (timestamp instanceof String timestampString && !timestampString.isEmpty()) {
-			host.put(key, Utils.formatDateTimeStringToLocal(timestampString));
+			Utils.formatDateTimeStringForMap(host, HostInfo.LAST_SEEN_KEY);
+			Utils.formatDateTimeStringForMap(host, HostInfo.CREATED_KEY);
 		}
 	}
 

@@ -840,22 +840,22 @@ public class ProductDataService extends DataService {
 		return new ArrayList<>(resultSet);
 	}
 
-	public List<Map<String, String>> getProductInfos(String clientId, List<String> attributes) {
-		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, attributes));
+	public List<Map<String, String>> getProductInfos(String clientId, List<String> callAttributes) {
+		return new ArrayList<>(getProductInfos(new HashSet<>(), clientId, callAttributes));
 	}
 
-	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId, List<String> attributes) {
+	public List<Map<String, String>> getProductInfos(Set<String> productIds, String clientId,
+			List<String> callAttributes) {
 		Map<String, Object> callFilter = new HashMap<>();
 		if (!productIds.isEmpty()) {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
 		callFilter.put("clientId", clientId);
-		RPCMethodName methodName = !attributes.isEmpty() ? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
-				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 
 		List<Map<String, String>> result = new ArrayList<>();
 
-		for (Map<String, Object> m : dataServices.exec.getListOfMaps(methodName, attributes, callFilter)) {
+		for (Map<String, Object> m : getProductOnClientsWithAdjustedTime(callAttributes, callFilter,
+				!callAttributes.isEmpty())) {
 			result.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 
@@ -863,7 +863,7 @@ public class ProductDataService extends DataService {
 	}
 
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(List<String> clientIds,
-			List<String> attributes, String productServerString) {
+			List<String> callAttributes, String productServerString) {
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : ", clientIds);
 
 		if (clientIds == null || clientIds.isEmpty()) {
@@ -875,10 +875,8 @@ public class ProductDataService extends DataService {
 		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", productServerString);
 
-		RPCMethodName methodName = !attributes.isEmpty() ? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
-				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
-		List<Map<String, Object>> productOnClients = dataServices.exec.getListOfMaps(methodName, attributes,
-				callFilter);
+		List<Map<String, Object>> productOnClients = getProductOnClientsWithAdjustedTime(callAttributes, callFilter,
+				!callAttributes.isEmpty());
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -904,8 +902,8 @@ public class ProductDataService extends DataService {
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", clientIds);
-		List<Map<String, Object>> productOnClients = dataServices.exec
-				.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, callAttributes, callFilter);
+		List<Map<String, Object>> productOnClients = getProductOnClientsWithAdjustedTime(callAttributes, callFilter,
+				false);
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
@@ -915,6 +913,20 @@ public class ProductDataService extends DataService {
 					.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 		return result;
+	}
+
+	private List<Map<String, Object>> getProductOnClientsWithAdjustedTime(Object callAttributes,
+			Map<String, Object> callFilter, boolean withSequence) {
+		RPCMethodName methodName = withSequence ? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
+				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
+
+		List<Map<String, Object>> productOnClients = dataServices.exec.getListOfMaps(methodName, callAttributes,
+				callFilter);
+
+		productOnClients.stream().forEach(productOnClient -> Utils.formatDateTimeStringForMap(productOnClient,
+				ProductState.KEY_LAST_STATE_CHANGE));
+
+		return productOnClients;
 	}
 
 	public List<Map<String, Object>> getAllProducts() {

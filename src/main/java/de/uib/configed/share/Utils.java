@@ -652,4 +652,10 @@ public final class Utils {
 			return dateTimeString;
 		}
 	}
+
+	public static void formatDateTimeStringForMap(Map<String, Object> map, String key) {
+		if (map.get(key) instanceof String timestampString && !timestampString.isEmpty()) {
+			map.put(key, formatDateTimeStringToLocal(timestampString));
+		}
+	}
 }
