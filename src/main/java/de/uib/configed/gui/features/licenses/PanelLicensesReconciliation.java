@@ -20,6 +20,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ControlPanelLicensesReconciliation;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import net.miginfocom.swing.MigLayout;
@@ -34,7 +35,8 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 
 	private void initComponents() {
 		panelReconciliation = new PanelGenEdit(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0, null, true);
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0,
+				new int[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF }, true);
 		panelReconciliation.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelReconciliation.setFilterKey(FilterKey.LICENSE_RECONCILIATION_TABLE);
 
