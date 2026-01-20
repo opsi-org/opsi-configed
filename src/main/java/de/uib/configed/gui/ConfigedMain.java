@@ -1028,7 +1028,7 @@ public class ConfigedMain {
 
 		productTree.reInitTree();
 		clientTree.reInitTree();
-		clientTree.valueChanged();
+		treeClientsSelectAction(clientTree.getSelectionPaths());
 		fetchDepots();
 
 		// if depot selection changed, we adapt the clients
