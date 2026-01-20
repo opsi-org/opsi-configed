@@ -102,7 +102,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	// interface TreeSelectionListener
 	@Override
-	public void valueChanged() {
+	public void reactOnTreeSelection() {
 		if (ConfigedMain.getMainFrame() != null) {
 			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
 					.getTabComponentAt(1);
