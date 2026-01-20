@@ -1006,7 +1006,6 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		String selectedGroup = getSelectedGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
@@ -1029,17 +1028,16 @@ public class ConfigedMain {
 
 		productTree.reInitTree();
 		clientTree.reInitTree();
+		clientTree.valueChanged();
 		fetchDepots();
 
 		// if depot selection changed, we adapt the clients
 		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(selValuesList);
-		selectedClients = clientsLeft;
 
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 		Logging.debug(this, " reset the values, particularly in list ");
 
-		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.activateListSelectionListener();
 		clientTablePanel.restoreFilter();
 		clientTablePanel.setSelectedValues(clientsLeft);
