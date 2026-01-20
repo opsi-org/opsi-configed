@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
@@ -254,8 +255,8 @@ public class ConfigedMain {
 	}
 
 	public void toggleColumn(String column) {
-		boolean visible = persistenceController.getDataServices().host.getHostDisplayFields().get(column);
-		persistenceController.getDataServices().host.getHostDisplayFields().put(column, !visible);
+		Map<String, Boolean> fields = persistenceController.getDataServices().host.getHostDisplayFields();
+		fields.put(column, !fields.get(column));
 		setRebuiltClientListTableModel(true, false);
 
 		// We need to make first selected visible again after resetting sortKeys
@@ -523,10 +524,7 @@ public class ConfigedMain {
 				persistenceController.getDataServices().host.getHostDisplayFields());
 
 		for (String clientId : clientIds) {
-			HostInfo pcinfo = pcinfos.get(clientId);
-			if (pcinfo == null) {
-				pcinfo = new HostInfo();
-			}
+			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
@@ -726,17 +724,11 @@ public class ConfigedMain {
 	}
 
 	public Set<String> getDepotsOfSelectedClients() {
-		Set<String> depotsOfSelectedClients = new TreeSet<>();
+		Map<String, String> mapPcBelongsToDepot = persistenceController.getDataServices().hostInfoCollections
+				.getMapPcBelongsToDepot();
 
-		for (String selectedClient : selectedClients) {
-			if (persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot()
-					.get(selectedClient) != null) {
-				depotsOfSelectedClients.add(persistenceController.getDataServices().hostInfoCollections
-						.getMapPcBelongsToDepot().get(selectedClient));
-			}
-		}
-
-		return depotsOfSelectedClients;
+		return selectedClients.stream().map(mapPcBelongsToDepot::get).filter(Objects::nonNull)
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 
 	private void treeClientsSelectAction(TreePath newSelectedPath) {
