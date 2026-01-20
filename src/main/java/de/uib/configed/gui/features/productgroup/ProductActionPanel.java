@@ -109,6 +109,7 @@ public class ProductActionPanel extends JPanel {
 		buttonSetValues.addActionListener(actionEvent -> handleCollectiveAction((String) jComboBox.getSelectedItem()));
 
 		JLabel labelStrip = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
+		labelStrip.setMinimumSize(new Dimension());
 
 		JToolBar toolBarActions = new JToolBar();
 		toolBarActions.add(buttonReloadProductStates);
@@ -134,6 +135,7 @@ public class ProductActionPanel extends JPanel {
 
 		JLabel labelVisibility = new JLabel(Configed.getResourceValue("GroupPanel.labelVisibility"));
 		labelVisibility.setToolTipText(Configed.getResourceValue("GroupPanel.labelVisibility.tooltip"));
+		labelVisibility.setMinimumSize(new Dimension());
 
 		comboVisibility = new JComboBox<>(
 				new String[] { Configed.getResourceValue("GroupPanel.comboVisibility.default"),
