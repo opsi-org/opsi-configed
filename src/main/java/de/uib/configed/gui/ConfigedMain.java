@@ -276,16 +276,6 @@ public class ConfigedMain {
 	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
 
-		boolean ok = checkNewEditingTarget(newEditingTarget) && mainFrame.showPanel(newEditingTarget);
-
-		if (ok) {
-			editingTarget = newEditingTarget;
-		}
-
-		return ok;
-	}
-
-	private static boolean checkNewEditingTarget(EditingTarget newEditingTarget) {
 		if (!ChangedDataManager.checkSaveAll(true)) {
 			Logging.info("stop changing editingTarget, unsaved data");
 			return false;
@@ -294,6 +284,10 @@ public class ConfigedMain {
 		if (newEditingTarget == editingTarget) {
 			Logging.info("stop setting editingTarget, it remains the same");
 			return false;
+		}
+
+		if (mainFrame.showPanel(newEditingTarget)) {
+			editingTarget = newEditingTarget;
 		}
 
 		return true;
@@ -578,11 +572,7 @@ public class ConfigedMain {
 
 	public void setClients(Collection<String> clientNames) {
 		Logging.info(this, "setClients ", clientNames);
-		if (clientNames == null) {
-			clientTablePanel.setSelectedValues(Collections.emptySet());
-		} else {
-			clientTablePanel.setSelectedValues(clientNames);
-		}
+		clientTablePanel.setSelectedValues(clientNames);
 	}
 
 	/**
