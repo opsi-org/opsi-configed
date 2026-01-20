@@ -658,10 +658,9 @@ public final class Utils {
 
 	public static String formatDateTimeStringToLocal(String dateTimeString) {
 		try {
-			LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
-			return formatDateTimeStringToLocal(dateTime);
+			return formatDateTimeStringToLocal(LocalDateTime.parse(dateTimeString, DATE_TIME_FORMATTER));
 		} catch (DateTimeParseException e) {
-			Logging.warning("Could not parse date time string: ", dateTimeString, e);
+			Logging.warning(e, "Could not parse date time string: ", dateTimeString);
 			return dateTimeString;
 		}
 	}
