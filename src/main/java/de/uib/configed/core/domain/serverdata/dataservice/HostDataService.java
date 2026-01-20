@@ -286,6 +286,8 @@ public class HostDataService extends DataService {
 		Logging.notice(this, "host_getObjects");
 		List<Map<String, Object>> opsiHosts = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_OBJECTS,
 				new String[0], callFilter);
+
+		transformTimestampsToLocal(opsiHosts);
 		timer.stop();
 		return opsiHosts;
 	}
@@ -294,8 +296,16 @@ public class HostDataService extends DataService {
 		TimeCheck timer = new TimeCheck(this, "getOpsiClients").start();
 		Logging.notice(this, "host_getClients");
 		List<Map<String, Object>> opsiClients = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_CLIENTS);
+		transformTimestampsToLocal(opsiClients);
 		timer.stop();
 		return opsiClients;
+	}
+
+	private static void transformTimestampsToLocal(List<Map<String, Object>> hostList) {
+		for (Map<String, Object> host : hostList) {
+			Utils.formatDateTimeStringForMap(host, HostInfo.LAST_SEEN_KEY);
+			Utils.formatDateTimeStringForMap(host, HostInfo.CREATED_KEY);
+		}
 	}
 
 	public List<String> getClientsWithOtherProductVersion(String productId, String productVersion,

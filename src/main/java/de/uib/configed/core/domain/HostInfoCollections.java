@@ -151,8 +151,8 @@ public class HostInfoCollections extends DataService {
 			Logging.info(this, "retrieveOpsiHosts clients in ", depot, ": ", depot2Host2HostInfos.get(depot).size());
 		}
 
-		TreeSet<String> depotNamesSorted = new TreeSet<>(masterDepots.keySet());
-		TreeSet<String> allDepotNamesSorted = new TreeSet<>(
+		Set<String> depotNamesSorted = new TreeSet<>(masterDepots.keySet());
+		Set<String> allDepotNamesSorted = new TreeSet<>(
 				dataServices.cacheManager.getCachedData(CacheIdentifier.ALL_DEPOTS, Map.class).keySet());
 
 		depotNamesSorted.remove(configServer);
