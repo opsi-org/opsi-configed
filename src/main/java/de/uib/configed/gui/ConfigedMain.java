@@ -774,12 +774,11 @@ public class ConfigedMain {
 			}
 		}
 
-		if (selTreePaths == null) {
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-		} else if (selTreePaths.length == 1) {
+		if (selTreePaths != null && selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
-			Logging.info(this, "treeClientsSelectAction selTreePaths: ", selTreePaths.length);
+			Logging.info(this, "treeClientsSelectAction selTreePaths length: ",
+					selTreePaths == null ? 0 : selTreePaths.length);
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 		}
 	}
