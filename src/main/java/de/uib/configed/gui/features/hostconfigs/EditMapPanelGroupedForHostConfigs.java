@@ -87,7 +87,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private Map<String, Object> originalMap;
 
 	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean isServerConfig) {
-		super(true);
+		super();
 
 		this.actor = actor;
 		this.isServerConfig = isServerConfig;
@@ -372,7 +372,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(reloadable, tree, isServerConfig,
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tree, isServerConfig,
 					includeAdditionalTooltipText);
 
 			editMapPanel.setActor(actor);

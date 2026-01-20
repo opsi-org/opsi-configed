@@ -7,10 +7,12 @@
 package de.uib.configed.core.domain.serverdata.reload;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.DepotPropertiesDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -22,7 +24,6 @@ import de.uib.configed.core.domain.serverdata.reload.handler.OpsiHostDataReloadH
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
-import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.StatisticsDataReloadHandler;
 
@@ -114,8 +115,12 @@ public enum ReloadEvent {
 	/**
 	 * Triggers {@link DepotProductPropertiesDataReloadHandler}.
 	 */
-	DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD("depot_product_properties_data_reload");
-	;
+	DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD("depot_product_properties_data_reload"),
+
+	/**
+	 * Triggers {@link DepotPropertiesDataReloadHandler}.
+	 */
+	DEPOT_PROPERTIES_DATA_RELOAD("depot_properties_data_reload");
 
 	private String displayName;
 

@@ -113,7 +113,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		leftPane.add(groupPanel, "growx");
 		leftPane.add(paneProducts, "grow, push, hmin 100");
 
-		propertiesPanel = new EditMapPanelX(false, true, false);
+		propertiesPanel = new EditMapPanelX(false, true);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 

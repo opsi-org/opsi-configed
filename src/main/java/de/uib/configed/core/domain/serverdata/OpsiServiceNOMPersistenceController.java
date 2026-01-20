@@ -19,6 +19,7 @@ import de.uib.configed.core.domain.serverdata.reload.handler.ConfigOptionsDataRe
 import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.DepotPropertiesDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -210,6 +211,9 @@ public class OpsiServiceNOMPersistenceController {
 
 		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString(),
 				new DepotProductPropertiesDataReloadHandler(dataServices));
+
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString(),
+				new DepotPropertiesDataReloadHandler(dataServices));
 
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler(dataServices);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);

@@ -66,7 +66,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
-		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false, false);
+		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.updateData(null, null);
