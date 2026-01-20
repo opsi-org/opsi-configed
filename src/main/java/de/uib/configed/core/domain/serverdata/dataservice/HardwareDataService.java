@@ -7,7 +7,6 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.share.Utils;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -101,8 +101,7 @@ public class HardwareDataService extends DataService {
 		List<Map<String, Object>> hardwareInfos = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, callAttributes, callFilter);
 
-		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
+		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", Utils.DATE_TIME_FORMATTER);
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
 			hardwareInfo.values().removeIf(Objects::isNull);
@@ -118,7 +117,7 @@ public class HardwareDataService extends DataService {
 
 		List<Map<String, Object>> scanProperties = new ArrayList<>();
 		Map<String, Object> scanProperty = new HashMap<>();
-		scanProperty.put(PanelHWInfo.SCANTIME, scanTime.format(timeFormatter));
+		scanProperty.put(PanelHWInfo.SCANTIME, Utils.formatDateTimeStringToLocal(scanTime));
 		scanProperties.add(scanProperty);
 		result.put(PanelHWInfo.SCANPROPERTYNAME, scanProperties);
 		return result.size() > 1 ? result : new HashMap<>();
@@ -127,8 +126,7 @@ public class HardwareDataService extends DataService {
 	private static LocalDateTime getScanTime(Object currentScanTime, LocalDateTime previousScanTime) {
 		LocalDateTime lastSeen = previousScanTime;
 		if (currentScanTime != null) {
-			lastSeen = LocalDateTime.parse(currentScanTime.toString(),
-					DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			lastSeen = LocalDateTime.parse(currentScanTime.toString(), Utils.DATE_TIME_FORMATTER);
 		}
 		if (previousScanTime.compareTo(lastSeen) < 0) {
 			previousScanTime = lastSeen;

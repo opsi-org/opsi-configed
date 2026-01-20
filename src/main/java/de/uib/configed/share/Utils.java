@@ -88,7 +88,7 @@ public final class Utils {
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
 
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	private Utils() {
 	}
@@ -651,10 +651,15 @@ public final class Utils {
 		}
 	}
 
+	public static String formatDateTimeStringToLocal(LocalDateTime dateTime) {
+		return dateTime.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
+				.format(DATE_TIME_FORMATTER);
+	}
+
 	public static String formatDateTimeStringToLocal(String dateTimeString) {
 		try {
-			return LocalDateTime.parse(dateTimeString, DATE_TIME_FORMATTER).atZone(ZoneOffset.UTC)
-					.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime().format(DATE_TIME_FORMATTER);
+			LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
+			return formatDateTimeStringToLocal(dateTime);
 		} catch (DateTimeParseException e) {
 			Logging.warning("Could not parse date time string: ", dateTimeString, e);
 			return dateTimeString;
