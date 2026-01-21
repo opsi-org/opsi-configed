@@ -70,7 +70,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 			return;
 		}
 
-		String nameVal = (String) genEditTable.getValueAt(modelrow,
+		String nameVal = (String) genEditTable.getValueAt(genEditTable.convertRowIndexToView(modelrow),
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
 		Logging.info(this, " got name ", nameVal);
