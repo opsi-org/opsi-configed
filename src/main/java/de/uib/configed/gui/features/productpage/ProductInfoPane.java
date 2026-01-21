@@ -68,6 +68,7 @@ public class ProductInfoPane extends JSplitPane {
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesTextLabel = new JLabel(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
+		dependenciesTextLabel.setMinimumSize(new Dimension());
 		depotForDependenciesLabel = new JLabel();
 		panelProductDependencies = new PanelProductDependencies(depotForDependenciesLabel);
 

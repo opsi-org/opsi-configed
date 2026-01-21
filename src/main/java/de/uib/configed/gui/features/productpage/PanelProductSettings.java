@@ -123,6 +123,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
+		contentPane.setResizeWeight(1.0);
 		setComponent(contentPane);
 
 		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(),

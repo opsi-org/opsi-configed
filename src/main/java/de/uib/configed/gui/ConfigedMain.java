@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
@@ -254,8 +255,8 @@ public class ConfigedMain {
 	}
 
 	public void toggleColumn(String column) {
-		boolean visible = persistenceController.getDataServices().host.getHostDisplayFields().get(column);
-		persistenceController.getDataServices().host.getHostDisplayFields().put(column, !visible);
+		Map<String, Boolean> fields = persistenceController.getDataServices().host.getHostDisplayFields();
+		fields.put(column, !fields.get(column));
 		setRebuiltClientListTableModel(true, false);
 
 		// We need to make first selected visible again after resetting sortKeys
@@ -276,16 +277,6 @@ public class ConfigedMain {
 	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
 
-		boolean ok = checkNewEditingTarget(newEditingTarget) && mainFrame.showPanel(newEditingTarget);
-
-		if (ok) {
-			editingTarget = newEditingTarget;
-		}
-
-		return ok;
-	}
-
-	private static boolean checkNewEditingTarget(EditingTarget newEditingTarget) {
 		if (!ChangedDataManager.checkSaveAll(true)) {
 			Logging.info("stop changing editingTarget, unsaved data");
 			return false;
@@ -294,6 +285,10 @@ public class ConfigedMain {
 		if (newEditingTarget == editingTarget) {
 			Logging.info("stop setting editingTarget, it remains the same");
 			return false;
+		}
+
+		if (mainFrame.showPanel(newEditingTarget)) {
+			editingTarget = newEditingTarget;
 		}
 
 		return true;
@@ -529,10 +524,7 @@ public class ConfigedMain {
 				persistenceController.getDataServices().host.getHostDisplayFields());
 
 		for (String clientId : clientIds) {
-			HostInfo pcinfo = pcinfos.get(clientId);
-			if (pcinfo == null) {
-				pcinfo = new HostInfo();
-			}
+			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
@@ -578,11 +570,7 @@ public class ConfigedMain {
 
 	public void setClients(Collection<String> clientNames) {
 		Logging.info(this, "setClients ", clientNames);
-		if (clientNames == null) {
-			clientTablePanel.setSelectedValues(Collections.emptySet());
-		} else {
-			clientTablePanel.setSelectedValues(clientNames);
-		}
+		clientTablePanel.setSelectedValues(clientNames);
 	}
 
 	/**
@@ -736,17 +724,11 @@ public class ConfigedMain {
 	}
 
 	public Set<String> getDepotsOfSelectedClients() {
-		Set<String> depotsOfSelectedClients = new TreeSet<>();
+		Map<String, String> mapPcBelongsToDepot = persistenceController.getDataServices().hostInfoCollections
+				.getMapPcBelongsToDepot();
 
-		for (String selectedClient : selectedClients) {
-			if (persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot()
-					.get(selectedClient) != null) {
-				depotsOfSelectedClients.add(persistenceController.getDataServices().hostInfoCollections
-						.getMapPcBelongsToDepot().get(selectedClient));
-			}
-		}
-
-		return depotsOfSelectedClients;
+		return selectedClients.stream().map(mapPcBelongsToDepot::get).filter(Objects::nonNull)
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 
 	private void treeClientsSelectAction(TreePath newSelectedPath) {
@@ -774,12 +756,11 @@ public class ConfigedMain {
 			}
 		}
 
-		if (selTreePaths == null) {
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-		} else if (selTreePaths.length == 1) {
+		if (selTreePaths != null && selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
-			Logging.info(this, "treeClientsSelectAction selTreePaths: ", selTreePaths.length);
+			Logging.info(this, "treeClientsSelectAction selTreePaths length: ",
+					selTreePaths == null ? 0 : selTreePaths.length);
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 		}
 	}
@@ -1006,7 +987,6 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		String selectedGroup = getSelectedGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
@@ -1029,17 +1009,16 @@ public class ConfigedMain {
 
 		productTree.reInitTree();
 		clientTree.reInitTree();
+		treeClientsSelectAction(clientTree.getSelectionPaths());
 		fetchDepots();
 
 		// if depot selection changed, we adapt the clients
 		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(selValuesList);
-		selectedClients = clientsLeft;
 
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 		Logging.debug(this, " reset the values, particularly in list ");
 
-		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.activateListSelectionListener();
 		clientTablePanel.restoreFilter();
 		clientTablePanel.setSelectedValues(clientsLeft);

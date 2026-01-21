@@ -97,7 +97,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	public void valueChanged(TreeSelectionEvent e) {
 		Logging.debug(this, "valueChanged ", e);
 		if (ChangedDataManager.checkSaveAll(true)) {
-			valueChanged();
+			reactOnTreeSelection();
 			lastSelectionPaths = getSelectionPaths();
 		} else {
 			removeTreeSelectionListener(this);
@@ -106,7 +106,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 	}
 
-	abstract void valueChanged();
+	abstract void reactOnTreeSelection();
 
 	@Override
 	public DefaultTreeModel getModel() {

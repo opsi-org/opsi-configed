@@ -191,7 +191,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	public void valueChanged() {
+	public void reactOnTreeSelection() {
 		if (ConfigedMain.getMainFrame() != null) {
 			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
 					.getTabComponentAt(2);

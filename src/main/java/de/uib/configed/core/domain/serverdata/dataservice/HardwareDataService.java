@@ -6,8 +6,6 @@
 
 package de.uib.configed.core.domain.serverdata.dataservice;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +17,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.share.Utils;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -101,12 +100,12 @@ public class HardwareDataService extends DataService {
 		List<Map<String, Object>> hardwareInfos = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, callAttributes, callFilter);
 
-		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
+		// Every "lastseen" is the same for a client, so we take the first one
+		String scanTime = hardwareInfos.isEmpty() ? ""
+				: Utils.formatDateTimeStringToLocal((String) hardwareInfos.get(0).get("lastseen"));
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
 			hardwareInfo.values().removeIf(Objects::isNull);
-			scanTime = getScanTime(hardwareInfo.get("lastseen"), scanTime);
 			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
 			hardwareInfo.keySet()
 					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
@@ -116,23 +115,8 @@ public class HardwareDataService extends DataService {
 			hardwareClassInfos.add(hardwareInfo);
 		}
 
-		List<Map<String, Object>> scanProperties = new ArrayList<>();
-		Map<String, Object> scanProperty = new HashMap<>();
-		scanProperty.put(PanelHWInfo.SCANTIME, scanTime.format(timeFormatter));
-		scanProperties.add(scanProperty);
-		result.put(PanelHWInfo.SCANPROPERTYNAME, scanProperties);
+		// Add the scan time info "lastseen"
+		result.put(PanelHWInfo.SCANPROPERTYNAME, List.of(Map.of(PanelHWInfo.SCANTIME, scanTime)));
 		return result.size() > 1 ? result : new HashMap<>();
-	}
-
-	private static LocalDateTime getScanTime(Object currentScanTime, LocalDateTime previousScanTime) {
-		LocalDateTime lastSeen = previousScanTime;
-		if (currentScanTime != null) {
-			lastSeen = LocalDateTime.parse(currentScanTime.toString(),
-					DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		}
-		if (previousScanTime.compareTo(lastSeen) < 0) {
-			previousScanTime = lastSeen;
-		}
-		return previousScanTime;
 	}
 }

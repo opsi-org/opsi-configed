@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.features.productpage;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,6 +32,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
+		jLabelProductProperties.setMinimumSize(new Dimension());
 
 		buttonSetValuesFromServerDefaults = new JButton(Icons.getIntellijIcon("locked"));
 		buttonSetValuesFromServerDefaults
