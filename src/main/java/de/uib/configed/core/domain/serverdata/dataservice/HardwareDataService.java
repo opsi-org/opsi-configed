@@ -6,7 +6,6 @@
 
 package de.uib.configed.core.domain.serverdata.dataservice;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,11 +100,12 @@ public class HardwareDataService extends DataService {
 		List<Map<String, Object>> hardwareInfos = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, callAttributes, callFilter);
 
-		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", Utils.DATE_TIME_FORMATTER);
+		// Every "lastseen" is the same for a client, so we take the first one
+		String scanTime = hardwareInfos.isEmpty() ? ""
+				: Utils.formatDateTimeStringToLocal((String) hardwareInfos.get(0).get("lastseen"));
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
 			hardwareInfo.values().removeIf(Objects::isNull);
-			scanTime = getScanTime(hardwareInfo.get("lastseen"), scanTime);
 			String hardwareClass = (String) hardwareInfo.get("hardwareClass");
 			hardwareInfo.keySet()
 					.removeAll(Set.of("firstseen", "lastseen", "state", "hostId", "hardwareClass", "ident"));
@@ -115,22 +115,8 @@ public class HardwareDataService extends DataService {
 			hardwareClassInfos.add(hardwareInfo);
 		}
 
-		List<Map<String, Object>> scanProperties = new ArrayList<>();
-		Map<String, Object> scanProperty = new HashMap<>();
-		scanProperty.put(PanelHWInfo.SCANTIME, Utils.formatDateTimeStringToLocal(scanTime));
-		scanProperties.add(scanProperty);
-		result.put(PanelHWInfo.SCANPROPERTYNAME, scanProperties);
+		// Add the scan time info "lastseen"
+		result.put(PanelHWInfo.SCANPROPERTYNAME, List.of(Map.of(PanelHWInfo.SCANTIME, scanTime)));
 		return result.size() > 1 ? result : new HashMap<>();
-	}
-
-	private static LocalDateTime getScanTime(Object currentScanTime, LocalDateTime previousScanTime) {
-		LocalDateTime lastSeen = previousScanTime;
-		if (currentScanTime != null) {
-			lastSeen = LocalDateTime.parse(currentScanTime.toString(), Utils.DATE_TIME_FORMATTER);
-		}
-		if (previousScanTime.compareTo(lastSeen) < 0) {
-			previousScanTime = lastSeen;
-		}
-		return previousScanTime;
 	}
 }
