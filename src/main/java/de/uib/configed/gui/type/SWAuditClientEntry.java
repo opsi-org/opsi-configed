@@ -21,16 +21,16 @@ public class SWAuditClientEntry {
 			SWAuditEntry.IS_OPERATING_SYSTEM);
 
 	private String swIdent;
-	private String lastModificationS;
 
 	private final Map<String, String> data;
+	private final Map<String, Object> originalMap;
 
-	public SWAuditClientEntry(final Map<String, Object> m) {
+	public SWAuditClientEntry(final Map<String, Object> originalMap) {
+		this.originalMap = originalMap;
 		data = new HashMap<>();
-		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
-		swIdent = produceSWIdent(m);
-		data.put(LICENSE_KEY, produceNonNull(m.get(LICENSE_KEY)));
-		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
+		data.put(SWAuditEntry.ID, produceNonNull(originalMap.get(CLIENT_ID)));
+		swIdent = produceSWIdent(originalMap);
+		data.put(LICENSE_KEY, produceNonNull(originalMap.get(LICENSE_KEY)));
 	}
 
 	private static String produceNonNull(Object o) {
@@ -48,7 +48,7 @@ public class SWAuditClientEntry {
 	}
 
 	public String getLastModification() {
-		return lastModificationS;
+		return Utils.formatDateTimeStringToLocal((String) originalMap.get(LAST_MODIFICATION));
 	}
 
 	public String getSWIdent() {
