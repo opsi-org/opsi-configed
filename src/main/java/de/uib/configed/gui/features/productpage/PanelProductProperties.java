@@ -7,13 +7,19 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.event.AncestorEvent;
@@ -27,18 +33,20 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientConfiguration;
+import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
-import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
-import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.ExternalSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.OpsiPackage;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelProductProperties extends AbstractConfigurationTab implements AncestorListener {
@@ -66,7 +74,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
-		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false, false);
+		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.updateData(null, null);
@@ -76,6 +84,8 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		paneProducts.setTableModel(model);
 		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
+
+		ProductTable productTable = new ProductTable();
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
@@ -92,7 +102,46 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		splitPane.setRightComponent(infoPane);
 		splitPane.setResizeWeight(1.0);
 
+		PopupMouseListener.addPopupMouseListenerToComponents(createPopupMenu(),
+				new JComponent[] { paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane() });
+
 		setComponent(splitPane);
+	}
+
+	private JPopupMenu createPopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
+
+		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
+		Icons.addIntellijIconToMenuItem(save, "save");
+		save.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+
+		save.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
+
+		popup.add(save);
+
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("reload"));
+		reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		Icons.addIntellijIconToMenuItem(reload, "refresh");
+		reload.addActionListener(actionEvent -> paneProducts.reload());
+		popup.add(reload);
+
+		popup.addSeparator();
+
+		JMenuItem menuItemSortAgain = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
+		menuItemSortAgain.addActionListener(actionEvent -> paneProducts.getGenEditTable().sortAgainAsConfigured());
+		popup.add(menuItemSortAgain);
+
+		popup.addSeparator();
+
+		ExporterToCSV exportTable = new ExporterToCSV(paneProducts.getGenEditTable());
+		JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
+		popup.add(menuItemExportCSV);
+
+		JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+		popup.add(menuItemExportSelectedCSV);
+
+		return popup;
 	}
 
 	private GenTableModel createTableModel() {
@@ -140,8 +189,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, PanelGenEditPopupManager.POPUP_SORT_AGAIN },
-					true);
+			super("", false, 0, null, true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;
@@ -158,7 +206,9 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 			if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
 				persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 			}
+			int[] selectedRows = genEditTable.getSelectedRows();
 			super.reload();
+			genEditTable.setRowSelectionInterval(selectedRows[0], selectedRows[selectedRows.length - 1]);
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
 

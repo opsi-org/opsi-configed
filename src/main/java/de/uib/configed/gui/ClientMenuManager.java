@@ -184,6 +184,8 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void addClientTableActions() {
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("save", () -> ChangedDataManager.checkSaveAll(false))
+				.withIcon("save").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK))));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts)
 				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
 

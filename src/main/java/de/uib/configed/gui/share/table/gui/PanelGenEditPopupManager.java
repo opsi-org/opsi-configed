@@ -114,16 +114,10 @@ public class PanelGenEditPopupManager {
 				this.internalpopups.add(wantedPopup);
 				Logging.info(this, "add popup ", wantedPopup);
 			}
-		} else {
-			this.internalpopups.add(PopupMenuTrait.POPUP_RELOAD);
-
-			this.internalpopups.add(PopupMenuTrait.POPUP_PDF);
+			this.internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 		}
 
 		Logging.info(this, "internalpopups ", giveMenuitemNames(internalpopups));
-
-		this.internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
-
 		Logging.info(this, "internalpopups supplemented ", giveMenuitemNames(internalpopups));
 	}
 

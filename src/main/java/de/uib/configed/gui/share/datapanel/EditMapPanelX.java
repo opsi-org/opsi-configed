@@ -102,10 +102,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable, boolean reloadable) {
-		super(reloadable);
+	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable) {
+		super();
 
-		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable, ",  ", reloadable);
+		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -259,23 +259,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	protected JPopupMenu definePopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-
-		Integer[] popups = reloadable ? new Integer[] { PopupMenuTrait.POPUP_RELOAD } : new Integer[] {};
-
-		return new PopupMenuTrait(popups, (MouseEvent event) -> {
+		return new PopupMenuTrait(new Integer[] {}, (MouseEvent event) -> {
 			updatePopupMenu();
 			return true;
-		}, new JComponent[] { table, jScrollPane.getViewport() }) {
-			@Override
-			public void action(int p) {
-				super.action(p);
-				if (p == PopupMenuTrait.POPUP_RELOAD) {
-					ConfigedMain.getMainFrame().activateLoadingCursor();
-					actor.reloadData();
-					ConfigedMain.getMainFrame().deactivateLoadingCursor();
-				}
-			}
-		};
+		}, new JComponent[] { table, jScrollPane.getViewport() });
 	}
 
 	private void buildPanel() {
