@@ -795,6 +795,12 @@ public class ConfigDataService extends DataService {
 		for (int i = 0; i < keys.length; i++) {
 			Logging.debug(this, "setMessageOfTheDayConfigs key ", keys[i], " data ", data[i]);
 			ConfigOption option = getConfigOptionsPD().get(keys[i]);
+			if (option == null) {
+				Map<String, Object> options = new HashMap<>();
+				options.put("id", keys[i]);
+				options.put("ident", keys[i]);
+				option = new ConfigOption(options);
+			}
 			option.setDefaultValues(List.of(data[i]));
 			option.put(possibleValues, List.of(data[i]));
 		}
