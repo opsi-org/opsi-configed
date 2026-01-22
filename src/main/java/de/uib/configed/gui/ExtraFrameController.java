@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.gui.features.clients.add.AddClientComponent;
+import de.uib.configed.gui.features.clients.add.AddClientMsg;
 import de.uib.configed.gui.features.groupaction.GroupActionsDialog;
 import de.uib.configed.gui.features.productaction.CompleteWinProductsDialog;
 import de.uib.configed.gui.features.serverconsole.EditTerminalCommandsDialog;
@@ -32,7 +34,7 @@ import de.uib.configed.share.logging.Logging;
 public final class ExtraFrameController {
 	private static SavedSearchesDialog savedSearchesDialog;
 	private static ClientSelectionDialog clientSelectionDialog;
-	private static NewClientDialog newClientDialog;
+	private static AddClientComponent addClientComponent;
 	private static EditTerminalCommandsDialog commandControlDialog;
 	private static CompleteWinProductsDialog completeWinProductsPanel;
 	private static GroupActionsDialog groupActionFrame;
@@ -58,7 +60,7 @@ public final class ExtraFrameController {
 		initSavedSearchesDialog(configedMain);
 
 		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(configedMain, savedSearchesDialog);
+			clientSelectionDialog = new ClientSelectionDialog(savedSearchesDialog);
 		}
 
 		clientSelectionDialog.show(searchName);
@@ -88,13 +90,14 @@ public final class ExtraFrameController {
 		}
 	}
 
-	public static void callNewClientDialog() {
-		if (newClientDialog == null) {
-			newClientDialog = new NewClientDialog();
+	public static void callAddClientDialog() {
+		if (addClientComponent == null) {
+			addClientComponent = new AddClientComponent();
+			addClientComponent.initUI();
 		}
 
-		newClientDialog.setDefaultValues();
-		newClientDialog.show();
+		addClientComponent.dispatch(new AddClientMsg.ActionMsg.LoadInitialDataRequested());
+		addClientComponent.show();
 	}
 
 	public static void startEditTerminalCommandsDialog(ConfigedMain configedMain) {
@@ -135,8 +138,8 @@ public final class ExtraFrameController {
 		}
 
 		if (remoteControls == null
-				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
-			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
+				|| !remoteControls.equals(persistenceController.getDataServices().config.getRemoteControlsPD())) {
+			remoteControls = persistenceController.getDataServices().config.getRemoteControlsPD();
 
 			Logging.debug("remoteControls ", remoteControls);
 
@@ -180,8 +183,8 @@ public final class ExtraFrameController {
 	public static void deleteInstances() {
 		savedSearchesDialog = null;
 		clientSelectionDialog = null;
-		newClientDialog = null;
 		commandControlDialog = null;
+		addClientComponent = null;
 		completeWinProductsPanel = null;
 		groupActionFrame = null;
 		remoteControlDialog = null;

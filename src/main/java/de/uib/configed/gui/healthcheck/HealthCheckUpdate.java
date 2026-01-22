@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -14,7 +14,7 @@ import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import lombok.Value;
 import lombok.With;
 
-public class HealthCheckUpdate {
+public final class HealthCheckUpdate {
 	@Value
 	@With
 	public static class HealthCheckModel {
@@ -34,16 +34,19 @@ public class HealthCheckUpdate {
 	public static UpdateResult<HealthCheckModel, HealthCheckEffect> update(HealthCheckModel model, HealthCheckMsg msg) {
 		return switch (msg) {
 		case HealthCheckMsg.SimpleMsg m -> handleSimpleMsg(m, model);
-		case HealthCheckMsg.ToggleDetails(String key) -> {
-			Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
-			Map<String, Object> details = newHealthData.get(key);
-			if (details != null && details.containsKey(HealthDataProcessor.KEY_SHOW_DETAILS)) {
-				boolean current = Boolean.TRUE.equals(details.get(HealthDataProcessor.KEY_SHOW_DETAILS));
-				details.put(HealthDataProcessor.KEY_SHOW_DETAILS, !current);
-			}
-			yield UpdateResult.noEffect(initModel(newHealthData));
-		}
+		case HealthCheckMsg.ToggleDetails(String key) -> handleToggleDetailsMsg(model, key);
 		};
+	}
+
+	private static UpdateResult<HealthCheckModel, HealthCheckEffect> handleToggleDetailsMsg(HealthCheckModel model,
+			String key) {
+		Map<String, Map<String, Object>> newHealthData = deepCopy(model.getHealthData());
+		Map<String, Object> details = newHealthData.get(key);
+		if (details != null && details.containsKey(HealthDataProcessor.KEY_SHOW_DETAILS)) {
+			boolean current = Boolean.TRUE.equals(details.get(HealthDataProcessor.KEY_SHOW_DETAILS));
+			details.put(HealthDataProcessor.KEY_SHOW_DETAILS, !current);
+		}
+		return UpdateResult.noEffect(initModel(newHealthData));
 	}
 
 	private static UpdateResult<HealthCheckModel, HealthCheckEffect> handleSimpleMsg(HealthCheckMsg.SimpleMsg msg,

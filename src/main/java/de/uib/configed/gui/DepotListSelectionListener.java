@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -19,12 +19,16 @@ public class DepotListSelectionListener implements ListSelectionListener {
 	private DepotsList depotsList;
 	private InitialDataLoader initialDataLoader;
 
+	private int[] lastSelectedIndices = new int[0];
+
 	public DepotListSelectionListener(ConfigedMain configedMain, DepotsList depotsList,
 			InitialDataLoader initialDataLoader) {
 		Logging.info(this, "DepotListSelectionListener constructor called");
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
 		this.initialDataLoader = initialDataLoader;
+
+		this.lastSelectedIndices = depotsList.getSelectedIndices();
 	}
 
 	@Override
@@ -33,7 +37,15 @@ public class DepotListSelectionListener implements ListSelectionListener {
 		Logging.info(this, "depotSelection event count  ", counter);
 
 		if (!e.getValueIsAdjusting()) {
-			depotsListValueChanged();
+			if (ChangedDataManager.checkSaveAll(true)) {
+				depotsListValueChanged();
+				lastSelectedIndices = depotsList.getSelectedIndices();
+			} else {
+				Logging.info(this, "depotSelection event ignored due to unsaved changes");
+				depotsList.removeListSelectionListener(this);
+				depotsList.setSelectedIndices(lastSelectedIndices);
+				depotsList.addListSelectionListener(this);
+			}
 		}
 	}
 
@@ -46,7 +58,7 @@ public class DepotListSelectionListener implements ListSelectionListener {
 
 		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
-			PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+			PersistenceControllerFactory.getPersistenceController().getDataServices().hostInfoCollections
 					.updateClientsForDepots(depotsList.getSelectedValuesList(), configedMain.getAllowedClients());
 			configedMain.initialTreeActivation();
 

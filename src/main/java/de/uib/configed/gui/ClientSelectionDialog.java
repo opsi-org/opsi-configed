@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -45,6 +44,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -85,6 +87,7 @@ import de.uib.configed.gui.type.SavedSearch;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
@@ -93,20 +96,9 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
-	private GroupLayout layout;
-	private GroupLayout.SequentialGroup vGroup;
-	private GroupLayout.ParallelGroup hGroupParenthesisClose;
-	private GroupLayout.ParallelGroup hGroupParenthesisOpen;
-	private GroupLayout.ParallelGroup hGroupRemoveBtn;
-	private GroupLayout.ParallelGroup hGroupNegate;
-	private GroupLayout.ParallelGroup hGroupConnections;
-	private GroupLayout.ParallelGroup hGroupElements;
-	private GroupLayout.ParallelGroup hGroupOperations;
-	private GroupLayout.ParallelGroup hGroupData;
 	private JPanel contentPane;
 	private JComboBox<String> newElementBox;
 	private JButton buttonReload;
-	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 
@@ -120,13 +112,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	private ConfigedMain configedMain;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSelectionDialog(ConfigedMain configedMain, SavedSearchesDialog savedSearchesDialog) {
-		this.configedMain = configedMain;
+	public ClientSelectionDialog(SavedSearchesDialog savedSearchesDialog) {
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
 		complexElements = new LinkedList<>();
@@ -150,6 +139,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		dialog.setModalityType(ModalityType.MODELESS);
 		dialog.pack();
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		resizeScrollPane();
 	}
 
 	public void show(String searchName) {
@@ -164,7 +154,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		manager.loadSearch(name);
 		loadFromManager();
-		SavedSearch search = persistenceController.getConfigDataService().getSavedSearchesPD().get(name);
+		SavedSearch search = persistenceController.getDataServices().config.getSavedSearchesPD().get(name);
 		saveNameField.setText(search.getName());
 		saveDescriptionField.setText(search.getDescription());
 	}
@@ -187,9 +177,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JPanel initComponents() {
 		JPanel completePanel = new JPanel();
 
-		GroupLayout completeLayout = new GroupLayout(completePanel);
-		completePanel.setLayout(completeLayout);
-
 		saveNameField = new JTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
 
@@ -207,113 +194,24 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		buttonReload.setToolTipText(Configed.getResourceValue("reload"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
-		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
-		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
-
-		buttonRestart.addActionListener(actionEvent -> restart());
-
-		completeLayout
-				.setHorizontalGroup(
-						completeLayout.createParallelGroup().addComponent(scrollPane)
-								.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(saveButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)));
-
-		completeLayout.setVerticalGroup(completeLayout.createSequentialGroup().addComponent(scrollPane)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(completeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveDescriptionField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(saveButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
+		completePanel.setLayout(new MigLayout("insets 0, fill", "", "[grow][pref!]"));
+		completePanel.add(scrollPane, "grow, span, wrap, gapbottom " + Globals.GAP_SIZE);
+		completePanel.add(saveNameLabel, "split 7, gapleft " + Globals.GAP_SIZE);
+		completePanel.add(saveNameField, "wmin 40, w 100:200, gapleft " + Globals.MIN_GAP_SIZE);
+		completePanel.add(saveDescriptionLabel, "gapleft " + Globals.GAP_SIZE);
+		completePanel.add(saveDescriptionField, "wmin 40, w 200, growx, gapleft " + Globals.MIN_GAP_SIZE);
+		completePanel.add(saveButton, "gapleft " + Globals.GAP_SIZE);
+		completePanel.add(buttonReload, "gapleft " + Globals.GAP_SIZE + ", wrap");
 		return completePanel;
 	}
 
 	private void init() {
-		contentPane = new JPanel();
-
-		layout = new GroupLayout(contentPane);
-		contentPane.setLayout(layout);
-
-		layout.setAutoCreateContainerGaps(true);
-		layout.setHonorsVisibility(false);
-
-		GroupLayout.SequentialGroup vMainGroup = layout.createSequentialGroup();
-		GroupLayout.ParallelGroup hMainGroup = layout.createParallelGroup();
-
-		vGroup = layout.createSequentialGroup();
-		GroupLayout.ParallelGroup vHeadlines = layout.createParallelGroup();
-		vGroup.addGroup(vHeadlines);
-		vMainGroup.addGroup(vGroup);
-
-		layout.setVerticalGroup(vMainGroup);
-		hGroupParenthesisClose = layout.createParallelGroup();
-		hGroupParenthesisOpen = layout.createParallelGroup();
-		hGroupRemoveBtn = layout.createParallelGroup();
-		hGroupNegate = layout.createParallelGroup();
-		hGroupConnections = layout.createParallelGroup();
-		hGroupElements = layout.createParallelGroup();
-		hGroupOperations = layout.createParallelGroup();
-		hGroupData = layout.createParallelGroup();
-		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(hGroupNegate).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupElements)
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupOperations).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(hGroupData).addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupParenthesisClose)
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(hGroupConnections).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(hGroupRemoveBtn));
-		layout.setHorizontalGroup(hMainGroup);
-
-		// columns headline
-		JLabel negationLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.negateColumn"));
-
-		JLabel nameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.nameColumn"));
-
-		JLabel dataLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.dataColumn"));
-
-		JLabel connectionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
-
-		vHeadlines.addComponent(negationLabel);
-		vHeadlines.addComponent(nameLabel);
-
-		vHeadlines.addComponent(dataLabel);
-		vHeadlines.addComponent(connectionLabel);
-
-		hGroupNegate.addComponent(negationLabel, GroupLayout.Alignment.CENTER);
-		hGroupElements.addComponent(nameLabel, GroupLayout.Alignment.CENTER);
-
-		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
-		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
+		contentPane = new JPanel(new MigLayout("insets 0, wrap 8",
+				"[20!,center][40!,center][pref,left][70!,center][100,grow,center][20!,center][100!,center][pref!,right]",
+				"[center]0"));
 
 		newElementBox = new JComboBox<>(
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
-
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 		newElementBox.addItem(Configed.getResourceValue("hostName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwareName"));
@@ -325,44 +223,26 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		for (String hardware : hardwareList) {
 			newElementBox.addItem(hardware);
 		}
-
 		newElementBox.addActionListener(actionEvent -> addElement());
-
-		vMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
-		hMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
 		complexElements.getLast().connectionType.setVisible(false);
+
 		scrollPane = new JScrollPane(contentPane);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+		renderAll();
 	}
 
 	private void reload() {
 		Logging.info(this, "actionPerformed");
 		buttonReload.setEnabled(false);
-		buttonRestart.setEnabled(false);
 		dialog.setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
 			buttonReload.setEnabled(true);
-			buttonRestart.setEnabled(true);
 			dialog.setCursor(null);
-		});
-	}
-
-	private void restart() {
-		Logging.info(this, "actionPerformed");
-		buttonRestart.setEnabled(false);
-		buttonReload.setEnabled(false);
-		dialog.setCursor(Globals.WAIT_CURSOR);
-		SwingUtilities.invokeLater(() -> {
-			manager.getBackend().setReloadRequested();
-			ExtraFrameController.callNewClientSelectionDialog(configedMain);
-			dialog.setCursor(null);
-			// we lose all components of this dialog, there is nothing to reset
 		});
 	}
 
@@ -377,7 +257,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		}
 
 		result.negateButton = createNOTCheckBox();
-
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
 
@@ -394,6 +273,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 				box.addItem(op.getOperationString());
 			}
 			result.operationComponent = box;
+			((JComboBox<?>) result.operationComponent).addActionListener(this::selectOperation);
 		} else {
 			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
 		}
@@ -401,7 +281,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 
-		// to reserve the place
+		// placeholder for data component; will be replaced depending on operation
 		result.dataComponent = new JLabel();
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
@@ -412,32 +292,11 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.closeParenthesis = createParenthesisCheckBox(")", false);
 		result.closeParenthesis.setVisible(false);
 
-		result.vRow = layout.createParallelGroup();
-		result.vRow.addComponent(result.negateButton, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.connectionType, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.elementLabel, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.operationComponent, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.dataComponent, GroupLayout.Alignment.CENTER);
-		result.vRow.addComponent(result.openParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		result.vRow.addComponent(result.closeParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-
-		vGroup.addGroup(result.vRow);
-
-		hGroupNegate.addComponent(result.negateButton, 10, 40, 50);
-		hGroupConnections.addComponent(result.connectionType, 100, 100, 100);
-		hGroupElements.addComponent(result.elementLabel);
-		hGroupOperations.addComponent(result.operationComponent, 65, 70, 70);
-		hGroupData.addComponent(result.dataComponent, 100, 100, Short.MAX_VALUE);
-		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
-		hGroupParenthesisClose.addComponent(result.closeParenthesis, 20, 20, 20);
-
-		if (operations.length > 1) {
-			((JComboBox<?>) result.operationComponent).addActionListener(this::selectOperation);
-			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
-		} else if (operations.length == 1) {
-			addDataComponent(result, 0);
-		} else {
-			// Do nothing with no operations
+		if (operations.length >= 1) {
+			addDataComponent(result,
+					(result.operationComponent instanceof JComboBox)
+							? ((JComboBox<?>) result.operationComponent).getSelectedIndex()
+							: 0);
 		}
 
 		return result;
@@ -473,7 +332,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private static JCheckBox createANDORCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
-		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
 		jCheckBox.addChangeListener(changeEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
@@ -522,9 +380,9 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
 
 		result.groupList.add(createSimpleGroup(new GroupElement(
-				persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]))));
+				persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(new GroupWithSubgroupsElement(
-				persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]))));
+				persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(
 				new NameElement(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
 		result.groupList.add(createSimpleGroup(new IPElement()));
@@ -613,24 +471,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 				result.negateButton.getPreferredSize().height));
 
 		result.topLabel = new JLabel();
-		result.topLabel.setMaximumSize(
-				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
-
 		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
 		result.openParenthesis = createParenthesisCheckBox("(", true);
 		result.openParenthesis.setSelected(false);
-
-		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
-		vRow.addComponent(result.topLabel, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		vRow.addComponent(result.removeButton, GroupLayout.Alignment.CENTER);
-		vRow.addComponent(result.negateButton, GroupLayout.Alignment.CENTER);
-		vRow.addComponent(result.openParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		vGroup.addGroup(vRow);
-		hGroupNegate.addComponent(result.negateButton, 10, 40, 50);
-		hGroupRemoveBtn.addComponent(result.removeButton);
-		hGroupElements.addComponent(result.topLabel);
-		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
 
 		result.groupList = new LinkedList<>();
 		return result;
@@ -645,12 +489,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
 				group.connectionType.getPreferredSize().height));
-		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
-		vRow.addComponent(group.connectionType, GroupLayout.Alignment.CENTER);
-		vRow.addComponent(group.closeParenthesis, GroupLayout.Alignment.CENTER, 20, 20, 20);
-		vGroup.addGroup(vRow);
-		hGroupConnections.addComponent(group.connectionType, 100, 100, 100);
-		hGroupParenthesisClose.addComponent(group.closeParenthesis, 20, 20, 20);
 	}
 
 	/* Gets the selected operation and adds the given data to it. */
@@ -664,33 +502,46 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		AbstractSelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
-		Object data = null;
 		SelectData.DataType type = operation.getDataType();
-		switch (type) {
-		// Do the same for all four cases
-		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE:
-			data = ((TextInputField) group.dataComponent).getText();
-			if (((String) data).isEmpty()) {
-				return null;
-			}
-			break;
-		case INTEGER_TYPE:
-			data = ((JSpinner) group.dataComponent).getValue();
-			if (((Integer) data) == 0) {
-				return null;
-			}
-			break;
-		case BIG_INTEGER_TYPE:
-			data = ((SpinnerWithExtension) group.dataComponent).getValue();
-			if (((Long) data) == 0) {
-				return null;
-			}
-			break;
-		case NONE_TYPE:
+
+		Object data = getData(type, group.dataComponent);
+
+		if (data == null) {
+			return null;
+		} else {
+			operation.setSelectData(new SelectData(data, type));
+			return operation;
+		}
+	}
+
+	private static Object getData(SelectData.DataType type, JComponent dataComponent) {
+		return switch (type) {
+		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE -> {
+			String text = ((TextInputField) dataComponent).getText();
+			yield text.isEmpty() ? null : text;
 		}
 
-		operation.setSelectData(new SelectData(data, type));
-		return operation;
+		case INTEGER_TYPE -> {
+			Integer integer = (Integer) ((JSpinner) dataComponent).getValue();
+			yield (integer == 0) ? null : integer;
+		}
+
+		case BIG_INTEGER_TYPE -> {
+			Long longValue = ((SpinnerWithExtension) dataComponent).getValue();
+			yield (longValue == 0) ? null : longValue;
+		}
+
+		case BOOLEAN_TYPE -> {
+			State state = ((FlatTriStateCheckBox) dataComponent).getState();
+			yield state == FlatTriStateCheckBox.State.INDETERMINATE ? null
+					: (state == FlatTriStateCheckBox.State.SELECTED);
+		}
+		case NONE_TYPE -> null;
+		default -> {
+			Logging.error("Unknown data type: ", type);
+			yield null;
+		}
+		};
 	}
 
 	/*
@@ -738,17 +589,43 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		return conStatus;
 	}
 
-	/* Remove a simple group from the display */
-	private void removeGroup(SimpleGroup group) {
-		contentPane.remove(group.negateButton);
-		contentPane.remove(group.connectionType);
-		contentPane.remove(group.elementLabel);
-		contentPane.remove(group.operationComponent);
-		if (group.dataComponent != null) {
-			contentPane.remove(group.dataComponent);
+	private void renderAll() {
+		JLabel negationLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.negateColumn"));
+		JLabel nameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.nameColumn"));
+		JLabel dataLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.dataColumn"));
+		JLabel connectionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
+
+		contentPane.removeAll();
+
+		contentPane.add(negationLabel, "skip 1");
+		contentPane.add(nameLabel);
+		contentPane.add(dataLabel, "skip 1");
+		contentPane.add(connectionLabel, "skip 1, w 100!, wrap");
+
+		for (ComplexGroup complex : complexElements) {
+			contentPane.add(complex.openParenthesis);
+			contentPane.add(complex.negateButton);
+			contentPane.add(complex.topLabel, "spanx 4, growx");
+			contentPane.add(complex.connectionType, "w 100!");
+			contentPane.add(complex.removeButton, "align right, wrap");
+
+			for (SimpleGroup simple : complex.groupList) {
+				contentPane.add(simple.openParenthesis);
+				contentPane.add(simple.negateButton);
+				contentPane.add(simple.elementLabel);
+				contentPane.add(simple.operationComponent, "w 70!");
+				contentPane.add(simple.dataComponent, "w 100:100, growx");
+				contentPane.add(simple.closeParenthesis);
+				contentPane.add(simple.connectionType, "w 100!, wrap");
+			}
+
+			contentPane.add(complex.closeParenthesis, "skip 5");
+			contentPane.add(complex.connectionType, "w 100!, wrap");
 		}
-		contentPane.remove(group.openParenthesis);
-		contentPane.remove(group.closeParenthesis);
+
+		contentPane.add(newElementBox, "span 8, align left, gapleft " + Globals.MIN_GAP_SIZE + ", gaptop "
+				+ Globals.GAP_SIZE + ", gapbottom " + Globals.GAP_SIZE + ", wrap");
+
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
@@ -820,33 +697,16 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-		case TEXT_TYPE:
-			addTextTypeComponent(sourceGroup);
-			break;
-
-		case DOUBLE_TYPE:
-			addDoubleTypeComponent(sourceGroup);
-			break;
-
-		case DATE_TYPE:
-			addDateTypeComponent(sourceGroup);
-			break;
-
-		case INTEGER_TYPE:
-			addIntegerTypeComponent(sourceGroup);
-			break;
-
-		case BIG_INTEGER_TYPE:
-			addBigIntegerTypeComponent(sourceGroup);
-			break;
-
-		case NONE_TYPE:
-			return;
+		case TEXT_TYPE -> addTextTypeComponent(sourceGroup);
+		case DOUBLE_TYPE -> addDoubleTypeComponent(sourceGroup);
+		case DATE_TYPE -> addDateTypeComponent(sourceGroup);
+		case INTEGER_TYPE -> addIntegerTypeComponent(sourceGroup);
+		case BIG_INTEGER_TYPE -> addBigIntegerTypeComponent(sourceGroup);
+		case BOOLEAN_TYPE -> addBooleanTypeComponent(sourceGroup);
+		case NONE_TYPE -> {
+			// Nothing has to be done here
 		}
-
-		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);
+		}
 	}
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
@@ -889,6 +749,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		sourceGroup.dataComponent = fieldDouble;
 	}
 
+	private static void addBooleanTypeComponent(SimpleGroup sourceGroup) {
+		FlatTriStateCheckBox checkBox = new FlatTriStateCheckBox();
+		checkBox.setFocusable(false);
+		checkBox.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.booleanInputToolTip"));
+		sourceGroup.dataComponent = checkBox;
+	}
+
 	/*
 	 * Collect the data and tell it to the SelectionManager, so it can use it to
 	 * start the client filtering.
@@ -925,25 +792,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	 */
 	private void reset() {
 		Logging.debug(this, "RESET");
-		for (ComplexGroup group : complexElements) {
-			contentPane.remove(group.topLabel);
-			contentPane.remove(group.removeButton);
-			contentPane.remove(group.connectionType);
-			contentPane.remove(group.negateButton);
-			contentPane.remove(group.openParenthesis);
-			contentPane.remove(group.closeParenthesis);
-			for (SimpleGroup simple : group.groupList) {
-				removeGroup(simple);
-			}
-		}
 		saveNameField.setText("");
 		saveDescriptionField.setText("");
 		complexElements.clear();
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
 		buildParentheses();
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 	}
 
 	/*
@@ -951,17 +806,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	 * in the interface.
 	 */
 	private void loadFromManager() {
-		for (ComplexGroup group : complexElements) {
-			contentPane.remove(group.topLabel);
-			contentPane.remove(group.removeButton);
-			contentPane.remove(group.connectionType);
-			contentPane.remove(group.negateButton);
-			contentPane.remove(group.openParenthesis);
-			contentPane.remove(group.closeParenthesis);
-			for (SimpleGroup simple : group.groupList) {
-				removeGroup(simple);
-			}
-		}
 		complexElements.clear();
 
 		List<OperationWithStatus> topList;
@@ -1001,8 +845,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			complexElements.getLast().connectionType.setVisible(false);
 		}
 		buildParentheses();
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 	}
 
 	private static AbstractSelectOperation getNonGroupOperation(AbstractSelectGroupOperation operation) {
@@ -1048,26 +891,23 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 						.setValue((Long) data.getData());
 		case JSpinner jSpinner when data.getType() == SelectData.DataType.INTEGER_TYPE -> jSpinner
 				.setValue(data.getData());
+		case FlatTriStateCheckBox flatTriStateCheckBox -> flatTriStateCheckBox.setSelected((Boolean) data.getData());
 		default -> Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}
 
 	private static void setConnectionTypes(JCheckBox andOr, AbstractButton not, ConnectionStatus status) {
 		switch (status) {
-		case AND:
-			andOr.setSelected(true);
-			break;
-		case OR:
-			andOr.setSelected(false);
-			break;
-		case AND_NOT:
+		case AND -> andOr.setSelected(true);
+		case OR -> andOr.setSelected(false);
+		case AND_NOT -> {
 			andOr.setSelected(true);
 			not.setSelected(true);
-			break;
-		case OR_NOT:
+		}
+		case OR_NOT -> {
 			andOr.setSelected(false);
 			not.setSelected(true);
-			break;
+		}
 		}
 	}
 
@@ -1080,7 +920,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		// may be JLabel or JComboBox
 		private JComponent operationComponent;
 		private JComponent dataComponent;
-		private GroupLayout.ParallelGroup vRow;
 		private JCheckBox openParenthesis;
 		private JCheckBox closeParenthesis;
 	}
@@ -1113,17 +952,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			Logging.info(this, "removing group of type ", group.type);
 
 			if (group.removeButton == e.getSource()) {
-				contentPane.remove(group.topLabel);
-				contentPane.remove(group.removeButton);
-				contentPane.remove(group.connectionType);
-				contentPane.remove(group.negateButton);
-				contentPane.remove(group.openParenthesis);
-				contentPane.remove(group.closeParenthesis);
-				for (SimpleGroup simple : group.groupList) {
-					removeGroup(simple);
-				}
-				contentPane.revalidate();
-				contentPane.repaint();
 				complexIterator.remove();
 				buildParentheses();
 				break;
@@ -1133,6 +961,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		if (!complexElements.isEmpty()) {
 			complexElements.getLast().connectionType.setVisible(false);
 		}
+		renderAll();
 	}
 
 	private void addElement() {
@@ -1154,11 +983,14 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			complexElements.add(complexGroup);
 		}
 
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 		newElementBox.setSelectedIndex(0);
 		complexElements.getLast().connectionType.setVisible(false);
 
+		resizeScrollPane();
+	}
+
+	private void resizeScrollPane() {
 		// This will change the width of the dialog so that all the content will be visible
 		// and we only need a vertical scrollbar
 		int diffSize = scrollPane.getPreferredSize().width - scrollPane.getSize().width
@@ -1187,10 +1019,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			return;
 		}
 
-		if (sourceGroup.dataComponent != null) {
-			contentPane.remove(sourceGroup.dataComponent);
-			sourceGroup.dataComponent = null;
-		}
+		sourceGroup.dataComponent = null;
 
 		int index = 0;
 		if (source instanceof JComboBox) {
@@ -1204,8 +1033,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		buildParentheses();
 
-		contentPane.revalidate();
-		contentPane.repaint();
+		renderAll();
 	}
 
 	private void save() {

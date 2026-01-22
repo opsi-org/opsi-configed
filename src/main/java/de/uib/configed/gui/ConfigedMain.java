@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
@@ -231,30 +232,31 @@ public class ConfigedMain {
 
 	protected void preloadData() {
 		if (depotRepresentative == null) {
-			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
+			depotRepresentative = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
 		}
 
-		persistenceController.getDepotDataService().setDepot(depotRepresentative);
+		persistenceController.getDataServices().depot.setDepot(depotRepresentative);
 
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		executor.runInParallel(() -> {
-			persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
-			persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
-			persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
+			persistenceController.getDataServices().product.retrieveProductIdsAndDefaultStatesPD();
+			persistenceController.getDataServices().product.retrieveAllProductPropertyDefinitionsPD();
+			persistenceController.getDataServices().product.retrieveAllProductDependenciesPD();
 		});
-		executor.runInParallel(() -> persistenceController.getProductDataService()
+		executor.runInParallel(() -> persistenceController.getDataServices().product
 				.retrieveProductOnClientsDisplayFieldsLocalbootProducts());
-		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
-		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
-		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
+		executor.runInParallel(() -> persistenceController.getDataServices().group.retrieveAllGroupsPD());
+		executor.runInParallel(() -> persistenceController.getDataServices().group.retrieveAllObject2GroupsPD());
+		executor.runInParallel(
+				() -> persistenceController.getDataServices().product.retrieveDepotProductPropertiesPD());
 		executor.waitForCompletion();
 
 		ExtraFrameController.reloadDialogs();
 	}
 
 	public void toggleColumn(String column) {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
-		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
+		Map<String, Boolean> fields = persistenceController.getDataServices().host.getHostDisplayFields();
+		fields.put(column, !fields.get(column));
 		setRebuiltClientListTableModel(true, false);
 
 		// We need to make first selected visible again after resetting sortKeys
@@ -264,7 +266,7 @@ public class ConfigedMain {
 	}
 
 	public void handleGroupActionRequest() {
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
+		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
 			Logging.error(this,
 					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
 		} else {
@@ -272,51 +274,29 @@ public class ConfigedMain {
 		}
 	}
 
-	public static void setEditingTarget(EditingTarget newEditingTarget) {
+	public static boolean setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info("setEditingTarget ", newEditingTarget);
-		ChangedDataManager.checkSaveAll(true);
+
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			Logging.info("stop changing editingTarget, unsaved data");
+			return false;
+		}
+
 		if (newEditingTarget == editingTarget) {
 			Logging.info("stop setting editingTarget, it remains the same");
-			return;
+			return false;
 		}
 
-		editingTarget = newEditingTarget;
-
-		switch (editingTarget) {
-		case CLIENTS:
-			mainFrame.showClientConfiguration();
-			break;
-
-		case DEPOTS:
-			mainFrame.showDepotConfiguration();
-			break;
-
-		case SERVER:
-			mainFrame.showServerConfiguration();
-			break;
-
-		case DASHBOARD:
-			mainFrame.showDashboard();
-			break;
-
-		case OPSI_MODULES:
-			mainFrame.showOpsiModules();
-			break;
-
-		case HEALTH_CHECK:
-			mainFrame.showHealthDataAction();
-			break;
-
-		case LICENSE_MANAGEMENT:
-			mainFrame.startLicensingManagement();
-			break;
+		if (mainFrame.showPanel(newEditingTarget)) {
+			editingTarget = newEditingTarget;
 		}
+
+		return true;
 	}
 
 	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
-		ChangedDataManager.checkSaveAll(true);
 		Logging.checkErrorList();
 
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
@@ -334,7 +314,6 @@ public class ConfigedMain {
 
 		clientTree.produceActiveParents();
 
-		// change in selection not via clientpage (i.e. via tree)
 		mainFrame.getClientConfiguration().stateChanged(null);
 
 		hostInfo.resetValues();
@@ -362,7 +341,8 @@ public class ConfigedMain {
 	}
 
 	private void updateHostInfo() {
-		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
+		Map<String, HostInfo> pcinfos = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfPCInfoMaps();
 
 		Logging.info(this, "updateHostInfo, produce hostInfo  selectedClients.length ", selectedClients.size());
 
@@ -392,11 +372,10 @@ public class ConfigedMain {
 		fetchDepots();
 
 		depotsList.setInfo(depots);
-		List<String> oldSelectedDepots = Arrays
-				.asList(backslashPattern
-						.matcher(Configed.getSavedStates().getProperty("selectedDepots",
-								persistenceController.getHostInfoCollections().getConfigServer()))
-						.replaceAll("").split(","));
+		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
+				.matcher(Configed.getSavedStates().getProperty("selectedDepots",
+						persistenceController.getDataServices().hostInfoCollections.getConfigServer()))
+				.replaceAll("").split(","));
 		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
@@ -487,7 +466,7 @@ public class ConfigedMain {
 				" running with allowedClients ", getAllowedClients());
 
 		// We need to create a copy since we manipulate the set later
-		Set<String> clientsForDepots = new TreeSet<>(persistenceController.getHostInfoCollections()
+		Set<String> clientsForDepots = new TreeSet<>(persistenceController.getDataServices().hostInfoCollections
 				.getClientsForDepots(depotsList.getSelectedValuesList(), getAllowedClients()));
 
 		if (mainFrame != null) {
@@ -527,10 +506,11 @@ public class ConfigedMain {
 			}
 		};
 
-		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
+		Map<String, HostInfo> pcinfos = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfPCInfoMaps();
 
 		List<String> displayFields = new ArrayList<>();
-		for (Entry<String, Boolean> entry : persistenceController.getHostDataService().getHostDisplayFields()
+		for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
 				.entrySet()) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
 				model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
@@ -541,19 +521,16 @@ public class ConfigedMain {
 		UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 
 		Logging.info(this, "buildPclistTableModel host_displayFields ",
-				persistenceController.getHostDataService().getHostDisplayFields());
+				persistenceController.getDataServices().host.getHostDisplayFields());
 
 		for (String clientId : clientIds) {
-			HostInfo pcinfo = pcinfos.get(clientId);
-			if (pcinfo == null) {
-				pcinfo = new HostInfo();
-			}
+			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
 			String sessionValue = "";
-			if (persistenceController.getHostDataService().getSessionInfo().get(clientId) != null) {
-				sessionValue = persistenceController.getHostDataService().getSessionInfo().get(clientId);
+			if (persistenceController.getDataServices().host.getSessionInfo().get(clientId) != null) {
+				sessionValue = persistenceController.getDataServices().host.getSessionInfo().get(clientId);
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
@@ -561,7 +538,7 @@ public class ConfigedMain {
 
 			List<Object> rowItems = new ArrayList<>();
 
-			for (Entry<String, Boolean> entry : persistenceController.getHostDataService().getHostDisplayFields()
+			for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
 					.entrySet()) {
 				if (Boolean.TRUE.equals(entry.getValue())) {
 					rowItems.add(rowmap.get(entry.getKey()));
@@ -593,11 +570,7 @@ public class ConfigedMain {
 
 	public void setClients(Collection<String> clientNames) {
 		Logging.info(this, "setClients ", clientNames);
-		if (clientNames == null) {
-			clientTablePanel.setSelectedValues(Collections.emptySet());
-		} else {
-			clientTablePanel.setSelectedValues(clientNames);
-		}
+		clientTablePanel.setSelectedValues(clientNames);
 	}
 
 	/**
@@ -671,7 +644,7 @@ public class ConfigedMain {
 	}
 
 	private void configureColumn(String fieldLabel, TableCellRenderer renderer) {
-		if (Boolean.FALSE.equals(persistenceController.getHostDataService().getHostDisplayFields().get(fieldLabel))) {
+		if (Boolean.FALSE.equals(persistenceController.getDataServices().host.getHostDisplayFields().get(fieldLabel))) {
 			Logging.info(this, "configureColumn, column is hidden " + fieldLabel);
 			return;
 		}
@@ -751,16 +724,11 @@ public class ConfigedMain {
 	}
 
 	public Set<String> getDepotsOfSelectedClients() {
-		Set<String> depotsOfSelectedClients = new TreeSet<>();
+		Map<String, String> mapPcBelongsToDepot = persistenceController.getDataServices().hostInfoCollections
+				.getMapPcBelongsToDepot();
 
-		for (String selectedClient : selectedClients) {
-			if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient) != null) {
-				depotsOfSelectedClients.add(
-						persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient));
-			}
-		}
-
-		return depotsOfSelectedClients;
+		return selectedClients.stream().map(mapPcBelongsToDepot::get).filter(Objects::nonNull)
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 
 	private void treeClientsSelectAction(TreePath newSelectedPath) {
@@ -788,12 +756,11 @@ public class ConfigedMain {
 			}
 		}
 
-		if (selTreePaths == null) {
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-		} else if (selTreePaths.length == 1) {
+		if (selTreePaths != null && selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
-			Logging.info(this, "treeClientsSelectAction selTreePaths: ", selTreePaths.length);
+			Logging.info(this, "treeClientsSelectAction selTreePaths length: ",
+					selTreePaths == null ? 0 : selTreePaths.length);
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 		}
 	}
@@ -803,7 +770,7 @@ public class ConfigedMain {
 
 		clientTree = new ClientTree(this);
 		productTree = new ProductTree(this);
-		persistenceController.getHostInfoCollections().setTree(clientTree);
+		persistenceController.getDataServices().hostInfoCollections.setTree(clientTree);
 	}
 
 	private void setGroupByTree(DefaultMutableTreeNode node) {
@@ -857,7 +824,7 @@ public class ConfigedMain {
 	}
 
 	public boolean checkSynchronous(Set<String> depots) {
-		if (depots.size() > 1 && !persistenceController.getDepotDataService().areDepotsSynchronous(depots)) {
+		if (depots.size() > 1 && !persistenceController.getDataServices().depot.areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
 
@@ -873,7 +840,7 @@ public class ConfigedMain {
 		List<String> selectedDepots = getSelectedDepots();
 		String oldRepresentative = depotRepresentative;
 
-		String configServer = persistenceController.getHostInfoCollections().getConfigServer();
+		String configServer = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
 		Set<String> clientDepots = selectedClients.isEmpty() ? Collections.emptySet() : getDepotsOfSelectedClients();
 
 		Logging.info(this, "Selected depots: " + selectedDepots);
@@ -896,7 +863,7 @@ public class ConfigedMain {
 			depotRepresentative = newRepresentative;
 			Logging.info(this, "Depot representative changed to " + depotRepresentative);
 
-			persistenceController.getDepotDataService().setDepot(depotRepresentative);
+			persistenceController.getDataServices().depot.setDepot(depotRepresentative);
 			persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 		} else {
 			Logging.debug(this, "Depot representative unchanged.");
@@ -928,7 +895,7 @@ public class ConfigedMain {
 
 	public String[] getDepotArray() {
 		if (depots == null) {
-			return new String[] {};
+			return new String[0];
 		}
 
 		return depots.keySet().toArray(new String[0]);
@@ -938,9 +905,9 @@ public class ConfigedMain {
 		Logging.info(this, "fetchDepots");
 
 		Logging.debug(this, "fetchDepots sorted depots ",
-				persistenceController.getHostInfoCollections().getDepotNamesList());
+				persistenceController.getDataServices().hostInfoCollections.getDepotNamesList());
 
-		depots = persistenceController.getHostInfoCollections().getDepots();
+		depots = persistenceController.getDataServices().hostInfoCollections.getDepots();
 		List<String> oldSelection = depotsList.getSelectedValuesList();
 
 		// Setting the list data will remove old selection. To prevent doing events
@@ -949,7 +916,7 @@ public class ConfigedMain {
 		// values again.
 		// Both actions will then be united into one event only
 		depotsList.setValueIsAdjusting(true);
-		depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
+		depotsList.setListData(persistenceController.getDataServices().hostInfoCollections.getDepotNamesList());
 		depotsList.setSelectedValues(oldSelection);
 		depotsList.setValueIsAdjusting(false);
 
@@ -1012,12 +979,14 @@ public class ConfigedMain {
 	}
 
 	private void reloadData() {
-		ChangedDataManager.checkSaveAll(true);
+		if (!ChangedDataManager.checkSaveAll(true)) {
+			mainFrame.deactivateLoadingPane();
+			return;
+		}
 
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		String selectedGroup = getSelectedGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
@@ -1026,7 +995,7 @@ public class ConfigedMain {
 		depotsList.removeListSelectionListener(depotListSelectionListener);
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
-		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+		persistenceController.getDataServices().userRoles.checkConfigurationPD();
 
 		preloadData();
 
@@ -1040,25 +1009,16 @@ public class ConfigedMain {
 
 		productTree.reInitTree();
 		clientTree.reInitTree();
+		treeClientsSelectAction(clientTree.getSelectionPaths());
 		fetchDepots();
 
 		// if depot selection changed, we adapt the clients
-		Set<String> clientsLeft = new TreeSet<>();
-		for (String client : selValuesList) {
-			String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client);
-
-			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
-				clientsLeft.add(client);
-			}
-		}
-
-		selectedClients = new ArrayList<>(clientsLeft);
+		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(selValuesList);
 
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 		Logging.debug(this, " reset the values, particularly in list ");
 
-		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.activateListSelectionListener();
 		clientTablePanel.restoreFilter();
 		clientTablePanel.setSelectedValues(clientsLeft);
@@ -1131,16 +1091,33 @@ public class ConfigedMain {
 
 	public void reloadHosts() {
 		mainFrame.activateLoadingCursor();
+		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(
+				clientTablePanel.getClientTable().getSelectedSet());
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 		updateHostInfo();
 
 		hostInfo.resetGui();
-		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
-				hostInfo);
 		clientTablePanel.restoreFilter();
+		this.selectedClients = clientsLeft;
+		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(),
+				this.selectedClients, hostInfo);
+		clientTablePanel.setSelectedValues(this.selectedClients);
 
 		mainFrame.deactivateLoadingCursor();
+	}
+
+	private List<String> getClientSelectionBasedOnDepotSelection(Set<String> selValuesList) {
+		List<String> clientsLeft = new ArrayList<>();
+		for (String client : selValuesList) {
+			String depotForClient = persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot()
+					.get(client);
+
+			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
+				clientsLeft.add(client);
+			}
+		}
+		return clientsLeft;
 	}
 
 	public void invertSelection() {
@@ -1193,7 +1170,7 @@ public class ConfigedMain {
 		Logging.info(this, "saveAndQuit");
 		saveSelectedGroupName();
 
-		finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
+		finishApp(!persistenceController.getDataServices().userRoles.isGlobalReadOnly(), 0);
 	}
 
 	public static void finishApp(boolean checkdirty, int exitcode) {

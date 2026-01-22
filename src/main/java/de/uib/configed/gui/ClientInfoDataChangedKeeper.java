@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -12,10 +12,10 @@ import java.util.Map.Entry;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.type.HostInfo;
-import de.uib.configed.share.DataChangedKeeper;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
-public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
+public class ClientInfoDataChangedKeeper extends AbstractDataChangedKeeper {
 	private Map<?, ?> source;
 
 	private ConfigedMain configedMain;
@@ -56,6 +56,7 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 		Logging.info(this, "dataHaveChanged dataChanged ", dataChanged);
 	}
 
+	@Override
 	public void save() {
 		Logging.info(this, "save , dataChanged ", dataChanged, " source ", source);
 		if (this.dataChanged && source != null) {
@@ -65,7 +66,7 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 				hostInfo.showAndSaveInternally(configedMain.getClientTablePanel(), client,
 						(Map<?, ?>) source.get(client));
 			}
-			persistenceController.getHostDataService().updateHosts();
+			persistenceController.getDataServices().host.updateHosts();
 
 			source.clear();
 			// we have to clear the map instead of nulling,
@@ -74,5 +75,16 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 		}
 
 		this.dataChanged = false;
+	}
+
+	@Override
+	public void cancel() {
+		super.cancel();
+		if (source != null) {
+			source.clear();
+		}
+
+		hostInfo.resetGui();
+		Logging.info(this, "cancel , dataChanged ", dataChanged);
 	}
 }

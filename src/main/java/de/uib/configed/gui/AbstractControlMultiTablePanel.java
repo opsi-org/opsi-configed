@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -16,12 +15,13 @@ import de.uib.configed.gui.features.licenses.MultiTablePanel;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.Utils;
 
 public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();
 
-	protected List<PanelGenEdit> tablePanes = new ArrayList<>();
+	protected List<PanelGenEdit> panelGenEdits = new ArrayList<>();
 
 	protected List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
@@ -31,8 +31,8 @@ public abstract class AbstractControlMultiTablePanel {
 		return tableModels;
 	}
 
-	public List<PanelGenEdit> getTablePanes() {
-		return tablePanes;
+	public List<PanelGenEdit> getPanelGenEdits() {
+		return panelGenEdits;
 	}
 
 	public abstract void init();
@@ -43,42 +43,27 @@ public abstract class AbstractControlMultiTablePanel {
 	public void initializeVisualSettings() {
 	}
 
-	public void refreshTables() {
+	public void refreshPanelGenEdits() {
 		for (GenTableModel tableModel : tableModels) {
 			tableModel.invalidate();
 			tableModel.reset();
 		}
 
-		for (PanelGenEdit tablePanel : tablePanes) {
+		for (PanelGenEdit tablePanel : panelGenEdits) {
 			tablePanel.setDataChanged(false);
 		}
 	}
 
-	public boolean mayLeave() {
-		boolean change = false;
-
-		Iterator<PanelGenEdit> iterP = tablePanes.iterator();
-
-		while (!change && iterP.hasNext()) {
-			PanelGenEdit p = iterP.next();
-			change = p.isDataChanged();
-		}
+	public int mayLeave() {
+		boolean change = panelGenEdits.stream().anyMatch(p -> p.isDataChanged());
 
 		if (change) {
-			int returnedOption = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
-					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
-					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-			if (returnedOption == JOptionPane.YES_OPTION) {
-				return true;
-			}
-
-			Utils.getMasterFrame().setVisible(true);
+			return JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
+					Configed.getResourceValue("ConfigedMain.confirmUnsavedChanges"),
+					Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 		} else {
-			return true;
+			return AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN;
 		}
-
-		return false;
 	}
 }

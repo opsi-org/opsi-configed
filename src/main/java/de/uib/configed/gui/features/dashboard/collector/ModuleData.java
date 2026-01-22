@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -35,7 +35,7 @@ public final class ModuleData {
 			return;
 		}
 
-		for (Map<String, Object> moduleInfo : persistenceController.getModuleDataService().getModules()) {
+		for (Map<String, Object> moduleInfo : persistenceController.getDataServices().module.getModules()) {
 			modules.add(moduleInfo.get("module_id").toString());
 		}
 	}
@@ -56,7 +56,7 @@ public final class ModuleData {
 		activeModules.clear();
 		expiredModules.clear();
 
-		List<Map<String, Object>> modules = persistenceController.getModuleDataService().getModules();
+		List<Map<String, Object>> modules = persistenceController.getDataServices().module.getModules();
 
 		for (Map<String, Object> moduleInfo : modules) {
 			String moduleId = moduleInfo.get("module_id").toString();

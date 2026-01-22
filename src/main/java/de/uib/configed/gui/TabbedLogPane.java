@@ -1,131 +1,106 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.logpane.LogPanel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class TabbedLogPane extends JTabbedPane {
-	private LogPanel[] textPanes;
-	private String[] idents = Utils.getLogTypes();
-	private final List<String> identsList;
-
-	private Map<String, String> logfiles = new HashMap<>();
+public class TabbedLogPane extends AbstractConfigurationTab {
+	// This is the index of "instlog" in Utils.getLogTypes()
+	private static final int DEFAULT_SELECTED_INDEX = 2;
+	private LogTabComponent[] textPanes;
+	private String[] logTypes = Utils.getLogTypes();
+	private final List<String> logTypesList;
 
 	private ConfigedMain configedMain;
+
+	private JTabbedPane tabbedPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public TabbedLogPane(ConfigedMain configedMain) {
+		super(false, true);
 		this.configedMain = configedMain;
 
+		tabbedPane = new JTabbedPane();
+		super.setComponent(tabbedPane);
+
 		// We want all the tabs to have equal width
-		putClientProperty("JTabbedPane.tabWidthMode", "equal");
+		tabbedPane.putClientProperty("JTabbedPane.tabWidthMode", "equal");
 
 		// We want a small gap on top, between the client tabs and the log tabs
-		super.setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE, 0, 0, 0));
+		tabbedPane.setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE, 0, 0, 0));
 
-		identsList = Arrays.asList(idents);
+		logTypesList = Arrays.asList(logTypes);
 
-		textPanes = new LogPanel[idents.length];
+		textPanes = new LogTabComponent[logTypes.length];
 
-		for (int i = 0; i < idents.length; i++) {
+		for (int i = 0; i < logTypes.length; i++) {
 			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
 		}
 
-		super.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex ", getSelectedIndex());
+		// We need to set the index before adding the change listener
+		// to avoid triggering the action on startup
+		tabbedPane.setSelectedIndex(DEFAULT_SELECTED_INDEX);
 
-			String logtype = Utils.getLogType(getSelectedIndex());
+		tabbedPane.addChangeListener(event -> updateContent());
 
-			// logfile empty?
-			if (!logfileExists(logtype)) {
-				setDocuments(logtype);
-			}
-		});
+		// We want to have no minimum size restrictions
+		// So that users can reduce the size of the client configuration as much as they want
+		super.setMinimumSize(new Dimension());
+	}
+
+	@Override
+	protected void updateContent() {
+		Logging.debug(this, "setLogPage");
+		setDocument(logTypes[tabbedPane.getSelectedIndex()], false);
 	}
 
 	private void initLogTabComponent(int i, String defaultText) {
 		LogTabComponent logTabComponent = new LogTabComponent(defaultText, getFocusTraversalKeysEnabled(),
 				configedMain);
-		logTabComponent.setLogFileType(idents[i]);
+		logTabComponent.setLogFileType(logTypes[i]);
 		textPanes[i] = logTabComponent;
-		super.addTab(idents[i], textPanes[i]);
+		tabbedPane.addTab(logTypes[i], textPanes[i].initUI());
 	}
 
-	public void setDocuments(String logtype) {
-		Map<String, String> documents = getLogfilesUpdating(logtype);
-		Logging.info(this, "idents.length ", idents.length);
-		for (String ident : idents) {
-			setDocument(ident, documents.get(ident));
-		}
-	}
+	public void setDocument(String logtype, final boolean resetCaret) {
+		String document = persistenceController.getDataServices().log
+				.getLogfile(configedMain.getSelectedClients().get(0), logtype);
+		Logging.info(this, "logTypes.length ", logTypes.length);
 
-	private void setDocument(String ident, final String document) {
-		int i = identsList.indexOf(ident);
-		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
-		if (i < 0 || i >= idents.length) {
+		int index = logTypesList.indexOf(logtype);
+		Logging.info(this, "setDocument ", index, " document == null ", (document == null));
+		if (index < 0 || index >= logTypes.length) {
 			return;
 		}
 
 		if (document == null) {
-			textPanes[i].setLogText("");
-			textPanes[i].setTitle("");
+			textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
+			textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(""));
 			return;
 		}
 
 		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
 				: "";
 
-		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
-		textPanes[i].setInfo(selectedClient);
-		textPanes[i].setLogText(document);
-	}
-
-	private boolean logfileExists(String logtype) {
-		return !logfiles.get(logtype).isEmpty()
-				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-	}
-
-	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
-		Logging.info(this, "getLogfilesUpdating ", logtypeToUpdate);
-
-		if (configedMain.getSelectedClients().size() == 1) {
-			logfiles = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
-					logtypeToUpdate);
-			Logging.debug(this, "log pages set");
-		} else {
-			for (String logType : Utils.getLogTypes()) {
-				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-			}
-		}
-
-		return logfiles;
-	}
-
-	public void setLogview(String logtype) {
-		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
-		if (i < 0) {
-			return;
-		}
-
-		setSelectedIndex(i);
+		textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(logTypes[index] + " " + selectedClient));
+		textPanes[index].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
+		textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document));
 	}
 }

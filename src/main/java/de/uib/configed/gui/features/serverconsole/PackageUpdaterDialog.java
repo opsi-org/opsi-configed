@@ -1,17 +1,15 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -25,7 +23,9 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandPackageUpdater;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PackageUpdaterDialog {
 	private JComboBox<String> jComboBoxActions;
@@ -35,8 +35,7 @@ public class PackageUpdaterDialog {
 	private ConfigedMain configedMain;
 
 	public PackageUpdaterDialog(ConfigedMain configedMain) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -102,11 +101,8 @@ public class PackageUpdaterDialog {
 	}
 
 	private JPanel initPanel() {
-		JLabel jLabelInfo = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.info"));
-		jLabelInfo.setFont(jLabelInfo.getFont().deriveFont(Font.BOLD));
-
-		JLabel jLabelRepos = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.repos"));
-		jLabelRepos.setFont(jLabelRepos.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelInfo = Utils.createBoldLabel("PackageUpdaterDialog.info");
+		JLabel jLabelRepos = Utils.createBoldLabel("PackageUpdaterDialog.repos");
 
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {
@@ -127,27 +123,12 @@ public class PackageUpdaterDialog {
 		jComboBoxActions.setEnabled(true);
 
 		JPanel panel = new JPanel();
-		GroupLayout inputPanelLayout = new GroupLayout(panel);
-		panel.setLayout(inputPanelLayout);
+		panel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "[grow, fill]", "[]0"));
+		panel.add(jLabelInfo);
+		panel.add(jComboBoxActions, "growx, gapbottom " + Globals.GAP_SIZE);
+		panel.add(jLabelRepos);
+		panel.add(jComboBoxRepos, "growx, gapbottom " + Globals.GAP_SIZE);
 
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxActions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jComboBoxRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxActions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
 		return panel;
 	}
 }

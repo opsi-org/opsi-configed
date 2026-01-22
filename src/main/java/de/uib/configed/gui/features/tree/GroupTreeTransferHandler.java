@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -40,8 +40,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			return false;
 		}
 

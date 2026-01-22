@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -52,7 +52,7 @@ public class ProductpropertiesUpdateCollection extends DefaultUpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion");
-		persistenceController.getProductDataService().setProductProperties();
+		persistenceController.getDataServices().product.setProductProperties();
 	}
 
 	@Override

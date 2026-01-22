@@ -1,15 +1,15 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui;
 
-import de.uib.configed.share.DataChangedKeeper;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
-public class GeneralDataChangedKeeper extends DataChangedKeeper {
+public class GeneralDataChangedKeeper extends AbstractDataChangedKeeper {
 	@Override
 	public void dataHaveChanged(Object source) {
 		super.dataHaveChanged(source);
@@ -33,6 +33,7 @@ public class GeneralDataChangedKeeper extends DataChangedKeeper {
 		UpdateCollectionManager.clearGlobalUpdateCollection();
 	}
 
+	@Override
 	public void save() {
 		if (this.dataChanged) {
 			saveConfigs();
@@ -41,9 +42,9 @@ public class GeneralDataChangedKeeper extends DataChangedKeeper {
 		this.dataChanged = false;
 	}
 
+	@Override
 	public void cancel() {
-		Logging.info(this, "cancel");
-		this.dataChanged = false;
+		super.cancel();
 
 		UpdateCollectionManager.cancelGlobalUpdateCollection();
 	}

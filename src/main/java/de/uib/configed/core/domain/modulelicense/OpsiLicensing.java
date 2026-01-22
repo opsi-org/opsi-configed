@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +35,7 @@ import de.uib.configed.gui.share.table.provider.MapSource;
 import de.uib.configed.gui.share.table.provider.TableSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class OpsiLicensing extends JPanel {
 	private static final int LABEL_COLOR_SIZE = 10;
@@ -56,14 +56,10 @@ public class OpsiLicensing extends JPanel {
 		PanelGenEdit mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
 
-		GroupLayout groupLayout = new GroupLayout(this);
-		super.setLayout(groupLayout);
+		super.setLayout(new MigLayout("insets 0, wrap 1", "[grow]", "[grow]0[]"));
 
-		groupLayout
-				.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(mainPanel).addComponent(clientInfo));
-
-		groupLayout
-				.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(mainPanel).addComponent(clientInfo));
+		super.add(mainPanel, "grow, push");
+		super.add(clientInfo, "gapbottom " + Globals.MIN_GAP_SIZE);
 	}
 
 	private void retrieveData() {
@@ -85,8 +81,8 @@ public class OpsiLicensing extends JPanel {
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
-						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+						persistenceController.getDataServices().module.getOpsiLicensingInfoOpsiAdminPD(),
+						persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 						!OpsiLicensing.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, theSourceMap, false);
@@ -131,24 +127,8 @@ public class OpsiLicensing extends JPanel {
 		JLabel warningLevelDays = new JLabel(Configed.getResourceValue("LicensingInfo.warning.levels.days") + ": "
 				+ licenseMap.getClientLimitWarningDays());
 
-		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
-		JLabel clientTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.title") + "  ("
-				+ persistenceController.getHostInfoCollections().getConfigServer() + ")");
-		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
-		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
-		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
-		JLabel macosNum = new JLabel(clientNumbers.get(LicensingInfoMap.MAC_OS).toString());
-		JLabel linux = new JLabel(Configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
-		JLabel linuxNum = new JLabel(clientNumbers.get(LicensingInfoMap.LINUX).toString());
-		JLabel windows = new JLabel(Configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
-		JLabel windowsNum = new JLabel(clientNumbers.get(LicensingInfoMap.WINDOWS).toString());
 		JLabel checksumTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.checksum"));
 		JLabel checksum = new JLabel(licenseMap.getCheckSum());
-
-		JLabel customerTitle = new JLabel(Configed.getResourceValue("LicensingInfo.customer.data"));
-		Set<String> customerSet = licenseMap.getCustomerNamesSet();
-		JLabel customerNames = new JLabel(
-				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 
 		checksumTitle.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 
@@ -170,81 +150,76 @@ public class OpsiLicensing extends JPanel {
 			licensingTable.reload();
 		});
 
-		JPanel panel = new JPanel();
-		GroupLayout gLayout = new GroupLayout(panel);
-		panel.setLayout(gLayout);
+		JPanel panel = new JPanel(new MigLayout("insets 10", "", "[]0"));
 
-		gLayout.setAutoCreateGaps(true);
-		gLayout.setAutoCreateContainerGaps(true);
+		panel.add(checkExtendedView, "split 2");
+		panel.add(checkShowOnlyAvailableModules, "wrap");
 
-		gLayout.setHorizontalGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(gLayout.createSequentialGroup()
-						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gLayout.createSequentialGroup()
-						.addComponent(okColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
-						.addComponent(okLabel).addGap(Globals.GAP_SIZE * 2)
-						.addComponent(warningColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
-						.addComponent(warningLabel).addGap(Globals.GAP_SIZE * 2)
-						.addComponent(errorColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE).addComponent(
-								errorLabel)
-						.addGap(0, 0, Short.MAX_VALUE))
-				.addGroup(
-						gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
-								warningLevelPercent).addGap(15).addComponent(
-										warningLevelDays))
-				.addGroup(gLayout
-						.createSequentialGroup().addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+		panel.add(okColor,
+				"w " + LABEL_COLOR_SIZE + "!, h " + LABEL_COLOR_SIZE + "!, split 6, gaptop " + Globals.GAP_SIZE);
+		panel.add(okLabel, "growx 0, gapright " + Globals.GAP_SIZE * 2 + ", gaptop " + Globals.GAP_SIZE);
 
-								.addComponent(clientTitle)
-								.addGroup(gLayout.createSequentialGroup()
-										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addComponent(allClient).addComponent(macos).addComponent(linux)
-												.addComponent(windows))
-										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addComponent(allClientNum).addComponent(macosNum)
-												.addComponent(linuxNum).addComponent(windowsNum)))
-								.addComponent(checksumTitle).addComponent(checksum))
-						.addGap(60).addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(customerTitle).addComponent(customerNames))));
+		panel.add(warningColor, "w " + LABEL_COLOR_SIZE + "!, h " + LABEL_COLOR_SIZE + "!, gaptop " + Globals.GAP_SIZE);
+		panel.add(warningLabel, "growx 0, gapright " + Globals.GAP_SIZE * 2 + ", gaptop " + Globals.GAP_SIZE);
 
-		gLayout.setVerticalGroup(
-				gLayout.createSequentialGroup()
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(okColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
-								.addComponent(okLabel)
-								.addComponent(warningColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
-								.addComponent(warningLabel)
-								.addComponent(errorColor, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE, LABEL_COLOR_SIZE)
-								.addComponent(errorLabel))
-						.addGap(15)
-						.addGroup(gLayout
-								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
-								.addComponent(warningLevelPercent).addComponent(warningLevelDays))
-						.addGap(25)
-						.addGroup(gLayout
-								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle).addGap(30)
-								.addComponent(customerTitle))
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup()
-										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addGroup(gLayout.createSequentialGroup().addComponent(allClient)
-														.addComponent(macos).addComponent(linux).addComponent(windows))
-												.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
-														.addComponent(macosNum).addComponent(linuxNum)
-														.addComponent(windowsNum)))
-										.addGap(30).addComponent(checksumTitle).addComponent(checksum))
-								.addGap(30).addComponent(customerNames)));
+		panel.add(errorColor, "w " + LABEL_COLOR_SIZE + "!, h " + LABEL_COLOR_SIZE + "!, gaptop " + Globals.GAP_SIZE);
+		panel.add(errorLabel, "growx 0, gapright " + Globals.GAP_SIZE * 2 + ", gaptop " + Globals.GAP_SIZE + ", wrap");
+
+		panel.add(warningLevelAbsolute, "split 3, gaptop 15 ");
+		panel.add(warningLevelPercent, "gapleft " + Globals.GAP_SIZE * 2);
+		panel.add(warningLevelDays, "gapleft " + Globals.GAP_SIZE * 2 + ", wrap");
+
+		JPanel osInstallationPanel = initOSInstallationPanel();
+		panel.add(osInstallationPanel, "gaptop 25, wrap");
+
+		panel.add(checksumTitle, "gaptop 30, wrap");
+		panel.add(checksum, "growx, gaptop " + Globals.MIN_GAP_SIZE);
 
 		return panel;
+	}
+
+	private JPanel initOSInstallationPanel() {
+		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
+		JLabel clientTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.title") + "  ("
+				+ persistenceController.getDataServices().hostInfoCollections.getConfigServer() + ")");
+		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
+		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
+		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
+		JLabel macosNum = new JLabel(clientNumbers.get(LicensingInfoMap.MAC_OS).toString());
+		JLabel linux = new JLabel(Configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
+		JLabel linuxNum = new JLabel(clientNumbers.get(LicensingInfoMap.LINUX).toString());
+		JLabel windows = new JLabel(Configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
+		JLabel windowsNum = new JLabel(clientNumbers.get(LicensingInfoMap.WINDOWS).toString());
+
+		JLabel customerTitle = new JLabel(Configed.getResourceValue("LicensingInfo.customer.data"));
+		Set<String> customerSet = licenseMap.getCustomerNamesSet();
+		JLabel customerNames = new JLabel(
+				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
+
+		JPanel osInstallationPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[pref!][grow]60[pref!]"));
+
+		osInstallationPanel.add(clientTitle, "cell 0 0");
+		osInstallationPanel.add(customerTitle, "cell 2 0");
+
+		JPanel osInstallationDataPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[pref!][pref!]"));
+
+		osInstallationDataPanel.add(allClient, "cell 0 0");
+		osInstallationDataPanel.add(allClientNum, "cell 1 0");
+
+		osInstallationDataPanel.add(macos, "cell 0 1");
+		osInstallationDataPanel.add(macosNum, "cell 1 1");
+
+		osInstallationDataPanel.add(linux, "cell 0 2");
+		osInstallationDataPanel.add(linuxNum, "cell 1 2");
+
+		osInstallationDataPanel.add(windows, "cell 0 3");
+		osInstallationDataPanel.add(windowsNum, "cell 1 3");
+
+		osInstallationPanel.add(osInstallationDataPanel,
+				"cell 0 1, alignx left, aligny top, gaptop " + Globals.GAP_SIZE);
+		osInstallationPanel.add(customerNames, "cell 2 1, alignx left, aligny top, gaptop " + Globals.GAP_SIZE);
+
+		return osInstallationPanel;
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {

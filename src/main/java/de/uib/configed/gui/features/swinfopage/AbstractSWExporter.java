@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -211,9 +211,9 @@ public abstract class AbstractSWExporter {
 
 	private Map<String, Map<String, Object>> retrieveSoftwareMap() {
 		Logging.info(this, "retrieving data for ", hostId);
-		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
+		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getDataServices().software
 				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
-		Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
+		Map<String, Map<String, Object>> tableData = persistenceController.getDataServices().software
 				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
 		if (tableData == null || tableData.isEmpty()) {
@@ -222,7 +222,7 @@ public abstract class AbstractSWExporter {
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 		} else {
 			Logging.debug(this, "retrieved size  ", tableData.size());
-			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
+			scanInfo = "Scan " + persistenceController.getDataServices().software
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 		}
 

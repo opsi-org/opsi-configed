@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,20 +11,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.configed.core.domain.serverdata.reload.handler.ReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
 import de.uib.configed.share.logging.Logging;
 
 /**
- * Provides a way to trigger specific {@link ReloadHandler} implementation for
- * an event, without requiring to know specific implementations.
+ * Provides a way to trigger specific {@link AbstractReloadHandler}
+ * implementation for an event, without requiring to know specific
+ * implementations.
  * <p>
  * {@link ReloadDispatcher} is based on event bus design pattern.
  */
 public class ReloadDispatcher {
-	private Map<String, ReloadHandler> handlers = new HashMap<>();
+	private Map<String, AbstractReloadHandler> handlers = new HashMap<>();
 	private Set<String> activeEvents = new HashSet<>();
 
-	public void registerHandler(String event, ReloadHandler handler) {
+	public void registerHandler(String event, AbstractReloadHandler handler) {
 		handlers.put(event, handler);
 	}
 

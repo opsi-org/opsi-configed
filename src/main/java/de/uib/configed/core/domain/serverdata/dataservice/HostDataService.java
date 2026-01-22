@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -17,17 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.IntStream;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
@@ -55,34 +52,13 @@ import de.uib.configed.share.userprefs.UserPreferences;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class HostDataService {
+public class HostDataService extends DataService {
 	private static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
-
-	private CacheManager cacheManager;
-	private AbstractPOJOExecutioner exec;
-	private OpsiServiceNOMPersistenceController persistenceController;
-	private ConfigDataService configDataService;
-	private UserRolesConfigDataService userRolesConfigDataService;
-	private HostInfoCollections hostInfoCollections;
 
 	private Map<String, Map<String, Object>> hostUpdates;
 
-	public HostDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
-		this.cacheManager = CacheManager.getInstance();
-		this.exec = exec;
-		this.persistenceController = persistenceController;
-	}
-
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
+	public HostDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public boolean createClients(Iterable<List<Object>> clients) {
@@ -92,7 +68,7 @@ public class HostDataService {
 
 		for (List<Object> client : clients) {
 			String hostname = ((String) client.get(0)).trim();
-			String domainname = ((String) client.get(1)).trim();
+			String domain = ((String) client.get(1)).trim();
 			String depotId = ((String) client.get(2)).trim();
 			String macaddress = ((String) client.get(3)).trim();
 			String description = ((String) client.get(4)).trim();
@@ -107,8 +83,13 @@ public class HostDataService {
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
 			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
+			String netbootProduct = ((String) client.get(13)).trim();
 
-			String newClientId = hostname + "." + domainname;
+			String newClientId = hostname + "." + domain;
+
+			if (netbootProduct != null && !netbootProduct.isBlank()) {
+				addNetbootProductToList(netbootProduct, newClientId, productsNetbootJsonObject);
+			}
 
 			Map<String, Object> hostItem = new HashMap<>();
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
@@ -127,21 +108,44 @@ public class HostDataService {
 			List<String> valuesDepot = new ArrayList<>();
 			ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 			if (depotId == null || depotId.isEmpty()) {
-				depotId = hostInfoCollections.getConfigServer();
+				depotId = dataServices.hostInfoCollections.getConfigServer();
 			}
 			valuesDepot.add(depotId);
 			config.put(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID, valuesDepot);
-			persistenceController.getConfigDataService().setConfigStates(newClientId, config);
-
+			dataServices.config.setConfigStates(newClientId, config);
 			addGroupsToList(groups, newClientId, groupsJsonObject);
 
 			HostInfo hostInfo = new HostInfo();
 			hostInfo.setValues(hostItem);
 			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
-			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
+			dataServices.hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
+
+			prioritizeSelectedDomain(domain);
 		}
 
 		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
+	}
+
+	private void prioritizeSelectedDomain(String selectedDomain) {
+		List<String> domains = new ArrayList<>(dataServices.config.getDomains());
+		domains.remove(selectedDomain);
+		domains.add(0, selectedDomain);
+
+		List<Object> serialized = IntStream.range(0, domains.size()).mapToObj(i -> (Object) (i + ":" + domains.get(i)))
+				.toList();
+
+		dataServices.config.writeDomains(serialized);
+	}
+
+	private void addNetbootProductToList(String netbootProduct, String newClientId,
+			List<Map<String, Object>> productsNetbootJsonObject) {
+		Logging.info(this, "createClient productNetboot ", netbootProduct);
+		Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
+		itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, netbootProduct);
+		itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		itemProducts.put("clientId", newClientId);
+		itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
+		productsNetbootJsonObject.add(itemProducts);
 	}
 
 	private void addGroupsToList(String groupsAsString, String newClientId,
@@ -150,7 +154,7 @@ public class HostDataService {
 		if (!groupsAsString.isEmpty()) {
 			groups = groupsAsString.replace("\\s,\\s", ",").trim().split(",");
 		} else {
-			groups = new String[] {};
+			groups = new String[0];
 		}
 
 		Logging.info(this, "createClient", " group ", Arrays.toString(groups));
@@ -165,130 +169,46 @@ public class HostDataService {
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
 			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { clientsJsonObject });
-		boolean result = exec.doCall(omc);
+		boolean result = dataServices.exec.doCall(RPCMethodName.HOST_CREATE_CLIENTS, clientsJsonObject);
 
 		if (result) {
 			if (!groupsJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
-						new Object[] { groupsJsonObject });
-				result = exec.doCall(omc);
+				result = dataServices.exec.doCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, groupsJsonObject);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
-						new Object[] { productsNetbootJsonObject });
-				result = result && exec.doCall(omc);
+				result = result && dataServices.exec.doCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
+						productsNetbootJsonObject);
 			}
 
-			persistenceController.getConfigDataService().updateConfigStates();
+			dataServices.config.updateConfigStates();
 		}
 
 		return result;
-	}
-
-	public boolean createClient(String hostname, String domainname, String depotId, String description,
-			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean wanConfig, String[] groups, String productNetboot) {
-		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
-			return false;
-		}
-
-		boolean result = false;
-
-		String newClientId = hostname + "." + domainname;
-
-		Map<String, Object> hostItem = new HashMap<>();
-		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
-		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
-		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
-		hostItem.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUID);
-		hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
-		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
-		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
-		hostItem.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
-		hostItem.put(HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_CLIENTS, new Object[] { hostItem });
-		result = exec.doCall(omc);
-
-		if (result) {
-			result = updateGroupsForClient(groups, newClientId);
-		}
-
-		if (result && productNetboot != null && !productNetboot.isEmpty()) {
-			Logging.info(this, "createClient productNetboot ", productNetboot);
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
-			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
-			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-			itemProducts.put("clientId", newClientId);
-			itemProducts.put(ProductState.KEY_ACTION_REQUEST, "setup");
-			jsonObjects.add(itemProducts);
-			omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS, new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		}
-
-		if (result) {
-			if (depotId == null || depotId.isEmpty()) {
-				depotId = hostInfoCollections.getConfigServer();
-			}
-			HostInfo hostInfo = new HostInfo();
-			hostInfo.setValues(hostItem);
-			hostInfo.setType(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
-			hostInfoCollections.setLocalHostInfo(newClientId, hostInfo);
-			hostInfoCollections.setDepotForClients(List.of(newClientId), depotId);
-
-			Logging.info(this, " createClient hostInfo ", hostInfo);
-		}
-
-		return result;
-	}
-
-	private boolean updateGroupsForClient(String[] groups, String newClientId) {
-		if (groups == null || groups.length == 0) {
-			return true;
-		}
-
-		Logging.info(this, "createClient group ", Arrays.toString(groups));
-		List<Map<String, Object>> jsonObjects = new ArrayList<>();
-		for (String group : groups) {
-			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-			jsonObjects.add(itemGroup);
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
-				new Object[] { jsonObjects });
-		return exec.doCall(omc);
 	}
 
 	public boolean renameClient(String hostname, String newHostname) {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly()) {
 			return false;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT,
-				new String[] { hostname, newHostname });
-		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-		return exec.doCall(omc);
+		dataServices.persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
+		return dataServices.exec.doCall(RPCMethodName.HOST_RENAME_OPSI_CLIENT, hostname, newHostname);
 	}
 
 	public void deleteClients(Collection<String> hostIds) {
-		if (userRolesConfigDataService.isGlobalReadOnly() || hostIds.isEmpty()) {
+		if (dataServices.userRoles.isGlobalReadOnly() || hostIds.isEmpty()) {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_DELETE, new Object[] { hostIds });
-		exec.doCall(omc);
+		dataServices.exec.doCall(RPCMethodName.HOST_DELETE, hostIds);
 
-		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
+		dataServices.persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
 
 	// executes all updates collected by setHostDescription ...
 	public void updateHosts() {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly()) {
 			return;
 		}
 
@@ -298,10 +218,7 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS,
-				new Object[] { hostUpdates.values() });
-
-		if (exec.doCall(omc)) {
+		if (dataServices.exec.doCall(RPCMethodName.HOST_UPDATE_CLIENTS, hostUpdates.values())) {
 			hostUpdates.clear();
 		}
 	}
@@ -360,7 +277,6 @@ public class HostDataService {
 	}
 
 	public List<Map<String, Object>> getOpsiHosts() {
-		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		List<String> hostTypes = new ArrayList<>();
 		hostTypes.add(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER);
@@ -368,8 +284,10 @@ public class HostDataService {
 		callFilter.put(HostInfo.HOST_TYPE_KEY, hostTypes);
 		TimeCheck timer = new TimeCheck(this, "getOpsiHosts").start();
 		Logging.notice(this, "host_getObjects");
-		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
-				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+		List<Map<String, Object>> opsiHosts = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_OBJECTS,
+				new String[0], callFilter);
+
+		transformTimestampsToLocal(opsiHosts);
 		timer.stop();
 		return opsiHosts;
 	}
@@ -377,22 +295,27 @@ public class HostDataService {
 	public List<Map<String, Object>> getOpsiClients() {
 		TimeCheck timer = new TimeCheck(this, "getOpsiClients").start();
 		Logging.notice(this, "host_getClients");
-		List<Map<String, Object>> opsiClients = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.HOST_GET_CLIENTS, new Object[0]));
+		List<Map<String, Object>> opsiClients = dataServices.exec.getListOfMaps(RPCMethodName.HOST_GET_CLIENTS);
+		transformTimestampsToLocal(opsiClients);
 		timer.stop();
 		return opsiClients;
+	}
+
+	private static void transformTimestampsToLocal(List<Map<String, Object>> hostList) {
+		for (Map<String, Object> host : hostList) {
+			Utils.formatDateTimeStringForMap(host, HostInfo.LAST_SEEN_KEY);
+			Utils.formatDateTimeStringForMap(host, HostInfo.CREATED_KEY);
+		}
 	}
 
 	public List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations) {
 		List<String> result = new ArrayList<>();
-		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
 		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
+		List<Map<String, Object>> retrievedList = dataServices.exec
+				.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new String[0], callFilter);
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get("clientId");
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
@@ -419,25 +342,22 @@ public class HostDataService {
 		Object[] callParameters = clientIds != null && !clientIds.isEmpty() ? new Object[] { clientIds }
 				: new Object[] {};
 
-		RPCMethodName methodname = RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS;
-		Map<String, Object> sessionInfos = exec.getResponses(exec
-				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
-		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
+		Map<String, Map<String, Object>> sessionInfos = dataServices.exec
+				.getMapOfMaps(RPCMethodName.HOST_CONTROL_GET_ACTIVE_SESSIONS, callParameters);
+		for (Entry<String, Map<String, Object>> resultEntry : sessionInfos.entrySet()) {
 			String value;
 
-			if (resultEntry.getValue() instanceof String errorString) {
-				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorString;
-			} else if (resultEntry.getValue() instanceof List<?> sessionlist) {
-				value = createSessionInfoForList(sessionlist);
+			Object error = resultEntry.getValue().get("error");
+			if (error != null) {
+				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + error;
 			} else {
-				Logging.warning(this, "resultEntry's value is neither a String nor a List");
-				value = "";
+				value = createSessionInfoForList(POJOReMapper.remap(resultEntry.getValue().get("result")));
 			}
 
 			sessionInfo.put(resultEntry.getKey(), value);
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.SESSION_INFO, sessionInfo);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SESSION_INFO, sessionInfo);
 	}
 
 	/**
@@ -448,18 +368,16 @@ public class HostDataService {
 	 * @return
 	 */
 	public Map<String, String> getSessionInfo() {
-		if (cacheManager.isDataCached(CacheIdentifier.SESSION_INFO)) {
-			return cacheManager.getCachedData(CacheIdentifier.SESSION_INFO, Map.class);
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.SESSION_INFO)) {
+			return dataServices.cacheManager.getCachedData(CacheIdentifier.SESSION_INFO, Map.class);
 		} else {
 			return Collections.emptyMap();
 		}
 	}
 
-	private static String createSessionInfoForList(List<?> sessionlist) {
+	private static String createSessionInfoForList(List<Map<String, Object>> sessionList) {
 		StringBuilder value = new StringBuilder();
-		for (Object element : sessionlist) {
-			Map<String, Object> session = POJOReMapper.remap(element);
-
+		for (Map<String, Object> session : sessionList) {
 			String username = "" + session.get("UserName");
 			String logondomain = "" + session.get("LogonDomain");
 
@@ -484,28 +402,27 @@ public class HostDataService {
 	 */
 	public Set<String> getMessagebusConnectedClients() {
 		Logging.info(this, "get clients connected with messagebus");
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS, new Object[] {});
-		return new HashSet<>(exec.getStringListResult(omc));
+		return new HashSet<>(dataServices.exec.getStringListResult(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS));
 	}
 
 	public void setHostValues(Map<String, Object> settings) {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly()) {
 			return;
 		}
 
-		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, new Object[] { settings }));
+		dataServices.exec.doCall(RPCMethodName.HOST_UPDATE_OBJECTS, settings);
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {
 		retrieveHostDisplayFields();
-		return cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, Map.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, Map.class);
 	}
 
 	public void retrieveHostDisplayFields() {
-		if (cacheManager.isDataCached(CacheIdentifier.HOST_DISPLAY_FIELDS)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HOST_DISPLAY_FIELDS)) {
 			return;
 		}
-		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
+		Map<String, List<Object>> serverPropertyMap = dataServices.config.getConfigDefaultValuesPD();
 		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 		// check if have to initialize the server property
 		configuredByService = produceHostDisplayFields(configuredByService);
@@ -525,12 +442,12 @@ public class HostDataService {
 		}
 
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
-		cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
 	}
 
 	private List<String> produceHostDisplayFields(List<String> givenList) {
 		List<String> result = null;
-		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
+		Map<String, ConfigOption> configOptions = dataServices.config.getConfigOptionsPD();
 		Logging.info(this, "produceHost_displayFields configOptions.get(key) ",
 				configOptions.get(KEY_HOST_DISPLAYFIELDS));
 
@@ -575,9 +492,7 @@ public class HostDataService {
 			item.put("editable", false);
 			item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
-
-			exec.doCall(omc);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, item);
 		} else {
 			result = givenList;
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -134,7 +134,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		private void selectAllowedDepots(int index0, int index1) {
 			for (int i = index0; i <= index1; i++) {
 				Object value = getModel().getElementAt(i);
-				if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 						.hasDepotPermission((String) value)) {
 					super.setSelectionInterval(index0, index1);
 				}

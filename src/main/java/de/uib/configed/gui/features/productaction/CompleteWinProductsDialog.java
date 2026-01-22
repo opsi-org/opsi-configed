@@ -1,15 +1,13 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.productaction;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -29,9 +27,11 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.NameProducer;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CompleteWinProductsDialog implements NameProducer {
 	private String winProduct = "";
@@ -67,7 +67,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		defineChoosers();
 		initComponentsForNameProducer();
 
-		String webDavPath = persistenceController.getHostInfoCollections().getConfigServerWebDavPath();
+		String webDavPath = persistenceController.getDataServices().hostInfoCollections.getConfigServerWebDavPath();
 		depotProductDirectory = webDavPath != null && !webDavPath.isEmpty() ? webDavPath : "depot/";
 		if (!depotProductDirectory.endsWith("/")) {
 			depotProductDirectory += "/";
@@ -119,7 +119,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Configed.getResourceValue("CompleteWinProducts.chooser"));
 
-		depot = new JLabel(persistenceController.getHostInfoCollections().getConfigServer());
+		depot = new JLabel(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
@@ -242,114 +242,41 @@ public class CompleteWinProductsDialog implements NameProducer {
 		new WinProductUploadWorker(ctx).execute();
 	}
 
-	@SuppressWarnings("java:S138")
 	private JPanel initLayout() {
-		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
-		topicLabel.setFont(topicLabel.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));
-		labelServer.setFont(labelServer.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelWinProduct = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelWinProduct"));
-		labelWinProduct.setFont(labelWinProduct.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelFolderWinPE = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelFolderWinPE"));
-		labelFolderWinPE.setFont(labelFolderWinPE.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelFolderInstallFiles = new JLabel(
-				Configed.getResourceValue("CompleteWinProducts.labelFolderInstallFiles"));
-		labelFolderInstallFiles.setFont(labelFolderInstallFiles.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
-		labelTargetPath.setFont(labelTargetPath.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelProductKey = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelProductKey"));
-		labelProductKey.setFont(labelProductKey.getFont().deriveFont(Font.BOLD));
+		JLabel topicLabel = Utils.createBoldLabel("CompleteWinProducts.topic");
+		JLabel labelServer = Utils.createBoldLabel("CompleteWinProducts.labelServer");
+		JLabel labelWinProduct = Utils.createBoldLabel("CompleteWinProducts.labelWinProduct");
+		JLabel labelFolderWinPE = Utils.createBoldLabel("CompleteWinProducts.labelFolderWinPE");
+		JLabel labelFolderInstallFiles = Utils.createBoldLabel("CompleteWinProducts.labelFolderInstallFiles");
+		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
+		JLabel labelProductKey = Utils.createBoldLabel("CompleteWinProducts.labelProductKey");
 
 		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		panel.add(topicLabel, "gapbottom " + Globals.GAP_SIZE);
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		panel.add(labelServer);
+		panel.add(depot, "gapbottom " + Globals.GAP_SIZE);
 
-				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		panel.add(labelWinProduct);
+		panel.add(comboChooseWinProduct, "growx, gapbottom " + Globals.GAP_SIZE);
 
-				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		panel.add(jLabelRetrievalText, "hidemode 3");
 
-				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		panel.add(labelFolderWinPE);
+		panel.add(fieldPathWinPE, "growx, split 2");
+		panel.add(buttonCallSelectFolderWinPE, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
 
-				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderInstallFiles,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+		panel.add(labelFolderInstallFiles);
+		panel.add(fieldPathInstallFiles, "growx, split 2");
+		panel.add(buttonCallSelectFolderInstallFiles, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
+
+		panel.add(labelTargetPath);
+		panel.add(fieldTargetPath, "growx, gapbottom " + Globals.GAP_SIZE);
+
+		panel.add(labelProductKey);
+		panel.add(fieldProductKey, "growx");
 
 		return panel;
 	}

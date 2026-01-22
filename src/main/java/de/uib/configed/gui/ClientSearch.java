@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -93,7 +93,7 @@ public class ClientSearch {
 		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.productSelection"));
 		listSelectionDialog.setListData(
-				new ArrayList<>(persistenceController.getProductDataService().getAllLocalbootProductNames()));
+				new ArrayList<>(persistenceController.getDataServices().product.getAllLocalbootProductNames()));
 		listSelectionDialog.show();
 		return listSelectionDialog.wasAccepted() ? listSelectionDialog.getSelectedValue() : "";
 	}
@@ -123,14 +123,14 @@ public class ClientSearch {
 		}
 
 		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
-			String productVersion = persistenceController.getProductDataService().getProductVersion(selectedProduct);
-			String packageVersion = persistenceController.getProductDataService()
+			String productVersion = persistenceController.getDataServices().product.getProductVersion(selectedProduct);
+			String packageVersion = persistenceController.getDataServices().product
 					.getProductPackageVersion(selectedProduct);
 
 			Logging.debug(this, "selectClientsNotCurrentProductInstalled product ", selectedProduct, ", ",
 					productVersion, ", ", packageVersion);
 
-			return persistenceController.getHostDataService().getClientsWithOtherProductVersion(selectedProduct,
+			return persistenceController.getDataServices().host.getClientsWithOtherProductVersion(selectedProduct,
 					productVersion, packageVersion, includeClientsWithBrokenInstallation);
 		}, searchQueryName.replace("...", " " + selectedProduct));
 		executor.execute();

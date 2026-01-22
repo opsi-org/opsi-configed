@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -39,10 +39,10 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	private void retrieveRequirements(String depotId, String product) {
 		// if depotId == null the depot representative is used
-		requMap = persistenceController.getProductDataService().getProductRequirements(depotId, product);
-		requBeforeMap = persistenceController.getProductDataService().getProductPreRequirements(depotId, product);
-		requAfterMap = persistenceController.getProductDataService().getProductPostRequirements(depotId, product);
-		requDeinstallMap = persistenceController.getProductDataService().getProductDeinstallRequirements(depotId,
+		requMap = persistenceController.getDataServices().product.getProductRequirements(depotId, product);
+		requBeforeMap = persistenceController.getDataServices().product.getProductPreRequirements(depotId, product);
+		requAfterMap = persistenceController.getDataServices().product.getProductPostRequirements(depotId, product);
+		requDeinstallMap = persistenceController.getDataServices().product.getProductDeinstallRequirements(depotId,
 				product);
 	}
 
@@ -93,27 +93,16 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int col) {
-		String result = "";
-		switch (col) {
-		case 0:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
-			break;
-
-		case 1:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
-			break;
-		case 2:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
-			break;
-		case 3:
-			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
-			break;
-		default:
+		return switch (col) {
+		case 0 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
+		case 1 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
+		case 2 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
+		case 3 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
+		default -> {
 			Logging.warning(this, "no case found for col in getColumnName");
-			break;
+			yield "";
 		}
-
-		return result;
+		};
 	}
 
 	@Override
@@ -128,26 +117,22 @@ public class RequirementsTableModel extends AbstractTableModel {
 			result = getValueAtFirstColumn(rowTypeIndex, myKey);
 		} else {
 			switch (col) {
-			case 1:
+			case 1 -> {
 				return getValueForCol1(myKey, rowTypeIndex);
-
-			case 2:
+			}
+			case 2 -> {
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requBeforeMap != null) {
 					result = requBeforeMap.get(myKey);
 				}
-				break;
-
-			case 3:
+			}
+			case 3 -> {
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requAfterMap != null) {
 					result = requAfterMap.get(myKey);
 				}
-				break;
-
-			default:
-				Logging.warning(this, "no case found for col in getValueAt");
-				break;
+			}
+			default -> Logging.warning(this, "no case found for col in getValueAt");
 			}
 
 			if (result != null) {
@@ -159,27 +144,19 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	private String getValueAtFirstColumn(int rowTypeIndex, String myKey) {
-		String result = null;
 		final String IDENT = "     ";
 
-		switch (rowTypeIndex) {
-		case 0:
-			result = myKey;
-			break;
-		case 1:
-			result = IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-					+ " setup";
-			break;
-		case 2:
-			result = IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-					+ " uninstall";
-			break;
-		default:
+		return switch (rowTypeIndex) {
+		case 0 -> myKey;
+		case 1 -> IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				+ " setup";
+		case 2 -> IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				+ " uninstall";
+		default -> {
 			Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
-			break;
+			yield null;
 		}
-
-		return result;
+		};
 	}
 
 	private String getValueForCol1(String myKey, int rowTypeIndex) {

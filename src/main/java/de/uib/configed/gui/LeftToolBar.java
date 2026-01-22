@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -66,15 +66,16 @@ public class LeftToolBar extends JToolBar {
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl
 				.addActionListener(actionEvent -> ExtraFrameController.startEditTerminalCommandsDialog(configedMain));
-		jMenuCommandControl.setEnabled(PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().terminalCommandControlIsActive());
+		jMenuCommandControl
+				.setEnabled(PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.terminalCommandControlIsActive());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
 		Icons.addOpsiIconToMenuItem(menuOpsi);
 		boolean commandsAreDeactivated = !PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().terminalCommandsIsActive();
+				.getDataServices().userRoles.terminalCommandsIsActive();
 
 		Logging.info("setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
@@ -90,7 +91,7 @@ public class LeftToolBar extends JToolBar {
 
 		// check terminal access rights defined by user roles
 		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().terminalsForbidden();
+				.getDataServices().userRoles.terminalsForbidden();
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
@@ -169,8 +170,8 @@ public class LeftToolBar extends JToolBar {
 				jMenuServerConsole.add(parentMenu);
 			}
 
-			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+					.isGlobalReadOnly() && !commandsAreDeactivated);
 		}
 	}
 
@@ -179,17 +180,17 @@ public class LeftToolBar extends JToolBar {
 	}
 
 	private void loadServerConsoleMenu() {
-		terminalButton.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.terminalMenuIsActive());
+		terminalButton.setEnabled(
+				!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
+						&& PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+								.terminalMenuIsActive());
 
 		setupMenuServerConsole(configedMain, jMenuServerConsole);
 
-		jMenuServerConsoleMenuBar.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.terminalMenuIsActive());
+		jMenuServerConsoleMenuBar.setEnabled(
+				!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
+						&& PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+								.terminalMenuIsActive());
 
 		setupMenuServerConsole(configedMain, jMenuServerConsoleMenuBar);
 	}

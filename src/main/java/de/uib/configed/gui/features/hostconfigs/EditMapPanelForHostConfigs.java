@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -44,9 +44,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	private boolean includeAdditionalTooltipText;
 	private JTree tree;
 
-	public EditMapPanelForHostConfigs(boolean reloadable, JTree tree, boolean isServerConfig,
-			boolean includeAdditionalTooltipText) {
-		super(isServerConfig, !isServerConfig, reloadable);
+	public EditMapPanelForHostConfigs(JTree tree, boolean isServerConfig, boolean includeAdditionalTooltipText) {
+		super(isServerConfig, !isServerConfig);
 
 		this.tree = tree;
 		this.includeAdditionalTooltipText = includeAdditionalTooltipText;
@@ -80,20 +79,10 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
-					actor.saveData();
-					break;
-				case PopupMenuTrait.POPUP_PDF:
-					createPDF();
-					break;
-
-				default:
-					Logging.warning(this, "no case found for JPopupMenu in definePopup");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_SAVE -> actor.saveData();
+				case PopupMenuTrait.POPUP_PDF -> createPDF();
+				default -> Logging.warning(this, "no case found for JPopupMenu in definePopup");
 				}
 			}
 		};
@@ -112,7 +101,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
-						.getPersistenceController().getUserRolesConfigDataService();
+						.getPersistenceController().getDataServices().userRoles;
 				boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
 						|| userRolesConfigDataService.canEditOwnServerRole();
 				Component saveComponent = jPopupMenu.getComponent(0);
@@ -186,7 +175,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 
 	private String getPropertyOrigin(String propertyName) {
 		Map<String, ConfigOption> serverConfigs = PersistenceControllerFactory.getPersistenceController()
-				.getConfigDataService().getConfigOptionsPD();
+				.getDataServices().config.getConfigOptionsPD();
 
 		if (serverConfigs != null && serverConfigs.containsKey(propertyName)
 				&& !serverConfigs.get(propertyName).getDefaultValues().equals(defaultsMap.get(propertyName))) {

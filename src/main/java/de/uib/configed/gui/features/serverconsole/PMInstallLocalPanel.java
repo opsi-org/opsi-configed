@@ -1,16 +1,14 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.nio.file.Paths;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -22,6 +20,8 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import net.miginfocom.swing.MigLayout;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
 	private JLabel jLabelUploadFrom;
@@ -41,11 +41,8 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelUploadFrom = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalFrom"));
-		jLabelUploadFrom.setFont(jLabelUploadFrom.getFont().deriveFont(Font.BOLD));
-
-		jLabelUploadTo = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalTo"));
-		jLabelUploadTo.setFont(jLabelUploadTo.getFont().deriveFont(Font.BOLD));
+		jLabelUploadFrom = Utils.createBoldLabel("PMInstallLocalPanel.jLabelLocalFrom");
+		jLabelUploadTo = Utils.createBoldLabel("PMInstallLocalPanel.jLabelLocalTo");
 
 		jTextFieldPath = new JTextField();
 
@@ -76,42 +73,13 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-
-		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jTextFieldPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelUploadTo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jTextFieldPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-				.addComponent(jLabelUploadTo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE, "[grow, fill][]", "[]0[]0[]"));
+		add(jLabelUploadFrom, "wrap");
+		add(jTextFieldPath, "split 2, growx");
+		add(jButtonFileChooser, "wrap, gapbottom " + Globals.GAP_SIZE);
+		add(jLabelUploadTo, "wrap");
+		add(jComboBoxAutoCompletion, "split2, growx");
+		add(jButtonAutoCompletion, "wrap");
 	}
 
 	public SingleCommandFileUpload getCommand() {

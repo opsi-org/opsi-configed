@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -35,9 +36,10 @@ import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
-public class LicenseManagement extends JTabbedPane {
+public class LicenseManagement extends JTabbedPane implements ChangeListener {
 	public enum LicensesTabStatus {
 		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
 	}
@@ -73,22 +75,27 @@ public class LicenseManagement extends JTabbedPane {
 		initTableData();
 		initTabs();
 
-		super.addChangeListener((ChangeEvent changeEvent) -> {
-			int newVisualIndex = getSelectedIndex();
+		super.addChangeListener(this);
+	}
 
-			LicensesTabStatus newStatus = tabOrder.get(newVisualIndex);
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		int newVisualIndex = getSelectedIndex();
 
-			// report state change request to controller and look, what it produces
-			LicensesTabStatus status = reactToStateChangeRequest(newStatus);
+		LicensesTabStatus newStatus = tabOrder.get(newVisualIndex);
 
-			// if the controller did not accept the new index set it back
-			// observe that we get a recursion since we initiate another state change
-			// the recursion breaks since newVisualIndex is identical with
-			// the old and does not yield a different value
-			if (newStatus != status) {
-				setSelectedIndex(tabOrder.indexOf(status));
-			}
-		});
+		// report state change request to controller and look, what it produces
+		licensesStatus = reactToStateChangeRequest(newStatus);
+
+		// if the controller did not accept the new index set it back
+		// observe that we get a recursion since we initiate another state change
+		// the recursion breaks since newVisualIndex is identical with
+		// the old and does not yield a different value
+		if (newStatus != licensesStatus) {
+			super.removeChangeListener(this);
+			setSelectedIndex(tabOrder.indexOf(licensesStatus));
+			super.addChangeListener(this);
+		}
 	}
 
 	private void initTableData() {
@@ -107,7 +114,7 @@ public class LicenseManagement extends JTabbedPane {
 
 			@Override
 			public Map<String, Map<String, Object>> retrieveMap() {
-				return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
+				return (Map) persistenceController.getDataServices().license.getLicensePoolsPD();
 			}
 		}));
 
@@ -124,7 +131,7 @@ public class LicenseManagement extends JTabbedPane {
 
 			@Override
 			public Map<String, Map<String, Object>> retrieveMap() {
-				return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
+				return persistenceController.getDataServices().license.getRelationsSoftwareL2LPool();
 			}
 		}));
 
@@ -145,7 +152,7 @@ public class LicenseManagement extends JTabbedPane {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicenseContractsPD();
+						return (Map) persistenceController.getDataServices().license.getLicenseContractsPD();
 					}
 				}));
 
@@ -166,7 +173,7 @@ public class LicenseManagement extends JTabbedPane {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicensesPD();
+						return (Map) persistenceController.getDataServices().license.getLicensesPD();
 					}
 				}));
 	}
@@ -187,7 +194,7 @@ public class LicenseManagement extends JTabbedPane {
 				Configed.getResourceValue("ConfigedMain.Licenses.TabNewLicense"));
 		ControlPanelEnterLicense controlPanelEnterLicense = new ControlPanelEnterLicense(configedMain, this);
 		addTab(LicensesTabStatus.ENTER_LICENSE, controlPanelEnterLicense.getTabClient());
-		setEnabledAt(getTabCount() - 1, !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		setEnabledAt(getTabCount() - 1, !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		allControlMultiTablePanels.add(controlPanelEnterLicense);
 
 		// panelEditLicense
@@ -195,7 +202,7 @@ public class LicenseManagement extends JTabbedPane {
 				Configed.getResourceValue("ConfigedMain.Licenses.TabEditLicense"));
 		ControlPanelEditLicenses controlPanelEditLicenses = new ControlPanelEditLicenses(configedMain, this);
 		addTab(LicensesTabStatus.EDIT_LICENSE, controlPanelEditLicenses.getTabClient());
-		setEnabledAt(getTabCount() - 1, !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		setEnabledAt(getTabCount() - 1, !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		allControlMultiTablePanels.add(controlPanelEditLicenses);
 
 		// panelUsage
@@ -222,16 +229,33 @@ public class LicenseManagement extends JTabbedPane {
 
 	private LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
 		Logging.debug(this, "reactToStateChangeRequest( newState: ", newState, "), current state ", licensesStatus);
-		if (newState != licensesStatus && licensesPanels.get(licensesStatus).mayLeave()) {
-			licensesStatus = newState;
 
-			if (licensesPanels.get(licensesStatus) != null) {
-				licensesPanels.get(licensesStatus).reset();
-			}
-			// otherwise we return the old status
+		return switch (licensesPanels.get(licensesStatus).mayLeave()) {
+		case JOptionPane.YES_OPTION -> {
+			licensesPanels.get(licensesStatus).saveSettings();
+			yield newState;
 		}
-
-		return licensesStatus;
+		case JOptionPane.NO_OPTION -> {
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned false");
+			licensesPanels.get(licensesStatus).reset();
+			yield newState;
+		}
+		case AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN -> {
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned no dialog shown");
+			// We want to load the data in the new panel
+			licensesPanels.get(newState).load();
+			yield newState;
+		}
+		case JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION -> {
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned cancel");
+			// stay in the old state
+			yield licensesStatus;
+		}
+		default -> {
+			Logging.debug(this, "reactToStateChangeRequest: mayLeave returned unknown value");
+			yield newState;
+		}
+		};
 	}
 
 	public boolean checkSavedLicensesPane() {
@@ -240,7 +264,7 @@ public class LicenseManagement extends JTabbedPane {
 		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 		while (!change && iter.hasNext()) {
 			AbstractControlMultiTablePanel cmtp = iter.next();
-			Iterator<PanelGenEdit> iterP = cmtp.getTablePanes().iterator();
+			Iterator<PanelGenEdit> iterP = cmtp.getPanelGenEdits().iterator();
 			while (!change && iterP.hasNext()) {
 				PanelGenEdit p = iterP.next();
 				change = p.isDataChanged();

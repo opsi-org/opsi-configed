@@ -1,12 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.tree;
 
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,7 +23,6 @@ import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
 import javax.swing.DropMode;
-import javax.swing.GroupLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,6 +31,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
+import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -41,16 +40,21 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.Object2GroupEntry;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
 
 	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
+
+	private TreePath[] lastSelectionPaths = new TreePath[0];
 
 	public final GroupNode rootNode = new GroupNode("");
 
@@ -88,6 +92,21 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	public boolean isGroupNodeFullList(DefaultMutableTreeNode compareNode) {
 		return groupNodeAllObjects.equals(compareNode);
 	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		Logging.debug(this, "valueChanged ", e);
+		if (ChangedDataManager.checkSaveAll(true)) {
+			reactOnTreeSelection();
+			lastSelectionPaths = getSelectionPaths();
+		} else {
+			removeTreeSelectionListener(this);
+			setSelectionPaths(lastSelectionPaths);
+			addTreeSelectionListener(this);
+		}
+	}
+
+	abstract void reactOnTreeSelection();
 
 	@Override
 	public DefaultTreeModel getModel() {
@@ -317,8 +336,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+		JLabel labelDescription = Utils.createBoldLabel("description");
 
 		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), labelDescription,
 				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
@@ -326,7 +344,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		if (answer != null) {
 			groups.get(groupId).put("description", answer);
-			persistenceController.getGroupDataService().updateGroup(groupId, groups.get(groupId),
+			persistenceController.getDataServices().group.updateGroup(groupId, groups.get(groupId),
 					this instanceof ClientTree);
 		}
 	}
@@ -368,7 +386,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		} else {
 			// client node
 			removeNodeInternally(nodeID, parent);
-			persistenceController.getGroupDataService().removeObject2Group(nodeID, parentID);
+			persistenceController.getDataServices().group.removeObject2Group(nodeID, parentID);
 		}
 		return true;
 	}
@@ -386,27 +404,21 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (node.getAllowsChildren()) {
-			JLabel labelGroupName = new JLabel(Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-			labelGroupName.setFont(labelGroupName.getFont().deriveFont(Font.BOLD));
+			JLabel labelGroupName = Utils.createBoldLabel("ClientTree.editNode.label.groupname");
 
 			JTextField groupNameField = new JTextField();
 
-			JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-			labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+			JLabel labelDescription = Utils.createBoldLabel("description");
 
 			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";
 
-			JPanel panel = new JPanel();
-			GroupLayout layout = new GroupLayout(panel);
-			panel.setLayout(layout);
+			JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
 
-			layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelGroupName)
-					.addComponent(groupNameField).addGap(Globals.GAP_SIZE).addComponent(labelDescription)
-					.addComponent(groupDescriptionField));
-			layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addComponent(labelGroupName).addComponent(groupNameField).addComponent(labelDescription)
-					.addComponent(groupDescriptionField));
+			panel.add(labelGroupName);
+			panel.add(groupNameField, "growx, gapbottom " + Globals.GAP_SIZE);
+			panel.add(labelDescription);
+			panel.add(groupDescriptionField, "growx");
 
 			String newGroupKey = null;
 			JOptionPane optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
@@ -443,7 +455,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			newGroup.put("description", description);
 
 			// send data to server
-			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
+			if (persistenceController.getDataServices().group.addGroup(newGroup, this instanceof ClientTree)) {
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
 
 				result = produceGroupNode(newGroupKey, description, node.toString());
@@ -534,7 +546,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
 				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
 
-		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries, groupType);
+		return persistenceController.getDataServices().group.removeHostGroupElements(groupEntries, groupType);
 	}
 
 	protected GroupNode produceGroupNode(String groupId, String description) {
@@ -565,7 +577,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		while (e.hasMoreElements()) {
 			DefaultMutableTreeNode nextNode = (DefaultMutableTreeNode) e.nextElement();
 			if (nextNode.getAllowsChildren()) {
-				persistenceController.getGroupDataService().deleteGroup(nextNode.toString());
+				persistenceController.getDataServices().group.deleteGroup(nextNode.toString());
 			}
 		}
 	}
@@ -604,7 +616,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		Map<String, String> theGroup = getGroups().get(importID);
 		theGroup.put("parentGroupId", dropParentID);
-		persistenceController.getGroupDataService().updateGroup(importID, theGroup, this instanceof ClientTree);
+		persistenceController.getDataServices().group.updateGroup(importID, theGroup, this instanceof ClientTree);
 	}
 
 	public TreePath getActiveTreePath(String id) {

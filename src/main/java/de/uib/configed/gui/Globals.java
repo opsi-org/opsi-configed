@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -22,7 +22,7 @@ import com.formdev.flatlaf.FlatLaf;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2025-11-18";
+	public static final String VERDATE = "2026-01-21";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
@@ -101,6 +101,8 @@ public final class Globals {
 	// also used for GlassPane...
 
 	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
+	public static final Color LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_DARK = new Color(87, 87, 87, 184);
+	public static final Color LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_LIGHT = new Color(87, 87, 87, 40);
 
 	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 
@@ -185,5 +187,18 @@ public final class Globals {
 
 	public static Color getActiveColor() {
 		return FlatLaf.isLafDark() ? ICON_ACTIVE_DARK : ICON_ACTIVE_LIGHT;
+	}
+
+	public static Color getLogPaneCurrentLineBackground() {
+		return FlatLaf.isLafDark() ? LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_DARK
+				: LOG_PANE_CURRENT_LINE_BACKGROUND_COLOR_LIGHT;
+	}
+
+	public static Color getLogPaneSelectionBackground() {
+		return FlatLaf.isLafDark() ? getMagentaCell2() : getMagentaCell1();
+	}
+
+	public static Color getForegroundColor() {
+		return FlatLaf.isLafDark() ? OPSI_FOREGROUND_DARK : OPSI_FOREGROUND_LIGHT;
 	}
 }

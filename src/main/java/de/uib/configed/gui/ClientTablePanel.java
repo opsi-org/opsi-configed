@@ -1,20 +1,16 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,8 +25,9 @@ import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
-public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
+public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -40,6 +37,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 	// we put a JTable on a standard JScrollPane
 	private ClientTable clientTable;
+
+	private int[] lastSelectedRows = new int[0];
 
 	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
@@ -66,19 +65,12 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		searchPane.setFiltering();
 
 		clientTable.addKeyListener(searchPane);
-		clientTable.addKeyListener(this);
 
-		GroupLayout layoutLeftPane = new GroupLayout(this);
-		this.setLayout(layoutLeftPane);
+		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
+				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
 
-		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(searchPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		add(searchPane);
+		add(scrollpane, "grow, push");
 	}
 
 	public void updateTable() {
@@ -87,7 +79,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			return;
 		}
 
-		if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
+		if (persistenceController.getDataServices().hostInfoCollections.getCountClients() == 0) {
 			setMissingDataPanel();
 		} else {
 			scrollpane.getViewport().setView(clientTable);
@@ -125,7 +117,23 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
+		}
+	}
+
+	private void actOnListSelection() {
+		if (ChangedDataManager.checkSaveAll(true)) {
 			configedMain.actOnListSelection();
+			lastSelectedRows = clientTable.getSelectedRows();
+		} else {
+			deactivateListSelectionListener();
+			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
+			for (int row : lastSelectedRows) {
+				selectionModel.addSelectionInterval(row, row);
+			}
+			selectionModel.setValueIsAdjusting(false);
+			activateListSelectionListener();
 		}
 	}
 
@@ -135,26 +143,14 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 		JPanel mdPanel = new JPanel();
 
-		GroupLayout mdLayout = new GroupLayout(mdPanel);
-		mdPanel.setLayout(mdLayout);
+		mdPanel.setLayout(new MigLayout("fill"));
 
-		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(missingData2, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE));
-		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE));
+		JPanel panel = new JPanel(new MigLayout("wrap 1, aligny center, alignx center, gap 0", "[center]", "[]0"));
+		panel.add(missingData0);
+		panel.add(missingData1, "gapy " + Globals.GAP_SIZE);
+		panel.add(missingData2, "gapy " + Globals.GAP_SIZE);
+
+		mdPanel.add(panel, "grow, center");
 
 		scrollpane.getViewport().setView(mdPanel);
 	}
@@ -194,7 +190,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			// For example when the last client is unselected in the client list,
 			// this method is not called automatically by the selection listener,
 			// so we do it manually
-			configedMain.actOnListSelection();
+			actOnListSelection();
 		} else {
 			// because of ordering , we create a TreeSet view of the list
 			selectionModel.setValueIsAdjusting(true);
@@ -245,20 +241,4 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 		return result;
 	}
-
-	// KeyListener interface
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
 }

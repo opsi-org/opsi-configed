@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,28 +11,15 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.core.domain.HostInfoCollections;
 import de.uib.configed.core.domain.modulelicense.LicensingInfoMap;
-import de.uib.configed.core.domain.serverdata.dataservice.CommandDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.DepotDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.GroupDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.HardwareDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.HealthDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.HostDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.LicenseDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.LogDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.ModuleDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.SoftwareDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.UserDataService;
-import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 import de.uib.configed.core.domain.serverdata.reload.ReloadDispatcher;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.domain.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.DepotPropertiesDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -48,7 +35,6 @@ import de.uib.configed.core.domain.serverdata.reload.handler.SoftwareLicense2Lic
 import de.uib.configed.core.domain.serverdata.reload.handler.StatisticsDataReloadHandler;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.ConnectionState;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.features.productaction.CompleteWinProductsDialog;
 import de.uib.configed.gui.type.RemoteControl;
@@ -125,23 +111,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	private ServerFacade exec;
 
-	private HostInfoCollections hostInfoCollections;
+	private DataServices dataServices;
 
-	private ConfigDataService configDataService;
-	private UserRolesConfigDataService userRolesConfigDataService;
-	private DepotDataService depotDataService;
-	private GroupDataService groupDataService;
-	private HardwareDataService hardwareDataService;
-	private HealthDataService healthDataService;
-	private HostDataService hostDataService;
-	private LicenseDataService licenseDataService;
-	private LogDataService logDataService;
-	private ModuleDataService moduleDataService;
-	private ProductDataService productDataService;
-	private SoftwareDataService softwareDataService;
-	private CommandDataService sshCommandDataService;
-	private UserDataService userDataService;
-	private RPCMethodExecutor rpcMethodExecutor;
 	private ReloadDispatcher reloadDispatcher;
 
 	private String triggeredEvent;
@@ -178,211 +149,73 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.info(this, "connection state ", exec.getConnectionState());
 
-		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
-		configDataService = new ConfigDataService(exec, this);
-		depotDataService = new DepotDataService(exec);
-		groupDataService = new GroupDataService(exec, this);
-		hardwareDataService = new HardwareDataService(exec);
-		healthDataService = new HealthDataService(exec);
-		hostDataService = new HostDataService(exec, this);
-		licenseDataService = new LicenseDataService(exec);
-		logDataService = new LogDataService(exec);
-		moduleDataService = new ModuleDataService(exec);
-		productDataService = new ProductDataService(exec, this);
-		softwareDataService = new SoftwareDataService(exec, this);
-		sshCommandDataService = new CommandDataService(exec);
-		userDataService = new UserDataService(exec);
-		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
-		hostInfoCollections = new HostInfoCollections(this);
-
-		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-
-		depotDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-		depotDataService.setProductDataService(productDataService);
-		depotDataService.setHostInfoCollections(hostInfoCollections);
-
-		groupDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-
-		hostDataService.setConfigDataService(configDataService);
-		hostDataService.setHostInfoCollections(hostInfoCollections);
-		hostDataService.setHostInfoCollections(hostInfoCollections);
-		hostDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-
-		licenseDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-		licenseDataService.setModuleDataService(moduleDataService);
-
-		moduleDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-		moduleDataService.setHostInfoCollections(hostInfoCollections);
-
-		productDataService.setConfigDataService(configDataService);
-		productDataService.setDepotDataService(depotDataService);
-		productDataService.setHostInfoCollections(hostInfoCollections);
-		productDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-
-		softwareDataService.setModuleDataService(moduleDataService);
-		softwareDataService.setLicenseDataService(licenseDataService);
-		softwareDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-		softwareDataService.setHostInfoCollections(hostInfoCollections);
-
-		sshCommandDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-
-		rpcMethodExecutor.setHostDataService(hostDataService);
-		rpcMethodExecutor.setHostInfoCollections(hostInfoCollections);
+		dataServices = new DataServices(exec, this);
 
 		registerReloadHandlers();
 	}
 
-	public ConfigDataService getConfigDataService() {
-		return configDataService;
+	public DataServices getDataServices() {
+		return dataServices;
 	}
 
-	public UserRolesConfigDataService getUserRolesConfigDataService() {
-		return userRolesConfigDataService;
-	}
-
-	public DepotDataService getDepotDataService() {
-		return depotDataService;
-	}
-
-	public GroupDataService getGroupDataService() {
-		return groupDataService;
-	}
-
-	public HardwareDataService getHardwareDataService() {
-		return hardwareDataService;
-	}
-
-	public HealthDataService getHealthDataService() {
-		return healthDataService;
-	}
-
-	public HostDataService getHostDataService() {
-		return hostDataService;
-	}
-
-	public LicenseDataService getLicenseDataService() {
-		return licenseDataService;
-	}
-
-	public LogDataService getLogDataService() {
-		return logDataService;
-	}
-
-	public ModuleDataService getModuleDataService() {
-		return moduleDataService;
-	}
-
-	public ProductDataService getProductDataService() {
-		return productDataService;
-	}
-
-	public SoftwareDataService getSoftwareDataService() {
-		return softwareDataService;
-	}
-
-	public CommandDataService getSSHCommandDataService() {
-		return sshCommandDataService;
-	}
-
-	public UserDataService getUserDataService() {
-		return userDataService;
-	}
-
-	public HostInfoCollections getHostInfoCollections() {
-		return hostInfoCollections;
-	}
-
-	public RPCMethodExecutor getRPCMethodExecutor() {
-		return rpcMethodExecutor;
-	}
-
-	@SuppressWarnings({ "java:S103" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
-		HostDataReloadHandler hostDataReloadHandler = new HostDataReloadHandler();
-		hostDataReloadHandler.setConfigDataService(configDataService);
-		hostDataReloadHandler.setGroupDataService(groupDataService);
-		hostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
-		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(), hostDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(),
+				new HostDataReloadHandler(dataServices));
 
-		ConfigOptionsDataReloadHandler configOptionsDataReloadHandler = new ConfigOptionsDataReloadHandler();
-		configOptionsDataReloadHandler.setConfigDataService(configDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString(), configOptionsDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString(),
+				new ConfigOptionsDataReloadHandler(dataServices));
 
-		HardwareConfDataReloadHandler hardwareConfDataReloadHandler = new HardwareConfDataReloadHandler();
-		hardwareConfDataReloadHandler.setConfigDataService(configDataService);
-		hardwareConfDataReloadHandler.setHardwareDataService(hardwareDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.HARDWARE_CONF_RELOAD.toString(), hardwareConfDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.HARDWARE_CONF_RELOAD.toString(),
+				new HardwareConfDataReloadHandler(dataServices));
 
-		InstalledSoftwareDataReloadHandler installedSoftwareDataReloadHandler = new InstalledSoftwareDataReloadHandler();
-		installedSoftwareDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString(),
-				installedSoftwareDataReloadHandler);
+				new InstalledSoftwareDataReloadHandler(dataServices));
 
-		LicenseDataReloadHandler licenseDataReloadHandler = new LicenseDataReloadHandler();
-		licenseDataReloadHandler.setLicenseDataService(licenseDataService);
-		licenseDataReloadHandler.setHostInfoCollections(hostInfoCollections);
-		licenseDataReloadHandler.setSoftwareDataService(softwareDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(), licenseDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_DATA_RELOAD.toString(),
+				new LicenseDataReloadHandler(dataServices));
 
-		OpsiLicenseReloadHandler opsiLicenseReloadHandler = new OpsiLicenseReloadHandler();
-		opsiLicenseReloadHandler.setModuleDataService(moduleDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.OPSI_LICENSE_RELOAD.toString(), opsiLicenseReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.OPSI_LICENSE_RELOAD.toString(),
+				new OpsiLicenseReloadHandler(dataServices));
 
-		ProductDataReloadHandler productDataReloadHandler = new ProductDataReloadHandler();
-		productDataReloadHandler.setGroupDataService(groupDataService);
-		productDataReloadHandler.setProductDataService(productDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_DATA_RELOAD.toString(), productDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.PRODUCT_DATA_RELOAD.toString(),
+				new ProductDataReloadHandler(dataServices));
 
-		DepotChangeReloadHandler depotChangeReloadHandler = new DepotChangeReloadHandler();
-		depotChangeReloadHandler.setDepotDataService(depotDataService);
-		depotChangeReloadHandler.setProductDataService(productDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_CHANGE_RELOAD.toString(), depotChangeReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_CHANGE_RELOAD.toString(),
+				new DepotChangeReloadHandler(dataServices));
 
-		RelationsASWToLPDataReloadHandler relationsASWToLPDataReloadHandler = new RelationsASWToLPDataReloadHandler();
-		relationsASWToLPDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString(),
-				relationsASWToLPDataReloadHandler);
+				new RelationsASWToLPDataReloadHandler(dataServices));
 
-		OpsiHostDataReloadHandler opsiHostDataReloadHandler = new OpsiHostDataReloadHandler();
-		opsiHostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
-		reloadDispatcher.registerHandler(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString(), opsiHostDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString(),
+				new OpsiHostDataReloadHandler(dataServices));
 
-		LicenseContractDataReloadHandler licenseContractDataReloadHandler = new LicenseContractDataReloadHandler();
-		licenseContractDataReloadHandler.setLicenseDataService(licenseDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString(),
-				licenseContractDataReloadHandler);
+				new LicenseContractDataReloadHandler(dataServices));
 
-		LicensePoolDataReloadHandler licensePoolDataReloadHandler = new LicensePoolDataReloadHandler();
-		licensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(), licensePoolDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(),
+				new LicensePoolDataReloadHandler(dataServices));
 
-		@SuppressWarnings({ "java:S103" })
-		SoftwareLicense2LicensePoolDataReloadHandler softwareLicense2LicensePoolDataReloadHandler = new SoftwareLicense2LicensePoolDataReloadHandler();
-		softwareLicense2LicensePoolDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString(),
+				new LicensePoolDataReloadHandler(dataServices));
+
 		reloadDispatcher.registerHandler(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString(),
-				softwareLicense2LicensePoolDataReloadHandler);
+				new SoftwareLicense2LicensePoolDataReloadHandler(dataServices));
 
-		LicenseOnClientDataReloadHandler licenseOnClientDataReloadHandler = new LicenseOnClientDataReloadHandler();
-		licenseOnClientDataReloadHandler.setLicenseDataService(licenseDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD.toString(),
-				licenseOnClientDataReloadHandler);
+				new LicenseOnClientDataReloadHandler(dataServices));
 
-		StatisticsDataReloadHandler statisticsDataReloadHandler = new StatisticsDataReloadHandler();
-		statisticsDataReloadHandler.setSoftwareDataService(softwareDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(), statisticsDataReloadHandler);
+		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(),
+				new StatisticsDataReloadHandler(dataServices));
 
-		DepotProductPropertiesDataReloadHandler depotProductPropertiesDataReloadHandler = new DepotProductPropertiesDataReloadHandler();
-		depotProductPropertiesDataReloadHandler.setProductDataService(productDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString(),
-				depotProductPropertiesDataReloadHandler);
+				new DepotProductPropertiesDataReloadHandler(dataServices));
 
-		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
-		defaultDataReloadHandler.setGroupDataService(groupDataService);
-		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
-		defaultDataReloadHandler.setConfigDataService(configDataService);
-		defaultDataReloadHandler.setLicenseDataService(licenseDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString(),
+				new DepotPropertiesDataReloadHandler(dataServices));
+
+		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler(dataServices);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
 				defaultDataReloadHandler);
@@ -444,7 +277,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public boolean makeConnection() {
 		Logging.info(this, "trying to make connection");
-		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
+		boolean result = exec.doCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED);
 
 		if (!result) {
 			Logging.info(this, "connection does not work");

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -36,7 +36,7 @@ public class ExternalSource implements TableSource {
 			reloadRequested = false;
 		}
 
-		return persistenceController.getProductDataService().getProductRowsForDepots(depotIds);
+		return persistenceController.getDataServices().product.getProductRowsForDepots(depotIds);
 	}
 
 	@Override

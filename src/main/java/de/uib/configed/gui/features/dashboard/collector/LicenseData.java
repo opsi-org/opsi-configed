@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -40,7 +40,7 @@ public final class LicenseData {
 			return;
 		}
 
-		Map<String, LicenseContractEntry> licenseContracts = persistenceController.getLicenseDataService()
+		Map<String, LicenseContractEntry> licenseContracts = persistenceController.getDataServices().license
 				.getLicenseContractsPD();
 
 		if (licenseContracts.isEmpty()) {
@@ -76,7 +76,7 @@ public final class LicenseData {
 		expiredLicenses.clear();
 
 		NavigableMap<String, NavigableSet<String>> expiredLicenseContracts = persistenceController
-				.getLicenseDataService().getLicenseContractsToNotifyPD();
+				.getDataServices().license.getLicenseContractsToNotifyPD();
 
 		if (expiredLicenseContracts.isEmpty()) {
 			return;

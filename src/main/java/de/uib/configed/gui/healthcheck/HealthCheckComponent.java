@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -36,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
@@ -57,6 +55,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class HealthCheckComponent extends
 		AbstractTeaComponent<HealthCheckUpdate.HealthCheckModel, HealthCheckMsg, HealthCheckUpdate.HealthCheckEffect> {
@@ -92,33 +91,22 @@ public class HealthCheckComponent extends
 	@Override
 	protected JComponent renderView(HealthCheckUpdate.HealthCheckModel model, Consumer<HealthCheckMsg> dispatch) {
 		JPanel rootPanel = new JPanel();
-		GroupLayout allLayout = new GroupLayout(rootPanel);
-		rootPanel.setLayout(allLayout);
-
-		JPanel northPanel = createNorthPanel();
-		JPanel centerPanel = createCenterPanel();
-
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(centerPanel).addGap(Globals.GAP_SIZE));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		rootPanel.setLayout(
+				new MigLayout("insets 0, fill, wrap 1", "", "[] " + Globals.GAP_SIZE + " [] " + Globals.GAP_SIZE));
+		rootPanel.add(createHealthCheckPanel(), "grow");
+		rootPanel.add(createButtonPanel(), "growx");
 
 		refreshView();
 
 		return rootPanel;
 	}
 
-	private JPanel createNorthPanel() {
-		JPanel northPanel = new JPanel();
+	private JPanel createHealthCheckPanel() {
+		JPanel panel = new JPanel();
 
 		JPopupMenu popupMenu = createPopupMenu();
-		northPanel.setComponentPopupMenu(popupMenu);
-
-		GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
+		panel.setComponentPopupMenu(popupMenu);
+		panel.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
 
 		styledDocument = new DefaultStyledDocument();
 		textPane = new JTextPane();
@@ -144,11 +132,9 @@ public class HealthCheckComponent extends
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		scrollPane.setInheritsPopupMenu(true);
+		panel.add(scrollPane, "grow");
 
-		northLayout.setHorizontalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
-
-		return northPanel;
+		return panel;
 	}
 
 	private String retrieveKeyFromElement(Element element) {
@@ -172,11 +158,8 @@ public class HealthCheckComponent extends
 		return popupMenu;
 	}
 
-	private JPanel createCenterPanel() {
-		JPanel centerPanel = new JPanel();
-
-		GroupLayout centerPanelLayout = new GroupLayout(centerPanel);
-		centerPanel.setLayout(centerPanelLayout);
+	private JPanel createButtonPanel() {
+		JPanel panel = new JPanel();
 
 		jButtonCollapseAll = new JButton(Configed.getResourceValue("HealthCheckDialog.collapseAll"));
 		jButtonCollapseAll.setEnabled(anyDetailsShown(model.getHealthData()));
@@ -191,26 +174,11 @@ public class HealthCheckComponent extends
 		jButtonDownloadDiagnosticData
 				.setToolTipText(Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData.tooltip"));
 
-		centerPanelLayout.setHorizontalGroup(centerPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonExpandAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonCollapseAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jButtonDownloadDiagnosticData, 10, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-		centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup()
-				.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jButtonExpandAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCollapseAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCopyHealthInformation, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonDownloadDiagnosticData, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
+		panel.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[pref!][pref!]push[pref!][pref!]", "[]0"));
+		panel.add(jButtonExpandAll);
+		panel.add(jButtonCollapseAll);
+		panel.add(jButtonCopyHealthInformation);
+		panel.add(jButtonDownloadDiagnosticData);
 
 		jButtonCollapseAll.addActionListener((ActionEvent event) -> dispatch(HealthCheckMsg.SimpleMsg.COLLAPSE_ALL));
 		jButtonExpandAll.addActionListener((ActionEvent event) -> dispatch(HealthCheckMsg.SimpleMsg.EXPAND_ALL));
@@ -218,7 +186,7 @@ public class HealthCheckComponent extends
 		jButtonDownloadDiagnosticData
 				.addActionListener(event -> dispatch(HealthCheckMsg.SimpleMsg.DOWNLOAD_DIAGNOSTIC_DATA));
 
-		return centerPanel;
+		return panel;
 	}
 
 	@Override
@@ -310,21 +278,19 @@ public class HealthCheckComponent extends
 		Style style = null;
 
 		switch (token) {
-		case "OK":
+		case "OK" -> {
 			style = styleContext.addStyle("ok", null);
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_NOTICE);
-			break;
-		case "WARNING":
+		}
+		case "WARNING" -> {
 			style = styleContext.addStyle("warning", null);
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_WARNING);
-			break;
-		case "ERROR":
+		}
+		case "ERROR" -> {
 			style = styleContext.addStyle("error", null);
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_ERROR);
-			break;
-		default:
-			Logging.notice(this, "unsupported token: ", token);
-			break;
+		}
+		default -> Logging.notice(this, "unsupported token: ", token);
 		}
 
 		return style;
@@ -338,7 +304,7 @@ public class HealthCheckComponent extends
 
 	private void saveDiagnosticDataToFile() {
 		File diagnosticDataFile = new File(getDirectoryLocation(), Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
-		JSONObject jo = new JSONObject(persistenceController.getHealthDataService().getDiagnosticDataPD());
+		JSONObject jo = new JSONObject(persistenceController.getDataServices().health.getDiagnosticDataPD());
 		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
 	}
 

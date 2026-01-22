@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -22,11 +22,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.logpane.LogPanel;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
+import de.uib.configed.gui.features.logviewer.logpane.LogPaneModel;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
-public class LogTabComponent extends LogPanel {
+public class LogTabComponent extends LogPaneComponent {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
@@ -35,7 +36,7 @@ public class LogTabComponent extends LogPanel {
 	private String logFileType;
 
 	public LogTabComponent(String defaultText, boolean withPopup, ConfigedMain configedMain) {
-		super(defaultText, withPopup);
+		super(LogPaneModel.builder().logText(defaultText).withPopup(withPopup).build());
 		this.configedMain = configedMain;
 	}
 
@@ -51,7 +52,7 @@ public class LogTabComponent extends LogPanel {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		Rectangle visibleRectangle = logTextPane.getVisibleRect();
 		int caretPosition = logTextPane.getCaretPosition();
-		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType);
+		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType, true);
 		SwingUtilities.invokeLater(() -> {
 			logTextPane.setCaretPosition(caretPosition);
 			logTextPane.scrollRectToVisible(visibleRectangle);
@@ -144,13 +145,13 @@ public class LogTabComponent extends LogPanel {
 		Map<String, String> logFiles = new HashMap<>();
 		String[] idents = Utils.getLogTypes();
 		for (String ident : idents) {
-			Map<String, String> logFile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
+			String logfile = PersistenceControllerFactory.getPersistenceController().getDataServices().log
 					.getLogfile(configedMain.getSelectedClients().get(0), ident);
-			if (logFile.get(ident) != null && logFile.get(ident).split("\n").length > 1) {
-				logFiles.put(ident, logFile.get(ident));
+			if (logfile.split("\n").length > 1) {
+				logFiles.put(ident, logfile);
 			}
 
-			Logging.info(this, "saveAllAsZip ", ident, " ", logFile.get(ident).split("\n").length);
+			Logging.info(this, "saveAllAsZip ", ident, " ", logfile.split("\n").length);
 		}
 		return logFiles;
 	}
@@ -168,8 +169,7 @@ public class LogTabComponent extends LogPanel {
 	private void saveAllToZipFile(String filePath, Map<String, String> logFiles) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			String[] idents = Utils.getLogTypes();
-			for (String ident : idents) {
+			for (String ident : Utils.getLogTypes()) {
 				if (logFiles.get(ident) != null && logFiles.get(ident).split("\n").length > 1) {
 					String fileName = retrieveFileName(configedMain.getSelectedClients().get(0).replace(".", "_"),
 							ident);

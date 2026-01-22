@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.GroupLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -29,6 +28,7 @@ import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class DepotListPresenter extends JPanel {
 	private DepotsList depotslist;
@@ -81,7 +81,7 @@ public class DepotListPresenter extends JPanel {
 
 	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
-		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
+		if (persistenceController.getDataServices().hostInfoCollections.getDepots().size() != 1) {
 			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 			selectAll.addActionListener(event -> depotslist.selectAll());
 			JMenuItem selectWithEqualProperties = new JMenuItem(
@@ -149,18 +149,18 @@ public class DepotListPresenter extends JPanel {
 	private boolean selectedServerForbidden() {
 		Logging.info("selectedServerForbidden.....");
 		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().terminalsForbidden();
+				.getDataServices().userRoles.terminalsForbidden();
 		Logging.info("forbiddenItems ", forbiddenItems);
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenConfigDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 
 		boolean isConfigserverAndForbidden = forbiddenConfigServer && depotslist.getSelectedValuesList()
-				.contains(persistenceController.getHostInfoCollections().getConfigServer());
+				.contains(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 		boolean isDepotAndForbidden = forbiddenConfigDepots && !depotslist.getSelectedValuesList().isEmpty()
 				&& !depotslist.getSelectedValuesList()
-						.contains(persistenceController.getHostInfoCollections().getConfigServer());
+						.contains(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
 
-		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly();
 
 		return isConfigserverAndForbidden || isDepotAndForbidden || isReadOnly;
@@ -175,20 +175,11 @@ public class DepotListPresenter extends JPanel {
 	}
 
 	private void layouting() {
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
+		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
+				"[]" + Globals.MIN_GAP_SIZE + "[grow, fill]"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(searchPane,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		add(searchPane);
+		add(scrollpaneDepotslist, "grow, push");
 	}
 
 	private void selectDepotsWithEqualProperties() {
@@ -196,7 +187,7 @@ public class DepotListPresenter extends JPanel {
 
 		if (depotslist.getSelectedIndex() > -1) {
 			String depotSelected = depotslist.getSelectedValue();
-			List<String> depotsWithEqualStock = persistenceController.getDepotDataService()
+			List<String> depotsWithEqualStock = persistenceController.getDataServices().depot
 					.getAllDepotsWithIdenticalProductStock(depotSelected);
 			depotslist.addToSelection(depotsWithEqualStock);
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -50,14 +50,14 @@ public final class PersistenceControllerFactory {
 
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD(user);
+			persistenceController.getDataServices().user.checkMultiFactorAuthenticationPD(user);
 		}
 
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - connected");
-			UserDataService userDataService = persistenceController.getUserDataService();
+			UserDataService userDataService = persistenceController.getDataServices().user;
 			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - userDataService:",
 					userDataService);
 
@@ -74,7 +74,7 @@ public final class PersistenceControllerFactory {
 			}
 
 			ParallelTaskExecutor executor = new ParallelTaskExecutor();
-			executor.runInParallel(() -> persistenceController.getUserRolesConfigDataService().checkConfigurationPD());
+			executor.runInParallel(() -> persistenceController.getDataServices().userRoles.checkConfigurationPD());
 			if (!Utils.isCertificateVerificationDisabled()) {
 				executor.runInParallel(CertificateManager::updateCertificate);
 			}

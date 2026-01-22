@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -103,7 +103,7 @@ public class OpsiDataSerializer {
 	public Set<String> getSaved() {
 		Set<String> set = new TreeSet<>();
 		set.addAll(searches.keySet());
-		set.addAll(persistenceController.getConfigDataService().getSavedSearchesPD().keySet());
+		set.addAll(persistenceController.getDataServices().config.getSavedSearchesPD().keySet());
 		return set;
 	}
 
@@ -195,7 +195,7 @@ public class OpsiDataSerializer {
 	private OperationNode getData(String name) {
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name,
-				persistenceController.getConfigDataService().getSavedSearchesPD().get(name).getSerialization());
+				persistenceController.getDataServices().config.getSavedSearchesPD().get(name).getSerialization());
 
 		String serialization = searches.get(name);
 		return decipher(serialization);
@@ -210,7 +210,7 @@ public class OpsiDataSerializer {
 			Logging.info(this, name, ": ", jsonString);
 			searches.put(name, jsonString);
 			SavedSearch saveObj = new SavedSearch(name, jsonString, description);
-			persistenceController.getConfigDataService().saveSearch(saveObj);
+			persistenceController.getDataServices().config.saveSearch(saveObj);
 		} catch (IOException e) {
 			Logging.error(this, e, e.getMessage());
 		}
@@ -236,41 +236,21 @@ public class OpsiDataSerializer {
 			return null;
 		}
 
-		DataType dataType = null;
-
-		switch (value) {
+		return switch (value) {
 		// In old searches, we still have "EnumType", but this will now
 		// due to refactoring be replaced by "TextType"
-		case "TextType", "EnumType":
-			dataType = DataType.TEXT_TYPE;
-			break;
-
-		case "IntegerType":
-			dataType = DataType.INTEGER_TYPE;
-			break;
-
-		case "BigIntegerType":
-			dataType = DataType.BIG_INTEGER_TYPE;
-			break;
-
-		case "DoubleType":
-			dataType = DataType.DOUBLE_TYPE;
-			break;
-
-		case "DateType":
-			dataType = DataType.DATE_TYPE;
-			break;
-
-		case "NoneType":
-			dataType = DataType.NONE_TYPE;
-			break;
-
-		default:
+		case "TextType", "EnumType" -> DataType.TEXT_TYPE;
+		case "IntegerType" -> DataType.INTEGER_TYPE;
+		case "BigIntegerType" -> DataType.BIG_INTEGER_TYPE;
+		case "DoubleType" -> DataType.DOUBLE_TYPE;
+		case "DateType" -> DataType.DATE_TYPE;
+		case "BooleanType" -> DataType.BOOLEAN_TYPE;
+		case "NoneType" -> DataType.NONE_TYPE;
+		default -> {
 			Logging.error(this, "dataType for ", value, " cannot be found...)");
-			break;
+			yield null;
 		}
-
-		return dataType;
+		};
 	}
 
 	private static Object convertData(String data, DataType dataType) {
@@ -284,6 +264,7 @@ public class OpsiDataSerializer {
 		case DOUBLE_TYPE -> Double.valueOf(data);
 		case INTEGER_TYPE -> Integer.valueOf(data);
 		case BIG_INTEGER_TYPE -> Long.valueOf(data);
+		case BOOLEAN_TYPE -> Boolean.valueOf(data);
 		default -> throw new IllegalArgumentException("Type " + dataType + " not expected here");
 		};
 	}
@@ -391,7 +372,7 @@ public class OpsiDataSerializer {
 			element = switch (elementName) {
 			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
 			case ELEMENT_NAME_GROUP_WITH_SUBGROUPS -> new GroupWithSubgroupsElement(
-					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+					persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]));
 			case ELEMENT_NAME_GROUP -> getGroupElement(subelementName);
 			default -> getDefaultElement(elementName, hardware, elementPath, elementPathS);
 			};
@@ -444,10 +425,10 @@ public class OpsiDataSerializer {
 		Logging.info(this, "getGroupElement subelementName ", subelementName);
 		if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 			return new GroupWithSubgroupsElement(
-					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+					persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]));
 		} else {
 			return new GroupElement(
-					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+					persistenceController.getDataServices().group.getHostGroupIds().toArray(new String[0]));
 		}
 	}
 

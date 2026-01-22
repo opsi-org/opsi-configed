@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -22,7 +22,6 @@ import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.AbstractExportTable;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.Icons;
@@ -60,7 +59,6 @@ public class PanelGenEditPopupManager {
 	private JMenuItem menuItemCancel;
 
 	private JPopupMenu popupMenu;
-	private AbstractExportTable exportTable;
 
 	private int generalPopupPosition;
 
@@ -73,7 +71,7 @@ public class PanelGenEditPopupManager {
 				menuItemSave.addActionListener(actionEvent -> panelGenEdit.commit());
 				addPopupItem(menuItemSave);
 			}, POPUP_CANCEL, () -> {
-				menuItemCancel = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.abandonNewData"));
+				menuItemCancel = new JMenuItem(Configed.getResourceValue("discard"));
 				menuItemCancel.setEnabled(false);
 				menuItemCancel.addActionListener(actionEvent -> panelGenEdit.cancel());
 				addPopupItem(menuItemCancel);
@@ -91,9 +89,11 @@ public class PanelGenEditPopupManager {
 
 				addPopupItem(menuItemPrint);
 			}, PopupMenuTrait.POPUP_EXPORT_CSV, () -> {
+				ExporterToCSV exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
 				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
 			}, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, () -> {
+				ExporterToCSV exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
 				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
 			}, PopupMenuTrait.POPUP_PDF, () -> {
@@ -114,19 +114,11 @@ public class PanelGenEditPopupManager {
 				this.internalpopups.add(wantedPopup);
 				Logging.info(this, "add popup ", wantedPopup);
 			}
-		} else {
-			this.internalpopups.add(PopupMenuTrait.POPUP_RELOAD);
-
-			this.internalpopups.add(PopupMenuTrait.POPUP_PDF);
+			this.internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 		}
 
 		Logging.info(this, "internalpopups ", giveMenuitemNames(internalpopups));
-
-		this.internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
-
 		Logging.info(this, "internalpopups supplemented ", giveMenuitemNames(internalpopups));
-
-		exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
 	}
 
 	public void setDataChanged(boolean dataChanged) {

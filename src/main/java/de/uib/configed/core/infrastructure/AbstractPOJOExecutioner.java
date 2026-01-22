@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -10,20 +10,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.share.logging.Logging;
 
 /**
  * This class extends the Executioner abstract class in such a way that the data
  * will be retrieved in POJO.
  */
+// We allow the use of varargs here for the parameters of the rpc calls
+@SuppressWarnings("java:S923")
 public abstract class AbstractPOJOExecutioner {
 	private final AtomicReference<ConnectionState> conStat = new AtomicReference<>();
 
-	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
+	public abstract Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters);
 
 	public ConnectionState getConnectionState() {
 		return conStat.get();
@@ -33,15 +35,15 @@ public abstract class AbstractPOJOExecutioner {
 		conStat.set(newState);
 	}
 
-	public boolean doCall(OpsiMethodCall omc) {
-		Map<String, Object> jO = retrieveResponse(omc);
+	public boolean doCall(RPCMethodName methodname, Object... parameters) {
+		Map<String, Object> jO = retrieveResponse(methodname, parameters);
 
 		return checkResponse(jO);
 	}
 
-	public List<Object> getListResult(OpsiMethodCall omc) {
+	public List<Object> getListResult(RPCMethodName methodname, Object... parameters) {
 		List<Object> result = new ArrayList<>();
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = POJOReMapper.remap(response.get("result"));
@@ -50,9 +52,9 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc) {
+	public Map<String, Map<String, Object>> getMapOfMaps(RPCMethodName methodname, Object... parameters) {
 		Map<String, Map<String, Object>> result = new HashMap<>();
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = POJOReMapper.remap(response.get("result"));
@@ -61,9 +63,9 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public List<String> getStringListResult(OpsiMethodCall omc) {
+	public List<String> getStringListResult(RPCMethodName methodname, Object... parameters) {
 		List<String> result = new ArrayList<>();
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = POJOReMapper.remap(response.get("result"));
@@ -72,9 +74,9 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
+	public Map<String, Object> getMapResult(RPCMethodName methodname, Object... parameters) {
 		Map<String, Object> result = new HashMap<>();
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = POJOReMapper.remap(response.get("result"));
@@ -101,25 +103,6 @@ public abstract class AbstractPOJOExecutioner {
 		return errorMessage;
 	}
 
-	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
-		Map<String, Object> result = new HashMap<>();
-		Map<String, Map<String, Object>> responses = POJOReMapper.remap(retrieved.get("result"));
-
-		for (Entry<String, Map<String, Object>> entry : responses.entrySet()) {
-			if (entry.getValue().get("error") == null) {
-				List<Object> list = POJOReMapper.remap(entry.getValue().get("result"));
-				result.put(entry.getKey(), list);
-			} else {
-				String str = "" + entry.getValue().get("error");
-				result.put(entry.getKey(), str);
-			}
-		}
-
-		Logging.debug(this, "getResponses  result ", result);
-
-		return result;
-	}
-
 	// returns false if the "error" key does not exist or is null
 	// Otherwise returns true which means call was successful
 	private boolean checkResponse(Map<String, Object> retrieved) {
@@ -141,9 +124,9 @@ public abstract class AbstractPOJOExecutioner {
 		}
 	}
 
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars) {
-		List<Object> resultlist = getListResult(omc);
+	public Map<String, Map<String, String>> getStringMappedObjectsByKey(RPCMethodName methodname, Object[] parameters,
+			String key, String[] sourceVars, String[] targetVars) {
+		List<Object> resultlist = getListResult(methodname, parameters);
 
 		if (resultlist == null) {
 			return new TreeMap<>();
@@ -196,9 +179,9 @@ public abstract class AbstractPOJOExecutioner {
 		return detailMap;
 	}
 
-	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
+	public List<Map<String, Object>> getListOfMaps(RPCMethodName methodname, Object... parameters) {
 		List<Map<String, Object>> result = new ArrayList<>();
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = POJOReMapper.remap(response.get("result"));
@@ -207,9 +190,9 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public String getStringResult(OpsiMethodCall omc) {
+	public String getStringResult(RPCMethodName methodname, Object... parameters) {
 		String result = "";
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = (String) response.get("result");
@@ -218,9 +201,9 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public boolean getBooleanResult(OpsiMethodCall omc) {
+	public boolean getBooleanResult(RPCMethodName methodname, Object... parameters) {
 		Boolean result = null;
-		Map<String, Object> response = retrieveResponse(omc);
+		Map<String, Object> response = retrieveResponse(methodname, parameters);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
 			result = (Boolean) response.get("result");

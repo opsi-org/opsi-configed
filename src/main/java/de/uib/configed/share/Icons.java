@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,12 +7,11 @@
 package de.uib.configed.share;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -29,6 +28,9 @@ import de.uib.configed.gui.healthcheck.HealthDataProcessor;
 import de.uib.configed.share.logging.Logging;
 
 public final class Icons {
+	private static Color originalColorLight = new Color(206, 208, 214);
+	private static Color originalColorDark = new Color(108, 112, 126);
+
 	private static Image mainIcon;
 
 	private Icons() {
@@ -57,9 +59,9 @@ public final class Icons {
 		ColorFilter filter = new ColorFilter();
 		if (dark) {
 			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
+			filter.add(originalColorLight, Globals.OPSI_FOREGROUND_LIGHT);
 		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
+			filter.add(originalColorDark, Globals.OPSI_FOREGROUND_DARK);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
@@ -90,9 +92,9 @@ public final class Icons {
 		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
 			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_DARK);
+			filter.add(originalColorLight, Globals.OPSI_FOREGROUND_DARK);
 		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_LIGHT);
+			filter.add(originalColorDark, Globals.OPSI_FOREGROUND_LIGHT);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + folder + "/" + iconName + ".svg").setColorFilter(filter)
@@ -117,7 +119,7 @@ public final class Icons {
 
 		ColorFilter filter = new ColorFilter();
 
-		filter.add(new Color(108, 112, 126), color);
+		filter.add(originalColorDark, color);
 		FlatSVGIcon icon = new FlatSVGIcon(path);
 		icon.setColorFilter(filter);
 		return icon;
@@ -145,55 +147,51 @@ public final class Icons {
 	}
 
 	public static FlatSVGIcon getOpsiThemeIcon(int size) {
-		return getOpsiIcon(size, FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+		return getOpsiIcon(size, Globals.getForegroundColor());
 	}
 
 	public static FlatSVGIcon getOpsiIcon(int size, Color color) {
 		return getOpsiIcon(size).setColorFilter(new ColorFilter(oldColor -> color));
 	}
 
-	public static ImageIcon getSelectedOpsiModulesIcon(int size) {
+	public static Icon getSelectedOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon(size, Globals.OPSI_FOREGROUND_DARK);
 	}
 
-	public static ImageIcon getActiveOpsiModulesIcon(int size) {
+	public static Icon getActiveOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon(size, Globals.getActiveColor());
 	}
 
-	public static ImageIcon getOpsiModulesIcon(int size) {
+	public static Icon getOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon(size, null);
 	}
 
 	/* 
 	 * @param color the color of the opsi icon. If null, the theme color will be used.
 	 */
-	private static ImageIcon getOpsiModulesIcon(int size, Color iconColor) {
+	private static Icon getOpsiModulesIcon(int size, Color iconColor) {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
 		Color dotColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+		if (persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
 			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					persistenceController.getDataServices().module.getOpsiLicensingInfoOpsiAdminPD(),
+					persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 					!OpsiLicensing.isExtendedView());
 
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				dotColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				dotColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
+			dotColor = switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT -> Globals.OPSI_ERROR;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT -> Globals.OPSI_WARNING;
+			case LicensingInfoMap.STATE_OKAY -> {
 				Logging.info("icon will remain null, we don't want to show a dot when modules are okay");
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
+				yield null;
 			}
+			default -> {
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
+				yield null;
+			}
+			};
 		}
 
 		FlatSVGIcon opsiIcon;
@@ -206,10 +204,16 @@ public final class Icons {
 		if (dotColor == null) {
 			return opsiIcon;
 		} else if (Globals.OPSI_FOREGROUND_DARK.equals(iconColor)) {
-			return addDotIcon(opsiIcon, size, iconColor);
+			return getDottedIcon(opsiIcon, iconColor, size);
 		} else {
-			return addDotIcon(opsiIcon, size, dotColor);
+			return getDottedIcon(opsiIcon, dotColor, size);
 		}
+	}
+
+	private static Icon getDottedIcon(Icon baseIcon, Color dotColor, int size) {
+		FlatSVGIcon point = getIntellijIcon("point", dotColor, size / 4);
+
+		return new CombinedSVGIcon(baseIcon, point, 1, 3.0 / 4, 3.0 / 4);
 	}
 
 	/**
@@ -242,31 +246,25 @@ public final class Icons {
 		}).start();
 	}
 
-	private static ImageIcon getHealthCheckIcon(int size) {
+	private static Icon getHealthCheckIcon(int size) {
 		return getHealthCheckIcon(size, null);
 	}
 
-	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
-		Color dotColor = null;
-
+	private static Icon getHealthCheckIcon(int size, Color iconColor) {
 		HealthDataProcessor.StatusLevel warningLevel = HealthDataProcessor.getMaxStatusLevel();
-		switch (warningLevel) {
-		case ERROR:
-			dotColor = Globals.OPSI_ERROR;
-			break;
 
-		case WARNING:
-			dotColor = Globals.OPSI_WARNING;
-			break;
-
-		case OK:
+		Color dotColor = switch (warningLevel) {
+		case ERROR -> Globals.OPSI_ERROR;
+		case WARNING -> Globals.OPSI_WARNING;
+		case OK -> {
 			Logging.info("icon will remain null, we don't want to show a dot when health check are okay");
-			break;
-
-		default:
-			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
-			break;
+			yield null;
 		}
+		default -> {
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
+			yield null;
+		}
+		};
 
 		FlatSVGIcon opsiIcon;
 		if (iconColor == null) {
@@ -278,19 +276,10 @@ public final class Icons {
 		if (dotColor == null) {
 			return opsiIcon;
 		} else if (Globals.OPSI_FOREGROUND_DARK.equals(iconColor)) {
-			return addDotIcon(opsiIcon, size, iconColor);
+			return getDottedIcon(opsiIcon, iconColor, size);
 		} else {
-			return addDotIcon(opsiIcon, size, dotColor);
+			return getDottedIcon(opsiIcon, dotColor, size);
 		}
-	}
-
-	private static ImageIcon addDotIcon(ImageIcon image, int size, Color dotColor) {
-		FlatSVGIcon point = getIntellijIcon("point", dotColor, size / 4);
-
-		BufferedImage bufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-		bufferedImage.getGraphics().drawImage(image.getImage(), 0, 0, null);
-		bufferedImage.getGraphics().drawImage(point.getImage(), size / 4 * 3, size / 4 * 3, null);
-		return new ImageIcon(bufferedImage);
 	}
 
 	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
@@ -321,9 +310,9 @@ public final class Icons {
 		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
 			iconName += "_dark";
-			filter.add(new Color(206, 208, 214), Globals.ICON_ACTIVE_DARK);
+			filter.add(originalColorLight, Globals.ICON_ACTIVE_DARK);
 		} else {
-			filter.add(new Color(108, 112, 126), Globals.ICON_ACTIVE_LIGHT);
+			filter.add(originalColorDark, Globals.ICON_ACTIVE_LIGHT);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
@@ -331,8 +320,7 @@ public final class Icons {
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName,
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+		return getIntellijIcon(iconName, Globals.getForegroundColor());
 	}
 
 	public static ImageIcon createImageIcon(String path, String description) {
@@ -356,29 +344,5 @@ public final class Icons {
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(100, 36);
-	}
-
-	public static ImageIcon getReloadButton(String iconName, int size) {
-		return getReloadButton(getIntellijIcon(iconName, size), size);
-	}
-
-	public static ImageIcon getOpsiReloadIcon(int size) {
-		return getReloadButton(getOpsiThemeIcon(size), size);
-	}
-
-	private static ImageIcon getReloadButton(ImageIcon icon, int size) {
-		FlatSVGIcon refreshIcon = getIntellijIcon("refresh", size / 2);
-
-		BufferedImage iconBufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D iconBufferedGraphics = iconBufferedImage.createGraphics();
-
-		iconBufferedGraphics.drawImage(icon.getImage(), 0, 0, null);
-
-		iconBufferedGraphics.setBackground(new Color(255, 255, 255, 0));
-		iconBufferedGraphics.clearRect(size / 2, size / 2, size / 2, size / 2);
-
-		iconBufferedGraphics.drawImage(refreshIcon.getImage(), size / 2, size / 2, null);
-
-		return new ImageIcon(iconBufferedImage);
 	}
 }

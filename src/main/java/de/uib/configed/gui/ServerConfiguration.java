@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -40,11 +40,12 @@ public class ServerConfiguration extends JTabbedPane {
 		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
 		List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
-		Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDataService()
+		Map<String, List<Object>> defaultValuesMap = persistenceController.getDataServices().config
 				.getConfigDefaultValuesPD();
 		additionalConfigs.add(defaultValuesMap);
 		panelHostConfig.initEditing(
-				persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
+				persistenceController.getDataServices().hostInfoCollections.getConfigServer()
+						+ " (configuration server)",
 				additionalConfigs.get(0), POJOReMapper.remap(additionalConfigs), configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesServer(), null, false);
 	}

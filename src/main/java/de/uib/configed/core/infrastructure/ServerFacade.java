@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
+import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.ConnectionHandler.RequestMethod;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
@@ -60,15 +62,16 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
  * <p>
  * Before establishing connection with the server, it check server's version to
  * disable/enable features according to the server's version. Once the
- * connection is established it sends a {@code POST} request, to send
- * {@code OpsiMethodCall}, and retrieves data from the response send by the
- * server.
+ * connection is established it sends a {@code POST} request, to send and
+ * retrieve data from the response sent by the server.
  *
  * @author Rupert Roeder, Naglis Vidziunas
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
 	private static final int COMPRESS_MIN_SIZE = 10000;
 	private static final Pattern userPattern = Pattern.compile("user:");
+
+	private static final int DEFAULT_JSON_ID = 1;
 
 	private static OpsiServerVersionRetriever versionRetriever;
 	private CountDownLatch otpWaiter;
@@ -144,7 +147,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	public Map<String, List<String>> getHeaders() {
 		if (getConnectionState() != null && getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
-			return new HashMap<>();
+			return Map.of();
 		}
 		Logging.info("getHeaders started");
 		int timeout = 2000;
@@ -162,9 +165,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.warning("try to get headers, but no connection. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
 			System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
-			return new HashMap<>();
+			return Map.of();
 		}
-		Map<String, List<String>> result = new HashMap<>();
+		Map<String, List<String>> result = Map.of();
 		try {
 			handleResponseCode(connection);
 			result = connection.getHeaderFields();
@@ -342,16 +345,25 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return serviceURL;
 	}
 
-	private byte[] produceMessagePack(OpsiMethodCall omc) {
-		Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
+	private byte[] produceMessagePack(RPCMethodName methodname, Object[] parameters) {
 		byte[] result = new byte[0];
 		try {
-			result = new MessagePackMapper().writeValueAsBytes(omcMap);
+			result = new MessagePackMapper().writeValueAsBytes(createMap(methodname, parameters));
 		} catch (JsonProcessingException e) {
 			Logging.error(this, e, "unable to process JSON");
 		}
 
 		return result;
+	}
+
+	private static Map<String, Object> createMap(RPCMethodName methodname, Object[] parameters) {
+		List<Object> params = new ArrayList<>();
+
+		for (Object parameter : parameters) {
+			params.add(parameter instanceof Object[] array ? Arrays.asList(array) : parameter);
+		}
+
+		return Map.of("id", DEFAULT_JSON_ID, "method", methodname.toString(), "params", params);
 	}
 
 	public boolean testConnection(boolean notifyUserOfErrors) {
@@ -374,25 +386,25 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 */
 	@Override
 	@SuppressWarnings("java:S1168")
-	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
+	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters) {
 		Logging.info(this, "retrieveResponse started");
 
 		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
 			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
 				ParallelTaskExecutor.allowNewTasks(true);
 			} else {
-				return new HashMap<>();
+				return Map.of();
 			}
 		}
 
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + methodname);
 		timeCheck.start();
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(),
-				produceGeneralRequestProperties(produceMessagePack(omc)));
+				produceGeneralRequestProperties(produceMessagePack(methodname, parameters)));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
-		sendPostRequest(connection, omc);
+		sendPostRequest(connection, methodname, parameters);
 
 		if (connection == null) {
 			return null;
@@ -409,8 +421,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private Map<String, Object> retrieveResponse(HttpsURLConnection connection) {
-		Map<String, Object> result = new HashMap<>();
-
 		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING
 				|| getConnectionState().getState() == ConnectionState.CONNECTED) {
 			try {
@@ -422,7 +432,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
-					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
+					return retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				} else {
 					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
@@ -435,7 +445,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 		}
 
-		return result;
+		return Map.of();
 	}
 
 	public Map<String, Object> retrieveResponse(URL url, RequestMethod requestMethod,
@@ -457,7 +467,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
 		if (connection == null) {
-			return new HashMap<>();
+			return Map.of();
 		}
 		// sending data
 		if (json != null) {
@@ -472,7 +482,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = Map.of();
 		// receiving data
 
 		if (getConnectionState().getState() == ConnectionState.CONNECTED) {
@@ -507,19 +517,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 	}
 
-	private void sendPostRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
+	private void sendPostRequest(HttpsURLConnection connection, RPCMethodName methodname, Object[] parameters) {
 		if (connection == null) {
 			return;
 		}
 
-		byte[] message = produceMessagePack(omc);
+		byte[] message = produceMessagePack(methodname, parameters);
 
 		try (OutputStream writer = getOutputStreamWriterForConnection(connection, message.length)) {
 			writer.write(message);
 			writer.flush();
 
-			Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
-			Logging.debug(this, "(POST) sending: ", omcMap);
+			Logging.debug(this, "(POST) sending: ", methodname);
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request ", iox);
 		}
@@ -536,21 +545,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, Object> retrieveResponseBasedOnContentType(String contentType, InputStream stream)
 			throws IOException {
-		Map<String, Object> result = new HashMap<>();
-
 		if (contentType.contains("application/json")) {
 			ObjectMapper mapper = new ObjectMapper();
-			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
+			return mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else if (contentType.contains("application/msgpack")) {
 			ObjectMapper mapper = new MessagePackMapper();
-			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
+			return mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
+			return Map.of();
 		}
-
-		return result;
 	}
 
 	private static String readInputStream(InputStream fis) {

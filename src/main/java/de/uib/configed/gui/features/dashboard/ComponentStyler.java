@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -10,8 +10,6 @@ import java.awt.Color;
 import java.util.Set;
 
 import javax.swing.UIManager;
-
-import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.gui.Globals;
 import javafx.beans.binding.Bindings;
@@ -42,8 +40,7 @@ public final class ComponentStyler {
 	@SuppressWarnings({ "java:S5612", "java:S1188" })
 	public static <T> void styleTableViewComponent(TableView<T> view) {
 		String tableViewBackgroundColor = getHexColor(UIManager.getColor("Table.background"));
-		String tableViewForegroundColor = FlatLaf.isLafDark() ? getHexColor(Globals.OPSI_FOREGROUND_DARK)
-				: getHexColor(Globals.OPSI_FOREGROUND_LIGHT);
+		String tableViewForegroundColor = getHexColor(Globals.getForegroundColor());
 		String tableViewHeaderBackgroundColor = getHexColor(UIManager.getColor("TableHeader.background"));
 		String tableViewHeaderForegroundColor = getHexColor(UIManager.getColor("TableHeader.foreground"));
 

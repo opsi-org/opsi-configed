@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -84,7 +84,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	}
 
 	private void initPanels() {
-		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
+		List<String> extraHostFields = persistenceController.getDataServices().config.getServerConfigStrings(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 
 		List<String> columnNames = new ArrayList<>();
@@ -117,7 +117,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 							return new HashMap<>();
 						}
 
-						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
+						return persistenceController.getDataServices().software.getLicensesReconciliationPD();
 					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 
@@ -137,7 +137,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		updateItemFactoryLicensesReconciliation.setSource(modelLicensesReconciliation);
 
 		tableModels.add(modelLicensesReconciliation);
-		tablePanes.add(thePanel.getPanelReconciliation());
+		panelGenEdits.add(thePanel.getPanelReconciliation());
 
 		modelLicensesReconciliation.reset();
 		thePanel.getPanelReconciliation().setTableModel(modelLicensesReconciliation);

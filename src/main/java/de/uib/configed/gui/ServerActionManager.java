@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -36,6 +35,7 @@ import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.gui.type.licenses.LicenseUsageEntry;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class ServerActionManager {
 	public static final String KEY_PROCESS_ACTION_REQUEST_DEFAULT = "";
@@ -63,8 +63,8 @@ public final class ServerActionManager {
 		isLocalChangeInProgress.set(true);
 
 		try {
-			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
-			if (persistenceController.getHostDataService().createClients(clients)) {
+			persistenceController.getDataServices().hostInfoCollections.addOpsiHostNames(createdClientNames);
+			if (persistenceController.getDataServices().host.createClients(clients)) {
 				Logging.debug("createClients", clients);
 				Logging.checkErrorList();
 
@@ -74,27 +74,8 @@ public final class ServerActionManager {
 				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 				configedMain.setClients(createdClientNames);
 			} else {
-				persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
+				persistenceController.getDataServices().hostInfoCollections.removeOpsiHostNames(createdClientNames);
 			}
-		} finally {
-			isLocalChangeInProgress.set(false);
-		}
-	}
-
-	public static void createClient(String newClientID, final String[] groups) {
-		Logging.checkErrorList();
-		isLocalChangeInProgress.set(true);
-		try {
-			persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
-
-			configedMain.setRebuiltClientListTableModel(true, true);
-
-			if (groups.length == 0 || groups.length > 1 || !configedMain.activateGroup(false, groups[0])) {
-				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-			}
-
-			// Sets the client on the table
-			configedMain.setClient(newClientID);
 		} finally {
 			isLocalChangeInProgress.set(false);
 		}
@@ -109,7 +90,8 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(configedMain.getSelectedClients());
+				return persistenceController.getDataServices().rpcMethodExecutor
+						.wakeOnLanOpsi43(configedMain.getSelectedClients());
 			}
 		}.start();
 	}
@@ -122,7 +104,7 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor()
+				return persistenceController.getDataServices().rpcMethodExecutor
 						.deletePackageCaches(configedMain.getSelectedClients());
 			}
 		}.start();
@@ -136,7 +118,7 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer("opsiclientd " + event) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().fireOpsiclientdEventOnClients(event,
+				return persistenceController.getDataServices().rpcMethodExecutor.fireOpsiclientdEventOnClients(event,
 						configedMain.getSelectedClients());
 			}
 		}.start();
@@ -161,7 +143,7 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer("opsiclientd processActionRequests") {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor()
+				return persistenceController.getDataServices().rpcMethodExecutor
 						.processActionRequests(configedMain.getSelectedClients(), products, visibility);
 			}
 		}.start();
@@ -175,14 +157,14 @@ public final class ServerActionManager {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().showPopupOnClients(message,
+				return persistenceController.getDataServices().rpcMethodExecutor.showPopupOnClients(message,
 						configedMain.getSelectedClients(), seconds);
 			}
 		}.start();
 	}
 
 	public static void shutdownSelectedClients() {
-		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+		if (persistenceController.getDataServices().userRoles.isGlobalReadOnly()
 				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
@@ -192,7 +174,7 @@ public final class ServerActionManager {
 			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
 				@Override
 				protected List<String> getErrors() {
-					return persistenceController.getRPCMethodExecutor()
+					return persistenceController.getDataServices().rpcMethodExecutor
 							.shutdownClients(configedMain.getSelectedClients());
 				}
 			}.start();
@@ -200,7 +182,7 @@ public final class ServerActionManager {
 	}
 
 	public static void rebootSelectedClients() {
-		if (persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+		if (persistenceController.getDataServices().userRoles.isGlobalReadOnly()
 				|| configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
@@ -209,7 +191,7 @@ public final class ServerActionManager {
 			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
 				@Override
 				protected List<String> getErrors() {
-					return persistenceController.getRPCMethodExecutor()
+					return persistenceController.getDataServices().rpcMethodExecutor
 							.rebootClients(configedMain.getSelectedClients());
 				}
 			}.start();
@@ -228,7 +210,7 @@ public final class ServerActionManager {
 		isLocalChangeInProgress.set(true);
 
 		try {
-			persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
+			persistenceController.getDataServices().host.deleteClients(configedMain.getSelectedClients());
 			configedMain.deactivateFilter();
 			configedMain.refreshClientListKeepingGroup();
 
@@ -252,24 +234,66 @@ public final class ServerActionManager {
 			return;
 		}
 
-		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
-				.stream().filter(hostValues -> hostValues.getName().equals(configedMain.getSelectedClients().get(0)))
+		Optional<HostInfo> selectedClient = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfPCInfoMaps().values().stream().filter(hostValues -> hostValues.getString(HostInfo.HOSTNAME_KEY)
+						.equals(configedMain.getSelectedClients().get(0)))
 				.findFirst();
 
 		if (!selectedClient.isPresent()) {
 			return;
 		}
 
+		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
+
+		HostInfo clientToCopy = selectedClient.get();
+
+		String newClientName = confirmCopyClient(clientToCopy, options);
+		if (newClientName != null) {
+			ConfigedMain.getMainFrame().activateLoadingCursor();
+			boolean proceed = true;
+			if (newClientName.isEmpty()) {
+				proceed = false;
+			}
+
+			String newClientNameWithDomain = newClientName + "."
+					+ Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
+			if (persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames()
+					.contains(newClientNameWithDomain)) {
+				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
+				if (!overwriteExistingHost) {
+					proceed = false;
+				}
+			}
+
+			Logging.info("copy client with new name ", newClientName);
+			if (proceed) {
+				persistenceController.getDataServices().hostInfoCollections.addOpsiHostName(newClientNameWithDomain);
+				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
+				copyClient.copy(options);
+
+				configedMain.setRebuiltClientListTableModel(true, true);
+				configedMain.activateGroup(false, configedMain.getSelectedGroupName());
+				configedMain.setClient(newClientNameWithDomain);
+			}
+			ConfigedMain.getMainFrame().deactivateLoadingCursor();
+		}
+	}
+
+	/**
+	 * We ask the user for confirmation and options to copy a client.
+	 * 
+	 * @param clientToCopy
+	 * @param options
+	 * @return the new client name or null if the user cancelled the action
+	 */
+	private static String confirmCopyClient(HostInfo clientToCopy, EnumSet<CopyClient.CopyOption> options) {
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
 				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
+		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 		jTextHostname.setText(copySuffixAddition.add());
-
-		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
-
 		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
 		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
 				CopyClient.CopyOption.GROUPS);
@@ -281,23 +305,21 @@ public final class ServerActionManager {
 		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
 				CopyClient.CopyOption.CONFIG_STATES);
 
-		JPanel panel = new JPanel();
-		GroupLayout groupLayout = new GroupLayout(panel);
-		panel.setLayout(groupLayout);
+		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
+
+		panel.add(jTextHostname, "growx");
+		panel.add(label, "gapy " + Globals.GAP_SIZE + "");
+		panel.add(copyGroups);
+		panel.add(copyProducts);
+		panel.add(copyProductProperties);
+		panel.add(copyConfigs);
 
 		StringBuilder messageText = new StringBuilder();
 		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
 		messageText.append("\n");
-		messageText.append(selectedClient.get().getName());
+		messageText.append(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
 		messageText.append("\n");
 		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
-				.addComponent(copyProductProperties).addComponent(copyConfigs));
-		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
-				.addComponent(copyProductProperties).addComponent(copyConfigs));
 
 		Object[] message = new Object[] { messageText.toString(), panel };
 
@@ -305,36 +327,7 @@ public final class ServerActionManager {
 				Configed.getResourceValue("MainFrame.jMenuCopyClient"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
-		if (answer == 0) {
-			ConfigedMain.getMainFrame().activateLoadingCursor();
-			String newClientName = jTextHostname.getText();
-			boolean proceed = true;
-			if (newClientName.isEmpty()) {
-				proceed = false;
-			}
-
-			HostInfo clientToCopy = selectedClient.get();
-			String newClientNameWithDomain = newClientName + "."
-					+ Utils.getDomainFromClientName(clientToCopy.getName());
-			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
-				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-				if (!overwriteExistingHost) {
-					proceed = false;
-				}
-			}
-
-			Logging.info("copy client with new name ", newClientName);
-			if (proceed) {
-				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
-				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
-				copyClient.copy(options);
-
-				configedMain.setRebuiltClientListTableModel(true, true);
-				configedMain.activateGroup(false, configedMain.getSelectedGroupName());
-				configedMain.setClient(newClientNameWithDomain);
-			}
-			ConfigedMain.getMainFrame().deactivateLoadingCursor();
-		}
+		return answer == JOptionPane.OK_OPTION ? jTextHostname.getText() : null;
 	}
 
 	private static JCheckBox createOptionCheckBox(String title, EnumSet<CopyClient.CopyOption> options,
@@ -380,12 +373,12 @@ public final class ServerActionManager {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		if (resetLocalbootProducts) {
-			persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(),
+			persistenceController.getDataServices().product.resetProducts(configedMain.getSelectedClients(),
 					withDependencies, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 		}
 
 		if (resetNetbootProducts) {
-			persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(),
+			persistenceController.getDataServices().product.resetProducts(configedMain.getSelectedClients(),
 					withDependencies, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		}
 
@@ -423,15 +416,15 @@ public final class ServerActionManager {
 
 		for (String client : configedMain.getSelectedClients()) {
 			Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = persistenceController
-					.getLicenseDataService().getFClient2LicensesUsageListPD();
+					.getDataServices().license.getFClient2LicensesUsageListPD();
 
 			for (LicenseUsageEntry m : fClient2LicensesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenseId(),
+				persistenceController.getDataServices().license.addDeletionLicenseUsage(client, m.getLicenseId(),
 						m.getLicensePool());
 			}
 		}
 
-		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenseUsage();
+		return persistenceController.getDataServices().license.executeCollectedDeletionsLicenseUsage();
 	}
 
 	public static void callChangeClientIDDialog() {
@@ -447,7 +440,7 @@ public final class ServerActionManager {
 		if (newClientName != null) {
 			Logging.debug("new name ", newClientName);
 
-			persistenceController.getHostDataService().renameClient(configedMain.getSelectedClients().get(0),
+			persistenceController.getDataServices().host.renameClient(configedMain.getSelectedClients().get(0),
 					newClientName);
 
 			SwingUtilities.invokeLater(() -> {
@@ -468,9 +461,8 @@ public final class ServerActionManager {
 		// We use the StringJoiner to separate these strings of clients with depots with a newline
 		StringJoiner stringJoiner = new StringJoiner("\n");
 		for (String selectedClient : configedMain.getSelectedClients()) {
-			stringJoiner.add(selectedClient + "  ("
-					+ persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient)
-					+ ")");
+			stringJoiner.add(selectedClient + "  (" + persistenceController.getDataServices().hostInfoCollections
+					.getMapPcBelongsToDepot().get(selectedClient) + ")");
 		}
 
 		JTextArea selectedClientsArea = new JTextArea(stringJoiner.toString());
@@ -488,8 +480,8 @@ public final class ServerActionManager {
 
 		if (answer == JOptionPane.OK_OPTION) {
 			Logging.debug(" start moving to another depot");
-			persistenceController.getHostInfoCollections().setDepotForClients(configedMain.getSelectedClients(),
-					(String) depotCombo.getSelectedItem());
+			persistenceController.getDataServices().hostInfoCollections
+					.setDepotForClients(configedMain.getSelectedClients(), (String) depotCombo.getSelectedItem());
 			Logging.checkErrorList();
 			configedMain.refreshClientListKeepingGroup();
 		}

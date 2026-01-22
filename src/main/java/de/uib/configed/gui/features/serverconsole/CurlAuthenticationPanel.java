@@ -1,15 +1,13 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -17,6 +15,8 @@ import javax.swing.JTextField;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.share.Utils;
+import net.miginfocom.swing.MigLayout;
 
 public class CurlAuthenticationPanel extends PMInstallPanel {
 	private JCheckBox jCheckBoxNeedAuthentication;
@@ -44,12 +44,10 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			}
 		});
 
-		labelUser = new JLabel(Configed.getResourceValue("username"));
-		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+		labelUser = Utils.createBoldLabel("username");
 		jTextFieldUser = new JTextField();
 
-		labelPassword = new JLabel(Configed.getResourceValue("password"));
-		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		labelPassword = Utils.createBoldLabel("password");
 		jPasswordField = new JPasswordField();
 	}
 
@@ -66,26 +64,10 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, wrap 1", "[grow, fill]", "[]0"));
+		add(labelUser);
+		add(jTextFieldUser, "growx, gapbottom " + Globals.GAP_SIZE);
+		add(labelPassword);
+		add(jPasswordField, "growx, gapbottom " + Globals.GAP_SIZE);
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -71,7 +71,7 @@ public class TopToolBarManager {
 	}
 
 	public List<JButton> getOpsiLicensingButtons(OpsiLicensing opsiLicensing) {
-		JButton reloadButton = new JButton(Icons.getOpsiReloadIcon(24));
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("reload"));
 		reloadButton.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
@@ -90,7 +90,7 @@ public class TopToolBarManager {
 		healthCheckSettingsButton.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
 		healthCheckSettingsButton.addActionListener(
 				actionEvent -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain));
-		healthCheckSettingsButton.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		healthCheckSettingsButton.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		return Arrays.asList(downloadButton, healthCheckSettingsButton);
 	}
@@ -98,14 +98,13 @@ public class TopToolBarManager {
 	public List<JButton> getConfigurationButtons() {
 		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
-		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog());
-		if (persistenceController.getConfigDataService().getDisabledClientMenuEntries()
+		addClientButton.addActionListener(event -> ExtraFrameController.callAddClientDialog());
+		if (persistenceController.getDataServices().config.getDisabledClientMenuEntries()
 				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
 			addClientButton.setEnabled(false);
 		} else {
-			addClientButton
-					.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
-							&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+			addClientButton.setEnabled(persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
+					&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		}
 
 		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));
@@ -116,7 +115,7 @@ public class TopToolBarManager {
 	}
 
 	public List<JButton> getLicensingManagementButtons(MainPanelManager mainPanelManager) {
-		JButton reloadButton = new JButton(Icons.getReloadButton("scriptingScript", 24));
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 

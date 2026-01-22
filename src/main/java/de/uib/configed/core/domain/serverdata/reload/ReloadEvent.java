@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,10 +7,12 @@
 package de.uib.configed.core.domain.serverdata.reload;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotChangeReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.DepotPropertiesDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -22,17 +24,16 @@ import de.uib.configed.core.domain.serverdata.reload.handler.OpsiHostDataReloadH
 import de.uib.configed.core.domain.serverdata.reload.handler.OpsiLicenseReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
-import de.uib.configed.core.domain.serverdata.reload.handler.ReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.StatisticsDataReloadHandler;
 
 /**
  * Events that trigger specifc reload handlers, that reload required data.
  * <p>
- * {@link ReloadEvent} and {@link ReloadHandler} implementations are used to
- * reload persistent data that are closely related or have to be reloaded
- * together. Data that only consist of one entry in internal cache is reloaded
- * using {@link DefaultDataReloadHandler} and is identified by the
+ * {@link ReloadEvent} and {@link AbstractReloadHandler} implementations are
+ * used to reload persistent data that are closely related or have to be
+ * reloaded together. Data that only consist of one entry in internal cache is
+ * reloaded using {@link DefaultDataReloadHandler} and is identified by the
  * {@link CacheIdentifier}.
  */
 public enum ReloadEvent {
@@ -114,8 +115,12 @@ public enum ReloadEvent {
 	/**
 	 * Triggers {@link DepotProductPropertiesDataReloadHandler}.
 	 */
-	DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD("depot_product_properties_data_reload");
-	;
+	DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD("depot_product_properties_data_reload"),
+
+	/**
+	 * Triggers {@link DepotPropertiesDataReloadHandler}.
+	 */
+	DEPOT_PROPERTIES_DATA_RELOAD("depot_properties_data_reload");
 
 	private String displayName;
 

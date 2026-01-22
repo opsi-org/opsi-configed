@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -38,11 +38,11 @@ public class DependenciesTreeModel {
 
 	private void initGraph(String depotId) {
 		if (depotId == null) {
-			depotId = persistenceController.getDepotDataService().getDepot();
+			depotId = persistenceController.getDataServices().depot.getDepot();
 		}
 
 		// Erstmal die Dependencies laden
-		Map<String, List<Map<String, String>>> dependencies = persistenceController.getProductDataService()
+		Map<String, List<Map<String, String>>> dependencies = persistenceController.getDataServices().product
 				.getProductDependencies(depotId);
 
 		productList = new LinkedList<>(dependencies.keySet());

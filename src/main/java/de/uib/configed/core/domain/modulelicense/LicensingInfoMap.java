@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -28,7 +28,6 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.share.logging.Logging;
 
 public final class LicensingInfoMap {
-	public static final String RESULT = "result";
 	public static final String CLIENT_NUMBERS_INFO = "client_numbers";
 	public static final String ALL = "all";
 	public static final String MAC_OS = "macos";
@@ -85,7 +84,7 @@ public final class LicensingInfoMap {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-	private Map<String, Object> jOResult;
+	private Map<String, Object> licensingInfo;
 	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
 	private Set<String> customerNames;
@@ -95,6 +94,7 @@ public final class LicensingInfoMap {
 	private List<String> obsoleteModules;
 	private List<String> shownModules;
 	private List<String> datesKeys;
+	private Map<String, String> dateToTitleMap;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
@@ -109,10 +109,10 @@ public final class LicensingInfoMap {
 	private Integer percentClientLimitWarning;
 	private List<String> disabledWarningModules;
 
-	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
+	private LicensingInfoMap(Map<String, Object> licensingInfo, Map<String, List<Object>> configVals, Boolean reduced) {
 		Logging.info(getClass(), "generate with reducedView ", reduced, " at the moment ignored, we set false");
 
-		jOResult = POJOReMapper.remap(jsonObj.get(RESULT));
+		this.licensingInfo = licensingInfo;
 
 		configs = configVals;
 		produceConfigs();
@@ -125,19 +125,20 @@ public final class LicensingInfoMap {
 		shownModules = produceShownModules();
 
 		datesKeys = produceDatesKeys();
+		dateToTitleMap = produceDateToTitleMap();
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
-		tableMap = produceTableMapFromDatesMap(datesMap);
+		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet();
 	}
 
-	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,
+	public static LicensingInfoMap getInstance(Map<String, Object> licensingInfo, Map<String, List<Object>> configVals,
 			boolean reduced) {
 		Logging.info("reduced, instance here ", reduced, ", ", instance);
 
 		if (instance == null || instanceComplete == null || instanceReduced == null) {
-			instanceComplete = new LicensingInfoMap(jsonObj, configVals, false);
-			instanceReduced = new LicensingInfoMap(jsonObj, configVals, true);
+			instanceComplete = new LicensingInfoMap(licensingInfo, configVals, false);
+			instanceReduced = new LicensingInfoMap(licensingInfo, configVals, true);
 		}
 
 		if (reduced) {
@@ -174,13 +175,13 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
-		return POJOReMapper.remap(jOResult.get(CLIENT_NUMBERS_INFO));
+		return POJOReMapper.remap(licensingInfo.get(CLIENT_NUMBERS_INFO));
 	}
 
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
-		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
+		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(licensingInfo.get(LICENSES_ID));
 
 		for (Map<String, Object> originalMap : producedLicenses) {
 			Map<String, Object> tmp = new HashMap<>();
@@ -197,7 +198,7 @@ public final class LicensingInfoMap {
 	private Set<String> produceCustomerNameSet() {
 		Set<String> producedCustomerNames = new LinkedHashSet<>();
 
-		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
+		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(licensingInfo.get(LICENSES_ID));
 
 		for (Map<String, Object> originalMap : producedLicenses) {
 			String customerName = String.valueOf(originalMap.get(CUSTOMER_NAME));
@@ -213,7 +214,7 @@ public final class LicensingInfoMap {
 	}
 
 	private List<String> produceAvailableModules() {
-		List<String> result = POJOReMapper.remap(jOResult.get(AVAILABLE_MODULES));
+		List<String> result = POJOReMapper.remap(licensingInfo.get(AVAILABLE_MODULES));
 		Collections.sort(result);
 
 		return result;
@@ -222,8 +223,8 @@ public final class LicensingInfoMap {
 	private List<String> produceKnownModules() {
 		List<String> result = availableModules;
 
-		if (jOResult.containsKey(KNOWN_MODULES)) {
-			result = POJOReMapper.remap(jOResult.get(KNOWN_MODULES));
+		if (licensingInfo.containsKey(KNOWN_MODULES)) {
+			result = POJOReMapper.remap(licensingInfo.get(KNOWN_MODULES));
 		}
 
 		Collections.sort(result);
@@ -233,8 +234,8 @@ public final class LicensingInfoMap {
 	private List<String> produceObsoleteModules() {
 		List<String> result = new ArrayList<>();
 
-		if (jOResult.containsKey(OBSOLETE_MODULES)) {
-			result = POJOReMapper.remap(jOResult.get(OBSOLETE_MODULES));
+		if (licensingInfo.containsKey(OBSOLETE_MODULES)) {
+			result = POJOReMapper.remap(licensingInfo.get(OBSOLETE_MODULES));
 		}
 
 		Collections.sort(result);
@@ -242,7 +243,7 @@ public final class LicensingInfoMap {
 	}
 
 	private List<String> produceShownModules() {
-		if (!jOResult.containsKey(OBSOLETE_MODULES)) {
+		if (!licensingInfo.containsKey(OBSOLETE_MODULES)) {
 			return produceKnownModules();
 		}
 
@@ -262,8 +263,8 @@ public final class LicensingInfoMap {
 
 	private void produceConfigs() {
 		try {
-			if (jOResult.containsKey(CONFIG)) {
-				Map<String, Object> config = POJOReMapper.remap(jOResult.get(CONFIG));
+			if (licensingInfo.containsKey(CONFIG)) {
+				Map<String, Object> config = POJOReMapper.remap(licensingInfo.get(CONFIG));
 
 				percentClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_PERCENT).toString());
 				absolutClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_ABSOLUTE).toString());
@@ -302,8 +303,8 @@ public final class LicensingInfoMap {
 	private String produceChecksum() {
 		String newChecksum = "";
 
-		if (jOResult.containsKey(CHECKSUM_ID) && jOResult.get(CHECKSUM_ID) != null) {
-			newChecksum = jOResult.get(CHECKSUM_ID).toString();
+		if (licensingInfo.containsKey(CHECKSUM_ID) && licensingInfo.get(CHECKSUM_ID) != null) {
+			newChecksum = licensingInfo.get(CHECKSUM_ID).toString();
 		}
 
 		return newChecksum;
@@ -312,7 +313,7 @@ public final class LicensingInfoMap {
 	private List<String> produceDatesKeys() {
 		List<String> dates = new ArrayList<>();
 
-		Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES));
+		Map<String, Object> datesM = POJOReMapper.remap(licensingInfo.get(DATES));
 
 		for (Entry<String, Object> entry : datesM.entrySet()) {
 			dates.add(entry.getKey());
@@ -336,6 +337,28 @@ public final class LicensingInfoMap {
 		return dates;
 	}
 
+	private Map<String, String> produceDateToTitleMap() {
+		Map<String, String> resultMap = new HashMap<>();
+		if (datesKeys.isEmpty()) {
+			return resultMap;
+		}
+
+		for (int i = 0; i < datesKeys.size() - 1; i++) {
+			String title = isoDateToGUIDate(datesKeys.get(i)) + " - "
+					+ isoDateToGUIDate(LocalDate.parse(datesKeys.get(i + 1)).minusDays(1).toString());
+			resultMap.put(datesKeys.get(i), title);
+		}
+
+		resultMap.put(datesKeys.get(datesKeys.size() - 1), Configed.getResourceValue("LicensingInfo.from") + " "
+				+ isoDateToGUIDate(datesKeys.get(datesKeys.size() - 1)));
+
+		return resultMap;
+	}
+
+	private static String isoDateToGUIDate(String isoDate) {
+		return isoDate.substring(8, 10) + '.' + isoDate.substring(5, 7) + '.' + isoDate.substring(0, 4);
+	}
+
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
 		if (currentCloseToLimitModuleList == null) {
 			currentCloseToLimitModuleList = new HashSet<>();
@@ -354,7 +377,7 @@ public final class LicensingInfoMap {
 		}
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
-		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(jOResult.get(DATES));
+		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
 
 		for (String key : datesKeys) {
 			Map<String, Map<String, Object>> modulesMapToDate = new TreeMap<>();
@@ -369,7 +392,7 @@ public final class LicensingInfoMap {
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
-			resultMap.put(key, modulesMapToDate);
+			resultMap.put(dateToTitleMap.get(key), modulesMapToDate);
 		}
 
 		return checkTimeWarning(resultMap);
@@ -418,15 +441,14 @@ public final class LicensingInfoMap {
 	 * transforms datesMap to be able to use in a table, with dates as columns
 	 * and modules as rows
 	 */
-	private Map<String, Map<String, Object>> produceTableMapFromDatesMap(
-			Map<String, Map<String, Map<String, Object>>> datesM) {
+	private Map<String, Map<String, Object>> produceTableMapFromDatesMap() {
 		Map<String, Map<String, Object>> resultMap = new TreeMap<>();
 
 		columnNames = new ArrayList<>();
-		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
+		columnNames.add(Configed.getResourceValue("LicensingInfo.module"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
-		for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+		for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
 			columnNames.add(date.getKey());
 		}
 
@@ -434,7 +456,7 @@ public final class LicensingInfoMap {
 			Map<String, Object> line = new HashMap<>();
 
 			// 1st column
-			line.put(Configed.getResourceValue("LicensingInfo.modules"), currentModule);
+			line.put(Configed.getResourceValue("LicensingInfo.module"), currentModule);
 
 			// 2nd column
 
@@ -442,7 +464,7 @@ public final class LicensingInfoMap {
 			line.put(Configed.getResourceValue("LicensingInfo.available"), availableModules.contains(currentModule));
 
 			// rest columns
-			for (Entry<String, Map<String, Map<String, Object>>> date : datesM.entrySet()) {
+			for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
 				line.put(date.getKey(), date.getValue().get(currentModule).get(CLIENT_NUMBER).toString());
 			}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,25 +7,17 @@
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
-import de.uib.configed.core.domain.serverdata.dataservice.LicenseDataService;
+import de.uib.configed.core.domain.serverdata.dataservice.DataServices;
 
-public class LicenseContractDataReloadHandler implements ReloadHandler {
-	private CacheManager cacheManager;
-	private LicenseDataService licenseDataService;
-
-	public LicenseContractDataReloadHandler() {
-		this.cacheManager = CacheManager.getInstance();
-	}
-
-	public void setLicenseDataService(LicenseDataService licenseDataService) {
-		this.licenseDataService = licenseDataService;
+public class LicenseContractDataReloadHandler extends AbstractReloadHandler {
+	public LicenseContractDataReloadHandler(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	@Override
 	public void handle(String event) {
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
-		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
-		licenseDataService.retrieveLicenseContractsPD();
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
+		dataServices.license.retrieveLicenseContractsPD();
 	}
 }

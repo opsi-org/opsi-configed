@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,9 +24,9 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
-	private static final int MIN_WIDTH = 250;
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
@@ -110,22 +109,22 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	private void updateSelectedClientInfo(HostInfo hostInfo) {
-		labelOS.setText(hostInfo.getClientOS());
-		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
+		labelOS.setText(hostInfo.getString(HostInfo.CLIENT_OS_KEY));
+		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getString(HostInfo.CLIENT_OS_KEY), 20));
 
-		labelDeviceType.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
-		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
-
+		labelDeviceType
+				.setText(ClientInfoPanel.transformDeviceType(hostInfo.getString(HostInfo.CLIENT_DEVICE_TYPE_KEY)));
+		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getString(HostInfo.CLIENT_DEVICE_TYPE_KEY)));
 		StringBuilder tooltipText = new StringBuilder();
-		if (!hostInfo.getClientDeviceVendor().isBlank()) {
-			tooltipText.append(hostInfo.getClientDeviceVendor());
+		if (!hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY).isBlank()) {
+			tooltipText.append(hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY));
 		}
 
-		if (!hostInfo.getClientDeviceModel().isBlank()) {
+		if (!hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY).isBlank()) {
 			if (tooltipText.length() > 0) {
 				tooltipText.append("\n");
 			}
-			tooltipText.append(hostInfo.getClientDeviceModel());
+			tooltipText.append(hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY));
 		}
 
 		labelDeviceType.setToolTipText(tooltipText.toString());
@@ -168,47 +167,16 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	private void setupLayout() {
-		GroupLayout layoutStatusPane = new GroupLayout(this);
-		this.setLayout(layoutStatusPane);
+		setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", gapx " + Globals.GAP_SIZE + ", flowx", "", ""));
 
-		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
-				.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(fieldSelectedClientName, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelDeviceType, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelOS, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(labelDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(fieldDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(serverConnectionStateLabel));
-
-		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelDeviceType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldSelectedClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(serverConnectionStateLabel))
-				.addGap(Globals.MIN_GAP_SIZE));
+		add(labelAllClientsCount);
+		add(labelSelectedClients);
+		add(fieldSelectedClientName, "growx, pushx");
+		add(labelDeviceType, "growx, pushx");
+		add(labelOS, "growx, pushx");
+		add(labelDepots);
+		add(fieldDepots, "growx, pushx");
+		add(serverConnectionStateLabel);
 	}
 
 	@Override

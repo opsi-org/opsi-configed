@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -24,12 +24,12 @@ import de.uib.configed.core.domain.datachanges.UpdateCollection;
 import de.uib.configed.core.domain.permission.UserConfig;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.type.ConfigOption;
-import de.uib.configed.share.DataChangedObserver;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class MapTableModel extends AbstractTableModel {
-	private List<DataChangedObserver> observers;
+	private List<AbstractDataChangedKeeper> keepers;
 
 	private UpdateCollection updateCollection;
 	private Collection<Map<String, Object>> storeData;
@@ -59,7 +59,7 @@ public class MapTableModel extends AbstractTableModel {
 	private boolean writeData = true;
 
 	public MapTableModel() {
-		observers = new ArrayList<>();
+		keepers = new ArrayList<>();
 	}
 
 	public void setOptions(Map<String, ConfigOption> optionsMap, Map<String, Object> defaultData) {
@@ -157,7 +157,6 @@ public class MapTableModel extends AbstractTableModel {
 		oridata.put(key, defaultValues);
 		Logging.debug(this, " keys ", keys);
 		keys = new ArrayList<>(data.keySet());
-		Logging.debug(this, " new keys  ", keys);
 		if (toStore) {
 			putEntryIntoStoredMaps(key, defaultValues, toStore);
 		}
@@ -178,7 +177,7 @@ public class MapTableModel extends AbstractTableModel {
 			configChanges = Collections.singletonMap(key, defaultValues);
 		}
 
-		updateCollection.addMap(configChanges);
+		updateCollection.addMap(new HashMap<>(configChanges));
 
 		notifyChange();
 		fireTableDataChanged();
@@ -303,7 +302,7 @@ public class MapTableModel extends AbstractTableModel {
 		notifyChange();
 		fireTableDataChanged();
 
-		updateCollection.addMap(configChanges);
+		updateCollection.addMap(new HashMap<>(configChanges));
 	}
 
 	private void weHaveChangedStoredMaps() {
@@ -319,7 +318,7 @@ public class MapTableModel extends AbstractTableModel {
 			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
 			} else {
-				updateCollection.addMap(changes);
+				updateCollection.addMap(new HashMap<>(changes));
 			}
 
 			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());
@@ -448,23 +447,23 @@ public class MapTableModel extends AbstractTableModel {
 		setValueAt(value, row, 1);
 	}
 
-	public void registerDataChangedObserver(DataChangedObserver o) {
-		observers.add(o);
+	public void registerDataChangedKeeper(AbstractDataChangedKeeper keeper) {
+		keepers.add(keeper);
 	}
 
 	// for transport between a class family
-	public List<DataChangedObserver> getObservers() {
-		return observers;
+	public List<AbstractDataChangedKeeper> getKeepers() {
+		return keepers;
 	}
 
-	public void setObservers(List<DataChangedObserver> observers) {
-		this.observers = observers;
+	public void setKeepers(List<AbstractDataChangedKeeper> keepers) {
+		this.keepers = keepers;
 	}
 
 	private void notifyChange() {
-		Logging.debug(this, "notifyChange, notify observers ", observers.size());
-		for (int i = 0; i < observers.size(); i++) {
-			observers.get(i).dataHaveChanged(this);
+		Logging.debug(this, "notifyChange, notify observers ", keepers.size());
+		for (int i = 0; i < keepers.size(); i++) {
+			keepers.get(i).dataHaveChanged(this);
 		}
 	}
 }

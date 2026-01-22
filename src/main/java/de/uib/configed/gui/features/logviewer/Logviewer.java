@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -13,7 +13,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 
-import de.uib.configed.gui.features.logviewer.gui.LogFrame;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WindowsPositionManager;
 import de.uib.configed.share.logging.Logging;

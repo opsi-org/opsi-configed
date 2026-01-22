@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -196,7 +196,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 
 		// add update to list
-		List<Map<String, String>> productInfos = persistenceController.getProductDataService()
+		List<Map<String, String>> productInfos = persistenceController.getDataServices().product
 				.getProductInfos(productIds, clientId, attributes);
 		for (Map<String, String> productInfo : productInfos) {
 			allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
@@ -220,8 +220,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			return;
 		}
 
-		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
-				attributes);
+		List<Map<String, String>> productInfos = persistenceController.getDataServices().product
+				.getProductInfos(clientId, attributes);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, String> productInfo : productInfos) {
 				allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
@@ -355,8 +355,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			return false;
 		}
 
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -780,21 +779,21 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product ", product);
 
-			Map<String, String> requirements = persistenceController.getProductDataService()
+			Map<String, String> requirements = persistenceController.getDataServices().product
 					.getProductDeinstallRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for uninstall for ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 		} else {
-			Map<String, String> requirements = persistenceController.getProductDataService()
+			Map<String, String> requirements = persistenceController.getDataServices().product
 					.getProductPreRequirements(null, product);
 			Logging.debug(this, "ProductPreRequirements for  ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persistenceController.getProductDataService().getProductRequirements(null, product);
+			requirements = persistenceController.getDataServices().product.getProductRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for  ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persistenceController.getProductDataService().getProductPostRequirements(null, product);
+			requirements = persistenceController.getDataServices().product.getProductPostRequirements(null, product);
 			Logging.debug(this, "ProductPostRequirements for  ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 		}

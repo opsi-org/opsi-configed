@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -229,49 +229,42 @@ public final class CommandParameterParser {
 	}
 
 	private String formatResult(String[] result, String format) {
-		String formatedResult = "";
 		String f = format.replace(" ", "");
 		Logging.info(this, "callMethod format f ", f);
-		switch (f) {
-		case "xyz", "xyz...":
-			formatedResult = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
-			break;
-		case "x,y,z", "x,y,z,...":
-			formatedResult = Arrays.toString(result).replace("[", "").replace("]", "");
-			break;
-		case "[x,y,z]", "[x,y,z,...]":
-			formatedResult = Arrays.toString(result);
-			break;
 
-		case "'x''y''z'", "'x''y''z''...'":
+		return switch (f) {
+		case "xyz", "xyz..." -> Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
+		case "x,y,z", "x,y,z,..." -> Arrays.toString(result).replace("[", "").replace("]", "");
+		case "[x,y,z]", "[x,y,z,...]" -> Arrays.toString(result);
+		case "'x''y''z'", "'x''y''z''...'" -> {
 			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
-			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
-			break;
-		case "'x','y','z'", "'x','y','z','...'":
-			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
-			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
-			break;
-		case "\"x\"\"y\"\"z\"", "\"x\"\"y\"\"z\"\"...\"":
-			Logging.info(this, "formatResult switch case [4] \"x\"\"y\"\"z\"\"...\" || \"x\"\"y\"\"z\"");
-			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
-			break;
-		case "\"x\",\"y\",\"z\"", "\"x\",\"y\",\"z\",\"...\"":
-			Logging.info(this, "formatResult switch case [5] \"x\",\"y\",\"z\",\"...\" || \"x\",\"y\",\"z\"");
-			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
-			break;
-		case "['x','y','z']", "['x','y','z','...']":
-			Logging.info(this, "formatResult switch case [5] ['x','y','z'] || ['x','y','z','...']");
-			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
-			break;
-		case "[\"x\",\"y\",\"z\"]", "[\"x\",\"y\",\"z\",\"...\"]":
-			Logging.info(this, "formatResult switch case [5] [\"x\",\"y\",\"z\"] || [\"x\",\"y\",\"z\",\"...\"]");
-			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
-			break;
-		default:
-			Logging.warning(this, "cannot format into \"", format, "\" with \"", Arrays.toString(result), "\"");
-			break;
+			yield createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
 		}
-		return formatedResult;
+		case "'x','y','z'", "'x','y','z','...'" -> {
+			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
+			yield createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
+		}
+		case "\"x\"\"y\"\"z\"", "\"x\"\"y\"\"z\"\"...\"" -> {
+			Logging.info(this, "formatResult switch case [4] \"x\"\"y\"\"z\"\"...\" || \"x\"\"y\"\"z\"");
+			yield createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
+		}
+		case "\"x\",\"y\",\"z\"", "\"x\",\"y\",\"z\",\"...\"" -> {
+			Logging.info(this, "formatResult switch case [5] \"x\",\"y\",\"z\",\"...\" || \"x\",\"y\",\"z\"");
+			yield createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
+		}
+		case "['x','y','z']", "['x','y','z','...']" -> {
+			Logging.info(this, "formatResult switch case [5] ['x','y','z'] || ['x','y','z','...']");
+			yield createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
+		}
+		case "[\"x\",\"y\",\"z\"]", "[\"x\",\"y\",\"z\",\"...\"]" -> {
+			Logging.info(this, "formatResult switch case [5] [\"x\",\"y\",\"z\"] || [\"x\",\"y\",\"z\",\"...\"]");
+			yield createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
+		}
+		default -> {
+			Logging.warning(this, "cannot format into \"", f, "\" with \"", Arrays.toString(result), "\"");
+			yield Arrays.toString(result);
+		}
+		};
 	}
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
@@ -343,7 +336,7 @@ public final class CommandParameterParser {
 	}
 
 	private String getConfigServerName() {
-		List<String> depots = persistenceController.getHostInfoCollections().getAllDepotNamesList();
+		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(persistenceController.getExecutioner().getHost())) {
 				Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHost());
@@ -362,9 +355,10 @@ public final class CommandParameterParser {
 		String[] clientIPs = new String[configedMain.getSelectedClients().size()];
 		int counter = 0;
 		for (String name : configedMain.getSelectedClients()) {
-			HostInfo hostInfo = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(name);
+			HostInfo hostInfo = persistenceController.getDataServices().hostInfoCollections.getMapOfAllPCInfoMaps()
+					.get(name);
 			if (hostInfo != null) {
-				clientIPs[counter] = hostInfo.getIpAddress();
+				clientIPs[counter] = hostInfo.getString(HostInfo.CLIENT_IP_ADDRESS_KEY);
 				counter++;
 			} else {
 				Logging.debug(this, "getSelected_clientIPs host ", name, " HostInfo null");
@@ -389,7 +383,7 @@ public final class CommandParameterParser {
 		String[] depotIPs = new String[configedMain.getSelectedDepots().size()];
 		int counter = 0;
 		for (String name : configedMain.getSelectedDepots()) {
-			String depotip = (String) persistenceController.getHostInfoCollections().getDepots().get(name)
+			String depotip = (String) persistenceController.getDataServices().hostInfoCollections.getDepots().get(name)
 					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host ", name, " depotip ", depotip);
 			if (depotip != null) {

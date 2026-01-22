@@ -1,15 +1,12 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
-
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -27,6 +24,7 @@ import de.uib.configed.gui.features.serverconsole.command.SingleCommandFileUploa
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PackageManagerInstallParameterDialog {
 	private JPanel mainPanel = new JPanel();
@@ -35,7 +33,6 @@ public class PackageManagerInstallParameterDialog {
 	private PMInstallServerPanel installServerPanel;
 	private PMInstallCurlPanel installCurlPanel;
 	private PMInstallSettingsPanel installSettingsPanel;
-	private JLabel jLabelInstall = new JLabel();
 
 	private JComboBox<String> jComboBoxPackageSource;
 
@@ -50,8 +47,7 @@ public class PackageManagerInstallParameterDialog {
 	}
 
 	public PackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -156,51 +152,24 @@ public class PackageManagerInstallParameterDialog {
 
 	private void initLayout() {
 		downloadPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
-		jLabelInstall.setFont(jLabelInstall.getFont().deriveFont(Font.BOLD));
+		JLabel jLabelInstall = Utils.createBoldLabel("PackageManagerInstallParameterDialog.jLabelInstallationMethod");
 
-		GroupLayout downloadPanelLayout = new GroupLayout(downloadPanel);
-		downloadPanel.setLayout(downloadPanelLayout);
+		downloadPanel.setLayout(
+				new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, gapy " + Globals.GAP_SIZE + ", wrap 1",
+						"[grow, fill]", "[]0[]0[]"));
 
-		downloadPanelLayout.setHorizontalGroup(downloadPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(downloadPanelLayout.createParallelGroup()
-						.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(installServerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGap(Globals.GAP_SIZE));
+		downloadPanel.add(installLocalPanel, "growx, hidemode 3");
+		downloadPanel.add(installServerPanel, "growx, hidemode 3");
+		downloadPanel.add(installCurlPanel, "growx, hidemode 3");
 
-		downloadPanelLayout.setVerticalGroup(downloadPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(installServerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
+		mainPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.MIN_GAP_SIZE + ", wrap 1", "[grow, fill]",
+				"[]0[]0[]0[]"));
 
-		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
-		mainPanel.setLayout(mainPanelLayout);
-		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
-				.addComponent(jLabelInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxPackageSource, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(downloadPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(installSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+		mainPanel.add(jLabelInstall, "gapbottom " + Globals.MIN_GAP_SIZE);
+		mainPanel.add(jComboBoxPackageSource, "gapbottom " + Globals.MIN_GAP_SIZE);
+		mainPanel.add(downloadPanel, "growx, gapbottom " + Globals.GAP_SIZE);
+		mainPanel.add(installSettingsPanel, "growx");
 
-		mainPanelLayout
-				.setVerticalGroup(
-						mainPanelLayout.createSequentialGroup().addComponent(jLabelInstall).addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jComboBoxPackageSource, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(downloadPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE).addComponent(installSettingsPanel));
 	}
 
 	private void execute() {

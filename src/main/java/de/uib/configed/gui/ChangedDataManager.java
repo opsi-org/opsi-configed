@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
 
 public final class ChangedDataManager {
@@ -21,8 +22,6 @@ public final class ChangedDataManager {
 
 	private static boolean anyDataChanged;
 
-	private static HostInfo hostInfo;
-
 	// This is the save button that is shown in the top toolbar
 	private static Component shownSaveButton;
 
@@ -31,8 +30,6 @@ public final class ChangedDataManager {
 	}
 
 	public static void initData(ConfigedMain configedMain, HostInfo hostInfo) {
-		ChangedDataManager.hostInfo = hostInfo;
-
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper(configedMain, hostInfo);
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
@@ -85,7 +82,7 @@ public final class ChangedDataManager {
 		if (anyDataChanged) {
 			result = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-					Configed.getResourceValue("buttonClose"), JOptionPane.YES_NO_CANCEL_OPTION,
+					Configed.getResourceValue("ConfigedMain.unsavedChanges"), JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 		}
 
@@ -94,47 +91,52 @@ public final class ChangedDataManager {
 	}
 
 	// save if not otherwise stated
-	public static void checkSaveAll(boolean ask) {
+	public static boolean checkSaveAll(boolean ask) {
+		boolean result = true;
 		Logging.debug("checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
 
-		if (anyDataChanged) {
-			if (!PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection(true)) {
-				setDataChanged(true, true);
-				return;
-			}
-			// actually save the data
-			saveData(ask);
+		if (anyDataChanged
+				&& PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection(true)) {
+			result = saveData(ask);
 
-			// without showing, but must be on first place since we run in this method again
-			setDataChanged(false, false);
-
-			setDataChanged(false, true);
+			setDataChanged(!result);
 		}
+
+		return result;
 	}
 
-	private static void saveData(boolean ask) {
+	private static boolean saveData(boolean ask) {
+		boolean result = true;
 		if (ask) {
-			if (clientInfoDataChangedKeeper.askSave()) {
-				clientInfoDataChangedKeeper.save();
-			} else if (clientInfoDataChangedKeeper.isDataChanged()) {
-				// reset to old values when data have been changed 
-				hostInfo.resetGui();
-			} else {
-				// if no data have been changed, and no client selected, we do nothing
-				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
-			}
+			boolean result1 = saveData(clientInfoDataChangedKeeper);
+			boolean result2 = saveData(generalDataChangedKeeper);
+			boolean result3 = saveData(hostConfigsDataChangedKeeper);
+
+			result = result1 && result2 && result3;
 		} else {
 			clientInfoDataChangedKeeper.save();
-		}
-
-		if (!ask || generalDataChangedKeeper.askSave()) {
 			generalDataChangedKeeper.save();
+			hostConfigsDataChangedKeeper.save();
 		}
 
-		if (!ask || hostConfigsDataChangedKeeper.askSave()) {
-			hostConfigsDataChangedKeeper.save();
-		} else {
-			hostConfigsDataChangedKeeper.cancel();
+		return result;
+	}
+
+	private static boolean saveData(AbstractDataChangedKeeper keeper) {
+
+		int option = keeper.askSave();
+		switch (option) {
+		case JOptionPane.YES_OPTION -> keeper.save();
+		case JOptionPane.NO_OPTION -> keeper.cancel();
+		case JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION -> {
+			Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
+			return false;
 		}
+		// Here no changes were made, so nothing to do - and successful (result = true)
+		case -2 -> Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
+		default -> Logging.error("unknown option in saveData: ", option);
+		}
+
+		return true;
 	}
 }

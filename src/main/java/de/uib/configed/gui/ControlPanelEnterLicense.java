@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -51,21 +51,21 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	}
 
 	public Set<String> getChoicesAllHosts() {
-		return persistenceController.getHostInfoCollections().getClientsForDepots(configedMain.getSelectedDepots(),
-				configedMain.getAllowedClients());
+		return persistenceController.getDataServices().hostInfoCollections
+				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients());
 	}
 
 	public void saveNewLicense(Map<String, String> m) {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
-		persistenceController.getSoftwareDataService().editSoftwareLicense(m.get(LicenseEntry.ID_KEY),
+		persistenceController.getDataServices().software.editSoftwareLicense(m.get(LicenseEntry.ID_KEY),
 				m.get(LicenseEntry.LICENSE_CONTRACT_ID_KEY), m.get(LicenseEntry.TYPE_KEY),
 				m.get(LicenseEntry.MAX_INSTALLATIONS_KEY), m.get(LicenseEntry.BOUND_TO_HOST_KEY),
 				m.get(LicenseEntry.EXPIRATION_DATE_KEY));
 		licensesPane.getSoftwarelicensesTableProvider().requestReloadRows();
 		// ensure that the visual tables everywhere get the new data when refreshed
 
-		String keyValue = persistenceController.getSoftwareDataService()
+		String keyValue = persistenceController.getDataServices().software
 				.editRelationSoftwareL2LPool(m.get(LicenseEntry.ID_KEY), m.get("licensePoolId"), m.get("licenseKey"));
 
 		modelLicensekeys.requestReload();
@@ -108,7 +108,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensekeys.setSource(modelLicensekeys);
 
 		tableModels.add(modelLicensekeys);
-		tablePanes.add(thePanel.getPanelKeys());
+		panelGenEdits.add(thePanel.getPanelKeys());
 
 		modelLicensekeys.reset();
 		thePanel.getPanelKeys().setTableModel(modelLicensekeys);
@@ -127,7 +127,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensepools.setSource(modelLicensepools);
 
 		tableModels.add(modelLicensepools);
-		tablePanes.add(thePanel.getPanelLicensePools());
+		panelGenEdits.add(thePanel.getPanelLicensePools());
 
 		modelLicensepools.reset();
 		thePanel.getPanelLicensePools().setTableModel(modelLicensepools);
@@ -147,7 +147,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		updateItemFactoryLicensecontracts.setSource(modelLicensecontracts);
 
 		tableModels.add(modelLicensecontracts);
-		tablePanes.add(thePanel.getPanelLicenseContracts());
+		panelGenEdits.add(thePanel.getPanelLicenseContracts());
 
 		modelLicensecontracts.reset();
 		thePanel.getPanelLicenseContracts().setTableModel(modelLicensecontracts);
@@ -159,7 +159,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
 		menuItemAddContract.addActionListener(actionEvent -> addContract());
-		menuItemAddContract.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		menuItemAddContract.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		thePanel.getPanelLicenseContracts().addPopupItem(menuItemAddContract);
 	}
@@ -189,7 +189,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.getPanelKeys(), modelLicensekeys, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.getSoftwareDataService().editRelationSoftwareL2LPool(
+						return persistenceController.getDataServices().software.editRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
 								(String) rowmap.get("licenseKey"));
 					}
@@ -197,7 +197,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicensekeys.requestReload();
-						return persistenceController.getSoftwareDataService().deleteRelationSoftwareL2LPool(
+						return persistenceController.getDataServices().software.deleteRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));
 					}
 				}, updateCollection));
@@ -208,7 +208,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 				thePanel.getPanelLicenseContracts(), modelLicensecontracts, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persistenceController.getLicenseDataService().editLicenseContract(
+						return persistenceController.getDataServices().license.editLicenseContract(
 								(String) rowmap.get("licenseContractId"), (String) rowmap.get("partner"),
 								(String) rowmap.get("conclusionDate"), (String) rowmap.get("notificationDate"),
 								(String) rowmap.get("expirationDate"), (String) rowmap.get("notes"));
@@ -217,7 +217,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicensecontracts.requestReload();
-						return persistenceController.getLicenseDataService()
+						return persistenceController.getDataServices().license
 								.deleteLicenseContract((String) rowmap.get("licenseContractId"));
 					}
 				}, updateCollection));

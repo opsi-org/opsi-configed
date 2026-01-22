@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -392,11 +392,12 @@ public final class Configed {
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getNewPersistenceController(host, user, password, otp, useSSO);
 
-			new UserConfigProducing(false, host, persistenceController.getHostInfoCollections().getDepotNamesList(),
-					persistenceController.getGroupDataService().getHostGroupIds(),
-					persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
+			new UserConfigProducing(false, host,
+					persistenceController.getDataServices().hostInfoCollections.getDepotNamesList(),
+					persistenceController.getDataServices().group.getHostGroupIds(),
+					persistenceController.getDataServices().group.getProductGroupsPD().keySet(),
+					persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
+					persistenceController.getDataServices().config.getConfigOptionsPD()).produce();
 
 			Main.endApp(Main.NO_ERROR);
 		} else {

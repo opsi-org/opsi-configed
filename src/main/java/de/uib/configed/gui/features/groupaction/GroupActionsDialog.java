@@ -1,12 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.groupaction;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +16,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -35,6 +33,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class GroupActionsDialog {
 	private JLabel groupNameLabel;
@@ -87,7 +86,7 @@ public class GroupActionsDialog {
 
 	private void setImages() {
 		Set<String> imagesCollection = new TreeSet<>(
-				persistenceController.getProductDataService().getCommonProductPropertyValues(associatedClients,
+				persistenceController.getDataServices().product.getCommonProductPropertyValues(associatedClients,
 						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY));
 
@@ -123,14 +122,14 @@ public class GroupActionsDialog {
 
 		dialog.setCursor(Globals.WAIT_CURSOR);
 
-		persistenceController.getProductDataService().setCommonProductPropertyValue(associatedClients,
+		persistenceController.getDataServices().product.setCommonProductPropertyValue(associatedClients,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persistenceController.getProductDataService().updateProductOnClients(associatedClients,
+		persistenceController.getDataServices().product.updateProductOnClients(associatedClients,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 
@@ -144,35 +143,17 @@ public class GroupActionsDialog {
 		groupNameLabel = new JLabel();
 		clientsCountLabel = new JLabel();
 
-		JLabel labelCombo = new JLabel(Configed.getResourceValue("FGroupAction.existingImages"));
-		labelCombo.setFont(labelCombo.getFont().deriveFont(Font.BOLD));
+		JLabel labelCombo = Utils.createBoldLabel("FGroupAction.existingImages");
 
 		comboSelectImage = new JComboBox<>();
 
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fillx", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(groupNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(clientsCountLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		panel.add(groupNameLabel, "split 2");
+		panel.add(clientsCountLabel, "wrap, gapleft " + Globals.GAP_SIZE);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
-				.addComponent(groupNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(clientsCountLabel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(labelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+		panel.add(labelCombo, "gapy " + Globals.GAP_SIZE + ", wrap");
+		panel.add(comboSelectImage, "growx");
 
 		return panel;
 	}

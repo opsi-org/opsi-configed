@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,6 @@ import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
 import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.data.InstallationStateUpdateManager;
-import de.uib.configed.gui.data.ListMerger;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
@@ -38,7 +36,7 @@ import de.uib.configed.share.userprefs.UserPreferences;
 
 public class ProductPageManager implements MessagebusListener {
 	// the properties for one product and all selected clients
-	private Collection<Map<String, Object>> productProperties;
+	private List<Map<String, Object>> productProperties;
 	private Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
 
 	private InstallationStateUpdateManager updateManager;
@@ -57,7 +55,7 @@ public class ProductPageManager implements MessagebusListener {
 	// a map of products, product --> list of used as an indicator that a product is in the depot
 	private Map<String, List<String>> possibleActions = new HashMap<>();
 
-	private Map<String, ListMerger> mergedProductProperties;
+	private Map<String, List<Object>> mergedProductProperties;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -73,7 +71,7 @@ public class ProductPageManager implements MessagebusListener {
 				clientConfiguration.getPanelLocalbootProductSettings().getProductTable(),
 				clientConfiguration.getPanelNetbootProductSettings().getProductTable());
 
-		possibleActions = persistenceController.getProductDataService()
+		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
 
 		Messagebus.getInstance().getWebSocket().registerListener(this);
@@ -101,14 +99,14 @@ public class ProductPageManager implements MessagebusListener {
 			return;
 		}
 
-		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getProductDataService()
+		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getDataServices().product
 				.getMapOfProductStatesAndActions(configedMain.getSelectedClients(), attributes, productServerString);
 
 		clientProductpropertiesUpdateCollections = new HashMap<>();
 		panelProductSettings.clearEditing();
 
 		Logging.debug(this, "setProductsPage,  depotRepresentative:", configedMain.getDepotRepresentative());
-		possibleActions = persistenceController.getProductDataService()
+		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
 
 		// we retrieve the properties for all clients and products
@@ -117,7 +115,7 @@ public class ProductPageManager implements MessagebusListener {
 		// listener is triggered
 		// which loads the productProperties for each client separately
 
-		persistenceController.getProductDataService()
+		persistenceController.getDataServices().product
 				.retrieveProductPropertiesPD(configedMain.getClientTablePanel().getClientTable().getSelectedSet());
 
 		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
@@ -128,19 +126,20 @@ public class ProductPageManager implements MessagebusListener {
 
 		Set<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = persistenceController.getProductDataService()
+			productNames = persistenceController.getDataServices().product
 					.getAllLocalbootProductNames(configedMain.getDepotRepresentative());
 		} else {
-			productNames = persistenceController.getProductDataService()
+			productNames = persistenceController.getDataServices().product
 					.getAllNetbootProductNames(configedMain.getDepotRepresentative());
 		}
 
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getProductTable());
 		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
 				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
 				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(
 				configedMain.getSelectedClients(), changedProductStates, productNames, statesAndActions,
-				possibleActions, persistenceController.getProductDataService()
+				possibleActions, persistenceController.getDataServices().product
 						.getProductGlobalInfosPD(configedMain.getDepotRepresentative()),
 				displayFields);
 		panelProductSettings.setTableModel(istmForSelectedClients);
@@ -156,8 +155,8 @@ public class ProductPageManager implements MessagebusListener {
 
 		panelProductSettings.updateSearchFields();
 		panelProductSettings.restoreFilter();
+		panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 
-		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getProductTable());
 		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getProductTable(), columnWidths);
 	}
 
@@ -178,7 +177,7 @@ public class ProductPageManager implements MessagebusListener {
 
 	private List<String> getLocalbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
+		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
 				.getProductOnClientsDisplayFieldsLocalbootProducts().entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
@@ -210,7 +209,7 @@ public class ProductPageManager implements MessagebusListener {
 	private List<String> getNetbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
 
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
+		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
 				.getProductOnClientsDisplayFieldsNetbootProducts().entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
@@ -277,58 +276,12 @@ public class ProductPageManager implements MessagebusListener {
 		// all selected clients
 
 		Logging.info(this, "collectTheProductProperties for ", productEdited);
-		mergedProductProperties = new HashMap<>();
-		productProperties = new ArrayList<>(configedMain.getSelectedClients().size());
+		productProperties = configedMain.getSelectedClients().stream()
+				.map(clientId -> persistenceController.getDataServices().product.getProductPropertiesPD(clientId,
+						productEdited))
+				.toList();
 
-		if (!configedMain.getSelectedClients().isEmpty() && possibleActions.get(productEdited) != null) {
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(configedMain.getSelectedClients().get(0), productEdited);
-
-			if (productPropertiesFor1Client != null) {
-				productProperties.add(productPropertiesFor1Client);
-
-				for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-					// create a merger for product property
-					ListMerger merger = new ListMerger((List<?>) productProperty.getValue());
-
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				}
-
-				// merge the other clients
-				mergeOtherClients(productEdited);
-			}
-		}
-	}
-
-	private void mergeOtherClients(String productEdited) {
-		for (int i = 1; i < configedMain.getSelectedClients().size(); i++) {
-			String selectedClient = configedMain.getSelectedClients().get(i);
-
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(selectedClient, productEdited);
-
-			productProperties.add(productPropertiesFor1Client);
-
-			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-				List<?> value = (List<?>) productProperty.getValue();
-
-				if (mergedProductProperties.get(productProperty.getValue()) == null) {
-					// we need a new property. it is not common
-
-					ListMerger merger = new ListMerger(value);
-
-					merger.setHavingNoCommonValue();
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				} else {
-					ListMerger merger = mergedProductProperties.get(productProperty.getKey());
-
-					ListMerger mergedValue = merger.merge(value);
-
-					// on merging we check if the value is the same as before
-					mergedProductProperties.put(productProperty.getKey(), mergedValue);
-				}
-			}
-		}
+		mergedProductProperties = ConfigedUtilityMethods.mergeMaps(productProperties);
 	}
 
 	public void updateProductStates() {
