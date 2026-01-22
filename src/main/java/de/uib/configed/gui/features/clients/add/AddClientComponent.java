@@ -148,12 +148,12 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				opsiHostKey);
 		case AddClientEffect.UIEffect.ShowOverwriteDepotDialog(String opsiHostKey) -> handleShowOverwriteDepotDialogEffect(
 				opsiHostKey);
-		case AddClientEffect.UIEffect.ShowNetbiosConfirmDialog e -> handleShowNetbiosConfirmDialogEffect();
-		case AddClientEffect.UIEffect.OpenCSVImportDialog e -> importCSV();
-		case AddClientEffect.UIEffect.OpenGroupSelectionDialog e -> displayGroupSelectionDialog();
+		case AddClientEffect.UIEffect.ShowNetbiosConfirmDialog _ -> handleShowNetbiosConfirmDialogEffect();
+		case AddClientEffect.UIEffect.OpenCSVImportDialog _ -> importCSV();
+		case AddClientEffect.UIEffect.OpenGroupSelectionDialog _ -> displayGroupSelectionDialog();
 		case AddClientEffect.UIEffect.ShowErrorMessage e -> JOptionPane.showMessageDialog(dialog, e.message(),
 				e.title(), JOptionPane.ERROR_MESSAGE);
-		case AddClientEffect.UIEffect.CloseDialog e -> handleCloseDialogEffect();
+		case AddClientEffect.UIEffect.CloseDialog _ -> handleCloseDialogEffect();
 		}
 	}
 
@@ -192,7 +192,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
-		case AddClientEffect.ServiceEffect.LoadInitialData e -> loadInitialData();
+		case AddClientEffect.ServiceEffect.LoadInitialData _ -> loadInitialData();
 		case AddClientEffect.ServiceEffect.CreateClients(List<List<Object>> rows) -> ServerActionManager
 				.createClients(rows);
 		}

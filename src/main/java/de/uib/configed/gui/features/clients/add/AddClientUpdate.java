@@ -61,7 +61,7 @@ final class AddClientUpdate {
 	private static UpdateResult<AddClientModel, AddClientEffect> handleActionMsg(AddClientMsg.ActionMsg msg,
 			AddClientModel model) {
 		return switch (msg) {
-		case AddClientMsg.ActionMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
+		case AddClientMsg.ActionMsg.LoadInitialDataRequested _ -> UpdateResult.withEffect(model,
 				new AddClientEffect.ServiceEffect.LoadInitialData());
 		case AddClientMsg.ActionMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
 				.noEffect(model.toBuilder().domains(domains).depots(depots).netbootProducts(netboots)

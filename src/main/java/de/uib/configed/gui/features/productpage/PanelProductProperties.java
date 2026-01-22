@@ -85,8 +85,6 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
 
-		ProductTable productTable = new ProductTable();
-
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
 		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING);

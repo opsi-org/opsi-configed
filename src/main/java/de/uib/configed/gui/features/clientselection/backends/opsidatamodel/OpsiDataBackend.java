@@ -189,9 +189,9 @@ public final class OpsiDataBackend {
 		// Host
 		AbstractSelectElement element = operation.getElement();
 		String attributeTextHost = switch (element) {
-		case NameElement ignored -> HostInfo.HOSTNAME_KEY;
-		case IPElement ignored -> HostInfo.CLIENT_IP_ADDRESS_KEY;
-		case DescriptionElement ignored -> HostInfo.CLIENT_DESCRIPTION_KEY;
+		case NameElement _ -> HostInfo.HOSTNAME_KEY;
+		case IPElement _ -> HostInfo.CLIENT_IP_ADDRESS_KEY;
+		case DescriptionElement _ -> HostInfo.CLIENT_DESCRIPTION_KEY;
 		default -> null;
 		};
 
@@ -220,45 +220,45 @@ public final class OpsiDataBackend {
 
 		// Software
 		String attributeTextSoftware = switch (element) {
-		case SoftwareNameElement ignored -> ProductState.KEY_PRODUCT_ID;
-		case SoftwareVersionElement ignored -> ProductState.KEY_PRODUCT_VERSION;
-		case SoftwarePackageVersionElement ignored -> ProductState.KEY_PACKAGE_VERSION;
-		case SoftwareRequestElement ignored -> ProductState.KEY_ACTION_REQUEST;
-		case SoftwareInstallationStatusElement ignored -> ProductState.KEY_INSTALLATION_STATUS;
-		case SoftwareActionProgressElement ignored -> ProductState.KEY_ACTION_PROGRESS;
-		case SoftwareActionResultElement ignored -> ProductState.KEY_ACTION_RESULT;
-		case SoftwareLastActionElement ignored -> ProductState.KEY_LAST_ACTION;
-		case SoftwareModificationTimeElement ignored -> ProductState.KEY_LAST_STATE_CHANGE;
+		case SoftwareNameElement _ -> ProductState.KEY_PRODUCT_ID;
+		case SoftwareVersionElement _ -> ProductState.KEY_PRODUCT_VERSION;
+		case SoftwarePackageVersionElement _ -> ProductState.KEY_PACKAGE_VERSION;
+		case SoftwareRequestElement _ -> ProductState.KEY_ACTION_REQUEST;
+		case SoftwareInstallationStatusElement _ -> ProductState.KEY_INSTALLATION_STATUS;
+		case SoftwareActionProgressElement _ -> ProductState.KEY_ACTION_PROGRESS;
+		case SoftwareActionResultElement _ -> ProductState.KEY_ACTION_RESULT;
+		case SoftwareLastActionElement _ -> ProductState.KEY_LAST_ACTION;
+		case SoftwareModificationTimeElement _ -> ProductState.KEY_LAST_STATE_CHANGE;
 		default -> null;
 		};
 
 		if (attributeTextSoftware != null) {
 			return switch (operation) {
-			case StringEqualsOperation stringEqualsOperation -> new OpsiSoftwareEqualsOperation(attributeTextSoftware,
+			case StringEqualsOperation _ -> new OpsiSoftwareEqualsOperation(attributeTextSoftware,
 					(String) operation.getData(), element);
-			case DateEqualsOperation dateEqualsOperation -> new OpsiDataDateEqualsOperation(OpsiDataClient.SOFTWARE_MAP,
+			case DateEqualsOperation _ -> new OpsiDataDateEqualsOperation(OpsiDataClient.SOFTWARE_MAP,
 					attributeTextSoftware, (String) operation.getData(), element);
-			case DateLessThanOperation dateLessThanOperation -> new OpsiDataDateLessThanOperation(
-					OpsiDataClient.SOFTWARE_MAP, attributeTextSoftware, (String) operation.getData(), element);
-			case DateLessOrEqualOperation dateLessOrEqualOperation -> new OpsiDataDateLessOrEqualOperation(
-					OpsiDataClient.SOFTWARE_MAP, attributeTextSoftware, (String) operation.getData(), element);
-			case DateGreaterThanOperation dateGreaterThanOperation -> new OpsiDataDateGreaterThanOperation(
-					OpsiDataClient.SOFTWARE_MAP, attributeTextSoftware, (String) operation.getData(), element);
-			case DateGreaterOrEqualOperation dateGreaterOrEqualOperation -> new OpsiDataDateGreaterOrEqualOperation(
-					OpsiDataClient.SOFTWARE_MAP, attributeTextSoftware, (String) operation.getData(), element);
+			case DateLessThanOperation _ -> new OpsiDataDateLessThanOperation(OpsiDataClient.SOFTWARE_MAP,
+					attributeTextSoftware, (String) operation.getData(), element);
+			case DateLessOrEqualOperation _ -> new OpsiDataDateLessOrEqualOperation(OpsiDataClient.SOFTWARE_MAP,
+					attributeTextSoftware, (String) operation.getData(), element);
+			case DateGreaterThanOperation _ -> new OpsiDataDateGreaterThanOperation(OpsiDataClient.SOFTWARE_MAP,
+					attributeTextSoftware, (String) operation.getData(), element);
+			case DateGreaterOrEqualOperation _ -> new OpsiDataDateGreaterOrEqualOperation(OpsiDataClient.SOFTWARE_MAP,
+					attributeTextSoftware, (String) operation.getData(), element);
 			default -> throw new IllegalArgumentException("Wrong operation for this element.");
 			};
 		}
 
 		// SwAudit
 		String swauditAttributeText = switch (element) {
-		case SwAuditArchitectureElement ignored -> "architecture";
-		case SwAuditLanguageElement ignored -> "language";
-		case SwAuditLicenseKeyElement ignored -> "licenseKey";
-		case SwAuditNameElement ignored -> "name";
-		case SwAuditVersionElement ignored -> "version";
-		case SwAuditSubversionElement ignored -> "subVersion";
-		case SwAuditSoftwareIdElement ignored -> "windowsSoftwareID";
+		case SwAuditArchitectureElement _ -> "architecture";
+		case SwAuditLanguageElement _ -> "language";
+		case SwAuditLicenseKeyElement _ -> "licenseKey";
+		case SwAuditNameElement _ -> "name";
+		case SwAuditVersionElement _ -> "version";
+		case SwAuditSubversionElement _ -> "subVersion";
+		case SwAuditSoftwareIdElement _ -> "windowsSoftwareID";
 		default -> null;
 		};
 
@@ -276,30 +276,22 @@ public final class OpsiDataBackend {
 			String attr = getKey(elementPath);
 
 			return switch (operation) {
-			case StringEqualsOperation stringEqualsOperation -> new OpsiDataStringEqualsOperation(map, attr,
-					(String) data, element);
-			case IntLessThanOperation intLessThanOperation -> new OpsiDataIntLessThanOperation(map, attr,
-					(Integer) data, element);
-			case IntLessOrEqualOperation intLessOrEqualOperation -> new OpsiDataIntLessOrEqualOperation(map, attr,
-					(Integer) data, element);
-			case IntGreaterThanOperation intGreaterThanOperation -> new OpsiDataIntGreaterThanOperation(map, attr,
-					(Integer) data, element);
-			case IntGreaterOrEqualOperation intGreaterOrEqualOperation -> new OpsiDataIntGreaterOrEqualOperation(map,
-					attr, (Integer) data, element);
-			case IntEqualsOperation intEqualsOperation -> new OpsiDataIntEqualsOperation(map, attr, (Integer) data,
+			case StringEqualsOperation _ -> new OpsiDataStringEqualsOperation(map, attr, (String) data, element);
+			case IntLessThanOperation _ -> new OpsiDataIntLessThanOperation(map, attr, (Integer) data, element);
+			case IntLessOrEqualOperation _ -> new OpsiDataIntLessOrEqualOperation(map, attr, (Integer) data, element);
+			case IntGreaterThanOperation _ -> new OpsiDataIntGreaterThanOperation(map, attr, (Integer) data, element);
+			case IntGreaterOrEqualOperation _ -> new OpsiDataIntGreaterOrEqualOperation(map, attr, (Integer) data,
 					element);
-			case BigIntLessThanOperation bigIntLessThanOperation -> new OpsiDataBigIntLessThanOperation(map, attr,
-					(Long) data, element);
-			case BigIntLessOrEqualOperation bigIntLessOrEqualOperation -> new OpsiDataBigIntLessOrEqualOperation(map,
-					attr, (Long) data, element);
-			case BigIntGreaterThanOperation bigIntGreaterThanOperation -> new OpsiDataBigIntGreaterThanOperation(map,
-					attr, (Long) data, element);
-			case BigIntGreaterOrEqualOperation bigIntGreaterOrEqualOperation -> new OpsiDataBigIntGreaterOrEqualOperation(
-					map, attr, (Long) data, element);
-			case BigIntEqualsOperation bigIntEqualsOperation -> new OpsiDataBigIntEqualsOperation(map, attr,
-					(Long) data, element);
-			case BooleanEqualsOperation booleanEqualsOperation -> new OpsiDataBooleanEqualsOperation(map, attr,
-					(Boolean) data, element);
+			case IntEqualsOperation _ -> new OpsiDataIntEqualsOperation(map, attr, (Integer) data, element);
+			case BigIntLessThanOperation _ -> new OpsiDataBigIntLessThanOperation(map, attr, (Long) data, element);
+			case BigIntLessOrEqualOperation _ -> new OpsiDataBigIntLessOrEqualOperation(map, attr, (Long) data,
+					element);
+			case BigIntGreaterThanOperation _ -> new OpsiDataBigIntGreaterThanOperation(map, attr, (Long) data,
+					element);
+			case BigIntGreaterOrEqualOperation _ -> new OpsiDataBigIntGreaterOrEqualOperation(map, attr, (Long) data,
+					element);
+			case BigIntEqualsOperation _ -> new OpsiDataBigIntEqualsOperation(map, attr, (Long) data, element);
+			case BooleanEqualsOperation _ -> new OpsiDataBooleanEqualsOperation(map, attr, (Boolean) data, element);
 			default -> {
 				// do nothing here
 				Logging.error("IllegalArgument: The operation ", operation, " was not found on ", element);
@@ -316,13 +308,13 @@ public final class OpsiDataBackend {
 		int size = operations.size();
 
 		return switch (operation) {
-		case AndOperation ignored when size >= 2 -> new AndOperation(operations);
-		case OrOperation ignored when size >= 2 -> new OrOperation(operations);
-		case NotOperation ignored when size == 1 -> new NotOperation(operations.get(0));
-		case SoftwareOperation ignored when size == 1 -> new OpsiDataSoftwareOperation(operations.get(0));
-		case SwAuditOperation ignored when size == 1 -> new OpsiDataSwAuditOperation(operations.get(0));
-		case HardwareOperation ignored when size == 1 -> new OpsiDataHardwareOperation(operations.get(0));
-		case HostOperation ignored when size == 1 -> new HostOperation(operations.get(0));
+		case AndOperation _ when size >= 2 -> new AndOperation(operations);
+		case OrOperation _ when size >= 2 -> new OrOperation(operations);
+		case NotOperation _ when size == 1 -> new NotOperation(operations.get(0));
+		case SoftwareOperation _ when size == 1 -> new OpsiDataSoftwareOperation(operations.get(0));
+		case SwAuditOperation _ when size == 1 -> new OpsiDataSwAuditOperation(operations.get(0));
+		case HardwareOperation _ when size == 1 -> new OpsiDataHardwareOperation(operations.get(0));
+		case HostOperation _ when size == 1 -> new HostOperation(operations.get(0));
 		default -> unsupportedOperation(operation, size);
 		};
 	}
