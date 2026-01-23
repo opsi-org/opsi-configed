@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -85,8 +86,11 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		comboBox.addActionListener(actionEvent -> stopCellEditing());
 
 		multiLineTextArea = new JTextArea();
+		multiLineTextArea.setLineWrap(true);
+		multiLineTextArea.setWrapStyleWord(true);
 		multiLineScrollPane = new JScrollPane(multiLineTextArea);
 		multiLineScrollPane.setPreferredSize(ListSelectionDialog.DEFAULT_MULTI_LINE_EDITOR_SIZE);
+		multiLineScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		unusedfield = new JLabel();
 
