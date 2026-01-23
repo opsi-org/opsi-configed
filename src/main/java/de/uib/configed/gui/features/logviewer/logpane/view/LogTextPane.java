@@ -22,24 +22,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.BoxView;
-import javax.swing.text.ComponentView;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.text.Highlighter;
-import javax.swing.text.IconView;
-import javax.swing.text.LabelView;
-import javax.swing.text.ParagraphView;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-import javax.swing.text.StyledEditorKit;
-import javax.swing.text.View;
-import javax.swing.text.ViewFactory;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -47,6 +38,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.share.swing.WrapEditorKit;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -93,7 +85,7 @@ public class LogTextPane extends JTextPane {
 				return monospacedFont;
 			}
 		};
-		setEditorKit(new WrapEditorKit());
+		setEditorKit(WrapEditorKit.STYLED.create());
 
 		logLevelStyles = new Style[10];
 		setLoglevelStyles();
@@ -445,48 +437,6 @@ public class LogTextPane extends JTextPane {
 		@Override
 		public void remove(int offs, int len) throws BadLocationException {
 			// Should be empty, because we don't want it to be able to be editable.
-		}
-	}
-
-	private static class WrapEditorKit extends StyledEditorKit {
-		private transient ViewFactory defaultFactory;
-
-		@Override
-		public ViewFactory getViewFactory() {
-			if (defaultFactory == null) {
-				defaultFactory = new WrapColumnFactory();
-			}
-			return defaultFactory;
-		}
-	}
-
-	private static class WrapColumnFactory implements ViewFactory {
-		@Override
-		public View create(Element elem) {
-			String kind = elem.getName();
-			return switch (kind) {
-			case AbstractDocument.ContentElementName -> new WrapLabelView(elem);
-			case AbstractDocument.ParagraphElementName -> new ParagraphView(elem);
-			case AbstractDocument.SectionElementName -> new BoxView(elem, View.Y_AXIS);
-			case StyleConstants.ComponentElementName -> new ComponentView(elem);
-			case StyleConstants.IconElementName -> new IconView(elem);
-			case null, default -> new LabelView(elem);
-			};
-		}
-	}
-
-	private static class WrapLabelView extends LabelView {
-		public WrapLabelView(Element elem) {
-			super(elem);
-		}
-
-		@Override
-		public float getMinimumSpan(int axis) {
-			if (axis == View.X_AXIS) {
-				// allow wrapping
-				return 0;
-			}
-			return super.getMinimumSpan(axis);
 		}
 	}
 }
