@@ -227,7 +227,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	private void setupLayout() {
-		setLayout(new MigLayout("insets 0, wrap 1", "[grow, fill]", "[]0"));
+		setLayout(new MigLayout("insets 0, wrap 1", "[grow, fill, 0:0]", "[]0"));
 
 		final int MIN = Globals.MIN_GAP_SIZE;
 		final int GAP = Globals.GAP_SIZE;
