@@ -111,14 +111,14 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean canImportToThisComponent(Component target) {
-		if (target instanceof ClientTree) {
-			return source instanceof ClientTable || source instanceof ClientTree;
-		} else if (target instanceof ProductTree) {
-			return source instanceof ProductTable || source instanceof ProductTree;
-		} else {
+		return switch (target) {
+		case ClientTree _ -> source instanceof ClientTable || source instanceof ClientTree;
+		case ProductTree _ -> source instanceof ProductTable || source instanceof ProductTree;
+		default -> {
 			Logging.debug(this, "The target is not a Client or product tree, but ", target.getClass().getName());
-			return false;
+			yield false;
 		}
+		};
 	}
 
 	@Override

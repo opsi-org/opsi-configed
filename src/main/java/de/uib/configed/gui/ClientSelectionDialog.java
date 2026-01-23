@@ -818,19 +818,19 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 				reset();
 				return;
 			}
-			ComplexGroup element;
-			if (op instanceof HostOperation) {
-				element = createHostGroup();
-			} else if (op instanceof SoftwareOperation) {
-				element = createSoftwareGroup();
-			} else if (op instanceof SwAuditOperation) {
-				element = createSwAuditGroup();
-			} else if (op instanceof HardwareOperation hardwareOperation) {
-				element = createHardwareGroup(
-						getNonGroupOperation(hardwareOperation).getElement().getLocalizedPathArray()[0]);
-			} else {
+			ComplexGroup element = switch (op) {
+			case HostOperation _ -> createHostGroup();
+			case SoftwareOperation _ -> createSoftwareGroup();
+			case SwAuditOperation _ -> createSwAuditGroup();
+			case HardwareOperation hardwareOperation -> createHardwareGroup(
+					getNonGroupOperation(hardwareOperation).getElement().getLocalizedPathArray()[0]);
+			default -> {
 				Logging.error("Not a group operation: ", op.getClassName());
 				reset();
+				yield null;
+			}
+			};
+			if (element == null) {
 				return;
 			}
 
@@ -1021,14 +1021,14 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		sourceGroup.dataComponent = null;
 
-		int index = 0;
-		if (source instanceof JComboBox) {
-			index = ((JComboBox<?>) source).getSelectedIndex();
-		} else if (source instanceof JLabel) {
-			index = 0;
-		} else {
+		int index = switch (source) {
+		case JComboBox<?> comboBox -> comboBox.getSelectedIndex();
+		case JLabel _ -> 0;
+		default -> {
 			Logging.warning(this, "unexpected source in selectOperation: ", source);
+			yield 0;
 		}
+		};
 		addDataComponent(sourceGroup, index);
 
 		buildParentheses();

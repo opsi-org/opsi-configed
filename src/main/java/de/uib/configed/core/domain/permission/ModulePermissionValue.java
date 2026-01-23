@@ -40,21 +40,18 @@ public class ModulePermissionValue {
 	}
 
 	private static Boolean checkBoolean(Object ob) {
-		Boolean result = null;
-
-		if (ob instanceof Boolean b) {
-			result = b;
-		} else if (ob instanceof String stringValue) {
+		return switch (ob) {
+		case Boolean b -> b;
+		case String stringValue -> {
 			stringValue = stringValue.trim();
 			boolean checked = "yes".equalsIgnoreCase(stringValue) || "true".equalsIgnoreCase(stringValue);
-			if (checked) {
-				result = "yes".equalsIgnoreCase(stringValue);
-			}
-		} else {
-			Logging.info("ob cannot be interpreted as boolean, it is ", ob);
+			yield checked ? "yes".equalsIgnoreCase(stringValue) : null;
 		}
-
-		return result;
+		default -> {
+			Logging.info("ob cannot be interpreted as boolean, it is ", ob);
+			yield null;
+		}
+		};
 	}
 
 	private ExtendedInteger retrieveMaxClients(Object object) {
@@ -62,32 +59,28 @@ public class ModulePermissionValue {
 			return ExtendedInteger.ZERO;
 		}
 
-		ExtendedInteger result = null;
-
 		Boolean b = checkBoolean(object);
 		if (b != null) {
-			if (Boolean.TRUE.equals(b)) {
-				result = ExtendedInteger.INFINITE;
-			} else {
-				result = ExtendedInteger.ZERO;
-			}
-		} else if (object instanceof Integer integer) {
-			result = new ExtendedInteger(integer);
-		} else if (object instanceof String string) {
-			Integer number = null;
-			try {
-				number = Integer.valueOf(string);
-			} catch (NumberFormatException ex) {
-				Logging.debug(this, "not a number: ", object);
-			}
-			if (number != null) {
-				result = new ExtendedInteger(number);
-			}
+			return Boolean.TRUE.equals(b) ? ExtendedInteger.INFINITE : ExtendedInteger.ZERO;
 		} else {
-			Logging.warning(this, "ob has unexpected type ", object.getClass(), " in retrieveMaxClients");
+			return switch (object) {
+			case Integer extendedInteger -> new ExtendedInteger(extendedInteger);
+			case String string -> parseStringToExtendedInteger(string);
+			default -> {
+				Logging.warning(this, "ob has unexpected type ", object.getClass(), " in retrieveMaxClients");
+				yield null;
+			}
+			};
 		}
+	}
 
-		return result;
+	private static ExtendedInteger parseStringToExtendedInteger(String string) {
+		try {
+			return new ExtendedInteger(Integer.valueOf(string));
+		} catch (NumberFormatException ex) {
+			Logging.debug("not a number: ", string);
+			return null;
+		}
 	}
 
 	private static ExtendedDate retrieveExpiresDate(Object ob) {

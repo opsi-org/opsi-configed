@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
@@ -566,13 +567,22 @@ public final class Utils {
 	}
 
 	public static Boolean toBoolean(Object obj) {
-		if (obj instanceof Boolean bool) {
-			return bool;
+		return switch (obj) {
+		case Boolean bool -> bool;
+		case String str -> Boolean.valueOf(str);
+		default -> false;
+		};
+	}
+
+	public static boolean compareNumeric(Object realData, long data, BiPredicate<Long, Long> comparison) {
+		return switch (realData) {
+		case Long longData -> comparison.test(longData, data);
+		case Integer integerData -> comparison.test(integerData.longValue(), data);
+		case Object o -> {
+			Logging.error("data is no BigInteger!", o);
+			yield false;
 		}
-		if (obj instanceof String) {
-			return Boolean.valueOf(obj.toString());
-		}
-		return false;
+		};
 	}
 
 	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {

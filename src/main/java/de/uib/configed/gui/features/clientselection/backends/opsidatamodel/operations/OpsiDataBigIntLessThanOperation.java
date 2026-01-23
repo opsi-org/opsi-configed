@@ -10,7 +10,7 @@ import de.uib.configed.gui.features.clientselection.AbstractSelectElement;
 import de.uib.configed.gui.features.clientselection.ExecutableOperation;
 import de.uib.configed.gui.features.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.gui.features.clientselection.operations.BigIntLessThanOperation;
-import de.uib.configed.share.logging.Logging;
+import de.uib.configed.share.Utils;
 
 public class OpsiDataBigIntLessThanOperation extends BigIntLessThanOperation implements ExecutableOperation {
 	private String map;
@@ -26,15 +26,6 @@ public class OpsiDataBigIntLessThanOperation extends BigIntLessThanOperation imp
 
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
-		Object realData = client.getMap(map).get(key);
-		if (realData instanceof Long longData) {
-			return longData < data;
-		} else if (realData instanceof Integer integerData) {
-			return integerData < data;
-		} else {
-			Logging.error(this, "data is no BigInteger!", realData);
-		}
-
-		return false;
+		return Utils.compareNumeric(client.getMap(map).get(key), data, (a, b) -> a < b);
 	}
 }

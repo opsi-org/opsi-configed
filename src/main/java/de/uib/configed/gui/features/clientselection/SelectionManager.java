@@ -263,16 +263,19 @@ public class SelectionManager {
 	 * there are no parentheses around the whole list
 	 */
 	private static List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
+		return switch (operation) {
+		case AndOperation andOperation -> reverseBuildAndOperation(andOperation, isTopOperation);
+		case OrOperation orOperation when !orOperation.getChildOperations().isEmpty() -> reverseBuildOrOperation(
+				orOperation, isTopOperation);
+		default -> createDefaultReverseBuild(operation);
+		};
+	}
+
+	private static LinkedList<OperationWithStatus> createDefaultReverseBuild(AbstractSelectOperation operation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<>();
-		if (operation instanceof AndOperation andOperation) {
-			return reverseBuildAndOperation(andOperation, isTopOperation);
-		} else if (operation instanceof OrOperation orOperation && !orOperation.getChildOperations().isEmpty()) {
-			return reverseBuildOrOperation(orOperation, isTopOperation);
-		} else {
-			result.add(reverseParseNot(operation, ConnectionStatus.AND));
-			result.getLast().setParenthesisOpen(false);
-			result.getLast().setParenthesisClose(false);
-		}
+		result.add(reverseParseNot(operation, ConnectionStatus.AND));
+		result.getLast().setParenthesisOpen(false);
+		result.getLast().setParenthesisClose(false);
 		return result;
 	}
 
@@ -352,14 +355,13 @@ public class SelectionManager {
 			return;
 		}
 
-		if (operation instanceof SoftwareOperation) {
-			hasSoftware = true;
-		} else if (operation instanceof HardwareOperation) {
-			hasHardware = true;
-		} else if (operation instanceof SwAuditOperation) {
-			hasSwAudit = true;
-		} else {
+		switch (operation) {
+		case SoftwareOperation _ -> hasSoftware = true;
+		case HardwareOperation _ -> hasHardware = true;
+		case SwAuditOperation _ -> hasSwAudit = true;
+		default -> {
 			// nothing to do for other operations
+		}
 		}
 
 		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
