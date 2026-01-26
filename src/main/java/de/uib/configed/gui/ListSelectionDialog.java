@@ -25,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -98,7 +99,12 @@ public class ListSelectionDialog {
 
 		if (editable) {
 			createEditableOptions();
-			panel.add(editingTextField, "growx, gapy " + Globals.GAP_SIZE);
+			panel.add(editingTextField, "split 2, growx, gapy " + Globals.GAP_SIZE);
+			JButton addMultiLineValueButton = new JButton();
+			addMultiLineValueButton.setIcon(Icons.getIntellijIcon("openNewTab"));
+			addMultiLineValueButton.addActionListener(actionEvent -> addMultilineItem(null, false));
+			addMultiLineValueButton.setToolTipText(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+			panel.add(addMultiLineValueButton, "gapy " + Globals.GAP_SIZE + ", wrap");
 		}
 
 		return panel;
@@ -149,8 +155,11 @@ public class ListSelectionDialog {
 
 	private void addMultilineItem(String initialText, boolean edit) {
 		JTextArea textArea = new JTextArea(initialText);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(DEFAULT_MULTI_LINE_EDITOR_SIZE);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 		Utils.enableDialogResizing(optionPane);
