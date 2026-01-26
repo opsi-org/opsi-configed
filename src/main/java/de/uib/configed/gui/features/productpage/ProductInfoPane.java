@@ -116,7 +116,7 @@ public class ProductInfoPane extends JSplitPane {
 
 	private void setupTopComponent() {
 		JPanel productDescriptionsPanel = new JPanel();
-		productDescriptionsPanel.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]",
+		productDescriptionsPanel.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow, 0:0]",
 				"[center]" + Globals.GAP_SIZE + "[]0[]" + Globals.GAP_SIZE + "[grow]"));
 
 		productDescriptionsPanel.add(jLabelProductID, "gap top " + Globals.GAP_SIZE + ", align center");
@@ -137,7 +137,7 @@ public class ProductInfoPane extends JSplitPane {
 
 	private void setupBottomComponent() {
 		JPanel bottomComponent = new JPanel();
-		bottomComponent.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow, fill]", "[]0[]0[]0[]"));
+		bottomComponent.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow, 0:0]", "[]0[]0[]0[]"));
 
 		bottomComponent.add(dependenciesActivateButton, "split 3, gapleft " + Globals.GAP_SIZE);
 		bottomComponent.add(dependenciesTextLabel, "gapright push");

@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -258,9 +259,12 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
 		jTextNotes.getDocument().addDocumentListener(Utils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
+		jTextNotes.setLineWrap(true);
+		jTextNotes.setWrapStyleWord(true);
 
 		JScrollPane jTextNotesScrollPane = new JScrollPane(jTextNotes);
 		jTextNotesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+		jTextNotesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JLabel jLabelSystemUUID = Utils.createBoldLabel("NewClientDialog.SystemUUID");
 

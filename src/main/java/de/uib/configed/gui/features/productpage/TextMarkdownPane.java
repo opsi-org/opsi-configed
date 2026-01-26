@@ -10,6 +10,7 @@ import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.DefaultCaret;
 
+import de.uib.configed.gui.share.swing.WrapEditorKit;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -17,6 +18,7 @@ public class TextMarkdownPane extends JTextPane {
 	public TextMarkdownPane() {
 		super.addHyperlinkListener(this::hyperlinkUpdate);
 		super.setEditable(false);
+		super.setEditorKit(WrapEditorKit.HTML.create());
 
 		DefaultCaret caret = (DefaultCaret) super.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
