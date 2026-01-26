@@ -28,6 +28,8 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class ProductInfoPane extends JSplitPane {
+	private static final int START_DIVIDER_LOCATION = 260;
+
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
 	private JLabel jLabelLabelProductVersion;
@@ -115,6 +117,8 @@ public class ProductInfoPane extends JSplitPane {
 
 		// Make it possible to close the info pane
 		setMinimumSize(new Dimension());
+
+		setDividerLocation(START_DIVIDER_LOCATION);
 	}
 
 	private void setupTopComponent() {
@@ -130,7 +134,7 @@ public class ProductInfoPane extends JSplitPane {
 		productDescriptionsPanel.add(jLabelLabelProductVersion, "split 2, gap left " + Globals.GAP_SIZE);
 		productDescriptionsPanel.add(jLabelProductVersion, "align left, growx");
 
-		productDescriptionsPanel.add(productSplitPane, "grow, push, hmin 160");
+		productDescriptionsPanel.add(productSplitPane, "grow, push, hmin 0");
 
 		setTopComponent(productDescriptionsPanel);
 	}
