@@ -17,18 +17,14 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -44,7 +40,6 @@ public class ListSelectionDialog {
 	public static final Dimension DEFAULT_MULTI_LINE_EDITOR_SIZE = new Dimension(400, 200);
 
 	protected ListSelectionList listSelectionList;
-	private JPopupMenu popupMenu;
 	protected TableSearchPane searchPane;
 
 	private FlatTextField editingTextField;
@@ -118,39 +113,6 @@ public class ListSelectionDialog {
 		editingTextField.setTrailingComponent(addValueButton);
 		editingTextField.setShowClearButton(true);
 		editingTextField.addActionListener(actionEvent -> addItem(editingTextField.getText()));
-
-		popupMenu = new JPopupMenu();
-
-		JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
-		Icons.addIntellijIconToMenuItem(addItemMenu, "add");
-		addItemMenu.addActionListener(actionEvent -> addMultilineItem(null, false));
-
-		JMenuItem editItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.editMultiLineValue"));
-		Icons.addIntellijIconToMenuItem(editItemMenu, "edit");
-		editItemMenu.addActionListener(actionEvent -> addMultilineItem(listSelectionList.getSelectedValue(), true));
-
-		popupMenu.add(addItemMenu);
-		popupMenu.add(editItemMenu);
-
-		editingTextField.setComponentPopupMenu(popupMenu);
-		listSelectionList.setComponentPopupMenu(popupMenu);
-
-		popupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				editItemMenu.setEnabled(listSelectionList.getSelectedValuesList().size() == 1);
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// Not needed here
-			}
-
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				// Handle popup menu cancellation
-			}
-		});
 	}
 
 	private void addMultilineItem(String initialText, boolean edit) {
@@ -212,10 +174,6 @@ public class ListSelectionDialog {
 	public void setEditable(boolean editable) {
 		editingTextField.setText(null);
 		editingTextField.setVisible(editable);
-
-		// We need to remove the popup menu from the list if not editable,
-		// because the popup menu is for adding values
-		listSelectionList.setComponentPopupMenu(editable ? popupMenu : null);
 	}
 
 	public void setModel(ListModel<String> model) {
