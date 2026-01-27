@@ -16,8 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
@@ -142,6 +144,14 @@ public class MainFrame extends JFrame {
 
 	public boolean checkSaveLicenses() {
 		return mainPanelManager.checkSavedLicenses();
+	}
+
+	public static void resetInstanceData() {
+		CacheManager.getInstance().clearAllCachedData();
+		Configed.getSavedStates().removeAll();
+
+		// We need to reset the validators so that new ones will be created when reconnecting
+		CertificateValidatorFactory.resetCertificateValidators();
 	}
 
 	public static void restartConfiged() {
