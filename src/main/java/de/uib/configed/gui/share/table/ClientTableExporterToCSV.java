@@ -27,8 +27,8 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.csv.CSVImportDataModifier;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.type.HostInfo;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 

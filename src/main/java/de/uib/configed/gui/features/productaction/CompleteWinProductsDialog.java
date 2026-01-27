@@ -26,7 +26,7 @@ import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WinProductsRetriever;

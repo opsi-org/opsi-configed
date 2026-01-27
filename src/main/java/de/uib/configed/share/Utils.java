@@ -66,6 +66,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Application;

@@ -39,7 +39,7 @@ import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFacto
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.ThemeManager;

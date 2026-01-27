@@ -13,8 +13,8 @@ import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 
+import de.uib.configed.gui.share.WindowsPositionManager;
 import de.uib.configed.share.Utils;
-import de.uib.configed.share.WindowsPositionManager;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.UncaughtConfigedExceptionHandler;
 

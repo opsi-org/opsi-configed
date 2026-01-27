@@ -39,7 +39,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WinProductUtils;

@@ -37,6 +37,7 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
@@ -51,7 +52,6 @@ import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

@@ -28,10 +28,10 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.features.clientselection.SelectionManager;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 

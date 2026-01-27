@@ -11,7 +11,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public class PlatfromIconTableCellRenderer extends ColorTableCellRenderer {

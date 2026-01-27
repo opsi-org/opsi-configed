@@ -36,7 +36,7 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

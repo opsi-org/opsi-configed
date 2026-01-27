@@ -36,7 +36,7 @@ import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

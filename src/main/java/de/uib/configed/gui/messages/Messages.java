@@ -26,7 +26,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import de.uib.configed.gui.Configed;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 

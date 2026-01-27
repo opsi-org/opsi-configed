@@ -21,11 +21,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 

@@ -31,10 +31,10 @@ import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;

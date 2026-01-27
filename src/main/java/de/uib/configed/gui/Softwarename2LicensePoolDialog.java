@@ -25,6 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.DefaultTableModelFilterCondition;
 import de.uib.configed.gui.share.table.GenTableModel;
@@ -40,7 +41,6 @@ import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.gui.type.licenses.AuditSoftwareXLicensePool;
 import de.uib.configed.gui.type.licenses.LicensepoolEntry;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

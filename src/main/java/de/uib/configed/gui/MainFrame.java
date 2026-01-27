@@ -23,11 +23,11 @@ import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.WindowsPositionManager;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
-import de.uib.configed.share.WindowsPositionManager;
 import net.miginfocom.swing.MigLayout;
 
 public class MainFrame extends JFrame {

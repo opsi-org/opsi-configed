@@ -26,11 +26,11 @@ import de.uib.configed.gui.ServerActionManager;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

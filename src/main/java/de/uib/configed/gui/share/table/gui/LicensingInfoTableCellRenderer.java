@@ -16,7 +16,7 @@ import javax.swing.JTable;
 import de.uib.configed.core.domain.modulelicense.LicensingInfoMap;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {

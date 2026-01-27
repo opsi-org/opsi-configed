@@ -26,7 +26,7 @@ import de.uib.configed.gui.features.serverconsole.command.CommandWithParameters;
 import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommand;
 import de.uib.configed.gui.features.terminal.TerminalFrame;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public class LeftToolBar extends JToolBar {

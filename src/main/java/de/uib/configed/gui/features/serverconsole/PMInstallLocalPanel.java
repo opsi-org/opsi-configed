@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandFileUpload;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.Icons;
 import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
