@@ -81,7 +81,7 @@ import de.uib.configed.gui.features.clientselection.operations.HardwareOperation
 import de.uib.configed.gui.features.clientselection.operations.HostOperation;
 import de.uib.configed.gui.features.clientselection.operations.SoftwareOperation;
 import de.uib.configed.gui.features.clientselection.operations.SwAuditOperation;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.TextInputField;
 import de.uib.configed.gui.type.SavedSearch;

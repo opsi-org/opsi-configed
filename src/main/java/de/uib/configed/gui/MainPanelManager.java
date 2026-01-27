@@ -39,7 +39,7 @@ import de.uib.configed.gui.features.licenses.LicenseManagement;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;

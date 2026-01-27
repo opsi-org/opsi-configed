@@ -28,7 +28,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;

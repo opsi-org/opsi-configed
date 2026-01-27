@@ -20,7 +20,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;

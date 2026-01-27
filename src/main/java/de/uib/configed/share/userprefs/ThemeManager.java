@@ -23,7 +23,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import de.uib.configed.app.Main;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public final class ThemeManager {

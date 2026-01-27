@@ -29,7 +29,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.features.licenses.LicenseManagement;
 import de.uib.configed.gui.features.licenses.PanelAssignToLPools;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.DefaultTableModelFilterCondition;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilter;

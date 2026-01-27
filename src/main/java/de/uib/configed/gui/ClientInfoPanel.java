@@ -33,7 +33,7 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;

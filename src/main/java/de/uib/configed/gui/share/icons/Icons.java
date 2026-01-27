@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.share;
+package de.uib.configed.gui.share.icons;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -25,7 +25,6 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.healthcheck.HealthDataProcessor;
-import de.uib.configed.share.CombinedSVGIcon;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 

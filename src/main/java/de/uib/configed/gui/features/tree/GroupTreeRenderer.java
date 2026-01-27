@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 

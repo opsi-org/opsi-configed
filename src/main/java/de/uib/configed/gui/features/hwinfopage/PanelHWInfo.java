@@ -43,7 +43,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.tree.IconNode;
 import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;

@@ -28,7 +28,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.CursorrowObserver;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.RowNoTableModelFilterCondition;

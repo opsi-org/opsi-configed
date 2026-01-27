@@ -39,7 +39,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.logpane.view.AdaptingSlider;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 import de.uib.configed.gui.features.logviewer.logpane.view.TextLineNumber;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;

@@ -46,7 +46,7 @@ import de.uib.configed.gui.ServerActionManager;
 import de.uib.configed.gui.features.csv.CSVImportDataDialog;
 import de.uib.configed.gui.features.csv.CSVImportDataModifier;
 import de.uib.configed.gui.features.csv.CSVTemplateCreatorDialog;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.share.Utils;

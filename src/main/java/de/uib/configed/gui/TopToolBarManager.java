@@ -23,7 +23,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 
 public class TopToolBarManager {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory

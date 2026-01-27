@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
-import de.uib.configed.gui.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;

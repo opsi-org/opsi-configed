@@ -22,8 +22,8 @@ import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.share.Icons;
 import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
