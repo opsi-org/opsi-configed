@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.share;
+package de.uib.configed.core.infrastructure.webdav;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -50,6 +50,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidator;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class WebDAVClient {

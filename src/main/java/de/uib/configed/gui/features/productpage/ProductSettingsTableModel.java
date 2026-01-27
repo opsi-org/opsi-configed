@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.awt.Component;
+import java.util.Comparator;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -24,11 +25,10 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.data.ColoredTableCellRenderer;
 import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
 import de.uib.configed.gui.data.InstallationStateTableModel;
-import de.uib.configed.gui.data.ProductVersionCellRenderer;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
-import de.uib.configed.share.IntComparatorForStrings;
+import de.uib.configed.share.logging.Logging;
 
 public class ProductSettingsTableModel {
 	private static final int WIDTH_COLUMN_PRODUCT_NAME = 170;
@@ -152,7 +152,7 @@ public class ProductSettingsTableModel {
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			rowSorter.setComparator(colIndex, new IntComparatorForStrings());
+			rowSorter.setComparator(colIndex, Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne));
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_SEQUENCE)) > -1) {
@@ -162,7 +162,7 @@ public class ProductSettingsTableModel {
 			productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
 
-			rowSorter.setComparator(colIndex, new IntComparatorForStrings());
+			rowSorter.setComparator(colIndex, Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne));
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_VERSION_INFO)) > -1) {
@@ -190,6 +190,18 @@ public class ProductSettingsTableModel {
 		tableProducts.setRowSorter(rowSorter);
 	}
 
+	private static int parseIntOrMinusOne(String s) {
+		if (s == null || s.isBlank()) {
+			return -1;
+		}
+		try {
+			return Integer.parseInt(s);
+		} catch (NumberFormatException ex) {
+			Logging.debug("not a number ", s);
+			return -1;
+		}
+	}
+
 	private class ProductNameTableCellRenderer extends ColorTableCellRenderer {
 		public ProductNameTableCellRenderer() {
 			super();
@@ -209,6 +221,46 @@ public class ProductSettingsTableModel {
 
 			setToolTipText(
 					Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange);
+
+			return this;
+		}
+	}
+
+	@SuppressWarnings("java:S2972")
+	private static class ProductVersionCellRenderer extends ColoredTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			// Safe since instanceof returns false if null
+			if (value instanceof String stringValue) {
+				if (stringValue.isEmpty()) {
+					return this;
+				}
+
+				if (stringValue.equals(Globals.CONFLICT_STATE_STRING) || stringValue
+						.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
+					setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
+				} else {
+					String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
+					InstallationStateTableModel istm = (InstallationStateTableModel) table.getModel();
+
+					String serverProductVersion = "";
+
+					if (istm.getGlobalProductInfos().get(productId) == null) {
+						Logging.warning(this, " istm.getGlobalProductInfos()).get(productId) == null for productId ",
+								productId);
+					} else {
+						serverProductVersion = serverProductVersion
+								+ istm.getGlobalProductInfos().get(productId).get(ProductState.KEY_VERSION_INFO);
+					}
+
+					if (!stringValue.equals(serverProductVersion)) {
+						setForeground(Globals.FAILED_COLOR);
+					}
+				}
+			}
 
 			return this;
 		}

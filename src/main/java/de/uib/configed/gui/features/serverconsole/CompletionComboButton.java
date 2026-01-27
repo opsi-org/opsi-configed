@@ -20,11 +20,11 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
-import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.logging.Logging;
 
 public class CompletionComboButton {

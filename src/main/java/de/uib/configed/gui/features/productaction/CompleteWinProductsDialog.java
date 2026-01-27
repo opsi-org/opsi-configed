@@ -22,13 +22,13 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.Utils;
-import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;

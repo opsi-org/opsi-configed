@@ -14,14 +14,15 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.data.SearchTargetModelFromClientTable;
 import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -240,5 +241,27 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		}
 
 		return result;
+	}
+
+	private static class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
+		private ConfigedMain configedMain;
+
+		public SearchTargetModelFromClientTable(ConfigedMain configedMain, JTable table) {
+			super(table);
+
+			this.configedMain = configedMain;
+
+			Logging.info(this, "table null? ", table == null);
+		}
+
+		@Override
+		public void setCursorRow(int row) {
+			Logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
+		}
+
+		@Override
+		public void setFiltered(boolean b) {
+			configedMain.setRebuiltClientListTableModel(true, false);
+		}
 	}
 }

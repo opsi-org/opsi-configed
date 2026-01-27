@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.share.logging.Logging;
 
 public final class WinProductUtils {

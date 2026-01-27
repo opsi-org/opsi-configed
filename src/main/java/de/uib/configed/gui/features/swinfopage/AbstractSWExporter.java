@@ -21,7 +21,6 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ConnectionState;
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.ErrorCode;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
@@ -238,5 +237,30 @@ public abstract class AbstractSWExporter {
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
+	}
+
+	private static final class ErrorCode {
+		public static final int NO_ERROR = 0;
+		public static final int INITIALIZATION_ERROR = 1;
+		public static final int CONNECTION_ERROR = 2;
+		public static final int CLIENTNAMES_FILENAME_MISSING = 11;
+
+		private ErrorCode() {
+		}
+
+		public static String tell(int n) {
+			String result = "";
+			if (n > 0) {
+				result = "problem type " + n + ": ";
+			}
+
+			return switch (n) {
+			case NO_ERROR -> result + "no error occured";
+			case INITIALIZATION_ERROR -> result + "inititalization error";
+			case CONNECTION_ERROR -> result + "connection error";
+			case CLIENTNAMES_FILENAME_MISSING -> result + "REQUIRED: name of file with clientnames";
+			default -> result + "_";
+			};
+		}
 	}
 }
