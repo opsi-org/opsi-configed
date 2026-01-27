@@ -16,10 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.app.Main;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
-import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -162,12 +160,7 @@ public final class ConnectionErrorReporter {
 		}
 		PersistenceControllerFactory.getPersistenceController().getExecutioner().setOTP(otp);
 
-		CacheManager.getInstance().clearAllCachedData();
-		Configed.getSavedStates().removeAll();
-		ConfigedMain.getMainFrame().resetData();
-
-		CertificateValidatorFactory.resetCertificateValidators();
-
+		MainFrame.resetInstanceData();
 		MainFrame.restartConfiged();
 	}
 

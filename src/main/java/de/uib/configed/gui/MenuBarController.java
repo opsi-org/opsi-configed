@@ -30,12 +30,10 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.permission.UserFeaturesConfig;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ServerFacade;
-import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
@@ -404,12 +402,8 @@ public class MenuBarController {
 		if (persistenceController != null) {
 			persistenceController.getExecutioner().clearAuthenticationData();
 		}
-		CacheManager.getInstance().clearAllCachedData();
-		Configed.getSavedStates().removeAll();
 
-		// We need to reset the validators so that new ones will be created when reconnecting
-		CertificateValidatorFactory.resetCertificateValidators();
-
+		MainFrame.resetInstanceData();
 		MainFrame.restartConfiged();
 	}
 
