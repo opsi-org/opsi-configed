@@ -406,7 +406,6 @@ public class MenuBarController {
 		}
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
-		ConfigedMain.getMainFrame().resetData();
 
 		// We need to reset the validators so that new ones will be created when reconnecting
 		CertificateValidatorFactory.resetCertificateValidators();
