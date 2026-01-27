@@ -39,6 +39,7 @@ import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFacto
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -309,12 +310,12 @@ public class MenuBarController {
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		Icons.addIntellijIconToMenuItem(jMenuHelpDoc, "readerMode");
-		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showDocumentation());
+		jMenuHelpDoc.addActionListener(actionEvent -> BrowserUtils.openDocumentation());
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
 		Icons.addThemeIconToMenuItem(jMenuHelpForum, "comment");
-		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		jMenuHelpForum.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		// Get the language used for the support page
@@ -322,13 +323,12 @@ public class MenuBarController {
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
 		Icons.addIntellijIconToMenuItem(jMenuHelpSupport, "cwmEnableCall");
 		jMenuHelpSupport
-				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.UIB_PAGE + language + "/support"));
+				.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.UIB_PAGE + language + "/support"));
 		jMenuHelp.add(jMenuHelpSupport);
 
 		JMenuItem jMenuMoreAboutOpsi = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuMoreAboutOpsi"));
 		Icons.addOpsiIconToMenuItem(jMenuMoreAboutOpsi);
-		jMenuMoreAboutOpsi
-				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_PAGE + language + "/"));
+		jMenuMoreAboutOpsi.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.OPSI_PAGE + language + "/"));
 		jMenuHelp.add(jMenuMoreAboutOpsi);
 	}
 

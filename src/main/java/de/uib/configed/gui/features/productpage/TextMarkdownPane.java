@@ -11,6 +11,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.DefaultCaret;
 
 import de.uib.configed.gui.share.swing.WrapEditorKit;
+import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -37,7 +38,7 @@ public class TextMarkdownPane extends JTextPane {
 		String link = event.getURL().toString();
 
 		if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-			Utils.showExternalDocument(link);
+			BrowserUtils.openLink(link);
 		} else if (event.getEventType().equals(HyperlinkEvent.EventType.ENTERED)) {
 			// Activate tooltip if mouse on link
 			setToolTipText(link);
