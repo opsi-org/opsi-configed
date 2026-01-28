@@ -34,6 +34,8 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import com.formdev.flatlaf.extras.components.FlatTextField;
+
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -59,7 +61,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
-	private JTextField jTextGroupSelection;
+	private FlatTextField jTextGroupSelection;
 	private JComboBox<String> jComboNetboot;
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
@@ -243,8 +245,14 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 		JLabel labelGroupSelection = Utils.createBoldLabel("NewClientDialog.primaryGroup");
 
-		jTextGroupSelection = new JTextField();
-		jTextGroupSelection.setEnabled(false);
+		JButton buttonGroupSelection = new JButton(Icons.getIntellijIcon("edit"));
+		buttonGroupSelection.addActionListener(e -> dispatch.accept(new AddClientMsg.UIMsg.OpenGroupSelectionDialog()));
+		jTextGroupSelection = new FlatTextField();
+		jTextGroupSelection.setEditable(false);
+		jTextGroupSelection.setBackground(UIManager.getColor("TextField.background"));
+		jTextGroupSelection.setCaretColor(UIManager.getColor("TextField.background"));
+		jTextGroupSelection.setTrailingComponent(buttonGroupSelection);
+
 		jTextGroupSelection.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
@@ -390,8 +398,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		if (groupsSelectionDialog.wasAccepted()) {
 			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
 			jTextGroupSelection.setText(selectedGroups);
-			jTextGroupSelection.setToolTipText(
-					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");
 			dispatch(new AddClientMsg.FieldChangeMsg.ChangeGroups(selectedGroups));
 		}
 	}
