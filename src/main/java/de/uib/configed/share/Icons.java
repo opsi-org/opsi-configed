@@ -225,10 +225,7 @@ public final class Icons {
 		button.setIcon(Icons.getIntellijIcon("springBootHealth", 32));
 		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.getActiveColor(), 32));
 
-		new Thread(() -> {
-			button.setIcon(getHealthCheckIcon(size));
-			button.setSelectedIcon(getHealthCheckIcon(size, Globals.getActiveColor()));
-		}).start();
+		setHealthCheckIcon(button, size, Globals.getActiveColor());
 	}
 
 	/**
@@ -240,10 +237,18 @@ public final class Icons {
 		button.setIcon(Icons.getIntellijIcon("springBootHealth"));
 		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.OPSI_FOREGROUND_DARK));
 
-		new Thread(() -> {
-			button.setIcon(getHealthCheckIcon(size));
-			button.setSelectedIcon(getHealthCheckIcon(size, Globals.OPSI_FOREGROUND_DARK));
-		}).start();
+		setHealthCheckIcon(button, size, Globals.OPSI_FOREGROUND_DARK);
+	}
+
+	private static void setHealthCheckIcon(AbstractButton button, int size, Color selectedColor) {
+		Utils.runSwingWorker(() -> {
+			Icon normal = getHealthCheckIcon(size);
+			Icon selected = getHealthCheckIcon(size, selectedColor);
+			return new Icon[] { normal, selected };
+		}, (Icon[] icons) -> {
+			button.setIcon(icons[0]);
+			button.setSelectedIcon(icons[1]);
+		}, null);
 	}
 
 	private static Icon getHealthCheckIcon(int size) {

@@ -297,14 +297,13 @@ public class MainPanelManager {
 	public void reloadLicensesAction() {
 		ConfigedMain.getMainFrame()
 				.activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
-		new Thread() {
-			@Override
-			public void run() {
-				persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-				ConfigedMain.getMainFrame().showPanel(EditingTarget.LICENSE_MANAGEMENT);
-				ConfigedMain.getMainFrame().deactivateLoadingPane();
-			}
-		}.start();
+		Utils.runSwingWorker(() -> {
+			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
+			return null;
+		}, (Void _) -> {
+			ConfigedMain.getMainFrame().showPanel(EditingTarget.LICENSE_MANAGEMENT);
+			ConfigedMain.getMainFrame().deactivateLoadingPane();
+		}, null);
 	}
 
 	public boolean checkSavedLicenses() {

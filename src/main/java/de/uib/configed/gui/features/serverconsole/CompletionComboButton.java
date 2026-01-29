@@ -24,6 +24,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.logging.Logging;
 
@@ -181,27 +182,19 @@ public class CompletionComboButton {
 	}
 
 	private void getDirectoriesIn(final String curdir) {
-		new Thread() {
-			@Override
-			public void run() {
-				WebDAVClient webDAVClient = new WebDAVClient();
-				Set<String> result = webDAVClient.getDirectoriesIn(curdir);
-				setItems(result, curdir);
-				enableComponents(true);
-			}
-		}.start();
+		Utils.runSwingWorker(() -> new WebDAVClient().getDirectoriesIn(curdir), (Set<String> result) -> {
+			setItems(result, curdir);
+			enableComponents(true);
+		}, e -> Logging.warning(this,
+				"Failed to retrieve directories and files from " + curdir + " ext " + fileExtension, e));
 	}
 
 	private void getDirectoriesAndFilesIn(final String curdir) {
-		new Thread() {
-			@Override
-			public void run() {
-				WebDAVClient webDAVClient = new WebDAVClient();
-				Set<String> result = webDAVClient.getDirectoriesAndFilesIn(curdir, fileExtension);
-				setItems(result, curdir);
-				enableComponents(true);
-			}
-		}.start();
+		Utils.runSwingWorker(() -> new WebDAVClient().getDirectoriesAndFilesIn(curdir, fileExtension),
+				(Set<String> result) -> {
+					setItems(result, curdir);
+					enableComponents(true);
+				}, e -> Logging.warning(this, "Failed to retrieve directories from " + curdir, e));
 	}
 
 	private boolean containsInDefaults(String other) {
