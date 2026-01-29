@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui;
+package de.uib.configed.gui.share.datapanel;
 
 import java.awt.event.MouseEvent;
 
@@ -15,7 +15,8 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.ChangedDataManager;
+import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 
 public class EditMapPanelHostProperties extends EditMapPanelX {
