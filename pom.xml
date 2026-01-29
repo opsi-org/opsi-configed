@@ -7,7 +7,7 @@
     <groupId>configed</groupId>
     <artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.3.19.2</version>
+    <version>4.3.19.3</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -17,7 +17,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 
-        <javafx.version>25</javafx.version>
+        <javafx.version>25.0.2</javafx.version>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
     </properties>
@@ -35,7 +35,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.8.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -106,7 +106,6 @@
 
 
     <dependencies>
-
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -119,14 +118,14 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.13.4</version>
+            <version>5.5.13.5</version>
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/at.yawk.lz4/lz4-java -->
         <dependency>
             <groupId>at.yawk.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-            <version>1.10.2</version>
+            <version>1.10.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
@@ -242,7 +241,7 @@
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-autolink</artifactId>
-            <version>0.27.0</version>
+            <version>0.27.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
@@ -270,7 +269,7 @@
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.0.3</version>
+            <version>3.0.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-extras -->
@@ -299,14 +298,14 @@
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-core</artifactId>
-            <version>3.57</version>
+            <version>3.61</version>
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.jetbrains.jediterm/jediterm-ui -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-ui</artifactId>
-            <version>3.57</version>
+            <version>3.61</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
@@ -359,12 +358,6 @@
             <version>1.11.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.lz4/lz4-pure-java -->
-        <dependency>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-pure-java</artifactId>
-            <version>1.8.0</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>

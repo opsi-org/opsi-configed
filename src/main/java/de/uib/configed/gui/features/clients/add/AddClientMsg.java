@@ -41,7 +41,7 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		record ChangeIP(String value) implements FieldChangeMsg {
 		}
 
-		record ChangeGroups(String value) implements FieldChangeMsg {
+		record ChangeGroups(List<String> value) implements FieldChangeMsg {
 		}
 
 		record ChangeDepot(String value) implements FieldChangeMsg {

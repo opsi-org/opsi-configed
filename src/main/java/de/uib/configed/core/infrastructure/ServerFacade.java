@@ -46,6 +46,7 @@ import de.uib.configed.core.infrastructure.certificate.CertificateManager;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
@@ -231,7 +232,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		String urlBrowserSaml = "/auth/saml/login?session_id=" + sid + "&redirect=close_window";
 		URL url = makeURL(urlBrowserSaml);
 		if (url != null) {
-			Utils.showExternalDocument(url.toString());
+			BrowserUtils.openLink(url.toString());
 			return true;
 		} else {
 			// But actually this cannot happen

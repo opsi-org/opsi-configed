@@ -30,17 +30,16 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.permission.UserFeaturesConfig;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ServerFacade;
-import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.Utils;
+import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.ThemeManager;
 import de.uib.configed.share.userprefs.UserPreferences;
@@ -309,12 +308,12 @@ public class MenuBarController {
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		Icons.addIntellijIconToMenuItem(jMenuHelpDoc, "readerMode");
-		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showDocumentation());
+		jMenuHelpDoc.addActionListener(actionEvent -> BrowserUtils.openDocumentation());
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
 		Icons.addThemeIconToMenuItem(jMenuHelpForum, "comment");
-		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		jMenuHelpForum.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		// Get the language used for the support page
@@ -322,13 +321,12 @@ public class MenuBarController {
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
 		Icons.addIntellijIconToMenuItem(jMenuHelpSupport, "cwmEnableCall");
 		jMenuHelpSupport
-				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.UIB_PAGE + language + "/support"));
+				.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.UIB_PAGE + language + "/support"));
 		jMenuHelp.add(jMenuHelpSupport);
 
 		JMenuItem jMenuMoreAboutOpsi = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuMoreAboutOpsi"));
 		Icons.addOpsiIconToMenuItem(jMenuMoreAboutOpsi);
-		jMenuMoreAboutOpsi
-				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_PAGE + language + "/"));
+		jMenuMoreAboutOpsi.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.OPSI_PAGE + language + "/"));
 		jMenuHelp.add(jMenuMoreAboutOpsi);
 	}
 
@@ -404,13 +402,8 @@ public class MenuBarController {
 		if (persistenceController != null) {
 			persistenceController.getExecutioner().clearAuthenticationData();
 		}
-		CacheManager.getInstance().clearAllCachedData();
-		Configed.getSavedStates().removeAll();
-		ConfigedMain.getMainFrame().resetData();
 
-		// We need to reset the validators so that new ones will be created when reconnecting
-		CertificateValidatorFactory.resetCertificateValidators();
-
+		MainFrame.resetInstanceData();
 		MainFrame.restartConfiged();
 	}
 

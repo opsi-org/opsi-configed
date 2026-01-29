@@ -36,8 +36,6 @@ public class AddClientModel {
 	@Builder.Default
 	String ipAddress = "";
 	@Builder.Default
-	String groups = "";
-	@Builder.Default
 	String selectedDepot = "";
 	@Builder.Default
 	String selectedNetbootProduct = "";
@@ -48,6 +46,8 @@ public class AddClientModel {
 	boolean shutdownInstallSelected;
 
 	// Lists
+	@Builder.Default
+	List<String> groups = new ArrayList<>();
 	@Builder.Default
 	List<String> domains = new ArrayList<>();
 	@Builder.Default

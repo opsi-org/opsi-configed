@@ -69,8 +69,6 @@ import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.logging.Logging;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 @SuppressWarnings({ "java:S1448" })
 public final class Utils {
@@ -238,23 +236,6 @@ public final class Utils {
 		result.add(now);
 		Logging.info("getNowTimeListValue", result);
 		return result;
-	}
-
-	public static void showDocumentation() {
-		if ("de".equals(Messages.getLocale().getLanguage())) {
-			showExternalDocument(Globals.OPSI_DOC_PAGE_DE);
-		} else {
-			showExternalDocument(Globals.OPSI_DOC_PAGE_EN);
-		}
-	}
-
-	public static void showExternalDocument(String link) {
-		new Application() {
-			@Override
-			public void start(Stage primaryStage) throws Exception {
-				// Empty, because not needed
-			}
-		}.getHostServices().showDocument(link);
 	}
 
 	public static String pseudokey(String[] partialvalues) {

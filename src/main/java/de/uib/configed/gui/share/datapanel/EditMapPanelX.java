@@ -50,10 +50,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	private ListModelProducer modelProducer;
 
-	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupRemoveSpecificEntry;
 	private JMenuItem setDefaultValue;
-	private JMenuItem popupItemAddStringListEntry;
 
 	private JMenuItem multiLineEditingItem;
 
@@ -113,8 +111,13 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		ttm.setReshowDelay(Globals.TOOLTIP_RESHOW_DELAY_MS);
 
 		buildPanel();
+		buildPopupMenu(keylistExtendible, entryRemovable);
 
-		popupMenu = definePopup();
+		propertyHandler.setMapTableModel(mapTableModel);
+	}
+
+	private void buildPopupMenu(boolean keylistExtendible, boolean entryRemovable) {
+		popupMenu = createBasicPopup();
 
 		Logging.debug(this, "logPopupElements ", popupMenu.getSubElements().length);
 		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
@@ -129,7 +132,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 				popupMenu.addSeparator();
 			}
 
-			popupItemAddStringListEntry = new JMenuItem(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
+			JMenuItem popupItemAddStringListEntry = new JMenuItem(
+					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 			popupItemAddStringListEntry.addActionListener(actionEvent -> new CreateConfigDialog(this));
 			popupItemAddStringListEntry
@@ -137,7 +141,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 							.isGlobalReadOnly());
 			popupMenu.add(popupItemAddStringListEntry);
 
-			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
+			JMenuItem popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
 			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
 			popupItemDeleteEntry0
@@ -172,8 +176,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 			popupMenu.add(popupRemoveSpecificEntry);
 		}
-
-		propertyHandler.setMapTableModel(mapTableModel);
 	}
 
 	protected void updatePopupMenu() {
@@ -257,7 +259,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	protected JPopupMenu definePopup() {
+	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
 		return new PopupMenuTrait(new Integer[] {}, (MouseEvent event) -> {
 			updatePopupMenu();

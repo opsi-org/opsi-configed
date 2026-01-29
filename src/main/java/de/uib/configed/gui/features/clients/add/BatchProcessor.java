@@ -83,5 +83,4 @@ public class BatchProcessor {
 
 		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateClients(List.of(row)));
 	}
-
 }

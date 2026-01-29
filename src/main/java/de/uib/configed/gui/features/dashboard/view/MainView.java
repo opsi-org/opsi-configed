@@ -227,7 +227,6 @@ public class MainView implements View {
 		}
 	}
 
-	@SuppressWarnings("java:S4968")
 	private void loadData() {
 		depotsNumberLabel.setText(String.valueOf(DepotData.getDepots().size()));
 		clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));
