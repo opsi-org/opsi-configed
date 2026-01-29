@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.share.datapanel.EditMapPanelHostProperties;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.logging.Logging;
