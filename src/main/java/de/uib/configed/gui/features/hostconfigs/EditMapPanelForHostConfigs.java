@@ -68,7 +68,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	@Override
-	protected JPopupMenu definePopup() {
+	protected JPopupMenu createBasicPopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 		JPopupMenu jPopupMenu = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF },

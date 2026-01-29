@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -14,23 +13,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
-
 import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
-import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
-import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelHostProperties extends AbstractConfigurationTab {
 	// delegate
-	private EditMapPanelX editMapPanel;
+	private EditMapPanelHostProperties editMapPanel;
 
 	private HostUpdateCollection hostUpdateCollection;
 
@@ -48,7 +40,7 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelHostProperties(false, false);
+		editMapPanel = new EditMapPanelHostProperties(false, false, this::updateContent);
 		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		editMapPanel.setShowToolTip(false);
 
@@ -116,37 +108,5 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 		}
 
 		return depotMap;
-	}
-
-	private class EditMapPanelHostProperties extends EditMapPanelX {
-		public EditMapPanelHostProperties(boolean keylistExtendible, boolean entryRemovable) {
-			super(keylistExtendible, entryRemovable);
-		}
-
-		@Override
-		protected JPopupMenu definePopup() {
-			Integer[] popups = new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD };
-
-			return new PopupMenuTrait(popups, (MouseEvent event) -> {
-				updatePopupMenu();
-				return true;
-			}, new JComponent[] { table, jScrollPane.getViewport() }) {
-				@Override
-				public void action(int p) {
-					super.action(p);
-					if (p == PopupMenuTrait.POPUP_RELOAD) {
-						ConfigedMain.getMainFrame().activateLoadingCursor();
-						if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
-							persistenceController.reloadData(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString());
-						}
-						updateContent();
-						ConfigedMain.getMainFrame().deactivateLoadingCursor();
-					}
-					if (p == PopupMenuTrait.POPUP_SAVE) {
-						ChangedDataManager.checkSaveAll(false);
-					}
-				}
-			};
-		}
 	}
 }
