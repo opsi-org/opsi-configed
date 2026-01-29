@@ -23,8 +23,8 @@ import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 class AddClientUpdateTest {
 	private static AddClientModel baseModel() {
 		return AddClientModel.builder().hostname("").selectedDomain("").description("").inventoryNumber("").notes("")
-				.systemUUID("").macAddress("").ipAddress("").groups("").selectedDepot("").selectedNetbootProduct("")
-				.wanEnabled(true).wanSelected(false).shutdownInstallSelected(false)
+				.systemUUID("").macAddress("").ipAddress("").groups(List.of()).selectedDepot("")
+				.selectedNetbootProduct("").wanEnabled(true).wanSelected(false).shutdownInstallSelected(false)
 				.domains(List.of("example.com", "corp.local")).depots(List.of("depot1", "depot2"))
 				.netbootProducts(List.of("nb1", "nb2")).build();
 	}
@@ -154,9 +154,9 @@ class AddClientUpdateTest {
 	void shouldUpdateGroups_whenChangeGroups() {
 		AddClientModel model = baseModel();
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.FieldChangeMsg.ChangeGroups("g1; g2"), model);
+				.update(new AddClientMsg.FieldChangeMsg.ChangeGroups(List.of("g1", "g2")), model);
 
-		assertEquals("g1; g2", result.model().getGroups());
+		assertEquals(List.of("g1", "g2"), result.model().getGroups());
 		assertFalse(result.effect().isPresent());
 	}
 
@@ -260,9 +260,9 @@ class AddClientUpdateTest {
 
 	@Test
 	void shouldTriggerCreateClients_whenCreateClient() {
-		AddClientModel model = baseModel().withHostname("host").withSelectedDomain("dom").withGroups("g1; g2")
-				.withSelectedDepot("depot1").withSelectedNetbootProduct("nb1").withShutdownInstallSelected(true)
-				.withWanSelected(true).withHostnames(List.of());
+		AddClientModel model = baseModel().withHostname("host").withSelectedDomain("dom")
+				.withGroups(List.of("g1", "g2")).withSelectedDepot("depot1").withSelectedNetbootProduct("nb1")
+				.withShutdownInstallSelected(true).withWanSelected(true).withHostnames(List.of());
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
 				.update(new AddClientMsg.ActionMsg.CreateClient(), model);

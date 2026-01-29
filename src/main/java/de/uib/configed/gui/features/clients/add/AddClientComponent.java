@@ -66,6 +66,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
 
+	private ListSelectionDialog groupsSelectionDialog;
+
 	private JDialog dialog;
 
 	public AddClientComponent() {
@@ -387,18 +389,20 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private void displayGroupSelectionDialog() {
-		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(dialog,
-				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
+		if (groupsSelectionDialog == null) {
+			groupsSelectionDialog = new ListSelectionDialog(dialog,
+					Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
+		}
+		List<String> currentSelection = groupsSelectionDialog.getSelectedValues();
+
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getDataServices().group.getHostGroupIds());
-		groupsSelectionDialog
-				.setPreviousSelectionValues(List.of(jTextGroupSelection.getText().replace("; ", ";").split(";")));
+		groupsSelectionDialog.setPreviousSelectionValues(currentSelection);
 		groupsSelectionDialog.show();
 
 		if (groupsSelectionDialog.wasAccepted()) {
-			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
-			jTextGroupSelection.setText(selectedGroups);
-			dispatch(new AddClientMsg.FieldChangeMsg.ChangeGroups(selectedGroups));
+			jTextGroupSelection.setText(Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues()));
+			dispatch(new AddClientMsg.FieldChangeMsg.ChangeGroups(groupsSelectionDialog.getSelectedValues()));
 		}
 	}
 

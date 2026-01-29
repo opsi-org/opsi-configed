@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -46,7 +45,7 @@ final class AddClientUpdate {
 		case AddClientMsg.FieldChangeMsg.ChangeSystemUUID(String v) -> UpdateResult.noEffect(model.withSystemUUID(v));
 		case AddClientMsg.FieldChangeMsg.ChangeMAC(String v) -> UpdateResult.noEffect(model.withMacAddress(v));
 		case AddClientMsg.FieldChangeMsg.ChangeIP(String v) -> UpdateResult.noEffect(model.withIpAddress(v));
-		case AddClientMsg.FieldChangeMsg.ChangeGroups(String v) -> UpdateResult.noEffect(model.withGroups(v));
+		case AddClientMsg.FieldChangeMsg.ChangeGroups(List<String> v) -> UpdateResult.noEffect(model.withGroups(v));
 		case AddClientMsg.FieldChangeMsg.ChangeDepot(String v) -> UpdateResult.noEffect(model.withSelectedDepot(v));
 		case AddClientMsg.FieldChangeMsg.ChangeNetboot(String v) -> UpdateResult
 				.noEffect(model.withSelectedNetbootProduct(v));
@@ -114,7 +113,7 @@ final class AddClientUpdate {
 		row.add(model.getNotes());
 		row.add(model.getSystemUUID());
 		row.add(model.getIpAddress());
-		row.add(String.join(",", parseGroups(model.getGroups())));
+		row.add(model.getGroups());
 		row.add(Boolean.toString(model.isWanSelected()));
 		row.add(Boolean.toString(model.isShutdownInstallSelected()));
 		row.add("");
@@ -126,15 +125,7 @@ final class AddClientUpdate {
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleOpenGroupSelectionDialogMsg(
 			AddClientModel model) {
-		List<String> preselected = Arrays.asList(parseGroups(model.getGroups()));
 		return UpdateResult.withEffect(model,
-				new AddClientEffect.UIEffect.OpenGroupSelectionDialog(new ArrayList<>(), preselected));
-	}
-
-	private static String[] parseGroups(String groupsText) {
-		if (groupsText == null || groupsText.isEmpty()) {
-			return new String[0];
-		}
-		return groupsText.replace("; ", ";").split(";");
+				new AddClientEffect.UIEffect.OpenGroupSelectionDialog(new ArrayList<>(), model.getGroups()));
 	}
 }

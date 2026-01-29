@@ -76,7 +76,7 @@ public class HostDataService extends DataService {
 			String notes = ((String) client.get(6)).trim();
 			String systemUUID = ((String) client.get(7)).trim();
 			String ipaddress = ((String) client.get(8)).trim();
-			String groups = ((String) client.get(9)).trim();
+			List<String> groups = (List<String>) client.get(9);
 
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
@@ -148,16 +148,8 @@ public class HostDataService extends DataService {
 		productsNetbootJsonObject.add(itemProducts);
 	}
 
-	private void addGroupsToList(String groupsAsString, String newClientId,
-			List<Map<String, Object>> groupsJsonObject) {
-		String[] groups;
-		if (!groupsAsString.isEmpty()) {
-			groups = groupsAsString.replace("\\s,\\s", ",").trim().split(",");
-		} else {
-			groups = new String[0];
-		}
-
-		Logging.info(this, "createClient", " group ", Arrays.toString(groups));
+	private void addGroupsToList(List<String> groups, String newClientId, List<Map<String, Object>> groupsJsonObject) {
+		Logging.info(this, "createClient", " group ", groups);
 		for (String group : groups) {
 			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
 			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
