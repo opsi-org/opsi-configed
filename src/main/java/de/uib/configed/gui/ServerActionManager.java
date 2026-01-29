@@ -71,7 +71,7 @@ public final class ServerActionManager {
 				persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 
 				configedMain.setRebuiltClientListTableModel(true, true);
-				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
+				configedMain.activateGroup(false, getGroupToActivate(clients));
 				configedMain.setClients(createdClientNames);
 			} else {
 				persistenceController.getDataServices().hostInfoCollections.removeOpsiHostNames(createdClientNames);
@@ -79,6 +79,14 @@ public final class ServerActionManager {
 		} finally {
 			isLocalChangeInProgress.set(false);
 		}
+	}
+
+	private static String getGroupToActivate(List<List<Object>> clients) {
+		// We want to activate the group if we create exactly one client in exactly one group
+		if (clients.size() == 1 && ((List<?>) clients.get(0).get(9)).size() == 1) {
+			return (String) ((List<?>) clients.get(0).get(9)).get(0);
+		}
+		return ClientTree.ALL_CLIENTS_NAME;
 	}
 
 	public static void wakeSelectedClients() {
