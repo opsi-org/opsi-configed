@@ -245,7 +245,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel labelGroupSelection = Utils.createBoldLabel("NewClientDialog.primaryGroup");
+		JLabel labelGroupSelection = Utils.createBoldLabel("NewClientDialog.assignToGroups");
 
 		JButton buttonGroupSelection = new JButton(Icons.getIntellijIcon("edit"));
 		buttonGroupSelection.addActionListener(e -> dispatch.accept(new AddClientMsg.UIMsg.OpenGroupSelectionDialog()));
