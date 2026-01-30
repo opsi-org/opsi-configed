@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -128,10 +126,7 @@ public class MakeProductFileDialog {
 
 		jButtonSearchDir = autocompletion.getButton();
 		jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
-		jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
-			autocompletion.doButtonAction();
-			doSetActionGetVersions();
-		});
+		jButtonSearchDir.addActionListener(actionEvent -> search());
 
 		jLabelPackageVersion = Utils.createBoldLabel("MakeProductFileDialog.packageVersion");
 		jLabelProductVersion = Utils.createBoldLabel("MakeProductFileDialog.productVersion");
@@ -151,10 +146,7 @@ public class MakeProductFileDialog {
 		jButtonAdvancedSettings = new JToggleButton(
 				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
-		jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
-			advancedOptionsPanel.setVisible(jButtonAdvancedSettings.isSelected());
-			dialog.pack();
-		});
+		jButtonAdvancedSettings.addActionListener(actionEvent -> toggleAdvancedSettings());
 
 		jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
@@ -199,6 +191,16 @@ public class MakeProductFileDialog {
 		return versionPanel;
 	}
 
+	private void search() {
+		autocompletion.doButtonAction();
+		doSetActionGetVersions();
+	}
+
+	private void toggleAdvancedSettings() {
+		advancedOptionsPanel.setVisible(!advancedOptionsPanel.isVisible());
+		dialog.pack();
+	}
+
 	private String doActionGetVersions() {
 		String dir = Utils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem())
 				+ "OPSI/control";
@@ -217,9 +219,9 @@ public class MakeProductFileDialog {
 					"Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
-			Logging.info(this, "doActionGetVersions, getDirectories result ", Arrays.toString(versions));
+			Logging.info(this, "doActionGetVersions, getDirectories result versions with length ", versions.length);
 			if (versions.length < 2) {
-				Logging.info(this, "doActionGetVersions, not expected versions array ", Arrays.toString(versions));
+				Logging.info(this, "doActionGetVersions, not expected versions array with size < 2");
 				return "";
 			}
 			return versions[0] + ";;;" + versions[1];
