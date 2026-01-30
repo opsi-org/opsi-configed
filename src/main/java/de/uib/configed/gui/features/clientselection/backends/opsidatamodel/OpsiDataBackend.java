@@ -99,7 +99,7 @@ import de.uib.configed.gui.features.clientselection.operations.OrOperation;
 import de.uib.configed.gui.features.clientselection.operations.SoftwareOperation;
 import de.uib.configed.gui.features.clientselection.operations.StringEqualsOperation;
 import de.uib.configed.gui.features.clientselection.operations.SwAuditOperation;
-import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
+import de.uib.configed.gui.features.hwinfopage.PanelHWSingleClientInfo;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.SWAuditClientEntry;
@@ -453,7 +453,7 @@ public final class OpsiDataBackend {
 				String type = (String) valuesMap.get("Type");
 				String name = (String) valuesMap.get("UI");
 				String localizedName = (String) valuesLocalized.get(j).get("UI");
-				if (PanelHWInfo.BOOLEAN_VALUES.contains(valuesMap.get("Opsi"))) {
+				if (PanelHWSingleClientInfo.BOOLEAN_VALUES.contains(valuesMap.get("Opsi"))) {
 					elementList.add(new GenericBooleanElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
 				} else if ("int".equals(type) || "tinyint".equals(type)) {

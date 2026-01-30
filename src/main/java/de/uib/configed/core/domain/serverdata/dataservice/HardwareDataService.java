@@ -15,7 +15,7 @@ import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
+import de.uib.configed.gui.features.hwinfopage.PanelHWSingleClientInfo;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.Utils;
 
@@ -116,7 +116,8 @@ public class HardwareDataService extends DataService {
 		}
 
 		// Add the scan time info "lastseen"
-		result.put(PanelHWInfo.SCANPROPERTYNAME, List.of(Map.of(PanelHWInfo.SCANTIME, scanTime)));
+		result.put(PanelHWSingleClientInfo.SCANPROPERTYNAME,
+				List.of(Map.of(PanelHWSingleClientInfo.SCANTIME, scanTime)));
 		return result.size() > 1 ? result : new HashMap<>();
 	}
 }
