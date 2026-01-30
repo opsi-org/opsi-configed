@@ -190,7 +190,6 @@ public class DeployClientAgentParameterDialog {
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"),
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"),
 					JOptionPane.ERROR_MESSAGE);
-
 			return;
 		}
 		Set<String> clients = Set.of(jTextFieldClient.getText().trim().split(" "));
@@ -204,12 +203,14 @@ public class DeployClientAgentParameterDialog {
 			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message2"));
 
 			int answer = JOptionPane.showOptionDialog(dialog, message.toString(),
-					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), 0, 0, null,
-					new String[] { Configed.getResourceValue("buttonCancel"),
-							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") },
+					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+					new String[] {
+							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed"),
+							Configed.getResourceValue("buttonCancel") },
 					null);
 
-			if (answer == 1) {
+			if (answer == 0) {
 				clients.removeAll(nonExistingHostNames);
 			} else {
 				return;
