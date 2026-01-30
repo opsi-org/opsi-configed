@@ -94,13 +94,8 @@ public class OpsiSetRightsParameterDialog {
 		commandOpsiSetRights.setDir(Utils.getServerPathFromWebDAVPath(completion.comboBoxGetStringItem()));
 		Logging.info(this, "doAction2 opsi-set-rights with path: ",
 				Utils.getServerPathFromWebDAVPath(commandOpsiSetRights.getDir()));
-		new Thread() {
-			@Override
-			public void run() {
-				CommandExecutor executor = new CommandExecutor(configedMain, commandOpsiSetRights);
-				executor.execute();
-			}
-		}.start();
+		CommandExecutor executor = new CommandExecutor(configedMain, commandOpsiSetRights);
+		executor.executeAsync();
 	}
 
 	private void initLayout() {

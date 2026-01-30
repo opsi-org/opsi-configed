@@ -37,8 +37,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -49,6 +51,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -659,5 +662,33 @@ public final class Utils {
 		if (map.get(key) instanceof String timestampString && !timestampString.isEmpty()) {
 			map.put(key, formatDateTimeStringToLocal(timestampString));
 		}
+	}
+
+	public static <T> void runSwingWorker(Supplier<T> backgroundTask, Consumer<T> doneTask,
+			Consumer<Exception> exceptionHandler) {
+
+		Consumer<Exception> finalExceptionHandler = exceptionHandler != null ? exceptionHandler : ((Exception e) -> {
+		});
+
+		SwingWorker<T, Void> worker = new SwingWorker<>() {
+			@Override
+			protected T doInBackground() {
+				return backgroundTask.get();
+			}
+
+			@Override
+			protected void done() {
+				try {
+					T result = get();
+					doneTask.accept(result);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					finalExceptionHandler.accept(e);
+				} catch (ExecutionException e) {
+					finalExceptionHandler.accept(e);
+				}
+			}
+		};
+		worker.execute();
 	}
 }

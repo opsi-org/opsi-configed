@@ -164,12 +164,8 @@ public class MainFrame extends JFrame {
 		ExtraFrameController.deleteInstances();
 		CommandFactory.destroyInstance();
 		FilterStateManager.clear();
-		new Thread() {
-			@Override
-			public void run() {
-				Configed.startConfiged();
-			}
-		}.start();
+
+		new Thread(Configed::startConfiged).start();
 	}
 
 	public void reloadServerConsoleMenu() {

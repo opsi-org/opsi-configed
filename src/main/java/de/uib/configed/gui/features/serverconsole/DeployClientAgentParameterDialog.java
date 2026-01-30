@@ -214,7 +214,7 @@ public class DeployClientAgentParameterDialog {
 		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
 		CommandExecutor executor = new CommandExecutor(configedMain, commandDeployClientAgent);
-		executor.execute();
+		executor.executeAsync();
 	}
 
 	private Set<String> getNonExistingHostNames(Set<String> hostNames) {
