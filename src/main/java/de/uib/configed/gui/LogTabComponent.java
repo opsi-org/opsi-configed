@@ -29,6 +29,7 @@ import de.uib.configed.share.logging.Logging;
 
 public class LogTabComponent extends LogPaneComponent {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
+	private static final String LOGFILE_EXTENSION = ".log";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
 	private JFileChooser chooser;
@@ -64,7 +65,7 @@ public class LogTabComponent extends LogPaneComponent {
 	public void download() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), logFileType);
-		String filePath = retrieveFilePath(fileName + ".log");
+		String filePath = retrieveFilePath(fileName + LOGFILE_EXTENSION);
 		if (filePath != null && !filePath.isEmpty()) {
 			saveToFile(filePath, getLines());
 		}
@@ -173,7 +174,7 @@ public class LogTabComponent extends LogPaneComponent {
 				if (logFiles.get(ident) != null && logFiles.get(ident).split("\n").length > 1) {
 					String fileName = retrieveFileName(configedMain.getSelectedClients().get(0).replace(".", "_"),
 							ident);
-					ZipEntry entry = new ZipEntry(fileName + ".log");
+					ZipEntry entry = new ZipEntry(fileName + LOGFILE_EXTENSION);
 					out.putNextEntry(entry);
 					writeToOutputStream(logFiles.get(ident).split("\n"), out);
 				}
@@ -186,7 +187,7 @@ public class LogTabComponent extends LogPaneComponent {
 	private static void saveToZipFile(String filePath, String fileName, String[] lines) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			ZipEntry entry = new ZipEntry(fileName);
+			ZipEntry entry = new ZipEntry(fileName + LOGFILE_EXTENSION);
 			out.putNextEntry(entry);
 			writeToOutputStream(lines, out);
 		} catch (IOException ex) {
