@@ -218,7 +218,7 @@ public class MakeProductFileDialog {
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
 			Logging.info(this, "doActionGetVersions, getDirectories result ", Arrays.toString(versions));
-			if (versions.length < 1) {
+			if (versions.length < 2) {
 				Logging.info(this, "doActionGetVersions, not expected versions array ", Arrays.toString(versions));
 				return "";
 			}
@@ -233,19 +233,19 @@ public class MakeProductFileDialog {
 			enableTfVersions(true);
 
 			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
-
-			jTextFieldPackageVersion.setText(versionArray[0]);
-			jLabelPackageVersionControlFile.setText(versionArray[0]);
-
-			jTextFieldProductVersion.setText(versionArray[1]);
-			jLabelProductVersionControlFile.setText(versionArray[1]);
+			updateVersionFields(versionArray[0], versionArray[1]);
 		} else {
 			enableTfVersions(false);
-			jTextFieldPackageVersion.setText("");
-			jLabelPackageVersionControlFile.setText("");
-			jTextFieldProductVersion.setText("");
-			jLabelProductVersionControlFile.setText("");
+			updateVersionFields("", "");
 		}
+	}
+
+	private void updateVersionFields(String product, String packageVersion) {
+		jTextFieldPackageVersion.setText(product);
+		jLabelPackageVersionControlFile.setText(product);
+
+		jTextFieldProductVersion.setText(packageVersion);
+		jLabelProductVersionControlFile.setText(packageVersion);
 	}
 
 	private void enableTfVersions(boolean enable) {
@@ -280,7 +280,7 @@ public class MakeProductFileDialog {
 		if (jCheckBoxOverwrite.isSelected()) {
 			String versions = doActionGetVersions();
 
-			String[] versionArray = tripleSemicolonMatcher.split(versions);
+			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
 
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);
