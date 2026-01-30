@@ -232,21 +232,17 @@ public class MainPanelManager {
 			return null;
 		}
 
-		new Thread() {
-			@Override
-			public void run() {
+		new Thread(() -> {
+			if (Boolean.TRUE.equals(persistenceController.getDataServices().config.getGlobalBooleanConfigValue(
+					OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
+					OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
+				// Starting JavaFX-Thread by creating a new JFXPanel, but not
+				// using it since it is not needed.
+				new JFXPanel();
 
-				if (Boolean.TRUE.equals(persistenceController.getDataServices().config.getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
-					// Starting JavaFX-Thread by creating a new JFXPanel, but not
-					// using it since it is not needed.
-					new JFXPanel();
-
-					Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
-				}
+				Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
 			}
-		}.start();
+		}).start();
 
 		// show Loading pane only when something needs to be loaded from server
 		long startmillis = System.currentTimeMillis();
