@@ -91,7 +91,7 @@ public class MakeProductFileDialog {
 		jComboBoxMainDir.setEnabled(true);
 
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
-		buttonExecute.addActionListener(actionEvent -> execute());
+		buttonExecute.addActionListener(actionEvent -> new Thread(this::execute));
 
 		JButton buttonPackageManager = new JButton(
 				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
@@ -228,7 +228,10 @@ public class MakeProductFileDialog {
 	}
 
 	private final void doSetActionGetVersions() {
-		String versions = doActionGetVersions();
+		Utils.runSwingWorker(this::doActionGetVersions, this::setVersions, null);
+	}
+
+	private void setVersions(String versions) {
 		if (versions.contains(";;;")) {
 			enableTfVersions(true);
 

@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
@@ -45,7 +46,6 @@ public class PackageUpdaterDialog {
 		this.configedMain = configedMain;
 		command = new SingleCommandPackageUpdater();
 		Logging.info(this, "with command");
-		retrieveRepos();
 		JPanel panel = initPanel();
 
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
@@ -101,9 +101,6 @@ public class PackageUpdaterDialog {
 	}
 
 	private JPanel initPanel() {
-		JLabel jLabelInfo = Utils.createBoldLabel("PackageUpdaterDialog.info");
-		JLabel jLabelRepos = Utils.createBoldLabel("PackageUpdaterDialog.repos");
-
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {
 			if (((String) itemEvent.getItem())
@@ -111,23 +108,40 @@ public class PackageUpdaterDialog {
 				jComboBoxRepos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
 			}
 		});
+		jComboBoxActions.setEnabled(true);
 
-		if (command.getRepos() != null) {
-			jComboBoxRepos = new JComboBox<>(command.getRepos().keySet().toArray(new String[0]));
-		} else {
-			jComboBoxRepos = new JComboBox<>();
-		}
-
+		jComboBoxRepos = new JComboBox<>();
 		jComboBoxRepos.addItem(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"));
 		jComboBoxRepos.setSelectedItem(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"));
-		jComboBoxActions.setEnabled(true);
+		jComboBoxRepos.setEnabled(false);
+
+		JLabel jLabelRetrievingRepos = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.retrievingRepos"));
+		jLabelRetrievingRepos.setVisible(true);
+
+		Utils.runSwingWorker(() -> {
+			retrieveRepos();
+			return null;
+		}, (Void _) -> {
+			if (command.getRepos() != null) {
+				for (String repo : command.getRepos().keySet()) {
+					jComboBoxRepos.addItem(repo);
+				}
+			}
+			jLabelRetrievingRepos.setVisible(false);
+			jComboBoxRepos.setEnabled(true);
+			SwingUtilities.getWindowAncestor(jComboBoxRepos).pack();
+		}, null);
+
+		JLabel jLabelInfo = Utils.createBoldLabel("PackageUpdaterDialog.info");
+		JLabel jLabelRepos = Utils.createBoldLabel("PackageUpdaterDialog.repos");
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "[grow, fill]", "[]0"));
 		panel.add(jLabelInfo);
 		panel.add(jComboBoxActions, "growx, gapbottom " + Globals.GAP_SIZE);
 		panel.add(jLabelRepos);
-		panel.add(jComboBoxRepos, "growx, gapbottom " + Globals.GAP_SIZE);
+		panel.add(jComboBoxRepos, "growx, gapbottom " + Globals.MIN_GAP_SIZE);
+		panel.add(jLabelRetrievingRepos, "hidemode 3, gapbottom " + Globals.GAP_SIZE);
 
 		return panel;
 	}

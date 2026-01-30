@@ -291,7 +291,7 @@ public final class EditTerminalCommandsDialog {
 
 		Utils.runSwingWorker(() -> {
 			executor.setMultiCommand(command);
-			executor.execute();
+			executor.executeAsync();
 			return null;
 		}, (Void _) -> jTextAreaCommands.requestFocus(), null);
 	}
