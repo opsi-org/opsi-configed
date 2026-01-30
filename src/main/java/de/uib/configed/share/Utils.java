@@ -664,9 +664,11 @@ public final class Utils {
 		}
 	}
 
-	@SuppressWarnings("java:S1188")
 	public static <T> void runSwingWorker(Supplier<T> backgroundTask, Consumer<T> doneTask,
 			Consumer<Exception> exceptionHandler) {
+
+		Consumer<Exception> finalExceptionHandler = exceptionHandler != null ? exceptionHandler : ((Exception e) -> {
+		});
 
 		SwingWorker<T, Void> worker = new SwingWorker<>() {
 			@Override
@@ -681,13 +683,9 @@ public final class Utils {
 					doneTask.accept(result);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
-					if (exceptionHandler != null) {
-						exceptionHandler.accept(e);
-					}
+					finalExceptionHandler.accept(e);
 				} catch (ExecutionException e) {
-					if (exceptionHandler != null) {
-						exceptionHandler.accept(e);
-					}
+					finalExceptionHandler.accept(e);
 				}
 			}
 		};
