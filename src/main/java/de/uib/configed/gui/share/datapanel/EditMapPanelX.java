@@ -97,9 +97,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
-	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
-
 	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable) {
 		super();
 
@@ -143,7 +140,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 			JMenuItem popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
+			popupItemDeleteEntry0.addActionListener(actionEvent -> setPropertyHandler(defaultPropertyHandler));
 			popupItemDeleteEntry0
 					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 							.isGlobalReadOnly());
@@ -158,21 +155,22 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			}
 
 			// initialize special property handlers
-			settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
+			AbstractPropertyHandler settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
 			settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
 
 			setDefaultValue = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(setDefaultValue, "locked");
-			setDefaultValue.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
+			setDefaultValue.addActionListener(actionEvent -> setPropertyHandler(settingDefaultValuesPropertyHandler));
 
 			popupMenu.add(setDefaultValue);
 
-			removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
+			AbstractPropertyHandler removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
 			removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
 
 			popupRemoveSpecificEntry = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupRemoveSpecificEntry, "remove");
-			popupRemoveSpecificEntry.addActionListener(actionEvent -> deleteSpecificEntry());
+			popupRemoveSpecificEntry
+					.addActionListener(actionEvent -> setPropertyHandler(removingSpecificValuesPropertyHandler));
 
 			popupMenu.add(popupRemoveSpecificEntry);
 		}
@@ -214,48 +212,19 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		this.originalMap = originalMap;
 	}
 
-	private void deleteConfigurationEntry() {
+	private void setPropertyHandler(AbstractPropertyHandler newPropertyHandler) {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-			showErrorNoRowSelected();
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"),
+					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 		} else if (names != null) {
-			propertyHandler = defaultPropertyHandler;
+			propertyHandler = newPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
 		} else {
-			Logging.warning(this, "names list is null, so cannot remove property in deleteEntry");
-		}
-	}
-
-	private static void showErrorNoRowSelected() {
-		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), Configed.getResourceValue("error"),
-				JOptionPane.ERROR_MESSAGE);
-	}
-
-	private void deleteSpecificEntry() {
-		Logging.info(this, "popupItemDeleteEntry action");
-		if (table.getSelectedRowCount() == 0) {
-			showErrorNoRowSelected();
-		} else if (names != null) {
-			propertyHandler = removingSpecificValuesPropertyHandler;
-
-			removeProperty(names.get(table.getSelectedRow()));
-		} else {
-			Logging.warning(this, "names list is null, so cannot remove property in deleteSpecificEntry");
-		}
-	}
-
-	private void removeDefaultAsSpecificEntry() {
-		Logging.info(this, "popupItemDeleteEntry action");
-		if (table.getSelectedRowCount() == 0) {
-			showErrorNoRowSelected();
-		} else if (names != null) {
-			propertyHandler = settingDefaultValuesPropertyHandler;
-
-			removeProperty(names.get(table.getSelectedRow()));
-		} else {
-			Logging.warning(this, "names list is null, so cannot remove property in removeDefaultAsSpecificEntry");
+			Logging.warning(this, "names list is null, so cannot remove property with handler ",
+					newPropertyHandler.getClass().getName());
 		}
 	}
 
