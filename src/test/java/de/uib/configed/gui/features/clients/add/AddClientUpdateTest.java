@@ -271,15 +271,4 @@ class AddClientUpdateTest {
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertInstanceOf(AddClientEffect.ServiceEffect.CreateClients.class, result.effect().get()));
 	}
-
-	@Test
-	void shouldTriggerCloseDialogEffect_whenCloseDialog() {
-		AddClientModel model = baseModel();
-		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
-				.update(new AddClientMsg.ActionMsg.CloseDialog(), model);
-
-		assertSame(model, result.model());
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertInstanceOf(AddClientEffect.UIEffect.CloseDialog.class, result.effect().get()));
-	}
 }

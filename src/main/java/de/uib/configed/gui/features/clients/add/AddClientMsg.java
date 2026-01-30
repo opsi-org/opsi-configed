@@ -57,9 +57,8 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		}
 	}
 
-	sealed interface ActionMsg extends AddClientMsg
-			permits ActionMsg.LoadInitialDataRequested, ActionMsg.InitialDataLoaded, ActionMsg.CreateClient,
-			ActionMsg.CSVImportRequested, ActionMsg.CSVImported, ActionMsg.CloseDialog {
+	sealed interface ActionMsg extends AddClientMsg permits ActionMsg.LoadInitialDataRequested,
+			ActionMsg.InitialDataLoaded, ActionMsg.CreateClient, ActionMsg.CSVImportRequested, ActionMsg.CSVImported {
 		record LoadInitialDataRequested() implements ActionMsg {
 		}
 
@@ -75,9 +74,6 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		}
 
 		record CSVImported(List<List<Object>> rows, boolean includeRow) implements ActionMsg {
-		}
-
-		record CloseDialog() implements ActionMsg {
 		}
 	}
 

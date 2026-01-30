@@ -73,8 +73,6 @@ final class AddClientUpdate {
 		case AddClientMsg.ActionMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(
 				model, rows, includeRow);
 		case AddClientMsg.ActionMsg.CreateClient() -> handleCreateClientMsg(model);
-		case AddClientMsg.ActionMsg.CloseDialog() -> UpdateResult.withEffect(model,
-				new AddClientEffect.UIEffect.CloseDialog());
 		};
 	}
 
