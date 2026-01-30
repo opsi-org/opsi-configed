@@ -44,6 +44,7 @@ import de.uib.configed.gui.features.tree.IconNode;
 import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
@@ -146,14 +147,17 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
-			new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATING_COPY }, new JComponent[] { tree, table }) {
+			new PopupMenuTrait(
+					new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
+							PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_FLOATING_COPY },
+					new JComponent[] { tree, table }) {
 				@Override
 				public void action(int p) {
 					switch (p) {
 					case PopupMenuTrait.POPUP_RELOAD -> reload();
 					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
 					case PopupMenuTrait.POPUP_PDF -> exportPDF();
+					case PopupMenuTrait.POPUP_EXPORT_CSV -> exportCSV();
 					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
 					}
 				}
@@ -181,6 +185,11 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		pdfExportTable.setPageSizeA4Landscape();
 		// create pdf // no filename, onlyselectedRows=false
 		pdfExportTable.execute(null, false);
+	}
+
+	private void exportCSV() {
+		ExporterToCSV exporterToCSV = new ExporterToCSV(createHWInfoTableModelComplete());
+		exporterToCSV.execute(null, false);
 	}
 
 	/** overwrite in subclasses */
