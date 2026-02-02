@@ -20,14 +20,14 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.logging.Logging;
 
 public class HwExporter implements ActionListener {
-	private PanelHWMultiClientReport showHardwareLogMultiClientReport;
+	private BaseMultiClientReportPanel showHardwareLogMultiClientReport;
 	private PanelHWSingleClientInfo panelHWInfo;
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public HwExporter(PanelHWMultiClientReport showHardwareLogMultiClientReport, PanelHWSingleClientInfo panelHWInfo,
+	public HwExporter(BaseMultiClientReportPanel showHardwareLogMultiClientReport, PanelHWSingleClientInfo panelHWInfo,
 			ConfigedMain configedMain) {
 		this.showHardwareLogMultiClientReport = showHardwareLogMultiClientReport;
 		this.panelHWInfo = panelHWInfo;

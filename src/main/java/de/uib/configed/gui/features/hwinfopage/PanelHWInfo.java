@@ -30,7 +30,7 @@ public class PanelHWInfo extends AbstractConfigurationTab {
 		this.configedMain = configedMain;
 
 		panelHWSingleClientInfo = new PanelHWSingleClientInfo(configedMain, true);
-		PanelHWMultiClientReport panelHWMultiClientReport = new PanelHWMultiClientReport();
+		BaseMultiClientReportPanel panelHWMultiClientReport = new BaseMultiClientReportPanel();
 		HwExporter swExporter = new HwExporter(panelHWMultiClientReport, panelHWSingleClientInfo, configedMain);
 		panelHWMultiClientReport.setActionListenerForStart(swExporter);
 

@@ -31,7 +31,7 @@ public class PanelSWInfo extends AbstractConfigurationTab {
 		this.configedMain = configedMain;
 
 		panelSWSingleClientInfo = new PanelSWSingleClientInfo(configedMain, true);
-		PanelSWMultiClientReport panelSWMultiClientReport = new PanelSWMultiClientReport();
+		SWMultiClientReportPanel panelSWMultiClientReport = new SWMultiClientReportPanel();
 		SwExporter swExporter = new SwExporter(panelSWMultiClientReport, panelSWSingleClientInfo, configedMain);
 		panelSWMultiClientReport.setActionListenerForStart(swExporter);
 

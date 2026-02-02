@@ -25,7 +25,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelHWMultiClientReport extends JPanel {
+public class BaseMultiClientReportPanel extends JPanel {
 	private JButton buttonStart;
 	private ActionListener actionListenerForStart;
 
@@ -39,7 +39,22 @@ public class PanelHWMultiClientReport extends JPanel {
 	private JTextField fieldExportDirectory;
 	private JTextField fieldFilenamePrefix;
 
-	public PanelHWMultiClientReport() {
+	private String title;
+	private String filenamePrefix;
+	private String exportKey;
+	private String filePrefixKey;
+
+	public BaseMultiClientReportPanel() {
+		this(Configed.getResourceValue("PanelHWMultiClientReport.title2"),
+				Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix"), "hwaudit_kind_of_export",
+				"hwaudit_export_file_prefix");
+	}
+
+	public BaseMultiClientReportPanel(String title, String filenamePrefix, String exportKey, String filePrefixKey) {
+		this.title = title;
+		this.filenamePrefix = filenamePrefix;
+		this.exportKey = exportKey;
+		this.filePrefixKey = filePrefixKey;
 		setupPanel();
 	}
 
@@ -76,8 +91,7 @@ public class PanelHWMultiClientReport extends JPanel {
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
-		JLabel labelSwauditMultiClientReport2 = new JLabel(
-				Configed.getResourceValue("PanelHWMultiClientReport.title2"));
+		JLabel labelSwauditMultiClientReport2 = new JLabel(title);
 
 		this.add(labelSwauditMultiClientReport1);
 		this.add(labelSwauditMultiClientReport2);
@@ -85,32 +99,33 @@ public class PanelHWMultiClientReport extends JPanel {
 		JPanel subpanelPreConfig = setupSubPanelPreConfig();
 		this.add(subpanelPreConfig, "growx, pushx, gaptop " + Globals.GAP_SIZE + ", gapbottom " + Globals.GAP_SIZE);
 
+		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
 		this.add(buttonStart, "gaptop " + Globals.GAP_SIZE);
 	}
 
-	private JPanel setupSubPanelPreConfig() {
-		JLabel labelFilenamePrefix = new JLabel(
-				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
+	protected JPanel setupSubPanelPreConfig() {
+		JPanel panel = new JPanel(new MigLayout("insets " + Globals.GAP_SIZE + ", hidemode 2", "[grow]", "[]0"));
 
-		String filenamePrefix = Configed.getSavedStates().getProperty("hwaudit_export_file_prefix",
-				Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix"));
+		addExportDirectory(panel);
+		addExportType(panel);
+		addFilenamePrefix(panel);
+		addFilenameInformation(panel);
 
-		fieldFilenamePrefix = new JTextField(filenamePrefix);
-		fieldFilenamePrefix.setEditable(true);
-		JLabel labelFilenameInformation = new JLabel(
-				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
+		addCustomOptions(panel);
 
-		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
+		addAskForOverwrite(panel);
 
-		checkAskForOverwrite = new JCheckBox();
+		return panel;
+	}
 
-		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
+	protected void addExportDirectory(JPanel panel) {
+		JLabel labelExportDirectory = new JLabel(
+				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
-		exportDirectoryS = Configed.getSavedStates().getProperty("hwaudit_export_dir", "");
+		exportDirectoryS = Configed.getSavedStates().getProperty(exportKey, "");
 
 		File dir = exportDirectoryS.isEmpty() ? null : new File(exportDirectoryS);
 
-		// We will get the default directory from user.dir if the saved one is invalid
 		exportDirectory = (dir != null && dir.isDirectory()) ? dir
 				: new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 
@@ -122,53 +137,61 @@ public class PanelHWMultiClientReport extends JPanel {
 		fieldExportDirectory = new JTextField(exportDirectoryS);
 		fieldExportDirectory.setEditable(false);
 
-		JLabel labelExportDirectory = new JLabel(
-				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
-		exportDirectoryS = "";
+		JButton buttonSelectDir = new JButton(Icons.getIntellijIcon("open"));
+		buttonSelectDir.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
+		buttonSelectDir.addActionListener(e -> buttonCallSelectExportDirectory());
 
-		JButton buttonCallSelectExportDirectory = new JButton(Icons.getIntellijIcon("open"));
-		buttonCallSelectExportDirectory
-				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
+		panel.add(labelExportDirectory, "split 3");
+		panel.add(buttonSelectDir, "gapleft " + Globals.GAP_SIZE + ", wmin 0, wmax pref");
+		panel.add(fieldExportDirectory, "span, growx, pushx, wrap");
+	}
 
-		buttonCallSelectExportDirectory.addActionListener(actionEvent -> buttonCallSelectExportDirectory());
-
+	protected void addExportType(JPanel panel) {
 		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), KindOfExport.PDF,
-				KindOfExport.values(), KindOfExport.class, ((Enum<KindOfExport> val) -> {
-					Logging.info(this, "change to ", val);
+				KindOfExport.values(), KindOfExport.class, (Enum<KindOfExport> val) -> {
 					kindOfExport = (KindOfExport) val;
-					Configed.getSavedStates().setProperty("swaudit_kind_of_export", "" + val);
-				}));
+					Configed.getSavedStates().setProperty(exportKey, "" + val);
+				});
 
-		panelSelectExportType.setValueByString(Configed.getSavedStates().getProperty("swaudit_kind_of_export"));
+		panelSelectExportType.setValueByString(Configed.getSavedStates().getProperty(exportKey));
 
 		kindOfExport = (KindOfExport) panelSelectExportType.getValue();
 
-		Logging.info(this, "kindOfExport   ", kindOfExport);
-
-		JPanel subpanelPreConfig = new JPanel(
-				new MigLayout("insets " + Globals.GAP_SIZE + ", hidemode 2", "[grow]", "[]0"));
-
-		subpanelPreConfig.add(labelExportDirectory, "split 3");
-		subpanelPreConfig.add(buttonCallSelectExportDirectory, "gapleft " + Globals.GAP_SIZE + ", wmin 0, wmax pref");
-		subpanelPreConfig.add(fieldExportDirectory, "span, growx, pushx, wrap");
-
-		subpanelPreConfig.add(panelSelectExportType, "span, growx, pushx, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
-
-		subpanelPreConfig.add(labelFilenamePrefix,
-				"split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
-		subpanelPreConfig.add(fieldFilenamePrefix, "span, growx, pushx, wrap");
-
-		subpanelPreConfig.add(labelFilenameInformation, "span, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
-
-		subpanelPreConfig.add(checkAskForOverwrite,
-				"split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
-		subpanelPreConfig.add(labelAskForOverwrite, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
-
-		return subpanelPreConfig;
+		panel.add(panelSelectExportType, "span, growx, pushx, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 	}
 
-	private void buttonCallSelectExportDirectory() {
+	protected void addFilenamePrefix(JPanel panel) {
+		JLabel labelFilenamePrefix = new JLabel(
+				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
+
+		fieldFilenamePrefix = new JTextField(Configed.getSavedStates().getProperty(filePrefixKey, filenamePrefix));
+
+		panel.add(labelFilenamePrefix, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		panel.add(fieldFilenamePrefix, "span, growx, pushx, wrap");
+	}
+
+	protected void addFilenameInformation(JPanel panel) {
+		JLabel labelFilenameInformation = new JLabel(
+				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
+
+		panel.add(labelFilenameInformation, "span, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
+	}
+
+	protected void addAskForOverwrite(JPanel panel) {
+		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
+
+		checkAskForOverwrite = new JCheckBox();
+
+		panel.add(checkAskForOverwrite, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		panel.add(labelAskForOverwrite, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
+	}
+
+	protected void addCustomOptions(JPanel panel) {
+		// default: no extra options
+	}
+
+	public void buttonCallSelectExportDirectory() {
 		chooserDirectory.setCurrentDirectory(exportDirectory);
 
 		int returnVal = chooserDirectory.showOpenDialog(this);
