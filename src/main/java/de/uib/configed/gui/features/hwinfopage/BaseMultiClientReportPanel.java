@@ -103,7 +103,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 		this.add(buttonStart, "gaptop " + Globals.GAP_SIZE);
 	}
 
-	protected JPanel setupSubPanelPreConfig() {
+	private JPanel setupSubPanelPreConfig() {
 		JPanel panel = new JPanel(new MigLayout("insets " + Globals.GAP_SIZE + ", hidemode 2", "[grow]", "[]0"));
 
 		addExportDirectory(panel);
@@ -118,7 +118,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 		return panel;
 	}
 
-	protected void addExportDirectory(JPanel panel) {
+	private void addExportDirectory(JPanel panel) {
 		JLabel labelExportDirectory = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
@@ -146,7 +146,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 		panel.add(fieldExportDirectory, "span, growx, pushx, wrap");
 	}
 
-	protected void addExportType(JPanel panel) {
+	private void addExportType(JPanel panel) {
 		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), KindOfExport.PDF,
 				KindOfExport.values(), KindOfExport.class, (Enum<KindOfExport> val) -> {
@@ -161,7 +161,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 		panel.add(panelSelectExportType, "span, growx, pushx, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 	}
 
-	protected void addFilenamePrefix(JPanel panel) {
+	private void addFilenamePrefix(JPanel panel) {
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
@@ -171,14 +171,14 @@ public class BaseMultiClientReportPanel extends JPanel {
 		panel.add(fieldFilenamePrefix, "span, growx, pushx, wrap");
 	}
 
-	protected void addFilenameInformation(JPanel panel) {
+	private static void addFilenameInformation(JPanel panel) {
 		JLabel labelFilenameInformation = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
 
 		panel.add(labelFilenameInformation, "span, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 	}
 
-	protected void addAskForOverwrite(JPanel panel) {
+	private void addAskForOverwrite(JPanel panel) {
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
 
 		checkAskForOverwrite = new JCheckBox();
