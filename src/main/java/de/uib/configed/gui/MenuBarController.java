@@ -300,13 +300,13 @@ public class MenuBarController {
 
 		JMenuItem jMenuItemAdminLink = new JMenuItem(
 				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiAdminWebPage"));
-		jMenuItemAdminLink.addActionListener(
-				actionEvent -> Utils.showExternalDocument("https://" + host + ":" + port + "/admin/"));
+		jMenuItemAdminLink
+				.addActionListener(actionEvent -> BrowserUtils.openLink("https://" + host + ":" + port + "/admin/"));
 
 		JMenuItem jMenuItemLicensesLink = new JMenuItem(
 				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiWebGUI"));
 		jMenuItemLicensesLink.addActionListener(
-				actionEvent -> Utils.showExternalDocument("https://" + host + ":" + port + "/addons/webgui/app/"));
+				actionEvent -> BrowserUtils.openLink("https://" + host + ":" + port + "/addons/webgui/app/"));
 
 		jMenuHelp.add(jMenuItemAdminLink);
 		jMenuHelp.add(jMenuItemLicensesLink);
