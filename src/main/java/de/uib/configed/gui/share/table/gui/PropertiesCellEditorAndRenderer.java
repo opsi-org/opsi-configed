@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -85,8 +86,11 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		comboBox.addActionListener(actionEvent -> stopCellEditing());
 
 		multiLineTextArea = new JTextArea();
+		multiLineTextArea.setLineWrap(true);
+		multiLineTextArea.setWrapStyleWord(true);
 		multiLineScrollPane = new JScrollPane(multiLineTextArea);
 		multiLineScrollPane.setPreferredSize(ListSelectionDialog.DEFAULT_MULTI_LINE_EDITOR_SIZE);
+		multiLineScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		unusedfield = new JLabel();
 
@@ -100,7 +104,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService();
+				.getDataServices().userRoles;
 		if (userRolesConfigDataService.isGlobalReadOnly() && !userRolesConfigDataService.canEditOwnServerRole()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
@@ -325,7 +329,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	@SuppressWarnings("squid:S2047")
 	private static boolean getDefaultBoolean(String key, Object firstVal) {
 		Map<String, ConfigOption> configOptions = PersistenceControllerFactory.getPersistenceController()
-				.getConfigDataService().getConfigOptionsPD();
+				.getDataServices().config.getConfigOptionsPD();
 		if (configOptions.containsKey(key)) {
 			Logging.debug("using default config value for key: ", key);
 			return (Boolean) configOptions.get(key).getDefaultValues().get(0);

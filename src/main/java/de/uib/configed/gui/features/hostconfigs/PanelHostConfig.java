@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
@@ -23,6 +22,7 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelHostConfig extends JPanel {
 	// delegate
@@ -72,14 +72,8 @@ public class PanelHostConfig extends JPanel {
 
 		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getHostConfigsDataChangedKeeper());
 
-		GroupLayout planeLayout = new GroupLayout(this);
-		this.setLayout(planeLayout);
-
-		planeLayout.setHorizontalGroup(planeLayout.createParallelGroup().addComponent(editMapPanel, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addComponent(editMapPanel, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets 0, fill", "[]", "[]0"));
+		this.add(editMapPanel, "grow");
 	}
 
 	public void initEditing(String labeltext, Map<String, List<Object>> configVisualMap,
@@ -93,7 +87,7 @@ public class PanelHostConfig extends JPanel {
 		}
 		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
 		editMapPanel.setEditableMap(POJOReMapper.remap(configVisualMap),
-				persistenceController.getConfigDataService().getConfigOptionsPD());
+				persistenceController.getDataServices().config.getConfigOptionsPD());
 		editMapPanel.updateData(configUpdateCollection, collectionConfigStored);
 		editMapPanel.setLabel(labeltext);
 	}

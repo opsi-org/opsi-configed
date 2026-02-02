@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -159,9 +159,9 @@ public class LicenseDisplayer {
 
 	private String showLicenseContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persistenceController.getLicenseDataService()
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persistenceController.getDataServices().license
 				.getLicenseContractsToNotifyPD();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getLicenseDataService()
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getDataServices().license
 				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired ", contractsExpired);
@@ -217,7 +217,8 @@ public class LicenseDisplayer {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+						return (Map) persistenceController.getDataServices().software
+								.getInstalledSoftwareName2SWinfoPD();
 					}
 				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
@@ -265,8 +266,8 @@ public class LicenseDisplayer {
 		// nearly done in produceModelSWxLicensepool, but we collect the range of the
 		// model-map
 		Set<String> range = new HashSet<>();
-		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+		for (String swID : persistenceController.getDataServices().software.getName2SWIdentsPD().get(swName)) {
+			String licpool = persistenceController.getDataServices().software.getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL);

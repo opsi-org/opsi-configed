@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.terminal;
 
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -19,6 +18,7 @@ import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
 import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
 import de.uib.configed.gui.share.swing.AbstractClosableTabComponent;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	private JTabbedPane jTabbedPane;
@@ -39,18 +39,13 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		if (!messagebus.getWebSocket().isListenerRegistered(this)) {
 			messagebus.getWebSocket().registerListener(this);
 		}
-		GroupLayout groupLayout = new GroupLayout(this);
-		this.setLayout(groupLayout);
 
 		jTabbedPane = new JTabbedPane();
 		jTabbedPane.addChangeListener(changeEvent -> onTabChange());
 		jTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
-		groupLayout
-				.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTabbedPane, 0, 0, Short.MAX_VALUE));
-
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
-				.addGroup(groupLayout.createSequentialGroup().addComponent(jTabbedPane, 0, 0, Short.MAX_VALUE)));
+		this.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		this.add(jTabbedPane, "grow");
 	}
 
 	private void onTabChange() {

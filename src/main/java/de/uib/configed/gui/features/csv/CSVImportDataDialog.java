@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -16,7 +16,6 @@ import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -42,6 +41,7 @@ import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CSVImportDataDialog {
 	private PanelGenEdit thePanel;
@@ -179,103 +179,41 @@ public class CSVImportDataDialog {
 
 		modifier.updateTable(format, startLine, thePanel);
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		JPanel panel = new JPanel(new MigLayout("insets " + Globals.GAP_SIZE, "[grow]", "[]0"));
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(importOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(startLineLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(startLineInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(splittingOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(commaOption).addGap(Globals.GAP_SIZE)
-						.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(otherOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(thePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		panel.add(importOptionsLabel, "wrap, gapbottom " + Globals.MIN_GAP_SIZE);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(importOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(startLineLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(startLineInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(splittingOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(otherOption).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(thePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		panel.add(startLineLabel, "split 2, gapright " + Globals.GAP_SIZE);
+		panel.add(startLineInput, "span, growx, pushx, wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+
+		panel.add(splittingOptionsLabel, "wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+
+		panel.add(tabsOption, "split 6");
+		panel.add(commaOption, "gapleft " + Globals.GAP_SIZE);
+		panel.add(semicolonOption, "gapleft " + Globals.GAP_SIZE);
+		panel.add(spaceOption, "gapleft " + Globals.GAP_SIZE);
+		panel.add(otherOption, "gapleft " + Globals.GAP_SIZE);
+		panel.add(otherDelimiterInput,
+				"gapleft " + Globals.GAP_SIZE + ", span, growx, pushx, wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+
+		panel.add(quoteLabel, "split 2, gapright " + Globals.GAP_SIZE);
+		panel.add(quoteOptions, "span, growx, pushx, wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+
+		panel.add(thePanel, "span, grow, push, wrap");
 
 		return panel;
 	}
 
 	public void setDetectedOptions() {
 		switch (format.getDelimiterString()) {
-		case "\t":
-			tabsOption.setSelected(true);
-			break;
-		case ",":
-			commaOption.setSelected(true);
-			break;
-		case ";":
-			semicolonOption.setSelected(true);
-			break;
-		case " ":
-			spaceOption.setSelected(true);
-			break;
-		default:
+		case "\t" -> tabsOption.setSelected(true);
+		case "," -> commaOption.setSelected(true);
+		case ";" -> semicolonOption.setSelected(true);
+		case " " -> spaceOption.setSelected(true);
+		default -> {
 			otherOption.setSelected(true);
 			otherDelimiterInput.setText(String.valueOf(format.getDelimiterString()));
-			break;
+		}
 		}
 
 		quoteOptions.setSelectedItem(format.getDelimiterString());

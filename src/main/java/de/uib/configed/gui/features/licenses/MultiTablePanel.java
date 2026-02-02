@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -25,6 +25,10 @@ public class MultiTablePanel extends JPanel {
 		controller.initializeVisualSettings();
 	}
 
+	public void load() {
+		// Can be overridden if needed
+	}
+
 	/**
 	 * commits all changes in this site
 	 */
@@ -33,8 +37,7 @@ public class MultiTablePanel extends JPanel {
 	}
 
 	public int mayLeave() {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			return AbstractDataChangedKeeper.JOPTIONPANE_DIALOG_NOT_SHOWN;
 		}
 

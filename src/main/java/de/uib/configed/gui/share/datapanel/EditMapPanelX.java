@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -40,6 +39,7 @@ import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel {
@@ -50,10 +50,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	private ListModelProducer modelProducer;
 
-	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupRemoveSpecificEntry;
 	private JMenuItem setDefaultValue;
-	private JMenuItem popupItemAddStringListEntry;
 
 	private JMenuItem multiLineEditingItem;
 
@@ -99,13 +97,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
-	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
+	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable) {
+		super();
 
-	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable, boolean reloadable) {
-		super(reloadable);
-
-		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable, ",  ", reloadable);
+		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -113,33 +108,42 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		ttm.setReshowDelay(Globals.TOOLTIP_RESHOW_DELAY_MS);
 
 		buildPanel();
+		buildPopupMenu(keylistExtendible, entryRemovable);
 
-		popupMenu = definePopup();
+		propertyHandler.setMapTableModel(mapTableModel);
+	}
+
+	private void buildPopupMenu(boolean keylistExtendible, boolean entryRemovable) {
+		popupMenu = createBasicPopup();
 
 		Logging.debug(this, "logPopupElements ", popupMenu.getSubElements().length);
 		multiLineEditingItem = new JMenuItem(Configed.getResourceValue("EditMapPanelX.openMultiLineEditor"));
 		Icons.addIntellijIconToMenuItem(multiLineEditingItem, "edit");
 		multiLineEditingItem.addActionListener(event -> startMultiLineEditing());
-		multiLineEditingItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		multiLineEditingItem
+				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 
 		if (keylistExtendible) {
 			if (popupMenu.getComponentCount() > 0) {
 				popupMenu.addSeparator();
 			}
 
-			popupItemAddStringListEntry = new JMenuItem(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
+			JMenuItem popupItemAddStringListEntry = new JMenuItem(
+					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 			popupItemAddStringListEntry.addActionListener(actionEvent -> new CreateConfigDialog(this));
-			popupItemAddStringListEntry.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			popupItemAddStringListEntry
+					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 			popupMenu.add(popupItemAddStringListEntry);
 
-			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
+			JMenuItem popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
-			popupItemDeleteEntry0.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			popupItemDeleteEntry0.addActionListener(actionEvent -> setPropertyHandler(defaultPropertyHandler));
+			popupItemDeleteEntry0
+					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 
 			popupMenu.add(popupItemDeleteEntry0);
 			// the menu item seems to work only for one menu
@@ -151,26 +155,25 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			}
 
 			// initialize special property handlers
-			settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
+			AbstractPropertyHandler settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
 			settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
 
 			setDefaultValue = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(setDefaultValue, "locked");
-			setDefaultValue.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
+			setDefaultValue.addActionListener(actionEvent -> setPropertyHandler(settingDefaultValuesPropertyHandler));
 
 			popupMenu.add(setDefaultValue);
 
-			removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
+			AbstractPropertyHandler removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
 			removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
 
 			popupRemoveSpecificEntry = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupRemoveSpecificEntry, "remove");
-			popupRemoveSpecificEntry.addActionListener(actionEvent -> deleteSpecificEntry());
+			popupRemoveSpecificEntry
+					.addActionListener(actionEvent -> setPropertyHandler(removingSpecificValuesPropertyHandler));
 
 			popupMenu.add(popupRemoveSpecificEntry);
 		}
-
-		propertyHandler.setMapTableModel(mapTableModel);
 	}
 
 	protected void updatePopupMenu() {
@@ -184,13 +187,15 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		if (setDefaultValue != null) {
-			setDefaultValue.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			setDefaultValue.setEnabled(
+					row != -1 && !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 		}
 
 		if (popupRemoveSpecificEntry != null) {
-			popupRemoveSpecificEntry.setEnabled(row != -1 && !PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly());
+			popupRemoveSpecificEntry.setEnabled(
+					row != -1 && !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+							.isGlobalReadOnly());
 		}
 	}
 
@@ -207,70 +212,28 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		this.originalMap = originalMap;
 	}
 
-	private void deleteConfigurationEntry() {
+	private void setPropertyHandler(AbstractPropertyHandler newPropertyHandler) {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-			showErrorNoRowSelected();
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"),
+					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 		} else if (names != null) {
-			propertyHandler = defaultPropertyHandler;
+			propertyHandler = newPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
 		} else {
-			Logging.warning(this, "names list is null, so cannot remove property in deleteEntry");
+			Logging.warning(this, "names list is null, so cannot remove property with handler ",
+					newPropertyHandler.getClass().getName());
 		}
 	}
 
-	private static void showErrorNoRowSelected() {
-		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), Configed.getResourceValue("error"),
-				JOptionPane.ERROR_MESSAGE);
-	}
-
-	private void deleteSpecificEntry() {
-		Logging.info(this, "popupItemDeleteEntry action");
-		if (table.getSelectedRowCount() == 0) {
-			showErrorNoRowSelected();
-		} else if (names != null) {
-			propertyHandler = removingSpecificValuesPropertyHandler;
-
-			removeProperty(names.get(table.getSelectedRow()));
-		} else {
-			Logging.warning(this, "names list is null, so cannot remove property in deleteSpecificEntry");
-		}
-	}
-
-	private void removeDefaultAsSpecificEntry() {
-		Logging.info(this, "popupItemDeleteEntry action");
-		if (table.getSelectedRowCount() == 0) {
-			showErrorNoRowSelected();
-		} else if (names != null) {
-			propertyHandler = settingDefaultValuesPropertyHandler;
-
-			removeProperty(names.get(table.getSelectedRow()));
-		} else {
-			Logging.warning(this, "names list is null, so cannot remove property in removeDefaultAsSpecificEntry");
-		}
-	}
-
-	protected JPopupMenu definePopup() {
+	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-
-		Integer[] popups = reloadable ? new Integer[] { PopupMenuTrait.POPUP_RELOAD } : new Integer[] {};
-
-		return new PopupMenuTrait(popups, (MouseEvent event) -> {
+		return new PopupMenuTrait(new Integer[] {}, (MouseEvent event) -> {
 			updatePopupMenu();
 			return true;
-		}, new JComponent[] { table, jScrollPane.getViewport() }) {
-			@Override
-			public void action(int p) {
-				super.action(p);
-				if (p == PopupMenuTrait.POPUP_RELOAD) {
-					ConfigedMain.getMainFrame().activateLoadingCursor();
-					actor.reloadData();
-					ConfigedMain.getMainFrame().deactivateLoadingCursor();
-				}
-			}
-		};
+		}, new JComponent[] { table, jScrollPane.getViewport() });
 	}
 
 	private void buildPanel() {
@@ -312,12 +275,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		jScrollPane = new JScrollPane(table);
 
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(jScrollPane, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane, 0,
-				GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		add(jScrollPane, "grow, hmin 0");
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {

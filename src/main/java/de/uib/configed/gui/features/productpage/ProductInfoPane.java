@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -9,8 +9,6 @@ package de.uib.configed.gui.features.productpage;
 import java.awt.Dimension;
 import java.awt.Font;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,8 +25,11 @@ import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.gui.type.OpsiProductInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class ProductInfoPane extends JSplitPane {
+	private static final int START_DIVIDER_LOCATION = 260;
+
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
 	private JLabel jLabelLabelProductVersion;
@@ -69,6 +70,7 @@ public class ProductInfoPane extends JSplitPane {
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesTextLabel = new JLabel(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
+		dependenciesTextLabel.setMinimumSize(new Dimension());
 		depotForDependenciesLabel = new JLabel();
 		panelProductDependencies = new PanelProductDependencies(depotForDependenciesLabel);
 
@@ -112,99 +114,47 @@ public class ProductInfoPane extends JSplitPane {
 	private void setupLayout() {
 		setupTopComponent();
 		setupBottomComponent();
+
+		// Make it possible to close the info pane
+		setMinimumSize(new Dimension());
+
+		setDividerLocation(START_DIVIDER_LOCATION);
 	}
 
 	private void setupTopComponent() {
 		JPanel productDescriptionsPanel = new JPanel();
+		productDescriptionsPanel.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow, 0:0]",
+				"[center]" + Globals.GAP_SIZE + "[]0[]" + Globals.GAP_SIZE + "[grow]"));
 
-		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
-		productDescriptionsPanel.setLayout(layoutDescriptionsPanel);
+		productDescriptionsPanel.add(jLabelProductID, "gap top " + Globals.GAP_SIZE + ", align center");
 
-		layoutDescriptionsPanel
-				.setHorizontalGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-								.addGap(0, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-								.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(0, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+		productDescriptionsPanel.add(jLabelProductName,
+				"h " + Globals.DEFAULT_JLABEL_HEIGHT + "!, gap left " + Globals.GAP_SIZE + ", align left");
 
-						.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(jLabelProductName, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+		productDescriptionsPanel.add(jLabelLabelProductVersion, "split 2, gap left " + Globals.GAP_SIZE);
+		productDescriptionsPanel.add(jLabelProductVersion, "align left, growx");
 
-						.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-
-						.addComponent(productSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutDescriptionsPanel
-				.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelProductName, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT)
-						.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE).addComponent(productSplitPane, 0, 160, Short.MAX_VALUE));
+		productDescriptionsPanel.add(productSplitPane, "grow, push, hmin 0");
 
 		setTopComponent(productDescriptionsPanel);
-
-		// Make it possible to close the info pane
-		setMinimumSize(new Dimension());
 	}
 
 	private void setupBottomComponent() {
-		// treat the bottom panel
 		JPanel bottomComponent = new JPanel();
+		bottomComponent.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow, 0:0]", "[]0[]0[]0[]"));
 
-		GroupLayout layoutBottomComponent = new GroupLayout(bottomComponent);
-		bottomComponent.setLayout(layoutBottomComponent);
+		bottomComponent.add(dependenciesActivateButton, "split 3, gapleft " + Globals.GAP_SIZE);
+		bottomComponent.add(dependenciesTextLabel, "gapright push");
+		bottomComponent.add(depotForDependenciesLabel, "alignx right, gapright " + Globals.MIN_GAP_SIZE + ", wrap");
 
-		layoutBottomComponent
-				.setHorizontalGroup(
-						layoutBottomComponent.createParallelGroup()
-								.addGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-										.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
+		bottomComponent.add(panelProductDependencies, "hidemode 3, grow, pushy 50, sgy vshare, hmin 0, gaptop "
+				+ Globals.MIN_GAP_SIZE + ", gapbottom " + Globals.MIN_GAP_SIZE);
 
-								.addComponent(panelProductDependencies, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		bottomComponent.add(propertiesActivateButton, "split 2, gapleft " + Globals.GAP_SIZE);
+		bottomComponent.add(panelEditProperties.getTitlePanel(), "growx, wrap");
 
-								.addGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(propertiesActivateButton, 0, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE).addComponent(panelEditProperties.getTitlePanel(), 0,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-
-								.addComponent(panelEditProperties, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutBottomComponent
-				.setVerticalGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
-						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(propertiesActivateButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(panelEditProperties.getTitlePanel()))
-						.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
+		bottomComponent.add(panelEditProperties,
+				"hidemode 3, grow, pushy 50, sgy vshare, hmin 0, gaptop " + Globals.MIN_GAP_SIZE);
 
 		setBottomComponent(bottomComponent);
 	}
@@ -255,7 +205,7 @@ public class ProductInfoPane extends JSplitPane {
 		setProductVersion(productVersion + "-" + packageVersion);
 
 		String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
-		OpsiProductInfo info = persistenceController.getProductDataService().getProduct2VersionInfo2InfosPD()
+		OpsiProductInfo info = persistenceController.getDataServices().product.getProduct2VersionInfo2InfosPD()
 				.get(productId).get(versionInfo);
 		Logging.info(this, "got product infos  productId, versionInfo:  ", productId, ", ", versionInfo, ": ", info);
 

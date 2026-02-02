@@ -1,16 +1,14 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -25,13 +23,15 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandParameterParser;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
 	private EditTerminalCommandsDialog editTerminalCommandsDialog;
 
-	private JLabel jLabelParamMethods = new JLabel();
-	private JLabel jLabelParamFormats = new JLabel();
+	private JLabel jLabelParamMethods;
+	private JLabel jLabelParamFormats;
 	private JComboBox<String> jComboBoxParameterMethods;
 	private JComboBox<String> jComboBoxParameterFormats;
 	private JButton jButtonAddParam;
@@ -52,11 +52,8 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	private void init() {
 		Logging.debug(this, "init setting up components ");
-		jLabelParamMethods.setText(Configed.getResourceValue("CommandControlDialog.parameterMethods"));
-		jLabelParamMethods.setFont(jLabelParamMethods.getFont().deriveFont(Font.BOLD));
-
-		jLabelParamFormats.setText(Configed.getResourceValue("CommandControlDialog.parameterFormats"));
-		jLabelParamFormats.setFont(jLabelParamFormats.getFont().deriveFont(Font.BOLD));
+		jLabelParamMethods = Utils.createBoldLabel("CommandControlDialog.parameterMethods");
+		jLabelParamFormats = Utils.createBoldLabel("CommandControlDialog.parameterFormats");
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
@@ -96,39 +93,13 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 	private void initLayout() {
 		Logging.debug(this, "initLayout ");
 
-		GroupLayout thisLayout = new GroupLayout(this);
-		setLayout(thisLayout);
-		thisLayout.setHorizontalGroup(thisLayout.createParallelGroup()
-				.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(thisLayout.createSequentialGroup()
-						.addComponent(jButtonTestParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonAddParam, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
-				.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(thisLayout.createParallelGroup()
-						.addComponent(jButtonTestParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonAddParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap", "", "[]0"));
+		add(jLabelParamMethods);
+		add(jComboBoxParameterMethods, "gapbottom " + Globals.GAP_SIZE);
+		add(jLabelParamFormats);
+		add(jComboBoxParameterFormats, "gapbottom " + Globals.GAP_SIZE);
+		add(jButtonTestParam, "split 2, gapright " + Globals.GAP_SIZE);
+		add(jButtonAddParam, "wrap");
 	}
 
 	public void doActionTestParam(JDialog caller) {

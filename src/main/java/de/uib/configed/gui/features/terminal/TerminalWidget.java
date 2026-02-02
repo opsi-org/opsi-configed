@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -89,7 +89,8 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 
 	public String getTitle() {
 		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
-				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
+				? PersistenceControllerFactory.getPersistenceController().getDataServices().hostInfoCollections
+						.getConfigServer()
 				: sessionChannel;
 	}
 
@@ -193,8 +194,8 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		if ("Configserver".equals(session)) {
 			return CONFIG_SERVER_SESSION_CHANNEL;
 		}
-		List<String> depotNames = PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
-				.getAllDepotNamesList();
+		List<String> depotNames = PersistenceControllerFactory.getPersistenceController()
+				.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		return depotNames.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
 	}
 

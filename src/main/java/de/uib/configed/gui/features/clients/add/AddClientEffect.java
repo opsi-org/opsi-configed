@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,7 +11,7 @@ import java.util.List;
 public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddClientEffect.ServiceEffect {
 	sealed interface UIEffect extends AddClientEffect permits UIEffect.ShowOverwriteHostDialog,
 			UIEffect.ShowOverwriteDepotDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCSVImportDialog,
-			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage, UIEffect.CloseDialog {
+			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage {
 		record ShowOverwriteHostDialog(String opsiHostKey) implements UIEffect {
 		}
 
@@ -28,9 +28,6 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 		}
 
 		record ShowErrorMessage(String title, String message) implements UIEffect {
-		}
-
-		record CloseDialog() implements UIEffect {
 		}
 	}
 

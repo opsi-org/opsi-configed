@@ -1,18 +1,16 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -31,7 +29,9 @@ import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PackageManagerUninstallParameterDialog {
 	private static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
@@ -39,10 +39,10 @@ public class PackageManagerUninstallParameterDialog {
 
 	private JPanel uninstallPanel = new JPanel();
 
-	private JLabel jLabelUninstall = new JLabel();
-	private JLabel jLabelOn = new JLabel();
+	private JLabel jLabelUninstall;
+	private JLabel jLabelOn;
 
-	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
+	protected JLabel jLabelLoglevel;
 
 	private JComboBox<String> jComboBoxOpsiProducts;
 	private JComboBox<Integer> jComboBoxLogLevel;
@@ -65,8 +65,7 @@ public class PackageManagerUninstallParameterDialog {
 	private ConfigedMain configedMain;
 
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -102,7 +101,7 @@ public class PackageManagerUninstallParameterDialog {
 		Logging.debug(this, "produceDepotParameter, selectedDepots ", selectedDepots);
 
 		if (selectedDepots.isEmpty()) {
-			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+			if (persistenceController.getDataServices().userRoles.hasDepotsFullPermissionPD()) {
 				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
@@ -134,7 +133,7 @@ public class PackageManagerUninstallParameterDialog {
 
 		List<String> result = new ArrayList<>();
 
-		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
+		if (persistenceController.getDataServices().userRoles.hasDepotsFullPermissionPD()) {
 			textFieldSelectedDepots.setEditable(true);
 			result.add(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS);
 			result.add(DEPOT_SELECTION_ALL_WHERE_INSTALLED);
@@ -142,7 +141,7 @@ public class PackageManagerUninstallParameterDialog {
 			textFieldSelectedDepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostInfoCollections().getAllDepotNamesList()) {
+		for (String depot : persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList()) {
 			if (isPossibleDepot(depot, selectedProduct)) {
 				Logging.info(this, "taking this depot ", depot);
 				result.add(depot);
@@ -155,18 +154,18 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private boolean isPossibleDepot(String depot, String selectedProduct) {
-		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
+		if (!persistenceController.getDataServices().userRoles.hasDepotPermission(depot)) {
 			return false;
 		}
 
-		if (persistenceController.getProductDataService().getDepot2LocalbootProductsPD().get(depot) != null
-				&& persistenceController.getProductDataService().getDepot2LocalbootProductsPD().get(depot)
+		if (persistenceController.getDataServices().product.getDepot2LocalbootProductsPD().get(depot) != null
+				&& persistenceController.getDataServices().product.getDepot2LocalbootProductsPD().get(depot)
 						.containsKey(selectedProduct)) {
 			return true;
 		}
 
-		return persistenceController.getProductDataService().getDepot2NetbootProductsPD().get(depot) != null
-				&& persistenceController.getProductDataService().getDepot2NetbootProductsPD().get(depot)
+		return persistenceController.getDataServices().product.getDepot2NetbootProductsPD().get(depot) != null
+				&& persistenceController.getDataServices().product.getDepot2NetbootProductsPD().get(depot)
 						.containsKey(selectedProduct);
 	}
 
@@ -183,10 +182,8 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private void init() {
-		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
-		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
-
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelUninstall = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
+		jLabelLoglevel = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelLoglevel");
 
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -208,8 +205,7 @@ public class PackageManagerUninstallParameterDialog {
 
 		jComboBoxOpsiProducts.addItemListener(itemEvent -> textFieldSelectedDepots.setText(""));
 
-		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
-		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
+		jLabelOn = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelOn");
 
 		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
@@ -234,7 +230,7 @@ public class PackageManagerUninstallParameterDialog {
 		Logging.info(this, "resetProducts in combobox opsi products");
 		jComboBoxOpsiProducts.removeAllItems();
 
-		for (String item : persistenceController.getProductDataService().getProductIdsPD()) {
+		for (String item : persistenceController.getDataServices().product.getProductIdsPD()) {
 			jComboBoxOpsiProducts.addItem(item);
 		}
 	}
@@ -290,61 +286,19 @@ public class PackageManagerUninstallParameterDialog {
 			return;
 		}
 
-		Thread execThread = new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "start exec thread ");
-				CommandExecutor executor = new CommandExecutor(configedMain, commandPMUninstall);
-				executor.execute();
-				Logging.debug(this, "end exec thread");
-			}
-		};
-
-		execThread.start();
+		CommandExecutor executor = new CommandExecutor(configedMain, commandPMUninstall);
+		executor.executeAsync();
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(uninstallPanel);
-		uninstallPanel.setLayout(layout);
-
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxLogLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(jLabelUninstall)
-						.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxLogLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		uninstallPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		uninstallPanel.add(jLabelUninstall);
+		uninstallPanel.add(jComboBoxOpsiProducts, "growx, gapbottom " + Globals.GAP_SIZE);
+		uninstallPanel.add(jLabelOn);
+		uninstallPanel.add(textFieldSelectedDepots, "split 2, growx, gapright " + Globals.GAP_SIZE);
+		uninstallPanel.add(jButtonDepotSelection, "wrap, gapbottom " + Globals.GAP_SIZE);
+		uninstallPanel.add(jLabelLoglevel);
+		uninstallPanel.add(jComboBoxLogLevel, "gapbottom " + Globals.GAP_SIZE);
+		uninstallPanel.add(checkBoxKeepFiles);
 	}
 }

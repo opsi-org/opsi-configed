@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -24,7 +24,6 @@ import de.uib.configed.share.logging.Logging;
 public class DefaultEditMapPanel extends JPanel {
 	protected MapTableModel mapTableModel;
 
-	protected boolean reloadable;
 	protected boolean showToolTip = true;
 
 	protected Actor actor;
@@ -75,12 +74,9 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected final AbstractPropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel(boolean reloadable) {
+	public DefaultEditMapPanel() {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		this.reloadable = reloadable;
-
-		Logging.debug(this, "DefaultEditMapPanel reloadable:", reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);

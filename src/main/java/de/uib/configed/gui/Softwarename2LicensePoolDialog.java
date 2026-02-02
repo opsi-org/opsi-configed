@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -44,6 +42,7 @@ import de.uib.configed.gui.type.licenses.AuditSoftwareXLicensePool;
 import de.uib.configed.gui.type.licenses.LicensepoolEntry;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class Softwarename2LicensePoolDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
@@ -117,8 +116,7 @@ public class Softwarename2LicensePoolDialog {
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(VALUE_NO_LICENSE_POOL)));
-		buttonRemoveAllAssignments
-				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		buttonRemoveAllAssignments.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
@@ -138,89 +136,28 @@ public class Softwarename2LicensePoolDialog {
 
 	private JPanel createPanelAction() {
 		JPanel panelAction = new JPanel();
-		GroupLayout panelActionLayout = new GroupLayout(panelAction);
-		panelAction.setLayout(panelActionLayout);
-		panelActionLayout
-				.setVerticalGroup(
-						panelActionLayout.createSequentialGroup()
-								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-										.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-										.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)));
+		panelAction.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, wrap 2", "", "[]0"));
 
-		panelActionLayout
-				.setHorizontalGroup(
-						panelActionLayout.createParallelGroup()
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(
-												labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE))
-								.addGroup(
-										panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-												.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE))
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)));
+		panelAction.add(buttonRemoveAllAssignments, "aligny center");
+		panelAction.add(labelRemoveAllAssignments, "aligny center");
+
+		panelAction.add(buttonSetAllAssignmentsToGloballySelectedPool, "aligny center");
+		panelAction.add(labelSetAllAssignmentsToGloballySelectedPool, "aligny center");
+
+		panelAction.add(buttonSetAllAssignmentsToPoolFromSelectedRow, "aligny center");
+		panelAction.add(labelSetAllAssignmentsToPoolFromSelectedRow, "aligny center");
+
 		return panelAction;
 	}
 
 	private JPanel createPanel(JPanel panelAction) {
 		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]",
+				"[200!]" + Globals.GAP_SIZE + "[200!]" + Globals.GAP_SIZE + "[pref]"));
+		panel.add(panelSWnames, "grow");
+		panel.add(panelSWxLicensepool, "grow");
+		panel.add(panelAction, "growx");
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(panelSWnames, 200, 200, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool, 200, 200, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelAction, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(panelSWnames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout
-						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)));
 		return panel;
 	}
 
@@ -302,7 +239,8 @@ public class Softwarename2LicensePoolDialog {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+						return (Map) persistenceController.getDataServices().software
+								.getInstalledSoftwareName2SWinfoPD();
 					}
 				})), 0, new int[] {}, panelSWnames, updateCollection, true) {
 			@Override
@@ -330,15 +268,11 @@ public class Softwarename2LicensePoolDialog {
 
 	public void setPreselectionForName2Pool(Softwarename2LicensepoolRestriction val) {
 		switch (val) {
-		case SHOW_ALL_NAMES:
-			modelSWnames.clearFilter();
-			break;
-		case SHOW_ONLY_NAMES_WITH_VARIANT_LICENSEPOOLS:
-			modelSWnames.setFilterCondition(showOnlyNamesWithVariantLicenses);
-			break;
-		case SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENSEPOOL:
-			modelSWnames.setFilterCondition(showOnlyNamesWithoutLicenses);
-			break;
+		case SHOW_ALL_NAMES -> modelSWnames.clearFilter();
+		case SHOW_ONLY_NAMES_WITH_VARIANT_LICENSEPOOLS -> modelSWnames
+				.setFilterCondition(showOnlyNamesWithVariantLicenses);
+		case SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENSEPOOL -> modelSWnames
+				.setFilterCondition(showOnlyNamesWithoutLicenses);
 		}
 
 		modelSWnames.reset();
@@ -352,8 +286,8 @@ public class Softwarename2LicensePoolDialog {
 
 		Set<String> range = new HashSet<>();
 
-		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+		for (String swID : persistenceController.getDataServices().software.getName2SWIdentsPD().get(swName)) {
+			String licpool = persistenceController.getDataServices().software.getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(VALUE_NO_LICENSE_POOL);
@@ -399,7 +333,7 @@ public class Softwarename2LicensePoolDialog {
 		Logging.info(this, "setGlobalPool  labelSetAllAssignmentsToGloballySelectedPool", labelText);
 		labelSetAllAssignmentsToGloballySelectedPool.setText(labelText);
 		buttonSetAllAssignmentsToGloballySelectedPool
-				.setEnabled(buttonActive && !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				.setEnabled(buttonActive && !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 	}
 
 	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {
@@ -407,10 +341,10 @@ public class Softwarename2LicensePoolDialog {
 
 		Map<String, Map<String, Object>> result = new TreeMap<>();
 
-		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
+		for (String swID : persistenceController.getDataServices().software.getName2SWIdentsPD().get(swName)) {
 			Map<String, Object> rowMap = new HashMap<>();
 			rowMap.put(AuditSoftwareXLicensePool.SW_ID, swID);
-			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+			String licpool = persistenceController.getDataServices().software.getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				rowMap.put(LicensepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENSE_POOL);
@@ -460,11 +394,11 @@ public class Softwarename2LicensePoolDialog {
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicensePool.SW_ID);
-						String licensePoolIDOld = persistenceController.getSoftwareDataService()
+						String licensePoolIDOld = persistenceController.getDataServices().software
 								.getFSoftware2LicensePoolPD(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicensepoolEntry.ID_SERVICE_KEY);
 
-						return persistenceController.getSoftwareDataService().editPool2AuditSoftware(swID,
+						return persistenceController.getDataServices().software.editPool2AuditSoftware(swID,
 								licensePoolIDOld, licensePoolIDNew);
 					}
 

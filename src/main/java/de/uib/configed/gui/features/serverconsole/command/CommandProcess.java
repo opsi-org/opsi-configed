@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -39,7 +39,7 @@ public class CommandProcess {
 	}
 
 	public boolean hasFailed() {
-		boolean failed = exitCode > 1 || errorEncounteredOnStart;
+		boolean failed = exitCode > 0 || errorEncounteredOnStart;
 		Logging.info(this, "Has command failed? ", failed);
 		return failed;
 	}

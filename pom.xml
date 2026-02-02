@@ -1,21 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>configed</groupId>
     <artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.3.17.1</version>
+    <version>4.3.19.3</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 
-        <javafx.version>21</javafx.version>
+        <javafx.version>25.0.2</javafx.version>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
     </properties>
@@ -33,7 +35,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.8.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -59,7 +61,21 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.42</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-site-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -71,7 +87,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.5.4</version>
             </plugin>
         </plugins>
 
@@ -90,12 +106,11 @@
 
 
     <dependencies>
-
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.19.0</version>
+            <version>2.21.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
@@ -103,14 +118,14 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.13.4</version>
+            <version>5.5.13.5</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.lz4/lz4-java -->
+        <!-- Source: https://mvnrepository.com/artifact/at.yawk.lz4/lz4-java -->
         <dependency>
-            <groupId>org.lz4</groupId>
+            <groupId>at.yawk.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-            <version>1.8.1</version>
+            <version>1.10.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
@@ -226,21 +241,21 @@
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-autolink</artifactId>
-            <version>0.24.0</version>
+            <version>0.27.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20250517</version>
+            <version>20251224</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.6</version>
+            <version>3.7</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
@@ -250,18 +265,18 @@
             <version>1.6.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <!-- Source: https://mvnrepository.com/artifact/tools.jackson.core/jackson-databind -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.19.0</version>
+            <version>3.0.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-extras -->
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
-            <version>3.6</version>
+            <version>3.7</version>
         </dependency>
 
 
@@ -269,44 +284,42 @@
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>msgpack-core</artifactId>
-            <version>0.9.9</version>
+            <version>0.9.11</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.msgpack/jackson-dataformat-msgpack -->
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>jackson-dataformat-msgpack</artifactId>
-            <version>0.9.9</version>
+            <version>0.9.11</version>
         </dependency>
 
-        <!--
-        https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-core/ -->
+        <!-- Source: https://mvnrepository.com/artifact/org.jetbrains.jediterm/jediterm-core -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-core</artifactId>
-            <version>3.54</version>
+            <version>3.61</version>
         </dependency>
 
-        <!--
-        https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-ui/ -->
+        <!-- Source: https://mvnrepository.com/artifact/org.jetbrains.jediterm/jediterm-ui -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-ui</artifactId>
-            <version>3.54</version>
+            <version>3.61</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
-            <version>2.1.21</version>
+            <version>2.3.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-artifact -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>3.9.10</version>
+            <version>3.9.12</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -342,35 +355,29 @@
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.9.0</version>
+            <version>1.11.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.lz4/lz4-pure-java -->
-        <dependency>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-pure-java</artifactId>
-            <version>1.8.0</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.27.1</version>
+            <version>1.28.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.14.0</version>
+            <version>1.14.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.tukaani/xz -->
         <dependency>
             <groupId>org.tukaani</groupId>
             <artifactId>xz</artifactId>
-            <version>1.10</version>
+            <version>1.11</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.github.lookfirst/sardine -->
@@ -384,7 +391,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.13.3</version>
+            <version>6.0.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -392,7 +399,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.38</version>
+            <version>1.18.42</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.miglayout/miglayout-swing -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.4.2</version>
         </dependency>
     </dependencies>
 </project>

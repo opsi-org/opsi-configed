@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -58,7 +58,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 
 		setConnectionIcon(depot);
 
-		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
+		if (!persistenceController.getDataServices().userRoles.hasDepotPermission(depot)) {
 			setEnabled(false);
 			setBackground(UIManager.getColor("List.background"));
 			setForeground(UIManager.getColor("List.foreground"));
@@ -73,7 +73,8 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	private void setConnectionIcon(String depot) {
 		if (configedMain.isHostConnected(depot)) {
 			setIcon(connectedIcon);
-		} else if (depot != null && depot.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
+		} else if (depot != null
+				&& depot.equals(persistenceController.getDataServices().hostInfoCollections.getConfigServer())) {
 			if (Messagebus.getInstance().isConnected()) {
 				setIcon(configServerConnectedIcon);
 			} else {

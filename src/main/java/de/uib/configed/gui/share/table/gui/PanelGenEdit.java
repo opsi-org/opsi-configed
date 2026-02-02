@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -12,8 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -38,6 +36,7 @@ import de.uib.configed.gui.share.table.updates.UpdateController;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelGenEdit extends JPanel implements TableModelListener, ListSelectionListener, CursorrowObserver {
 	private JScrollPane jScrollPane;
@@ -80,7 +79,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		this.editing = editing;
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		if (!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.hasServerFullPermissionPD()) {
 			this.editing = false;
 		}
@@ -140,26 +139,12 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		JPanel controlPanel = initControlPanel();
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
+		setLayout(new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]0"));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTitle,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jScrollPane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(jScrollPane, 20, 100, Short.MAX_VALUE)
-
-				.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		add(jLabelTitle, "gapbottom " + Globals.MIN_GAP_SIZE);
+		add(tableSearchPane, "hidemode 3, gapbottom " + Globals.MIN_GAP_SIZE);
+		add(jScrollPane, "grow, push");
+		add(controlPanel, "hidemode 3, gaptop " + Globals.MIN_GAP_SIZE);
 	}
 
 	private JPanel initControlPanel() {
@@ -178,21 +163,10 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		buttonCancel.setToolTipText(Configed.getResourceValue("buttonClose"));
 		buttonCancel.addActionListener(action -> cancel());
 
-		GroupLayout layout = new GroupLayout(controlPanel);
+		controlPanel.setLayout(new MigLayout("insets 0", "[][" + Globals.GAP_SIZE + "][]", "[]0"));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		controlPanel.add(buttonCancel);
+		controlPanel.add(buttonCommit);
 
 		setDataChanged(false);
 
@@ -405,15 +379,15 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		if (genEditTable.getGenTableModel().isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
 			for (int i = 0; i < genEditTable.getRowCount(); i++) {
-				result.add(genEditTable
-						.getValueAt(genEditTable.convertRowIndexToModel(i), genEditTable.getGenTableModel().getKeyCol())
-						.toString());
+				result.add(genEditTable.getValueAt(i, genEditTable.getGenTableModel().getKeyCol()).toString());
 			}
 		} else {
-			for (int i = 0; i < genEditTable.getSelectedRowCount(); i++) {
-				result.add(
-						genEditTable.getValueAt(genEditTable.convertRowIndexToModel(genEditTable.getSelectedRows()[i]),
-								genEditTable.getGenTableModel().getKeyCol()).toString());
+			int[] selectedRows = genEditTable.getSelectedRows();
+			for (int selectedRow : selectedRows) {
+				if (selectedRow >= 0 && selectedRow < genEditTable.getRowCount()) {
+					result.add(genEditTable.getValueAt(selectedRow, genEditTable.getGenTableModel().getKeyCol())
+							.toString());
+				}
 			}
 		}
 

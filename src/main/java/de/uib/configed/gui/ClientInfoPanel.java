@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -13,7 +13,6 @@ import java.awt.datatransfer.StringSelection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -39,6 +38,7 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientDescription;
@@ -99,25 +99,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextFieldClientID = createUneditableTextField();
 		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
-		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
-		labelClientDescription.setFont(labelClientDescription.getFont().deriveFont(Font.BOLD));
+		labelClientDescription = Utils.createBoldLabel("description");
 
-		labelClientInventoryNumber = new JLabel(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
-		labelClientInventoryNumber.setFont(labelClientInventoryNumber.getFont().deriveFont(Font.BOLD));
+		labelClientInventoryNumber = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber");
 
-		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
-		labelClientNotes.setFont(labelClientNotes.getFont().deriveFont(Font.BOLD));
+		labelClientNotes = Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes");
 
-		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
-		labelClientSystemUUID.setFont(labelClientSystemUUID.getFont().deriveFont(Font.BOLD));
+		labelClientSystemUUID = Utils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID");
 
-		labelClientMacAddress = new JLabel(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-		labelClientMacAddress.setFont(labelClientMacAddress.getFont().deriveFont(Font.BOLD));
+		labelClientMacAddress = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress");
 
-		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
-		labelClientIPAddress.setFont(labelClientIPAddress.getFont().deriveFont(Font.BOLD));
+		labelClientIPAddress = Utils.createBoldLabel("ipAddress");
 
 		jTextFieldClientOS = createUneditableTextField();
 		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
@@ -136,11 +128,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
 
-		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
-		labelOneTimePassword.setFont(labelOneTimePassword.getFont().deriveFont(Font.BOLD));
+		labelOneTimePassword = Utils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword");
 
-		labelOpsiHostKey = new JLabel("opsi-host-key");
-		labelOpsiHostKey.setFont(labelOpsiHostKey.getFont().deriveFont(Font.BOLD));
+		labelOpsiHostKey = Utils.createBoldLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
@@ -192,19 +182,19 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive.setAllowIndeterminate(false);
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
-		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
+		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getDataServices().host
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 
 		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
 		openHealthCheckSettingsDialogButton
 				.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
-		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
+		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getDataServices().host
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton
 				.addActionListener(e -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain,
 						configedMain.getSelectedClients(), checkBoxHealthCheckActive.getState()));
 		openHealthCheckSettingsDialogButton
-				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		checkBoxInstallByShutdown = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.installByShutdown"));
@@ -237,168 +227,53 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	private void setupLayout() {
-		GroupLayout layoutClientPane = new GroupLayout(this);
-		setLayout(layoutClientPane);
-		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
-				/////// HOST
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(labelClientOSIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(jTextFieldClientID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+		setLayout(new MigLayout("insets 0, wrap 1", "[grow, fill, 0:0]", "[]0"));
 
-				/////// Operating System (long label)
-				.addComponent(jTextFieldClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		final int MIN = Globals.MIN_GAP_SIZE;
+		final int GAP = Globals.GAP_SIZE;
 
-				/////// DEVICE INFO (icon, vendor, model)
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(jTextFieldDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(25, 25, 25)
-						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+		add(labelClientOSIcon, "split 2, gapright " + MIN);
+		add(jTextFieldClientID, "growx, gapbottom " + MIN);
 
-				/////// DESCRIPTION
-				.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(jTextFieldClientOS, "growx, gapbottom " + MIN);
 
-				/////// INVENTORY NUMBER
-				.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(labelDeviceTypeIcon, "split 2, gapright " + MIN);
+		add(jTextFieldDeviceType, "growx");
 
-				/////// SYSTEM UUID
-				.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(systemUUIDField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(scrollpaneVendorModel, "growx, hmin 50, gapbottom " + MIN);
 
-				/////// MAC ADDRESS
-				.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(macAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(labelClientDescription, "gaptop " + GAP);
+		add(jTextFieldDescription, "growx");
 
-				/////// IP ADDRESS
-				.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(ipAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(labelClientInventoryNumber, "gaptop " + GAP);
+		add(jTextFieldInventoryNumber, "growx");
 
-				/////// INSTALL BY SHUTDOWN
-				.addComponent(checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		add(labelClientSystemUUID, "gaptop " + GAP);
+		add(systemUUIDField, "growx");
 
-				/////// UEFI BOOT
-				.addComponent(checkBoxUEFIBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		add(labelClientMacAddress, "gaptop " + GAP);
+		add(macAddressField, "growx");
 
-				/////// WAN CONFIG
-				.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		add(labelClientIPAddress, "gaptop " + GAP);
+		add(ipAddressField, "growx");
 
-				/////// Health-Check active
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addComponent(checkBoxHealthCheckActive, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(openHealthCheckSettingsDialogButton,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		add(checkBoxInstallByShutdown, "gaptop " + GAP);
 
-				/////// ONE TIME PASSWORD
-				.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(checkBoxUEFIBoot);
 
-				////// opsiHostKey
-				.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(hostKeyField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		add(checkBoxWANConfig);
 
-				/////// NOTES
-				.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		add(checkBoxHealthCheckActive, "split 2, gapright " + GAP);
+		add(openHealthCheckSettingsDialogButton);
 
-		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
-				/////// HOST
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutClientPane.createParallelGroup()
-						.addComponent(labelClientOSIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT)
-						.addComponent(jTextFieldClientID, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT))
-				/////// Operating System (long label)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jTextFieldClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
-				/////// DEVICE INFO (icon, vendor, model)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutClientPane.createParallelGroup()
-						.addComponent(labelDeviceTypeIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT)
-						.addComponent(jTextFieldDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-								Globals.DEFAULT_JLABEL_HEIGHT))
-				.addComponent(scrollpaneVendorModel, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE,
-						Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE)
+		add(labelOneTimePassword, "gaptop " + GAP);
+		add(jTextFieldOneTimePassword, "growx");
 
-				/////// DESCRIPTION
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		add(labelOpsiHostKey, "gaptop " + GAP);
+		add(hostKeyField, "growx");
 
-				/////// INVENTORY NUMBER
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// SYSTEM UUID
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// MAC ADDRESS
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// IP ADDRESS
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientIPAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				////// INSTALL BY SHUTDOWN
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(checkBoxInstallByShutdown, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// UEFI BOOT & WAN Config
-				.addComponent(checkBoxUEFIBoot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				.addComponent(checkBoxWANConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// Health-Check active
-				.addGroup(layoutClientPane.createParallelGroup()
-						.addComponent(checkBoxHealthCheckActive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(openHealthCheckSettingsDialogButton, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-
-				/////// ONE TIME PASSWORD
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				////// opsiHostKey
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelOpsiHostKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(hostKeyField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-
-				/////// NOTES
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		add(labelClientNotes, "gaptop " + GAP);
+		add(scrollpaneNotes, "grow, pushy");
 
 		setMinimumSize(new Dimension());
 	}
@@ -535,7 +410,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	public void updateClientCheckboxText() {
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+		if (persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN)) {
 			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -611,8 +486,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly();
+		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+				.isGlobalReadOnly();
 
 		jTextFieldDescription.setEnabled(singleClient);
 		jTextFieldDescription.setEditable(writingAllowed);
@@ -630,7 +505,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		ipAddressField.setEditable(writingAllowed);
 
 		checkBoxWANConfig.setEnabled(writingAllowed && !clientSelectionEmpty
-				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
+				&& persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN));
 		checkBoxInstallByShutdown.setEnabled(writingAllowed && !clientSelectionEmpty);
 
 		hostKeyField.setEnabled(singleClient);

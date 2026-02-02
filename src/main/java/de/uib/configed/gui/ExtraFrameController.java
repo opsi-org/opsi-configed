@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -60,7 +60,7 @@ public final class ExtraFrameController {
 		initSavedSearchesDialog(configedMain);
 
 		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(configedMain, savedSearchesDialog);
+			clientSelectionDialog = new ClientSelectionDialog(savedSearchesDialog);
 		}
 
 		clientSelectionDialog.show(searchName);
@@ -138,8 +138,8 @@ public final class ExtraFrameController {
 		}
 
 		if (remoteControls == null
-				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
-			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
+				|| !remoteControls.equals(persistenceController.getDataServices().config.getRemoteControlsPD())) {
+			remoteControls = persistenceController.getDataServices().config.getRemoteControlsPD();
 
 			Logging.debug("remoteControls ", remoteControls);
 

@@ -1,12 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,9 +14,10 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.configed.share.Utils;
+import net.miginfocom.swing.MigLayout;
 
 public class PMInstallServerPanel extends PMInstallPanel {
-	private JLabel jLabelServerDir = new JLabel();
+	private JLabel jLabelServerDir;
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
 	private CompletionComboButton autocompletion;
@@ -43,8 +43,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelServerDir.setText(Configed.getResourceValue("PMInstallServerPanel.jLabelOtherPath"));
-		jLabelServerDir.setFont(jLabelServerDir.getFont().deriveFont(java.awt.Font.BOLD));
+		jLabelServerDir = Utils.createBoldLabel("PMInstallServerPanel.jLabelOtherPath");
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.setToolTipText(
@@ -59,26 +58,10 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-
-		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		setLayout(new MigLayout("insets 0, fillx, gap " + Globals.GAP_SIZE, "[grow, fill][]", "[]0"));
+		add(jLabelServerDir, "wrap");
+		add(jComboBoxAutoCompletion, "growx");
+		add(jButtonAutoCompletion);
 	}
 
 	public SingleCommandOpsiPackageManagerInstall getCommand() {

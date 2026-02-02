@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -43,7 +43,7 @@ public final class ProductData {
 
 	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
 		ProductData.persistenceController = persistenceController;
-		depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+		depots = new ArrayList<>(persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 	}
 
 	public static List<String> getProducts() {
@@ -75,7 +75,7 @@ public final class ProductData {
 			return;
 		}
 
-		List<Map<String, Object>> allProductsInDepot = persistenceController.getProductDataService().getAllProducts();
+		List<Map<String, Object>> allProductsInDepot = persistenceController.getDataServices().product.getAllProducts();
 
 		for (String depot : depots) {
 			Helper.fillMapOfListsForDepots(products, allProductsInDepot.stream()
@@ -134,10 +134,12 @@ public final class ProductData {
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
-			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).toList();
+			List<String> clientsMap = persistenceController.getDataServices().hostInfoCollections
+					.getMapOfAllPCInfoMaps().values().stream()
+					.filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
+					.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).toList();
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
-					.getProductDataService().getMapOfProductStatesAndActions(clientsMap);
+					.getDataServices().product.getMapOfProductStatesAndActions(clientsMap);
 
 			if (!productsStatesAndActions.isEmpty()) {
 				for (Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
@@ -196,8 +198,9 @@ public final class ProductData {
 
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
-		List<String> hostnames = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).toList();
+		List<String> hostnames = persistenceController.getDataServices().hostInfoCollections.getMapOfAllPCInfoMaps()
+				.values().stream().filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
+				.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).toList();
 		for (String productId : tmpUnusedProductsList.get(depot)) {
 			addUnusedProductToList(depot, productId, hostnames, unusedProductsList);
 		}
@@ -263,7 +266,7 @@ public final class ProductData {
 			return;
 		}
 
-		Map<String, Integer> installedOSs = persistenceController.getModuleDataService().getInstalledOsOverview();
+		Map<String, Integer> installedOSs = persistenceController.getDataServices().module.getInstalledOsOverview();
 
 		if (installedOSs.isEmpty()) {
 			return;

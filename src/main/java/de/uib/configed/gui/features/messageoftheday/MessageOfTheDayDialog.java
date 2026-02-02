@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -30,6 +27,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Represents the overall dialog for the "message of the day" (motd)
@@ -50,7 +48,7 @@ public class MessageOfTheDayDialog {
 	private JScrollPane scrollpane = new JScrollPane();
 
 	public MessageOfTheDayDialog() {
-		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
+		List<Object> forbiddenItemsMOTD = persistenceController.getDataServices().userRoles.getForbiddenMOTD();
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
 		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 		if (forbiddenDevice && forbiddenUser) {
@@ -59,7 +57,7 @@ public class MessageOfTheDayDialog {
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
+		motdData = persistenceController.getDataServices().config.getMessageOfTheDayConfigs();
 		define();
 		init();
 
@@ -103,48 +101,29 @@ public class MessageOfTheDayDialog {
 		}
 
 		JPanel panel = new JPanel();
-		GroupLayout gpl = new GroupLayout(panel);
-		panel.setLayout(gpl);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
 		resetButton.addActionListener(e -> resetData());
 		JLabel frameTitleLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.title"));
 
-		SequentialGroup seqGroup = gpl.createSequentialGroup();
-		seqGroup.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(frameTitleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(resetButton,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		ParallelGroup vertGroup = gpl.createParallelGroup();
-		vertGroup.addGroup(gpl.createSequentialGroup()
-				.addComponent(frameTitleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addGroup(gpl.createSequentialGroup().addComponent(resetButton,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		panel.add(frameTitleLabel, "split 2, gapright " + Globals.GAP_SIZE);
+		panel.add(resetButton, "wrap");
 
 		if (!forbiddenDevice) {
-			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
-			vertGroup.addComponent(pMsgInfoGeneral, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					Short.MAX_VALUE);
+			panel.add(pMsgInfoGeneral, "grow, pushy, gapy " + Globals.GAP_SIZE);
 		}
+
 		if (!forbiddenUser) {
-			vertGroup.addComponent(pMsgInfoUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					Short.MAX_VALUE);
-			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
+			panel.add(pMsgInfoUser, "grow, pushy, gapy " + Globals.GAP_SIZE);
 		}
-		gpl.setVerticalGroup(seqGroup);
-		gpl.setHorizontalGroup(vertGroup);
+
 		scrollpane.getViewport().add(panel);
 		scrollpane.setBorder(null);
 	}
 
 	private void resetData() {
 		Logging.debug("FMessageOfTheDay resetData(both)");
-		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
+		motdData = persistenceController.getDataServices().config.getMessageOfTheDayConfigs();
 		if (!forbiddenDevice) {
 			pMsgInfoGeneral.setDataMap(motdData);
 			pMsgInfoGeneral.resetData();
@@ -172,7 +151,7 @@ public class MessageOfTheDayDialog {
 			Logging.error("FMessageOfTheDay saveData no data", data);
 			return;
 		}
-		persistenceController.getConfigDataService().setMessageOfTheDayConfigs(data);
+		persistenceController.getDataServices().config.setMessageOfTheDayConfigs(data);
 		Logging.info("FMessageOfTheDay saveData done: ", data);
 		resetData();
 	}

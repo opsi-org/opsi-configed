@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -60,10 +60,11 @@ public class SavedSearchQuery {
 	}
 
 	public Collection<String> runSearch(boolean printing) {
-		Map<String, Map<String, Object>> depots = persistenceController.getHostInfoCollections().getAllDepots();
+		Map<String, Map<String, Object>> depots = persistenceController.getDataServices().hostInfoCollections
+				.getAllDepots();
 
 		// Load data that we need to find clients for selection
-		persistenceController.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
+		persistenceController.getDataServices().hostInfoCollections.getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager();
 		Set<String> searches = manager.getSavedSearchesNames();
@@ -92,24 +93,24 @@ public class SavedSearchQuery {
 			Main.endApp(4);
 		}
 
-		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+		Map<String, Map<String, String>> hostGroups = persistenceController.getDataServices().group.getHostGroupsPD();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");
 			Main.endApp(5);
 		}
 
-		if (!persistenceController.getGroupDataService().deleteGroup(groupName)) {
+		if (!persistenceController.getDataServices().group.deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName ", groupName);
 			Main.endApp(6);
 		}
 
-		if (!persistenceController.getGroupDataService().addGroup(hostGroups.get(groupName), true)) {
+		if (!persistenceController.getDataServices().group.addGroup(hostGroups.get(groupName), true)) {
 			Logging.error("add group error, group ", hostGroups.get(groupName));
 			Main.endApp(7);
 		}
 
-		if (!persistenceController.getGroupDataService().addHosts2Group(hosts, groupName)) {
+		if (!persistenceController.getDataServices().group.addHosts2Group(hosts, groupName)) {
 			Logging.error("addHosts2Group error, group ", groupName);
 			Main.endApp(8);
 		}

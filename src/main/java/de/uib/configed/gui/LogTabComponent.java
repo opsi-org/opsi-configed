@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -29,6 +29,7 @@ import de.uib.configed.share.logging.Logging;
 
 public class LogTabComponent extends LogPaneComponent {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
+	private static final String LOGFILE_EXTENSION = ".log";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
 	private JFileChooser chooser;
@@ -64,7 +65,7 @@ public class LogTabComponent extends LogPaneComponent {
 	public void download() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), logFileType);
-		String filePath = retrieveFilePath(fileName + ".log");
+		String filePath = retrieveFilePath(fileName + LOGFILE_EXTENSION);
 		if (filePath != null && !filePath.isEmpty()) {
 			saveToFile(filePath, getLines());
 		}
@@ -145,13 +146,13 @@ public class LogTabComponent extends LogPaneComponent {
 		Map<String, String> logFiles = new HashMap<>();
 		String[] idents = Utils.getLogTypes();
 		for (String ident : idents) {
-			Map<String, String> logFile = PersistenceControllerFactory.getPersistenceController().getLogDataService()
+			String logfile = PersistenceControllerFactory.getPersistenceController().getDataServices().log
 					.getLogfile(configedMain.getSelectedClients().get(0), ident);
-			if (logFile.get(ident) != null && logFile.get(ident).split("\n").length > 1) {
-				logFiles.put(ident, logFile.get(ident));
+			if (logfile.split("\n").length > 1) {
+				logFiles.put(ident, logfile);
 			}
 
-			Logging.info(this, "saveAllAsZip ", ident, " ", logFile.get(ident).split("\n").length);
+			Logging.info(this, "saveAllAsZip ", ident, " ", logfile.split("\n").length);
 		}
 		return logFiles;
 	}
@@ -169,12 +170,11 @@ public class LogTabComponent extends LogPaneComponent {
 	private void saveAllToZipFile(String filePath, Map<String, String> logFiles) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			String[] idents = Utils.getLogTypes();
-			for (String ident : idents) {
+			for (String ident : Utils.getLogTypes()) {
 				if (logFiles.get(ident) != null && logFiles.get(ident).split("\n").length > 1) {
 					String fileName = retrieveFileName(configedMain.getSelectedClients().get(0).replace(".", "_"),
 							ident);
-					ZipEntry entry = new ZipEntry(fileName + ".log");
+					ZipEntry entry = new ZipEntry(fileName + LOGFILE_EXTENSION);
 					out.putNextEntry(entry);
 					writeToOutputStream(logFiles.get(ident).split("\n"), out);
 				}
@@ -187,7 +187,7 @@ public class LogTabComponent extends LogPaneComponent {
 	private static void saveToZipFile(String filePath, String fileName, String[] lines) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			ZipEntry entry = new ZipEntry(fileName);
+			ZipEntry entry = new ZipEntry(fileName + LOGFILE_EXTENSION);
 			out.putNextEntry(entry);
 			writeToOutputStream(lines, out);
 		} catch (IOException ex) {

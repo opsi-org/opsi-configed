@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -50,6 +50,6 @@ public class HostUpdate implements UpdateCommand {
 		// Without the type, the method will not work on the server
 		newdata.put("type", type);
 
-		persistenceController.getHostDataService().setHostValues(newdata);
+		persistenceController.getDataServices().host.setHostValues(newdata);
 	}
 }

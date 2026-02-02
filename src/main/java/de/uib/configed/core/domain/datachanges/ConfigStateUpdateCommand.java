@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -26,6 +26,6 @@ public class ConfigStateUpdateCommand implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		persistenceController.getConfigDataService().setConfigStates(objectId, new ConfigName2ConfigValue(newdata));
+		persistenceController.getDataServices().config.setConfigStates(objectId, new ConfigName2ConfigValue(newdata));
 	}
 }

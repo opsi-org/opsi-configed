@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -36,8 +36,6 @@ public class AddClientModel {
 	@Builder.Default
 	String ipAddress = "";
 	@Builder.Default
-	String groups = "";
-	@Builder.Default
 	String selectedDepot = "";
 	@Builder.Default
 	String selectedNetbootProduct = "";
@@ -48,6 +46,8 @@ public class AddClientModel {
 	boolean shutdownInstallSelected;
 
 	// Lists
+	@Builder.Default
+	List<String> groups = new ArrayList<>();
 	@Builder.Default
 	List<String> domains = new ArrayList<>();
 	@Builder.Default

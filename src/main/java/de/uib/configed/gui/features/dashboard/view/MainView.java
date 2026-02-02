@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -227,7 +227,6 @@ public class MainView implements View {
 		}
 	}
 
-	@SuppressWarnings("java:S4968")
 	private void loadData() {
 		depotsNumberLabel.setText(String.valueOf(DepotData.getDepots().size()));
 		clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));

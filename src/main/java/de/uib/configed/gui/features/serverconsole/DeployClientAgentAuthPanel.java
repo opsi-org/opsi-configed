@@ -1,14 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
-
-import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -19,9 +16,10 @@ import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
-import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent;
+import de.uib.configed.share.Utils;
+import net.miginfocom.swing.MigLayout;
 
 public class DeployClientAgentAuthPanel extends JPanel {
 	private JLabel labelUser;
@@ -38,8 +36,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void init() {
-		labelUser = new JLabel(Configed.getResourceValue("username"));
-		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+		labelUser = Utils.createBoldLabel("username");
 
 		textFieldUser = new FlatTextField();
 		textFieldUser.getDocument().addDocumentListener(new DocumentListener() {
@@ -59,8 +56,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		labelPassword = new JLabel(Configed.getResourceValue("password"));
-		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		labelPassword = Utils.createBoldLabel("password");
 		passwordField = new FlatPasswordField();
 
 		passwordField.getDocument().addDocumentListener(new DocumentListener() {
@@ -92,26 +88,10 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void initLayout() {
-		GroupLayout winAuthPanelLayout = new GroupLayout(this);
-		setLayout(winAuthPanelLayout);
-
-		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(textFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup()
-				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(textFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "[grow, fill]", "[]0"));
+		add(labelUser);
+		add(textFieldUser, "growx, gapbottom " + Globals.GAP_SIZE);
+		add(labelPassword);
+		add(passwordField, "growx, gapbottom " + Globals.GAP_SIZE);
 	}
 }

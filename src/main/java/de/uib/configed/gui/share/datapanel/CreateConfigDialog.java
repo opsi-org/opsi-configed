@@ -1,12 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.share.datapanel;
 
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -30,7 +28,9 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class CreateConfigDialog {
 	private EditMapPanelX editMapPanelX;
@@ -83,8 +83,7 @@ public class CreateConfigDialog {
 	}
 
 	private void initBooleanDetailsPanel() {
-		JLabel defaultLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValue"));
-		defaultLabel.setFont(defaultLabel.getFont().deriveFont(Font.BOLD));
+		JLabel defaultLabel = Utils.createBoldLabel("CreateConfigDialog.defaultValue");
 
 		isBooleanTrue = new JRadioButton("true", true);
 		JRadioButton isBooleanFalse = new JRadioButton("false", false);
@@ -94,20 +93,17 @@ public class CreateConfigDialog {
 		booleanGroup.add(isBooleanFalse);
 
 		booleanDetailsPanel = new JPanel();
-		GroupLayout layout = new GroupLayout(booleanDetailsPanel);
-		booleanDetailsPanel.setLayout(layout);
+		booleanDetailsPanel.setLayout(new MigLayout("insets 0, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(defaultLabel).addComponent(isBooleanTrue)
-				.addComponent(isBooleanFalse));
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(defaultLabel).addComponent(isBooleanTrue)
-				.addComponent(isBooleanFalse));
+		booleanDetailsPanel.add(defaultLabel);
+		booleanDetailsPanel.add(isBooleanTrue);
+		booleanDetailsPanel.add(isBooleanFalse);
 
 		booleanDetailsPanel.setVisible(false);
 	}
 
 	private void initUnicodeDetailsPanel() {
-		JLabel propertiesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.properties"));
-		propertiesLabel.setFont(propertiesLabel.getFont().deriveFont(Font.BOLD));
+		JLabel propertiesLabel = Utils.createBoldLabel("CreateConfigDialog.properties");
 		isEditable = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.editable"), true);
 		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
 
@@ -124,25 +120,21 @@ public class CreateConfigDialog {
 
 		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
 
-		JLabel defaultValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValues"));
-		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
-
-		JLabel possibleValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.possibleValues"));
-		possibleValuesLabel.setFont(possibleValuesLabel.getFont().deriveFont(Font.BOLD));
+		JLabel defaultValuesLabel = Utils.createBoldLabel("CreateConfigDialog.defaultValues");
+		JLabel possibleValuesLabel = Utils.createBoldLabel("CreateConfigDialog.possibleValues");
 
 		unicodeDetailsPanel = new JPanel();
-		GroupLayout layout = new GroupLayout(unicodeDetailsPanel);
-		unicodeDetailsPanel.setLayout(layout);
+		unicodeDetailsPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(propertiesLabel).addComponent(isEditable)
-				.addComponent(isMultiValue).addGap(Globals.GAP_SIZE).addComponent(defaultValuesLabel)
-				.addComponent(defaultValuesTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(possibleValuesLabel).addComponent(possibleValuesTextField,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(propertiesLabel).addComponent(isEditable)
-				.addComponent(isMultiValue).addComponent(defaultValuesLabel).addComponent(defaultValuesTextField)
-				.addComponent(possibleValuesLabel).addComponent(possibleValuesTextField));
+		unicodeDetailsPanel.add(propertiesLabel);
+		unicodeDetailsPanel.add(isEditable);
+		unicodeDetailsPanel.add(isMultiValue, "gapbottom " + Globals.GAP_SIZE);
+
+		unicodeDetailsPanel.add(defaultValuesLabel);
+		unicodeDetailsPanel.add(defaultValuesTextField, "grow, gapbottom " + Globals.GAP_SIZE);
+
+		unicodeDetailsPanel.add(possibleValuesLabel);
+		unicodeDetailsPanel.add(possibleValuesTextField, "grow");
 	}
 
 	private void updateSelectionModeForDefaultValuesSelectionDialog() {
@@ -189,8 +181,7 @@ public class CreateConfigDialog {
 	}
 
 	private void initGeneralPanel() {
-		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
-		labelConfigEntry.setFont(labelConfigEntry.getFont().deriveFont(Font.BOLD));
+		JLabel labelConfigEntry = Utils.createBoldLabel("EditMapPanelX.configName");
 
 		int selectionIndex = editMapPanelX.table.getSelectionModel().getMinSelectionIndex();
 		String value = selectionIndex >= 0 ? (String) editMapPanelX.table.getValueAt(selectionIndex, 0) : null;
@@ -198,13 +189,11 @@ public class CreateConfigDialog {
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 
-		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+		JLabel labelDescription = Utils.createBoldLabel("description");
 
 		textFieldDescription = new JTextField();
 
-		JLabel labelDataType = new JLabel(Configed.getResourceValue("CreateConfigDialog.dataType"));
-		labelDataType.setFont(labelDataType.getFont().deriveFont(Font.BOLD));
+		JLabel labelDataType = Utils.createBoldLabel("CreateConfigDialog.dataType");
 
 		booleanButton = new JRadioButton("boolean", false);
 		unicodeButton = new JRadioButton("unicode", true);
@@ -220,33 +209,27 @@ public class CreateConfigDialog {
 		booleanGroup.add(unicodeButton);
 
 		generalPanel = new JPanel();
-		GroupLayout layout = new GroupLayout(generalPanel);
-		generalPanel.setLayout(layout);
+		generalPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(labelConfigEntry)
-				.addComponent(textFieldConfigEntry, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(labelDescription)
-				.addComponent(textFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(labelDataType).addComponent(booleanButton)
-				.addComponent(unicodeButton));
+		generalPanel.add(labelConfigEntry);
+		generalPanel.add(textFieldConfigEntry, "grow, gapbottom " + Globals.GAP_SIZE);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(labelConfigEntry)
-				.addComponent(textFieldConfigEntry).addComponent(labelDescription).addComponent(textFieldDescription)
-				.addComponent(labelDataType).addComponent(booleanButton).addComponent(unicodeButton));
+		generalPanel.add(labelDescription);
+		generalPanel.add(textFieldDescription, "grow, gapbottom " + Globals.GAP_SIZE);
+
+		generalPanel.add(labelDataType);
+		generalPanel.add(booleanButton);
+		generalPanel.add(unicodeButton);
 	}
 
 	private void initPanel() {
 		panel = new JPanel();
 
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(generalPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel).addGap(0, 0, Short.MAX_VALUE));
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(generalPanel)
-				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
+		panel.add(generalPanel, "growx, gapbottom " + Globals.GAP_SIZE);
+		panel.add(unicodeDetailsPanel, "hidemode 3, growx");
+		panel.add(booleanDetailsPanel, "hidemode 3, growx");
 	}
 
 	private void updateDetailsTab() {

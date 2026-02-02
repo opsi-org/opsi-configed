@@ -1,17 +1,15 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -32,31 +30,22 @@ import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent.FinalActionType;
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class DeployClientAgentParameterDialog {
 	private enum OS {
-		WINDOWS("Windows"), LINUX("Linux"), MACOS("MacOS");
-
-		private String displayName;
-
-		OS(String displayName) {
-			this.displayName = displayName;
-		}
-
-		@Override
-		public String toString() {
-			return displayName;
-		}
+		WINDOWS, LINUX, MACOS
 	}
 
 	private JPanel inputPanel = new JPanel();
 
-	private JLabel jLabelClient = new JLabel();
-	private JLabel jLabelUserData = new JLabel();
-	private JLabel jLabelLoglevel = new JLabel();
-	private JLabel jLabelFinalize = new JLabel();
-	private JLabel jLabelOperatingSystem = new JLabel();
+	private JLabel jLabelClient;
+	private JLabel jLabelUserData;
+	private JLabel jLabelLoglevel;
+	private JLabel jLabelFinalize;
+	private JLabel jLabelOperatingSystem;
 
 	private JButton jButtonCopySelectedClients;
 
@@ -67,7 +56,7 @@ public class DeployClientAgentParameterDialog {
 
 	private JCheckBox jCheckBoxIgnorePing;
 	private JComboBox<Integer> jComboBoxLoglevel;
-	private JComboBox<String> jComboBoxOperatingSystem;
+	private JComboBox<OS> jComboBoxOperatingSystem;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent = new SingleCommandDeployClientAgent();
 	private ConfigedMain configedMain;
@@ -80,8 +69,7 @@ public class DeployClientAgentParameterDialog {
 			.getPersistenceController();
 
 	public DeployClientAgentParameterDialog(ConfigedMain configedMain) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -113,8 +101,7 @@ public class DeployClientAgentParameterDialog {
 				!commandDeployClientAgent.isPingRequired());
 		jCheckBoxIgnorePing.addItemListener(itemEvent -> commandDeployClientAgent.togglePingIsRequired());
 
-		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jLabelLoglevel = Utils.createBoldLabel("loglevel");
 		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
 			jComboBoxLoglevel.addItem(i);
@@ -123,8 +110,7 @@ public class DeployClientAgentParameterDialog {
 		jComboBoxLoglevel.setSelectedItem(4);
 		jComboBoxLoglevel.addItemListener(itemEvent -> updateLoglevel());
 
-		jLabelClient.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.jLabelClient"));
-		jLabelClient.setFont(jLabelClient.getFont().deriveFont(Font.BOLD));
+		jLabelClient = Utils.createBoldLabel("DeployClientAgentParameterDialog.jLabelClient");
 		jTextFieldClient = new JTextField();
 		jTextFieldClient
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.tooltip.tf_client"));
@@ -145,12 +131,9 @@ public class DeployClientAgentParameterDialog {
 			}
 		});
 
-		jLabelUserData
-				.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.targetclient_authentication"));
-		jLabelUserData.setFont(jLabelUserData.getFont().deriveFont(Font.BOLD));
+		jLabelUserData = Utils.createBoldLabel("DeployClientAgentParameterDialog.targetclient_authentication");
 
-		jLabelFinalize.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize"));
-		jLabelFinalize.setFont(jLabelFinalize.getFont().deriveFont(Font.BOLD));
+		jLabelFinalize = Utils.createBoldLabel("DeployClientAgentParameterDialog.lbl_finalize");
 
 		panelFinalAction = new PanelStateSwitch<>(null, FinalActionType.START_OCD, FinalActionType.values(),
 				new String[] { Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.START_OCD"),
@@ -161,12 +144,9 @@ public class DeployClientAgentParameterDialog {
 					finalAction = (FinalActionType) val;
 				}));
 
-		jLabelOperatingSystem
-				.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.opsiClientAgent.label"));
-		jLabelOperatingSystem.setFont(jLabelOperatingSystem.getFont().deriveFont(Font.BOLD));
+		jLabelOperatingSystem = Utils.createBoldLabel("DeployClientAgentParameterDialog.opsiClientAgent.label");
 
-		jComboBoxOperatingSystem = new JComboBox<>(
-				new String[] { OS.WINDOWS.toString(), OS.LINUX.toString(), OS.MACOS.toString() });
+		jComboBoxOperatingSystem = new JComboBox<>(OS.values());
 		jComboBoxOperatingSystem
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
 
@@ -198,7 +178,6 @@ public class DeployClientAgentParameterDialog {
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"),
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"),
 					JOptionPane.ERROR_MESSAGE);
-
 			return;
 		}
 		Set<String> clients = Set.of(jTextFieldClient.getText().trim().split(" "));
@@ -212,114 +191,62 @@ public class DeployClientAgentParameterDialog {
 			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message2"));
 
 			int answer = JOptionPane.showOptionDialog(dialog, message.toString(),
-					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), 0, 0, null,
-					new String[] { Configed.getResourceValue("buttonCancel"),
-							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") },
+					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+					new String[] {
+							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed"),
+							Configed.getResourceValue("buttonCancel") },
 					null);
 
-			if (answer == 1) {
+			if (answer == 0) {
 				clients.removeAll(nonExistingHostNames);
 			} else {
 				return;
 			}
 		}
-		String selectedOS = jComboBoxOperatingSystem.getItemAt(jComboBoxOperatingSystem.getSelectedIndex());
-		String opsiClientAgentDir = "";
-		if (OS.LINUX.toString().equals(selectedOS)) {
-			opsiClientAgentDir = "opsi-linux-client-agent";
-		} else if (OS.MACOS.toString().equals(selectedOS)) {
-			opsiClientAgentDir = "opsi-mac-client-agent";
-		} else {
-			opsiClientAgentDir = "opsi-client-agent";
-		}
+		String opsiClientAgentDir = switch (jComboBoxOperatingSystem
+				.getItemAt(jComboBoxOperatingSystem.getSelectedIndex())) {
+		case LINUX -> "opsi-linux-client-agent";
+		case MACOS -> "opsi-mac-client-agent";
+		case WINDOWS -> "opsi-client-agent";
+		};
+
 		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
 		CommandExecutor executor = new CommandExecutor(configedMain, commandDeployClientAgent);
-		executor.execute();
+		executor.executeAsync();
 	}
 
 	private Set<String> getNonExistingHostNames(Set<String> hostNames) {
 		Set<String> nonExistingHostNames = new HashSet<>();
-		if (hostNames == null || hostNames.isEmpty()) {
+		if (hostNames.isEmpty()) {
 			return nonExistingHostNames;
 		}
 		nonExistingHostNames.addAll(hostNames);
-		nonExistingHostNames.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		nonExistingHostNames.removeAll(persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames());
 		return nonExistingHostNames;
 	}
 
 	private void doCopySelectedClients() {
 		List<String> clientsList = configedMain.getSelectedClients();
 		if (!clientsList.isEmpty()) {
-			StringBuilder clients = new StringBuilder();
-			for (String c : clientsList) {
-				clients.append(c);
-				clients.append(" ");
-			}
-			jTextFieldClient.setText(clients.toString());
+			jTextFieldClient.setText(String.join(" ", clientsList));
 		}
 	}
 
 	private void initLayout() {
-		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
-		inputPanel.setLayout(inputPanelLayout);
-
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(panelFinalAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckBoxIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboBoxOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		inputPanelLayout
-				.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-						.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelFinalAction).addGap(Globals.GAP_SIZE)
-
-						.addComponent(jCheckBoxIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE));
+		inputPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		inputPanel.add(jLabelClient);
+		inputPanel.add(jTextFieldClient, "growx, gapbottom " + Globals.MIN_GAP_SIZE);
+		inputPanel.add(jButtonCopySelectedClients, "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(jLabelUserData, "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(authPanel, "growx");
+		inputPanel.add(jLabelFinalize);
+		inputPanel.add(panelFinalAction, "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(jCheckBoxIgnorePing, "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(jLabelLoglevel);
+		inputPanel.add(jComboBoxLoglevel, "gapbottom " + Globals.GAP_SIZE);
+		inputPanel.add(jLabelOperatingSystem);
+		inputPanel.add(jComboBoxOperatingSystem);
 	}
 }

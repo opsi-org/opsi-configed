@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -40,8 +40,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			return false;
 		}
 
@@ -112,14 +111,14 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean canImportToThisComponent(Component target) {
-		if (target instanceof ClientTree) {
-			return source instanceof ClientTable || source instanceof ClientTree;
-		} else if (target instanceof ProductTree) {
-			return source instanceof ProductTable || source instanceof ProductTree;
-		} else {
+		return switch (target) {
+		case ClientTree _ -> source instanceof ClientTable || source instanceof ClientTree;
+		case ProductTree _ -> source instanceof ProductTable || source instanceof ProductTree;
+		default -> {
 			Logging.debug(this, "The target is not a Client or product tree, but ", target.getClass().getName());
-			return false;
+			yield false;
 		}
+		};
 	}
 
 	@Override

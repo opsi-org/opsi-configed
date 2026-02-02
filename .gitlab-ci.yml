@@ -23,7 +23,7 @@ set_variables:
     expire_in: 2 day
 
 compile_and_package:
-  image: gaianmobius/openjdk-21-mvn-3.9.6
+  image: sensedia/openjdk-25-pipeline
   stage: build_and_analyze
   script:
     - TRANSIFEX_MIN_TRANSLATION_RATE=0.0
@@ -53,7 +53,7 @@ compile_and_package:
 
 sonarqube-check:
   stage: build_and_analyze
-  image: gaianmobius/openjdk-21-mvn-3.9.6
+  image: sensedia/openjdk-25-pipeline
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
     GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task

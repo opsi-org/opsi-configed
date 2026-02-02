@@ -1,12 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.healthcheck.settings;
 
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -42,10 +40,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.StackPane;
+import net.miginfocom.swing.MigLayout;
 
 public final class HealthCheckSettingsComponent
 		extends AbstractTeaComponent<HealthCheckSettingsModel, HealthCheckSettingsMsg, HealthCheckSettingsEffect> {
-	private static final int TEXT_LABEL_WIDTH = 200;
 	private static final String ZERO_HOUR_STRING = "00:00:00";
 	private static final String END_OF_DAY_STRING = "23:59:59";
 
@@ -80,8 +78,7 @@ public final class HealthCheckSettingsComponent
 
 	@Override
 	protected JComponent renderView(HealthCheckSettingsModel model, Consumer<HealthCheckSettingsMsg> dispatch) {
-		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
-		labelSelectedHosts.setFont(labelSelectedHosts.getFont().deriveFont(Font.BOLD));
+		JLabel labelSelectedHosts = Utils.createBoldLabel("HealthCheckSettingsDialog.selectedHosts");
 
 		selectedHosts = new JTextField();
 		selectedHosts.setEditable(false);
@@ -95,8 +92,9 @@ public final class HealthCheckSettingsComponent
 
 		selectedHostList = new ListSelectionDialog(null,
 				Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
-		List<String> hostNames = new ArrayList<>(persistenceController.getHostInfoCollections().getDepotNamesList());
-		hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		List<String> hostNames = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getDepotNamesList());
+		hostNames.addAll(persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames());
 		selectedHostList.setListData(hostNames);
 		selectedHostList.setMultiSelection();
 		if (model.getSelectedHosts() != null && !model.getSelectedHosts().isEmpty()) {
@@ -109,8 +107,7 @@ public final class HealthCheckSettingsComponent
 		checkBoxCheckActive.addItemListener(itemEvent -> dispatch
 				.accept(new HealthCheckSettingsMsg.ToggleActivity(checkBoxCheckActive.getState())));
 
-		labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
-		labelStartDowntime.setFont(labelStartDowntime.getFont().deriveFont(Font.BOLD));
+		labelStartDowntime = Utils.createBoldLabel("HealthCheckSettingsDialog.startDowntime");
 
 		startDowntimeField = new JTextField();
 		startDowntimeField.setEditable(false);
@@ -123,8 +120,7 @@ public final class HealthCheckSettingsComponent
 			}
 		});
 
-		labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
-		labelEndDowntime.setFont(labelEndDowntime.getFont().deriveFont(Font.BOLD));
+		labelEndDowntime = Utils.createBoldLabel("HealthCheckSettingsDialog.endDowntime");
 
 		endDowntimeField = new JTextField();
 		endDowntimeField.setEditable(false);
@@ -138,20 +134,18 @@ public final class HealthCheckSettingsComponent
 		});
 
 		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelSelectedHosts)
-				.addComponent(selectedHosts).addGap(Globals.GAP_SIZE).addComponent(checkBoxCheckActive)
-				.addGap(Globals.GAP_SIZE).addComponent(labelStartDowntime).addComponent(startDowntimeField)
-				.addGap(Globals.GAP_SIZE).addComponent(labelEndDowntime).addComponent(endDowntimeField));
+		panel.add(labelSelectedHosts);
+		panel.add(selectedHosts, "grow, gapbottom " + Globals.GAP_SIZE);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(labelSelectedHosts)
-				.addComponent(selectedHosts, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
-				.addComponent(checkBoxCheckActive).addComponent(labelStartDowntime)
-				.addComponent(startDowntimeField, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
-				.addComponent(labelEndDowntime)
-				.addComponent(endDowntimeField, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH));
+		panel.add(checkBoxCheckActive, "gapbottom " + Globals.GAP_SIZE);
+
+		panel.add(labelStartDowntime);
+		panel.add(startDowntimeField, "grow, gapbottom " + Globals.GAP_SIZE);
+
+		panel.add(labelEndDowntime);
+		panel.add(endDowntimeField, "grow");
 
 		return panel;
 	}
@@ -313,7 +307,7 @@ public final class HealthCheckSettingsComponent
 		String endDownTime = model.getEndDowntime();
 		endDownTime = (endDownTime == null || endDownTime.isBlank()) ? "" : (endDownTime + END_OF_DAY_STRING);
 
-		persistenceController.getConfigDataService().writeDownTime(model.getSelectedHosts(),
+		persistenceController.getDataServices().config.writeDownTime(model.getSelectedHosts(),
 				model.getCheckActiveState() == State.SELECTED, startDownTime, endDownTime);
 	}
 }

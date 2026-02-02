@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -15,22 +15,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -40,12 +34,12 @@ import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class ListSelectionDialog {
 	public static final Dimension DEFAULT_MULTI_LINE_EDITOR_SIZE = new Dimension(400, 200);
 
 	protected ListSelectionList listSelectionList;
-	private JPopupMenu popupMenu;
 	protected TableSearchPane searchPane;
 
 	private FlatTextField editingTextField;
@@ -70,12 +64,7 @@ public class ListSelectionDialog {
 	private JPanel createPanel(boolean editable) {
 		Logging.info(this, "createCenterPanel");
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
 		listSelectionList = new ListSelectionList();
-
 		listSelectionList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -98,36 +87,25 @@ public class ListSelectionDialog {
 		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setNarrow(true);
 
-		ParallelGroup horizontalGroup = layout.createParallelGroup();
-		SequentialGroup verticalGroup = layout.createSequentialGroup();
+		JPanel panel = new JPanel();
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[]0"));
+		panel.add(searchPane, "growx");
+		panel.add(listScrollPane, "grow, gapy " + Globals.GAP_SIZE);
 
-		// Add search pane
-		horizontalGroup.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-		verticalGroup.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
-
-		// add list
-		horizontalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-
-		verticalGroup.addGap(Globals.GAP_SIZE);
-		verticalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-
-		// Add additional component if not null
-		Logging.info(this, "editable: ", editable);
 		if (editable) {
-			createEditableOptions(horizontalGroup, verticalGroup);
+			createEditableOptions();
+			panel.add(editingTextField, "split 2, growx, gapy " + Globals.GAP_SIZE);
+			JButton addMultiLineValueButton = new JButton();
+			addMultiLineValueButton.setIcon(Icons.getIntellijIcon("openNewTab"));
+			addMultiLineValueButton.addActionListener(actionEvent -> addMultilineItem(null, false));
+			addMultiLineValueButton.setToolTipText(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
+			panel.add(addMultiLineValueButton, "gapy " + Globals.GAP_SIZE + ", wrap");
 		}
-
-		layout.setVerticalGroup(verticalGroup);
-		layout.setHorizontalGroup(horizontalGroup);
 
 		return panel;
 	}
 
-	private void createEditableOptions(ParallelGroup horizontalGroup, SequentialGroup verticalGroup) {
+	private void createEditableOptions() {
 		editingTextField = new FlatTextField();
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
 		addValueButton.addActionListener(actionEvent -> addItem(editingTextField.getText()));
@@ -135,51 +113,15 @@ public class ListSelectionDialog {
 		editingTextField.setTrailingComponent(addValueButton);
 		editingTextField.setShowClearButton(true);
 		editingTextField.addActionListener(actionEvent -> addItem(editingTextField.getText()));
-
-		popupMenu = new JPopupMenu();
-
-		JMenuItem addItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
-		Icons.addIntellijIconToMenuItem(addItemMenu, "add");
-		addItemMenu.addActionListener(actionEvent -> addMultilineItem(null, false));
-
-		JMenuItem editItemMenu = new JMenuItem(Configed.getResourceValue("ListSelectionDialog.editMultiLineValue"));
-		Icons.addIntellijIconToMenuItem(editItemMenu, "edit");
-		editItemMenu.addActionListener(actionEvent -> addMultilineItem(listSelectionList.getSelectedValue(), true));
-
-		popupMenu.add(addItemMenu);
-		popupMenu.add(editItemMenu);
-
-		editingTextField.setComponentPopupMenu(popupMenu);
-		listSelectionList.setComponentPopupMenu(popupMenu);
-
-		popupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				editItemMenu.setEnabled(listSelectionList.getSelectedValuesList().size() == 1);
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// Not needed here
-			}
-
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				// Handle popup menu cancellation
-			}
-		});
-
-		horizontalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				Short.MAX_VALUE);
-		verticalGroup.addGap(Globals.GAP_SIZE);
-		verticalGroup.addComponent(editingTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
 	}
 
 	private void addMultilineItem(String initialText, boolean edit) {
 		JTextArea textArea = new JTextArea(initialText);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(DEFAULT_MULTI_LINE_EDITOR_SIZE);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 		Utils.enableDialogResizing(optionPane);
@@ -232,10 +174,6 @@ public class ListSelectionDialog {
 	public void setEditable(boolean editable) {
 		editingTextField.setText(null);
 		editingTextField.setVisible(editable);
-
-		// We need to remove the popup menu from the list if not editable,
-		// because the popup menu is for adding values
-		listSelectionList.setComponentPopupMenu(editable ? popupMenu : null);
 	}
 
 	public void setModel(ListModel<String> model) {

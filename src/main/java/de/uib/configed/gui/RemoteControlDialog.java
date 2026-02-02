@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -32,6 +31,7 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class RemoteControlDialog implements DocumentListener {
 	private static final int START_HEIGHT_LOGGING_AREA = 80;
@@ -123,18 +123,11 @@ public class RemoteControlDialog implements DocumentListener {
 		loggingArea.setEditable(false);
 		loggingArea.setLineWrap(true);
 
-		JPanel topPanel = new JPanel();
-		GroupLayout layout = new GroupLayout(topPanel);
-		topPanel.setLayout(layout);
+		JPanel topPanel = new JPanel(
+				new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow][" + Globals.GAP_SIZE + "][pref!]"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(visibleListScrollPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(extraField, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layout.setHorizontalGroup(
-				layout.createParallelGroup().addComponent(visibleListScrollPane, 0, 0, Short.MAX_VALUE).addComponent(
-						extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		topPanel.add(visibleListScrollPane, "grow");
+		topPanel.add(extraField, "grow");
 
 		JScrollPane loggingScrollPane = new JScrollPane(loggingArea);
 		loggingScrollPane.setMinimumSize(new Dimension());
@@ -144,13 +137,8 @@ public class RemoteControlDialog implements DocumentListener {
 		splitPane.setResizeWeight(1.0);
 		splitPane.setDividerLocation(START_HEIGHT_FRAME - START_HEIGHT_LOGGING_AREA);
 
-		JPanel mainPanel = new JPanel();
-		GroupLayout mainLayout = new GroupLayout(mainPanel);
-		mainPanel.setLayout(mainLayout);
-		mainLayout.setVerticalGroup(
-				mainLayout.createSequentialGroup().addComponent(splitPane, 0, START_HEIGHT_FRAME, Short.MAX_VALUE));
-		mainLayout.setHorizontalGroup(
-				mainLayout.createParallelGroup().addComponent(splitPane, 0, START_WIDTH_FRAME, Short.MAX_VALUE));
+		JPanel mainPanel = new JPanel(new MigLayout("insets 0, fill", "[]", "[]0"));
+		mainPanel.add(splitPane, "grow, w " + START_WIDTH_FRAME + ", h " + START_HEIGHT_FRAME);
 
 		return mainPanel;
 	}

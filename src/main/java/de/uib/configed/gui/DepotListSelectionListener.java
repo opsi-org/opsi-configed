@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -58,7 +58,7 @@ public class DepotListSelectionListener implements ListSelectionListener {
 
 		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
-			PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+			PersistenceControllerFactory.getPersistenceController().getDataServices().hostInfoCollections
 					.updateClientsForDepots(depotsList.getSelectedValuesList(), configedMain.getAllowedClients());
 			configedMain.initialTreeActivation();
 

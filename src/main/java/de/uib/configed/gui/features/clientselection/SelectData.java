@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -17,7 +17,7 @@ public class SelectData {
 
 	public enum DataType {
 		TEXT_TYPE("TextType"), INTEGER_TYPE("IntegerType"), BIG_INTEGER_TYPE("BigIntegerType"),
-		DOUBLE_TYPE("DoubleType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType");
+		DOUBLE_TYPE("DoubleType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType"), BOOLEAN_TYPE("BooleanType");
 
 		private final String displayName;
 
@@ -37,33 +37,19 @@ public class SelectData {
 
 		Logging.debug(this, "got data, type ", data, ", ", type);
 
-		switch (type) {
-		case TEXT_TYPE, DATE_TYPE:
-			if (!(data instanceof String)) {
-				Logging.error(this, "Data is no String");
-				throw new IllegalArgumentException("Data is no String");
-			}
-			break;
-		case INTEGER_TYPE:
-			if (!(data instanceof Integer)) {
-				Logging.error(this, "Data is no Integer");
-				throw new IllegalArgumentException("Data is no Integer");
-			}
-			break;
-		case BIG_INTEGER_TYPE:
-			if (!(data instanceof Long)) {
-				Logging.error(this, "Data is no Long");
-				throw new IllegalArgumentException("Data is no Long");
-			}
-			break;
-		case DOUBLE_TYPE:
-			if (!(data instanceof Double)) {
-				Logging.error(this, "Data is no Double");
-				throw new IllegalArgumentException("Data is no Double");
-			}
-			break;
-		case NONE_TYPE:
-			break;
+		Class<?> expectedClass = switch (type) {
+		case TEXT_TYPE, DATE_TYPE -> String.class;
+		case INTEGER_TYPE -> Integer.class;
+		case BIG_INTEGER_TYPE -> Long.class;
+		case DOUBLE_TYPE -> Double.class;
+		case BOOLEAN_TYPE -> Boolean.class;
+		case NONE_TYPE -> null;
+		};
+
+		if (expectedClass != null && !expectedClass.isInstance(data)) {
+			String warningText = "data type mismatch: expected " + expectedClass.getName() + " but got "
+					+ data.getClass().getName();
+			Logging.error(this, warningText);
 		}
 	}
 

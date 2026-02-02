@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -31,7 +31,7 @@ public class ConnectedHostsManager implements MessagebusListener {
 	public ConnectedHostsManager(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
-		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
+		connectedHostsByMessagebus = persistenceController.getDataServices().host.getMessagebusConnectedClients();
 	}
 
 	public boolean isHostConnected(String hostId) {

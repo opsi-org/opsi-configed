@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -16,10 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.app.Main;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
-import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -73,17 +71,11 @@ public final class ConnectionErrorReporter {
 
 	public void notify(String message, ConnectionErrorType errorType) {
 		switch (errorType) {
-		case FAILED_CERTIFICATE_VALIDATION_ERROR:
-			displayFailedCertificateValidationDialog(message);
-			break;
-		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR, GENERAL_ERROR:
-			displayGeneralDialog(message);
-			break;
-		case MFA_ERROR:
-			displayMFADialog();
-			break;
-		default:
-			Logging.notice(this, "unhandeld error type: ", errorType);
+		case FAILED_CERTIFICATE_VALIDATION_ERROR -> displayFailedCertificateValidationDialog(message);
+		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR, GENERAL_ERROR -> displayGeneralDialog(
+				message);
+		case MFA_ERROR -> displayMFADialog();
+		default -> Logging.notice(this, "unhandeld error type: ", errorType);
 		}
 	}
 
@@ -97,7 +89,7 @@ public final class ConnectionErrorReporter {
 		JOptionPane pane = new JOptionPane();
 		pane.setMessageType(JOptionPane.WARNING_MESSAGE);
 		pane.setMessage(message);
-		pane.setOptions(new Object[] { Configed.getResourceValue("buttonCancel"), alwaysTrust, trustOnce });
+		pane.setOptions(new Object[] { alwaysTrust, trustOnce, Configed.getResourceValue("buttonCancel") });
 
 		JDialog dialog = pane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"));
@@ -168,12 +160,7 @@ public final class ConnectionErrorReporter {
 		}
 		PersistenceControllerFactory.getPersistenceController().getExecutioner().setOTP(otp);
 
-		CacheManager.getInstance().clearAllCachedData();
-		Configed.getSavedStates().removeAll();
-		ConfigedMain.getMainFrame().resetData();
-
-		CertificateValidatorFactory.resetCertificateValidators();
-
+		MainFrame.resetInstanceData();
 		MainFrame.restartConfiged();
 	}
 

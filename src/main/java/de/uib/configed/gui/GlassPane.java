@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -14,12 +14,14 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import com.formdev.flatlaf.FlatLaf;
+
+import net.miginfocom.swing.MigLayout;
 
 public class GlassPane extends JComponent implements KeyListener {
 	private JLabel jLabelInfo;
@@ -52,16 +54,14 @@ public class GlassPane extends JComponent implements KeyListener {
 		jLabelAnimation.setIndeterminate(true);
 		jLabelInfo = new JLabel();
 
-		GroupLayout grouplayout = new GroupLayout(this);
-		setLayout(grouplayout);
+		setLayout(new MigLayout("fill"));
+		JPanel panel = new JPanel(new MigLayout("wrap 1, alignx center, aligny center, gap 0", "[center]", "[]0[]"));
+		panel.setBackground(initBackground());
+		panel.setOpaque(false);
 
-		grouplayout.setVerticalGroup(grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-				.addComponent(jLabelAnimation, 10, 10, 10).addComponent(jLabelInfo).addGap(0, 0, Short.MAX_VALUE));
-
-		grouplayout.setHorizontalGroup(grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-				.addGroup(grouplayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelAnimation, 150, 150, 150).addComponent(jLabelInfo))
-				.addGap(0, 0, Short.MAX_VALUE));
+		panel.add(jLabelAnimation, "w 150!, h 10!");
+		panel.add(jLabelInfo);
+		add(panel, "grow, center");
 	}
 
 	public void setInfoText(String s) {

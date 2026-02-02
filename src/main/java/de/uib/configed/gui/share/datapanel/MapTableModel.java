@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -157,7 +157,6 @@ public class MapTableModel extends AbstractTableModel {
 		oridata.put(key, defaultValues);
 		Logging.debug(this, " keys ", keys);
 		keys = new ArrayList<>(data.keySet());
-		Logging.debug(this, " new keys  ", keys);
 		if (toStore) {
 			putEntryIntoStoredMaps(key, defaultValues, toStore);
 		}
@@ -178,7 +177,7 @@ public class MapTableModel extends AbstractTableModel {
 			configChanges = Collections.singletonMap(key, defaultValues);
 		}
 
-		updateCollection.addMap(configChanges);
+		updateCollection.addMap(new HashMap<>(configChanges));
 
 		notifyChange();
 		fireTableDataChanged();
@@ -303,7 +302,7 @@ public class MapTableModel extends AbstractTableModel {
 		notifyChange();
 		fireTableDataChanged();
 
-		updateCollection.addMap(configChanges);
+		updateCollection.addMap(new HashMap<>(configChanges));
 	}
 
 	private void weHaveChangedStoredMaps() {
@@ -319,7 +318,7 @@ public class MapTableModel extends AbstractTableModel {
 			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
 			} else {
-				updateCollection.addMap(changes);
+				updateCollection.addMap(new HashMap<>(changes));
 			}
 
 			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());

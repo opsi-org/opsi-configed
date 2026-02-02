@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -41,7 +41,7 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		record ChangeIP(String value) implements FieldChangeMsg {
 		}
 
-		record ChangeGroups(String value) implements FieldChangeMsg {
+		record ChangeGroups(List<String> value) implements FieldChangeMsg {
 		}
 
 		record ChangeDepot(String value) implements FieldChangeMsg {
@@ -57,9 +57,8 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		}
 	}
 
-	sealed interface ActionMsg extends AddClientMsg
-			permits ActionMsg.LoadInitialDataRequested, ActionMsg.InitialDataLoaded, ActionMsg.CreateClient,
-			ActionMsg.CSVImportRequested, ActionMsg.CSVImported, ActionMsg.CloseDialog {
+	sealed interface ActionMsg extends AddClientMsg permits ActionMsg.LoadInitialDataRequested,
+			ActionMsg.InitialDataLoaded, ActionMsg.CreateClient, ActionMsg.CSVImportRequested, ActionMsg.CSVImported {
 		record LoadInitialDataRequested() implements ActionMsg {
 		}
 
@@ -75,9 +74,6 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		}
 
 		record CSVImported(List<List<Object>> rows, boolean includeRow) implements ActionMsg {
-		}
-
-		record CloseDialog() implements ActionMsg {
 		}
 	}
 

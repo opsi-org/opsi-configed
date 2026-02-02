@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -46,7 +45,7 @@ final class AddClientUpdate {
 		case AddClientMsg.FieldChangeMsg.ChangeSystemUUID(String v) -> UpdateResult.noEffect(model.withSystemUUID(v));
 		case AddClientMsg.FieldChangeMsg.ChangeMAC(String v) -> UpdateResult.noEffect(model.withMacAddress(v));
 		case AddClientMsg.FieldChangeMsg.ChangeIP(String v) -> UpdateResult.noEffect(model.withIpAddress(v));
-		case AddClientMsg.FieldChangeMsg.ChangeGroups(String v) -> UpdateResult.noEffect(model.withGroups(v));
+		case AddClientMsg.FieldChangeMsg.ChangeGroups(List<String> v) -> UpdateResult.noEffect(model.withGroups(v));
 		case AddClientMsg.FieldChangeMsg.ChangeDepot(String v) -> UpdateResult.noEffect(model.withSelectedDepot(v));
 		case AddClientMsg.FieldChangeMsg.ChangeNetboot(String v) -> UpdateResult
 				.noEffect(model.withSelectedNetbootProduct(v));
@@ -61,7 +60,7 @@ final class AddClientUpdate {
 	private static UpdateResult<AddClientModel, AddClientEffect> handleActionMsg(AddClientMsg.ActionMsg msg,
 			AddClientModel model) {
 		return switch (msg) {
-		case AddClientMsg.ActionMsg.LoadInitialDataRequested m -> UpdateResult.withEffect(model,
+		case AddClientMsg.ActionMsg.LoadInitialDataRequested _ -> UpdateResult.withEffect(model,
 				new AddClientEffect.ServiceEffect.LoadInitialData());
 		case AddClientMsg.ActionMsg.InitialDataLoaded(List<String> domains, List<String> depots, List<String> netboots, List<String> hostnames, boolean isWanActive, boolean defaultWanSelected, boolean defaultShutdown) -> UpdateResult
 				.noEffect(model.toBuilder().domains(domains).depots(depots).netbootProducts(netboots)
@@ -73,8 +72,6 @@ final class AddClientUpdate {
 		case AddClientMsg.ActionMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(
 				model, rows, includeRow);
 		case AddClientMsg.ActionMsg.CreateClient() -> handleCreateClientMsg(model);
-		case AddClientMsg.ActionMsg.CloseDialog() -> UpdateResult.withEffect(model,
-				new AddClientEffect.UIEffect.CloseDialog());
 		};
 	}
 
@@ -82,7 +79,6 @@ final class AddClientUpdate {
 			AddClientModel model) {
 		return switch (msg) {
 		case AddClientMsg.UIMsg.OpenGroupSelectionDialog() -> handleOpenGroupSelectionDialogMsg(model);
-
 		case AddClientMsg.UIMsg.ShowErrorMessage(String title, String message) -> UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.ShowErrorMessage(title, message));
 		};
@@ -115,7 +111,7 @@ final class AddClientUpdate {
 		row.add(model.getNotes());
 		row.add(model.getSystemUUID());
 		row.add(model.getIpAddress());
-		row.add(String.join(",", parseGroups(model.getGroups())));
+		row.add(model.getGroups());
 		row.add(Boolean.toString(model.isWanSelected()));
 		row.add(Boolean.toString(model.isShutdownInstallSelected()));
 		row.add("");
@@ -127,15 +123,7 @@ final class AddClientUpdate {
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleOpenGroupSelectionDialogMsg(
 			AddClientModel model) {
-		List<String> preselected = Arrays.asList(parseGroups(model.getGroups()));
 		return UpdateResult.withEffect(model,
-				new AddClientEffect.UIEffect.OpenGroupSelectionDialog(new ArrayList<>(), preselected));
-	}
-
-	private static String[] parseGroups(String groupsText) {
-		if (groupsText == null || groupsText.isEmpty()) {
-			return new String[] {};
-		}
-		return groupsText.replace("; ", ";").split(";");
+				new AddClientEffect.UIEffect.OpenGroupSelectionDialog(new ArrayList<>(), model.getGroups()));
 	}
 }

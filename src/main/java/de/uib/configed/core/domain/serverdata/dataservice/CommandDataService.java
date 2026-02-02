@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -10,10 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
-import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
-import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -30,46 +27,35 @@ import de.uib.configed.share.logging.Logging;
  * {@code Persistent Data}.
  */
 @SuppressWarnings({ "unchecked" })
-public class CommandDataService {
-	private AbstractPOJOExecutioner exec;
-	private UserRolesConfigDataService userRolesConfigDataService;
-
-	private CacheManager cacheManager = CacheManager.getInstance();
-
-	public CommandDataService(AbstractPOJOExecutioner exec) {
-		this.exec = exec;
-	}
-
-	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
-		this.userRolesConfigDataService = userRolesConfigDataService;
+public class CommandDataService extends DataService {
+	public CommandDataService(DataServices dataServices) {
+		super(dataServices);
 	}
 
 	public List<Map<String, Object>> getCommandList() {
 		retrieveCommandList();
 
-		return cacheManager.getCachedData(CacheIdentifier.SSH_COMMAND_LIST, List.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.SSH_COMMAND_LIST, List.class);
 	}
 
 	public void retrieveCommandList() {
-		if (cacheManager.isDataCached(CacheIdentifier.SSH_COMMAND_LIST)) {
+		if (dataServices.cacheManager.isDataCached(CacheIdentifier.SSH_COMMAND_LIST)) {
 			return;
 		}
 
 		Logging.info(this, "retrieveCommandList ");
-		List<Map<String, Object>> commands = exec
-				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] {}));
+		List<Map<String, Object>> commands = dataServices.exec.getListOfMaps(RPCMethodName.SSH_COMMAND_GET_OBJECTS);
 		Logging.debug(this, "retrieveCommandList commands ", commands);
 
-		cacheManager.setCachedData(CacheIdentifier.SSH_COMMAND_LIST, commands);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.SSH_COMMAND_LIST, commands);
 	}
 
 	public boolean deleteCommand(List<String> jsonObjects) {
 		Logging.info(this, "deleteSSHCommand ");
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(dataServices.userRoles.isGlobalReadOnly())) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects });
-		boolean result = exec.doCall(omc);
+		boolean result = dataServices.exec.doCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, jsonObjects);
 		Logging.info(this, "deleteSSHCommand result ", result);
 		return result;
 	}
@@ -84,11 +70,10 @@ public class CommandDataService {
 
 	private boolean doActionCommand(RPCMethodName method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method ", method);
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (Boolean.TRUE.equals(dataServices.userRoles.isGlobalReadOnly())) {
 			return false;
 		}
-		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
-		boolean result = exec.doCall(omc);
+		boolean result = dataServices.exec.doCall(method, jsonObjects);
 		Logging.info(this, "doActionSSHCommand method ", method, " result ", result);
 		return result;
 	}

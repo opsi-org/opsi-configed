@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -18,8 +18,6 @@ import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -45,6 +43,7 @@ import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPaneMsg, LogPaneEffect> {
 	private static final int SLIDER_W = 180;
@@ -265,53 +264,21 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	private void setLayout() {
-		GroupLayout layoutCommandpane = new GroupLayout(rootPanel);
-		rootPanel.setLayout(layoutCommandpane);
+		JPanel bottomPanel = new JPanel(new MigLayout(
+				"insets 0, fillx", "[]" + Globals.GAP_SIZE + "[grow]" + (Globals.GAP_SIZE * 2) + "[]" + Globals.GAP_SIZE
+						+ "[][grow]" + (Globals.GAP_SIZE * 2) + "[]" + Globals.GAP_SIZE + "[" + SLIDER_W + "!]",
+				"[center]"));
+		bottomPanel.add(labelSearch);
+		bottomPanel.add(jComboBoxSearch, "growx");
+		bottomPanel.add(jToolBar);
+		bottomPanel.add(labelDisplayRestriction);
+		bottomPanel.add(comboType, "growx");
+		bottomPanel.add(labelLevel);
+		bottomPanel.add(sliderLevel);
 
-		layoutCommandpane
-				.setHorizontalGroup(
-						layoutCommandpane.createParallelGroup().addComponent(jScrollPane)
-								.addGroup(
-										layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-												.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(jComboBoxSearch, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-												.addGap(Globals.GAP_SIZE * 2)
-												.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE * 2)
-												.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(comboType, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-												.addGap(Globals.GAP_SIZE * 2)
-												.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-												.addGap(Globals.GAP_SIZE)));
-
-		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addComponent(jScrollPane)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
-						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(sliderLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+		rootPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow]" + Globals.MIN_GAP_SIZE + "[]"));
+		rootPanel.add(jScrollPane, "grow");
+		rootPanel.add(bottomPanel, "growx");
 	}
 
 	private void initPopupMenu() {
@@ -336,27 +303,13 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	private void treatPopupAction(int p) {
 		switch (p) {
-		case PopupMenuTrait.POPUP_RELOAD:
-			dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
-			break;
-		case PopupMenuTrait.POPUP_COPY:
-			dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
-			break;
-		case PopupMenuTrait.POPUP_DOWNLOAD:
-			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
-			break;
-		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP:
-			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP);
-			break;
-		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP:
-			dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP);
-			break;
-		case PopupMenuTrait.POPUP_FLOATING_COPY:
-			dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL);
-			break;
-		default:
-			Logging.warning(this, "no case found for popupMenuTrait in LogPane");
-			break;
+		case PopupMenuTrait.POPUP_RELOAD -> dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
+		case PopupMenuTrait.POPUP_COPY -> dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
+		case PopupMenuTrait.POPUP_DOWNLOAD -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
+		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP);
+		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP);
+		case PopupMenuTrait.POPUP_FLOATING_COPY -> dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL);
+		default -> Logging.warning(this, "no case found for popupMenuTrait in LogPane");
 		}
 	}
 

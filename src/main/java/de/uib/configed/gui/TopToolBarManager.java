@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -90,7 +90,7 @@ public class TopToolBarManager {
 		healthCheckSettingsButton.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
 		healthCheckSettingsButton.addActionListener(
 				actionEvent -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain));
-		healthCheckSettingsButton.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		healthCheckSettingsButton.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		return Arrays.asList(downloadButton, healthCheckSettingsButton);
 	}
@@ -99,13 +99,12 @@ public class TopToolBarManager {
 		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 		addClientButton.addActionListener(event -> ExtraFrameController.callAddClientDialog());
-		if (persistenceController.getConfigDataService().getDisabledClientMenuEntries()
+		if (persistenceController.getDataServices().config.getDisabledClientMenuEntries()
 				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
 			addClientButton.setEnabled(false);
 		} else {
-			addClientButton
-					.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()
-							&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+			addClientButton.setEnabled(persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
+					&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		}
 
 		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));

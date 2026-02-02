@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -39,12 +37,12 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.DepotListCellRenderer;
-import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.UpdateCollectionManager;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, MouseListener, KeyListener {
@@ -74,7 +72,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.addKeyListener(this);
 
 		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer(configedMain);
-		myListCellRenderer.setInfo(persistenceController.getHostInfoCollections().getDepots());
+		myListCellRenderer.setInfo(persistenceController.getDataServices().hostInfoCollections.getDepots());
 		listDepots.setCellRenderer(myListCellRenderer);
 
 		JScrollPane scrollpaneDepots = new JScrollPane();
@@ -101,45 +99,23 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();
-		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
-		panelTop.setLayout(layoutEditProperties);
-
-		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(scrollpaneDepots, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(scrollpaneDepots, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));
+		panelTop.add(scrollpaneDepots, "growx");
+		panelTop.add(buttonSetValuesFromPackage, "aligny bottom");
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setResizeWeight(0.3);
 		splitter.setTopComponent(panelTop);
 		splitter.setBottomComponent(productPropertiesPanel);
 
-		GroupLayout layoutAll = new GroupLayout(this);
-		setLayout(layoutAll);
-
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[grow, fill]"));
+		this.add(splitter, "grow, push");
 	}
 
 	private void initTitlePanel() {
 		titlePanel = new JPanel();
-
-		GroupLayout titleLayout = new GroupLayout(titlePanel);
-		titlePanel.setLayout(titleLayout);
-
-		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelEditDepotProductProperties, 0, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE));
+		titlePanel.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[]0"));
+		titlePanel.add(jLabelEditDepotProductProperties, "growx");
 	}
 
 	@Override
@@ -178,9 +154,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Logging.devel("value changed");
 		Map<String, Object> visualData = mergeProperties(
-				persistenceController.getProductDataService().getDepot2product2propertiesPD(),
+				persistenceController.getDataServices().product.getDepot2product2propertiesPD(),
 				listDepots.getSelectedValuesList(), productEdited);
 
 		// no properties
@@ -190,13 +165,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		}
 
 		if (!listDepots.getSelectedValuesList().isEmpty()) {
-			productPropertiesPanel.setEditableMap(visualData, persistenceController.getProductDataService()
+			productPropertiesPanel.setEditableMap(visualData, persistenceController.getDataServices().product
 					.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
 			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
-				Map<String, ConfigName2ConfigValue> product2properties = persistenceController.getProductDataService()
+				Map<String, ConfigName2ConfigValue> product2properties = persistenceController.getDataServices().product
 						.getDepot2product2propertiesPD().get(depot);
 
 				if (product2properties == null) {
@@ -326,7 +301,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		ConfigName2ConfigValue properties0 = persistenceController.getProductDataService()
+		ConfigName2ConfigValue properties0 = persistenceController.getDataServices().product
 				.getDefaultProductPropertiesPD(selectedDepot0).get(productEdited);
 
 		int startDepotIndex = listDepots.getSelectedIndex();
@@ -339,7 +314,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				continue;
 			}
 
-			ConfigName2ConfigValue compareProperties = persistenceController.getProductDataService()
+			ConfigName2ConfigValue compareProperties = persistenceController.getDataServices().product
 					.getDefaultProductPropertiesPD(compareDepot).get(productEdited);
 
 			// True if both objects are equal or both null

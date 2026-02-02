@@ -1,12 +1,11 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.hostconfigs;
 
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +20,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -52,7 +50,9 @@ import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {
@@ -87,7 +87,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private Map<String, Object> originalMap;
 
 	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean isServerConfig) {
-		super(true);
+		super();
 
 		this.actor = actor;
 		this.isServerConfig = isServerConfig;
@@ -135,21 +135,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addUser();
-					break;
-
-				case PopupMenuTrait.POPUP_DELETE:
-					deleteUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addUser();
+				case PopupMenuTrait.POPUP_DELETE -> deleteUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
 				}
 			}
 		};
@@ -165,17 +154,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
 				}
 			}
 		};
@@ -192,21 +173,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addRole();
-					break;
-
-				case PopupMenuTrait.POPUP_DELETE:
-					deleteUser();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addRole();
+				case PopupMenuTrait.POPUP_DELETE -> deleteUser();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
 				}
 			}
 		};
@@ -222,17 +192,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			public void action(int p) {
 				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_ADD:
-					addRole();
-					break;
-
-				default:
-					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
-					break;
+				case PopupMenuTrait.POPUP_RELOAD -> reload();
+				case PopupMenuTrait.POPUP_ADD -> addRole();
+				default -> Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
 				}
 			}
 		};
@@ -320,14 +282,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		splitPane.setRightComponent(emptyRightPane);
 		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(splitPane, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(splitPane, 50,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));
+		this.add(splitPane, "grow");
 	}
 
 	/**
@@ -373,11 +329,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			return;
 		}
 
-		if ("".equals(s)) {
-			s = Configed.getResourceValue("HostConfigTreeModel.noClientsSelected");
-			tree.collapseRow(0);
-		}
-
 		treemodel.setRootLabel(s);
 	}
 
@@ -421,7 +372,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(reloadable, tree, isServerConfig,
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tree, isServerConfig,
 					includeAdditionalTooltipText);
 
 			editMapPanel.setActor(actor);
@@ -462,7 +413,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 		Logging.info(this, "entry ", partialPanelEntry, " key ", key);
 
-		if (isServerConfig && !persistenceController.getUserRolesConfigDataService().hasServerFullPermissionPD()) {
+		if (isServerConfig && !persistenceController.getDataServices().userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
 
@@ -486,7 +437,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		// rolekey may be edited
 		if (!(key.equals(rolekey))) {
-			List<Object> values = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			List<Object> values = PersistenceControllerFactory.getPersistenceController().getDataServices().config
 					.getConfigDefaultValuesPD().get(rolekey);
 
 			boolean obeyToRole = values != null && !values.isEmpty()
@@ -611,14 +562,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		JLabel userLabel = new JLabel(Configed.getResourceValue("FramingNewUser.textfieldLabel"));
-		userLabel.setFont(userLabel.getFont().deriveFont(Font.BOLD));
+		JLabel userLabel = Utils.createBoldLabel("FramingNewUser.textfieldLabel");
 
 		JTextField userField = new JTextField();
 
-		JLabel userRolesLabel = new JLabel(Configed.getResourceValue("FramingNewUser.listLabel"));
+		JLabel userRolesLabel = Utils.createBoldLabel("FramingNewUser.listLabel");
 		userRolesLabel.setToolTipText(Configed.getResourceValue("FramingNewUser.listLabel.ToolTip"));
-		userRolesLabel.setFont(userRolesLabel.getFont().deriveFont(Font.BOLD));
 
 		JList<String> userRolesList = new JList<>(theRoles.toArray(new String[0]));
 
@@ -632,15 +581,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		}
 		userRolesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "[]", "[]0"));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(userLabel).addComponent(userField)
-				.addGap(Globals.GAP_SIZE).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+		panel.add(userLabel);
+		panel.add(userField, "growx");
 
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(userLabel)
-				.addComponent(userField).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+		panel.add(userRolesLabel, "gapy " + Globals.GAP_SIZE);
+		panel.add(userRolesScrollPane, "grow");
 
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), panel,
 				Configed.getResourceValue("FramingNewUser.title"), JOptionPane.OK_CANCEL_OPTION,
@@ -654,17 +601,16 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void buildUserConfig() {
-		new UserConfigProducing(false, persistenceController.getHostInfoCollections().getConfigServer(),
-				persistenceController.getHostInfoCollections().getDepotNamesList(),
-				persistenceController.getGroupDataService().getHostGroupIds(),
-				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
-				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
+		new UserConfigProducing(false, persistenceController.getDataServices().hostInfoCollections.getConfigServer(),
+				persistenceController.getDataServices().hostInfoCollections.getDepotNamesList(),
+				persistenceController.getDataServices().group.getHostGroupIds(),
+				persistenceController.getDataServices().group.getProductGroupsPD().keySet(),
+				persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
+				persistenceController.getDataServices().config.getConfigOptionsPD()).produce();
 	}
 
 	private void addRole() {
-		JLabel roleLabel = new JLabel(Configed.getResourceValue("FramingNewRole.textfieldLabel"));
-		roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
+		JLabel roleLabel = Utils.createBoldLabel("FramingNewRole.textfieldLabel");
 
 		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), roleLabel,
 				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);
@@ -718,12 +664,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setRoleConfig(String name) {
 		Logging.info(this, "setRoleConfig ", name);
-		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name);
+		PersistenceControllerFactory.getPersistenceController().getDataServices().config.addRoleConfig(name);
 	}
 
 	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig ", name, ",", rolename);
-		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addUserConfig(name, rolename);
+		PersistenceControllerFactory.getPersistenceController().getDataServices().config.addUserConfig(name, rolename);
 	}
 
 	public void setOriginalMap(Map<String, Object> originalMap) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -51,10 +51,11 @@ public final class ClientData {
 			return;
 		}
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getDataServices().hostInfoCollections
 				.getMapOfAllPCInfoMaps();
 
-		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 
 		for (String depot : depots) {
 			List<Client> clientsList = new ArrayList<>();
@@ -62,12 +63,12 @@ public final class ClientData {
 			for (Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
 				HostInfo hostInfo = entry.getValue();
 
-				if (hostInfo.getInDepot().equals(depot)) {
+				if (hostInfo.getString(HostInfo.DEPOT_OF_CLIENT_KEY).equals(depot)) {
 					Client client = new Client();
-					client.setHostname(hostInfo.getName());
-					client.setLastSeen(hostInfo.getLastSeen());
-					client.setConnectedWithMessagebus(
-							connectedClientsByMessagebus.get(depot).contains(hostInfo.getName()));
+					client.setHostname(hostInfo.getString(HostInfo.HOSTNAME_KEY));
+					client.setLastSeen(hostInfo.getString(HostInfo.LAST_SEEN_KEY));
+					client.setConnectedWithMessagebus(connectedClientsByMessagebus.get(depot)
+							.contains(hostInfo.getString(HostInfo.HOSTNAME_KEY)));
 					clientsList.add(client);
 				}
 			}
@@ -101,12 +102,14 @@ public final class ClientData {
 		notConnectedClientsByMessagebus.clear();
 
 		List<String> allConnectedClientsByMessagebus = new ArrayList<>(
-				persistenceController.getHostDataService().getMessagebusConnectedClients());
-		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+				persistenceController.getDataServices().host.getMessagebusConnectedClients());
+		List<String> depots = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 		for (String depot : depots) {
-			List<String> notConnectedClientsByMessagebusInDepot = persistenceController.getHostInfoCollections()
-					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
-					.map(HostInfo::getName).collect(Collectors.toList());
+			List<String> notConnectedClientsByMessagebusInDepot = persistenceController
+					.getDataServices().hostInfoCollections.getMapOfAllPCInfoMaps().values().stream()
+							.filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
+							.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).collect(Collectors.toList());
 			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
 					.filter(notConnectedClientsByMessagebusInDepot::contains).toList();
 			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
@@ -134,9 +137,10 @@ public final class ClientData {
 
 		clientLastSeen.clear();
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getDataServices().hostInfoCollections
 				.getMapOfAllPCInfoMaps();
-		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(
+				persistenceController.getDataServices().hostInfoCollections.getAllDepots().keySet());
 
 		for (String depot : depots) {
 			Helper.fillMapOfMapsForDepots(clientLastSeen, produceLastSeenData(mapOfAllPCInfoMaps, depot), depot);
@@ -153,12 +157,12 @@ public final class ClientData {
 		final LocalDate currentDate = LocalDate.now();
 
 		for (Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
-			if (!entry.getValue().getInDepot().equals(depot) || entry.getValue().getLastSeen().isBlank()) {
+			if (!entry.getValue().getString(HostInfo.DEPOT_OF_CLIENT_KEY).equals(depot)
+					|| entry.getValue().getString(HostInfo.LAST_SEEN_KEY).isBlank()) {
 				continue;
 			}
 
-			String date = entry.getValue().getLastSeen().substring(0, 10);
-
+			String date = entry.getValue().getString(HostInfo.LAST_SEEN_KEY).substring(0, 10);
 			final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
 			final long days = ChronoUnit.DAYS.between(lastSeenDate, currentDate);
 

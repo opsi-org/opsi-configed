@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -30,15 +30,14 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.permission.UserFeaturesConfig;
-import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ServerFacade;
-import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -235,8 +234,8 @@ public class MenuBarController {
 		JMenu jMenuExtras = new JMenu(Configed.getResourceValue("MainFrame.jMenuExtras"));
 
 		JMenuItem jMenuWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnGroups"));
-		jMenuWorkOnGroups
-				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
+		jMenuWorkOnGroups.setEnabled(
+				persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
 		jMenuWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JMenuItem jMenuWorkOnProducts = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnProducts"));
@@ -246,7 +245,7 @@ public class MenuBarController {
 		jMenuExtras.add(jMenuWorkOnProducts);
 
 		JMenuItem jMenuFrameMsgOfTheDay = null;
-		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
+		List<Object> forbiddenItemsMOTD = persistenceController.getDataServices().userRoles.getForbiddenMOTD();
 		boolean forbiddenMOTD = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE)
 				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 
@@ -331,27 +330,26 @@ public class MenuBarController {
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		Icons.addOpsiIconToMenuItem(jMenuHelpDoc);
-		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showDocumentation());
+		Icons.addIntellijIconToMenuItem(jMenuHelpDoc, "readerMode");
+		jMenuHelpDoc.addActionListener(actionEvent -> BrowserUtils.openDocumentation());
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
-		Icons.addOpsiIconToMenuItem(jMenuHelpForum);
-		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		Icons.addThemeIconToMenuItem(jMenuHelpForum, "comment");
+		jMenuHelpForum.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		// Get the language used for the support page
 		String language = "de".equals(Messages.getLocale().getLanguage()) ? "de" : "en";
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		Icons.addOpsiIconToMenuItem(jMenuHelpSupport);
+		Icons.addIntellijIconToMenuItem(jMenuHelpSupport, "cwmEnableCall");
 		jMenuHelpSupport
-				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.UIB_PAGE + language + "/support"));
+				.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.UIB_PAGE + language + "/support"));
 		jMenuHelp.add(jMenuHelpSupport);
 
 		JMenuItem jMenuMoreAboutOpsi = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuMoreAboutOpsi"));
 		Icons.addOpsiIconToMenuItem(jMenuMoreAboutOpsi);
-		jMenuMoreAboutOpsi
-				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_PAGE + language + "/"));
+		jMenuMoreAboutOpsi.addActionListener(actionEvent -> BrowserUtils.openLink(Globals.OPSI_PAGE + language + "/"));
 		jMenuHelp.add(jMenuMoreAboutOpsi);
 	}
 
@@ -427,18 +425,13 @@ public class MenuBarController {
 		if (persistenceController != null) {
 			persistenceController.getExecutioner().clearAuthenticationData();
 		}
-		CacheManager.getInstance().clearAllCachedData();
-		Configed.getSavedStates().removeAll();
-		ConfigedMain.getMainFrame().resetData();
 
-		// We need to reset the validators so that new ones will be created when reconnecting
-		CertificateValidatorFactory.resetCertificateValidators();
-
+		MainFrame.resetInstanceData();
 		MainFrame.restartConfiged();
 	}
 
 	public void saveConfigurationsSetEnabled(boolean enabled) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
 				&& enabled) {
 			return;
 		}

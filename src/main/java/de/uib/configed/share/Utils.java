@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -8,6 +8,7 @@ package de.uib.configed.share;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
@@ -22,6 +23,11 @@ import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,16 +37,21 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -57,20 +68,15 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
-import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.logging.Logging;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 @SuppressWarnings({ "java:S1448" })
 public final class Utils {
 	private static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 	private static final int KIBI_BYTE = 1024;
-	private static final String[] LOG_TYPES = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
-			"opsiconfd" };
-	private static final int[] MAX_LOG_SIZES = new int[] { 4 * KIBI_BYTE * KIBI_BYTE, 8 * KIBI_BYTE * KIBI_BYTE,
-			8 * KIBI_BYTE * KIBI_BYTE, 0, 1 * KIBI_BYTE * KIBI_BYTE };
+	private static final String[] LOG_TYPES = new String[] { "bootimage", "clientconnect", "instlog", "opsiconfd",
+			"userlogin" };
 
 	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
 	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
@@ -82,6 +88,8 @@ public final class Utils {
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
+
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	private Utils() {
 	}
@@ -206,19 +214,11 @@ public final class Utils {
 	}
 
 	public static String[] getLogTypes() {
-		return LOG_TYPES.clone();
+		return LOG_TYPES;
 	}
 
 	public static String getLogType(int index) {
 		return (index < 0 || index >= LOG_TYPES.length) ? "" : LOG_TYPES[index];
-	}
-
-	public static int getMaxLogSize(int index) {
-		if (index < 0 || index >= MAX_LOG_SIZES.length) {
-			Logging.warning("error with index for maxLogSizes");
-			return -1;
-		}
-		return MAX_LOG_SIZES[index];
 	}
 
 	public static void threadSleep(Object caller, long millis) {
@@ -237,23 +237,6 @@ public final class Utils {
 		result.add(now);
 		Logging.info("getNowTimeListValue", result);
 		return result;
-	}
-
-	public static void showDocumentation() {
-		if ("de".equals(Messages.getLocale().getLanguage())) {
-			showExternalDocument(Globals.OPSI_DOC_PAGE_DE);
-		} else {
-			showExternalDocument(Globals.OPSI_DOC_PAGE_EN);
-		}
-	}
-
-	public static void showExternalDocument(String link) {
-		new Application() {
-			@Override
-			public void start(Stage primaryStage) throws Exception {
-				// Empty, because not needed
-			}
-		}.getHostServices().showDocument(link);
 	}
 
 	public static String pseudokey(String[] partialvalues) {
@@ -532,7 +515,7 @@ public final class Utils {
 	public static String getServerPathFromWebDAVPath(String webDAVPath) {
 		String dir = "";
 		if (webDAVPath.startsWith("workbench")) {
-			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+			dir = PersistenceControllerFactory.getPersistenceController().getDataServices().config
 					.getConfigedWorkbenchDefaultValuePD();
 			if (dir.charAt(dir.length() - 1) != '/') {
 				dir = dir + "/";
@@ -567,13 +550,22 @@ public final class Utils {
 	}
 
 	public static Boolean toBoolean(Object obj) {
-		if (obj instanceof Boolean bool) {
-			return bool;
+		return switch (obj) {
+		case Boolean bool -> bool;
+		case String str -> Boolean.valueOf(str);
+		default -> false;
+		};
+	}
+
+	public static boolean compareNumeric(Object realData, long data, BiPredicate<Long, Long> comparison) {
+		return switch (realData) {
+		case Long longData -> comparison.test(longData, data);
+		case Integer integerData -> comparison.test(integerData.longValue(), data);
+		case Object o -> {
+			Logging.error("data is no BigInteger!", o);
+			yield false;
 		}
-		if (obj instanceof String) {
-			return Boolean.valueOf(obj.toString());
-		}
-		return false;
+		};
 	}
 
 	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
@@ -591,6 +583,7 @@ public final class Utils {
 
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
 		return switch (value) {
+		case "server" -> Icons.getThemeSVGRepoIcon("server", size);
 		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
 		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
 		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
@@ -637,10 +630,65 @@ public final class Utils {
 		};
 	}
 
-	/**
-	 * Overload that accepts a Runnable and runs it on any document change.
-	 */
-	public static javax.swing.event.DocumentListener onDocumentChange(Runnable runnable) {
-		return onDocumentChange(e -> runnable.run());
+	public static JLabel createBoldLabel(String ressourceId) {
+		JLabel label = new JLabel(Configed.getResourceValue(ressourceId));
+		label.setFont(label.getFont().deriveFont(Font.BOLD));
+		return label;
+	}
+
+	public static void runOnEventDispatchThread(Runnable runnable) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(runnable);
+		} else {
+			runnable.run();
+		}
+	}
+
+	public static String formatDateTimeStringToLocal(LocalDateTime dateTime) {
+		return dateTime.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
+				.format(DATE_TIME_FORMATTER);
+	}
+
+	public static String formatDateTimeStringToLocal(String dateTimeString) {
+		try {
+			return formatDateTimeStringToLocal(LocalDateTime.parse(dateTimeString, DATE_TIME_FORMATTER));
+		} catch (DateTimeParseException e) {
+			Logging.warning(e, "Could not parse date time string: ", dateTimeString);
+			return dateTimeString;
+		}
+	}
+
+	public static void formatDateTimeStringForMap(Map<String, Object> map, String key) {
+		if (map.get(key) instanceof String timestampString && !timestampString.isEmpty()) {
+			map.put(key, formatDateTimeStringToLocal(timestampString));
+		}
+	}
+
+	public static <T> void runSwingWorker(Supplier<T> backgroundTask, Consumer<T> doneTask,
+			Consumer<Exception> exceptionHandler) {
+
+		Consumer<Exception> finalExceptionHandler = exceptionHandler != null ? exceptionHandler : ((Exception e) -> {
+		});
+
+		SwingWorker<T, Void> worker = new SwingWorker<>() {
+			@Override
+			protected T doInBackground() {
+				return backgroundTask.get();
+			}
+
+			@Override
+			protected void done() {
+				try {
+					T result = get();
+					doneTask.accept(result);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					finalExceptionHandler.accept(e);
+				} catch (ExecutionException e) {
+					finalExceptionHandler.accept(e);
+				}
+			}
+		};
+		worker.execute();
 	}
 }

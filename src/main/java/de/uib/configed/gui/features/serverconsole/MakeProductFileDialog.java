@@ -1,18 +1,14 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -35,6 +31,7 @@ import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
 import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class MakeProductFileDialog {
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
@@ -72,8 +69,7 @@ public class MakeProductFileDialog {
 	private JDialog dialog;
 
 	public MakeProductFileDialog(ConfigedMain configedMain) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -93,7 +89,7 @@ public class MakeProductFileDialog {
 		jComboBoxMainDir.setEnabled(true);
 
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
-		buttonExecute.addActionListener(actionEvent -> execute());
+		buttonExecute.addActionListener(actionEvent -> new Thread(this::execute));
 
 		JButton buttonPackageManager = new JButton(
 				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
@@ -115,8 +111,7 @@ public class MakeProductFileDialog {
 	}
 
 	private void initComponents() {
-		jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
-		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
+		jLabelDir = Utils.createBoldLabel("MakeProductFileDialog.serverDir");
 
 		autocompletion.setCombobox(new AutoCompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
@@ -131,22 +126,12 @@ public class MakeProductFileDialog {
 
 		jButtonSearchDir = autocompletion.getButton();
 		jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
-		jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
-			autocompletion.doButtonAction();
-			doSetActionGetVersions();
-		});
+		jButtonSearchDir.addActionListener(actionEvent -> search());
 
-		jLabelPackageVersion = new JLabel("    " + Configed.getResourceValue("MakeProductFileDialog.packageVersion"));
-		jLabelPackageVersion.setFont(jLabelPackageVersion.getFont().deriveFont(Font.BOLD));
-
-		jLabelProductVersion = new JLabel("    " + Configed.getResourceValue("MakeProductFileDialog.productVersion"));
-		jLabelProductVersion.setFont(jLabelProductVersion.getFont().deriveFont(Font.BOLD));
-
-		jLabelVersionsControlFile = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions_controlfile"));
-		jLabelVersionsControlFile.setFont(jLabelVersionsControlFile.getFont().deriveFont(Font.BOLD));
-
-		jLabelVersions = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions"));
-		jLabelVersions.setFont(jLabelVersions.getFont().deriveFont(Font.BOLD));
+		jLabelPackageVersion = Utils.createBoldLabel("MakeProductFileDialog.packageVersion");
+		jLabelProductVersion = Utils.createBoldLabel("MakeProductFileDialog.productVersion");
+		jLabelVersionsControlFile = Utils.createBoldLabel("MakeProductFileDialog.versions_controlfile");
+		jLabelVersions = Utils.createBoldLabel("MakeProductFileDialog.versions");
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
@@ -161,10 +146,7 @@ public class MakeProductFileDialog {
 		jButtonAdvancedSettings = new JToggleButton(
 				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
-		jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
-			advancedOptionsPanel.setVisible(jButtonAdvancedSettings.isSelected());
-			dialog.pack();
-		});
+		jButtonAdvancedSettings.addActionListener(actionEvent -> toggleAdvancedSettings());
 
 		jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
@@ -172,91 +154,51 @@ public class MakeProductFileDialog {
 	}
 
 	private JPanel initPanel() {
-		JPanel panel = new JPanel();
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		JPanel panel = new JPanel(new MigLayout("insets 0, wrap 1, hidemode 2", "[grow]", "[]0"));
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jComboBoxMainDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(jLabelProductVersionControlFile, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(jLabelPackageVersionControlFile, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldPackageVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jButtonAdvancedSettings, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(advancedOptionsPanel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		panel.add(jLabelDir, "gapbottom " + Globals.GAP_SIZE);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxMainDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelProductVersionControlFile, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelPackageVersionControlFile, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldPackageVersion, GroupLayout.Alignment.LEADING,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jButtonAdvancedSettings, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(advancedOptionsPanel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		panel.add(jComboBoxMainDir, "split 2, growx, pushx, wmin 0, wmax pref");
+		panel.add(jButtonSearchDir, "gapleft " + Globals.GAP_SIZE + ", wrap");
+
+		panel.add(jButtonSetRights, "gaptop " + Globals.GAP_SIZE);
+
+		JPanel versionPanel = initVersionPanel();
+		panel.add(versionPanel, "span, growx, pushx, gaptop " + Globals.GAP_SIZE);
+
+		panel.add(jCheckBoxOverwrite, "gaptop " + Globals.GAP_SIZE);
+		panel.add(jButtonAdvancedSettings);
+
+		panel.add(advancedOptionsPanel, "gaptop " + Globals.GAP_SIZE);
 
 		return panel;
+	}
+
+	private JPanel initVersionPanel() {
+		JPanel versionPanel = new JPanel(new MigLayout("insets 0, hidemode 2, wrap 1", "[][pref!][grow][]"));
+
+		versionPanel.add(jLabelVersionsControlFile, "cell 1 0, align right");
+		versionPanel.add(jLabelVersions, "cell 3 0, align left");
+
+		versionPanel.add(jLabelProductVersion, "cell 0 1, align right");
+		versionPanel.add(jLabelProductVersionControlFile, "cell 1 1");
+		versionPanel.add(jTextFieldProductVersion, "cell 3 1");
+
+		versionPanel.add(jLabelPackageVersion, "cell 0 2, align right");
+		versionPanel.add(jLabelPackageVersionControlFile, "cell 1 2");
+		versionPanel.add(jTextFieldPackageVersion, "cell 3 2");
+
+		return versionPanel;
+	}
+
+	private void search() {
+		autocompletion.doButtonAction();
+		doSetActionGetVersions();
+	}
+
+	private void toggleAdvancedSettings() {
+		advancedOptionsPanel.setVisible(!advancedOptionsPanel.isVisible());
+		dialog.pack();
 	}
 
 	private String doActionGetVersions() {
@@ -277,9 +219,9 @@ public class MakeProductFileDialog {
 					"Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
-			Logging.info(this, "doActionGetVersions, getDirectories result ", Arrays.toString(versions));
-			if (versions.length < 1) {
-				Logging.info(this, "doActionGetVersions, not expected versions array ", Arrays.toString(versions));
+			Logging.info(this, "doActionGetVersions, getDirectories result versions with length ", versions.length);
+			if (versions.length < 2) {
+				Logging.info(this, "doActionGetVersions, not expected versions array with size < 2");
 				return "";
 			}
 			return versions[0] + ";;;" + versions[1];
@@ -288,24 +230,27 @@ public class MakeProductFileDialog {
 	}
 
 	private final void doSetActionGetVersions() {
-		String versions = doActionGetVersions();
+		Utils.runSwingWorker(this::doActionGetVersions, this::setVersions, null);
+	}
+
+	private void setVersions(String versions) {
 		if (versions.contains(";;;")) {
 			enableTfVersions(true);
 
 			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
-
-			jTextFieldPackageVersion.setText(versionArray[0]);
-			jLabelPackageVersionControlFile.setText(versionArray[0]);
-
-			jTextFieldProductVersion.setText(versionArray[1]);
-			jLabelProductVersionControlFile.setText(versionArray[1]);
+			updateVersionFields(versionArray[0], versionArray[1]);
 		} else {
 			enableTfVersions(false);
-			jTextFieldPackageVersion.setText("");
-			jLabelPackageVersionControlFile.setText("");
-			jTextFieldProductVersion.setText("");
-			jLabelProductVersionControlFile.setText("");
+			updateVersionFields("", "");
 		}
+	}
+
+	private void updateVersionFields(String product, String packageVersion) {
+		jTextFieldPackageVersion.setText(product);
+		jLabelPackageVersionControlFile.setText(product);
+
+		jTextFieldProductVersion.setText(packageVersion);
+		jLabelProductVersionControlFile.setText(packageVersion);
 	}
 
 	private void enableTfVersions(boolean enable) {
@@ -340,7 +285,7 @@ public class MakeProductFileDialog {
 		if (jCheckBoxOverwrite.isSelected()) {
 			String versions = doActionGetVersions();
 
-			String[] versionArray = tripleSemicolonMatcher.split(versions);
+			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
 
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -34,7 +34,7 @@ public final class DepotData {
 		}
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-		depots = persistenceController.getHostInfoCollections().getDepots();
+		depots = persistenceController.getDataServices().hostInfoCollections.getDepots();
 	}
 
 	public static void clear() {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -35,6 +33,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.Configed;
@@ -50,8 +49,9 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
-public class PanelProductSettings extends JSplitPane {
+public class PanelProductSettings extends AbstractConfigurationTab {
 	public enum ProductSettingsType {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
@@ -68,7 +68,10 @@ public class PanelProductSettings extends JSplitPane {
 
 	private ProductTree productTree;
 
+	private JSplitPane contentPane;
+
 	private ConfigedMain configedMain;
+	private Runnable updater;
 
 	private ProductSettingsType type;
 
@@ -76,14 +79,12 @@ public class PanelProductSettings extends JSplitPane {
 			.getPersistenceController();
 
 	public PanelProductSettings(ConfigedMain configedMain, ProductTree productTree, ProductSettingsType type) {
-		super(JSplitPane.HORIZONTAL_SPLIT);
-		this.productTree = productTree;
+		super(true, true);
 		this.configedMain = configedMain;
+		this.productTree = productTree;
 		this.type = type;
 
 		init();
-
-		super.setResizeWeight(1.0);
 	}
 
 	private void init() {
@@ -108,21 +109,11 @@ public class PanelProductSettings extends JSplitPane {
 		productSettingsTableModel = new ProductSettingsTableModel(productTable);
 
 		JPanel leftPane = new JPanel();
-		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
-		leftPane.setLayout(layoutLeftPane);
+		leftPane.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]", "[]0"));
+		leftPane.add(groupPanel, "growx");
+		leftPane.add(paneProducts, "grow, push, hmin 100");
 
-		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(groupPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(paneProducts, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
-				.addComponent(groupPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		setLeftComponent(leftPane);
-
-		propertiesPanel = new EditMapPanelX(false, true, false);
+		propertiesPanel = new EditMapPanelX(false, true);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 
@@ -131,7 +122,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
-		setRightComponent(infoPane);
+		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
+		contentPane.setResizeWeight(1.0);
+		setComponent(contentPane);
 
 		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(),
 				new JComponent[] { paneProducts, productTable });
@@ -153,12 +146,25 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.setFilterMark(enable);
 	}
 
+	public JSplitPane getContentPane() {
+		return contentPane;
+	}
+
+	public void setUpdater(Runnable updater) {
+		this.updater = updater;
+	}
+
+	@Override
+	protected void updateContent() {
+		updater.run();
+	}
+
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
 		Icons.addIntellijIconToMenuItem(save, "save");
-		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		save.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
 		save.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
@@ -169,7 +175,7 @@ public class PanelProductSettings extends JSplitPane {
 		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.addActionListener(actionEvent -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
-				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		popup.add(itemOnDemand);
 
@@ -177,11 +183,11 @@ public class PanelProductSettings extends JSplitPane {
 				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
 		Icons.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
 		itemOnDemandForSelectedProducts
-				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		itemOnDemandForSelectedProducts.addActionListener(
 				actionEvent -> ServerActionManager.processActionRequestsSelectedProducts(groupPanel.getVisibility()));
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS
-				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+				&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		popup.add(itemOnDemandForSelectedProducts);
 
@@ -193,7 +199,7 @@ public class PanelProductSettings extends JSplitPane {
 		} else {
 			resetProductsMenu = ClientMenuManager.createResetNetbootProductsMenuItemsTo();
 		}
-		resetProductsMenu.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
+		resetProductsMenu.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 		popup.add(resetProductsMenu);
 
 		popup.addSeparator();
@@ -241,8 +247,8 @@ public class PanelProductSettings extends JSplitPane {
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
 		return type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
-				? persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts()
-				: persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
+				? persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsLocalbootProducts()
+				: persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsNetbootProducts();
 	}
 
 	private void createReport() {
@@ -342,17 +348,17 @@ public class PanelProductSettings extends JSplitPane {
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
 			Map<String, Object> editableProductProperties, ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setProductId(productID);
-		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
-		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
-		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
+		infoPane.setProductName(persistenceController.getDataServices().product.getProductTitle(productID));
+		infoPane.setProductInfo(persistenceController.getDataServices().product.getProductInfo(productID));
+		infoPane.setProductVersion(persistenceController.getDataServices().product.getProductVersion(productID)
 				+ ProductDataService.FOR_DISPLAY
-				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
-				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
+				+ persistenceController.getDataServices().product.getProductPackageVersion(productID) + "   "
+				+ persistenceController.getDataServices().product.getProductLockedInfo(productID));
 
-		infoPane.setProductAdvice(persistenceController.getProductDataService().getProductAdvice(productID));
+		infoPane.setProductAdvice(persistenceController.getDataServices().product.getProductAdvice(productID));
 
 		propertiesPanel.setEditableMap(editableProductProperties,
-				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
+				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
 		propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 

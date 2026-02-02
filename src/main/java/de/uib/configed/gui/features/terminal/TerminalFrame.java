@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -39,6 +38,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public final class TerminalFrame implements MessagebusListener {
 	private JFrame frame;
@@ -48,12 +48,12 @@ public final class TerminalFrame implements MessagebusListener {
 			.getPersistenceController();
 
 	// User roles configs
-	private boolean fullDepotsPermission = persistenceController.getUserRolesConfigDataService()
+	private boolean fullDepotsPermission = persistenceController.getDataServices().userRoles
 			.hasDepotsFullPermissionPD();
-	private boolean fullClientsPermission = persistenceController.getUserRolesConfigDataService()
+	private boolean fullClientsPermission = persistenceController.getDataServices().userRoles
 			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
-	private Set<Object> allowedDepots = persistenceController.getUserRolesConfigDataService().getPermittedDepots();
-	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
+	private Set<Object> allowedDepots = persistenceController.getDataServices().userRoles.getPermittedDepots();
+	private List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
@@ -104,24 +104,14 @@ public final class TerminalFrame implements MessagebusListener {
 		menuBar.init();
 		frame.setJMenuBar(menuBar);
 
-		JPanel allPane = new JPanel();
-
-		GroupLayout allLayout = new GroupLayout(allPane);
-		allPane.setLayout(allLayout);
-
 		JPanel northPanel = createNorthPanel();
 		fileUploadProgressIndicator = new TerminalFileUploadProgressIndicator();
 		fileUploadProgressIndicator.init();
 		fileUploadProgressIndicator.setVisible(false);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(fileUploadProgressIndicator));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup().addComponent(northPanel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(allLayout.createSequentialGroup().addComponent(fileUploadProgressIndicator)));
+		JPanel allPane = new JPanel(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow]0[pref!]"));
+		allPane.add(northPanel, "grow");
+		allPane.add(fileUploadProgressIndicator, "growx, hidemode 3");
 
 		frame.add(allPane);
 
@@ -226,12 +216,12 @@ public final class TerminalFrame implements MessagebusListener {
 		}
 
 		// Don't allow connection to clients when VPN module is not available
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN)) {
 			return resultListAllowedDevices;
 		}
 
 		// list of *all depots* to e.g. distinguish between depots and clients in list of connected devices
-		List<String> depotsList = persistenceController.getHostInfoCollections().getAllDepotNamesList();
+		List<String> depotsList = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		Logging.info(this, "terminal, depotsList: ", depotsList);
 
 		Set<String> allowedHosts = getAllowedHostsByUserRolesHosts(depotsList);
@@ -275,7 +265,7 @@ public final class TerminalFrame implements MessagebusListener {
 	private boolean isConfigServerAllowed(boolean forbiddenConfigServer, boolean fullDepotsPermission,
 			Set<Object> allowedDepots) {
 		Logging.debug(this, "terminal, allowedDepots: ", allowedDepots);
-		String configserverName = persistenceController.getHostInfoCollections().getConfigServer();
+		String configserverName = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
 		boolean allowed = (!forbiddenConfigServer
 				&& (fullDepotsPermission || allowedDepots.contains(configserverName)));
 		Logging.debug(this, "terminal, configserver allowed (", allowed, "): ", configserverName,
@@ -297,13 +287,13 @@ public final class TerminalFrame implements MessagebusListener {
 	 * @return Set of clients and depots allowed by user roles
 	 */
 	private Set<String> getAllowedHostsByUserRolesHosts(List<String> allDepots) {
-		Set<String> allClientsDepotsConnected2Msgbus = persistenceController.getHostDataService()
+		Set<String> allClientsDepotsConnected2Msgbus = persistenceController.getDataServices().host
 				.getMessagebusConnectedClients();
 		Set<String> allClientsDepotsConnected2MsgbusCopy = new HashSet<>(allClientsDepotsConnected2Msgbus);
 		Logging.info(this, "terminal, allClientsDepotsConnected2Msgbus: ", allClientsDepotsConnected2Msgbus);
 
 		// list of clients allowed by user roles
-		Set<String> clientsOfAllowedDepots = persistenceController.getHostInfoCollections()
+		Set<String> clientsOfAllowedDepots = persistenceController.getDataServices().hostInfoCollections
 				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients());
 		Logging.info(this, "terminal, clientsForDepots: ", clientsOfAllowedDepots);
 
@@ -378,10 +368,6 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	private JPanel createNorthPanel() {
-		JPanel northPanel = new JPanel();
-
-		GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
 
 		tabbedPane = new TerminalTabbedPane(this);
 		tabbedPane.setMessagebus(messagebus);
@@ -390,11 +376,9 @@ public final class TerminalFrame implements MessagebusListener {
 
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
-		northLayout
-				.setVerticalGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE));
-
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
-				.addGroup(northLayout.createSequentialGroup().addComponent(tabbedPane, 0, 0, Short.MAX_VALUE)));
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new MigLayout("insets 0, fill", "[grow]", "[grow]"));
+		northPanel.add(tabbedPane, "grow, hmin 0, wmin 0");
 
 		return northPanel;
 	}

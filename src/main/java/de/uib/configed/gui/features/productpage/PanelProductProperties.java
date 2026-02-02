@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,13 +7,19 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.event.AncestorEvent;
@@ -24,33 +30,38 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientConfiguration;
+import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
-import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
-import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.ExternalSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.OpsiPackage;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelProductProperties extends JSplitPane implements AncestorListener {
+public class PanelProductProperties extends AbstractConfigurationTab implements AncestorListener {
 	private PanelGenEdit paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
 	private DepotsList depotsList;
 
+	private JSplitPane splitPane;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public PanelProductProperties(ConfigedMain configedMain, DepotsList depotsList) {
-		super(JSplitPane.HORIZONTAL_SPLIT);
+		super(true, false);
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
 
@@ -63,7 +74,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
-		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false, false);
+		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.updateData(null, null);
@@ -81,13 +92,54 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		paneProducts.setSortOrder(sortDescriptor);
 
-		setLeftComponent(paneProducts);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setLeftComponent(paneProducts);
 
 		infoPane = new ProductInfoPane(panelEditProperties);
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
-		setRightComponent(infoPane);
+		splitPane.setRightComponent(infoPane);
+		splitPane.setResizeWeight(1.0);
 
-		setResizeWeight(1.0);
+		PopupMouseListener.addPopupMouseListenerToComponents(createPopupMenu(),
+				new JComponent[] { paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane() });
+
+		setComponent(splitPane);
+	}
+
+	private JPopupMenu createPopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
+
+		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
+		Icons.addIntellijIconToMenuItem(save, "save");
+		save.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+
+		save.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
+
+		popup.add(save);
+
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("reload"));
+		reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		Icons.addIntellijIconToMenuItem(reload, "refresh");
+		reload.addActionListener(actionEvent -> paneProducts.reload());
+		popup.add(reload);
+
+		popup.addSeparator();
+
+		JMenuItem menuItemSortAgain = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
+		menuItemSortAgain.addActionListener(actionEvent -> paneProducts.getGenEditTable().sortAgainAsConfigured());
+		popup.add(menuItemSortAgain);
+
+		popup.addSeparator();
+
+		ExporterToCSV exportTable = new ExporterToCSV(paneProducts.getGenEditTable());
+		JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
+		popup.add(menuItemExportCSV);
+
+		JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+		popup.add(menuItemExportSelectedCSV);
+
+		return popup;
 	}
 
 	private GenTableModel createTableModel() {
@@ -105,6 +157,13 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 				paneProducts, updateCollection);
 	}
 
+	@Override
+	public void updateContent() {
+		Logging.info(this, "updateContent()");
+		setProductProperties();
+		paneProducts.restoreFilter();
+	}
+
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
 		int saveSelectedRow = paneProducts.getGenEditTable().getSelectedRow();
@@ -119,10 +178,6 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		}
 	}
 
-	public PanelGenEdit getPaneProducts() {
-		return paneProducts;
-	}
-
 	@SuppressWarnings({ "java:S2972" })
 	private class PaneProducts extends PanelGenEdit {
 		private List<String> columnNames;
@@ -132,8 +187,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, PanelGenEditPopupManager.POPUP_SORT_AGAIN },
-					true);
+			super("", false, 0, null, true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;
@@ -150,7 +204,9 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
 				persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 			}
+			int[] selectedRows = genEditTable.getSelectedRows();
 			super.reload();
+			genEditTable.setRowSelectionInterval(selectedRows[0], selectedRows[selectedRows.length - 1]);
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
 
@@ -191,7 +247,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 						"" + genEditTable.getValueAt(row, columnNames.indexOf("productVersion")),
 						"" + genEditTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
+				List<String> depotsOfPackageAsRetrieved = persistenceController.getDataServices().product
 						.getProduct2VersionInfo2DepotsPD()
 						.get(genEditTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
@@ -199,7 +255,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 				depotsOfPackage = new LinkedList<>();
 
-				for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
+				for (String depot : persistenceController.getDataServices().hostInfoCollections.getDepots().keySet()) {
 					if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
 						depotsOfPackage.add(depot);
 					}
@@ -221,7 +277,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	@Override
 	public void ancestorAdded(AncestorEvent event) {
-		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
+		splitPane.setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
 	}
 
 	@Override

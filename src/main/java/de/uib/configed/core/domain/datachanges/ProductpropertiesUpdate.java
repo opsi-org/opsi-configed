@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -28,7 +28,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		persistenceController.getProductDataService().setProductProperties(pcname, productname,
+		persistenceController.getDataServices().product.setProductProperties(pcname, productname,
 				new ConfigName2ConfigValue(newdata));
 	}
 

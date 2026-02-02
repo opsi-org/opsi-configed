@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -55,7 +55,7 @@ public class SelectionManager {
 	 * data.
 	 */
 	public SoftwareNameElement getNewSoftwareNameElement() {
-		return new SoftwareNameElement(persistenceController.getProductDataService().getProductIdsPD());
+		return new SoftwareNameElement(persistenceController.getDataServices().product.getProductIdsPD());
 	}
 
 	public OpsiDataBackend getBackend() {
@@ -71,24 +71,19 @@ public class SelectionManager {
 		Logging.debug(this, "addGroupOperation: ", groupType, " ", operation, " ", operation);
 
 		switch (groupType) {
-		case SOFTWARE_GROUP:
+		case SOFTWARE_GROUP -> {
 			groupStatus.setOperation(new SoftwareOperation(operation));
 			hasSoftware = true;
-			break;
-
-		case HARDWARE_GROUP:
+		}
+		case HARDWARE_GROUP -> {
 			groupStatus.setOperation(new HardwareOperation(operation));
 			hasHardware = true;
-			break;
-
-		case SW_AUDIT_GROUP:
+		}
+		case SW_AUDIT_GROUP -> {
 			groupStatus.setOperation(new SwAuditOperation(operation));
 			hasSwAudit = true;
-			break;
-
-		case HOST_GROUP:
-			groupStatus.setOperation(new HostOperation(operation));
-			break;
+		}
+		case HOST_GROUP -> groupStatus.setOperation(new HostOperation(operation));
 		}
 
 		groupWithStatusList.add(groupStatus);
@@ -268,16 +263,19 @@ public class SelectionManager {
 	 * there are no parentheses around the whole list
 	 */
 	private static List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
+		return switch (operation) {
+		case AndOperation andOperation -> reverseBuildAndOperation(andOperation, isTopOperation);
+		case OrOperation orOperation when !orOperation.getChildOperations().isEmpty() -> reverseBuildOrOperation(
+				orOperation, isTopOperation);
+		default -> createDefaultReverseBuild(operation);
+		};
+	}
+
+	private static LinkedList<OperationWithStatus> createDefaultReverseBuild(AbstractSelectOperation operation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<>();
-		if (operation instanceof AndOperation andOperation) {
-			return reverseBuildAndOperation(andOperation, isTopOperation);
-		} else if (operation instanceof OrOperation orOperation && !orOperation.getChildOperations().isEmpty()) {
-			return reverseBuildOrOperation(orOperation, isTopOperation);
-		} else {
-			result.add(reverseParseNot(operation, ConnectionStatus.AND));
-			result.getLast().setParenthesisOpen(false);
-			result.getLast().setParenthesisClose(false);
-		}
+		result.add(reverseParseNot(operation, ConnectionStatus.AND));
+		result.getLast().setParenthesisOpen(false);
+		result.getLast().setParenthesisClose(false);
 		return result;
 	}
 
@@ -357,14 +355,13 @@ public class SelectionManager {
 			return;
 		}
 
-		if (operation instanceof SoftwareOperation) {
-			hasSoftware = true;
-		} else if (operation instanceof HardwareOperation) {
-			hasHardware = true;
-		} else if (operation instanceof SwAuditOperation) {
-			hasSwAudit = true;
-		} else {
+		switch (operation) {
+		case SoftwareOperation _ -> hasSoftware = true;
+		case HardwareOperation _ -> hasHardware = true;
+		case SwAuditOperation _ -> hasSwAudit = true;
+		default -> {
 			// nothing to do for other operations
+		}
 		}
 
 		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {

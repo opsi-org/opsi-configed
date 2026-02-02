@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -70,7 +70,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 			return;
 		}
 
-		String nameVal = (String) genEditTable.getValueAt(modelrow,
+		String nameVal = (String) genEditTable.getValueAt(genEditTable.convertRowIndexToView(modelrow),
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
 		Logging.info(this, " got name ", nameVal);

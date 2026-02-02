@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -11,7 +11,6 @@
 
 package de.uib.configed.gui.features.licenses;
 
-import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
@@ -21,8 +20,10 @@ import de.uib.configed.gui.AbstractControlMultiTablePanel;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelLicensesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
@@ -36,24 +37,15 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 
 	private void initComponents() {
 		panelStatistics = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"),
-				false, 0, null, true);
+				false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF }, true);
 		panelStatistics.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelStatistics.setFilterKey(FilterKey.LICENSES_STATISTICS_TABLE);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
 		panelStatistics.getTableSearchPane().setFiltering();
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING).addComponent(panelStatistics,
-						GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-						Short.MAX_VALUE))
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(panelStatistics, MIN_VSIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE));
+		this.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		this.add(panelStatistics, "grow, hmin " + MIN_VSIZE + ", gapbottom " + Globals.MIN_GAP_SIZE);
 	}
 
 	public PanelGenEdit getPanelStatistics() {
@@ -75,5 +67,10 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 		} else {
 			super.reset();
 		}
+	}
+
+	@Override
+	public void load() {
+		reset();
 	}
 }

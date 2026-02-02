@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -31,26 +31,16 @@ public class ByteUnitConverter {
 	}
 
 	public double convertByteUnit(long bytes, ByteUnit unit) {
-		double size;
-		switch (unit) {
-		case KILO_BYTE:
-			size = bytes / 1_000.0;
-			break;
-		case MEGA_BYTE:
-			size = bytes / 1_000_000.0;
-			break;
-		case GIGA_BYTE:
-			size = bytes / 1_000_000_000.0;
-			break;
-		case TERA_BYTE:
-			size = bytes / 1_000_000_000_000.0;
-			break;
-		default:
+		return switch (unit) {
+		case KILO_BYTE -> bytes / 1_000.0;
+		case MEGA_BYTE -> bytes / 1_000_000.0;
+		case GIGA_BYTE -> bytes / 1_000_000_000.0;
+		case TERA_BYTE -> bytes / 1_000_000_000_000.0;
+		default -> {
 			Logging.warning(this, "Unknown byte unit: ", unit);
-			size = bytes;
-			break;
+			yield bytes;
 		}
-		return size;
+		};
 	}
 
 	public String asString(double value, ByteUnit unit) {

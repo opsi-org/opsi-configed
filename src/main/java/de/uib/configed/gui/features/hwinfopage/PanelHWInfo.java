@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -17,7 +17,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -36,6 +35,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
+import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -45,14 +45,18 @@ import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
-import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
-public class PanelHWInfo extends JPanel implements TreeSelectionListener {
+public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
+
+	// These are the values that should be interpreted as booleans
+	public static final Set<String> BOOLEAN_VALUES = Set.of("UEFIBootActive", "SecureBootActive",
+			"SecureBootWindowsCA2023");
 
 	private static final Set<String> hwClassesForByAudit = new HashSet<>();
 	static {
@@ -64,8 +68,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
-	private static final String SCANPROPERTYNAME = "SCANPROPERTIES";
-	private static final String SCANTIME = "scantime";
+	public static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	public static final String SCANTIME = "scantime";
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
@@ -100,14 +104,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			.getPersistenceController();
 
 	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
+		super(false, true);
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
 		this.clientConfiguration = clientConfiguration;
 
-		buildPanel();
+		buildContentPanel();
 	}
 
-	private void buildPanel() {
+	private void buildContentPanel() {
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
 		tree = new XTree();
@@ -119,7 +124,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
-		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
+		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
 		table.getColumnModel().getColumn(1).setPreferredWidth(300);
@@ -129,21 +134,16 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		JScrollPane jScrollPaneInfo = new JScrollPane(table);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		contentPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
+		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
-		GroupLayout layoutBase = new GroupLayout(this);
-		setLayout(layoutBase);
+		JPanel contentPanel = new JPanel();
+		setComponent(contentPanel);
 
-		layoutBase.setHorizontalGroup(layoutBase.createParallelGroup()
-				.addGroup(layoutBase.createSequentialGroup().addComponent(panelByAuditInfo, 0,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(contentPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(contentPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		contentPanel
+				.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
+		contentPanel.add(panelByAuditInfo);
+		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
 			new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
@@ -151,24 +151,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				@Override
 				public void action(int p) {
 					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						break;
-
-					case PopupMenuTrait.POPUP_FLOATING_COPY:
-						floatExternal();
-						break;
-					case PopupMenuTrait.POPUP_PDF:
-						exportPDF();
-						break;
-
-					default:
-						Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-						break;
+					case PopupMenuTrait.POPUP_RELOAD -> reload();
+					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
+					case PopupMenuTrait.POPUP_PDF -> exportPDF();
+					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
 					}
 				}
 			};
 		}
+	}
+
+	@Override
+	protected void updateContent() {
+		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
+		setHardwareInfo(persistenceController.getDataServices().hardware
+				.getHardwareInfo(configedMain.getSelectedClients().get(0)));
 	}
 
 	private void exportPDF() {
@@ -189,7 +186,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	/** overwrite in subclasses */
 	protected void reload() {
 		Logging.debug(this, "reload hardware info");
-		clientConfiguration.setHardwareInfoPage();
+		updateContent();
 	}
 
 	private void floatExternal() {
@@ -287,7 +284,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return values;
 	}
 
-	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+	private List<Object[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 		if (!hasData(node, reduceScanToByAuditClasses)) {
 			return new ArrayList<>();
 		}
@@ -301,7 +298,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
-		List<String[]> data = new ArrayList<>();
+		List<Object[]> data = new ArrayList<>();
 		for (Map<String, Object> value : values) {
 			String opsi = (String) value.get("Opsi");
 			Logging.debug(this, "opsi ", opsi);
@@ -316,9 +313,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
 				if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
-					String cv = findCV(reduceScanToByAuditClasses, hwClass, unit, opsi, deviceInfoEntry.getValue());
+					Object cv = findCV(reduceScanToByAuditClasses, hwClass, unit, opsi, deviceInfoEntry.getValue());
 
-					String[] row = { ui, cv };
+					Object[] row = { ui, cv };
 					data.add(row);
 					Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
 					break;
@@ -329,8 +326,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return data;
 	}
 
-	private String findCV(boolean reduceScanToByAuditClasses, String hwClass, String unit, String opsi,
+	private Object findCV(boolean reduceScanToByAuditClasses, String hwClass, String unit, String opsi,
 			Object deviceInfo) {
+		// First we check, if the deviceInfo should be a boolean
+		if (BOOLEAN_VALUES.contains(opsi) && deviceInfo instanceof Integer integer) {
+			return integer.intValue() != 0;
+		}
+
 		String cv = "" + deviceInfo;
 
 		// Set these values before adding ending to cv
@@ -413,9 +415,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		productString = "";
 	}
 
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
+	private void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo) {
 		if (hwConfig == null) {
-			hwConfig = persistenceController.getHardwareDataService()
+			hwConfig = persistenceController.getDataServices().hardware
 					.getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
 		}
 

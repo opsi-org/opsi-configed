@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -174,28 +174,24 @@ public final class Icons {
 				.getPersistenceController();
 
 		Color dotColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+		if (persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
 			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					persistenceController.getDataServices().module.getOpsiLicensingInfoOpsiAdminPD(),
+					persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 					!OpsiLicensing.isExtendedView());
 
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				dotColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				dotColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
+			dotColor = switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT -> Globals.OPSI_ERROR;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT -> Globals.OPSI_WARNING;
+			case LicensingInfoMap.STATE_OKAY -> {
 				Logging.info("icon will remain null, we don't want to show a dot when modules are okay");
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
+				yield null;
 			}
+			default -> {
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
+				yield null;
+			}
+			};
 		}
 
 		FlatSVGIcon opsiIcon;
@@ -229,10 +225,7 @@ public final class Icons {
 		button.setIcon(Icons.getIntellijIcon("springBootHealth", 32));
 		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.getActiveColor(), 32));
 
-		new Thread(() -> {
-			button.setIcon(getHealthCheckIcon(size));
-			button.setSelectedIcon(getHealthCheckIcon(size, Globals.getActiveColor()));
-		}).start();
+		setHealthCheckIcon(button, size, Globals.getActiveColor());
 	}
 
 	/**
@@ -244,10 +237,18 @@ public final class Icons {
 		button.setIcon(Icons.getIntellijIcon("springBootHealth"));
 		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.OPSI_FOREGROUND_DARK));
 
-		new Thread(() -> {
-			button.setIcon(getHealthCheckIcon(size));
-			button.setSelectedIcon(getHealthCheckIcon(size, Globals.OPSI_FOREGROUND_DARK));
-		}).start();
+		setHealthCheckIcon(button, size, Globals.OPSI_FOREGROUND_DARK);
+	}
+
+	private static void setHealthCheckIcon(AbstractButton button, int size, Color selectedColor) {
+		Utils.runSwingWorker(() -> {
+			Icon normal = getHealthCheckIcon(size);
+			Icon selected = getHealthCheckIcon(size, selectedColor);
+			return new Icon[] { normal, selected };
+		}, (Icon[] icons) -> {
+			button.setIcon(icons[0]);
+			button.setSelectedIcon(icons[1]);
+		}, null);
 	}
 
 	private static Icon getHealthCheckIcon(int size) {
@@ -255,26 +256,20 @@ public final class Icons {
 	}
 
 	private static Icon getHealthCheckIcon(int size, Color iconColor) {
-		Color dotColor = null;
-
 		HealthDataProcessor.StatusLevel warningLevel = HealthDataProcessor.getMaxStatusLevel();
-		switch (warningLevel) {
-		case ERROR:
-			dotColor = Globals.OPSI_ERROR;
-			break;
 
-		case WARNING:
-			dotColor = Globals.OPSI_WARNING;
-			break;
-
-		case OK:
+		Color dotColor = switch (warningLevel) {
+		case ERROR -> Globals.OPSI_ERROR;
+		case WARNING -> Globals.OPSI_WARNING;
+		case OK -> {
 			Logging.info("icon will remain null, we don't want to show a dot when health check are okay");
-			break;
-
-		default:
-			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
-			break;
+			yield null;
 		}
+		default -> {
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthDataProcessor.getMaxStatusLevel());
+			yield null;
+		}
+		};
 
 		FlatSVGIcon opsiIcon;
 		if (iconColor == null) {

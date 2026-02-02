@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -16,20 +16,20 @@ import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.features.swinfopage.PanelSWMultiClientReport;
+import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.share.logging.Logging;
 
 public class SwExporter implements ActionListener {
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	private PanelSWInfo panelSWInfo;
+	private PanelSWSingleClientInfo panelSWInfo;
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo,
+	public SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWSingleClientInfo panelSWInfo,
 			ConfigedMain configedMain) {
 		this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
 		this.panelSWInfo = panelSWInfo;
@@ -63,9 +63,9 @@ public class SwExporter implements ActionListener {
 			panelSWInfo.setHost(client);
 			panelSWInfo.updateModel();
 
-			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
-					.getSoftwareAuditOnClients(Collections.singletonList(client));
-			String scandate = persistenceController.getSoftwareDataService()
+			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
+					.getDataServices().software.getSoftwareAuditOnClients(Collections.singletonList(client));
+			String scandate = persistenceController.getDataServices().software
 					.getLastSoftwareAuditModification(swAuditClientEntries, client);
 			if (scandate != null) {
 				int timePos = scandate.indexOf(' ');

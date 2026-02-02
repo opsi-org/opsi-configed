@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -7,12 +7,12 @@
 package de.uib.configed.gui.features.serverconsole;
 
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import net.miginfocom.swing.MigLayout;
 
 public class AdvancedOptionsPanel extends JPanel {
 	private JCheckBox jCheckBoxMD5Sum;
@@ -39,33 +39,12 @@ public class AdvancedOptionsPanel extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(""));
 
 		jCheckBoxMD5Sum = new JCheckBox(Configed.getResourceValue("AdvancedOptionsPanel.lbl_createMd5sum"), true);
-
 		jCheckBoxZsync = new JCheckBox(Configed.getResourceValue("AdvancedOptionsPanel.lbl_createZsync"), true);
-
 		jCheckBoxSetRights = new JCheckBox(Configed.getResourceValue("AdvancedOptionsPanel.setRights"), true);
 
-		GroupLayout advancedOptionsPanelLayout = new GroupLayout(this);
-		advancedOptionsPanelLayout.setAutoCreateGaps(true);
-		advancedOptionsPanelLayout.setAutoCreateContainerGaps(true);
-		setLayout(advancedOptionsPanelLayout);
-
-		advancedOptionsPanelLayout.setHorizontalGroup(advancedOptionsPanelLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(advancedOptionsPanelLayout.createParallelGroup()
-						.addComponent(jCheckBoxZsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxMD5Sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
-		advancedOptionsPanelLayout.setVerticalGroup(advancedOptionsPanelLayout.createSequentialGroup()
-				.addComponent(jCheckBoxZsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jCheckBoxMD5Sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
+		add(jCheckBoxZsync, "gapbottom " + Globals.GAP_SIZE);
+		add(jCheckBoxMD5Sum, "gapbottom " + Globals.GAP_SIZE);
+		add(jCheckBoxSetRights, "gapbottom " + Globals.GAP_SIZE);
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -50,7 +50,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 
 	@Override
 	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
-		Map<String, HostInfo> clientInfos = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps();
+		Map<String, HostInfo> clientInfos = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfAllPCInfoMaps();
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			if (!theTable.isRowSelected(rowI) && selectedOnly) {
 				continue;
@@ -68,7 +69,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private String getRowValue(String columnName, HostInfo clientInfo) {
-		String clientName = clientInfo.getName();
+		String clientName = clientInfo.getString(HostInfo.HOSTNAME_KEY);
 
 		return switch (columnName) {
 		case "id" -> clientName.substring(0, clientName.indexOf("."));
@@ -79,7 +80,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private String getGroupsValue(String clientName) {
-		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+		Map<String, Set<String>> fObject2Groups = persistenceController.getDataServices().group.getFObject2GroupsPD();
 
 		// We need to add an empty set if there are no groups
 		if (fObject2Groups.containsKey(clientName)) {

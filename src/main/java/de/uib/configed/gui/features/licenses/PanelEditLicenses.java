@@ -1,5 +1,5 @@
 /**
- * Copyright (c) uib GmbH <info@uib.de>
+ * Copyright (c) UIB GmbH <info@uib.de>
  * License: AGPL-3.0
  * This file is part of opsi - https://www.opsi.org
  */
@@ -12,7 +12,6 @@
 
 package de.uib.configed.gui.features.licenses;
 
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
@@ -24,6 +23,7 @@ import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelEditLicenses extends MultiTablePanel {
 	private PanelGenEdit panelKeys;
@@ -71,41 +71,21 @@ public class PanelEditLicenses extends MultiTablePanel {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.5);
 
-		JPanel topPane = new JPanel();
-		JPanel bottomPane = new JPanel();
+		JPanel topPane = new JPanel(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
+
+		topPane.add(panelKeys, "grow");
+		topPane.add(panelSoftwarelicenses, "grow");
+
+		JPanel bottomPane = new JPanel(new MigLayout(
+				"insets " + Globals.GAP_SIZE + " 0 " + Globals.MIN_GAP_SIZE + " 0, fill", "[grow]", "[grow]"));
+
+		bottomPane.add(panelLicensecontracts, "grow, hmin " + minVSize);
+
+		this.setLayout(new MigLayout("insets 0, fill", "[]", "[]0"));
+		this.add(splitPane, "grow");
+
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
-
-		GroupLayout layoutTopPane = new GroupLayout(topPane);
-		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup()
-				.addGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.TRAILING)
-						.addComponent(panelKeys, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(panelSoftwarelicenses, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-
-		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
-				.addComponent(panelKeys, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(panelSoftwarelicenses, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE));
-
-		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
-		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addComponent(panelLicensecontracts,
-				GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-
-		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(panelLicensecontracts, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(splitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
-
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(splitPane, 0,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public PanelGenEdit getPanelKeys() {
