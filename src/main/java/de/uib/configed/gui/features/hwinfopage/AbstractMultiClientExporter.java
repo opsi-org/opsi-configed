@@ -15,6 +15,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.logging.Logging;
 
+@SuppressWarnings("java:S103")
 public abstract class AbstractMultiClientExporter<T extends AbstractSingleClientInfoPanel, V extends BaseMultiClientReportPanel>
 		implements ActionListener {
 	protected T panelInfo;

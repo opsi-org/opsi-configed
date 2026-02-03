@@ -41,20 +41,24 @@ public class SingleClientExporter {
 	 */
 	public void export() {
 		switch (kindOfExport) {
-		case CSV -> {
-			ExporterToCSV exporter = new ExporterToCSV(table);
-			exporter.setAskForOverwrite(askForOverwrite);
-			exporter.execute(filename, onlySelectedRows);
-		}
-		case PDF -> {
-			ExporterToPDF pdfExporter = new ExporterToPDF(table);
-			if (metaData != null) {
-				pdfExporter.setMetaData(metaData);
-			}
-			pdfExporter.setPageSizeA4Landscape();
-			pdfExporter.execute(filename, onlySelectedRows);
-		}
+		case CSV -> exportToCSV();
+		case PDF -> exportToPDF();
 		default -> Logging.warning(SingleClientExporter.class, "unexpected kindOfExport ", kindOfExport);
 		}
+	}
+
+	private void exportToCSV() {
+		ExporterToCSV exporter = new ExporterToCSV(table);
+		exporter.setAskForOverwrite(askForOverwrite);
+		exporter.execute(filename, onlySelectedRows);
+	}
+
+	private void exportToPDF() {
+		ExporterToPDF pdfExporter = new ExporterToPDF(table);
+		if (metaData != null) {
+			pdfExporter.setMetaData(metaData);
+		}
+		pdfExporter.setPageSizeA4Landscape();
+		pdfExporter.execute(filename, onlySelectedRows);
 	}
 }
