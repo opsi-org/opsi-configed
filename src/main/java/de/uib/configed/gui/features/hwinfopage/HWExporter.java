@@ -11,9 +11,10 @@ import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.share.infopage.AbstractMultiClientExporter;
 
-public class HwExporter extends AbstractMultiClientExporter<PanelHWSingleClientInfo, BaseMultiClientReportPanel> {
-	public HwExporter(BaseMultiClientReportPanel reportPanel, PanelHWSingleClientInfo panelInfo,
+public class HWExporter extends AbstractMultiClientExporter<PanelHWSingleClientInfo, BaseMultiClientReportPanel> {
+	public HWExporter(BaseMultiClientReportPanel reportPanel, PanelHWSingleClientInfo panelInfo,
 			ConfigedMain configedMain) {
 		super(panelInfo, reportPanel, configedMain);
 	}

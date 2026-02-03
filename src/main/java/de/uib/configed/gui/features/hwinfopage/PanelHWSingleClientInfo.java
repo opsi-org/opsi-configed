@@ -41,6 +41,8 @@ import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExp
 import de.uib.configed.gui.features.tree.IconNode;
 import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.share.infopage.AbstractSingleClientInfoPanel;
+import de.uib.configed.gui.share.infopage.SingleClientExporter;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;

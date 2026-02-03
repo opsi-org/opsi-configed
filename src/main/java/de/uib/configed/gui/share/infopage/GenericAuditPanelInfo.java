@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.hwinfopage;
+package de.uib.configed.gui.share.infopage;
 
 import java.awt.CardLayout;
 
@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
 import de.uib.configed.share.logging.Logging;
 import lombok.Getter;
 

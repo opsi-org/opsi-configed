@@ -13,14 +13,15 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.gui.features.hostconfigs.PanelConfigurationHostConfig;
 import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
-import de.uib.configed.gui.features.hwinfopage.GenericAuditPanelInfo;
-import de.uib.configed.gui.features.hwinfopage.HwExporter;
+import de.uib.configed.gui.features.hwinfopage.HWExporter;
 import de.uib.configed.gui.features.hwinfopage.PanelHWSingleClientInfo;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo;
+import de.uib.configed.gui.features.swinfopage.SWExporter;
 import de.uib.configed.gui.features.swinfopage.SWMultiClientReportPanel;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.gui.share.infopage.GenericAuditPanelInfo;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
@@ -115,7 +116,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		if (panelSWInfo == null) {
 			PanelSWSingleClientInfo panelSWSingleClientInfo = new PanelSWSingleClientInfo(configedMain, true);
 			SWMultiClientReportPanel panelSWMultiClientReport = new SWMultiClientReportPanel();
-			SwExporter swExporter = new SwExporter(panelSWMultiClientReport, panelSWSingleClientInfo, configedMain);
+			SWExporter swExporter = new SWExporter(panelSWMultiClientReport, panelSWSingleClientInfo, configedMain);
 			panelSWInfo = new GenericAuditPanelInfo<>(configedMain, panelSWSingleClientInfo, panelSWMultiClientReport,
 					swExporter);
 
@@ -129,7 +130,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		if (panelHWInfo == null) {
 			PanelHWSingleClientInfo panelHWSingleClientInfo = new PanelHWSingleClientInfo(configedMain, true);
 			BaseMultiClientReportPanel panelHWMultiClientReport = new BaseMultiClientReportPanel();
-			HwExporter hwExporter = new HwExporter(panelHWMultiClientReport, panelHWSingleClientInfo, configedMain);
+			HWExporter hwExporter = new HWExporter(panelHWMultiClientReport, panelHWSingleClientInfo, configedMain);
 			panelHWInfo = new GenericAuditPanelInfo<>(configedMain, panelHWSingleClientInfo, panelHWMultiClientReport,
 					hwExporter);
 			setComponentAt(getSelectedIndex(), panelHWInfo);

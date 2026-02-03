@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.features.hwinfopage;
+package de.uib.configed.gui.share.infopage;
 
 import javax.swing.JPanel;
 
