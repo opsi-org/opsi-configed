@@ -20,7 +20,6 @@ import java.util.TreeMap;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -43,14 +42,12 @@ import de.uib.configed.gui.features.tree.IconNode;
 import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.ExporterToCSV;
-import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelHWSingleClientInfo extends JPanel implements TreeSelectionListener {
+public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
@@ -98,10 +95,6 @@ public class PanelHWSingleClientInfo extends JPanel implements TreeSelectionList
 	private boolean withPopup;
 
 	private ConfigedMain configedMain;
-
-	private boolean askForOverwrite;
-	private KindOfExport kindOfExport;
-	private String exportFilename;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -152,8 +145,11 @@ public class PanelHWSingleClientInfo extends JPanel implements TreeSelectionList
 					switch (p) {
 					case PopupMenuTrait.POPUP_RELOAD -> reload();
 					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
-					case PopupMenuTrait.POPUP_PDF -> exportPDF();
-					case PopupMenuTrait.POPUP_EXPORT_CSV -> exportCSV();
+					case PopupMenuTrait.POPUP_PDF -> getSingleClientExporter().toBuilder()
+							.kindOfExport(KindOfExport.PDF).build().export();
+
+					case PopupMenuTrait.POPUP_EXPORT_CSV -> getSingleClientExporter().toBuilder()
+							.kindOfExport(KindOfExport.CSV).build().export();
 					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
 					}
 				}
@@ -166,35 +162,11 @@ public class PanelHWSingleClientInfo extends JPanel implements TreeSelectionList
 		setHardwareInfo(persistenceController.getDataServices().hardware.getHardwareInfo(clientId));
 	}
 
-	public void export() {
-		if (kindOfExport == KindOfExport.CSV) {
-			exportCSV();
-		} else if (kindOfExport == KindOfExport.PDF) {
-			exportPDF();
-		} else {
-			Logging.warning(this, "unexpected kindOfExport ", kindOfExport);
-		}
-	}
-
-	private void exportPDF() {
-		Logging.info(this, "create report");
-		Map<String, String> metaData = new HashMap<>();
-		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
-
-		metaData.put("title", treeRootTitle);
-		metaData.put("keywords", "hardware infos");
-
-		ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4Landscape();
-		// create pdf // no filename, onlyselectedRows=false
-		pdfExportTable.execute(exportFilename, false);
-	}
-
-	private void exportCSV() {
-		ExporterToCSV exporterToCSV = new ExporterToCSV(createHWInfoTableModelComplete());
-		exporterToCSV.setAskForOverwrite(askForOverwrite);
-		exporterToCSV.execute(exportFilename, false);
+	@Override
+	public SingleClientExporter getSingleClientExporter() {
+		return SingleClientExporter.builder().table(createHWInfoTableModelComplete()).filename(exportFilename)
+				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport)
+				.metaData(Map.of("title", treeRootTitle, "header", "Hardware report")).build();
 	}
 
 	/** overwrite in subclasses */
@@ -578,7 +550,7 @@ public class PanelHWSingleClientInfo extends JPanel implements TreeSelectionList
 		}
 	}
 
-	private JTable createHWInfoTableModelComplete() {
+	protected JTable createHWInfoTableModelComplete() {
 		getLocalizedHashMap();
 
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
@@ -628,17 +600,5 @@ public class PanelHWSingleClientInfo extends JPanel implements TreeSelectionList
 				tableModelComplete.addRow(childValues.toArray());
 			}
 		}
-	}
-
-	public void setWriteToFile(String path) {
-		exportFilename = path;
-	}
-
-	public void setAskForOverwrite(boolean b) {
-		askForOverwrite = b;
-	}
-
-	public void setKindOfExport(KindOfExport k) {
-		kindOfExport = k;
 	}
 }

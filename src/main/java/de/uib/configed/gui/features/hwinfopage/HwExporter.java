@@ -6,69 +6,39 @@
 
 package de.uib.configed.gui.features.hwinfopage;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.share.logging.Logging;
 
-public class HwExporter implements ActionListener {
-	private BaseMultiClientReportPanel showHardwareLogMultiClientReport;
-	private PanelHWSingleClientInfo panelHWInfo;
-	private ConfigedMain configedMain;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
-
-	public HwExporter(BaseMultiClientReportPanel showHardwareLogMultiClientReport, PanelHWSingleClientInfo panelHWInfo,
+public class HwExporter extends AbstractMultiClientExporter<PanelHWSingleClientInfo, BaseMultiClientReportPanel> {
+	public HwExporter(BaseMultiClientReportPanel reportPanel, PanelHWSingleClientInfo panelInfo,
 			ConfigedMain configedMain) {
-		this.showHardwareLogMultiClientReport = showHardwareLogMultiClientReport;
-		this.panelHWInfo = panelHWInfo;
-		this.configedMain = configedMain;
+		super(panelInfo, reportPanel, configedMain);
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		Configed.getSavedStates().setProperty("hwaudit_export_file_prefix",
-				showHardwareLogMultiClientReport.getExportfilePrefix());
+	protected String getExportPrefixKey() {
+		return "hwaudit_export_file_prefix";
+	}
 
-		String filepathStart = showHardwareLogMultiClientReport.getExportDirectory() + File.separator
-				+ showHardwareLogMultiClientReport.getExportfilePrefix();
+	@Override
+	protected void applyExtraSettings() {
+		// no extra HW-specific settings
+	}
 
-		String extension = "."
-				+ showHardwareLogMultiClientReport.wantsKindOfExport().toString().toLowerCase(Locale.ROOT);
+	@Override
+	protected void updatePanelForClient(String client) {
+		panelInfo.updateContent(client);
+	}
 
-		panelHWInfo.setAskForOverwrite(showHardwareLogMultiClientReport.wantsAskForOverwrite());
+	@Override
+	protected String getScanDateForClient(String client) {
+		Map<String, List<Map<String, Object>>> hardwareInfo = PersistenceControllerFactory.getPersistenceController()
+				.getDataServices().hardware.getHardwareInfo(client);
 
-		panelHWInfo.setKindOfExport(showHardwareLogMultiClientReport.wantsKindOfExport());
-
-		for (String client : configedMain.getSelectedClients()) {
-			panelHWInfo.updateContent(client);
-
-			Map<String, List<Map<String, Object>>> hardwareInfo = persistenceController.getDataServices().hardware
-					.getHardwareInfo(client);
-			List<Map<String, Object>> scanProperty = hardwareInfo.get(PanelHWSingleClientInfo.SCANPROPERTYNAME);
-			String scandate = scanProperty.get(0).get(PanelHWSingleClientInfo.SCANTIME).toString();
-			if (scandate != null) {
-				int timePos = scandate.indexOf(' ');
-				if (timePos >= 0) {
-					scandate = scandate.substring(0, timePos);
-				} else {
-					scandate = "__";
-				}
-			}
-
-			String filepath = filepathStart + client + "__scan_" + scandate + extension;
-			Logging.debug(this, "actionPerformed, write to ", filepath);
-			panelHWInfo.setWriteToFile(filepath);
-			panelHWInfo.export();
-		}
+		List<Map<String, Object>> scanProperty = hardwareInfo.get(PanelHWSingleClientInfo.SCANPROPERTYNAME);
+		return scanProperty.get(0).get(PanelHWSingleClientInfo.SCANTIME).toString();
 	}
 }

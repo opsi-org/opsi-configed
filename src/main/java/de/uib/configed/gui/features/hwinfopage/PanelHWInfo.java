@@ -31,8 +31,9 @@ public class PanelHWInfo extends AbstractConfigurationTab {
 
 		panelHWSingleClientInfo = new PanelHWSingleClientInfo(configedMain, true);
 		BaseMultiClientReportPanel panelHWMultiClientReport = new BaseMultiClientReportPanel();
-		HwExporter swExporter = new HwExporter(panelHWMultiClientReport, panelHWSingleClientInfo, configedMain);
-		panelHWMultiClientReport.setActionListenerForStart(swExporter);
+
+		HwExporter hwExporter = new HwExporter(panelHWMultiClientReport, panelHWSingleClientInfo, configedMain);
+		panelHWMultiClientReport.setActionListenerForStart(hwExporter);
 
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
