@@ -42,19 +42,22 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private String title;
 	private String filenamePrefix;
 	private String exportKey;
-	private String filePrefixKey;
+	private String exportDirKey;
+	private String exportFilePrefixKey;
 
 	public BaseMultiClientReportPanel() {
 		this(Configed.getResourceValue("PanelHWMultiClientReport.title2"),
 				Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix"), "hwaudit_kind_of_export",
-				"hwaudit_export_file_prefix");
+				"hwaudit_export_dir", "hwaudit_export_file_prefix");
 	}
 
-	public BaseMultiClientReportPanel(String title, String filenamePrefix, String exportKey, String filePrefixKey) {
+	public BaseMultiClientReportPanel(String title, String filenamePrefix, String exportKey, String exportDirKey,
+			String exportFilePrefixKey) {
 		this.title = title;
 		this.filenamePrefix = filenamePrefix;
 		this.exportKey = exportKey;
-		this.filePrefixKey = filePrefixKey;
+		this.exportDirKey = exportDirKey;
+		this.exportFilePrefixKey = exportFilePrefixKey;
 		setupPanel();
 	}
 
@@ -122,7 +125,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 		JLabel labelExportDirectory = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
-		exportDirectoryS = Configed.getSavedStates().getProperty(exportKey, "");
+		exportDirectoryS = Configed.getSavedStates().getProperty(exportDirKey, "");
 
 		File dir = exportDirectoryS.isEmpty() ? null : new File(exportDirectoryS);
 
@@ -165,7 +168,8 @@ public class BaseMultiClientReportPanel extends JPanel {
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
-		fieldFilenamePrefix = new JTextField(Configed.getSavedStates().getProperty(filePrefixKey, filenamePrefix));
+		fieldFilenamePrefix = new JTextField(
+				Configed.getSavedStates().getProperty(exportFilePrefixKey, filenamePrefix));
 
 		panel.add(labelFilenamePrefix, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
 		panel.add(fieldFilenamePrefix, "span, growx, pushx, wrap");

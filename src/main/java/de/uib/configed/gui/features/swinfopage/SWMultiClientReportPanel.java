@@ -21,7 +21,7 @@ public class SWMultiClientReportPanel extends BaseMultiClientReportPanel {
 	public SWMultiClientReportPanel() {
 		super(Configed.getResourceValue("PanelSWMultiClientReport.title2"),
 				Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix"), "swaudit_kind_of_export",
-				"swaudit_export_file_prefix");
+				"swaudit_export_dir", "swaudit_export_file_prefix");
 	}
 
 	public boolean wantsWithMsUpdates() {
