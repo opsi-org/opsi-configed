@@ -28,4 +28,6 @@ public abstract class AbstractSingleClientInfoPanel extends JPanel {
 	}
 
 	public abstract SingleClientExporter getSingleClientExporter();
+
+	protected abstract void updateContent(String client);
 }

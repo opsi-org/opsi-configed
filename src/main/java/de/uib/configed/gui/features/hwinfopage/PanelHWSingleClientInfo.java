@@ -157,6 +157,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		}
 	}
 
+	@Override
 	protected void updateContent(String clientId) {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
 		setHardwareInfo(persistenceController.getDataServices().hardware.getHardwareInfo(clientId));

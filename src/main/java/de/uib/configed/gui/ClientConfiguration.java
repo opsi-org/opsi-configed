@@ -12,10 +12,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.uib.configed.gui.features.hostconfigs.PanelConfigurationHostConfig;
-import de.uib.configed.gui.features.hwinfopage.PanelHWInfo;
+import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
+import de.uib.configed.gui.features.hwinfopage.GenericAuditPanelInfo;
+import de.uib.configed.gui.features.hwinfopage.HwExporter;
+import de.uib.configed.gui.features.hwinfopage.PanelHWSingleClientInfo;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
-import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
+import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo;
+import de.uib.configed.gui.features.swinfopage.SWMultiClientReportPanel;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.share.logging.Logging;
 
@@ -30,9 +34,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private PanelProductSettings panelNetbootProductSettings;
 	private PanelConfigurationHostConfig panelClientHostConfig;
 
-	private PanelSWInfo panelSWInfo;
+	private GenericAuditPanelInfo<PanelSWSingleClientInfo, SWMultiClientReportPanel> panelSWInfo;
 
-	private PanelHWInfo panelHWInfo;
+	private GenericAuditPanelInfo<PanelHWSingleClientInfo, BaseMultiClientReportPanel> panelHWInfo;
 
 	private TabbedLogPane tabbedLogPane;
 	private JSplitPane panelClientSelection;
@@ -109,7 +113,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void setSoftwareInfoTab() {
 		if (panelSWInfo == null) {
-			panelSWInfo = new PanelSWInfo(configedMain);
+			PanelSWSingleClientInfo panelSWSingleClientInfo = new PanelSWSingleClientInfo(configedMain, true);
+			SWMultiClientReportPanel panelSWMultiClientReport = new SWMultiClientReportPanel();
+			SwExporter swExporter = new SwExporter(panelSWMultiClientReport, panelSWSingleClientInfo, configedMain);
+			panelSWInfo = new GenericAuditPanelInfo<>(configedMain, panelSWSingleClientInfo, panelSWMultiClientReport,
+					swExporter);
 
 			setComponentAt(getSelectedIndex(), panelSWInfo);
 		}
@@ -119,7 +127,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void setHardwareInfoTab() {
 		if (panelHWInfo == null) {
-			panelHWInfo = new PanelHWInfo(configedMain);
+			PanelHWSingleClientInfo panelHWSingleClientInfo = new PanelHWSingleClientInfo(configedMain, true);
+			BaseMultiClientReportPanel panelHWMultiClientReport = new BaseMultiClientReportPanel();
+			HwExporter hwExporter = new HwExporter(panelHWMultiClientReport, panelHWSingleClientInfo, configedMain);
+			panelHWInfo = new GenericAuditPanelInfo<>(configedMain, panelHWSingleClientInfo, panelHWMultiClientReport,
+					hwExporter);
 			setComponentAt(getSelectedIndex(), panelHWInfo);
 		}
 
