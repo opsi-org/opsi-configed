@@ -98,17 +98,8 @@ public class CSVTemplateCreatorDialog {
 		ButtonGroup delimiterOptions = new ButtonGroup();
 		Stream.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
 
-		MaskFormatter maskFormatter;
-		try {
-			maskFormatter = new MaskFormatter("*");
-		} catch (ParseException e) {
-			Logging.debug(this, "INVALID MASK");
-			return null;
-		}
+		MaskFormatter maskFormatter = createMaskFormatter();
 
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
-		maskFormatter.setAllowsInvalid(false);
-		maskFormatter.setCommitsOnValidEdit(true);
 		otherDelimiterInput = new JFormattedTextField(maskFormatter);
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
@@ -123,15 +114,8 @@ public class CSVTemplateCreatorDialog {
 			}
 		});
 
-		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
-			button.addItemListener((ItemEvent e) -> {
-				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
-
-				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
-				}
-			});
-		}
+		Collections.list(delimiterOptions.getElements())
+				.forEach(button -> button.addItemListener((e -> delimiterAction(button, otherOption, e))));
 
 		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
 			@Override
@@ -179,6 +163,28 @@ public class CSVTemplateCreatorDialog {
 		centerPanel.add(quoteOptions);
 
 		return centerPanel;
+	}
+
+	public static MaskFormatter createMaskFormatter() {
+		MaskFormatter maskFormatter;
+		try {
+			maskFormatter = new MaskFormatter("*");
+		} catch (ParseException e) {
+			Logging.warning(e, "INVALID MASK");
+			maskFormatter = new MaskFormatter();
+		}
+		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
+		maskFormatter.setAllowsInvalid(false);
+		maskFormatter.setCommitsOnValidEdit(true);
+		return maskFormatter;
+	}
+
+	private void delimiterAction(AbstractButton button, AbstractButton otherOption, ItemEvent e) {
+		otherDelimiterInput.setEnabled(e.getItem() == otherOption);
+
+		if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
+			format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
+		}
 	}
 
 	private static JRadioButton radio(String key, String cmd, boolean selected) {

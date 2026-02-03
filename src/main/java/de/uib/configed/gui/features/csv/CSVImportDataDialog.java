@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.Set;
 
@@ -113,16 +112,8 @@ public class CSVImportDataDialog {
 		delimiterOptions.add(spaceOption);
 		delimiterOptions.add(otherOption);
 
-		MaskFormatter maskFormatter = null;
-		try {
-			maskFormatter = new MaskFormatter("*");
-		} catch (ParseException e) {
-			Logging.debug(this, "INVALID MASK");
-			return null;
-		}
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
-		maskFormatter.setAllowsInvalid(false);
-		maskFormatter.setCommitsOnValidEdit(true);
+		MaskFormatter maskFormatter = CSVTemplateCreatorDialog.createMaskFormatter();
+
 		otherDelimiterInput = new JFormattedTextField(maskFormatter);
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
