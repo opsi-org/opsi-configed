@@ -10,7 +10,8 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Enumeration;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.AbstractButton;
@@ -106,11 +107,7 @@ public class CSVImportDataDialog {
 		otherOption.setActionCommand("");
 
 		ButtonGroup delimiterOptions = new ButtonGroup();
-		delimiterOptions.add(tabsOption);
-		delimiterOptions.add(commaOption);
-		delimiterOptions.add(semicolonOption);
-		delimiterOptions.add(spaceOption);
-		delimiterOptions.add(otherOption);
+		List.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
 
 		MaskFormatter maskFormatter = CSVTemplateCreatorDialog.createMaskFormatter();
 
@@ -128,11 +125,7 @@ public class CSVImportDataDialog {
 			}
 		});
 
-		Enumeration<AbstractButton> iter = delimiterOptions.getElements();
-
-		while (iter.hasMoreElements()) {
-			AbstractButton button = iter.nextElement();
-
+		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
 			button.addItemListener((ItemEvent e) -> {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 

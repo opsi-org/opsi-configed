@@ -114,8 +114,9 @@ public class CSVTemplateCreatorDialog {
 			}
 		});
 
-		Collections.list(delimiterOptions.getElements())
-				.forEach(button -> button.addItemListener((e -> delimiterAction(button, otherOption, e))));
+		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
+			button.addItemListener((e -> delimiterAction(button, otherOption, e)));
+		}
 
 		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
 			@Override
