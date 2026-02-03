@@ -11,11 +11,11 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
@@ -37,7 +37,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	private File exportDirectory;
 	private String exportDirectoryS;
-	private JFileChooser chooserDirectory;
+	private SystemFileChooser chooserDirectory;
 	private JTextField fieldExportDirectory;
 	private JTextField fieldFilenamePrefix;
 
@@ -124,10 +124,9 @@ public class PanelSWMultiClientReport extends JPanel {
 		exportDirectory = (dir != null && dir.isDirectory()) ? dir
 				: new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 
-		chooserDirectory = new JFileChooser();
+		chooserDirectory = new SystemFileChooser();
 		chooserDirectory.setFileHidingEnabled(false);
-		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		SwingUtilities.updateComponentTreeUI(chooserDirectory);
+		chooserDirectory.setFileSelectionMode(SystemFileChooser.DIRECTORIES_ONLY);
 
 		fieldExportDirectory = new JTextField(exportDirectoryS);
 		fieldExportDirectory.setEditable(false);
@@ -197,7 +196,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		int returnVal = chooserDirectory.showOpenDialog(this);
 
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 			exportDirectory = chooserDirectory.getSelectedFile();
 			Logging.info(this, "selected directory ", exportDirectory);
 

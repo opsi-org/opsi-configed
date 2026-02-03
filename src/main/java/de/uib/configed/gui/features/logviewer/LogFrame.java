@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,6 +31,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.app.Main;
 import de.uib.configed.gui.Configed;
@@ -233,16 +235,16 @@ public class LogFrame extends JFrame {
 	}
 
 	public static String openFile(String title) {
-		JFileChooser chooser = new JFileChooser(fileName);
+		SystemFileChooser chooser = new SystemFileChooser(fileName);
 		chooser.setFileHidingEnabled(false);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
-				"logfiles: .log, .zip, .gz, .7z, .txt", "log", "zip", "gz", "7z", "txt"));
-		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
+		chooser.setFileFilter(
+				new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z, .txt", "log", "zip", "gz", "7z", "txt"));
+		chooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(title);
 
 		int returnVal = chooser.showOpenDialog(Main.getMainFrame());
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 

@@ -18,18 +18,18 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -111,7 +111,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private RadioButtonIntegrationType buttonByAudit;
 
 	private JTextField fieldDriverPath;
-	private JFileChooser chooserDriverPath;
+	private SystemFileChooser chooserDriverPath;
 
 	// server path finding
 	private JTextField fieldServerPath;
@@ -180,20 +180,17 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			produceTarget();
 		});
 
-		chooserDriverPath = new JFileChooser();
+		chooserDriverPath = new SystemFileChooser();
 		chooserDriverPath.setFileHidingEnabled(false);
-		chooserDriverPath.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		SwingUtilities.updateComponentTreeUI(chooserDriverPath);
 
-		chooserDriverPath.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooserDriverPath.setDialogType(SystemFileChooser.OPEN_DIALOG);
 		chooserDriverPath.setDialogTitle(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
-		JFileChooser chooserServerpath = new JFileChooser();
+		SystemFileChooser chooserServerpath = new SystemFileChooser();
 		chooserServerpath.setFileHidingEnabled(false);
-		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		SwingUtilities.updateComponentTreeUI(chooserServerpath);
+		chooserServerpath.setFileSelectionMode(SystemFileChooser.DIRECTORIES_ONLY);
 
-		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooserServerpath.setDialogType(SystemFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 	}
 
@@ -474,7 +471,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void chooseDriverPath() {
-		if (chooserDriverPath.showOpenDialog(dialog) == JFileChooser.APPROVE_OPTION) {
+		if (chooserDriverPath.showOpenDialog(dialog) == SystemFileChooser.APPROVE_OPTION) {
 			String pathInstallFiles = chooserDriverPath.getSelectedFile().getPath();
 			fieldDriverPath.setText(pathInstallFiles);
 			fieldDriverPath.setCaretPosition(pathInstallFiles.length());

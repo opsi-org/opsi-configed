@@ -11,14 +11,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -51,7 +51,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 	private JButton buttonCallExecute;
 
-	private JFileChooser chooserFolder;
+	private SystemFileChooser chooserFolder;
 
 	private JDialog dialog;
 
@@ -111,12 +111,11 @@ public class CompleteWinProductsDialog implements NameProducer {
 	}
 
 	private void defineChoosers() {
-		chooserFolder = new JFileChooser();
+		chooserFolder = new SystemFileChooser();
 		chooserFolder.setFileHidingEnabled(false);
-		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		SwingUtilities.updateComponentTreeUI(chooserFolder);
+		chooserFolder.setFileSelectionMode(SystemFileChooser.DIRECTORIES_ONLY);
 
-		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooserFolder.setDialogType(SystemFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Configed.getResourceValue("CompleteWinProducts.chooser"));
 
 		depot = new JLabel(persistenceController.getDataServices().hostInfoCollections.getConfigServer());
@@ -194,7 +193,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = chooserFolder.showOpenDialog(dialog);
 
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 				String pathWinPE = chooserFolder.getSelectedFile().getPath();
 				fieldPathWinPE.setText(pathWinPE);
 				fieldPathWinPE.setCaretPosition(pathWinPE.length());
@@ -212,7 +211,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = chooserFolder.showOpenDialog(dialog);
 
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
 				fieldPathInstallFiles.setText(pathInstallFiles);
 				fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());

@@ -11,10 +11,11 @@ import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
@@ -51,20 +52,19 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jComboBoxAutoCompletion.setEnabled(true);
 		jButtonAutoCompletion = autocompletion.getButton();
 
-		JFileChooser jFileChooser = new JFileChooser();
-		jFileChooser.setFileHidingEnabled(false);
-		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		jFileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
-		jFileChooser.setFileFilter(filter);
+		SystemFileChooser fileChooser = new SystemFileChooser();
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
+		fileChooser.setDialogType(SystemFileChooser.OPEN_DIALOG);
+		fileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi"));
 
 		jButtonFileChooser = new JButton(Icons.getIntellijIcon("open"));
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = jFileChooser.showOpenDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String pathModules = jFileChooser.getSelectedFile().getPath();
+			int returnVal = fileChooser.showOpenDialog(this);
+			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+				String pathModules = fileChooser.getSelectedFile().getPath();
 				jTextFieldPath.setText(pathModules);
 			} else {
 				jTextFieldPath.setText("");
