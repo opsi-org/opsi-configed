@@ -138,20 +138,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getFieldSelectedLicensePoolId().setText(poolID);
 		thePanel.getFieldSelectedLicensePoolId().setToolTipText(poolID);
 
-		List<String> softwareIdsForPool = new ArrayList<>();
-		if (poolID != null) {
-			softwareIdsForPool = persistenceController.getDataServices().software
-					.getSoftwareListByLicensePoolPD(poolID);
-		}
+		List<String> softwareIdsForPool = poolID == null ? new ArrayList<>()
+				: persistenceController.getDataServices().software.getSoftwareListByLicensePoolPD(poolID);
 
 		Logging.info(this, "setSoftwareIdsFromLicensePool  softwareIds for licensePool  ", poolID, " : ",
 				softwareIdsForPool.size());
 		Logging.info(this, "setSoftwareIdsFromLicensePool  unknown softwareIds for licensePool  ", poolID, " : ",
 				persistenceController.getDataServices().software.getUnknownSoftwareListForLicensePoolPD(poolID).size());
-
-		Integer totalUnassignedSWEntries = persistenceController.getDataServices().software
-				.getSoftwareWithoutAssociatedLicensePoolPD().size();
-		Logging.info(this, "setSoftwareIdsFromLicensePool unAssignedSoftwareIds ", totalUnassignedSWEntries);
 
 		resetCounters(poolID);
 		thePanel.getFieldCountAllWindowsSoftware().setText("0");
@@ -164,29 +157,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (!persistenceController.getDataServices().software.getUnknownSoftwareListForLicensePoolPD(poolID)
 				.isEmpty()) {
-			thePanel.getFMissingSoftwareInfo().setTableModel(new GenTableModel(
-					new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
-					new DefaultTableProvider(new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
-							new MapRetriever() {
-								@Override
-								public void reloadMap() {
-									persistenceController
-											.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
-								}
-
-								@Override
-								public Map<String, Map<String, Object>> retrieveMap() {
-									return getMissingSoftwareMap(poolID);
-								}
-							})),
-					0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection));
+			thePanel.getFMissingSoftwareInfo().setTableModel(getMissingSoftwareTableModel(poolID));
 		}
 
 		thePanel.getFieldCountAssignedStatus().setText(produceCount(softwareIdsForPool.size(), poolID == null));
 
 		thePanel.getFieldCountAssignedStatus().setToolTipText(createTooltip(softwareIdsForPool));
-
-		Integer totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 
 		produceFilterSets(softwareIdsForPool);
 
@@ -201,9 +177,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
 		Logging.info(this, "modelWindowsSoftwareIds row count ", totalShownEntries);
-		thePanel.getFieldCountAllWindowsSoftware().setText(produceCount(totalSWEntries));
+		thePanel.getFieldCountAllWindowsSoftware().setText(produceCount(modelWindowsSoftwareIds.getRowCount()));
 		thePanel.getFieldCountDisplayedWindowsSoftware().setText(produceCount(totalShownEntries));
-		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(totalUnassignedSWEntries));
+		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(
+				persistenceController.getDataServices().software.getSoftwareWithoutAssociatedLicensePoolPD().size()));
 
 		List<String> selectKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
 
@@ -234,6 +211,24 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
+	}
+
+	private GenTableModel getMissingSoftwareTableModel(String poolID) {
+		return new GenTableModel(new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
+				new DefaultTableProvider(
+						new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(), new MapRetriever() {
+							@Override
+							public void reloadMap() {
+								persistenceController
+										.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
+							}
+
+							@Override
+							public Map<String, Map<String, Object>> retrieveMap() {
+								return getMissingSoftwareMap(poolID);
+							}
+						})),
+				0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection);
 	}
 
 	private static String createTooltip(List<String> softwareIdsForPool) {
