@@ -28,7 +28,6 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.SWAuditEntry;
@@ -202,9 +201,8 @@ public final class LicenseDisplayer {
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames,
-						MapRetriever.createMapRetriever(ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
-								persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD))),
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD)),
 				0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {

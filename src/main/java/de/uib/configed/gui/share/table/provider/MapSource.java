@@ -26,13 +26,14 @@ public class MapSource implements TableSource {
 
 	private List<String> columnNames;
 
-	protected Map<String, Map<String, Object>> table;
+	protected Map<String, ? extends Map<String, ? extends Object>> table;
 
 	protected List<List<Object>> rows;
 
 	protected boolean reloadRequested;
 
-	public MapSource(List<String> columnNames, Map<String, Map<String, Object>> table, boolean rowCounting) {
+	public MapSource(List<String> columnNames, Map<String, ? extends Map<String, ? extends Object>> table,
+			boolean rowCounting) {
 		Logging.info(this, "constructed with cols ", columnNames);
 		this.columnNames = columnNames;
 		this.table = table;
@@ -54,10 +55,10 @@ public class MapSource implements TableSource {
 
 		int rowCount = 0;
 
-		for (Entry<String, Map<String, Object>> tableEntry : table.entrySet()) {
+		for (Entry<String, ? extends Map<String, ? extends Object>> tableEntry : table.entrySet()) {
 			List<Object> vRow = new ArrayList<>();
 
-			Map<String, Object> mRow = tableEntry.getValue();
+			Map<String, ? extends Object> mRow = tableEntry.getValue();
 
 			// previously we assumed that column 0 hold the key
 

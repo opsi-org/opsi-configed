@@ -162,6 +162,7 @@ public class MainView implements View {
 
 	private DepotInfo depotInfo;
 
+	@SuppressWarnings("java:S4968")
 	public MainView(JFXPanel fxPanel) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"),
 				Messages.getResourceBundle());
