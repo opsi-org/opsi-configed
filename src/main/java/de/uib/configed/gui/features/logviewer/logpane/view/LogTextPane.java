@@ -38,8 +38,8 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.swing.WrapEditorKit;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class LogTextPane extends JTextPane {
@@ -217,7 +217,7 @@ public class LogTextPane extends JTextPane {
 
 		setDocument(document);
 
-		Utils.runOnEventDispatchThread(() -> {
+		SwingUtils.runOnEventDispatchThread(() -> {
 			highlighter.removeAllHighlights();
 			refreshCurrentLineVisuals();
 			setCursor(null);

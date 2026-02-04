@@ -30,7 +30,8 @@ import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.gui.type.OpsiProductInfo;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
+import de.uib.configed.share.TimeUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 
@@ -920,7 +921,7 @@ public class ProductDataService extends DataService {
 		List<Map<String, Object>> productOnClients = dataServices.exec.getListOfMaps(methodName, callAttributes,
 				callFilter);
 
-		productOnClients.stream().forEach(productOnClient -> Utils.formatDateTimeStringForMap(productOnClient,
+		productOnClients.stream().forEach(productOnClient -> TimeUtils.formatDateTimeStringForMap(productOnClient,
 				ProductState.KEY_LAST_STATE_CHANGE));
 
 		return productOnClients;
@@ -1010,7 +1011,7 @@ public class ProductDataService extends DataService {
 			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()
 					.filter(m -> clientId.equals(m.get("clientId"))).map(m -> (String) m.get("productId")).toList();
 			for (final String product : modifiedProductsOnClient) {
-				Map<String, Object> productOnClientItem = Utils.createNOMitem("ProductOnClient");
+				Map<String, Object> productOnClientItem = ConfigUtils.createNOMitem("ProductOnClient");
 				productOnClientItem.put("productType", productType);
 				productOnClientItem.put("clientId", clientId);
 				productOnClientItem.put("productId", product);
@@ -1460,7 +1461,7 @@ public class ProductDataService extends DataService {
 		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
 
 		// create config for service
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 		item.put("ident", key);
 		item.put("description", "");
 		item.put("defaultValues", result);

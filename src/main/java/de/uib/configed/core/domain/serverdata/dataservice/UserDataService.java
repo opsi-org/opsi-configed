@@ -32,7 +32,7 @@ public class UserDataService extends DataService {
 		super(dataServices);
 	}
 
-	public boolean usesMultiFactorAuthentication() {
+	public boolean usesMFA() {
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.MFA_ENABLED, Boolean.class);
 	}
 

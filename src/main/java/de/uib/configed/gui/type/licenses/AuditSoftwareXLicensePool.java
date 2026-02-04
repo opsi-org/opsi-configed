@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.gui.type.SWAuditEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.datastructure.Relation;
 import de.uib.configed.share.datastructure.StringValuedRelationElement;
 import de.uib.configed.share.logging.Logging;
@@ -45,7 +45,7 @@ public class AuditSoftwareXLicensePool extends Relation {
 	}
 
 	private static String produceSWident(Map<String, Object> m) {
-		return Utils.pseudokey(new String[] { getStringValue(m.get(SWAuditEntry.NAME)),
+		return ConfigUtils.pseudokey(new String[] { getStringValue(m.get(SWAuditEntry.NAME)),
 				getStringValue(m.get(SWAuditEntry.VERSION)), getStringValue(m.get(SWAuditEntry.SUB_VERSION)),
 				getStringValue(m.get(SWAuditEntry.LANGUAGE)), getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
 	}

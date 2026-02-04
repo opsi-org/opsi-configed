@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.datastructure.StringValuedRelationElement;
 import de.uib.configed.share.logging.Logging;
 
@@ -109,7 +109,7 @@ public class LicenseUsageEntry extends StringValuedRelationElement {
 	}
 
 	public static String produceKey(String hostId, String licensePoolId, String licenseId) {
-		return Utils.pseudokey(new String[] { hostId, licensePoolId, licenseId });
+		return ConfigUtils.pseudokey(new String[] { hostId, licensePoolId, licenseId });
 	}
 
 	public String getPseudoKey() {

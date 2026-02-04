@@ -32,9 +32,10 @@ import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommand;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.CheckedDocument;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -76,7 +77,7 @@ public final class EditTerminalCommandsDialog {
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { saveButton, Configed.getResourceValue("buttonCancel") });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCommandControl"));
@@ -149,10 +150,10 @@ public final class EditTerminalCommandsDialog {
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.addActionListener(actionEvent -> deleteCommand());
 
-		JLabel labelMenuText = Utils.createBoldLabel("CommandControlDialog.menuText");
-		JLabel labelParentMenuText = Utils.createBoldLabel("CommandControlDialog.parentMenuText");
-		JLabel labelTooltipText = Utils.createBoldLabel("description");
-		JLabel labelPriority = Utils.createBoldLabel("CommandControlDialog.priority");
+		JLabel labelMenuText = SwingUtils.createBoldLabel("CommandControlDialog.menuText");
+		JLabel labelParentMenuText = SwingUtils.createBoldLabel("CommandControlDialog.parentMenuText");
+		JLabel labelTooltipText = SwingUtils.createBoldLabel("description");
+		JLabel labelPriority = SwingUtils.createBoldLabel("CommandControlDialog.priority");
 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
@@ -172,7 +173,7 @@ public final class EditTerminalCommandsDialog {
 	private JPanel initCommandsPanel() {
 		parameterPanel = new CommandControlParameterMethodsPanel(this, configedMain);
 
-		JLabel labelCommands = Utils.createBoldLabel("CommandControlDialog.commands");
+		JLabel labelCommands = SwingUtils.createBoldLabel("CommandControlDialog.commands");
 		labelCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 
 		JButton buttonTestCommand = new JButton(Icons.getIntellijIcon("run"));

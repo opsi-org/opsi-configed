@@ -9,7 +9,7 @@ package de.uib.configed.gui.type.licenses;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class LicenseUsableForEntry extends HashMap<String, String> {
@@ -27,7 +27,8 @@ public class LicenseUsableForEntry extends HashMap<String, String> {
 			Logging.warning("LicenseUsableForEntry,  missing primary key in ", importedEntry);
 		}
 
-		String pseudokey = Utils.pseudokey(new String[] { entry.get(LICENSE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
+		String pseudokey = ConfigUtils
+				.pseudokey(new String[] { entry.get(LICENSE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
 		entry.put(ID_KEY, pseudokey);
 
 		return entry;

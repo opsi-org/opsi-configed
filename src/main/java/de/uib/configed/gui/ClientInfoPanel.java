@@ -33,6 +33,7 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.gui.type.HostInfo;
@@ -99,17 +100,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextFieldClientID = createUneditableTextField();
 		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
-		labelClientDescription = Utils.createBoldLabel("description");
+		labelClientDescription = SwingUtils.createBoldLabel("description");
 
-		labelClientInventoryNumber = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber");
+		labelClientInventoryNumber = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber");
 
-		labelClientNotes = Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes");
+		labelClientNotes = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.notes");
 
-		labelClientSystemUUID = Utils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID");
+		labelClientSystemUUID = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID");
 
-		labelClientMacAddress = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress");
+		labelClientMacAddress = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress");
 
-		labelClientIPAddress = Utils.createBoldLabel("ipAddress");
+		labelClientIPAddress = SwingUtils.createBoldLabel("ipAddress");
 
 		jTextFieldClientOS = createUneditableTextField();
 		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
@@ -128,9 +129,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
 
-		labelOneTimePassword = Utils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword");
+		labelOneTimePassword = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword");
 
-		labelOpsiHostKey = Utils.createBoldLabel("opsi-host-key");
+		labelOpsiHostKey = SwingUtils.createBoldLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);

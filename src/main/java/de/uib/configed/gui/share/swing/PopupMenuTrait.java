@@ -23,8 +23,8 @@ import javax.swing.KeyStroke;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PopupMenuTrait extends JPopupMenu {
@@ -98,7 +98,8 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		if (components != null) {
 			for (JComponent component : components) {
-				Utils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), () -> action(p));
+				SwingUtils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+						() -> action(p));
 			}
 		}
 

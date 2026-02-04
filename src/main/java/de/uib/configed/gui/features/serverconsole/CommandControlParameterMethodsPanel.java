@@ -22,8 +22,8 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandParameterParser;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -52,8 +52,8 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	private void init() {
 		Logging.debug(this, "init setting up components ");
-		jLabelParamMethods = Utils.createBoldLabel("CommandControlDialog.parameterMethods");
-		jLabelParamFormats = Utils.createBoldLabel("CommandControlDialog.parameterFormats");
+		jLabelParamMethods = SwingUtils.createBoldLabel("CommandControlDialog.parameterMethods");
+		jLabelParamFormats = SwingUtils.createBoldLabel("CommandControlDialog.parameterFormats");
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());

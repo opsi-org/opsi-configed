@@ -27,7 +27,7 @@ import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.CLIUtils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -77,7 +77,7 @@ public abstract class AbstractSWExporter {
 
 	private void addMissingLoginData() {
 		if (server == null) {
-			server = Utils.getCLIParam("Host (default: localhost): ");
+			server = CLIUtils.getCLIParam("Host (default: localhost): ");
 		}
 
 		if (server.isEmpty()) {
@@ -85,7 +85,7 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (user == null) {
-			user = Utils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : ");
+			user = CLIUtils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : ");
 		}
 
 		if (user.isEmpty()) {
@@ -93,17 +93,17 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (password == null) {
-			password = Utils.getCLIPasswordParam("Password: ");
+			password = CLIUtils.getCLIPasswordParam("Password: ");
 		}
 
 		if (otp == null) {
-			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+			otp = CLIUtils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
 		}
 	}
 
 	private void addMissingExporterArgs() {
 		if (clientsFile == null) {
-			clientsFile = Utils.getCLIParam("File with client names: ");
+			clientsFile = CLIUtils.getCLIParam("File with client names: ");
 		}
 
 		if (clientsFile.isEmpty()) {
@@ -114,7 +114,7 @@ public abstract class AbstractSWExporter {
 		String userHomeS = userHome.toString();
 
 		if (outDir == null) {
-			outDir = Utils.getCLIParam("Export directory (default: " + userHomeS + "): ");
+			outDir = CLIUtils.getCLIParam("Export directory (default: " + userHomeS + "): ");
 		}
 
 		if (outDir.isEmpty()) {

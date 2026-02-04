@@ -35,7 +35,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class ExporterToPDF extends AbstractExportTable {
@@ -113,7 +113,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			try {
 				File temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
 						.toFile();
-				Utils.restrictAccessToFile(temp);
+				FileUtils.restrictAccessToFile(temp);
 				writeFile(temp.getAbsolutePath(), fileName);
 				openFile(temp);
 			} catch (IOException e) {

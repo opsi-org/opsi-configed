@@ -28,11 +28,11 @@ import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
+import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -54,7 +54,7 @@ public class ListSelectionDialog {
 	public ListSelectionDialog(Component owner, String title, boolean editable) {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-		Utils.enableDialogResizing(jOptionPane);
+		DialogUtils.enableDialogResizing(jOptionPane);
 
 		dialog = jOptionPane.createDialog(owner, title);
 		dialog.pack();
@@ -124,7 +124,7 @@ public class ListSelectionDialog {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		JDialog multiLineItemDialog = optionPane.createDialog(dialog,
 				edit ? Configed.getResourceValue("ListSelectionDialog.editMultiLineValue")

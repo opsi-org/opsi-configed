@@ -12,7 +12,7 @@ import java.util.Map;
 
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.licenses.AuditSoftwareXLicensePool;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.datastructure.AbstractTableEntry;
 import de.uib.configed.share.datastructure.StringValuedRelationElement;
 
@@ -76,9 +76,9 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 		super.put(SUB_VERSION, subversion);
 
-		ident = Utils.pseudokey(new String[] { super.get(NAME).toString(), super.get(VERSION).toString(), subversion,
-				super.get(LANGUAGE).toString(), super.get(ARCHITECTURE).toString() });
-		identReduced = Utils
+		ident = ConfigUtils.pseudokey(new String[] { super.get(NAME).toString(), super.get(VERSION).toString(),
+				subversion, super.get(LANGUAGE).toString(), super.get(ARCHITECTURE).toString() });
+		identReduced = ConfigUtils
 				.pseudokey(new String[] { super.get(VERSION).toString(), super.get(ARCHITECTURE).toString() });
 
 		super.put(ID, ident);

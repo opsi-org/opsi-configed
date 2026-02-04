@@ -81,11 +81,12 @@ import de.uib.configed.gui.features.clientselection.operations.HardwareOperation
 import de.uib.configed.gui.features.clientselection.operations.HostOperation;
 import de.uib.configed.gui.features.clientselection.operations.SoftwareOperation;
 import de.uib.configed.gui.features.clientselection.operations.SwAuditOperation;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.TextInputField;
 import de.uib.configed.gui.type.SavedSearch;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -121,7 +122,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		complexElements = new LinkedList<>();
 		init();
 		JPanel panel = initComponents();
-		Utils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
+		SwingUtils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
 
 		JButton buttonSearch = new JButton(Configed.getResourceValue("search"));
 		buttonSearch.addActionListener(event -> doSearch());
@@ -131,7 +132,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonSearch, buttonReset, Configed.getResourceValue("buttonClose") });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));

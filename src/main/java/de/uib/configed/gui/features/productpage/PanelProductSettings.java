@@ -43,11 +43,11 @@ import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productgroup.ProductActionPanel;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -131,7 +131,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
 
-		Utils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
+		SwingUtils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
 
 	public void updateSearchFields() {

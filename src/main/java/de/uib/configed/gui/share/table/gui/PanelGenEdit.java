@@ -34,7 +34,7 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.RowNoTableModelFilterCondition;
 import de.uib.configed.gui.share.table.TableModelFilter;
 import de.uib.configed.gui.share.table.updates.UpdateController;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -463,7 +463,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 					j++;
 				}
 
-				if (keyValue.equals(Utils.pseudokey(partialkeys))) {
+				if (keyValue.equals(ConfigUtils.pseudokey(partialkeys))) {
 					found = true;
 					break;
 				} else {

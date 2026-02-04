@@ -40,6 +40,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
 import de.uib.configed.gui.share.table.AbstractExportTable;
@@ -48,7 +49,6 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class ClientMenuManager implements MenuListener {
@@ -133,7 +133,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		// Space should only be active on the client table, but not on other where you 
 		// could accidently start remote control by pressing space in a text field etc.
-		Utils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
+		SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
 				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
 				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
@@ -241,7 +241,7 @@ public final class ClientMenuManager implements MenuListener {
 		if (config.keyStroke() != null) {
 			item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
 			item.setAccelerator(config.keyStroke());
-			Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
+			SwingUtils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
 					config.keyStroke(), config.action());
 		} else {
 			item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));

@@ -23,7 +23,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -57,8 +57,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelOn = Utils.createBoldLabel("PMInstallSettingsPanel.jLabelOn");
-		jLabelLoglevel = Utils.createBoldLabel("loglevel");
+		jLabelOn = SwingUtils.createBoldLabel("PMInstallSettingsPanel.jLabelOn");
+		jLabelLoglevel = SwingUtils.createBoldLabel("loglevel");
 
 		jButtonDepotselection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {

@@ -6,7 +6,6 @@
 
 package de.uib.configed.core.infrastructure.certificate;
 
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -18,6 +17,7 @@ import de.uib.configed.share.logging.Logging;
 public final class CertificateValidatorFactory {
 	private static CertificateValidator insecureCertificateValidator;
 	private static CertificateValidator secureCertificateValidator;
+	private static boolean disableCertificateVerification;
 
 	private CertificateValidatorFactory() {
 	}
@@ -48,8 +48,8 @@ public final class CertificateValidatorFactory {
 	 *         {@link SecureCertificateValidator} is returned.
 	 */
 	public static CertificateValidator getValidator() {
-		Logging.info("certificate verification is disabled: ", Utils.isCertificateVerificationDisabled());
-		if (Utils.isCertificateVerificationDisabled()) {
+		Logging.info("certificate verification is disabled: ", disableCertificateVerification);
+		if (disableCertificateVerification) {
 			Logging.info("using insecure certificate validator");
 			return getInsecure();
 		}
@@ -64,5 +64,13 @@ public final class CertificateValidatorFactory {
 	public static void resetCertificateValidators() {
 		insecureCertificateValidator = null;
 		secureCertificateValidator = null;
+	}
+
+	public static void setDisableCertificateVerification(boolean disable) {
+		disableCertificateVerification = disable;
+	}
+
+	public static boolean isCertificateVerificationDisabled() {
+		return disableCertificateVerification;
 	}
 }

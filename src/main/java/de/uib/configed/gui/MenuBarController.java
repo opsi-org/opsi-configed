@@ -37,8 +37,8 @@ import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.ThemeManager;
@@ -332,12 +332,12 @@ public class MenuBarController {
 
 	public static void addCreditsMenus(JMenu jMenuHelp, JFrame owner) {
 		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
-		jMenuHelpCredits.addActionListener(actionEvent -> Utils.showCreditsAction(owner));
+		jMenuHelpCredits.addActionListener(actionEvent -> DialogUtils.showCredits(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"),
 				Icons.getIntellijIcon("info"));
-		jMenuHelpAbout.addActionListener(actionEvent -> Utils.showAboutAction(owner));
+		jMenuHelpAbout.addActionListener(actionEvent -> DialogUtils.showAbout(owner));
 		jMenuHelp.add(jMenuHelpAbout);
 	}
 

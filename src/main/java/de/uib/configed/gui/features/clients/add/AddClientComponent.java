@@ -48,6 +48,8 @@ import de.uib.configed.gui.ServerActionManager;
 import de.uib.configed.gui.features.csv.CSVImportDataDialog;
 import de.uib.configed.gui.features.csv.CSVImportDataModifier;
 import de.uib.configed.gui.features.csv.CSVTemplateCreatorDialog;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
@@ -102,7 +104,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { buttonCreate, buttonClose });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
@@ -210,42 +212,42 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private JPanel createPanel(Consumer<AddClientMsg> dispatch) {
-		JLabel jLabelHostname = Utils.createBoldLabel("NewClientDialog.hostname");
+		JLabel jLabelHostname = SwingUtils.createBoldLabel("NewClientDialog.hostname");
 
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
 				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-		jTextHostname.getDocument().addDocumentListener(Utils.onDocumentChange(
+		jTextHostname.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeHostname(jTextHostname.getText()))));
 
-		JLabel jLabelDomainname = Utils.createBoldLabel("NewClientDialog.domain");
+		JLabel jLabelDomainname = SwingUtils.createBoldLabel("NewClientDialog.domain");
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
 		jComboDomain.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDomain((String) jComboDomain.getSelectedItem())));
 
-		JLabel jLabelDescription = Utils.createBoldLabel("description");
+		JLabel jLabelDescription = SwingUtils.createBoldLabel("description");
 
 		JTextField jTextDescription = new JTextField();
-		jTextDescription.getDocument().addDocumentListener(Utils.onDocumentChange(
+		jTextDescription.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeDescription(jTextDescription.getText()))));
 
-		JLabel jLabelInventoryNumber = Utils.createBoldLabel("NewClientDialog.inventorynumber");
+		JLabel jLabelInventoryNumber = SwingUtils.createBoldLabel("NewClientDialog.inventorynumber");
 
 		JTextField jTextInventoryNumber = new JTextField();
-		jTextInventoryNumber.getDocument().addDocumentListener(Utils.onDocumentChange(
+		jTextInventoryNumber.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeInventory(jTextInventoryNumber.getText()))));
 
-		JLabel jLabelDepot = Utils.createBoldLabel("NewClientDialog.belongsToDepot");
+		JLabel jLabelDepot = SwingUtils.createBoldLabel("NewClientDialog.belongsToDepot");
 
 		jComboDepots = new JComboBox<>();
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel labelGroupSelection = Utils.createBoldLabel("NewClientDialog.assignToGroups");
+		JLabel labelGroupSelection = SwingUtils.createBoldLabel("NewClientDialog.assignToGroups");
 
 		JButton buttonGroupSelection = new JButton(Icons.getIntellijIcon("edit"));
 		buttonGroupSelection.addActionListener(e -> dispatch.accept(new AddClientMsg.UIMsg.OpenGroupSelectionDialog()));
@@ -262,12 +264,12 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 			}
 		});
 
-		JLabel jLabelNotes = Utils.createBoldLabel("NewClientDialog.notes");
+		JLabel jLabelNotes = SwingUtils.createBoldLabel("NewClientDialog.notes");
 
 		JTextArea jTextNotes = new JTextArea();
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
-		jTextNotes.getDocument().addDocumentListener(Utils.onDocumentChange(
+		jTextNotes.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
 		jTextNotes.setLineWrap(true);
 		jTextNotes.setWrapStyleWord(true);
@@ -276,32 +278,32 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextNotesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 		jTextNotesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-		JLabel jLabelSystemUUID = Utils.createBoldLabel("NewClientDialog.SystemUUID");
+		JLabel jLabelSystemUUID = SwingUtils.createBoldLabel("NewClientDialog.SystemUUID");
 
 		JTextField systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
 				Character.MIN_VALUE, 36, true), "", 36);
-		systemUUIDField.getDocument().addDocumentListener(Utils.onDocumentChange(
+		systemUUIDField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID(systemUUIDField.getText()))));
 
-		JLabel jLabelMacAddress = Utils.createBoldLabel("NewClientDialog.HardwareAddress");
+		JLabel jLabelMacAddress = SwingUtils.createBoldLabel("NewClientDialog.HardwareAddress");
 		jLabelMacAddress.setIcon(Icons.getIntellijIcon("info"));
 		jLabelMacAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoMac"));
 
 		JTextField macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
 				2, true), "", 17);
-		macAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
+		macAddressField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeMAC(macAddressField.getText()))));
 
-		JLabel jLabelIpAddress = Utils.createBoldLabel("ipAddress");
+		JLabel jLabelIpAddress = SwingUtils.createBoldLabel("ipAddress");
 		jLabelIpAddress.setIcon(Icons.getIntellijIcon("info"));
 		jLabelIpAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
 
 		JTextField ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
-		ipAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
+		ipAddressField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(
 				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeIP(ipAddressField.getText()))));
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
@@ -316,7 +318,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jComboDepots.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeDepot((String) jComboDepots.getSelectedItem())));
 
-		JLabel jLabelNetboot = Utils.createBoldLabel("NewClientDialog.netbootProduct");
+		JLabel jLabelNetboot = SwingUtils.createBoldLabel("NewClientDialog.netbootProduct");
 		jComboNetboot = new JComboBox<>();
 		jComboNetboot.addActionListener(a -> dispatch
 				.accept(new AddClientMsg.FieldChangeMsg.ChangeNetboot((String) jComboNetboot.getSelectedItem())));

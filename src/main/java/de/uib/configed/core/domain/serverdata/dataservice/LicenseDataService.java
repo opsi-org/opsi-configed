@@ -26,7 +26,7 @@ import de.uib.configed.gui.type.licenses.LicensePoolXOpsiProduct;
 import de.uib.configed.gui.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.gui.type.licenses.LicenseUsageEntry;
 import de.uib.configed.gui.type.licenses.LicensepoolEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.datastructure.StringValuedRelationElement;
 import de.uib.configed.share.logging.Logging;
 
@@ -170,8 +170,9 @@ public class LicenseDataService extends DataService {
 			licenseUsabilities.add(entry);
 			softwareL2LPool.remove("ident");
 			softwareL2LPool.remove("type");
-			rowsSoftwareL2LPool.put(Utils.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
-					(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
+			rowsSoftwareL2LPool.put(ConfigUtils.pseudokey(new String[] {
+					(String) softwareL2LPool.get("softwareLicenseId"), (String) softwareL2LPool.get("licensePoolId") }),
+					softwareL2LPool);
 		}
 		dataServices.cacheManager.setCachedData(CacheIdentifier.LICENSE_USABILITIES, licenseUsabilities);
 		dataServices.cacheManager.setCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, rowsSoftwareL2LPool);
@@ -188,7 +189,7 @@ public class LicenseDataService extends DataService {
 					licensePoolId);
 
 			if (!resultMap.isEmpty()) {
-				result = Utils
+				result = ConfigUtils
 						.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
 								"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
@@ -211,7 +212,7 @@ public class LicenseDataService extends DataService {
 					licensePoolId, hostId, licenseKey, notes);
 
 			if (!resultMap.isEmpty()) {
-				result = Utils
+				result = ConfigUtils
 						.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
 								"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
@@ -336,7 +337,7 @@ public class LicenseDataService extends DataService {
 			Logging.info(this, "licensePoolXOpsiProduct size ", getLicensePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicensePoolXOpsiProductPD()) {
 				rowsLicensePoolXOpsiProduct
-						.put(Utils.pseudokey(new String[] { element.get(LicensePoolXOpsiProduct.LICENSE_POOL_KEY),
+						.put(ConfigUtils.pseudokey(new String[] { element.get(LicensePoolXOpsiProduct.LICENSE_POOL_KEY),
 								element.get(LicensePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
 			}
 		}

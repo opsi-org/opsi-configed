@@ -39,9 +39,10 @@ import de.uib.configed.gui.features.licenses.LicenseManagement;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -164,7 +165,7 @@ public class MainPanelManager {
 		depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
 		DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
-		JLabel depotSelectionLabel = Utils.createBoldLabel(Configed.getResourceValue("depotSelection"));
+		JLabel depotSelectionLabel = SwingUtils.createBoldLabel(Configed.getResourceValue("depotSelection"));
 		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 		JPanel depotsListPanel = new JPanel();
@@ -228,7 +229,7 @@ public class MainPanelManager {
 		Logging.info(this, "startLicensingManagement called");
 
 		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			Utils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
+			DialogUtils.showMissingLicenseModules(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
 			return null;
 		}
 

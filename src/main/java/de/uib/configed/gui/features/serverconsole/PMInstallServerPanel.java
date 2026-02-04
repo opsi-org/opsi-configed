@@ -13,7 +13,8 @@ import javax.swing.JLabel;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.share.FileUtils;
 import net.miginfocom.swing.MigLayout;
 
 public class PMInstallServerPanel extends PMInstallPanel {
@@ -43,7 +44,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelServerDir = Utils.createBoldLabel("PMInstallServerPanel.jLabelOtherPath");
+		jLabelServerDir = SwingUtils.createBoldLabel("PMInstallServerPanel.jLabelOtherPath");
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.setToolTipText(
@@ -66,7 +67,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 
 	public SingleCommandOpsiPackageManagerInstall getCommand() {
 		return PMInstallServerPanel
-				.getCommand(Utils.getServerPathFromWebDAVPath(autocompletion.getTextField().getText()));
+				.getCommand(FileUtils.getServerPathFromWebDAVPath(autocompletion.getTextField().getText()));
 	}
 
 	public static SingleCommandOpsiPackageManagerInstall getCommand(String product) {

@@ -45,12 +45,12 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -562,11 +562,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		JLabel userLabel = Utils.createBoldLabel("FramingNewUser.textfieldLabel");
+		JLabel userLabel = SwingUtils.createBoldLabel("FramingNewUser.textfieldLabel");
 
 		JTextField userField = new JTextField();
 
-		JLabel userRolesLabel = Utils.createBoldLabel("FramingNewUser.listLabel");
+		JLabel userRolesLabel = SwingUtils.createBoldLabel("FramingNewUser.listLabel");
 		userRolesLabel.setToolTipText(Configed.getResourceValue("FramingNewUser.listLabel.ToolTip"));
 
 		JList<String> userRolesList = new JList<>(theRoles.toArray(new String[0]));
@@ -610,7 +610,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		JLabel roleLabel = Utils.createBoldLabel("FramingNewRole.textfieldLabel");
+		JLabel roleLabel = SwingUtils.createBoldLabel("FramingNewRole.textfieldLabel");
 
 		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), roleLabel,
 				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);

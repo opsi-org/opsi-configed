@@ -32,6 +32,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
@@ -78,7 +79,7 @@ public final class HealthCheckSettingsComponent
 
 	@Override
 	protected JComponent renderView(HealthCheckSettingsModel model, Consumer<HealthCheckSettingsMsg> dispatch) {
-		JLabel labelSelectedHosts = Utils.createBoldLabel("HealthCheckSettingsDialog.selectedHosts");
+		JLabel labelSelectedHosts = SwingUtils.createBoldLabel("HealthCheckSettingsDialog.selectedHosts");
 
 		selectedHosts = new JTextField();
 		selectedHosts.setEditable(false);
@@ -107,7 +108,7 @@ public final class HealthCheckSettingsComponent
 		checkBoxCheckActive.addItemListener(itemEvent -> dispatch
 				.accept(new HealthCheckSettingsMsg.ToggleActivity(checkBoxCheckActive.getState())));
 
-		labelStartDowntime = Utils.createBoldLabel("HealthCheckSettingsDialog.startDowntime");
+		labelStartDowntime = SwingUtils.createBoldLabel("HealthCheckSettingsDialog.startDowntime");
 
 		startDowntimeField = new JTextField();
 		startDowntimeField.setEditable(false);
@@ -120,7 +121,7 @@ public final class HealthCheckSettingsComponent
 			}
 		});
 
-		labelEndDowntime = Utils.createBoldLabel("HealthCheckSettingsDialog.endDowntime");
+		labelEndDowntime = SwingUtils.createBoldLabel("HealthCheckSettingsDialog.endDowntime");
 
 		endDowntimeField = new JTextField();
 		endDowntimeField.setEditable(false);

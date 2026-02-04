@@ -33,8 +33,9 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.ServerConfiguration;
+import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.type.RemoteControl;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -202,8 +203,9 @@ public class UserRolesConfigDataService extends DataService {
 		if (dataServices.config.getConfigDefaultValuesPD()
 				.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null || setUserRegisterVal) {
 			List<Object> readyObjects = new ArrayList<>();
-			Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
-					keyUserRegisterValue, "without given values the primary value setting is false");
+			Map<String, Object> item = ConfigUtils.createNOMBoolConfig(
+					OpsiServiceNOMPersistenceController.KEY_USER_REGISTER, keyUserRegisterValue,
+					"without given values the primary value setting is false");
 			readyObjects.add(item);
 
 			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
@@ -254,7 +256,7 @@ public class UserRolesConfigDataService extends DataService {
 
 		Logging.warning(this, " user role administration configured but not permitted by the modules file ", info);
 
-		Utils.showMissingLicenseModules(info.toString());
+		DialogUtils.showMissingLicenseModules(info.toString());
 	}
 
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
@@ -599,7 +601,7 @@ public class UserRolesConfigDataService extends DataService {
 	private List<Object> computeConfigedGivenDomains(List<Map<String, Object>> readyObjects) {
 		Logging.info(this, "checkStandardConfigs: create domain list");
 
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 
 		List<Object> defaultValues = new ArrayList<>();
 		defaultValues.add(dataServices.config.getOpsiDefaultDomainPD());
@@ -635,7 +637,7 @@ public class UserRolesConfigDataService extends DataService {
 		possibleValues.add("lastSeen");
 
 		// create config for service
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 		item.put("ident",
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 		item.put("description",
@@ -662,7 +664,7 @@ public class UserRolesConfigDataService extends DataService {
 		possibleValues.add(ITEM_DELETE_CLIENT);
 		possibleValues.add(ITEM_FREE_LICENSES);
 
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 		item.put("id", ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
 		item.put("description", "");
 		item.put("defaultValues", defaultValues);
@@ -688,7 +690,7 @@ public class UserRolesConfigDataService extends DataService {
 		possibleValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 		possibleValues.add(OPSI_CLIENTD_EVENT_SILENT_INSTALL);
 
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 		item.put("id", ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
 		item.put("description", "");
 		item.put("defaultValues", defaultValues);

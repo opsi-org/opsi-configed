@@ -25,7 +25,7 @@ import de.uib.configed.core.domain.permission.UserConfig;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.AbstractDataChangedKeeper;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.TimeUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class MapTableModel extends AbstractTableModel {
@@ -412,7 +412,7 @@ public class MapTableModel extends AbstractTableModel {
 				// produces as well rowModiTime
 
 				if (rowModiTime > -1 && row != rowModiTime) {
-					setValueAt(Utils.getNowTimeListValue(), rowModiTime, 1);
+					setValueAt(TimeUtils.getNowTimeListValue(), rowModiTime, 1);
 				}
 			}
 		}

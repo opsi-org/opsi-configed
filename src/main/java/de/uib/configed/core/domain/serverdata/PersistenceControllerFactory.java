@@ -11,12 +11,14 @@ import java.util.regex.Pattern;
 import de.uib.configed.core.domain.serverdata.dataservice.UserDataService;
 import de.uib.configed.core.infrastructure.ConnectionState;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
-import de.uib.configed.share.Utils;
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.share.logging.Logging;
 
 public final class PersistenceControllerFactory {
 	private static final Pattern OTP_PATTERN = Pattern.compile("^[\\d]{6}$");
 	private static OpsiServiceNOMPersistenceController staticPersistControl;
+
+	private static boolean isMFAEnabled;
 
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
@@ -62,20 +64,15 @@ public final class PersistenceControllerFactory {
 					userDataService);
 
 			if (!useSSO) {
-				boolean isMultiFactorAuthenticationEnabled = userDataService.usesMultiFactorAuthentication();
+				isMFAEnabled = userDataService.usesMFA();
 				Logging.debug(
 						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
-						isMultiFactorAuthenticationEnabled);
-
-				Utils.setMultiFactorAuthenticationEnabled(isMultiFactorAuthenticationEnabled);
-				Logging.debug(
-						"PersistenceControllerFactory.getNewPersistenceController() - setMultiFactorAuthenticationEnabled:",
-						Utils.isMultiFactorAuthenticationEnabled());
+						isMFAEnabled);
 			}
 
 			ParallelTaskExecutor executor = new ParallelTaskExecutor();
 			executor.runInParallel(() -> persistenceController.getDataServices().userRoles.checkConfigurationPD());
-			if (!Utils.isCertificateVerificationDisabled()) {
+			if (!CertificateValidatorFactory.isCertificateVerificationDisabled()) {
 				executor.runInParallel(CertificateManager::updateCertificate);
 			}
 			executor.waitForCompletion();
@@ -98,5 +95,9 @@ public final class PersistenceControllerFactory {
 		ConnectionState result = staticPersistControl.getConnectionState();
 		Logging.info("PersistenceControllerFactory getConnectionState ", result);
 		return result;
+	}
+
+	public static boolean isMFAEnabled() {
+		return isMFAEnabled;
 	}
 }

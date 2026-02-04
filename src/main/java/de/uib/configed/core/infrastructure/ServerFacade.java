@@ -40,6 +40,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.ConnectionHandler.RequestMethod;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
@@ -47,7 +48,6 @@ import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.BrowserUtils;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
 import net.jpountz.lz4.LZ4FrameInputStream;
@@ -390,7 +390,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters) {
 		Logging.info(this, "retrieveResponse started");
 
-		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
+		if ((otp == null && PersistenceControllerFactory.isMFAEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
 			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
 				ParallelTaskExecutor.allowNewTasks(true);
 			} else {
@@ -633,8 +633,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			// Normal response; clear error flag if needed
 			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
 		} else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
-			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
+			boolean isMFAEnabled = PersistenceControllerFactory.isMFAEnabled();
+			Logging.debug("Unauthorized: ", sessionId, ", mfa=", isMFAEnabled);
+			if (isMFAEnabled && ConfigedMain.getMainFrame() != null) {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
 				// Don't initiate Messagebus reconnection, since the connection is restablished once

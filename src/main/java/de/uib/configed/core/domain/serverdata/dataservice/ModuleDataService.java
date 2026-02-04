@@ -24,9 +24,9 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.share.ExtendedDate;
 import de.uib.configed.share.ExtendedInteger;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -413,7 +413,7 @@ public class ModuleDataService extends DataService {
 				}
 
 				Logging.info(this, "missingModules ", info);
-				Utils.showMissingLicenseModules(info.toString());
+				DialogUtils.showMissingLicenseModules(info.toString());
 			});
 		}
 	}

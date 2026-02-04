@@ -33,7 +33,7 @@ import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.TimeUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
@@ -286,7 +286,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 	private void addLicense() {
 		Object[] a = new Object[6];
-		a[0] = "l_" + Utils.getSeconds();
+		a[0] = "l_" + TimeUtils.getSeconds();
 		a[1] = "";
 		a[2] = LicenseEntry.LICENSE_TYPES.get(0);
 		a[3] = "1";
@@ -336,9 +336,9 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 	private void addContract() {
 		Object[] a = new Object[6];
-		a[0] = "c_" + Utils.getSeconds();
+		a[0] = "c_" + TimeUtils.getSeconds();
 		a[1] = "";
-		a[2] = Utils.getDate();
+		a[2] = TimeUtils.getDate();
 		a[3] = "";
 		a[4] = "";
 		a[5] = "";

@@ -52,9 +52,10 @@ import de.uib.configed.gui.CheckBoxList;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.HostInfo;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -113,7 +114,7 @@ public class CSVTemplateCreatorDialog {
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
 
-		JLabel delimiterLabel = Utils.createBoldLabel("CSVImportDataDialog.stringSeparatorLabel");
+		JLabel delimiterLabel = SwingUtils.createBoldLabel("CSVImportDataDialog.stringSeparatorLabel");
 
 		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
@@ -144,8 +145,8 @@ public class CSVTemplateCreatorDialog {
 
 		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
-		JLabel dataSelectionLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
-		JLabel fieldSeparatorLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.fieldSeparatorLabel");
+		JLabel dataSelectionLabel = SwingUtils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
+		JLabel fieldSeparatorLabel = SwingUtils.createBoldLabel("CSVTemplateCreatorDialog.fieldSeparatorLabel");
 		includeFormatHintOption = new JCheckBox(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
 
@@ -228,7 +229,7 @@ public class CSVTemplateCreatorDialog {
 		boolean proceed = true;
 		for (JCheckBox headerCheckBox : headerCheckBoxes) {
 			if (HostInfo.HOST_KEY_KEY.equals(headerCheckBox.getText()) && headerCheckBox.isSelected()
-					&& !Utils.includeOpsiHostKey()) {
+					&& !DialogUtils.includeOpsiHostKey()) {
 				proceed = false;
 			}
 		}

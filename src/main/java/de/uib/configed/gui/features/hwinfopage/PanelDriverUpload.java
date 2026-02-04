@@ -39,9 +39,9 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.NameProducer;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.WinProductUtils;
 import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
@@ -144,9 +144,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
-		jLabelTopic = Utils.createBoldLabel("PanelDriverUpload.topic");
+		jLabelTopic = SwingUtils.createBoldLabel("PanelDriverUpload.topic");
 
-		labelDriverToIntegrate = Utils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
+		labelDriverToIntegrate = SwingUtils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 		jLabelRetrievalText.setVisible(false);
 
 		webDAVClient = new WebDAVClient();
@@ -255,9 +255,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		labelClientName = new JLabel();
 
-		JLabel jLabelDepotServer = Utils.createBoldLabel("PanelDriverUpload.DepotServer");
+		JLabel jLabelDepotServer = SwingUtils.createBoldLabel("PanelDriverUpload.DepotServer");
 
-		JLabel jLabelWinProduct = Utils.createBoldLabel("PanelDriverUpload.labelWinProduct");
+		JLabel jLabelWinProduct = SwingUtils.createBoldLabel("PanelDriverUpload.labelWinProduct");
 
 		JButton buttonCallSelectDriverFiles = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallSelectDriverFiles
@@ -284,7 +284,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			executor.execute();
 		});
 
-		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
+		JLabel labelTargetPath = SwingUtils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
@@ -296,7 +296,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
-		JLabel labelDriverLocationType = Utils.createBoldLabel("PanelDriverUpload.type");
+		JLabel labelDriverLocationType = SwingUtils.createBoldLabel("PanelDriverUpload.type");
 
 		JPanel panelButtonGroup = createPanelButtonGroup();
 

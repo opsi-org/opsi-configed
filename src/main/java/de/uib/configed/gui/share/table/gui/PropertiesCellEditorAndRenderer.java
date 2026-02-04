@@ -35,10 +35,11 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.table.DefaultListModelProducer;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
@@ -112,7 +113,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		String key = (String) table.getValueAt(row, 0);
 
-		if (Utils.isKeyForSecretValue(key)) {
+		if (SwingUtils.isKeyForSecretValue(key)) {
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"), JOptionPane.YES_NO_OPTION);
@@ -175,7 +176,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		JOptionPane optionPane = new JOptionPane(multiLineScrollPane, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION);
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), title);
 		dialog.pack();
 		dialog.setVisible(true);

@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
+import de.uib.configed.share.TimeUtils;
 
 public class SWAuditClientEntry {
 	public static final String CLIENT_ID = "clientId";
@@ -38,7 +39,7 @@ public class SWAuditClientEntry {
 	}
 
 	private static String produceSWIdent(Map<String, Object> readMap) {
-		return Utils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.NAME),
+		return ConfigUtils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.NAME),
 				(String) readMap.get(SWAuditEntry.VERSION), (String) readMap.get(SWAuditEntry.SUB_VERSION),
 				(String) readMap.get(SWAuditEntry.LANGUAGE), (String) readMap.get(SWAuditEntry.ARCHITECTURE) });
 	}
@@ -48,7 +49,7 @@ public class SWAuditClientEntry {
 	}
 
 	public String getLastModification() {
-		return Utils.formatDateTimeStringToLocal((String) originalMap.get(LAST_MODIFICATION));
+		return TimeUtils.formatDateTimeStringToLocal((String) originalMap.get(LAST_MODIFICATION));
 	}
 
 	public String getSWIdent() {

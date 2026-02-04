@@ -23,7 +23,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandPackageUpdater;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -101,8 +101,8 @@ public class PackageUpdaterDialog {
 	}
 
 	private JPanel initPanel() {
-		JLabel jLabelInfo = Utils.createBoldLabel("PackageUpdaterDialog.info");
-		JLabel jLabelRepos = Utils.createBoldLabel("PackageUpdaterDialog.repos");
+		JLabel jLabelInfo = SwingUtils.createBoldLabel("PackageUpdaterDialog.info");
+		JLabel jLabelRepos = SwingUtils.createBoldLabel("PackageUpdaterDialog.repos");
 
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {

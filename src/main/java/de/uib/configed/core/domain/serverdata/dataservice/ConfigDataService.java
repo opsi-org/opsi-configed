@@ -28,7 +28,7 @@ import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.gui.type.SavedSearch;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
 
@@ -246,7 +246,7 @@ public class ConfigDataService extends DataService {
 		Logging.info(this, "setConfig(), usedConfigIds: ", usedConfigIds);
 		List<Map<String, Object>> createItems = new ArrayList<>();
 		for (String missingId : usedConfigIds) {
-			Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
+			Map<String, Object> item = ConfigUtils.createNOMitem(typesOfUsedConfigIds.get(missingId));
 			item.put("ident", missingId);
 			createItems.add(item);
 		}
@@ -395,7 +395,7 @@ public class ConfigDataService extends DataService {
 		List<Object> selectedValuesRole = new ArrayList<>();
 		selectedValuesRole.add(role);
 
-		Map<String, Object> itemRole = Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configkey,
+		Map<String, Object> itemRole = ConfigUtils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configkey,
 				"which role should determine this configuration", false, false, selectedValuesRole, selectedValuesRole);
 
 		readyObjects.add(itemRole);
@@ -413,11 +413,11 @@ public class ConfigDataService extends DataService {
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		Map<String, Object> item;
 
-		item = Utils.createNOMitem("UnicodeConfig");
+		item = ConfigUtils.createNOMitem("UnicodeConfig");
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name);
 		readyObjects.add(item);
 
-		item = Utils.createNOMitem("UnicodeConfig");
+		item = ConfigUtils.createNOMitem("UnicodeConfig");
 		item.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
 		readyObjects.add(item);
 
@@ -459,7 +459,7 @@ public class ConfigDataService extends DataService {
 		// create config for service
 		Map<String, Object> item;
 
-		item = Utils.createNOMitem(nomType);
+		item = ConfigUtils.createNOMitem(nomType);
 		item.put("ident", key);
 		item.put("description", description);
 		item.put("defaultValues", defaultValues);
@@ -551,7 +551,7 @@ public class ConfigDataService extends DataService {
 				for (Object key : removedKeys) {
 					String ident = "" + key + ";" + objectId;
 
-					Map<String, Object> item = Utils.createNOMitem("ConfigState");
+					Map<String, Object> item = ConfigUtils.createNOMitem("ConfigState");
 					item.put("ident", ident);
 					deleteConfigStateItems.add(item);
 				}
@@ -596,7 +596,7 @@ public class ConfigDataService extends DataService {
 			List<?> valueList = (List<?>) configState.get("values");
 
 			if (valueList == null) {
-				Map<String, Object> item = Utils.createNOMitem("ConfigState");
+				Map<String, Object> item = ConfigUtils.createNOMitem("ConfigState");
 				item.put("objectId", configState.get("objectId"));
 				item.put("configId", configState.get("configId"));
 
@@ -634,7 +634,7 @@ public class ConfigDataService extends DataService {
 		Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: ", missingConfigIds);
 		List<Map<String, Object>> createItems = new ArrayList<>();
 		for (String missingId : missingConfigIds) {
-			Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
+			Map<String, Object> item = ConfigUtils.createNOMitem(typesOfUsedConfigIds.get(missingId));
 			item.put("ident", missingId);
 			createItems.add(item);
 		}
@@ -855,7 +855,7 @@ public class ConfigDataService extends DataService {
 
 	public void writeDomains(List<Object> domains) {
 		String key = OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY;
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+		Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 
 		item.put("ident", key);
 		item.put("description", "saved domains for creating clients");
@@ -883,19 +883,19 @@ public class ConfigDataService extends DataService {
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 
 		for (String hostId : hostIds) {
-			Map<String, Object> enabledItem = Utils
+			Map<String, Object> enabledItem = ConfigUtils
 					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 			enabledItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
 			enabledItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_ENABLED);
 			enabledItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(enabled));
 
-			Map<String, Object> startTimeItem = Utils
+			Map<String, Object> startTimeItem = ConfigUtils
 					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 			startTimeItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
 			startTimeItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_START);
 			startTimeItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(startTime));
 
-			Map<String, Object> endTimeItem = Utils
+			Map<String, Object> endTimeItem = ConfigUtils
 					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 			endTimeItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
 			endTimeItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_END);

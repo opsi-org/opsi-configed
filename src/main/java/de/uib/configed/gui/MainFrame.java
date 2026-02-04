@@ -26,10 +26,10 @@ import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.WindowsPositionManager;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
-import de.uib.configed.share.Utils;
 import net.miginfocom.swing.MigLayout;
 
 public class MainFrame extends JFrame {
@@ -198,22 +198,22 @@ public class MainFrame extends JFrame {
 	}
 
 	public void activateLoadingPane(String infoText) {
-		Utils.runOnEventDispatchThread(() -> {
+		SwingUtils.runOnEventDispatchThread(() -> {
 			glassPane.activate(true);
 			glassPane.setInfoText(infoText);
 		});
 	}
 
 	public void deactivateLoadingPane() {
-		Utils.runOnEventDispatchThread(() -> glassPane.activate(false));
+		SwingUtils.runOnEventDispatchThread(() -> glassPane.activate(false));
 	}
 
 	public void activateLoadingCursor() {
-		Utils.runOnEventDispatchThread(() -> setCursor(Globals.WAIT_CURSOR));
+		SwingUtils.runOnEventDispatchThread(() -> setCursor(Globals.WAIT_CURSOR));
 	}
 
 	public void deactivateLoadingCursor() {
-		Utils.runOnEventDispatchThread(() -> setCursor(null));
+		SwingUtils.runOnEventDispatchThread(() -> setCursor(null));
 	}
 
 	public void nextView() {

@@ -10,9 +10,9 @@ import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.DefaultCaret;
 
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.swing.WrapEditorKit;
 import de.uib.configed.share.BrowserUtils;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class TextMarkdownPane extends JTextPane {
@@ -29,7 +29,7 @@ public class TextMarkdownPane extends JTextPane {
 
 	@Override
 	public void setText(String s) {
-		super.setText(Utils.parseMarkdown(s));
+		super.setText(SwingUtils.parseMarkdown(s));
 	}
 
 	private void hyperlinkUpdate(HyperlinkEvent event) {

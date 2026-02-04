@@ -41,7 +41,7 @@ import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.TimeUtils;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
 import net.miginfocom.swing.MigLayout;
@@ -164,7 +164,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		}
 
 		jTextFieldLicenseID.setEnabled(true);
-		jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
+		jTextFieldLicenseID.setText("l_" + TimeUtils.getSeconds());
 
 		jTextFieldEndOfLicense.setEnabled(true);
 		jTextFieldEndOfLicense.setText("");
@@ -235,7 +235,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		}
 
 		jTextFieldLicenseID.setEnabled(true);
-		jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
+		jTextFieldLicenseID.setText("l_" + TimeUtils.getSeconds());
 		jTextFieldLicenseType.setEnabled(true);
 		jTextFieldLicenseType.setText("CONCURRENT");
 		jTextFieldLicenseType.setEditable(false);

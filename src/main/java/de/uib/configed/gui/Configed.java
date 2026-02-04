@@ -28,12 +28,14 @@ import de.uib.configed.core.domain.permission.UserConfigProducing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ServerFacade;
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.features.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.features.swinfopage.SwPdfExporter;
 import de.uib.configed.gui.messages.Messages;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.CLIUtils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.savedstates.SavedStates;
 
@@ -176,16 +178,16 @@ public final class Configed {
 
 	private static void addMissingArgs() {
 		if (host == null) {
-			host = Utils.getCLIParam("Host: ");
+			host = CLIUtils.getCLIParam("Host: ");
 		}
 		if (user == null) {
-			user = Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT);
+			user = CLIUtils.getCLIParam("User: ").toLowerCase(Locale.ROOT);
 		}
 		if (password == null) {
-			password = Utils.getCLIPasswordParam("Password: ");
+			password = CLIUtils.getCLIPasswordParam("Password: ");
 		}
 		if (otp == null) {
-			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+			otp = CLIUtils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
 		}
 	}
 
@@ -281,7 +283,7 @@ public final class Configed {
 		}
 
 		if (cmd.hasOption("disable-certificate-verification")) {
-			Utils.setDisableCertificateVerification(true);
+			CertificateValidatorFactory.setDisableCertificateVerification(true);
 		}
 	}
 
@@ -432,8 +434,8 @@ public final class Configed {
 		}
 
 		if (savedStatesLocationName == null || Configed.getSavedStates() == null) {
-			Logging.info("writing saved states to ", Utils.getSavedStatesDefaultLocation());
-			savedStatesDir = new File(getSavedStatesDirectoryName(Utils.getSavedStatesDefaultLocation(), host));
+			Logging.info("writing saved states to ", FileUtils.getSavedStatesDefaultLocation());
+			savedStatesDir = new File(getSavedStatesDirectoryName(FileUtils.getSavedStatesDefaultLocation(), host));
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
 				Logging.warning("mkdirs for saved states failed, in savedStatesDefaultLocation");
@@ -447,7 +449,7 @@ public final class Configed {
 					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 		}
 
-		savedStatesLocationName = Utils.getSavedStatesDefaultLocation();
+		savedStatesLocationName = FileUtils.getSavedStatesDefaultLocation();
 
 		try {
 			Configed.getSavedStates().load();

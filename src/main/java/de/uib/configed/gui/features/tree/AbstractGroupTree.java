@@ -44,8 +44,8 @@ import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.type.Object2GroupEntry;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -336,7 +336,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		JLabel labelDescription = Utils.createBoldLabel("description");
+		JLabel labelDescription = SwingUtils.createBoldLabel("description");
 
 		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), labelDescription,
 				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
@@ -404,11 +404,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (node.getAllowsChildren()) {
-			JLabel labelGroupName = Utils.createBoldLabel("ClientTree.editNode.label.groupname");
+			JLabel labelGroupName = SwingUtils.createBoldLabel("ClientTree.editNode.label.groupname");
 
 			JTextField groupNameField = new JTextField();
 
-			JLabel labelDescription = Utils.createBoldLabel("description");
+			JLabel labelDescription = SwingUtils.createBoldLabel("description");
 
 			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";
