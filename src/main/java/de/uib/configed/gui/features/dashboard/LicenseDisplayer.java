@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
@@ -30,7 +29,6 @@ import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.SWAuditEntry;
@@ -52,7 +50,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-public class LicenseDisplayer {
+public final class LicenseDisplayer {
 	private static LicenseDisplayer instance;
 
 	@FXML
@@ -72,24 +70,20 @@ public class LicenseDisplayer {
 
 	private Stage stage;
 
-	private ConfigedMain configedMain;
-
-	public static void showLicenseDisplayer(ConfigedMain configedMain) {
-		if (instance == null) {
-			try {
-				instance = new LicenseDisplayer();
-				instance.setConfigedMain(configedMain);
-				instance.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.warning(ioE, "Unable to open FXML file.");
-			}
-		} else {
-			instance.display();
+	private LicenseDisplayer() {
+		try {
+			this.initAndShowGUI();
+		} catch (IOException ioE) {
+			Logging.warning(ioE, "Unable to open FXML file.");
 		}
 	}
 
-	public void setConfigedMain(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
+	public static void showLicenseDisplayer() {
+		if (instance == null) {
+			instance = new LicenseDisplayer();
+		} else {
+			instance.display();
+		}
 	}
 
 	public void loadData() {
@@ -107,7 +101,7 @@ public class LicenseDisplayer {
 		list.add(text);
 	}
 
-	public void initAndShowGUI() throws IOException {
+	private void initAndShowGUI() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/fxml/dialogs/license_dialog.fxml"));
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene(root);
@@ -207,20 +201,9 @@ public class LicenseDisplayer {
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (configedMain != null) {
-							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-						}
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().software
-								.getInstalledSoftwareName2SWinfoPD();
-					}
-				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD)),
+				0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
 			public void produceRows() {
 				super.produceRows();

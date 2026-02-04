@@ -286,17 +286,8 @@ public class PackageManagerUninstallParameterDialog {
 			return;
 		}
 
-		Thread execThread = new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "start exec thread ");
-				CommandExecutor executor = new CommandExecutor(configedMain, commandPMUninstall);
-				executor.execute();
-				Logging.debug(this, "end exec thread");
-			}
-		};
-
-		execThread.start();
+		CommandExecutor executor = new CommandExecutor(configedMain, commandPMUninstall);
+		executor.executeAsync();
 	}
 
 	private void initLayout() {

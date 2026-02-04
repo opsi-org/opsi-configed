@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.dashboard.collector.ClientData;
 import de.uib.configed.gui.features.dashboard.collector.DepotData;
 import de.uib.configed.gui.features.dashboard.collector.LicenseData;
@@ -30,11 +29,9 @@ public class Dashboard extends JFXPanel {
 	public static final String PRODUCT_VIEW = "product";
 
 	private MainView mainView;
-	private ConfigedMain configedMain;
 
-	public Dashboard(ConfigedMain configedMain) {
+	public Dashboard() {
 		mainView = null;
-		this.configedMain = configedMain;
 
 		// We need to make sure that all data is cleared when re-initializing the dashboard
 		clearAllData();
@@ -70,7 +67,7 @@ public class Dashboard extends JFXPanel {
 	}
 
 	private void initFX() throws IOException {
-		mainView = new MainView(this, configedMain);
+		mainView = new MainView(this);
 		ClientView clientView = new ClientView(this);
 		ProductView productView = new ProductView(this);
 

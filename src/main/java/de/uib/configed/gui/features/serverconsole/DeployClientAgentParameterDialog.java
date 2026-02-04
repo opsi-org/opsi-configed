@@ -36,18 +36,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class DeployClientAgentParameterDialog {
 	private enum OS {
-		WINDOWS("Windows"), LINUX("Linux"), MACOS("MacOS");
-
-		private String displayName;
-
-		OS(String displayName) {
-			this.displayName = displayName;
-		}
-
-		@Override
-		public String toString() {
-			return displayName;
-		}
+		WINDOWS, LINUX, MACOS
 	}
 
 	private JPanel inputPanel = new JPanel();
@@ -67,7 +56,7 @@ public class DeployClientAgentParameterDialog {
 
 	private JCheckBox jCheckBoxIgnorePing;
 	private JComboBox<Integer> jComboBoxLoglevel;
-	private JComboBox<String> jComboBoxOperatingSystem;
+	private JComboBox<OS> jComboBoxOperatingSystem;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent = new SingleCommandDeployClientAgent();
 	private ConfigedMain configedMain;
@@ -157,8 +146,7 @@ public class DeployClientAgentParameterDialog {
 
 		jLabelOperatingSystem = SwingUtils.createBoldLabel("DeployClientAgentParameterDialog.opsiClientAgent.label");
 
-		jComboBoxOperatingSystem = new JComboBox<>(
-				new String[] { OS.WINDOWS.toString(), OS.LINUX.toString(), OS.MACOS.toString() });
+		jComboBoxOperatingSystem = new JComboBox<>(OS.values());
 		jComboBoxOperatingSystem
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
 
@@ -190,7 +178,6 @@ public class DeployClientAgentParameterDialog {
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"),
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"),
 					JOptionPane.ERROR_MESSAGE);
-
 			return;
 		}
 		Set<String> clients = Set.of(jTextFieldClient.getText().trim().split(" "));
@@ -204,35 +191,35 @@ public class DeployClientAgentParameterDialog {
 			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message2"));
 
 			int answer = JOptionPane.showOptionDialog(dialog, message.toString(),
-					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), 0, 0, null,
-					new String[] { Configed.getResourceValue("buttonCancel"),
-							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") },
+					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+					new String[] {
+							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed"),
+							Configed.getResourceValue("buttonCancel") },
 					null);
 
-			if (answer == 1) {
+			if (answer == 0) {
 				clients.removeAll(nonExistingHostNames);
 			} else {
 				return;
 			}
 		}
-		String selectedOS = jComboBoxOperatingSystem.getItemAt(jComboBoxOperatingSystem.getSelectedIndex());
-		String opsiClientAgentDir = "";
-		if (OS.LINUX.toString().equals(selectedOS)) {
-			opsiClientAgentDir = "opsi-linux-client-agent";
-		} else if (OS.MACOS.toString().equals(selectedOS)) {
-			opsiClientAgentDir = "opsi-mac-client-agent";
-		} else {
-			opsiClientAgentDir = "opsi-client-agent";
-		}
+		String opsiClientAgentDir = switch (jComboBoxOperatingSystem
+				.getItemAt(jComboBoxOperatingSystem.getSelectedIndex())) {
+		case LINUX -> "opsi-linux-client-agent";
+		case MACOS -> "opsi-mac-client-agent";
+		case WINDOWS -> "opsi-client-agent";
+		};
+
 		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
 		CommandExecutor executor = new CommandExecutor(configedMain, commandDeployClientAgent);
-		executor.execute();
+		executor.executeAsync();
 	}
 
 	private Set<String> getNonExistingHostNames(Set<String> hostNames) {
 		Set<String> nonExistingHostNames = new HashSet<>();
-		if (hostNames == null || hostNames.isEmpty()) {
+		if (hostNames.isEmpty()) {
 			return nonExistingHostNames;
 		}
 		nonExistingHostNames.addAll(hostNames);
@@ -243,12 +230,7 @@ public class DeployClientAgentParameterDialog {
 	private void doCopySelectedClients() {
 		List<String> clientsList = configedMain.getSelectedClients();
 		if (!clientsList.isEmpty()) {
-			StringBuilder clients = new StringBuilder();
-			for (String c : clientsList) {
-				clients.append(c);
-				clients.append(" ");
-			}
-			jTextFieldClient.setText(clients.toString());
+			jTextFieldClient.setText(String.join(" ", clientsList));
 		}
 	}
 

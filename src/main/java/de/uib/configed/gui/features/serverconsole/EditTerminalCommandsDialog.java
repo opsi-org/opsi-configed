@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -291,14 +290,11 @@ public final class EditTerminalCommandsDialog {
 		Logging.debug(this, "doActionTestCommand buildCommand ", command);
 		Logging.debug(this, "doActionTestCommand buildCommand commandlist ", command.getCommands());
 
-		new Thread() {
-			@Override
-			public void run() {
-				executor.setMultiCommand(command);
-				executor.execute();
-				SwingUtilities.invokeLater(() -> jTextAreaCommands.requestFocus());
-			}
-		}.start();
+		SwingUtils.runSwingWorker(() -> {
+			executor.setMultiCommand(command);
+			executor.executeAsync();
+			return null;
+		}, (Void _) -> jTextAreaCommands.requestFocus(), null);
 	}
 
 	private boolean canCommandBeSaved() {

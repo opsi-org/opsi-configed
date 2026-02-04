@@ -48,7 +48,6 @@ import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
@@ -170,17 +169,8 @@ public class PanelSWSingleClientInfo extends JPanel {
 		}
 
 		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						// Nothing to reload.
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return retrieveSWInfoMap();
-					}
-				})), -1, finalColumns, null, null);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, null, this::retrieveSWInfoMap)), -1,
+				finalColumns, null, null);
 
 		int indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, createTableModelFilter1(indexOfColWindowsSoftwareID));

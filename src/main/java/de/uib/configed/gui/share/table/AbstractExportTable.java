@@ -108,16 +108,16 @@ public abstract class AbstractExportTable {
 				int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), message,
 						Configed.getResourceValue("ExportTable.title"), JOptionPane.OK_OPTION,
 						JOptionPane.PLAIN_MESSAGE, null,
-						new Object[] { Configed.getResourceValue("buttonCancel"),
+						new Object[] {
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
-								Configed.getResourceValue(
-										"ExportTable.caseNoSelectedRows.option.exportCompleteTable") },
+								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable"),
+								Configed.getResourceValue("buttonCancel") },
 						null);
 
 				Logging.info(this, "checkSelection answered ", answer);
-				if (answer == 1) {
+				if (answer == 0) {
 					result = true;
-				} else if (answer == 2) {
+				} else if (answer == 1) {
 					result = false;
 				} else {
 					result = null;

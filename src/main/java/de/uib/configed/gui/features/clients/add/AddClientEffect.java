@@ -11,7 +11,7 @@ import java.util.List;
 public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddClientEffect.ServiceEffect {
 	sealed interface UIEffect extends AddClientEffect permits UIEffect.ShowOverwriteHostDialog,
 			UIEffect.ShowOverwriteDepotDialog, UIEffect.ShowNetbiosConfirmDialog, UIEffect.OpenCSVImportDialog,
-			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage, UIEffect.CloseDialog {
+			UIEffect.OpenGroupSelectionDialog, UIEffect.ShowErrorMessage {
 		record ShowOverwriteHostDialog(String opsiHostKey) implements UIEffect {
 		}
 
@@ -28,9 +28,6 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 		}
 
 		record ShowErrorMessage(String title, String message) implements UIEffect {
-		}
-
-		record CloseDialog() implements UIEffect {
 		}
 	}
 

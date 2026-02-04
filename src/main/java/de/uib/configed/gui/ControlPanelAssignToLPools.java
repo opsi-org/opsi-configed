@@ -37,7 +37,6 @@ import de.uib.configed.gui.share.table.TableModelFilterCondition;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
@@ -138,20 +137,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getFieldSelectedLicensePoolId().setText(poolID);
 		thePanel.getFieldSelectedLicensePoolId().setToolTipText(poolID);
 
-		List<String> softwareIdsForPool = new ArrayList<>();
-		if (poolID != null) {
-			softwareIdsForPool = persistenceController.getDataServices().software
-					.getSoftwareListByLicensePoolPD(poolID);
-		}
+		List<String> softwareIdsForPool = poolID == null ? new ArrayList<>()
+				: persistenceController.getDataServices().software.getSoftwareListByLicensePoolPD(poolID);
 
 		Logging.info(this, "setSoftwareIdsFromLicensePool  softwareIds for licensePool  ", poolID, " : ",
 				softwareIdsForPool.size());
 		Logging.info(this, "setSoftwareIdsFromLicensePool  unknown softwareIds for licensePool  ", poolID, " : ",
 				persistenceController.getDataServices().software.getUnknownSoftwareListForLicensePoolPD(poolID).size());
-
-		Integer totalUnassignedSWEntries = persistenceController.getDataServices().software
-				.getSoftwareWithoutAssociatedLicensePoolPD().size();
-		Logging.info(this, "setSoftwareIdsFromLicensePool unAssignedSoftwareIds ", totalUnassignedSWEntries);
 
 		resetCounters(poolID);
 		thePanel.getFieldCountAllWindowsSoftware().setText("0");
@@ -164,29 +156,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (!persistenceController.getDataServices().software.getUnknownSoftwareListForLicensePoolPD(poolID)
 				.isEmpty()) {
-			thePanel.getFMissingSoftwareInfo().setTableModel(new GenTableModel(
-					new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
-					new DefaultTableProvider(new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
-							new MapRetriever() {
-								@Override
-								public void reloadMap() {
-									persistenceController
-											.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
-								}
-
-								@Override
-								public Map<String, Map<String, Object>> retrieveMap() {
-									return getMissingSoftwareMap(poolID);
-								}
-							})),
-					0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection));
+			thePanel.getFMissingSoftwareInfo().setTableModel(getMissingSoftwareTableModel(poolID));
 		}
 
 		thePanel.getFieldCountAssignedStatus().setText(produceCount(softwareIdsForPool.size(), poolID == null));
 
 		thePanel.getFieldCountAssignedStatus().setToolTipText(createTooltip(softwareIdsForPool));
-
-		Integer totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 
 		produceFilterSets(softwareIdsForPool);
 
@@ -201,9 +176,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
 		Logging.info(this, "modelWindowsSoftwareIds row count ", totalShownEntries);
-		thePanel.getFieldCountAllWindowsSoftware().setText(produceCount(totalSWEntries));
+		thePanel.getFieldCountAllWindowsSoftware().setText(produceCount(modelWindowsSoftwareIds.getRowCount()));
 		thePanel.getFieldCountDisplayedWindowsSoftware().setText(produceCount(totalShownEntries));
-		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(totalUnassignedSWEntries));
+		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(
+				persistenceController.getDataServices().software.getSoftwareWithoutAssociatedLicensePoolPD().size()));
 
 		List<String> selectKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
 
@@ -234,6 +210,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
+	}
+
+	private GenTableModel getMissingSoftwareTableModel(String poolID) {
+		return new GenTableModel(new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
+				new DefaultTableProvider(new RetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
+						ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD, () -> getMissingSoftwareMap(poolID))),
+				0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection);
 	}
 
 	private static String createTooltip(List<String> softwareIdsForPool) {
@@ -469,17 +452,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
 				columnNames);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
-					}
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.LICENSE_POOL_DATA_RELOAD,
+						persistenceController.getDataServices().license::getRelationsProductId2LPool)),
+				-1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection, true);
 
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().license.getRelationsProductId2LPool();
-					}
-				})), -1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection, true);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
 		tableModels.add(modelProductId2LPool);
@@ -548,19 +524,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().software
-								.getInstalledSoftwareInformationForLicensingPD();
-					}
-				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
-				updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+						persistenceController.getDataServices().software::getInstalledSoftwareInformationForLicensingPD,
+						withRowCounter)),
+				WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(), updateCollection);
 
 		Logging.info(this, "modelWindowsSoftwareIds row count ", modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);

@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import javax.swing.UIManager;
 
-import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.dashboard.ComponentStyler;
 import de.uib.configed.gui.features.dashboard.Dashboard;
 import de.uib.configed.gui.features.dashboard.DataObserver;
@@ -163,10 +162,8 @@ public class MainView implements View {
 
 	private DepotInfo depotInfo;
 
-	private ConfigedMain configedMain;
-
 	@SuppressWarnings("java:S4968")
-	public MainView(JFXPanel fxPanel, ConfigedMain configedMain) throws IOException {
+	public MainView(JFXPanel fxPanel) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"),
 				Messages.getResourceBundle());
 		fxmlLoader.setController(this);
@@ -190,8 +187,6 @@ public class MainView implements View {
 
 		depotSelectionListener = (ObservableValue<? extends String> observable, String oldValue,
 				String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue);
-
-		this.configedMain = configedMain;
 	}
 
 	public void init() {
@@ -246,7 +241,7 @@ public class MainView implements View {
 
 		clientDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.CLIENT_VIEW));
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
-		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> LicenseDisplayer.showLicenseDisplayer(configedMain));
+		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> LicenseDisplayer.showLicenseDisplayer());
 
 		selectedDepotComboBox.getSelectionModel().selectedItemProperty().removeListener(depotSelectionListener);
 		selectedDepotComboBox.getSelectionModel().selectedItemProperty().addListener(depotSelectionListener);

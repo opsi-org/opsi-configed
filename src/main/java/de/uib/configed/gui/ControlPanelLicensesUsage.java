@@ -24,7 +24,6 @@ import de.uib.configed.gui.features.licenses.PanelLicensesUsage;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.CellInputDialogEditor;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
@@ -122,17 +121,9 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryLicensesUsage = new MapTableUpdateItemFactory(modelLicensesUsage,
 				columnNames);
 		modelLicensesUsage = new GenTableModel(updateItemFactoryLicensesUsage,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().license.getRowsLicensesUsagePD();
-					}
-				})), -1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection, true);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.LICENSE_ON_CLIENT_DATA_RELOAD,
+						persistenceController.getDataServices().license::getRowsLicensesUsagePD)),
+				-1, new int[] { 0, 1, 2 }, thePanel.getPanelUsage(), updateCollection, true);
 		updateItemFactoryLicensesUsage.setSource(modelLicensesUsage);
 
 		tableModels.add(modelLicensesUsage);

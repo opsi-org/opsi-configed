@@ -281,7 +281,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 					new SingleCommandTemplate("create_driver_links.py", "/var/lib/opsi/depot/"
 							+ comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
 							"create_driver_links.py"));
-			executor.execute();
+			executor.executeAsync();
 		});
 
 		JLabel labelTargetPath = SwingUtils.createBoldLabel("CompleteWinProducts.labelTargetPath");
@@ -425,17 +425,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void showDrivers() {
-		new Thread() {
-			@Override
-			public void run() {
-				CommandExecutor executor = new CommandExecutor(configedMain,
-						new SingleCommandTemplate("show_drivers.py",
-								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
-										+ labelClientName.getText(),
-								"show_drivers.py"));
-				executor.execute();
-			}
-		}.start();
+		CommandExecutor executor = new CommandExecutor(configedMain,
+				new SingleCommandTemplate("show_drivers.py", "/var/lib/opsi/depot/"
+						+ comboChooseWinProduct.getSelectedItem() + "/show_drivers.py " + labelClientName.getText(),
+						"show_drivers.py"));
+		executor.executeAsync();
 	}
 
 	private void execute() {

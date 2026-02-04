@@ -97,13 +97,10 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
 		buttonCreate.addActionListener(actionEvent -> dispatch(new AddClientMsg.ActionMsg.CreateClient()));
 
-		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
-		buttonClose.addActionListener(actionEvent -> dispatch(new AddClientMsg.ActionMsg.CloseDialog()));
-
 		JScrollPane scrollPane = new JScrollPane(createPanel(dispatch));
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-				null, new Object[] { buttonCreate, buttonClose });
+				null, new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
 		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
@@ -160,7 +157,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		case AddClientEffect.UIEffect.OpenGroupSelectionDialog _ -> displayGroupSelectionDialog();
 		case AddClientEffect.UIEffect.ShowErrorMessage e -> JOptionPane.showMessageDialog(dialog, e.message(),
 				e.title(), JOptionPane.ERROR_MESSAGE);
-		case AddClientEffect.UIEffect.CloseDialog _ -> handleCloseDialogEffect();
 		}
 	}
 
@@ -188,13 +184,6 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
 				JOptionPane.YES_NO_OPTION);
 		dispatch(new AddClientMsg.ActionMsg.CSVImported(model.getRowsToImport(), answer == JOptionPane.YES_OPTION));
-	}
-
-	private void handleCloseDialogEffect() {
-		if (dialog != null) {
-			dialog.setVisible(false);
-			dialog.dispose();
-		}
 	}
 
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {

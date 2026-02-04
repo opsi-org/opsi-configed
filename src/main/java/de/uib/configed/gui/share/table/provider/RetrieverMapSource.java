@@ -8,30 +8,39 @@ package de.uib.configed.gui.share.table.provider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 
 public class RetrieverMapSource extends MapSource {
 	// the map is not given via a parameter but by a pointer to a function
 
-	private MapRetriever retriever;
+	private Object reloadEvent;
+	private Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier;
 
-	public RetrieverMapSource(List<String> columnNames, MapRetriever retriever, boolean rowCounting) {
+	public RetrieverMapSource(List<String> columnNames, Object reloadEvent,
+			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier, boolean rowCounting) {
 		super(columnNames, null, rowCounting);
-		this.retriever = retriever;
+		this.reloadEvent = reloadEvent;
+		this.mapSupplier = mapSupplier;
 		rows = new ArrayList<>();
 	}
 
-	public RetrieverMapSource(List<String> columnNames, MapRetriever retriever) {
-		this(columnNames, retriever, false);
+	public RetrieverMapSource(List<String> columnNames, Object reloadEvent,
+			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier) {
+		this(columnNames, reloadEvent, mapSupplier, false);
 	}
 
 	@Override
 	protected void fetchData() {
-		if (reloadRequested) {
-			retriever.reloadMap();
-			reloadRequested = false;
+		if (reloadRequested && reloadEvent != null) {
+			PersistenceControllerFactory.getPersistenceController().reloadData(reloadEvent.toString());
 		}
 
-		table = retriever.retrieveMap();
+		reloadRequested = false;
+
+		table = mapSupplier.get();
 
 		super.fetchData();
 	}

@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -93,7 +91,7 @@ public class MakeProductFileDialog {
 		jComboBoxMainDir.setEnabled(true);
 
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
-		buttonExecute.addActionListener(actionEvent -> execute());
+		buttonExecute.addActionListener(actionEvent -> new Thread(this::execute));
 
 		JButton buttonPackageManager = new JButton(
 				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
@@ -130,10 +128,7 @@ public class MakeProductFileDialog {
 
 		jButtonSearchDir = autocompletion.getButton();
 		jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
-		jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
-			autocompletion.doButtonAction();
-			doSetActionGetVersions();
-		});
+		jButtonSearchDir.addActionListener(actionEvent -> search());
 
 		jLabelPackageVersion = SwingUtils.createBoldLabel("MakeProductFileDialog.packageVersion");
 		jLabelProductVersion = SwingUtils.createBoldLabel("MakeProductFileDialog.productVersion");
@@ -153,10 +148,7 @@ public class MakeProductFileDialog {
 		jButtonAdvancedSettings = new JToggleButton(
 				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
-		jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
-			advancedOptionsPanel.setVisible(jButtonAdvancedSettings.isSelected());
-			dialog.pack();
-		});
+		jButtonAdvancedSettings.addActionListener(actionEvent -> toggleAdvancedSettings());
 
 		jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
@@ -201,6 +193,16 @@ public class MakeProductFileDialog {
 		return versionPanel;
 	}
 
+	private void search() {
+		autocompletion.doButtonAction();
+		doSetActionGetVersions();
+	}
+
+	private void toggleAdvancedSettings() {
+		advancedOptionsPanel.setVisible(!advancedOptionsPanel.isVisible());
+		dialog.pack();
+	}
+
 	private String doActionGetVersions() {
 		String dir = FileUtils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem())
 				+ "OPSI/control";
@@ -219,9 +221,9 @@ public class MakeProductFileDialog {
 					"Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
-			Logging.info(this, "doActionGetVersions, getDirectories result ", Arrays.toString(versions));
-			if (versions.length < 1) {
-				Logging.info(this, "doActionGetVersions, not expected versions array ", Arrays.toString(versions));
+			Logging.info(this, "doActionGetVersions, getDirectories result versions with length ", versions.length);
+			if (versions.length < 2) {
+				Logging.info(this, "doActionGetVersions, not expected versions array with size < 2");
 				return "";
 			}
 			return versions[0] + ";;;" + versions[1];
@@ -230,24 +232,27 @@ public class MakeProductFileDialog {
 	}
 
 	private final void doSetActionGetVersions() {
-		String versions = doActionGetVersions();
+		SwingUtils.runSwingWorker(this::doActionGetVersions, this::setVersions, null);
+	}
+
+	private void setVersions(String versions) {
 		if (versions.contains(";;;")) {
 			enableTfVersions(true);
 
 			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
-
-			jTextFieldPackageVersion.setText(versionArray[0]);
-			jLabelPackageVersionControlFile.setText(versionArray[0]);
-
-			jTextFieldProductVersion.setText(versionArray[1]);
-			jLabelProductVersionControlFile.setText(versionArray[1]);
+			updateVersionFields(versionArray[0], versionArray[1]);
 		} else {
 			enableTfVersions(false);
-			jTextFieldPackageVersion.setText("");
-			jLabelPackageVersionControlFile.setText("");
-			jTextFieldProductVersion.setText("");
-			jLabelProductVersionControlFile.setText("");
+			updateVersionFields("", "");
 		}
+	}
+
+	private void updateVersionFields(String product, String packageVersion) {
+		jTextFieldPackageVersion.setText(product);
+		jLabelPackageVersionControlFile.setText(product);
+
+		jTextFieldProductVersion.setText(packageVersion);
+		jLabelProductVersionControlFile.setText(packageVersion);
 	}
 
 	private void enableTfVersions(boolean enable) {
@@ -282,7 +287,7 @@ public class MakeProductFileDialog {
 		if (jCheckBoxOverwrite.isSelected()) {
 			String versions = doActionGetVersions();
 
-			String[] versionArray = tripleSemicolonMatcher.split(versions);
+			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
 
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);

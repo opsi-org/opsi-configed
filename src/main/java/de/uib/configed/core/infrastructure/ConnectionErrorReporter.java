@@ -89,7 +89,7 @@ public final class ConnectionErrorReporter {
 		JOptionPane pane = new JOptionPane();
 		pane.setMessageType(JOptionPane.WARNING_MESSAGE);
 		pane.setMessage(message);
-		pane.setOptions(new Object[] { Configed.getResourceValue("buttonCancel"), alwaysTrust, trustOnce });
+		pane.setOptions(new Object[] { alwaysTrust, trustOnce, Configed.getResourceValue("buttonCancel") });
 
 		JDialog dialog = pane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"));

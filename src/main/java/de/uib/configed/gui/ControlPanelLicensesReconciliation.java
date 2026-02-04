@@ -25,7 +25,6 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilterCondition;
 import de.uib.configed.gui.share.table.gui.CheckBoxTableCellRenderer;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapRetriever;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
@@ -104,22 +103,11 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		MapTableUpdateItemFactory updateItemFactoryLicensesReconciliation = new MapTableUpdateItemFactory(
 				modelLicensesReconciliation, columnNames);
 		modelLicensesReconciliation = new GenTableModel(updateItemFactoryLicensesReconciliation,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						Logging.debug(this, "retrieveMap");
-						if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
-							return new HashMap<>();
-						}
-
-						return persistenceController.getDataServices().software.getLicensesReconciliationPD();
-					}
-				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
+						() -> CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)
+								? persistenceController.getDataServices().software.getLicensesReconciliationPD()
+								: new HashMap<>())),
+				-1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicensesReconciliation.setFilterCondition(new TableModelFilterCondition() {

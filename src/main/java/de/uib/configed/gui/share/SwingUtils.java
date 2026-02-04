@@ -13,13 +13,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -161,5 +164,33 @@ public final class SwingUtils {
 		} else {
 			runnable.run();
 		}
+	}
+
+	public static <T> void runSwingWorker(Supplier<T> backgroundTask, Consumer<T> doneTask,
+			Consumer<Exception> exceptionHandler) {
+
+		Consumer<Exception> finalExceptionHandler = exceptionHandler != null ? exceptionHandler : ((Exception e) -> {
+		});
+
+		SwingWorker<T, Void> worker = new SwingWorker<>() {
+			@Override
+			protected T doInBackground() {
+				return backgroundTask.get();
+			}
+
+			@Override
+			protected void done() {
+				try {
+					T result = get();
+					doneTask.accept(result);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					finalExceptionHandler.accept(e);
+				} catch (ExecutionException e) {
+					finalExceptionHandler.accept(e);
+				}
+			}
+		};
+		worker.execute();
 	}
 }
