@@ -26,7 +26,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
-public class TreePopupMouseListener extends PopupMouseListener {
+public class TreePopupMouseListener {
 	private AbstractGroupTree tree;
 
 	private TreePath mousePath;
@@ -38,7 +38,8 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemRemoveElements;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		super(jPopupMenu, new JComponent[] { tree });
+		new PopupMouseListener(jPopupMenu, this::checkAccepted, new JComponent[] { tree });
+
 		this.tree = tree;
 
 		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
@@ -186,12 +187,5 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		}
 
 		return numberVisibleItems > 0;
-	}
-
-	@Override
-	protected void maybeShowPopup(MouseEvent e) {
-		if (checkAccepted(e)) {
-			super.maybeShowPopup(e);
-		}
 	}
 }

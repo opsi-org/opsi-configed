@@ -28,10 +28,6 @@ public class PopupMouseListener extends MouseAdapter {
 		}
 	}
 
-	public PopupMouseListener(JPopupMenu popup, JComponent[] components) {
-		this(popup, null, components);
-	}
-
 	@Override
 	public void mousePressed(MouseEvent e) {
 		maybeShowPopup(e);
