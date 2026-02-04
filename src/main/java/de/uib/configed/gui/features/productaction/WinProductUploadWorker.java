@@ -24,7 +24,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.WinProductUtils;
+import de.uib.configed.gui.share.WinProductUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class WinProductUploadWorker extends SwingWorker<Void, Void> {
