@@ -170,17 +170,9 @@ public class PanelSWSingleClientInfo extends JPanel {
 		}
 
 		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						// Nothing to reload.
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return retrieveSWInfoMap();
-					}
-				})), -1, finalColumns, null, null);
+				new DefaultTableProvider(
+						new RetrieverMapSource(columnNames, MapRetriever.createMapRetriever(this::retrieveSWInfoMap))),
+				-1, finalColumns, null, null);
 
 		int indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, createTableModelFilter1(indexOfColWindowsSoftwareID));

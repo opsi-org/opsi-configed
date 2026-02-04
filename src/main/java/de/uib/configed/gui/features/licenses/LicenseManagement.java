@@ -106,34 +106,18 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
 
-		licensePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-			@Override
-			public void reloadMap() {
-				persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
-			}
-
-			@Override
-			public Map<String, Map<String, Object>> retrieveMap() {
-				return (Map) persistenceController.getDataServices().license.getLicensePoolsPD();
-			}
-		}));
+		licensePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames,
+				MapRetriever.createMapRetriever(ReloadEvent.LICENSE_POOL_DATA_RELOAD,
+						persistenceController.getDataServices().license::getLicensePoolsPD)));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
 
-		licenseOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-			@Override
-			public void reloadMap() {
-				persistenceController.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
-			}
-
-			@Override
-			public Map<String, Map<String, Object>> retrieveMap() {
-				return persistenceController.getDataServices().license.getRelationsSoftwareL2LPool();
-			}
-		}));
+		licenseOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames,
+				MapRetriever.createMapRetriever(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD,
+						persistenceController.getDataServices().license::getRelationsProductId2LPool)));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -143,18 +127,9 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
 
-		licenseContractsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().license.getLicenseContractsPD();
-					}
-				}));
+		licenseContractsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames,
+				MapRetriever.createMapRetriever(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD,
+						persistenceController.getDataServices().license::getLicenseContractsPD)));
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenseEntry.ID_KEY);
@@ -165,17 +140,8 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
 
 		softwarelicensesTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().license.getLicensesPD();
-					}
-				}));
+				new RetrieverMapSource(columnNames, MapRetriever.createMapRetriever(CacheIdentifier.LICENSES,
+						persistenceController.getDataServices().license::getLicensesPD)));
 	}
 
 	private void initTabs() {

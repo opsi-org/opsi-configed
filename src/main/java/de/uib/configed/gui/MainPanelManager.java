@@ -192,7 +192,7 @@ public class MainPanelManager {
 
 	public JPanel getDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
-		return createPanel(new Dashboard(configedMain), null, Configed.getResourceValue("Dashboard.title"));
+		return createPanel(new Dashboard(), null, Configed.getResourceValue("Dashboard.title"));
 	}
 
 	public JPanel getOpsiLicensingPanel() {
@@ -240,7 +240,7 @@ public class MainPanelManager {
 				// using it since it is not needed.
 				new JFXPanel();
 
-				Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
+				Platform.runLater(LicenseDisplayer::showLicenseDisplayer);
 			}
 		}).start();
 

@@ -195,18 +195,9 @@ public abstract class AbstractSWExporter {
 		}
 
 		// no updates
-		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						// Nothing to reload.
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return retrieveSoftwareMap();
-					}
-				})), -1, finalColumns, null, null);
+		modelSWInfo = new GenTableModel(null, new DefaultTableProvider(
+				new RetrieverMapSource(columnNames, MapRetriever.createMapRetriever(this::retrieveSoftwareMap))), -1,
+				finalColumns, null, null);
 	}
 
 	private Map<String, Map<String, Object>> retrieveSoftwareMap() {

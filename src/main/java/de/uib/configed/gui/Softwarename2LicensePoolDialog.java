@@ -231,18 +231,10 @@ public class Softwarename2LicensePoolDialog {
 		Logging.info(this, "init modelSWnames");
 
 		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getDataServices().software
-								.getInstalledSoftwareName2SWinfoPD();
-					}
-				})), 0, new int[] {}, panelSWnames, updateCollection, true) {
+				new DefaultTableProvider(new RetrieverMapSource(columnNames,
+						MapRetriever.createMapRetriever(ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+								persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD))),
+				0, new int[] {}, panelSWnames, updateCollection, true) {
 			@Override
 			public void produceRows() {
 				super.produceRows();
@@ -367,18 +359,10 @@ public class Softwarename2LicensePoolDialog {
 				columnNamesSWxLicensepool);
 
 		modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						Logging.info(this, "retrieveMap for swName ", swName);
-						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return produceModelSWxLicensepool(swName);
-					}
-				})), 0, new int[] {}, panelSWnames, updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool,
+						MapRetriever.createMapRetriever(ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+								() -> produceModelSWxLicensepool(swName)))),
+				0, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicensepool.setSource(modelSWxLicensepool);
 		Logging.info(this, "setTableModelSWxLicensepool, we reset the model");
 		modelSWxLicensepool.reset();
