@@ -80,6 +80,12 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	private TreePath pathToROOT = new TreePath(new Object[] { rootNode });
 
+	private static class DeletionPlan {
+		final Set<String> memberIds = new HashSet<>();
+		final Set<String> groupIds = new HashSet<>();
+		final List<Object2GroupEntry> entries = new ArrayList<>();
+	}
+
 	protected AbstractGroupTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		init();
@@ -350,36 +356,83 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	protected boolean deleteNodes(TreePath[] paths) {
-		if (paths == null) {
+		if (paths == null || paths.length == 0) {
 			return false;
 		}
 
-		List<Object2GroupEntry> groupEntries = new ArrayList<>();
-		for (TreePath path : paths) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+		DeletionPlan plan = buildDeletionPlan(paths);
 
-			String nodeID = (String) node.getUserObject();
+		boolean hasWork = !plan.entries.isEmpty();
+		if (hasWork) {
+			boolean confirmed = confirmNodeDeletion(plan.memberIds.size(), plan.groupIds.size());
 
-			GroupNode parent = (GroupNode) node.getParent();
+			if (confirmed) {
+				for (Object2GroupEntry entry : plan.entries) {
+					removeNodeInternally(entry.getMember(), groupNodes.get(entry.getGroupId()));
+				}
 
-			if (groupNodes.get(nodeID) != null && groupNodes.get(nodeID).getParent() != parent) {
-				Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
-				parent = (GroupNode) groupNodes.get(nodeID).getParent();
-			}
+				String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+						: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
 
-			if (groupNodes.get(nodeID) == null) {
-				// client node
-				removeNodeInternally(nodeID, parent);
-				String parentID = (String) parent.getUserObject();
-				groupEntries.add(new Object2GroupEntry(nodeID, parentID));
-
+				return persistenceController.getDataServices().group.removeHostGroupElements(plan.entries, groupType);
 			}
 		}
 
-		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
-				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
+		return false;
+	}
 
-		return persistenceController.getDataServices().group.removeHostGroupElements(groupEntries, groupType);
+	private DeletionPlan buildDeletionPlan(TreePath[] paths) {
+		DeletionPlan plan = new DeletionPlan();
+
+		for (TreePath path : paths) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+			String nodeId = (String) node.getUserObject();
+
+			boolean isMember = isMemberNode(nodeId);
+			GroupNode group = null;
+
+			if (isMember) {
+				group = resolveGroup(node);
+			}
+
+			if (isMember && group != null) {
+				String groupId = (String) group.getUserObject();
+
+				plan.memberIds.add(nodeId);
+				plan.groupIds.add(groupId);
+				plan.entries.add(new Object2GroupEntry(nodeId, groupId));
+			}
+		}
+
+		return plan;
+	}
+
+	private boolean isMemberNode(String nodeId) {
+		return groupNodes.get(nodeId) == null;
+	}
+
+	private GroupNode resolveGroup(DefaultMutableTreeNode node) {
+		GroupNode parent = (GroupNode) node.getParent();
+		String nodeId = (String) node.getUserObject();
+
+		GroupNode registered = groupNodes.get(nodeId);
+		if (registered != null && registered.getParent() != parent) {
+			return (GroupNode) registered.getParent();
+		}
+
+		return parent;
+	}
+
+	private boolean confirmNodeDeletion(int memberCount, int groupCount) {
+		String message = String.format(Configed.getResourceValue("AbstractGroupTree.deleteNodesWarning"), memberCount,
+				groupCount);
+
+		int option = JOptionPane.showConfirmDialog(this, message,
+				Configed.getResourceValue("AbstractGroupTree.deleteNodesTitle"), JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+
+		return option == JOptionPane.YES_OPTION;
 	}
 
 	protected boolean deleteNode(TreePath path) {
