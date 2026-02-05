@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.tree;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class TreePopupMouseListener {
 	private JMenuItem menuItemDeleteNode;
 	private JMenuItem menuItemDeleteGroupNode;
 	private JMenuItem menuItemRemoveElements;
+
+	private boolean anyVisible;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
 		new PopupMouseListener(jPopupMenu, this::checkAccepted, new JComponent[] { tree });
@@ -147,45 +150,65 @@ public class TreePopupMouseListener {
 			return false;
 		}
 
+		hideAllMenuItems();
+
+		DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+
+		boolean contextIsGroup = contextNode.getAllowsChildren();
+		boolean contextIsFixed = contextIsGroup && ((GroupNode) contextNode).isFixed();
+		boolean contextIsAssignable = contextIsGroup
+				&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(contextNode.toString());
+
+		List<DefaultMutableTreeNode> selectedNodes = getSelectedNodes();
+
+		boolean anyGroupsSelected = selectedNodes.stream().anyMatch(TreeNode::getAllowsChildren);
+		boolean anyMembersSelected = selectedNodes.stream().anyMatch(n -> !n.getAllowsChildren());
+
+		setMenuItemVisible(menuItemCreateNode, contextIsAssignable);
+		setMenuItemVisible(menuItemEditNode, contextIsAssignable && !contextIsFixed);
+		setMenuItemVisible(menuItemDeleteGroupNode, anyGroupsSelected && !contextIsFixed);
+		setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextIsFixed);
+		setMenuItemVisible(menuItemRemoveElements, anyGroupsSelected && !anyMembersSelected && !contextIsFixed);
+
+		updateContextLabels(contextNode);
+
+		return anyVisible;
+	}
+
+	private void hideAllMenuItems() {
 		menuItemCreateNode.setVisible(false);
 		menuItemEditNode.setVisible(false);
 		menuItemDeleteNode.setVisible(false);
 		menuItemDeleteGroupNode.setVisible(false);
 		menuItemRemoveElements.setVisible(false);
+	}
 
-		int numberVisibleItems = 0;
-
-		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
-
-		if (clickNode.getAllowsChildren()) {
-			if (!ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(clickNode.toString())) {
-				menuItemCreateNode.setVisible(true);
-				numberVisibleItems++;
-			}
-
-			if (!ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(clickNode.toString())
-					&& !(((GroupNode) clickNode).isFixed())) {
-				menuItemEditNode.setVisible(true);
-				numberVisibleItems++;
-			}
-
-			if (!(((GroupNode) clickNode).isFixed())) {
-				menuItemDeleteGroupNode.setVisible(true);
-				numberVisibleItems++;
-			}
-
-			if (!(((GroupNode) clickNode).isFixed())) {
-				menuItemRemoveElements.setVisible(true);
-				numberVisibleItems++;
-			}
-		} else if (!(((GroupNode) parentNode).isFixed())) {
-			menuItemDeleteNode.setVisible(true);
-			numberVisibleItems++;
-		} else {
-			// Do nothing since no item visible
+	private List<DefaultMutableTreeNode> getSelectedNodes() {
+		TreePath[] paths = tree.getSelectionPaths();
+		if (paths == null) {
+			return List.of();
 		}
+		return Arrays.stream(paths).map(p -> (DefaultMutableTreeNode) p.getLastPathComponent()).toList();
+	}
 
-		return numberVisibleItems > 0;
+	private void updateContextLabels(DefaultMutableTreeNode contextNode) {
+		if (menuItemCreateNode.isVisible()) {
+			menuItemCreateNode.setText(
+					String.format(Configed.getResourceValue("ClientTree.addNode"), contextNode.getUserObject()));
+		}
+		if (menuItemEditNode.isVisible()) {
+			menuItemEditNode.setText(
+					String.format(Configed.getResourceValue("ClientTree.editGroup"), contextNode.getUserObject()));
+		}
+		if (menuItemRemoveElements.isVisible()) {
+			menuItemRemoveElements.setText(String.format(Configed.getResourceValue(
+					tree instanceof ClientTree ? "ClientTree.removeAllElements" : "ProductTree.removeAllElements"),
+					contextNode.getUserObject()));
+		}
+	}
+
+	private void setMenuItemVisible(JMenuItem menuItem, boolean visible) {
+		menuItem.setVisible(visible);
+		anyVisible |= menuItem.isVisible();
 	}
 }
