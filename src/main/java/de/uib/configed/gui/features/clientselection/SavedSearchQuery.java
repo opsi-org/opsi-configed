@@ -16,6 +16,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ConnectionState;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.type.Object2GroupEntry;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -100,7 +101,8 @@ public class SavedSearchQuery {
 			Main.endApp(5);
 		}
 
-		if (!persistenceController.getDataServices().group.deleteGroup(groupName)) {
+		if (!persistenceController.getDataServices().group.deleteGroup(groupName,
+				Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
 			Logging.error("delete group error, groupName ", groupName);
 			Main.endApp(6);
 		}

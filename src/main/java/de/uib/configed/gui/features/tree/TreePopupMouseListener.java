@@ -67,7 +67,7 @@ public class TreePopupMouseListener {
 
 		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
 		Icons.addIntellijIconToMenuItem(menuItemDeleteGroupNode, "delete");
-		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
+		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteGroupNodes(tree.getSelectionPaths()));
 		menuItemDeleteGroupNode
 				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 						.isGlobalReadOnly());

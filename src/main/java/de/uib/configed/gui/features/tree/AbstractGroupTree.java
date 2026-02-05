@@ -35,6 +35,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -84,6 +85,12 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		final Set<String> memberIds = new HashSet<>();
 		final Set<String> groupIds = new HashSet<>();
 		final List<Object2GroupEntry> entries = new ArrayList<>();
+	}
+
+	private static class GroupDeletionPlan {
+		final Set<String> selectedGroupIds = new HashSet<>();
+		final Set<String> allGroupIds = new HashSet<>();
+		final List<DefaultMutableTreeNode> selectedGroupNodes = new ArrayList<>();
 	}
 
 	protected AbstractGroupTree(ConfigedMain configedMain) {
@@ -435,40 +442,89 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return option == JOptionPane.YES_OPTION;
 	}
 
-	protected boolean deleteNode(TreePath path) {
-		if (path == null) {
-			return false;
-		}
+	protected boolean deleteGroupNodes(TreePath[] paths) {
+		boolean success = false;
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+		if (paths != null && paths.length > 0) {
+			GroupDeletionPlan plan = buildGroupDeletionPlan(paths);
 
-		String nodeID = (String) node.getUserObject();
-
-		GroupNode parent = (GroupNode) node.getParent();
-
-		if (groupNodes.get(nodeID) != null && groupNodes.get(nodeID).getParent() != parent) {
-			Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
-			parent = (GroupNode) groupNodes.get(nodeID).getParent();
-		}
-
-		if (groupNodes.get(nodeID) != null) {
-			// found a group
-			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-					Configed.getResourceValue("ClientTree.deleteGroupNode") + ": " + nodeID,
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-
-			if (returnedOption == JOptionPane.OK_OPTION) {
-				groupNodes.remove(nodeID);
-				groups.remove(nodeID);
-
-				deleteGroupWithSubgroups(node);
-				parent.remove(node);
-
-				getModel().nodeStructureChanged(parent);
+			if (!plan.allGroupIds.isEmpty() && confirmGroupDeletion(plan)) {
+				executeGroupDeletion(plan);
+				success = true;
 			}
 		}
-		return true;
+
+		return success;
+	}
+
+	private GroupDeletionPlan buildGroupDeletionPlan(TreePath[] paths) {
+		GroupDeletionPlan plan = new GroupDeletionPlan();
+
+		for (TreePath path : paths) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+			String nodeId = (String) node.getUserObject();
+
+			if (groupNodes.get(nodeId) != null) {
+				plan.selectedGroupIds.add(nodeId);
+				plan.selectedGroupNodes.add(node);
+
+				collectGroupSubtree(node, plan);
+			}
+		}
+
+		return plan;
+	}
+
+	private static void collectGroupSubtree(DefaultMutableTreeNode root, GroupDeletionPlan plan) {
+		Enumeration<TreeNode> e = root.depthFirstEnumeration();
+
+		while (e.hasMoreElements()) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+
+			String nodeId = node.getUserObject().toString();
+
+			if (node.getAllowsChildren()) {
+				plan.allGroupIds.add(nodeId);
+			}
+		}
+	}
+
+	private static boolean confirmGroupDeletion(GroupDeletionPlan plan) {
+		String message = String.format(Configed.getResourceValue("ClientTree.deleteGroupWarning"),
+				plan.selectedGroupIds.size());
+
+		return JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("ClientTree.deleteGroupNode"), JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION;
+	}
+
+	private void executeGroupDeletion(GroupDeletionPlan plan) {
+		if (plan.allGroupIds.isEmpty()) {
+			return;
+		}
+
+		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
+
+		boolean result = persistenceController.getDataServices().group.deleteGroups(new ArrayList<>(plan.allGroupIds),
+				groupType);
+
+		if (result) {
+			for (String groupId : plan.allGroupIds) {
+
+				groupNodes.remove(groupId);
+				groups.remove(groupId);
+			}
+
+			for (DefaultMutableTreeNode node : plan.selectedGroupNodes) {
+				MutableTreeNode parent = (MutableTreeNode) node.getParent();
+				if (parent != null) {
+					parent.remove(node);
+					getModel().nodeStructureChanged(parent);
+				}
+			}
+		}
 	}
 
 	// calls main controller for getting persistence for the new subgroup
@@ -650,17 +706,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	abstract void removeNodeInternally(String nodeID, GroupNode parent);
-
-	private void deleteGroupWithSubgroups(DefaultMutableTreeNode node) {
-		Enumeration<TreeNode> e = node.depthFirstEnumeration();
-
-		while (e.hasMoreElements()) {
-			DefaultMutableTreeNode nextNode = (DefaultMutableTreeNode) e.nextElement();
-			if (nextNode.getAllowsChildren()) {
-				persistenceController.getDataServices().group.deleteGroup(nextNode.toString());
-			}
-		}
-	}
 
 	public boolean isInGROUPS(String groupName) {
 		GroupNode node = groupNodes.get(groupName);
