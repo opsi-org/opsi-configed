@@ -349,6 +349,39 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 	}
 
+	protected boolean deleteNodes(TreePath[] paths) {
+		if (paths == null) {
+			return false;
+		}
+
+		List<Object2GroupEntry> groupEntries = new ArrayList<>();
+		for (TreePath path : paths) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+			String nodeID = (String) node.getUserObject();
+
+			GroupNode parent = (GroupNode) node.getParent();
+
+			if (groupNodes.get(nodeID) != null && groupNodes.get(nodeID).getParent() != parent) {
+				Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
+				parent = (GroupNode) groupNodes.get(nodeID).getParent();
+			}
+
+			if (groupNodes.get(nodeID) == null) {
+				// client node
+				removeNodeInternally(nodeID, parent);
+				String parentID = (String) parent.getUserObject();
+				groupEntries.add(new Object2GroupEntry(nodeID, parentID));
+
+			}
+		}
+
+		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
+
+		return persistenceController.getDataServices().group.removeHostGroupElements(groupEntries, groupType);
+	}
+
 	protected boolean deleteNode(TreePath path) {
 		if (path == null) {
 			return false;
@@ -364,8 +397,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
 			parent = (GroupNode) groupNodes.get(nodeID).getParent();
 		}
-
-		String parentID = (String) parent.getUserObject();
 
 		if (groupNodes.get(nodeID) != null) {
 			// found a group
@@ -383,10 +414,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 				getModel().nodeStructureChanged(parent);
 			}
-		} else {
-			// client node
-			removeNodeInternally(nodeID, parent);
-			persistenceController.getDataServices().group.removeObject2Group(nodeID, parentID);
 		}
 		return true;
 	}
