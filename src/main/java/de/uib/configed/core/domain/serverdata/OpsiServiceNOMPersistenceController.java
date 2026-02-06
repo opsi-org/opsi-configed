@@ -7,7 +7,7 @@
 package de.uib.configed.core.domain.serverdata;
 
 import java.util.HashSet;
-import java.util.NavigableMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -103,8 +103,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	// opsi module information
 
-	private static NavigableMap<String, String> propertyClassesServer;
-	private static NavigableMap<String, String> propertyClassesClient;
+	private static Map<String, String> propertyClassesServer;
+	private static Map<String, String> propertyClassesClient;
 	private static Set<String> configKeyStartersNotForClients;
 
 	private CompleteWinProductsDialog completeWinProductsPanel;
@@ -296,11 +296,11 @@ public class OpsiServiceNOMPersistenceController {
 		return exec;
 	}
 
-	public static NavigableMap<String, String> getPropertyClassesServer() {
+	public static Map<String, String> getPropertyClassesServer() {
 		return propertyClassesServer;
 	}
 
-	public static NavigableMap<String, String> getPropertyClassesClient() {
+	public static Map<String, String> getPropertyClassesClient() {
 		return propertyClassesClient;
 	}
 

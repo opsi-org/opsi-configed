@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -250,7 +249,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 	}
 
-	public void setSubpanelClasses(NavigableMap<String, String> classesMap) {
+	public void setSubpanelClasses(Map<String, String> classesMap) {
 		cellRenderer.setTooltips(classesMap);
 		givenClasses = classesMap;
 	}
