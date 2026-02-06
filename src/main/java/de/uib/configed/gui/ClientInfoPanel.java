@@ -283,50 +283,40 @@ public class ClientInfoPanel extends JPanel {
 	}
 
 	public void setClientDescriptionText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextFieldDescription.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextFieldDescription.setText(s));
 	}
 
 	public void setClientInventoryNumberText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextFieldInventoryNumber.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextFieldInventoryNumber.setText(s));
 	}
 
 	public void setClientOneTimePasswordText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextFieldOneTimePassword.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextFieldOneTimePassword.setText(s));
 	}
 
 	public void setClientNotesText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextAreaNotes.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextAreaNotes.setText(s));
 	}
 
 	public void setClientMacAddress(String s) {
-		dataAreChangedProgramatically = true;
-		macAddressField.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> macAddressField.setText(s));
 	}
 
 	public void setClientSystemUUID(String s) {
-		dataAreChangedProgramatically = true;
-		systemUUIDField.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> systemUUIDField.setText(s));
 	}
 
 	public void setClientIpAddress(String s) {
-		dataAreChangedProgramatically = true;
-		ipAddressField.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> ipAddressField.setText(s));
 	}
 
 	public void setClientOS(String s) {
+		changeData(() -> jTextFieldClientOS.setText(s));
+	}
+
+	private void changeData(Runnable changeDataAction) {
 		dataAreChangedProgramatically = true;
-		jTextFieldClientOS.setText(s);
+		changeDataAction.run();
 		dataAreChangedProgramatically = false;
 	}
 
@@ -378,30 +368,26 @@ public class ClientInfoPanel extends JPanel {
 	}
 
 	public void setClientMonitoring(Boolean value) {
-		dataAreChangedProgramatically = true;
-		checkBoxHealthCheckActive.setChecked(value);
-		dataAreChangedProgramatically = false;
+		changeData(() -> checkBoxHealthCheckActive.setChecked(value));
 	}
 
 	public void setClientPlatform(String value) {
-		dataAreChangedProgramatically = true;
-		labelClientOSIcon.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
-		dataAreChangedProgramatically = false;
+		changeData(() -> labelClientOSIcon.setIcon(Utils.determineIconBasedOnPlatform(value, 24)));
 	}
 
 	public void setUefiBoot(Boolean uefiBoot) {
 		Logging.info(this, "setUefiBoot ", uefiBoot);
-		checkBoxUEFIBoot.setChecked(uefiBoot);
+		changeData(() -> checkBoxUEFIBoot.setChecked(uefiBoot));
 	}
 
 	public void setWANConfig(Boolean value) {
 		Logging.info(this, "setWANConfig ", value);
-		checkBoxWANConfig.setChecked(value);
+		changeData(() -> checkBoxWANConfig.setChecked(value));
 	}
 
 	public void setShutdownInstall(Boolean value) {
 		Logging.info(this, "setShutdownInstall ", value);
-		checkBoxInstallByShutdown.setChecked(value);
+		changeData(() -> checkBoxInstallByShutdown.setChecked(value));
 	}
 
 	public void setOpsiHostKey(String s) {

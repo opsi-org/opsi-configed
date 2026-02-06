@@ -7,6 +7,7 @@
 package de.uib.configed.gui.share.swing;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -53,7 +54,7 @@ public class ButtonTabComponent extends JPanel {
 
 			setToolTipText(toolTipText);
 
-			addActionListener(e -> {
+			addActionListener((ActionEvent e) -> {
 				runnable.run();
 				setVisible(false);
 			});
