@@ -21,9 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -40,7 +37,7 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class ClientInfoPanel extends JPanel implements DocumentListener {
+public class ClientInfoPanel extends JPanel {
 	private JLabel labelClientDescription;
 	private JLabel labelClientInventoryNumber;
 	private JLabel labelClientNotes;
@@ -134,11 +131,13 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
-		jTextFieldDescription.getDocument().addDocumentListener(this);
+		jTextFieldDescription.getDocument().addDocumentListener(
+				Utils.onDocumentChange(() -> dataChange(jTextFieldDescription, HostInfo.CLIENT_DESCRIPTION_KEY)));
 
 		jTextFieldInventoryNumber = new JTextField();
 		jTextFieldInventoryNumber.setEditable(true);
-		jTextFieldInventoryNumber.getDocument().addDocumentListener(this);
+		jTextFieldInventoryNumber.getDocument().addDocumentListener(Utils
+				.onDocumentChange(() -> dataChange(jTextFieldInventoryNumber, HostInfo.CLIENT_INVENTORY_NUMBER_KEY)));
 
 		jTextAreaNotes = new JTextArea();
 
@@ -146,7 +145,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
 
-		jTextAreaNotes.getDocument().addDocumentListener(this);
+		jTextAreaNotes.getDocument().addDocumentListener(
+				Utils.onDocumentChange(() -> dataChange(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY)));
 
 		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -155,18 +155,21 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
 				Character.MIN_VALUE, 36, true), "", 36);
-		systemUUIDField.getDocument().addDocumentListener(this);
+		systemUUIDField.getDocument().addDocumentListener(
+				Utils.onDocumentChange(() -> dataChange(systemUUIDField, HostInfo.CLIENT_SYSTEM_UUID_KEY)));
 
 		macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
 				2, true), "", 17);
 
-		macAddressField.getDocument().addDocumentListener(this);
+		macAddressField.getDocument().addDocumentListener(
+				Utils.onDocumentChange(() -> dataChange(macAddressField, HostInfo.CLIENT_MAC_ADDRESS_KEY)));
 
 		ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
-		ipAddressField.getDocument().addDocumentListener(this);
+		ipAddressField.getDocument().addDocumentListener(
+				Utils.onDocumentChange(() -> dataChange(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY)));
 
 		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 		checkBoxUEFIBoot.setAllowIndeterminate(false);
@@ -205,7 +208,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		updateClientCheckboxText();
 
 		jTextFieldOneTimePassword = new JTextField();
-		jTextFieldOneTimePassword.getDocument().addDocumentListener(this);
+		jTextFieldOneTimePassword.getDocument().addDocumentListener(Utils
+				.onDocumentChange(() -> dataChange(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY)));
 
 		hostKeyField = new FlatPasswordField();
 		hostKeyField.setEditable(false);
@@ -439,29 +443,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		}
 	}
 
-	private void reactToClientDataChange(Document document) {
+	private void dataChange(JTextComponent editorField, String key) {
 		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: ", dataAreChangedProgramatically);
 
-		if (dataAreChangedProgramatically || configedMain.getSelectedClients().size() != 1) {
-			return;
-		}
-
-		if (document == jTextFieldDescription.getDocument()) {
-			applyChanges(jTextFieldDescription, HostInfo.CLIENT_DESCRIPTION_KEY);
-		} else if (document == jTextFieldInventoryNumber.getDocument()) {
-			applyChanges(jTextFieldInventoryNumber, HostInfo.CLIENT_INVENTORY_NUMBER_KEY);
-		} else if (document == jTextFieldOneTimePassword.getDocument()) {
-			applyChanges(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY);
-		} else if (document == jTextAreaNotes.getDocument()) {
-			applyChanges(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY);
-		} else if (document == systemUUIDField.getDocument()) {
-			applyChanges(systemUUIDField, HostInfo.CLIENT_SYSTEM_UUID_KEY);
-		} else if (document == macAddressField.getDocument()) {
-			applyChanges(macAddressField, HostInfo.CLIENT_MAC_ADRESS_KEY);
-		} else if (document == ipAddressField.getDocument()) {
-			applyChanges(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY);
-		} else {
-			Logging.warning(this, "unexpected source in reactToHostDataChange, document: ", document);
+		if (!dataAreChangedProgramatically && configedMain.getSelectedClients().size() == 1) {
+			applyChanges(editorField, key);
 		}
 	}
 
@@ -529,21 +515,5 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void hideHealthCheckActiveCheckBox(boolean hide) {
 		checkBoxHealthCheckActive.setVisible(hide);
 		openHealthCheckSettingsDialogButton.setVisible(hide);
-	}
-
-	// DocumentListener
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		reactToClientDataChange(e.getDocument());
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		reactToClientDataChange(e.getDocument());
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		reactToClientDataChange(e.getDocument());
 	}
 }

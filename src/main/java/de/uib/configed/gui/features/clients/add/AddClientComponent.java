@@ -207,7 +207,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
 		jTextHostname.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeHostname(jTextHostname.getText()))));
+				() -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeHostname(jTextHostname.getText()))));
 
 		JLabel jLabelDomainname = Utils.createBoldLabel("NewClientDialog.domain");
 
@@ -220,13 +220,13 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 		JTextField jTextDescription = new JTextField();
 		jTextDescription.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeDescription(jTextDescription.getText()))));
+				() -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeDescription(jTextDescription.getText()))));
 
 		JLabel jLabelInventoryNumber = Utils.createBoldLabel("NewClientDialog.inventorynumber");
 
 		JTextField jTextInventoryNumber = new JTextField();
-		jTextInventoryNumber.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeInventory(jTextInventoryNumber.getText()))));
+		jTextInventoryNumber.getDocument().addDocumentListener(Utils.onDocumentChange(() -> dispatch
+				.accept(new AddClientMsg.FieldChangeMsg.ChangeInventory(jTextInventoryNumber.getText()))));
 
 		JLabel jLabelDepot = Utils.createBoldLabel("NewClientDialog.belongsToDepot");
 
@@ -257,7 +257,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
 		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
 		jTextNotes.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
+				() -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeNotes(jTextNotes.getText().trim()))));
 		jTextNotes.setLineWrap(true);
 		jTextNotes.setWrapStyleWord(true);
 
@@ -271,7 +271,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
 				Character.MIN_VALUE, 36, true), "", 36);
 		systemUUIDField.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID(systemUUIDField.getText()))));
+				() -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeSystemUUID(systemUUIDField.getText()))));
 
 		JLabel jLabelMacAddress = Utils.createBoldLabel("NewClientDialog.HardwareAddress");
 		jLabelMacAddress.setIcon(Icons.getIntellijIcon("info"));
@@ -281,7 +281,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
 				2, true), "", 17);
 		macAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeMAC(macAddressField.getText()))));
+				() -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeMAC(macAddressField.getText()))));
 
 		JLabel jLabelIpAddress = Utils.createBoldLabel("ipAddress");
 		jLabelIpAddress.setIcon(Icons.getIntellijIcon("info"));
@@ -291,7 +291,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
 		ipAddressField.getDocument().addDocumentListener(Utils.onDocumentChange(
-				e -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeIP(ipAddressField.getText()))));
+				() -> dispatch.accept(new AddClientMsg.FieldChangeMsg.ChangeIP(ipAddressField.getText()))));
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 		jCheckShutdownInstall.addActionListener(a -> dispatch

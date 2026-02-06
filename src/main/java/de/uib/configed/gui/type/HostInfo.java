@@ -29,7 +29,7 @@ public class HostInfo {
 	public static final String CLIENT_ONE_TIME_PASSWORD_KEY = "oneTimePassword";
 	public static final String CLIENT_NOTES_KEY = "notes";
 	public static final String CLIENT_SYSTEM_UUID_KEY = "systemUUID";
-	public static final String CLIENT_MAC_ADRESS_KEY = "hardwareAddress";
+	public static final String CLIENT_MAC_ADDRESS_KEY = "hardwareAddress";
 	public static final String LAST_SEEN_KEY = "lastSeen";
 	public static final String CREATED_KEY = "created";
 	public static final String HOSTNAME_KEY = "id";
@@ -76,7 +76,7 @@ public class HostInfo {
 
 	private static final Set<String> keys = Set.of(DEPOT_OF_CLIENT_KEY, CLIENT_DESCRIPTION_KEY,
 			CLIENT_INVENTORY_NUMBER_KEY, CLIENT_ONE_TIME_PASSWORD_KEY, CLIENT_NOTES_KEY, CLIENT_SYSTEM_UUID_KEY,
-			CLIENT_MAC_ADRESS_KEY, LAST_SEEN_KEY, CREATED_KEY, HOSTNAME_KEY, HOST_KEY_KEY, HOST_TYPE_KEY,
+			CLIENT_MAC_ADDRESS_KEY, LAST_SEEN_KEY, CREATED_KEY, HOSTNAME_KEY, HOST_KEY_KEY, HOST_TYPE_KEY,
 			CLIENT_IP_ADDRESS_KEY, CLIENT_WAN_CONFIG_KEY, CLIENT_SHUTDOWN_INSTALL_KEY, CLIENT_OS_KEY,
 			CLIENT_OS_TYPE_KEY, CLIENT_OS_ARCHITECTURE_KEY, CLIENT_DEVICE_TYPE_KEY, CLIENT_DEVICE_VENDOR_KEY,
 			CLIENT_DEVICE_MODEL_KEY, CLIENT_MONITORING_KEY, UEFI_BOOT_KEY);
@@ -160,7 +160,7 @@ public class HostInfo {
 		displayRowMap.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, data.get(CLIENT_WAN_CONFIG_KEY));
 		displayRowMap.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_IP_ADDRESS_KEY));
 		displayRowMap.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, data.get(CLIENT_SYSTEM_UUID_KEY));
-		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_MAC_ADRESS_KEY));
+		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_MAC_ADDRESS_KEY));
 		displayRowMap.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
 
 		displayRowMap.put(CREATED_DISPLAY_FIELD_LABEL, data.get(CREATED_KEY));
@@ -186,7 +186,7 @@ public class HostInfo {
 		unordered.put(CLIENT_ONE_TIME_PASSWORD_KEY, data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		unordered.put(CLIENT_NOTES_KEY, data.get(CLIENT_NOTES_KEY));
 		unordered.put(CLIENT_SYSTEM_UUID_KEY, data.get(CLIENT_SYSTEM_UUID_KEY));
-		unordered.put(CLIENT_MAC_ADRESS_KEY, data.get(CLIENT_MAC_ADRESS_KEY));
+		unordered.put(CLIENT_MAC_ADDRESS_KEY, data.get(CLIENT_MAC_ADDRESS_KEY));
 		unordered.put(LAST_SEEN_KEY, data.get(LAST_SEEN_KEY));
 		unordered.put(CREATED_KEY, data.get(CREATED_KEY));
 		unordered.put(HOSTNAME_KEY, data.get(HOSTNAME_KEY));
@@ -215,7 +215,7 @@ public class HostInfo {
 		keys.add(HOSTNAME_KEY);
 		keys.add("domain");
 		keys.add(DEPOT_OF_CLIENT_KEY);
-		keys.add(CLIENT_MAC_ADRESS_KEY);
+		keys.add(CLIENT_MAC_ADDRESS_KEY);
 		keys.add(CLIENT_DESCRIPTION_KEY);
 		keys.add(CLIENT_INVENTORY_NUMBER_KEY);
 		keys.add(CLIENT_NOTES_KEY);
@@ -363,7 +363,7 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel()
 				.setClientSystemUUID((String) data.get(CLIENT_SYSTEM_UUID_KEY));
 		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientMacAddress((String) data.get(CLIENT_MAC_ADRESS_KEY));
+				.setClientMacAddress((String) data.get(CLIENT_MAC_ADDRESS_KEY));
 		mainFrame.getClientConfiguration().getClientInfoPanel()
 				.setClientIpAddress((String) data.get(CLIENT_IP_ADDRESS_KEY));
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS((String) data.get(CLIENT_OS_KEY));
@@ -487,25 +487,25 @@ public class HostInfo {
 
 	private void setClientMACAddress(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
-		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null) {
-			data.put(CLIENT_MAC_ADRESS_KEY, ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim());
+		if (sourceOfChanges.get(CLIENT_MAC_ADDRESS_KEY) != null) {
+			data.put(CLIENT_MAC_ADDRESS_KEY, ((String) sourceOfChanges.get(CLIENT_MAC_ADDRESS_KEY)).trim());
 
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_MAC_ADRESS_KEY), row, col);
+				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_MAC_ADDRESS_KEY), row, col);
 			}
 
 			// restoring old value
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientMacAddress((String) data.get(CLIENT_MAC_ADRESS_KEY));
+					.setClientMacAddress((String) data.get(CLIENT_MAC_ADDRESS_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
 			persistenceController.getDataServices().host.setMacAddress(client,
-					(String) data.get(CLIENT_MAC_ADRESS_KEY));
+					(String) data.get(CLIENT_MAC_ADDRESS_KEY));
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_MAC_ADRESS_KEY, data.get(CLIENT_MAC_ADRESS_KEY));
+					CLIENT_MAC_ADDRESS_KEY, data.get(CLIENT_MAC_ADDRESS_KEY));
 		}
 	}
 

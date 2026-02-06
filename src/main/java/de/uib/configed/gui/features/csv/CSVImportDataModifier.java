@@ -42,7 +42,7 @@ import de.uib.configed.share.logging.Logging;
 
 public class CSVImportDataModifier {
 	private static final List<String> IMPORTANT_HEADER_NAMES = List.of(HostInfo.HOSTNAME_KEY, "domain",
-			HostInfo.DEPOT_OF_CLIENT_KEY, HostInfo.CLIENT_MAC_ADRESS_KEY);
+			HostInfo.DEPOT_OF_CLIENT_KEY, HostInfo.CLIENT_MAC_ADDRESS_KEY);
 
 	private GenTableModel model;
 	private String csvFile;

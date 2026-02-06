@@ -17,8 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -165,22 +163,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 	private void initComponentsForNameProducer() {
 		fieldTargetPath = new JTextField();
-		fieldTargetPath.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				checkButtonCallExecute();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				checkButtonCallExecute();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				checkButtonCallExecute();
-			}
-		});
+		fieldTargetPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkButtonCallExecute));
 
 		fieldPathWinPE = new JTextField();
 	}

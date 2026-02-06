@@ -22,8 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 
 import org.apache.commons.csv.CSVFormat;
@@ -112,14 +110,14 @@ public class CSVImportDataDialog {
 			});
 		}
 
-		otherDelimiterInput.getDocument().addDocumentListener(new InputListener(() -> {
+		otherDelimiterInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
 			if (!otherDelimiterInput.getText().isEmpty()) {
 				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		}));
 
-		startLineInput.getDocument().addDocumentListener(new InputListener(() -> {
+		startLineInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
 			if (!startLineInput.getText().isEmpty()) {
 				startLine = Integer.parseInt(startLineInput.getText());
 				modifier.updateTable(format, startLine, thePanel);
@@ -196,28 +194,6 @@ public class CSVImportDataDialog {
 		}
 
 		quoteOptions.setSelectedItem(format.getDelimiterString());
-	}
-
-	private static class InputListener implements DocumentListener {
-		private Runnable runnable;
-
-		public InputListener(Runnable runnable) {
-			this.runnable = runnable;
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			runnable.run();
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			runnable.run();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			/* Not needed */}
 	}
 
 	public CSVImportDataModifier getModifier() {

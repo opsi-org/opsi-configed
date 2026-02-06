@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -84,27 +83,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		public String getSubdir() {
 			return subdir;
-		}
-	}
-
-	@SuppressWarnings("java:S2972")
-	private class FileNameDocumentListener implements DocumentListener {
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			Logging.debug(this, "changedUpdate ");
-			checkFiles();
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			Logging.debug(this, "insertUpdate ");
-			checkFiles();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			Logging.debug(this, "removeUpdate ");
-			checkFiles();
 		}
 	}
 
@@ -286,14 +264,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
+		DocumentListener checkFilesListener = Utils.onDocumentChange(this::checkFiles);
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
-		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
+		fieldServerPath.getDocument().addDocumentListener(checkFilesListener);
 
 		fieldDriverPath = new JTextField();
 		fieldDriverPath.setEditable(true);
-		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
-
+		fieldDriverPath.getDocument().addDocumentListener(checkFilesListener);
 		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
 		JLabel labelDriverLocationType = Utils.createBoldLabel("PanelDriverUpload.type");

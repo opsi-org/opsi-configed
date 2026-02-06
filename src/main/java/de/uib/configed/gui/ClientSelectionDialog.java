@@ -42,8 +42,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
@@ -92,7 +90,7 @@ import net.miginfocom.swing.MigLayout;
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
-public class ClientSelectionDialog implements ActionListener, DocumentListener {
+public class ClientSelectionDialog implements ActionListener {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -657,7 +655,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	}
 
 	/* Show the parentheses making sure that or will be evaluated before and. */
-	private void buildParentheses() {
+	public void buildParentheses() {
 		Logging.debug("BUILDPARENTHESES");
 		for (ComplexGroup group : complexElements) {
 			showParenthesesForGroup(group.groupList);
@@ -1052,21 +1050,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		buildParentheses();
-	}
-
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		buildParentheses();
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		buildParentheses();
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
 		buildParentheses();
 	}
 }

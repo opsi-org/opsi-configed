@@ -96,7 +96,7 @@ public class HostDataService extends DataService {
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
 			hostItem.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUID);
-			hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
+			hostItem.put(HostInfo.CLIENT_MAC_ADDRESS_KEY, macaddress);
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 			hostItem.put(HostInfo.HOST_KEY_KEY, opsiHostKey);
@@ -253,7 +253,7 @@ public class HostDataService extends DataService {
 	}
 
 	public void setMacAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.CLIENT_MAC_ADRESS_KEY, address);
+		updateHost(hostId, HostInfo.CLIENT_MAC_ADDRESS_KEY, address);
 	}
 
 	public void setIpAddress(String hostId, String address) {
