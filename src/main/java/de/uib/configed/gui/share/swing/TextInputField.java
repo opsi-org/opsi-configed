@@ -74,7 +74,7 @@ public class TextInputField extends JPanel {
 	}
 
 	public void setClientSelectionDialog(ClientSelectionDialog dialog) {
-		combo.addActionListener(dialog);
+		combo.addActionListener(e -> dialog.buildParentheses());
 		textfield.getDocument().addDocumentListener(Utils.onDocumentChange(dialog::buildParentheses));
 	}
 

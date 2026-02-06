@@ -11,7 +11,6 @@ import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -90,7 +89,7 @@ import net.miginfocom.swing.MigLayout;
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
-public class ClientSelectionDialog implements ActionListener {
+public class ClientSelectionDialog {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -1046,10 +1045,5 @@ public class ClientSelectionDialog implements ActionListener {
 		} else {
 			JOptionPane.showMessageDialog(dialog, "wrong name", "error", JOptionPane.OK_OPTION);
 		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		buildParentheses();
 	}
 }

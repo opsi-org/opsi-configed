@@ -7,8 +7,6 @@
 package de.uib.configed.gui.share.swing;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -37,7 +35,7 @@ public class ButtonTabComponent extends JPanel {
 		button.setVisible(show);
 	}
 
-	private static class TabButton extends JButton implements ActionListener {
+	private static class TabButton extends JButton {
 		private final Runnable runnable;
 
 		public TabButton(Icon icon, String toolTipText, Runnable runnable) {
@@ -55,13 +53,10 @@ public class ButtonTabComponent extends JPanel {
 
 			setToolTipText(toolTipText);
 
-			addActionListener(this);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			runnable.run();
-			setVisible(false);
+			addActionListener(e -> {
+				runnable.run();
+				setVisible(false);
+			});
 		}
 	}
 }

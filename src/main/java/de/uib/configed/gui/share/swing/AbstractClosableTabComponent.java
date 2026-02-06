@@ -10,8 +10,6 @@ import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -50,7 +48,7 @@ public abstract class AbstractClosableTabComponent extends JPanel {
 	}
 
 	@SuppressWarnings({ "java:S2972" })
-	private class CloseTabButton extends JButton implements ActionListener {
+	private class CloseTabButton extends JButton {
 		public CloseTabButton() {
 			init();
 		}
@@ -63,12 +61,7 @@ public abstract class AbstractClosableTabComponent extends JPanel {
 			setFocusable(false);
 			setBorderPainted(false);
 			setRolloverEnabled(true);
-			addActionListener(this);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			close();
+			addActionListener(e -> close());
 		}
 
 		@Override

@@ -89,7 +89,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	public void activateListSelectionListener() {
 		// We want to prevent, that the listSelectionListener is added more than once
 		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(this)) {
-			selectionModel.addListSelectionListener(this);
+			selectionModel.addListSelectionListener(e -> actOnListSelection());
 		}
 	}
 
