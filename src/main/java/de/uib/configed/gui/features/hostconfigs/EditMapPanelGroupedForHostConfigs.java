@@ -78,10 +78,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private HostConfigTreeModel treemodel;
 	private HostConfigNodeRenderer cellRenderer;
 
-	private NavigableMap<String, String> givenClasses;
+	private Map<String, String> givenClasses;
 	private NavigableSet<String> keyclasses;
 	protected Map<String, DefaultEditMapPanel> partialPanels;
-	private NavigableMap<String, Map<String, Object>> virtualLines;
+	private Map<String, Map<String, Object>> virtualLines;
 
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;

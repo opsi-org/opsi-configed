@@ -11,9 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -153,9 +152,9 @@ public final class LicenseDisplayer {
 
 	private String showLicenseContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persistenceController.getDataServices().license
+		Map<String, Set<String>> contractsExpired = persistenceController.getDataServices().license
 				.getLicenseContractsToNotifyPD();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getDataServices().license
+		Map<String, Set<String>> contractsToNotify = persistenceController.getDataServices().license
 				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired ", contractsExpired);
@@ -165,7 +164,7 @@ public final class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
 		result.append(":  \n");
 
-		for (Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
+		for (Entry<String, Set<String>> entry : contractsExpired.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -177,7 +176,7 @@ public final class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
+		for (Entry<String, Set<String>> entry : contractsToNotify.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
