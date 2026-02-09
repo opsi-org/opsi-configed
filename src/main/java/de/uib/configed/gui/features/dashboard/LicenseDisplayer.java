@@ -66,17 +66,17 @@ public final class LicenseDisplayer {
 
 	private Stage stage;
 
-	private LicenseDisplayer() {
-		try {
-			this.initAndShowGUI();
-		} catch (IOException ioE) {
-			Logging.warning(ioE, "Unable to open FXML file.");
-		}
-	}
-
 	public static void showLicenseDisplayer() {
 		if (instance == null) {
 			instance = new LicenseDisplayer();
+			try {
+				// We need to call this here because the constructor is called in the method FXMLLoader.getController() 
+				// in initAndShowGUI, which is called in the same method. So we cannot call it in the constructor.
+				// This would leed to a recursive call of the constructor and thus a stack overflow.
+				instance.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(ioE, "Unable to open FXML file.");
+			}
 		} else {
 			instance.display();
 		}
@@ -97,7 +97,7 @@ public final class LicenseDisplayer {
 		list.add(text);
 	}
 
-	private void initAndShowGUI() throws IOException {
+	public void initAndShowGUI() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/fxml/dialogs/license_dialog.fxml"));
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene(root);
