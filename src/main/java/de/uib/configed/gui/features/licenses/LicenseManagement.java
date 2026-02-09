@@ -116,7 +116,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 
 		licenseOptionsTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD,
-						persistenceController.getDataServices().license::getRelationsProductId2LPool));
+						persistenceController.getDataServices().license::getRelationsSoftwareL2LPool));
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
