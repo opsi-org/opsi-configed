@@ -57,7 +57,7 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 		MapTableUpdateItemFactory updateItemFactoryStatistics = new MapTableUpdateItemFactory(modelStatistics,
 				columnNames);
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
-				new DefaultTableProvider(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
 						() -> CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)
 								? persistenceController.getDataServices().software.getLicenseStatistics()
 								: new HashMap<>()),

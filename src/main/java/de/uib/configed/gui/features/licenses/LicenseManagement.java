@@ -104,7 +104,8 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
 
-		licensePoolTableProvider = new DefaultTableProvider(columnNames, ReloadEvent.LICENSE_POOL_DATA_RELOAD,
+		licensePoolTableProvider = DefaultTableProvider.createWithRetrieverMapSource(columnNames,
+				ReloadEvent.LICENSE_POOL_DATA_RELOAD,
 				persistenceController.getDataServices().license::getLicensePoolsPD);
 
 		columnNames = new ArrayList<>();
@@ -112,7 +113,7 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
 
-		licenseOptionsTableProvider = new DefaultTableProvider(columnNames,
+		licenseOptionsTableProvider = DefaultTableProvider.createWithRetrieverMapSource(columnNames,
 				ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD,
 				persistenceController.getDataServices().license::getRelationsSoftwareL2LPool);
 
@@ -124,7 +125,8 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
 
-		licenseContractsTableProvider = new DefaultTableProvider(columnNames, ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD,
+		licenseContractsTableProvider = DefaultTableProvider.createWithRetrieverMapSource(columnNames,
+				ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD,
 				persistenceController.getDataServices().license::getLicenseContractsPD);
 
 		columnNames = new ArrayList<>();
@@ -135,8 +137,8 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add(LicenseEntry.BOUND_TO_HOST_KEY);
 		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
 
-		softwarelicensesTableProvider = new DefaultTableProvider(columnNames, CacheIdentifier.LICENSES,
-				persistenceController.getDataServices().license::getLicensesPD);
+		softwarelicensesTableProvider = DefaultTableProvider.createWithRetrieverMapSource(columnNames,
+				CacheIdentifier.LICENSES, persistenceController.getDataServices().license::getLicensesPD);
 	}
 
 	private void initTabs() {

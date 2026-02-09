@@ -42,8 +42,6 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.ExternalSource;
-import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
@@ -151,10 +149,9 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
 
-		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(new ExternalSource(columnNames, depotsList.getSelectedValuesList())), -1,
-				paneProducts, updateCollection);
+				DefaultTableProvider.createWithExternalSource(columnNames, depotsList.getSelectedValuesList()), -1,
+				paneProducts, new ArrayList<>());
 	}
 
 	@Override

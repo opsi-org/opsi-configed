@@ -167,7 +167,8 @@ public class PanelSWSingleClientInfo extends JPanel {
 			finalColumns[i] = i;
 		}
 
-		modelSWInfo = new GenTableModel(null, new DefaultTableProvider(columnNames, null, this::retrieveSWInfoMap), -1,
+		modelSWInfo = new GenTableModel(null,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, null, this::retrieveSWInfoMap), -1,
 				finalColumns, null, null);
 
 		int indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);

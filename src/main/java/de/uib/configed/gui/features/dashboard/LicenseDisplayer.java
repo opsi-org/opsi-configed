@@ -187,7 +187,7 @@ public final class LicenseDisplayer {
 		final Set<String> namesWithVariantPools = new TreeSet<>();
 
 		new GenTableModel(null,
-				new DefaultTableProvider(new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS),
+				DefaultTableProvider.createWithRetrieverMapSource(new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS),
 						ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
 						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD),
 				0, new int[] {}, null, new ArrayList<>()) {

@@ -31,8 +31,6 @@ import de.uib.configed.gui.share.table.gui.LicensingInfoPanelGenEditTable;
 import de.uib.configed.gui.share.table.gui.LicensingInfoTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapSource;
-import de.uib.configed.gui.share.table.provider.TableSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -46,8 +44,6 @@ public class OpsiLicensing extends JPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
-
-	private TableSource tableSource;
 
 	private List<String> columnNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
@@ -85,13 +81,10 @@ public class OpsiLicensing extends JPanel {
 						persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 						!OpsiLicensing.extendedView);
 				retrieveData();
-				tableSource = new MapSource(columnNames, theSourceMap);
 				buildModel();
 				super.reload();
 			}
 		};
-
-		tableSource = new MapSource(columnNames, theSourceMap);
 
 		buildModel();
 
@@ -237,8 +230,9 @@ public class OpsiLicensing extends JPanel {
 	private void buildModel() {
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
-		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
-				licensingTable, updateCollection);
+		GenTableModel theModel = new GenTableModel(null,
+				DefaultTableProvider.createWithMapSource(columnNames, theSourceMap), 0, new int[] {}, licensingTable,
+				updateCollection);
 
 		theModel.reset();
 

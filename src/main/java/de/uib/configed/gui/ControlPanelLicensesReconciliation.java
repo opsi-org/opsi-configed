@@ -102,7 +102,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		MapTableUpdateItemFactory updateItemFactoryLicensesReconciliation = new MapTableUpdateItemFactory(
 				modelLicensesReconciliation, columnNames);
 		modelLicensesReconciliation = new GenTableModel(updateItemFactoryLicensesReconciliation,
-				new DefaultTableProvider(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
 						() -> CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)
 								? persistenceController.getDataServices().software.getLicensesReconciliationPD()
 								: new HashMap<>()),

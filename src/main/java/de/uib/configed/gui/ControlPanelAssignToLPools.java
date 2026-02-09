@@ -213,7 +213,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private GenTableModel getMissingSoftwareTableModel(String poolID) {
 		return new GenTableModel(new MapTableUpdateItemFactory(thePanel.getFMissingSoftwareInfo().getColumnNames()),
-				new DefaultTableProvider(thePanel.getFMissingSoftwareInfo().getColumnNames(),
+				DefaultTableProvider.createWithRetrieverMapSource(thePanel.getFMissingSoftwareInfo().getColumnNames(),
 						ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD, () -> getMissingSoftwareMap(poolID)),
 				0, new int[] {}, thePanel.getFMissingSoftwareInfo().getPanelGlobalSoftware(), updateCollection);
 	}
@@ -451,7 +451,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
 				columnNames);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
-				new DefaultTableProvider(columnNames, ReloadEvent.LICENSE_POOL_DATA_RELOAD,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, ReloadEvent.LICENSE_POOL_DATA_RELOAD,
 						persistenceController.getDataServices().license::getRelationsProductId2LPool),
 				-1, new int[] { 0, 1 }, thePanel.getPanelProductId2LPool(), updateCollection, true);
 
@@ -521,7 +521,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols (", columnNames.size(), ") ",
 				columnNames);
 
-		modelWindowsSoftwareIds = new GenTableModel(null, new DefaultTableProvider(columnNames,
+		modelWindowsSoftwareIds = new GenTableModel(null, DefaultTableProvider.createWithRetrieverMapSource(columnNames,
 				ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
 				persistenceController.getDataServices().software::getInstalledSoftwareInformationForLicensingPD),
 				WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(), updateCollection);

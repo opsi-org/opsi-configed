@@ -229,7 +229,7 @@ public class Softwarename2LicensePoolDialog {
 		Logging.info(this, "init modelSWnames");
 
 		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
 						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD),
 				0, new int[] {}, panelSWnames, updateCollection, true) {
 			@Override
@@ -355,8 +355,8 @@ public class Softwarename2LicensePoolDialog {
 		MapTableUpdateItemFactory updateItemFactoySWxLicensepool = new MapTableUpdateItemFactory(
 				columnNamesSWxLicensepool);
 
-		modelSWxLicensepool = new GenTableModel(
-				updateItemFactoySWxLicensepool, new DefaultTableProvider(columnNamesSWxLicensepool,
+		modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNamesSWxLicensepool,
 						ReloadEvent.INSTALLED_SOFTWARE_RELOAD, () -> produceModelSWxLicensepool(swName)),
 				0, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicensepool.setSource(modelSWxLicensepool);

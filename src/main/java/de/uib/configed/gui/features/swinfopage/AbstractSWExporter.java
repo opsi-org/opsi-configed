@@ -193,8 +193,9 @@ public abstract class AbstractSWExporter {
 		}
 
 		// no updates
-		modelSWInfo = new GenTableModel(null, new DefaultTableProvider(columnNames, null, this::retrieveSoftwareMap),
-				-1, finalColumns, null, null);
+		modelSWInfo = new GenTableModel(null,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, null, this::retrieveSoftwareMap), -1,
+				finalColumns, null, null);
 	}
 
 	private Map<String, Map<String, Object>> retrieveSoftwareMap() {

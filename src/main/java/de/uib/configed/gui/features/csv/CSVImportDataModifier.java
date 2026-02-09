@@ -32,7 +32,6 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
@@ -145,7 +144,7 @@ public class CSVImportDataModifier {
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
 		GenTableModel createdModel = new GenTableModel(updateItemFactory,
-				new DefaultTableProvider(new MapSource(columnNames, theSourceMap)), 0, new int[] {}, thePanel,
+				DefaultTableProvider.createWithMapSource(columnNames, theSourceMap), 0, new int[] {}, thePanel,
 				updateCollection);
 
 		updateItemFactory.setSource(createdModel);
