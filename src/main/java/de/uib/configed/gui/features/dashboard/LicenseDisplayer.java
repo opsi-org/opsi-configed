@@ -10,7 +10,6 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -28,7 +27,6 @@ import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
-import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
@@ -187,22 +185,14 @@ public final class LicenseDisplayer {
 	}
 
 	private String calculateVariantLicensepools() {
-		GenTableModel modelSWnames;
 
-		List<String> columnNames;
+		final Set<String> namesWithVariantPools = new TreeSet<>();
 
-		List<MapBasedTableEditItem> updateCollection;
-
-		columnNames = new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS);
-
-		updateCollection = new ArrayList<>();
-
-		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
-
-		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+		new GenTableModel(null,
+				new DefaultTableProvider(new RetrieverMapSource(new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS),
+						ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
 						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD)),
-				0, new int[] {}, (TableModelListener) null, updateCollection) {
+				0, new int[] {}, (TableModelListener) null, new ArrayList<>()) {
 			@Override
 			public void produceRows() {
 				super.produceRows();
@@ -221,14 +211,7 @@ public final class LicenseDisplayer {
 
 				Logging.info(this, "produced rows, foundVariantLicensepools ", foundVariantLicensepools);
 			}
-		};
-
-		modelSWnames.produceRows();
-
-		List<List<Object>> specialrows = modelSWnames.getRows();
-		if (specialrows != null) {
-			Logging.info(this, "initDashInfo, modelSWnames.getRows() size ", specialrows.size());
-		}
+		}.produceRows();
 
 		StringBuilder result = new StringBuilder();
 		result.append("\n");
