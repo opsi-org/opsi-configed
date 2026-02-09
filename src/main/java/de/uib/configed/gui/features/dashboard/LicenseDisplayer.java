@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.UIManager;
-import javax.swing.event.TableModelListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -192,7 +191,7 @@ public final class LicenseDisplayer {
 				new DefaultTableProvider(new RetrieverMapSource(new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS),
 						ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
 						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD)),
-				0, new int[] {}, (TableModelListener) null, new ArrayList<>()) {
+				0, new int[] {}, null, new ArrayList<>()) {
 			@Override
 			public void produceRows() {
 				super.produceRows();
