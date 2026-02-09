@@ -33,7 +33,6 @@ import de.uib.configed.gui.ControlPanelLicensesStatistics;
 import de.uib.configed.gui.ControlPanelLicensesUsage;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
 import de.uib.configed.share.AbstractDataChangedKeeper;
 import de.uib.configed.share.logging.Logging;
@@ -105,18 +104,17 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
 
-		licensePoolTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, ReloadEvent.LICENSE_POOL_DATA_RELOAD,
-						persistenceController.getDataServices().license::getLicensePoolsPD));
+		licensePoolTableProvider = new DefaultTableProvider(columnNames, ReloadEvent.LICENSE_POOL_DATA_RELOAD,
+				persistenceController.getDataServices().license::getLicensePoolsPD);
 
 		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
 
-		licenseOptionsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD,
-						persistenceController.getDataServices().license::getRelationsSoftwareL2LPool));
+		licenseOptionsTableProvider = new DefaultTableProvider(columnNames,
+				ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD,
+				persistenceController.getDataServices().license::getRelationsSoftwareL2LPool);
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -126,9 +124,8 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
 
-		licenseContractsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD,
-						persistenceController.getDataServices().license::getLicenseContractsPD));
+		licenseContractsTableProvider = new DefaultTableProvider(columnNames, ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD,
+				persistenceController.getDataServices().license::getLicenseContractsPD);
 
 		columnNames = new ArrayList<>();
 		columnNames.add(LicenseEntry.ID_KEY);
@@ -138,8 +135,8 @@ public class LicenseManagement extends JTabbedPane implements ChangeListener {
 		columnNames.add(LicenseEntry.BOUND_TO_HOST_KEY);
 		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
 
-		softwarelicensesTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames,
-				CacheIdentifier.LICENSES, persistenceController.getDataServices().license::getLicensesPD));
+		softwarelicensesTableProvider = new DefaultTableProvider(columnNames, CacheIdentifier.LICENSES,
+				persistenceController.getDataServices().license::getLicensesPD);
 	}
 
 	private void initTabs() {

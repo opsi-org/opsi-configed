@@ -47,7 +47,6 @@ import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.Icons;
@@ -168,8 +167,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 			finalColumns[i] = i;
 		}
 
-		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, null, this::retrieveSWInfoMap)), -1,
+		modelSWInfo = new GenTableModel(null, new DefaultTableProvider(columnNames, null, this::retrieveSWInfoMap), -1,
 				finalColumns, null, null);
 
 		int indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);

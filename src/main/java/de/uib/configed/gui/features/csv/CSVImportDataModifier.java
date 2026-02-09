@@ -33,7 +33,6 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.provider.MapSource;
-import de.uib.configed.gui.share.table.provider.TableSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
@@ -143,11 +142,11 @@ public class CSVImportDataModifier {
 		populateSourceMap(theSourceMap, csvData);
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
-		TableSource source = new MapSource(columnNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
-		GenTableModel createdModel = new GenTableModel(updateItemFactory, new DefaultTableProvider(source), 0,
-				new int[] {}, thePanel, updateCollection);
+		GenTableModel createdModel = new GenTableModel(updateItemFactory,
+				new DefaultTableProvider(new MapSource(columnNames, theSourceMap)), 0, new int[] {}, thePanel,
+				updateCollection);
 
 		updateItemFactory.setSource(createdModel);
 

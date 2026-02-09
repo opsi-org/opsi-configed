@@ -85,13 +85,13 @@ public class OpsiLicensing extends JPanel {
 						persistenceController.getDataServices().config.getConfigDefaultValuesPD(),
 						!OpsiLicensing.extendedView);
 				retrieveData();
-				tableSource = new MapSource(columnNames, theSourceMap, false);
+				tableSource = new MapSource(columnNames, theSourceMap);
 				buildModel();
 				super.reload();
 			}
 		};
 
-		tableSource = new MapSource(columnNames, theSourceMap, false);
+		tableSource = new MapSource(columnNames, theSourceMap);
 
 		buildModel();
 

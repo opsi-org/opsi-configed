@@ -8,7 +8,9 @@ package de.uib.configed.gui.share.table.provider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
+import java.util.function.Supplier;
 
 import de.uib.configed.share.logging.Logging;
 
@@ -17,6 +19,11 @@ public class DefaultTableProvider {
 	private List<String> columnNames;
 	private List<List<Object>> rows;
 	private List<List<Object>> rowsCopy;
+
+	public DefaultTableProvider(List<String> columnNames, Object reloadEvent,
+			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier) {
+		this.source = new RetrieverMapSource(columnNames, reloadEvent, mapSupplier);
+	}
 
 	public DefaultTableProvider(TableSource source) {
 		this.source = source;

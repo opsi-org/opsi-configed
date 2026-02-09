@@ -25,7 +25,6 @@ import de.uib.configed.gui.ErrorCode;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -194,9 +193,8 @@ public abstract class AbstractSWExporter {
 		}
 
 		// no updates
-		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, null, this::retrieveSoftwareMap)), -1,
-				finalColumns, null, null);
+		modelSWInfo = new GenTableModel(null, new DefaultTableProvider(columnNames, null, this::retrieveSoftwareMap),
+				-1, finalColumns, null, null);
 	}
 
 	private Map<String, Map<String, Object>> retrieveSoftwareMap() {
