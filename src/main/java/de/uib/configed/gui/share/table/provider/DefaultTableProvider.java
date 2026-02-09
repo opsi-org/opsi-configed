@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 import de.uib.configed.share.logging.Logging;
 
-public class DefaultTableProvider {
+public final class DefaultTableProvider {
 	private TableSource source;
 	private List<String> columnNames;
 	private List<List<Object>> rows;
