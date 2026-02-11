@@ -84,10 +84,8 @@ public final class LicensingInfoMap {
 	private Map<String, Object> clientNumbersMap;
 	private Set<String> customerNames;
 	private List<String> availableModules;
-	private List<String> obsoleteModules;
 	private List<String> shownModules;
 	private List<LocalDate> datesKeys;
-	private Map<LocalDate, String> dateToTitleMap;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
@@ -111,12 +109,10 @@ public final class LicensingInfoMap {
 
 		Map<String, Map<String, Object>> licenses = produceLicenses(licensingInfo);
 
-		obsoleteModules = produceObsoleteModules(licensingInfo);
 		availableModules = produceAvailableModules(licensingInfo);
 		shownModules = produceShownModules(licensingInfo);
 
 		datesKeys = produceDatesKeys(licensingInfo);
-		dateToTitleMap = produceDateToTitleMap();
 		latestDate = findLatestChangeDate(datesKeys);
 		datesMap = produceDatesMap(licensingInfo, licenses);
 		tableMap = produceTableMapFromDatesMap();
@@ -247,7 +243,7 @@ public final class LicensingInfoMap {
 
 		}
 
-		result.removeAll(obsoleteModules);
+		result.removeAll(produceObsoleteModules(licensingInfo));
 
 		Collections.sort(result);
 		return result;
@@ -357,6 +353,7 @@ public final class LicensingInfoMap {
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
+		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap();
 
 		for (LocalDate key : datesKeys) {
 			Map<String, Map<String, Object>> modulesMapToDate = new TreeMap<>();
