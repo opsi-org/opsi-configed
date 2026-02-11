@@ -7,6 +7,7 @@
 package de.uib.configed.core.domain.modulelicense;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +73,8 @@ public final class LicensingInfoMap {
 	public static final int CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT = 5;
 	public static final int CLIENT_LIMIT_WARNING_DAYS_DEFAULT = 30;
 
+	private static final DateTimeFormatter GUI_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
 	private static LicensingInfoMap instance;
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
@@ -87,8 +90,8 @@ public final class LicensingInfoMap {
 	private List<String> knownModulesList;
 	private List<String> obsoleteModules;
 	private List<String> shownModules;
-	private List<String> datesKeys;
-	private Map<String, String> dateToTitleMap;
+	private List<LocalDate> datesKeys;
+	private Map<LocalDate, String> dateToTitleMap;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
@@ -120,7 +123,7 @@ public final class LicensingInfoMap {
 
 		datesKeys = produceDatesKeys();
 		dateToTitleMap = produceDateToTitleMap();
-		latestDate = findLatestChangeDateString();
+		latestDate = findLatestChangeDate(datesKeys);
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet();
@@ -304,53 +307,39 @@ public final class LicensingInfoMap {
 		return newChecksum;
 	}
 
-	private List<String> produceDatesKeys() {
-		List<String> dates = new ArrayList<>();
-
+	private List<LocalDate> produceDatesKeys() {
 		Map<String, Object> datesM = POJOReMapper.remap(licensingInfo.get(DATES));
 
-		for (Entry<String, Object> entry : datesM.entrySet()) {
-			dates.add(entry.getKey());
-		}
-		Collections.sort(dates);
+		List<LocalDate> dates = datesM.keySet().stream().map(LocalDate::parse).sorted().toList();
 
 		LocalDate latest = findLatestChangeDate(dates);
 
 		if (reducedView) {
-			List<String> reducedDatesKeys = new ArrayList<>();
-
-			for (String key : dates) {
-				if ((LocalDate.parse(key)).compareTo(latest) >= 0) {
-					reducedDatesKeys.add(key);
-				}
-			}
-
-			dates = reducedDatesKeys;
+			dates = dates.stream().filter(d -> !d.isBefore(latest)).toList();
 		}
 
 		return dates;
 	}
 
-	private Map<String, String> produceDateToTitleMap() {
-		Map<String, String> resultMap = new HashMap<>();
+	private Map<LocalDate, String> produceDateToTitleMap() {
+		Map<LocalDate, String> resultMap = new HashMap<>();
 		if (datesKeys.isEmpty()) {
 			return resultMap;
 		}
 
 		for (int i = 0; i < datesKeys.size() - 1; i++) {
-			String title = isoDateToGUIDate(datesKeys.get(i)) + " - "
-					+ isoDateToGUIDate(LocalDate.parse(datesKeys.get(i + 1)).minusDays(1).toString());
+			String title = toGuiDate(datesKeys.get(i)) + " - " + toGuiDate(datesKeys.get(i + 1).minusDays(1));
 			resultMap.put(datesKeys.get(i), title);
 		}
 
-		resultMap.put(datesKeys.get(datesKeys.size() - 1), Configed.getResourceValue("LicensingInfo.from") + " "
-				+ isoDateToGUIDate(datesKeys.get(datesKeys.size() - 1)));
+		resultMap.put(datesKeys.get(datesKeys.size() - 1),
+				Configed.getResourceValue("LicensingInfo.from") + " " + toGuiDate(datesKeys.get(datesKeys.size() - 1)));
 
 		return resultMap;
 	}
 
-	private static String isoDateToGUIDate(String isoDate) {
-		return isoDate.substring(8, 10) + '.' + isoDate.substring(5, 7) + '.' + isoDate.substring(0, 4);
+	private static String toGuiDate(LocalDate date) {
+		return date.format(GUI_FORMAT);
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
@@ -373,11 +362,11 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
 
-		for (String key : datesKeys) {
+		for (LocalDate key : datesKeys) {
 			Map<String, Map<String, Object>> modulesMapToDate = new TreeMap<>();
 
 			// iterate over date entries
-			Map<String, Object> moduleToDate = dates.get(key).get(MODULES);
+			Map<String, Object> moduleToDate = dates.get(key.toString()).get(MODULES);
 			// iterate over module entries to every date entry
 
 			// also warning state should be none
@@ -392,7 +381,8 @@ public final class LicensingInfoMap {
 		return checkTimeWarning(resultMap);
 	}
 
-	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate, String key) {
+	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate,
+			LocalDate key) {
 		Map<String, Object> moduleInfo;
 		boolean available = availableModules.contains(currentModule);
 
@@ -409,7 +399,7 @@ public final class LicensingInfoMap {
 		}
 
 		moduleInfo.put(AVAILABLE, available);
-		if (key.equals(latestDate.toString())) {
+		if (key.equals(latestDate)) {
 			if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
 				currentCloseToLimitModuleList.add(currentModule);
 			} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
@@ -468,51 +458,14 @@ public final class LicensingInfoMap {
 		return resultMap;
 	}
 
-	/**
-	 * gets the date with the currently active licenses
-	 */
-	private LocalDate findLatestChangeDateString() {
+	private static LocalDate findLatestChangeDate(List<LocalDate> dates) {
 		LocalDate now = LocalDate.now();
 
-		LocalDate newest = null;
-
-		for (String key : datesKeys) {
-			LocalDate thisDate = LocalDate.parse(key);
-			if (!thisDate.isAfter(now)) {
-				newest = thisDate;
-			} else {
-				break;
-			}
-		}
-
-		return newest;
+		return dates.stream().filter(d -> !d.isAfter(now)).reduce((first, second) -> second).orElse(now);
 	}
 
-	private static LocalDate findLatestChangeDate(List<String> dates) {
-		LocalDate newest = LocalDate.now();
-
-		LocalDate now = LocalDate.now();
-
-		for (String key : dates) {
-			LocalDate thisDate = LocalDate.parse(key);
-			if (now.compareTo(thisDate) >= 0) {
-				newest = thisDate;
-			} else {
-				break;
-			}
-		}
-
-		return newest;
-	}
-
-	private String findNextChangeDate() {
-		for (String key : datesKeys) {
-			LocalDate date = LocalDate.parse(key);
-			if (date.isAfter(latestDate)) {
-				return key;
-			}
-		}
-		return null;
+	private LocalDate findNextChangeDate() {
+		return datesKeys.stream().filter(date -> date.isAfter(latestDate)).findFirst().orElse(null);
 	}
 
 	private String checkTimeLeft(Map<String, Object> moduleInfo) {
@@ -526,11 +479,11 @@ public final class LicensingInfoMap {
 		return STATE_DAYS_OKAY;
 	}
 
-	private String checkTimeLeft(List<String> lics) {
+	private String checkTimeLeft(List<String> licenseIds) {
 		LocalDate now = LocalDate.now();
 
-		for (String licId : lics) {
-			String validUntilString = licenses.get(licId).get(VALID_UNTIL).toString();
+		for (String id : licenseIds) {
+			String validUntilString = licenses.get(id).get(VALID_UNTIL).toString();
 
 			LocalDate validUntil = LocalDate.parse(validUntilString);
 
@@ -548,13 +501,7 @@ public final class LicensingInfoMap {
 		return STATE_DAYS_OKAY;
 	}
 
-	/**
-	 * @param moduleInfo
-	 * @param date
-	 * @return
-	 */
-
-	private String checkFuture(Map<String, Object> moduleInfo, String module, String date) {
+	private String checkFuture(Map<String, Object> moduleInfo, String module, LocalDate date) {
 		String futureCheck = null;
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER) && date.equals(findNextChangeDate())) {
 			String state = moduleInfo.get(STATE).toString();
@@ -612,7 +559,10 @@ public final class LicensingInfoMap {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(findNextChangeDate())
+				LocalDate nextChangeDate = findNextChangeDate();
+				String nextChangeDateString = nextChangeDate != null ? nextChangeDate.toString() : "";
+
+				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(nextChangeDateString)
 						.get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
 					val.put(STATE, STATE_DAYS_OKAY);
 					currentTimeWarningModuleList.remove(modKey);
