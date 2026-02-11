@@ -327,6 +327,7 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
 		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap(datesKeys);
 		Map<String, Map<String, Object>> licenses = produceLicenses(licensingInfo);
+		LocalDate nextChangeDate = findNextChangeDate(datesKeys);
 
 		for (LocalDate key : datesKeys) {
 			Map<String, Map<String, Object>> modulesMapToDate = new TreeMap<>();
@@ -337,7 +338,7 @@ public final class LicensingInfoMap {
 
 			// also warning state should be none
 			for (String currentModule : shownModules) {
-				Map<String, Object> moduleInfo = createModuleInfo(currentModule, moduleToDate, key, datesKeys,
+				Map<String, Object> moduleInfo = createModuleInfo(currentModule, moduleToDate, key, nextChangeDate,
 						licenses);
 
 				modulesMapToDate.put(currentModule, moduleInfo);
@@ -345,11 +346,11 @@ public final class LicensingInfoMap {
 			resultMap.put(dateToTitleMap.get(key), modulesMapToDate);
 		}
 
-		return checkTimeWarning(resultMap, datesKeys);
+		return checkTimeWarning(resultMap, nextChangeDate);
 	}
 
 	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate, LocalDate key,
-			List<LocalDate> datesKeys, Map<String, Map<String, Object>> licenses) {
+			LocalDate nextChangeDate, Map<String, Map<String, Object>> licenses) {
 		Map<String, Object> moduleInfo;
 		boolean available = availableModules.contains(currentModule);
 
@@ -367,9 +368,9 @@ public final class LicensingInfoMap {
 
 		moduleInfo.put(AVAILABLE, available);
 		if (key.equals(latestDate)) {
-			if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
+			if (moduleInfo.get(STATE).equals(STATE_CLOSE_TO_LIMIT)) {
 				currentCloseToLimitModuleList.add(currentModule);
-			} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
+			} else if (moduleInfo.get(STATE).equals(STATE_OVER_LIMIT)) {
 				currentOverLimitModuleList.add(currentModule);
 			} else if (checkTimeLeft(moduleInfo, licenses).equals(STATE_DAYS_WARNING)) {
 				moduleInfo.put(STATE, STATE_DAYS_WARNING);
@@ -382,8 +383,7 @@ public final class LicensingInfoMap {
 			}
 		}
 
-		String futureCheck = checkFuture(moduleInfo, currentModule, datesKeys, key);
-		moduleInfo.put(FUTURE_STATE, futureCheck);
+		moduleInfo.put(FUTURE_STATE, checkFuture(moduleInfo, currentModule, nextChangeDate, key));
 
 		return moduleInfo;
 	}
@@ -436,17 +436,16 @@ public final class LicensingInfoMap {
 	}
 
 	private String checkTimeLeft(Map<String, Object> moduleInfo, Map<String, Map<String, Object>> licenses) {
-		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
-				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
-			List<String> lics = POJOReMapper.remap(moduleInfo.get(LICENSE_IDS));
+		if (moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
+				|| moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 
-			return checkTimeLeft(lics, licenses);
+			return STATE_DAYS_OKAY;
 		}
 
-		return STATE_DAYS_OKAY;
+		return findWarning(POJOReMapper.remap(moduleInfo.get(LICENSE_IDS)), licenses);
 	}
 
-	private String checkTimeLeft(List<String> licenseIds, Map<String, Map<String, Object>> licenses) {
+	private String findWarning(List<String> licenseIds, Map<String, Map<String, Object>> licenses) {
 		LocalDate now = LocalDate.now();
 
 		for (String id : licenseIds) {
@@ -468,40 +467,28 @@ public final class LicensingInfoMap {
 		return STATE_DAYS_OKAY;
 	}
 
-	private String checkFuture(Map<String, Object> moduleInfo, String module, List<LocalDate> datesKeys,
+	private String checkFuture(Map<String, Object> moduleInfo, String module, LocalDate nextChangeDate,
 			LocalDate date) {
 		String futureCheck = null;
-		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
-				&& date.equals(findNextChangeDate(datesKeys))) {
+		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER) && date.equals(nextChangeDate)) {
 			String state = moduleInfo.get(STATE).toString();
 
 			if (!state.equals(STATE_UNLICENSED)) {
-				String cNum;
-				String fNum;
+				String cNum = switch (module) {
+				case MODULE_MACOS_AGENT -> clientNumbersMap.get(MAC_OS).toString();
+				case MODULE_LINUX_AGENT -> clientNumbersMap.get(LINUX).toString();
+				default -> clientNumbersMap.get(ALL).toString();
+				};
 
-				if (module.equals(MODULE_MACOS_AGENT)) {
-					cNum = clientNumbersMap.get(MAC_OS).toString();
-				} else if (module.equals(MODULE_LINUX_AGENT)) {
-					cNum = clientNumbersMap.get(LINUX).toString();
-				} else {
-					cNum = clientNumbersMap.get(ALL).toString();
-				}
-
-				fNum = moduleInfo.get(CLIENT_NUMBER).toString();
-
-				Integer futureNum = Integer.parseInt(fNum);
+				Integer futureNum = Integer.parseInt(moduleInfo.get(CLIENT_NUMBER).toString());
 				Integer clientNum = Integer.parseInt(cNum);
 
 				futureCheck = calculateStateForNumbers(clientNum, futureNum);
 			}
 		}
 
-		if (futureCheck != null && moduleInfo.get(STATE) != null
-				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
-			return futureCheck;
-		} else {
-			return "null";
-		}
+		return futureCheck != null && moduleInfo.get(STATE) != null
+				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING) ? futureCheck : null;
 	}
 
 	private String calculateStateForNumbers(int clientNum, int futureNum) {
@@ -520,7 +507,7 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(
-			Map<String, Map<String, Map<String, Object>>> map, List<LocalDate> datesKeys) {
+			Map<String, Map<String, Map<String, Object>>> map, LocalDate nextChangeDate) {
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
 
 		if (resultMap.get(latestDate.toString()) != null) {
@@ -528,7 +515,6 @@ public final class LicensingInfoMap {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				LocalDate nextChangeDate = findNextChangeDate(datesKeys);
 				String nextChangeDateString = nextChangeDate != null ? nextChangeDate.toString() : "";
 
 				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(nextChangeDateString)
