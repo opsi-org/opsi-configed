@@ -75,11 +75,9 @@ public final class LicensingInfoMap {
 
 	private static final DateTimeFormatter GUI_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-	private static LicensingInfoMap instance;
-	private static LicensingInfoMap instanceComplete;
-	private static LicensingInfoMap instanceReduced;
+	private static final Map<Boolean, LicensingInfoMap> INSTANCES = new HashMap<>();
 
-	private static boolean reducedView = !OpsiLicensing.isExtendedView();
+	private static boolean reduced = !OpsiLicensing.isExtendedView();
 
 	private Map<String, Object> clientNumbersMap;
 	private Set<String> customerNames;
@@ -118,44 +116,27 @@ public final class LicensingInfoMap {
 
 	public static LicensingInfoMap getInstance(Map<String, Object> licensingInfo, Map<String, List<Object>> configVals,
 			boolean reduced) {
-		Logging.info("reduced, instance here ", reduced, ", ", instance);
+		Logging.info("reduced, instance here ", reduced);
 
-		if (instance == null || instanceComplete == null || instanceReduced == null) {
-			instanceComplete = new LicensingInfoMap(licensingInfo, configVals, false);
-			instanceReduced = new LicensingInfoMap(licensingInfo, configVals, true);
-		}
-
-		if (reduced) {
-			instance = instanceReduced;
-		} else {
-			instance = instanceComplete;
-		}
-
-		return instance;
+		return INSTANCES.computeIfAbsent(reduced, r -> new LicensingInfoMap(licensingInfo, configVals, reduced));
 	}
 
 	public static void setReduced(boolean reduced) {
-		Logging.info("setReduced instanceReduced ", instanceReduced, " cols ", instanceReduced.getColumnNames());
-		Logging.info("setReduced instanceComplete ", instanceComplete, " cols ", instanceComplete.getColumnNames());
-
-		reducedView = reduced;
-		if (reduced) {
-			instance = instanceReduced;
-		} else {
-			instance = instanceComplete;
-		}
+		LicensingInfoMap.reduced = reduced;
 	}
 
 	public static LicensingInfoMap getInstance() {
-		if (instance == null) {
+		LicensingInfoMap result = reduced ? INSTANCES.get(true) : INSTANCES.get(false);
+
+		if (result == null) {
 			Logging.error(" instance  not initialized");
 		}
 
-		return instance;
+		return result;
 	}
 
 	public static void requestRefresh() {
-		instance = null;
+		INSTANCES.clear();
 	}
 
 	private static Map<String, Object> produceClientNumbersMap(Map<String, Object> licensingInfo) {
@@ -296,7 +277,7 @@ public final class LicensingInfoMap {
 
 		LocalDate latest = findLatestChangeDate(dates);
 
-		if (reducedView) {
+		if (reduced) {
 			dates = dates.stream().filter(d -> !d.isBefore(latest)).toList();
 		}
 
