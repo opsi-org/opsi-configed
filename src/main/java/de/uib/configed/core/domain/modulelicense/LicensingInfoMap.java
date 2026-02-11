@@ -103,7 +103,7 @@ public final class LicensingInfoMap {
 		checksum = (String) licensingInfo.get(CHECKSUM_ID);
 		clientNumbersMap = POJOReMapper.remap(licensingInfo.get(CLIENT_NUMBERS_INFO));
 
-		availableModules = produceAvailableModules(licensingInfo);
+		availableModules = POJOReMapper.remap(licensingInfo.get(AVAILABLE_MODULES));
 		shownModules = produceShownModules(licensingInfo);
 
 		List<LocalDate> datesKeys = produceDatesKeys(licensingInfo);
@@ -173,47 +173,17 @@ public final class LicensingInfoMap {
 		return producedCustomerNames;
 	}
 
-	private static List<String> produceAvailableModules(Map<String, Object> licensingInfo) {
-		List<String> result = POJOReMapper.remap(licensingInfo.get(AVAILABLE_MODULES));
-
-		Collections.sort(result);
-
-		return result;
-	}
-
-	private List<String> produceKnownModules(Map<String, Object> licensingInfo) {
-		List<String> result = availableModules;
-
-		if (licensingInfo.containsKey(KNOWN_MODULES)) {
-			result = POJOReMapper.remap(licensingInfo.get(KNOWN_MODULES));
-		}
-
-		Collections.sort(result);
-		return result;
-	}
-
-	private static List<String> produceObsoleteModules(Map<String, Object> licensingInfo) {
-		List<String> result = new ArrayList<>();
-
-		if (licensingInfo.containsKey(OBSOLETE_MODULES)) {
-			result = POJOReMapper.remap(licensingInfo.get(OBSOLETE_MODULES));
-		}
-
-		Collections.sort(result);
-		return result;
-	}
-
 	private List<String> produceShownModules(Map<String, Object> licensingInfo) {
 		if (!licensingInfo.containsKey(OBSOLETE_MODULES)) {
-			return produceKnownModules(licensingInfo);
+			return POJOReMapper.remap(licensingInfo.get(KNOWN_MODULES));
 		}
 
-		List<String> result = OpsiLicensing.isShowOnlyAvailableModules() ? new ArrayList<>(availableModules)
-				: produceKnownModules(licensingInfo);
+		// Create a copy because we will manipulate the list by removing obsolete modules
+		List<String> result = new ArrayList<>(OpsiLicensing.isShowOnlyAvailableModules() ? availableModules
+				: POJOReMapper.remap(licensingInfo.get(KNOWN_MODULES)));
 
-		result.removeAll(produceObsoleteModules(licensingInfo));
+		result.removeAll(POJOReMapper.remap(licensingInfo.get(OBSOLETE_MODULES)));
 
-		Collections.sort(result);
 		return result;
 	}
 
