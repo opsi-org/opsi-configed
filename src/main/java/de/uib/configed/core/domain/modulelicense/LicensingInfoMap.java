@@ -34,7 +34,6 @@ public final class LicensingInfoMap {
 	public static final String AVAILABLE_MODULES = "available_modules";
 	public static final String OBSOLETE_MODULES = "obsolete_modules";
 	public static final String LICENSES_ID = "licenses";
-	public static final String CUSTOMER_ID = "customer_id";
 	public static final String CUSTOMER_NAME = "customer_name";
 	public static final String CUSTOMER_UNIT = "customer_unit";
 	public static final String ID = "id";
@@ -100,8 +99,9 @@ public final class LicensingInfoMap {
 		Logging.info(getClass(), "generate with reducedView ", reduced, " at the moment ignored, we set false");
 
 		produceConfigs(licensingInfo, configVals);
-		checksum = produceChecksum(licensingInfo);
-		clientNumbersMap = produceClientNumbersMap(licensingInfo);
+
+		checksum = (String) licensingInfo.get(CHECKSUM_ID);
+		clientNumbersMap = POJOReMapper.remap(licensingInfo.get(CLIENT_NUMBERS_INFO));
 
 		availableModules = produceAvailableModules(licensingInfo);
 		shownModules = produceShownModules(licensingInfo);
@@ -136,10 +136,6 @@ public final class LicensingInfoMap {
 
 	public static void requestRefresh() {
 		INSTANCES.clear();
-	}
-
-	private static Map<String, Object> produceClientNumbersMap(Map<String, Object> licensingInfo) {
-		return POJOReMapper.remap(licensingInfo.get(CLIENT_NUMBERS_INFO));
 	}
 
 	private static Map<String, Map<String, Object>> produceLicenses(Map<String, Object> licensingInfo) {
@@ -179,6 +175,7 @@ public final class LicensingInfoMap {
 
 	private static List<String> produceAvailableModules(Map<String, Object> licensingInfo) {
 		List<String> result = POJOReMapper.remap(licensingInfo.get(AVAILABLE_MODULES));
+
 		Collections.sort(result);
 
 		return result;
@@ -257,16 +254,6 @@ public final class LicensingInfoMap {
 		} catch (NumberFormatException ex) {
 			Logging.error(this, ex, " produceConfigs ");
 		}
-	}
-
-	private static String produceChecksum(Map<String, Object> licensingInfo) {
-		String newChecksum = "";
-
-		if (licensingInfo.containsKey(CHECKSUM_ID) && licensingInfo.get(CHECKSUM_ID) != null) {
-			newChecksum = licensingInfo.get(CHECKSUM_ID).toString();
-		}
-
-		return newChecksum;
 	}
 
 	private static List<LocalDate> produceDatesKeys(Map<String, Object> licensingInfo) {

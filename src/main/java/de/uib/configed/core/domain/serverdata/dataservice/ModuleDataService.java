@@ -296,8 +296,6 @@ public class ModuleDataService extends DataService {
 			int allActiveClients = ((int) LicensingInfoMap.getInstance().getClientNumbersMap()
 					.get(LicensingInfoMap.ALL));
 
-			// tests
-
 			if (!opsiModules.containsKey(key)) {
 				continue;
 			}
