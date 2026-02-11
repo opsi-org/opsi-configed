@@ -88,10 +88,9 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Object>> tableMap;
 	private LocalDate latestDate;
 	private String checksum;
-	private Set<String> currentCloseToLimitModuleList;
-	private Set<String> currentOverLimitModuleList;
-	private Set<String> currentTimeWarningModuleList;
-	private Set<String> currentTimeOverModuleList;
+	private Map<String, Set<String>> warningModulesList = Map.of(STATE_CLOSE_TO_LIMIT, new HashSet<>(),
+			STATE_OVER_LIMIT, new HashSet<>(), STATE_DAYS_WARNING, new HashSet<>(), STATE_DAYS_OVER, new HashSet<>());
+
 	private Integer daysClientLimitWarning;
 	private Integer absolutClientLimitWarning;
 	private Integer percentClientLimitWarning;
@@ -307,22 +306,6 @@ public final class LicensingInfoMap {
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap(Map<String, Object> licensingInfo,
 			List<LocalDate> datesKeys) {
-		if (currentCloseToLimitModuleList == null) {
-			currentCloseToLimitModuleList = new HashSet<>();
-		}
-
-		if (currentOverLimitModuleList == null) {
-			currentOverLimitModuleList = new HashSet<>();
-		}
-
-		if (currentTimeWarningModuleList == null) {
-			currentTimeWarningModuleList = new HashSet<>();
-		}
-
-		if (currentTimeOverModuleList == null) {
-			currentTimeOverModuleList = new HashSet<>();
-		}
-
 		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
 		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap(datesKeys);
@@ -369,17 +352,20 @@ public final class LicensingInfoMap {
 		moduleInfo.put(AVAILABLE, available);
 		if (key.equals(latestDate)) {
 			if (moduleInfo.get(STATE).equals(STATE_CLOSE_TO_LIMIT)) {
-				currentCloseToLimitModuleList.add(currentModule);
+				warningModulesList.get(STATE_CLOSE_TO_LIMIT).add(currentModule);
 			} else if (moduleInfo.get(STATE).equals(STATE_OVER_LIMIT)) {
-				currentOverLimitModuleList.add(currentModule);
-			} else if (checkTimeLeft(moduleInfo, licenses).equals(STATE_DAYS_WARNING)) {
-				moduleInfo.put(STATE, STATE_DAYS_WARNING);
-				currentTimeWarningModuleList.add(currentModule);
-			} else if (checkTimeLeft(moduleInfo, licenses).equals(STATE_DAYS_OVER)) {
-				moduleInfo.put(STATE, STATE_DAYS_OVER);
-				currentTimeOverModuleList.add(currentModule);
+				warningModulesList.get(STATE_OVER_LIMIT).add(currentModule);
 			} else {
-				// no warnings to add
+				String timeState = checkTimeLeft(moduleInfo, licenses);
+				if (timeState.equals(STATE_DAYS_WARNING)) {
+					moduleInfo.put(STATE, STATE_DAYS_WARNING);
+					warningModulesList.get(STATE_DAYS_WARNING).add(currentModule);
+				} else if (timeState.equals(STATE_DAYS_OVER)) {
+					moduleInfo.put(STATE, STATE_DAYS_OVER);
+					warningModulesList.get(STATE_DAYS_OVER).add(currentModule);
+				} else {
+					// Apparently no warning
+				}
 			}
 		}
 
@@ -520,8 +506,8 @@ public final class LicensingInfoMap {
 				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(nextChangeDateString)
 						.get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
 					val.put(STATE, STATE_DAYS_OKAY);
-					currentTimeWarningModuleList.remove(modKey);
-					currentTimeOverModuleList.remove(modKey);
+					warningModulesList.get(STATE_DAYS_WARNING).remove(modKey);
+					warningModulesList.get(STATE_DAYS_OVER).remove(modKey);
 				}
 			}
 		}
@@ -530,15 +516,16 @@ public final class LicensingInfoMap {
 	}
 
 	public Set<String> getCurrentOverLimitModuleList() {
-		return currentOverLimitModuleList;
+		return warningModulesList.get(STATE_OVER_LIMIT);
 	}
 
 	public String getWarningLevel() {
-		if (!currentOverLimitModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty()) {
+		if (!warningModulesList.get(STATE_OVER_LIMIT).isEmpty() || !warningModulesList.get(STATE_DAYS_OVER).isEmpty()) {
 			return STATE_OVER_LIMIT;
 		}
 
-		if (!currentCloseToLimitModuleList.isEmpty() || !currentTimeWarningModuleList.isEmpty()) {
+		if (!warningModulesList.get(STATE_CLOSE_TO_LIMIT).isEmpty()
+				|| !warningModulesList.get(STATE_DAYS_WARNING).isEmpty()) {
 			return STATE_CLOSE_TO_LIMIT;
 		}
 
