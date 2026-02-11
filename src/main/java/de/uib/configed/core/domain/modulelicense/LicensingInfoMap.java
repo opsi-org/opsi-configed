@@ -6,13 +6,10 @@
 
 package de.uib.configed.core.domain.modulelicense;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -21,7 +18,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
@@ -82,8 +78,6 @@ public final class LicensingInfoMap {
 
 	private static boolean reducedView = !OpsiLicensing.isExtendedView();
 
-	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
 	private Map<String, Object> licensingInfo;
 	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
@@ -98,7 +92,7 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
-	private String latestDateString;
+	private LocalDate latestDate;
 	private String checksum;
 	private Set<String> currentCloseToLimitModuleList;
 	private Set<String> currentOverLimitModuleList;
@@ -126,7 +120,7 @@ public final class LicensingInfoMap {
 
 		datesKeys = produceDatesKeys();
 		dateToTitleMap = produceDateToTitleMap();
-		latestDateString = findLatestChangeDateString();
+		latestDate = findLatestChangeDateString();
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet();
@@ -415,7 +409,7 @@ public final class LicensingInfoMap {
 		}
 
 		moduleInfo.put(AVAILABLE, available);
-		if (key.equals(latestDateString)) {
+		if (key.equals(latestDate.toString())) {
 			if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
 				currentCloseToLimitModuleList.add(currentModule);
 			} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
@@ -477,23 +471,18 @@ public final class LicensingInfoMap {
 	/**
 	 * gets the date with the currently active licenses
 	 */
-	private String findLatestChangeDateString() {
-		String newest = "";
-		try {
-			LocalDate now = LocalDate.now();
+	private LocalDate findLatestChangeDateString() {
+		LocalDate now = LocalDate.now();
 
-			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		LocalDate newest = null;
 
-			for (String key : datesKeys) {
-				Date thisDate = sdf.parse(key);
-				if (dateNow.compareTo(thisDate) >= 0) {
-					newest = key;
-				} else {
-					break;
-				}
+		for (String key : datesKeys) {
+			LocalDate thisDate = LocalDate.parse(key);
+			if (!thisDate.isAfter(now)) {
+				newest = thisDate;
+			} else {
+				break;
 			}
-		} catch (ParseException ex) {
-			Logging.error(getClass(), ex, " getCurrentlyActiveLicense ");
 		}
 
 		return newest;
@@ -517,34 +506,19 @@ public final class LicensingInfoMap {
 	}
 
 	private String findNextChangeDate() {
-		try {
-			Date latest = sdf.parse(latestDateString);
-			for (String key : datesKeys) {
-				Date thisDate = sdf.parse(key);
-				if (thisDate.compareTo(latest) > 0) {
-					return key;
-				}
+		for (String key : datesKeys) {
+			LocalDate date = LocalDate.parse(key);
+			if (date.isAfter(latestDate)) {
+				return key;
 			}
-		} catch (ParseException ex) {
-			Logging.error(getClass(), ex, " findNextChangeDate ");
 		}
-
 		return null;
-	}
-
-	private static Long getDaysLeftUntil(Date date) {
-		LocalDate now = LocalDate.now();
-		Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-		long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
-
-		return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	}
 
 	private String checkTimeLeft(Map<String, Object> moduleInfo) {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
-			List<?> lics = (List<?>) moduleInfo.get(LICENSE_IDS);
+			List<String> lics = POJOReMapper.remap(moduleInfo.get(LICENSE_IDS));
 
 			return checkTimeLeft(lics);
 		}
@@ -552,26 +526,23 @@ public final class LicensingInfoMap {
 		return STATE_DAYS_OKAY;
 	}
 
-	private String checkTimeLeft(List<?> lics) {
+	private String checkTimeLeft(List<String> lics) {
 		LocalDate now = LocalDate.now();
-		Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-		try {
-			for (int i = 0; i < lics.size(); i++) {
-				Date validUntil = sdf.parse(licenses.get(lics.get(i)).get(VALID_UNTIL).toString());
+		for (String licId : lics) {
+			String validUntilString = licenses.get(licId).get(VALID_UNTIL).toString();
 
-				if (dateNow.after(validUntil)) {
-					return STATE_DAYS_OVER;
-				}
+			LocalDate validUntil = LocalDate.parse(validUntilString);
 
-				Long timeLeft = getDaysLeftUntil(validUntil);
-
-				if (timeLeft <= daysClientLimitWarning) {
-					return STATE_DAYS_WARNING;
-				}
+			if (validUntil.isBefore(now)) {
+				return STATE_DAYS_OVER;
 			}
-		} catch (ParseException ex) {
-			Logging.error(getClass(), ex, " checkTimeLeft ");
+
+			long daysLeft = ChronoUnit.DAYS.between(now, validUntil);
+
+			if (daysLeft <= daysClientLimitWarning) {
+				return STATE_DAYS_WARNING;
+			}
 		}
 
 		return STATE_DAYS_OKAY;
@@ -636,8 +607,8 @@ public final class LicensingInfoMap {
 			Map<String, Map<String, Map<String, Object>>> map) {
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
 
-		if (resultMap.get(latestDateString) != null) {
-			for (Entry<String, Map<String, Object>> mod : resultMap.get(latestDateString).entrySet()) {
+		if (resultMap.get(latestDate.toString()) != null) {
+			for (Entry<String, Map<String, Object>> mod : resultMap.get(latestDate.toString()).entrySet()) {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
@@ -670,7 +641,7 @@ public final class LicensingInfoMap {
 	}
 
 	public String getLatestDate() {
-		return latestDateString;
+		return latestDate.toString();
 	}
 
 	public Map<String, Object> getClientNumbersMap() {
