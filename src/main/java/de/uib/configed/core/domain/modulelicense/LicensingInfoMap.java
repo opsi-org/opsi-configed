@@ -85,7 +85,6 @@ public final class LicensingInfoMap {
 	private Set<String> customerNames;
 	private List<String> availableModules;
 	private List<String> shownModules;
-	private List<LocalDate> datesKeys;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
@@ -107,14 +106,12 @@ public final class LicensingInfoMap {
 		checksum = produceChecksum(licensingInfo);
 		clientNumbersMap = produceClientNumbersMap(licensingInfo);
 
-		Map<String, Map<String, Object>> licenses = produceLicenses(licensingInfo);
-
 		availableModules = produceAvailableModules(licensingInfo);
 		shownModules = produceShownModules(licensingInfo);
 
-		datesKeys = produceDatesKeys(licensingInfo);
+		List<LocalDate> datesKeys = produceDatesKeys(licensingInfo);
 		latestDate = findLatestChangeDate(datesKeys);
-		datesMap = produceDatesMap(licensingInfo, licenses);
+		datesMap = produceDatesMap(licensingInfo, datesKeys);
 		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet(licensingInfo);
 	}
@@ -234,14 +231,8 @@ public final class LicensingInfoMap {
 			return produceKnownModules(licensingInfo);
 		}
 
-		List<String> result;
-
-		if (OpsiLicensing.isShowOnlyAvailableModules()) {
-			result = new ArrayList<>(availableModules);
-		} else {
-			result = produceKnownModules(licensingInfo);
-
-		}
+		List<String> result = OpsiLicensing.isShowOnlyAvailableModules() ? new ArrayList<>(availableModules)
+				: produceKnownModules(licensingInfo);
 
 		result.removeAll(produceObsoleteModules(licensingInfo));
 
@@ -312,7 +303,7 @@ public final class LicensingInfoMap {
 		return dates;
 	}
 
-	private Map<LocalDate, String> produceDateToTitleMap() {
+	private static Map<LocalDate, String> produceDateToTitleMap(List<LocalDate> datesKeys) {
 		Map<LocalDate, String> resultMap = new HashMap<>();
 		if (datesKeys.isEmpty()) {
 			return resultMap;
@@ -334,7 +325,7 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap(Map<String, Object> licensingInfo,
-			Map<String, Map<String, Object>> licenses) {
+			List<LocalDate> datesKeys) {
 		if (currentCloseToLimitModuleList == null) {
 			currentCloseToLimitModuleList = new HashSet<>();
 		}
@@ -353,7 +344,8 @@ public final class LicensingInfoMap {
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
-		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap();
+		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap(datesKeys);
+		Map<String, Map<String, Object>> licenses = produceLicenses(licensingInfo);
 
 		for (LocalDate key : datesKeys) {
 			Map<String, Map<String, Object>> modulesMapToDate = new TreeMap<>();
@@ -364,18 +356,19 @@ public final class LicensingInfoMap {
 
 			// also warning state should be none
 			for (String currentModule : shownModules) {
-				Map<String, Object> moduleInfo = createModuleInfo(currentModule, moduleToDate, key, licenses);
+				Map<String, Object> moduleInfo = createModuleInfo(currentModule, moduleToDate, key, datesKeys,
+						licenses);
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
 			resultMap.put(dateToTitleMap.get(key), modulesMapToDate);
 		}
 
-		return checkTimeWarning(resultMap);
+		return checkTimeWarning(resultMap, datesKeys);
 	}
 
 	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate, LocalDate key,
-			Map<String, Map<String, Object>> licenses) {
+			List<LocalDate> datesKeys, Map<String, Map<String, Object>> licenses) {
 		Map<String, Object> moduleInfo;
 		boolean available = availableModules.contains(currentModule);
 
@@ -408,7 +401,7 @@ public final class LicensingInfoMap {
 			}
 		}
 
-		String futureCheck = checkFuture(moduleInfo, currentModule, key);
+		String futureCheck = checkFuture(moduleInfo, currentModule, datesKeys, key);
 		moduleInfo.put(FUTURE_STATE, futureCheck);
 
 		return moduleInfo;
@@ -457,7 +450,7 @@ public final class LicensingInfoMap {
 		return dates.stream().filter(d -> !d.isAfter(now)).reduce((first, second) -> second).orElse(now);
 	}
 
-	private LocalDate findNextChangeDate() {
+	private LocalDate findNextChangeDate(List<LocalDate> datesKeys) {
 		return datesKeys.stream().filter(date -> date.isAfter(latestDate)).findFirst().orElse(null);
 	}
 
@@ -494,9 +487,11 @@ public final class LicensingInfoMap {
 		return STATE_DAYS_OKAY;
 	}
 
-	private String checkFuture(Map<String, Object> moduleInfo, String module, LocalDate date) {
+	private String checkFuture(Map<String, Object> moduleInfo, String module, List<LocalDate> datesKeys,
+			LocalDate date) {
 		String futureCheck = null;
-		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER) && date.equals(findNextChangeDate())) {
+		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
+				&& date.equals(findNextChangeDate(datesKeys))) {
 			String state = moduleInfo.get(STATE).toString();
 
 			if (!state.equals(STATE_UNLICENSED)) {
@@ -544,7 +539,7 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(
-			Map<String, Map<String, Map<String, Object>>> map) {
+			Map<String, Map<String, Map<String, Object>>> map, List<LocalDate> datesKeys) {
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
 
 		if (resultMap.get(latestDate.toString()) != null) {
@@ -552,7 +547,7 @@ public final class LicensingInfoMap {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				LocalDate nextChangeDate = findNextChangeDate();
+				LocalDate nextChangeDate = findNextChangeDate(datesKeys);
 				String nextChangeDateString = nextChangeDate != null ? nextChangeDate.toString() : "";
 
 				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(nextChangeDateString)
