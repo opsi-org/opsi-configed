@@ -290,18 +290,15 @@ public final class LicensingInfoMap {
 		}
 
 		for (int i = 0; i < datesKeys.size() - 1; i++) {
-			String title = toGuiDate(datesKeys.get(i)) + " - " + toGuiDate(datesKeys.get(i + 1).minusDays(1));
+			String title = datesKeys.get(i).format(GUI_FORMAT) + " - "
+					+ datesKeys.get(i + 1).minusDays(1).format(GUI_FORMAT);
 			resultMap.put(datesKeys.get(i), title);
 		}
 
-		resultMap.put(datesKeys.get(datesKeys.size() - 1),
-				Configed.getResourceValue("LicensingInfo.from") + " " + toGuiDate(datesKeys.get(datesKeys.size() - 1)));
+		resultMap.put(datesKeys.get(datesKeys.size() - 1), Configed.getResourceValue("LicensingInfo.from") + " "
+				+ datesKeys.get(datesKeys.size() - 1).format(GUI_FORMAT));
 
 		return resultMap;
-	}
-
-	private static String toGuiDate(LocalDate date) {
-		return date.format(GUI_FORMAT);
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap(Map<String, Object> licensingInfo,
