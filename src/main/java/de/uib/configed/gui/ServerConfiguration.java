@@ -51,6 +51,6 @@ public class ServerConfiguration extends JTabbedPane {
 	}
 
 	public boolean isCurrentUserRoleSelected() {
-		return panelHostConfig.isSelected(persistenceController.getExecutioner().getUsername());
+		return panelHostConfig.isSelected(persistenceController.getExecutioner().getHostData().getUser());
 	}
 }

@@ -39,6 +39,7 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.features.terminal.TerminalController;
@@ -414,41 +415,8 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	public static void setupLoginDialog(String host, String user, String password, String otp, boolean useSSO) {
-		Logging.debug(" create password dialog ");
-		loginDialog = new LoginDialog();
-
-		if (host != null && !host.isEmpty()) {
-			loginDialog.setHost(host);
-		}
-
-		if (user != null) {
-			loginDialog.setUser(user);
-		}
-
-		if (password != null) {
-			loginDialog.setPassword(password);
-		}
-
-		if (otp != null) {
-			loginDialog.setOTP(otp);
-		}
-
-		Logging.info("become interactive");
-		Logging.info("using sso ? ", useSSO);
-		loginDialog.setVisible(true);
-
-		if (host == null) {
-			Logging.info("host is not set (yet)");
-		}
-		if (!useSSO && (user == null || password == null)) {
-			Logging.info("user or password not given (yet)");
-		} else {
-			// This must be called last, so that loading frame for connection is called last
-			// and on top of the login-frame
-			Logging.info("loginDialog tryConnecting with sso ", useSSO);
-			loginDialog.tryConnectingDependOnServer(useSSO);
-		}
+	public static void setupLoginDialog(HostData hostData) {
+		loginDialog = new LoginDialog(hostData);
 	}
 
 	public void setPersistenceController(OpsiServiceNOMPersistenceController persistenceController) {

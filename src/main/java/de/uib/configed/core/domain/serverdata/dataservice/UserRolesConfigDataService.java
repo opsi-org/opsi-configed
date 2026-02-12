@@ -537,7 +537,7 @@ public class UserRolesConfigDataService extends DataService {
 
 		if (applyUserSpecializedConfigPD()) {
 			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-					+ dataServices.persistenceController.getExecutioner().getUsername() + "}.";
+					+ dataServices.persistenceController.getExecutioner().getHostData().getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
