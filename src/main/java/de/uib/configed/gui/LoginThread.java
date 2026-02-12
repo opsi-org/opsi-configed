@@ -14,6 +14,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ConnectionErrorReporter;
 import de.uib.configed.core.infrastructure.ConnectionErrorType;
 import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.share.logging.Logging;
 
@@ -22,38 +23,29 @@ import de.uib.configed.share.logging.Logging;
  */
 public class LoginThread extends Thread {
 	private LoginDialog loginDialog;
-	private Object selectedHost;
-	private String user;
-	private char[] password;
-	private char[] otp;
-	private boolean useSSO;
+	private HostData selectedHost;
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public LoginThread(LoginDialog loginDialog, Object selectedHost, String user, char[] password, char[] otp,
-			boolean useSSO) {
+	public LoginThread(LoginDialog loginDialog, HostData selectedHost) {
 		this.loginDialog = loginDialog;
 		this.selectedHost = selectedHost;
-		this.user = user;
-		this.password = password;
-		this.otp = otp;
-		this.useSSO = useSSO;
 	}
 
 	@Override
 	public void run() {
 		Logging.info(this, "get persis");
-		boolean invalidHost = selectedHost == null || selectedHost.toString().isEmpty();
-		boolean invalidUser = user == null || user.isEmpty();
-		boolean invalidPw = String.valueOf(password) == null || String.valueOf(password).isEmpty();
-		if (!useSSO && (invalidHost || invalidUser || invalidPw)) {
+		boolean invalidHost = selectedHost.getHost() == null || selectedHost.getHost().isEmpty();
+		boolean invalidUser = selectedHost.getUser() == null || selectedHost.getUser().isEmpty();
+		boolean invalidPw = String.valueOf(selectedHost.getPassword()) == null
+				|| String.valueOf(selectedHost.getPassword()).isEmpty();
+		if (!selectedHost.isUseSSO() && (invalidHost || invalidUser || invalidPw)) {
 			Logging.error(this, "No host, user or password provided");
 			Logging.debug(this, "Validate credentials: invalids ", invalidHost, invalidUser, invalidPw);
 			loginDialog.setActivated(true);
 			return;
 		}
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController((String) selectedHost, user,
-				String.valueOf(password), String.valueOf(otp), useSSO);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(selectedHost);
 
 		Logging.updateLogfile();
 		Logging.info(this, "got persis, == null ", persistenceController == null);
@@ -92,7 +84,7 @@ public class LoginThread extends Thread {
 	private void login() {
 		loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 		Logging.info(this, "connected with persis ", persistenceController);
-		if (useSSO) {
+		if (selectedHost.isUseSSO()) {
 			// Using SSO, so the browser window is currently in the foreground.
 			// Bring the login dialog back to the front.
 			loginDialog.setVisible(true);

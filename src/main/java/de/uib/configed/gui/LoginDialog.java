@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.share.Icons;
@@ -75,7 +76,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		}
 	};
 
-	public LoginDialog() {
+	public LoginDialog(HostData hostData) {
 		super();
 
 		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -87,6 +88,42 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		initGlassPane();
 		initSSO();
+
+		setHostData(hostData);
+	}
+
+	private void setHostData(HostData hostData) {
+		if (hostData.getHost() != null && !hostData.getHost().isEmpty()) {
+			setHost(hostData.getHost());
+		}
+
+		if (hostData.getUser() != null) {
+			setUser(hostData.getUser());
+		}
+
+		if (hostData.getPassword() != null) {
+			setPassword(hostData.getPassword());
+		}
+
+		if (hostData.getOtp() != null) {
+			setOTP(hostData.getOtp());
+		}
+
+		Logging.info("become interactive");
+		Logging.info("using sso ? ", hostData.isUseSSO());
+		setVisible(true);
+
+		if (hostData.getHost() == null) {
+			Logging.info("host is not set (yet)");
+		}
+		if (!hostData.isUseSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
+			Logging.info("user or password not given (yet)");
+		} else {
+			// This must be called last, so that loading frame for connection is called last
+			// and on top of the login-frame
+			Logging.info("loginDialog tryConnecting with sso ", hostData.isUseSSO());
+			tryConnectingDependOnServer(hostData.isUseSSO());
+		}
 	}
 
 	private void initGlassPane() {
@@ -95,7 +132,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		setGlassPane(glassPane);
 	}
 
-	public void setHost(String host) {
+	private void setHost(String host) {
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
 		initSSO();
@@ -111,25 +148,16 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
 	}
 
-	public void setUser(String user) {
-		if (user == null) {
-			user = "";
-		}
+	private void setUser(String user) {
 		fieldUser.setText(user);
 		passwordField.requestFocus();
 	}
 
-	public void setPassword(String password) {
-		if (password == null) {
-			password = "";
-		}
+	private void setPassword(String password) {
 		passwordField.setText(password);
 	}
 
-	public void setOTP(String otp) {
-		if (otp == null) {
-			otp = "";
-		}
+	private void setOTP(String otp) {
 		checkUseOTP.setSelected(!otp.isEmpty());
 		fieldOTP.setText(otp);
 	}
@@ -312,7 +340,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		tryConnecting(false);
 	}
 
-	public void tryConnectingDependOnServer(boolean requestSSO) {
+	private void tryConnectingDependOnServer(boolean requestSSO) {
 		if (ssoActiveByServer == null) {
 			ssoActiveByServer = false;
 			initSSO();
@@ -335,8 +363,8 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "starting thread");
 
-		new LoginThread(this, fieldHost.getSelectedItem(), user, passwordField.getPassword(), fieldOTP.getPassword(),
-				useSSO).start();
+		new LoginThread(this, new HostData((String) fieldHost.getSelectedItem(), user,
+				String.valueOf(passwordField.getPassword()), String.valueOf(fieldOTP.getPassword()), useSSO)).start();
 	}
 
 	private static void endProgram() {

@@ -102,8 +102,8 @@ public class MainFrame extends JFrame {
 
 		showPanel(EditingTarget.CLIENTS);
 
-		setTitle("(" + persistenceController.getExecutioner().getUsername() + ") "
-				+ persistenceController.getExecutioner().getHost() + " - " + Globals.APPNAME);
+		setTitle("(" + persistenceController.getExecutioner().getHostData().getUser() + ") "
+				+ persistenceController.getExecutioner().getHostData().getHost() + " - " + Globals.APPNAME);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
