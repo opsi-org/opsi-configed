@@ -8,8 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +36,7 @@ import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 import net.miginfocom.swing.MigLayout;
 
-public class LoginDialog extends JFrame implements KeyListener {
+public class LoginDialog extends JFrame {
 	private GlassPane glassPane;
 
 	private JLabel jLabelTitle;
@@ -182,15 +180,15 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
+		((JTextField) fieldHost.getEditor().getEditorComponent())
+				.addActionListener(actionEvent -> login((JTextField) fieldHost.getEditor().getEditorComponent()));
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
-
-		fieldUser.addKeyListener(this);
-		passwordField.addKeyListener(this);
+		fieldUser.addActionListener(e -> login(fieldUser));
+		passwordField.addActionListener(e -> tryConnecting(false));
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, false));
-		fieldOTP.addKeyListener(this);
+		fieldOTP.addActionListener(e -> tryConnecting(false));
 		fieldOTP.setVisible(false);
 
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
@@ -199,7 +197,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
-		jButtonCancel.addActionListener(actionEvent -> endProgram());
+		jButtonCancel.addActionListener(actionEvent -> ConfigedMain.finishApp(false, 0));
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
 		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
@@ -339,38 +337,15 @@ public class LoginDialog extends JFrame implements KeyListener {
 				useSSO).start();
 	}
 
-	private static void endProgram() {
-		ConfigedMain.finishApp(false, 0);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (e.getSource() == passwordField || e.getSource() == fieldOTP) {
-				tryConnecting(false);
-			} else if (Boolean.TRUE.equals(ssoActiveByServer)) {
-				tryConnecting(true);
-			} else if (e.getSource() == fieldHost.getEditor().getEditorComponent() || fieldUser.getText().isEmpty()) {
-				fieldUser.requestFocus();
-			} else if (passwordField.getPassword().length == 0) {
-				passwordField.requestFocus();
-			} else {
-				tryConnecting(false);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			endProgram();
+	private void login(JTextField source) {
+		if (Boolean.TRUE.equals(ssoActiveByServer)) {
+			tryConnecting(true);
+		} else if (source == fieldHost.getEditor().getEditorComponent() || fieldUser.getText().isEmpty()) {
+			fieldUser.requestFocus();
+		} else if (passwordField.getPassword().length == 0) {
+			passwordField.requestFocus();
 		} else {
-			// Do nothing with other keys
+			tryConnecting(false);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// Not needed here
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// Not needed here
 	}
 }
