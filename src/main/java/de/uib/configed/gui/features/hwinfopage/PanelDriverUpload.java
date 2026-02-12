@@ -38,7 +38,6 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductUtils;
@@ -46,7 +45,7 @@ import de.uib.configed.share.WinProductsRetriever;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelDriverUpload extends JPanel implements NameProducer {
+public class PanelDriverUpload extends JPanel {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
 	private static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
 	private static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
@@ -459,27 +458,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		} else {
 			fieldDriverPath.setText("");
 		}
-	}
-
-	// implements NameProducer
-	@Override
-	public String produceName() {
-		if (fieldServerPath != null) {
-			Logging.info(this, "produceName ? fieldServerPath , depotProductDirectory ", fieldServerPath.getText(),
-					" , ", depotProductDirectory);
-		}
-
-		if (fieldServerPath == null || fieldServerPath.getText().isEmpty()
-				|| fieldServerPath.getText().startsWith(depotProductDirectory)) {
-			return depotProductDirectory;
-		}
-
-		return fieldServerPath.getText();
-	}
-
-	@Override
-	public String getDefaultName() {
-		return byAuditPath;
 	}
 
 	private static String getLocalsystemPath(String[] parts) {
