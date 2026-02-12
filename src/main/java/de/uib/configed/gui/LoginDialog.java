@@ -92,19 +92,23 @@ public class LoginDialog extends JFrame {
 
 	private void setHostData(HostData hostData) {
 		if (hostData.getHost() != null && !hostData.getHost().isEmpty()) {
-			setHost(hostData.getHost());
+			fieldHost.setSelectedItem(hostData.getHost());
+			fieldUser.requestFocus();
+			initSSO();
 		}
 
 		if (hostData.getUser() != null) {
-			setUser(hostData.getUser());
+			fieldUser.setText(hostData.getUser());
+			passwordField.requestFocus();
 		}
 
 		if (hostData.getPassword() != null) {
-			setPassword(hostData.getPassword());
+			passwordField.setText(hostData.getPassword());
 		}
 
 		if (hostData.getOtp() != null) {
-			setOTP(hostData.getOtp());
+			checkUseOTP.setSelected(!hostData.getOtp().isEmpty());
+			fieldOTP.setText(hostData.getOtp());
 		}
 
 		Logging.info("become interactive");
@@ -113,8 +117,7 @@ public class LoginDialog extends JFrame {
 
 		if (hostData.getHost() == null) {
 			Logging.info("host is not set (yet)");
-		}
-		if (!hostData.isUseSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
+		} else if (!hostData.isUseSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
 			Logging.info("user or password not given (yet)");
 		} else {
 			// This must be called last, so that loading frame for connection is called last
@@ -130,12 +133,6 @@ public class LoginDialog extends JFrame {
 		setGlassPane(glassPane);
 	}
 
-	private void setHost(String host) {
-		fieldHost.setSelectedItem(host);
-		fieldUser.requestFocus();
-		initSSO();
-	}
-
 	private void setServers() {
 		List<String> savedServers = Utils.readLocallySavedServerNames();
 
@@ -144,20 +141,6 @@ public class LoginDialog extends JFrame {
 		}
 
 		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
-	}
-
-	private void setUser(String user) {
-		fieldUser.setText(user);
-		passwordField.requestFocus();
-	}
-
-	private void setPassword(String password) {
-		passwordField.setText(password);
-	}
-
-	private void setOTP(String otp) {
-		checkUseOTP.setSelected(!otp.isEmpty());
-		fieldOTP.setText(otp);
 	}
 
 	public void setActivated(boolean active) {
