@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
@@ -354,10 +355,10 @@ public class ConfigedMain {
 
 			HostInfo secondInfo = new HostInfo();
 
-			for (int i = 1; i < selectedClients.size(); i++) {
-				secondInfo.setValues(pcinfos.get(selectedClients.get(i)).getMap());
+			selectedClients.stream().skip(1).forEach((String clientId) -> {
+				secondInfo.setValues(pcinfos.get(clientId).getMap());
 				hostInfo.combineWith(secondInfo);
-			}
+			});
 		}
 	}
 
@@ -494,23 +495,13 @@ public class ConfigedMain {
 			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
-
-			String sessionValue = "";
-			if (persistenceController.getDataServices().host.getSessionInfo().get(clientId) != null) {
-				sessionValue = persistenceController.getDataServices().host.getSessionInfo().get(clientId);
-			}
-
-			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
+			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL,
+					persistenceController.getDataServices().host.getSessionInfo().getOrDefault(clientId, ""));
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
 
-			List<Object> rowItems = new ArrayList<>();
-
-			for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
-					.entrySet()) {
-				if (Boolean.TRUE.equals(entry.getValue())) {
-					rowItems.add(rowmap.get(entry.getKey()));
-				}
-			}
+			List<Object> rowItems = persistenceController.getDataServices().host.getHostDisplayFields().entrySet()
+					.stream().filter(entry -> Boolean.TRUE.equals(entry.getValue()))
+					.map(entry -> rowmap.get(entry.getKey())).toList();
 
 			model.addRow(rowItems.toArray());
 		}
@@ -811,16 +802,9 @@ public class ConfigedMain {
 		Logging.info(this, "Selected depots: " + selectedDepots);
 		Logging.info(this, "Depots of selected clients: " + clientDepots);
 
-		String newRepresentative;
-
-		if (selectedDepots.isEmpty() || clientDepots.contains(configServer)) {
-			newRepresentative = configServer;
-		} else if (selectedDepots.size() == 1) {
-			String onlyDepot = selectedDepots.get(0);
-			newRepresentative = clientDepots.contains(onlyDepot) ? onlyDepot : configServer;
-		} else {
-			newRepresentative = selectedDepots.stream().filter(clientDepots::contains).findFirst().orElse(configServer);
-		}
+		String newRepresentative = Stream
+				.concat(selectedDepots.stream().filter(clientDepots::contains), Stream.of(configServer)).findFirst()
+				.orElse(configServer);
 
 		Logging.debug(this, "Old representative: " + oldRepresentative + ", new: " + newRepresentative);
 
@@ -1073,16 +1057,9 @@ public class ConfigedMain {
 	}
 
 	private List<String> getClientSelectionBasedOnDepotSelection(Set<String> selValuesList) {
-		List<String> clientsLeft = new ArrayList<>();
-		for (String client : selValuesList) {
-			String depotForClient = persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot()
-					.get(client);
-
-			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
-				clientsLeft.add(client);
-			}
-		}
-		return clientsLeft;
+		return selValuesList.stream().filter(client -> depotsList.getSelectedValuesList().contains(
+				persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot().get(client)))
+				.toList();
 	}
 
 	public void invertSelection() {
