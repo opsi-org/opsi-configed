@@ -177,7 +177,7 @@ public class MapTableModel extends AbstractTableModel {
 			configChanges = Collections.singletonMap(key, defaultValues);
 		}
 
-		updateCollection.addMap(new HashMap<>(configChanges));
+		updateCollection.addMap(configChanges);
 
 		notifyChange();
 		fireTableDataChanged();
@@ -302,7 +302,7 @@ public class MapTableModel extends AbstractTableModel {
 		notifyChange();
 		fireTableDataChanged();
 
-		updateCollection.addMap(new HashMap<>(configChanges));
+		updateCollection.addMap(configChanges);
 	}
 
 	private void weHaveChangedStoredMaps() {
@@ -318,7 +318,7 @@ public class MapTableModel extends AbstractTableModel {
 			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
 			} else {
-				updateCollection.addMap(new HashMap<>(changes));
+				updateCollection.addMap(changes);
 			}
 
 			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());
