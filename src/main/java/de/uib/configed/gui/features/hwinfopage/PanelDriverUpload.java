@@ -61,8 +61,6 @@ public class PanelDriverUpload extends JPanel {
 	private JLabel depot;
 	private JComboBox<String> comboChooseWinProduct;
 
-	private JLabel labelDriverToIntegrate;
-
 	private String depotProductDirectory = "";
 	private String driverDirectory = "";
 
@@ -100,8 +98,6 @@ public class PanelDriverUpload extends JPanel {
 
 	private String winProduct = "";
 
-	private JLabel jLabelTopic;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
@@ -121,16 +117,11 @@ public class PanelDriverUpload extends JPanel {
 		}
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
-		jLabelTopic = Utils.createBoldLabel("PanelDriverUpload.topic");
-
-		labelDriverToIntegrate = Utils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 		jLabelRetrievalText.setVisible(false);
 
 		webDAVClient = new WebDAVClient();
 
 		defineChoosers();
-
-		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
 		buildPanel();
 
@@ -230,6 +221,8 @@ public class PanelDriverUpload extends JPanel {
 		fieldByAuditPath = new JTextField();
 		fieldByAuditPath.setEditable(false);
 
+		JLabel jLabelTopic = Utils.createBoldLabel("PanelDriverUpload.topic");
+
 		labelClientName = new JLabel();
 
 		JLabel jLabelDepotServer = Utils.createBoldLabel("PanelDriverUpload.DepotServer");
@@ -267,6 +260,8 @@ public class PanelDriverUpload extends JPanel {
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
 		fieldServerPath.getDocument().addDocumentListener(checkFilesListener);
+
+		JLabel labelDriverToIntegrate = Utils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 
 		fieldDriverPath = new JTextField();
 		fieldDriverPath.setEditable(true);
