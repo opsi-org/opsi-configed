@@ -161,7 +161,8 @@ public class UserRolesConfigDataService extends DataService {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
 				.getDataServices().userRoles.hasServerFullPermissionPD();
-		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
+		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getMainPanelManager()
+				.getServerConfiguration();
 		boolean isCurrentUserRoleSelected = serverConfiguration != null
 				&& serverConfiguration.isCurrentUserRoleSelected();
 		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;

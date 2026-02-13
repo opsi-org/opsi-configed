@@ -104,8 +104,8 @@ public class ClientTree extends AbstractGroupTree {
 	@Override
 	public void reactOnTreeSelection() {
 		if (ConfigedMain.getMainFrame() != null) {
-			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-					.getTabComponentAt(1);
+			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+					.getTabbedPane().getTabComponentAt(1);
 			comp.showButton(getSelectionPaths() == null
 					|| !ALL_CLIENTS_NAME.equals(getSelectionPath().getLastPathComponent().toString())
 					|| getSelectionPaths().length > 1);

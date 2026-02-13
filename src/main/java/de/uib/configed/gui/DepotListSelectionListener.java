@@ -67,10 +67,13 @@ public class DepotListSelectionListener implements ListSelectionListener {
 
 			configedMain.initTabComponents();
 
-			if (ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() == 1) {
-				ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setLocalbootProductsPage();
-			} else if (ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() == 2) {
-				ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setNetbootProductsPage();
+			ClientConfiguration clientConfiguration = ConfigedMain.getMainFrame().getMainPanelManager()
+					.getClientConfiguration();
+
+			if (clientConfiguration.getSelectedIndex() == 1) {
+				clientConfiguration.getProductPageManager().setLocalbootProductsPage();
+			} else if (clientConfiguration.getSelectedIndex() == 2) {
+				clientConfiguration.getProductPageManager().setNetbootProductsPage();
 			} else {
 				// Do nothing.
 			}

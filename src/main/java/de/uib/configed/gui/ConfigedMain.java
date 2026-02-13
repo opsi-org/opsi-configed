@@ -151,14 +151,14 @@ public class ConfigedMain {
 		if (Messagebus.getInstance().getWebSocket().isOpen()) {
 			// Fake opening event on registering listener since this listener
 			// does not know yet if it's open
-			mainFrame.getHostsStatusPanel().onOpen(null);
+			mainFrame.getMainPanelManager().getHostsStatusPanel().onOpen(null);
 		} else {
 			Logging.warning(this, "Messagebus is not open, but should be on start");
 		}
 
 		Logging.debug(this, "initialTreeActivation");
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 	}
 
 	private void connectTreesWithTables() {
@@ -168,9 +168,9 @@ public class ConfigedMain {
 
 		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
 		productTree.setTransferHandler(productTransferHandler);
-		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
 				.setTransferHandler(productTransferHandler);
-		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
 				.setTransferHandler(productTransferHandler);
 	}
 
@@ -179,17 +179,18 @@ public class ConfigedMain {
 	}
 
 	public void initTabComponents() {
-		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
+		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getMainPanelManager().getTabbedPane()
+				.getTabComponentAt(0);
 		depotComp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
 
-		ButtonTabComponent clientComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-				.getTabComponentAt(1);
+		ButtonTabComponent clientComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+				.getTabbedPane().getTabComponentAt(1);
 		clientComp.showButton(clientTree.getSelectionPaths() == null
 				|| !ClientTree.ALL_CLIENTS_NAME.equals(clientTree.getSelectionPath().getLastPathComponent().toString())
 				|| clientTree.getSelectionPaths().length > 1);
 
-		ButtonTabComponent productComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-				.getTabComponentAt(2);
+		ButtonTabComponent productComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+				.getTabbedPane().getTabComponentAt(2);
 		productComp.showButton(productTree.getSelectionPaths() == null
 				|| !Configed.getResourceValue("ProductTree.allProducts")
 						.equals(productTree.getSelectionPath().getLastPathComponent().toString())
@@ -198,10 +199,10 @@ public class ConfigedMain {
 
 	public void registerMessagebusListeners() {
 		Messagebus.getInstance().getWebSocket().registerListener(connectedHostsManager);
-		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
+		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getMainPanelManager().getHostsStatusPanel());
 		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
 		Messagebus.getInstance().getWebSocket()
-				.registerListener(mainFrame.getClientConfiguration().getProductPageManager());
+				.registerListener(mainFrame.getMainPanelManager().getClientConfiguration().getProductPageManager());
 	}
 
 	public ClientSearch getClientSearch() {
@@ -315,19 +316,20 @@ public class ConfigedMain {
 
 		clientTree.produceActiveParents();
 
-		mainFrame.getClientConfiguration().stateChanged(null);
+		mainFrame.getMainPanelManager().getClientConfiguration().stateChanged(null);
 
 		hostInfo.resetValues();
 
 		updateHostInfo();
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
-				selectedClients.isEmpty());
+		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+				.setClientInfoEditing(selectedClients.size() == 1, selectedClients.isEmpty());
 
 		if (selectedClients.size() == 1) {
-			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
+			mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+					.setClientID(selectedClients.get(0));
 		} else {
-			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
+			mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().setClientID("");
 		}
 
 		hostInfo.resetGui();
@@ -335,8 +337,8 @@ public class ConfigedMain {
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
 				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
-				hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel()
+				.updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients, hostInfo);
 
 		clientTree.updateSelectedObjectsInTable();
 	}
@@ -438,7 +440,7 @@ public class ConfigedMain {
 				.getClientsForDepots(depotsList.getSelectedValuesList(), getAllowedClients()));
 
 		if (mainFrame != null) {
-			mainFrame.getHostsStatusPanel().updateAllClientsCount(clientsForDepots.size());
+			mainFrame.getMainPanelManager().getHostsStatusPanel().updateAllClientsCount(clientsForDepots.size());
 			clientTablePanel.updateTable();
 		}
 
@@ -512,7 +514,8 @@ public class ConfigedMain {
 		selectedClients.clear();
 		if (mainFrame != null) {
 			// Update the info on the bottom with new data
-			mainFrame.getHostsStatusPanel().updateSelectedClientsCount(selectedClients.size(), clientIds.size());
+			mainFrame.getMainPanelManager().getHostsStatusPanel().updateSelectedClientsCount(selectedClients.size(),
+					clientIds.size());
 		}
 		return model;
 	}
@@ -936,10 +939,10 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs();
-		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
-				.getProductTable().getSelectedIDs();
+		Set<String> selectedLocalbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
+				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs();
+		Set<String> selectedNetbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
+				.getPanelNetbootProductSettings().getProductTable().getSelectedIDs();
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotListSelectionListener);
 
@@ -952,7 +955,7 @@ public class ConfigedMain {
 
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 
 		Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
 
@@ -974,9 +977,9 @@ public class ConfigedMain {
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
-		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
 				.setPendingSelection(selectedLocalbootProducts);
-		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
 				.setPendingSelection(selectedNetbootProducts);
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
@@ -1004,7 +1007,7 @@ public class ConfigedMain {
 		// We need to update the client configuration since it will not be done
 		// automatically in the method setEditingTarget!
 		if (t == EditingTarget.CLIENTS) {
-			mainFrame.getClientConfiguration().stateChanged(null);
+			mainFrame.getMainPanelManager().getClientConfiguration().stateChanged(null);
 		}
 	}
 
@@ -1049,8 +1052,8 @@ public class ConfigedMain {
 		hostInfo.resetGui();
 		clientTablePanel.restoreFilter();
 		this.selectedClients = clientsLeft;
-		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(),
-				this.selectedClients, hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel()
+				.updateValues(clientTablePanel.getClientTable().getRowCount(), this.selectedClients, hostInfo);
 		clientTablePanel.setSelectedValues(this.selectedClients);
 
 		mainFrame.deactivateLoadingCursor();
@@ -1097,7 +1100,7 @@ public class ConfigedMain {
 		boolean result = true;
 
 		if (mainFrame != null) {
-			result = mainFrame.checkSaveLicenses();
+			result = mainFrame.getMainPanelManager().checkSavedLicenses();
 			if (result) {
 				mainFrame.setVisible(false);
 				mainFrame.dispose();

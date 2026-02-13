@@ -193,8 +193,8 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	public void reactOnTreeSelection() {
 		if (ConfigedMain.getMainFrame() != null) {
-			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-					.getTabComponentAt(2);
+			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+					.getTabbedPane().getTabComponentAt(2);
 			comp.showButton(getSelectionPaths() == null
 					|| !Configed.getResourceValue("ProductTree.allProducts")
 							.equals(getSelectionPath().getLastPathComponent().toString())
