@@ -33,7 +33,7 @@ public class Graph {
 		adj = new ArrayList<>(numberOfElements);
 
 		for (int i = 0; i < numberOfElements; i++) {
-			adj.add(new LinkedList<>());
+			adj.add(new ArrayList<>());
 		}
 	}
 
@@ -87,7 +87,7 @@ public class Graph {
 
 	private void addRecursiveAbhaengigeProdukte(DefaultMutableTreeNode node, Map<String, Integer> productMap,
 			List<String> productList) {
-		List<String> childStrings = new LinkedList<>();
+		List<String> childStrings = new ArrayList<>();
 
 		int product = productMap.get(node.toString());
 

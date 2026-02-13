@@ -6,9 +6,9 @@
 
 package de.uib.configed.gui.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class DependenciesTreeModel {
 		Map<String, List<Map<String, String>>> dependencies = persistenceController.getDataServices().product
 				.getProductDependencies(depotId);
 
-		productList = new LinkedList<>(dependencies.keySet());
+		productList = new ArrayList<>(dependencies.keySet());
 
 		for (List<Map<String, String>> dependenciesForOneProduct : dependencies.values()) {
 			for (Map<String, String> dependency : dependenciesForOneProduct) {
@@ -102,7 +102,7 @@ public class DependenciesTreeModel {
 	public String getListOfTreeNodes(DefaultMutableTreeNode root) {
 		Set<String> setOfTreeNodes = graph.getRecursiveSetOfTreeNodes(root);
 
-		List<String> sortedList = new LinkedList<>(setOfTreeNodes);
+		List<String> sortedList = new ArrayList<>(setOfTreeNodes);
 		Collections.sort(sortedList);
 
 		StringBuilder listAsString = new StringBuilder();

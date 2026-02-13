@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -113,8 +112,8 @@ public final class CommandFactory {
 		Collections.sort(commandList);
 
 		Map<String, List<MultiCommandTemplate>> sortedCommands = new LinkedHashMap<>();
-		sortedCommands.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new LinkedList<>());
-		sortedCommands.put(PARENT_OPSI, new LinkedList<>());
+		sortedCommands.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new ArrayList<>());
+		sortedCommands.put(PARENT_OPSI, new ArrayList<>());
 
 		for (MultiCommandTemplate command : commandList) {
 			String parent = command.getParentMenuText();

@@ -7,10 +7,10 @@
 package de.uib.configed.gui.features.hostconfigs;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -380,8 +380,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			partialPanels.put(key, editMapPanel);
 		}
 
-		List<String> theUsers = new LinkedList<>();
-		theRoles = new LinkedList<>();
+		List<String> theUsers = new ArrayList<>();
+		theRoles = new ArrayList<>();
 
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
 

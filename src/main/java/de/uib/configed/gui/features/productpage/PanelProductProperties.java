@@ -11,7 +11,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -250,7 +249,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 
 				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
-				depotsOfPackage = new LinkedList<>();
+				depotsOfPackage = new ArrayList<>();
 
 				for (String depot : persistenceController.getDataServices().hostInfoCollections.getDepots().keySet()) {
 					if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
