@@ -10,9 +10,7 @@ import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -20,6 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -82,10 +81,10 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
 
-		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
-		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
-		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING);
-		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING);
+		List<SortKey> sortDescriptor = new ArrayList<>();
+		sortDescriptor.add(new SortKey(columnNames.indexOf("productId"), SortOrder.ASCENDING));
+		sortDescriptor.add(new SortKey(columnNames.indexOf("productVersion"), SortOrder.ASCENDING));
+		sortDescriptor.add(new SortKey(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING));
 
 		paneProducts.setSortOrder(sortDescriptor);
 
