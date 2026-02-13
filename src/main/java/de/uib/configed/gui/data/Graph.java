@@ -8,7 +8,6 @@ package de.uib.configed.gui.data;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,13 +146,10 @@ public class Graph {
 	}
 
 	private static Set<String> getRecursiveSetOfTreeNodes(Set<String> setOfTreeNodes, DefaultMutableTreeNode node) {
-		Enumeration<TreeNode> children = node.children();
-
-		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) children.nextElement();
-			setOfTreeNodes.add(childNode.getUserObject().toString());
-			getRecursiveSetOfTreeNodes(setOfTreeNodes, childNode);
-		}
+		node.children().asIterator().forEachRemaining((TreeNode child) -> {
+			setOfTreeNodes.add(((DefaultMutableTreeNode) child).getUserObject().toString());
+			getRecursiveSetOfTreeNodes(setOfTreeNodes, (DefaultMutableTreeNode) child);
+		});
 
 		return setOfTreeNodes;
 	}

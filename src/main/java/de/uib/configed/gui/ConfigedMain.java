@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -753,15 +752,13 @@ public class ConfigedMain {
 		clientTree.initActiveParents();
 		// Get all leaves from the node which should be a group
 		clientsFilteredByTree.clear();
-		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
-		while (e.hasMoreElements()) {
-			DefaultMutableTreeNode element = (DefaultMutableTreeNode) e.nextElement();
-
-			if (!element.getAllowsChildren()) {
-				String nodeinfo = (String) element.getUserObject();
+		node.breadthFirstEnumeration().asIterator().forEachRemaining((TreeNode child) -> {
+			if (!child.getAllowsChildren()) {
+				String nodeinfo = (String) ((DefaultMutableTreeNode) child).getUserObject();
 				clientsFilteredByTree.add(nodeinfo);
 			}
-		}
+
+		});
 
 		clientTree.repaint();
 	}
