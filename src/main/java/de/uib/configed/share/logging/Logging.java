@@ -514,8 +514,7 @@ public final class Logging {
 
 			JOptionPane optionPane = new JOptionPane(scrollPane);
 
-			dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("problemsOccurred"));
+			dialog = optionPane.createDialog(Configed.getResourceValue("problemsOccurred"));
 			dialog.setModal(false);
 
 			/**
@@ -534,7 +533,7 @@ public final class Logging {
 
 		// Get the text as a string, each element separated by a newline
 		jTextArea.setText(errorList.toString().replace("[", "").replace("]", "").replace(",", "\n"));
-		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setLocationRelativeTo(ConfigedMain.getVisibleFrame());
 		dialog.setVisible(true);
 	}
 

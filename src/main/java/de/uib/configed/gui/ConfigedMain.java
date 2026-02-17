@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
@@ -112,7 +113,11 @@ public class ConfigedMain {
 		return mainFrame;
 	}
 
-	public LoginDialog getLoginDialog() {
+	public static JFrame getVisibleFrame() {
+		return mainFrame != null ? mainFrame : loginDialog;
+	}
+
+	public static LoginDialog getLoginDialog() {
 		return loginDialog;
 	}
 
