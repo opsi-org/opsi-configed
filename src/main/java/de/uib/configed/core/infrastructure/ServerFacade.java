@@ -80,6 +80,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private HostData hostData = new HostData();
 
 	private String sessionId;
+	private String hostWithoutPort;
 	private int portHTTPS = Globals.DEFAULT_PORT;
 	private boolean useSAML;
 
@@ -124,9 +125,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		if (idx > -1) {
-			hostData.setHost(host.substring(0, idx));
+			hostWithoutPort = host.substring(0, idx);
 			this.portHTTPS = Integer.parseInt(host.substring(idx + 1, host.length()));
+		} else {
+			hostWithoutPort = host;
 		}
+
 		hostData.setUser(username);
 		hostData.setPassword(password);
 		hostData.setOtp(otp);
@@ -136,8 +140,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error(this, "SAML connection failed");
 			return;
 		}
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE),
-				hostData.getHost() + "_" + portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), hostWithoutPort + "_" + portHTTPS);
 		checkServerVersion();
 	}
 
@@ -197,8 +200,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		String localKeySID = "respondSessionId";
 		//////// register and get new session id
 		URL urlGetSid = makeURL("/auth/session_id");
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE),
-				hostData.getHost() + "_" + portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), hostWithoutPort + "_" + portHTTPS);
 		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		Map<String, Object> result = retrieveResponse(urlGetSid, RequestMethod.GET, requestProperties, jsonProperties,
 				localKeySID);
