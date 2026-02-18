@@ -103,8 +103,7 @@ public class MainPanelManager {
 	}
 
 	private static JScrollPane createScrollPaneForTree(JComponent tree) {
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getViewport().add(tree);
+		JScrollPane scrollPane = new JScrollPane(tree);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(tree.getMaximumSize());
@@ -136,8 +135,7 @@ public class MainPanelManager {
 		jPanel.add(jSplitPane, "grow");
 		jPanel.add(hostsStatusPanel, "growx");
 
-		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(),
-				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(), "MainFrame.labelClientsConfiguration");
 	}
 
 	private JPanel createDepotConfigurationPanel() {
@@ -163,18 +161,18 @@ public class MainPanelManager {
 		depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 		depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 
-		return createPanel(depotConfigurationSplitPane, null, Configed.getResourceValue("depotConfiguration"));
+		return createPanel(depotConfigurationSplitPane, null, "depotConfiguration");
 	}
 
 	private JPanel createServerConfigurationPanel() {
 		serverConfiguration = new ServerConfiguration();
 		serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
-		return createPanel(serverConfiguration, null, Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		return createPanel(serverConfiguration, null, "MainFrame.labelServerConfiguration");
 	}
 
 	private JPanel createDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
-		return createPanel(new Dashboard(), null, Configed.getResourceValue("Dashboard.title"));
+		return createPanel(new Dashboard(), null, "Dashboard.title");
 	}
 
 	private JPanel createOpsiLicensingPanel() {
@@ -195,7 +193,7 @@ public class MainPanelManager {
 		} else {
 			OpsiLicensing opsiLicensing = new OpsiLicensing();
 			return createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingButtons(opsiLicensing),
-					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+					"MainFrame.jMenuHelpOpsiModuleInformation");
 		}
 	}
 
@@ -203,7 +201,7 @@ public class MainPanelManager {
 		Logging.info(this, "init health check panel");
 		HealthCheckComponent healthCheck = new HealthCheckComponent();
 		return createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
-				Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+				"MainFrame.jMenuHelpCheckHealth");
 	}
 
 	private JPanel createLicenseManagementPanel() {
@@ -237,9 +235,9 @@ public class MainPanelManager {
 				Configed.getResourceValue("MainFrame.labelLicenses"));
 	}
 
-	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String title) {
+	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String titleKey) {
 		JLabel opsiLogo = new JLabel(Icons.getOpsiLogoWide());
-		JLabel titleLabel = new JLabel(title);
+		JLabel titleLabel = new JLabel(Configed.getResourceValue(titleKey));
 		titleLabel.setFont(
 				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 2)));
 
