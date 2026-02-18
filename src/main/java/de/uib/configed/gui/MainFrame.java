@@ -158,7 +158,7 @@ public class MainFrame extends JFrame {
 	public boolean showPanel(EditingTarget editingTarget) {
 		if (!Boolean.TRUE.equals(initializedPanels.get(editingTarget))) {
 			activateLoadingCursor();
-			JPanel panel = mainPanelManager.getPanelForEditingTarget(editingTarget);
+			JPanel panel = mainPanelManager.createPanelForEditingTarget(editingTarget);
 			if (panel == null) {
 				deactivateLoadingCursor();
 				return false;

@@ -91,12 +91,6 @@ public class MainPanelManager {
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
 				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
-
 		JScrollPane scrollpaneTreeProducts = new JScrollPane();
 		scrollpaneTreeProducts.getViewport().add(productTree);
 		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -133,19 +127,19 @@ public class MainPanelManager {
 		return leftTabs;
 	}
 
-	public JPanel getPanelForEditingTarget(EditingTarget editingTarget) {
+	public JPanel createPanelForEditingTarget(EditingTarget editingTarget) {
 		return switch (editingTarget) {
-		case CLIENTS -> getClientConfigurationPanel();
-		case DEPOTS -> getDepotConfigurationSplitPane();
-		case SERVER -> getServerConfigurationPanel();
-		case DASHBOARD -> getDashBoardPanel();
-		case OPSI_MODULES -> getOpsiLicensingPanel();
-		case HEALTH_CHECK -> getHealthCheckPanel();
-		case LICENSE_MANAGEMENT -> getLicenseManagementPanel();
+		case CLIENTS -> createClientConfigurationPanel();
+		case DEPOTS -> createDepotConfigurationPanel();
+		case SERVER -> createServerConfigurationPanel();
+		case DASHBOARD -> createDashBoardPanel();
+		case OPSI_MODULES -> createOpsiLicensingPanel();
+		case HEALTH_CHECK -> createHealthCheckPanel();
+		case LICENSE_MANAGEMENT -> createLicenseManagementPanel();
 		};
 	}
 
-	private JPanel getClientConfigurationPanel() {
+	private JPanel createClientConfigurationPanel() {
 		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, clientConfiguration);
 		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
@@ -158,7 +152,7 @@ public class MainPanelManager {
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 	}
 
-	private JPanel getDepotConfigurationSplitPane() {
+	private JPanel createDepotConfigurationPanel() {
 		DepotsList depotsList = new DepotsList(configedMain);
 		depotsList.setListData(persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList());
 		depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
@@ -184,18 +178,18 @@ public class MainPanelManager {
 		return createPanel(depotConfigurationSplitPane, null, Configed.getResourceValue("depotConfiguration"));
 	}
 
-	private JPanel getServerConfigurationPanel() {
+	private JPanel createServerConfigurationPanel() {
 		serverConfiguration = new ServerConfiguration();
 		serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 		return createPanel(serverConfiguration, null, Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 	}
 
-	public JPanel getDashBoardPanel() {
+	private JPanel createDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
 		return createPanel(new Dashboard(), null, Configed.getResourceValue("Dashboard.title"));
 	}
 
-	public JPanel getOpsiLicensingPanel() {
+	private JPanel createOpsiLicensingPanel() {
 		if (!persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
 			Map<String, Object> modulesInfo = persistenceController.getDataServices().module.getOpsiModulesInfosPD();
 
@@ -217,14 +211,14 @@ public class MainPanelManager {
 		}
 	}
 
-	public JPanel getHealthCheckPanel() {
+	private JPanel createHealthCheckPanel() {
 		Logging.info(this, "init health check panel");
 		HealthCheckComponent healthCheck = new HealthCheckComponent();
 		return createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
 				Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 	}
 
-	public JPanel getLicenseManagementPanel() {
+	private JPanel createLicenseManagementPanel() {
 		Logging.info(this, "startLicensingManagement called");
 
 		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
