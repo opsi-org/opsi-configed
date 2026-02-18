@@ -263,14 +263,6 @@ public class HostInfo {
 		return (Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY);
 	}
 
-	public void setShutdownInstall(boolean b) {
-		data.put(CLIENT_SHUTDOWN_INSTALL_KEY, b);
-	}
-
-	public void setWanConfig(boolean b) {
-		data.put(CLIENT_WAN_CONFIG_KEY, b);
-	}
-
 	public void setType(String type) {
 		data.put(HOST_TYPE_KEY, type);
 	}
@@ -391,7 +383,7 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setHostDescription(client, (String) data.get(key));
+			persistenceController.getDataServices().host.updateHost(client, key, data.get(key));
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, key, data.get(key));
 		}
 	}
@@ -405,8 +397,8 @@ public class HostInfo {
 					.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setClientOneTimePassword(client,
-					(String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
+			persistenceController.getDataServices().host.updateHost(client, CLIENT_ONE_TIME_PASSWORD_KEY,
+					data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
 					CLIENT_ONE_TIME_PASSWORD_KEY, data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		}
@@ -422,7 +414,8 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setHostNotes(client, (String) data.get(CLIENT_NOTES_KEY));
+			persistenceController.getDataServices().host.updateHost(client, CLIENT_NOTES_KEY,
+					data.get(CLIENT_NOTES_KEY));
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, CLIENT_NOTES_KEY,
 					data.get(CLIENT_NOTES_KEY));
 		}
@@ -443,9 +436,8 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setInstallOnShutdown(client, value);
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_SHUTDOWN_INSTALL_KEY, value);
+			persistenceController.getDataServices().host.updateHost(client, key, value);
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, key, value);
 		}
 	}
 
@@ -483,11 +475,11 @@ public class HostInfo {
 		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_IP_ADDRESS_KEY, "ipAddress",
 				clientInfoPanel::setClientIpAddress);
 
-		setClientBoolean(clientTablePanel, client, sourceOfChanges, HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
-				"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_SHUTDOWN_INSTALL_KEY,
+				"ConfigedMain.pclistTableModel." + CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 
-		setClientBoolean(clientTablePanel, client, sourceOfChanges, HostInfo.CLIENT_WAN_CONFIG_KEY,
-				"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_WAN_CONFIG_KEY,
+				"ConfigedMain.pclistTableModel." + CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 	}
 
 	@Override
