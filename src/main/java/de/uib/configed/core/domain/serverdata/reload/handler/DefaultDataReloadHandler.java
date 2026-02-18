@@ -40,8 +40,8 @@ public class DefaultDataReloadHandler extends AbstractReloadHandler {
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 			dataServices.hardware.retrieveHardwareOnClientPD();
 		});
-		eventHandlers.put(CacheIdentifier.FHOST_TO_GROUPS.toString(), (Void v) -> {
-			dataServices.cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
+		eventHandlers.put(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString(), (Void v) -> {
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 			dataServices.group.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
 					CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 		});
