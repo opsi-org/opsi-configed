@@ -16,11 +16,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -84,8 +84,6 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private JLabel jLabelLKey;
 
 	private ControlPanelEnterLicense enterLicenseController;
-
-	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	public PanelEnterLicense(ControlPanelEnterLicense enterLicenseController) {
 		super(enterLicenseController);
@@ -180,71 +178,33 @@ public class PanelEnterLicense extends MultiTablePanel {
 		return true;
 	}
 
-	private void startStandard() {
+	private void startLicense(String licenseType, String maxInstallations, Collection<String> clients,
+			boolean enableLicenseID) {
 		if (!checkAndStart()) {
 			return;
 		}
 
 		jTextFieldLicenseType.setEnabled(true);
-		jTextFieldLicenseType.setText("RETAIL");
+		jTextFieldLicenseType.setText(licenseType);
 		jTextFieldLicenseType.setEditable(false);
 		jTextFieldMaxInstallations.setEnabled(true);
 
-		jTextFieldMaxInstallations.setText("1");
+		jTextFieldMaxInstallations.setText(maxInstallations);
 		jTextFieldMaxInstallations.setEditable(false);
-		comboClient.setEnabled(false);
-		comboClient.setModel(emptyComboBoxModel);
-	}
 
-	private void startVolume() {
-		if (!checkAndStart()) {
-			return;
+		if (clients == null) {
+			comboClient.setEnabled(false);
+			comboClient.addItem("");
+			comboClient.removeAllItems();
+		} else {
+			comboClient.setModel(new DefaultComboBoxModel<>(clients.toArray(new String[0])));
+			comboClient.setEnabled(true);
 		}
 
-		jTextFieldLicenseType.setEnabled(true);
-		jTextFieldLicenseType.setText("VOLUME");
-		jTextFieldLicenseType.setEditable(false);
-		jTextFieldMaxInstallations.setEnabled(true);
-
-		jTextFieldMaxInstallations.setText("0");
-		jTextFieldMaxInstallations.setEditable(true);
-		comboClient.setEnabled(false);
-		comboClient.setModel(emptyComboBoxModel);
-	}
-
-	private void startOEM() {
-		if (!checkAndStart()) {
-			return;
+		if (enableLicenseID) {
+			jTextFieldLicenseID.setEnabled(true);
+			jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
 		}
-
-		jTextFieldLicenseType.setEnabled(true);
-		jTextFieldLicenseType.setText("OEM");
-		jTextFieldLicenseType.setEditable(false);
-		jTextFieldMaxInstallations.setEnabled(true);
-
-		jTextFieldMaxInstallations.setText("1");
-		jTextFieldMaxInstallations.setEditable(false);
-		comboClient.setModel(
-				new DefaultComboBoxModel<>(enterLicenseController.getChoicesAllHosts().toArray(new String[0])));
-		comboClient.setEnabled(true);
-	}
-
-	private void startConcurrent() {
-		if (!checkAndStart()) {
-			return;
-		}
-
-		jTextFieldLicenseID.setEnabled(true);
-		jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
-		jTextFieldLicenseType.setEnabled(true);
-		jTextFieldLicenseType.setText("CONCURRENT");
-		jTextFieldLicenseType.setEditable(false);
-		jTextFieldMaxInstallations.setEnabled(true);
-
-		jTextFieldMaxInstallations.setText("0");
-		jTextFieldMaxInstallations.setEditable(false);
-		comboClient.setEnabled(false);
-		comboClient.setModel(emptyComboBoxModel);
 	}
 
 	private void initComponents() {
@@ -299,24 +259,25 @@ public class PanelEnterLicense extends MultiTablePanel {
 				Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.StandardLicense"));
 		jButtonCreateStandard.setToolTipText(
 				Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.StandardLicense.ToolTip"));
-		jButtonCreateStandard.addActionListener(event -> startStandard());
+		jButtonCreateStandard.addActionListener(event -> startLicense("RETAIL", "1", null, false));
 
 		jButtonCreateVolume = new JButton(
 				Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.VolumeLicense"));
 		jButtonCreateVolume
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.VolumeLicense.ToolTip"));
-		jButtonCreateVolume.addActionListener(event -> startVolume());
+		jButtonCreateVolume.addActionListener(event -> startLicense("VOLUME", "0", null, false));
 
 		jButtonCreateOEM = new JButton(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.OEMLicense"));
 		jButtonCreateOEM
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.OEMLicense.ToolTip"));
-		jButtonCreateOEM.addActionListener(event -> startOEM());
+		jButtonCreateOEM.addActionListener(
+				event -> startLicense("OEM", "1", enterLicenseController.getChoicesAllHosts(), false));
 
 		jButtonCreateConcurrent = new JButton(
 				Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.ConcurrentLicense"));
 		jButtonCreateConcurrent.setToolTipText(
 				Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.ConcurrentLicense.ToolTip"));
-		jButtonCreateConcurrent.addActionListener(event -> startConcurrent());
+		jButtonCreateConcurrent.addActionListener(event -> startLicense("CONCURRENT", "0", null, true));
 
 		jButtonSend = new JButton(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.Execute"));
 		jButtonSend.addActionListener((ActionEvent event) -> {
