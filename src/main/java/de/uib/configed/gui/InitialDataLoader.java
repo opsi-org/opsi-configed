@@ -32,12 +32,12 @@ public class InitialDataLoader extends SwingWorker<Void, Void> {
 		isDataLoaded = true;
 
 		Logging.checkErrorList();
-		configedMain.getLoginDialog().setVisible(false);
+		ConfigedMain.getLoginDialog().setVisible(false);
 
 		Logging.info("setting mainframe visible");
 
 		ConfigedMain.getMainFrame().setVisible(true);
-		ConfigedMain.getMainFrame().getClientConfiguration().initSplitPanes();
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().initSplitPanes();
 		ConfigedMain.getMainFrame().toFront();
 	}
 

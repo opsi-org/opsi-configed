@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -75,14 +74,14 @@ public final class LicenseData {
 
 		expiredLicenses.clear();
 
-		NavigableMap<String, NavigableSet<String>> expiredLicenseContracts = persistenceController
-				.getDataServices().license.getLicenseContractsToNotifyPD();
+		Map<String, Set<String>> expiredLicenseContracts = persistenceController.getDataServices().license
+				.getLicenseContractsToNotifyPD();
 
 		if (expiredLicenseContracts.isEmpty()) {
 			return;
 		}
 
-		for (Entry<String, NavigableSet<String>> entry : expiredLicenseContracts.entrySet()) {
+		for (Entry<String, Set<String>> entry : expiredLicenseContracts.entrySet()) {
 			expiredLicenses.addAll(entry.getValue());
 		}
 	}

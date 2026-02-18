@@ -19,6 +19,7 @@ import de.uib.configed.core.domain.SavedSearches;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.clientselection.SelectionManager;
+import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.type.DateExtendedByVars;
 import de.uib.configed.share.logging.Logging;
@@ -138,10 +139,11 @@ public class ClientSearch {
 	}
 
 	private static void selectProducts(Set<String> products) {
-		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().enableFilterMode(false);
-		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
-				.setPendingSelection(products);
-		ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings().enableFilterMode(true);
+		PanelProductSettings localbootProductSettings = ConfigedMain.getMainFrame().getMainPanelManager()
+				.getClientConfiguration().getPanelLocalbootProductSettings();
+		localbootProductSettings.enableFilterMode(false);
+		localbootProductSettings.getProductTable().setPendingSelection(products);
+		localbootProductSettings.enableFilterMode(true);
 	}
 
 	public void selectClientsByFailedAtSomeTimeAgo(String arg, String searchQueryName) {

@@ -16,8 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
@@ -121,7 +119,7 @@ public class CurlParameterDialog {
 
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));
-		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeFreeInput));
+		jTextFieldFreeInput.getDocument().addDocumentListener(Utils.onDocumentChange(this::changeFreeInput));
 
 		curlAuthPanel = new CurlAuthenticationPanel();
 		curlAuthPanel.getCheckBox().setSelected(false);
@@ -183,28 +181,5 @@ public class CurlParameterDialog {
 		inputPanel.add(curlAuthPanel, "growx, hidemode 3");
 		inputPanel.add(jLabelFreeInput);
 		inputPanel.add(jTextFieldFreeInput, "growx");
-	}
-
-	private static class DocumentListenerAdapter implements DocumentListener {
-		private Runnable method;
-
-		public DocumentListenerAdapter(Runnable method) {
-			this.method = method;
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent arg0) {
-			method.run();
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent arg0) {
-			method.run();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent arg0) {
-			method.run();
-		}
 	}
 }

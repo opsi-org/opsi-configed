@@ -91,7 +91,7 @@ public final class ConnectionErrorReporter {
 		pane.setMessage(message);
 		pane.setOptions(new Object[] { alwaysTrust, trustOnce, Configed.getResourceValue("buttonCancel") });
 
-		JDialog dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+		JDialog dialog = pane.createDialog(ConfigedMain.getVisibleFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"));
 
 		// We need to add action listeners to the buttons, because otherwise 
@@ -128,7 +128,7 @@ public final class ConnectionErrorReporter {
 			if (!dialogOpened.compareAndSet(false, true)) {
 				return;
 			}
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
+			JOptionPane.showMessageDialog(ConfigedMain.getVisibleFrame(), message,
 					Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"),
 					JOptionPane.OK_CANCEL_OPTION);
 			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
@@ -182,7 +182,7 @@ public final class ConnectionErrorReporter {
 
 	private static void showConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
 		try {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getVisibleFrame(), message, title,
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			if (answer == JOptionPane.OK_OPTION) {
 				onOK.run();

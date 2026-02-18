@@ -32,21 +32,16 @@ public class MapSource implements TableSource {
 
 	protected boolean reloadRequested;
 
-	public MapSource(List<String> columnNames, Map<String, ? extends Map<String, ? extends Object>> table,
-			boolean rowCounting) {
+	public MapSource(List<String> columnNames, Map<String, ? extends Map<String, ? extends Object>> table) {
 		Logging.info(this, "constructed with cols ", columnNames);
 		this.columnNames = columnNames;
 		this.table = table;
-		this.rowCounting = rowCounting;
 
 		init();
 	}
 
 	private void init() {
 		setRowCounting(rowCounting);
-		if (rowCounting) {
-			Logging.info(this, "completed to cols ", columnNames);
-		}
 		rows = new ArrayList<>();
 	}
 

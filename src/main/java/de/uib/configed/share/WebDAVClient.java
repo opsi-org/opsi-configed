@@ -73,10 +73,11 @@ public class WebDAVClient {
 			sardine = new SardineImpl(builder);
 		} else {
 			sardine = new SardineImpl(builder);
-			int port = getPortFromHost(persistenceController.getExecutioner().getHost());
-			sardine.enablePreemptiveAuthentication(persistenceController.getExecutioner().getHost(), port, port);
-			sardine.setCredentials(persistenceController.getExecutioner().getUsername(),
-					persistenceController.getExecutioner().getPassword());
+			int port = getPortFromHost(persistenceController.getExecutioner().getHostData().getHost());
+			sardine.enablePreemptiveAuthentication(persistenceController.getExecutioner().getHostData().getHost(), port,
+					port);
+			sardine.setCredentials(persistenceController.getExecutioner().getHostData().getUser(),
+					persistenceController.getExecutioner().getHostData().getPassword());
 		}
 	}
 

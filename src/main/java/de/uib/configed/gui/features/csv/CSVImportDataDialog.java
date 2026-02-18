@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -23,10 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import org.apache.commons.csv.CSVFormat;
@@ -81,41 +76,18 @@ public class CSVImportDataDialog {
 	}
 
 	private JPanel createPanel() {
-		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-		numberFormat.setGroupingUsed(false);
+		JFormattedTextField startLineInput = createStartLineTextField();
 
-		NumberFormatter formatter = new NumberFormatter(numberFormat);
-		formatter.setAllowsInvalid(false);
-		formatter.setCommitsOnValidEdit(true);
+		tabsOption = createOption(Configed.getResourceValue("CSVImportDataDialog.tabsOption"), "\t");
+		commaOption = createOption(Configed.getResourceValue("CSVImportDataDialog.commaOption"), ",");
+		semicolonOption = createOption(Configed.getResourceValue("CSVImportDataDialog.semicolonOption"), ";");
+		spaceOption = createOption(Configed.getResourceValue("CSVImportDataDialog.spaceOption"), " ");
+		otherOption = createOption(Configed.getResourceValue("CSVImportDataDialog.otherOption"), "");
 
-		JFormattedTextField startLineInput = new JFormattedTextField(formatter);
-		startLineInput.setText(String.valueOf(startLine));
-
-		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
-		tabsOption.setActionCommand("\t");
-
-		commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
-		commaOption.setActionCommand(",");
-
-		semicolonOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
-		semicolonOption.setActionCommand(";");
-
-		spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
-		spaceOption.setActionCommand(" ");
-
-		otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
-		otherOption.setActionCommand("");
-
-		ButtonGroup delimiterOptions = new ButtonGroup();
-		List.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
-
-		MaskFormatter maskFormatter = CSVTemplateCreatorDialog.createMaskFormatter();
-
-		otherDelimiterInput = new JFormattedTextField(maskFormatter);
+		otherDelimiterInput = new JFormattedTextField(CSVTemplateCreatorDialog.createMaskFormatter());
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
 
-		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
 		quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -125,7 +97,9 @@ public class CSVImportDataDialog {
 			}
 		});
 
-		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
+		ButtonGroup delimiterOptions = new ButtonGroup();
+		for (AbstractButton button : List.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption)) {
+			delimiterOptions.add(button);
 			button.addItemListener((ItemEvent e) -> {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
@@ -136,24 +110,23 @@ public class CSVImportDataDialog {
 			});
 		}
 
-		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener(() -> {
+		otherDelimiterInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
 			if (!otherDelimiterInput.getText().isEmpty()) {
 				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		}));
 
-		((AbstractDocument) startLineInput.getDocument()).addDocumentListener(new InputListener(() -> {
+		startLineInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
 			if (!startLineInput.getText().isEmpty()) {
 				startLine = Integer.parseInt(startLineInput.getText());
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		}));
 
+		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
 		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
-
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
@@ -188,6 +161,26 @@ public class CSVImportDataDialog {
 		return panel;
 	}
 
+	private static JRadioButton createOption(String label, String actionCommand) {
+		JRadioButton option = new JRadioButton(label);
+		option.setActionCommand(actionCommand);
+		return option;
+	}
+
+	private JFormattedTextField createStartLineTextField() {
+		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+		numberFormat.setGroupingUsed(false);
+
+		NumberFormatter formatter = new NumberFormatter(numberFormat);
+		formatter.setAllowsInvalid(false);
+		formatter.setCommitsOnValidEdit(true);
+
+		JFormattedTextField startLineTextField = new JFormattedTextField(formatter);
+		startLineTextField.setText(String.valueOf(startLine));
+
+		return startLineTextField;
+	}
+
 	public void setDetectedOptions() {
 		switch (format.getDelimiterString()) {
 		case "\t" -> tabsOption.setSelected(true);
@@ -201,28 +194,6 @@ public class CSVImportDataDialog {
 		}
 
 		quoteOptions.setSelectedItem(format.getDelimiterString());
-	}
-
-	private static class InputListener implements DocumentListener {
-		private Runnable runnable;
-
-		public InputListener(Runnable runnable) {
-			this.runnable = runnable;
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			runnable.run();
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			runnable.run();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			/* Not needed */}
 	}
 
 	public CSVImportDataModifier getModifier() {

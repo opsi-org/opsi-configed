@@ -20,12 +20,12 @@ import de.uib.configed.app.Main;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ErrorCode;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -47,11 +47,7 @@ public abstract class AbstractSWExporter {
 	protected String hostId;
 	protected String exportFilename;
 
-	private String server;
-	private String user;
-	private String password;
-	private String otp;
-	private boolean sso;
+	private HostData hostData;
 	private String clientsFile;
 	private String outDir;
 
@@ -59,13 +55,8 @@ public abstract class AbstractSWExporter {
 	protected AbstractSWExporter() {
 	}
 
-	public void setArgs(String server, String user, String password, String otp, boolean sso, String clientsFile,
-			String outDir) {
-		this.server = server;
-		this.user = user;
-		this.password = password;
-		this.otp = otp;
-		this.sso = sso;
+	public void setArgs(HostData hostData, String clientsFile, String outDir) {
+		this.hostData = hostData;
 		this.clientsFile = clientsFile;
 		this.outDir = outDir;
 	}
@@ -76,28 +67,29 @@ public abstract class AbstractSWExporter {
 	}
 
 	private void addMissingLoginData() {
-		if (server == null) {
-			server = Utils.getCLIParam("Host (default: localhost): ");
+		if (hostData.getHost() == null) {
+			hostData.setHost(Utils.getCLIParam("Host (default: localhost): "));
 		}
 
-		if (server.isEmpty()) {
-			server = "localhost";
+		if (hostData.getHost().isEmpty()) {
+			hostData.setHost("localhost");
 		}
 
-		if (user == null) {
-			user = Utils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : ");
+		if (hostData.getUser() == null) {
+			hostData.setUser(Utils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : "));
 		}
 
-		if (user.isEmpty()) {
-			user = System.getProperty("user.name");
+		if (hostData.getUser().isEmpty()) {
+			hostData.setUser(System.getProperty("user.name"));
 		}
 
-		if (password == null) {
-			password = Utils.getCLIPasswordParam("Password: ");
+		if (hostData.getPassword() == null) {
+			hostData.setPassword(Utils.getCLIPasswordParam("Password: "));
 		}
 
-		if (otp == null) {
-			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+		if (hostData.getOtp() == null) {
+			hostData.setOtp(
+					Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): "));
 		}
 	}
 
@@ -130,8 +122,7 @@ public abstract class AbstractSWExporter {
 
 	public void run() {
 		Messages.setLocale("en");
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password, otp,
-				sso);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(hostData);
 		if (persistenceController == null) {
 			finish(ErrorCode.INITIALIZATION_ERROR);
 		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
@@ -195,7 +186,7 @@ public abstract class AbstractSWExporter {
 
 		// no updates
 		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, null, this::retrieveSoftwareMap)), -1,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, null, this::retrieveSoftwareMap), -1,
 				finalColumns, null, null);
 	}
 

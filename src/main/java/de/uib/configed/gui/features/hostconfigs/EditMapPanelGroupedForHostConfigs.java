@@ -7,14 +7,13 @@
 package de.uib.configed.gui.features.hostconfigs;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -78,10 +77,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private HostConfigTreeModel treemodel;
 	private HostConfigNodeRenderer cellRenderer;
 
-	private NavigableMap<String, String> givenClasses;
+	private Map<String, String> givenClasses;
 	private NavigableSet<String> keyclasses;
 	protected Map<String, DefaultEditMapPanel> partialPanels;
-	private NavigableMap<String, Map<String, Object>> virtualLines;
+	private Map<String, Map<String, Object>> virtualLines;
 
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
@@ -250,7 +249,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 	}
 
-	public void setSubpanelClasses(NavigableMap<String, String> classesMap) {
+	public void setSubpanelClasses(Map<String, String> classesMap) {
 		cellRenderer.setTooltips(classesMap);
 		givenClasses = classesMap;
 	}
@@ -381,8 +380,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			partialPanels.put(key, editMapPanel);
 		}
 
-		List<String> theUsers = new LinkedList<>();
-		theRoles = new LinkedList<>();
+		List<String> theUsers = new ArrayList<>();
+		theRoles = new ArrayList<>();
 
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
 

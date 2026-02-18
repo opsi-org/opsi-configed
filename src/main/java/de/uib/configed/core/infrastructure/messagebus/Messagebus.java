@@ -136,7 +136,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private String produceURL() {
-		String host = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHost();
+		String host = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHostData().getHost();
 		if (host == null) {
 			Logging.error(this, "Host is null");
 			return null;
@@ -165,7 +165,7 @@ public class Messagebus implements MessagebusListener {
 		if (exec.isUseSAML()) {
 			return null;
 		}
-		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
+		String basicAuth = String.format("%s:%s", exec.getHostData().getUser(), exec.getHostData().getPassword());
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 

@@ -137,8 +137,8 @@ public final class ServerActionManager {
 	}
 
 	public static void processActionRequestsSelectedProducts(String visibility) {
-		processActionRequests(ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs(), visibility);
+		processActionRequests(ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
+				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs(), visibility);
 	}
 
 	private static void processActionRequests(Set<String> products, String visibility) {
@@ -392,7 +392,7 @@ public final class ServerActionManager {
 
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
-		ConfigedMain.getMainFrame().getClientConfiguration().updateProductTab();
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().updateProductTab();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}

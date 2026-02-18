@@ -17,8 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -26,14 +24,12 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductsRetriever;
-import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class CompleteWinProductsDialog implements NameProducer {
+public class CompleteWinProductsDialog {
 	private String winProduct = "";
 
 	private String depotProductDirectory;
@@ -145,42 +141,9 @@ public class CompleteWinProductsDialog implements NameProducer {
 		}
 	}
 
-	// implements NameProducer
-	@Override
-	public String produceName() {
-		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory ", fieldTargetPath, " , ",
-				depotProductDirectory);
-		if (fieldTargetPath == null || fieldTargetPath.getText().isEmpty()
-				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
-			return depotProductDirectory;
-		}
-
-		return fieldTargetPath.getText();
-	}
-
-	@Override
-	public String getDefaultName() {
-		return depotProductDirectory;
-	}
-
 	private void initComponentsForNameProducer() {
 		fieldTargetPath = new JTextField();
-		fieldTargetPath.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				checkButtonCallExecute();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				checkButtonCallExecute();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				checkButtonCallExecute();
-			}
-		});
+		fieldTargetPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkButtonCallExecute));
 
 		fieldPathWinPE = new JTextField();
 	}

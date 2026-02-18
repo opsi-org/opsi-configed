@@ -611,21 +611,31 @@ public final class Utils {
 		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 
-	public static DocumentListener onDocumentChange(Consumer<DocumentEvent> consumer) {
+	public static DocumentListener onDocumentChange(Runnable runnable) {
+		return onDocumentChange(runnable, true);
+	}
+
+	public static DocumentListener onDocumentChangeWithoutRemoveUpdate(Runnable runnable) {
+		return onDocumentChange(runnable, false);
+	}
+
+	private static DocumentListener onDocumentChange(Runnable runnable, boolean reactOnChangeUpdate) {
 		return new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				runnable.run();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				if (reactOnChangeUpdate) {
+					runnable.run();
+				}
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				runnable.run();
 			}
 		};
 	}

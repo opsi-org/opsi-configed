@@ -7,7 +7,7 @@
 package de.uib.configed.core.domain.serverdata;
 
 import java.util.HashSet;
-import java.util.NavigableMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -35,6 +35,7 @@ import de.uib.configed.core.domain.serverdata.reload.handler.SoftwareLicense2Lic
 import de.uib.configed.core.domain.serverdata.reload.handler.StatisticsDataReloadHandler;
 import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.features.productaction.CompleteWinProductsDialog;
 import de.uib.configed.gui.type.RemoteControl;
@@ -103,8 +104,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	// opsi module information
 
-	private static NavigableMap<String, String> propertyClassesServer;
-	private static NavigableMap<String, String> propertyClassesClient;
+	private static Map<String, String> propertyClassesServer;
+	private static Map<String, String> propertyClassesClient;
 	private static Set<String> configKeyStartersNotForClients;
 
 	private CompleteWinProductsDialog completeWinProductsPanel;
@@ -117,17 +118,19 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String triggeredEvent;
 
-	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp, boolean useSSO) {
-		Logging.info(this, "start construction, \nconnect to ", server, " as ", user, " sso ", useSSO);
+	OpsiServiceNOMPersistenceController(HostData hostData) {
+		Logging.info(this, "start construction, \nconnect to ", hostData.getHost(), " as ", hostData.getUser(), " sso ",
+				hostData.isUseSSO());
 
-		if (server == null || server.isEmpty()) {
+		if (hostData.getHost() == null || hostData.getHost().isEmpty()) {
 			Logging.error(this.getClass(), "no server given");
 			return;
 		}
 
-		if (useSSO) {
+		if (hostData.isUseSSO()) {
 			Logging.info(this.getClass(), "OSNOM try sso/saml");
-		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
+		} else if (hostData.getUser() == null || hostData.getUser().isEmpty() || hostData.getPassword() == null
+				|| hostData.getPassword().isEmpty()) {
 			Logging.error(this, "No user or password given.");
 		} else {
 			// Nothing to do here, we just continue logging in
@@ -137,14 +140,14 @@ public class OpsiServiceNOMPersistenceController {
 
 		init();
 		ParallelTaskExecutor.allowNewTasks(true);
-		if (useSSO) {
+		if (hostData.isUseSSO()) {
 			Logging.info("ONOMPC useSSO true");
-			exec = new ServerFacade(server);
-			exec.setUseSSO(true);
+			exec = new ServerFacade(hostData.getHost());
+			exec.getHostData().setUseSSO(true);
 		} else {
-			Logging.info("ONOMPC useSSO false server ", server, " user ", user);
-			exec = new ServerFacade(server, user, password, otp);
-			exec.setUseSSO(false);
+			Logging.info("ONOMPC useSSO false server ", hostData.getHost(), " user ", hostData.getUser());
+			exec = new ServerFacade(hostData.getHost(), hostData.getUser(), hostData.getPassword(), hostData.getOtp());
+			exec.getHostData().setUseSSO(false);
 		}
 
 		Logging.info(this, "connection state ", exec.getConnectionState());
@@ -296,11 +299,11 @@ public class OpsiServiceNOMPersistenceController {
 		return exec;
 	}
 
-	public static NavigableMap<String, String> getPropertyClassesServer() {
+	public static Map<String, String> getPropertyClassesServer() {
 		return propertyClassesServer;
 	}
 
-	public static NavigableMap<String, String> getPropertyClassesClient() {
+	public static Map<String, String> getPropertyClassesClient() {
 		return propertyClassesClient;
 	}
 

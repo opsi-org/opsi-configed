@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JTree;
@@ -50,10 +49,8 @@ public class XTree extends JTree {
 
 	public List<Integer> getToggledRows(TreePath parent) {
 		List<Integer> result = new ArrayList<>();
-		Enumeration<TreePath> enumer = super.getDescendantToggledPaths(parent);
-		while (enumer.hasMoreElements()) {
-			result.add(getRowForPath(enumer.nextElement()));
-		}
+		super.getDescendantToggledPaths(parent).asIterator()
+				.forEachRemaining(enumer -> result.add(getRowForPath(enumer)));
 		return result;
 	}
 

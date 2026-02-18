@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.type.licenses;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class LicensePoolXOpsiProduct extends Relation {
 
 	private static final List<String> LICENSE_ATTRIBUTES;
 	static {
-		LICENSE_ATTRIBUTES = new LinkedList<>();
+		LICENSE_ATTRIBUTES = new ArrayList<>();
 		LICENSE_ATTRIBUTES.add(LICENSE_POOL_KEY);
 		LICENSE_ATTRIBUTES.add(PRODUCT_ID_KEY);
 	}

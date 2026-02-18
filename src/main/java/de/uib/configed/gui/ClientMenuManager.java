@@ -241,7 +241,8 @@ public final class ClientMenuManager implements MenuListener {
 		if (config.keyStroke() != null) {
 			item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
 			item.setAccelerator(config.keyStroke());
-			Utils.addKeyBindingToJComponent(mainFrame.getClientConfiguration().getPanelClientSelection(),
+			Utils.addKeyBindingToJComponent(
+					mainFrame.getMainPanelManager().getClientConfiguration().getPanelClientSelection(),
 					config.keyStroke(), config.action());
 		} else {
 			item = new JMenuItem(Configed.getResourceValue(config.resourceKey()));
@@ -383,7 +384,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
 			item.addActionListener((ActionEvent event) -> {
-				ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
 						.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
 								.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 				configedMain.toggleColumn(info.label);

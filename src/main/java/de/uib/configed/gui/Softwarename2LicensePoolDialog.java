@@ -31,7 +31,6 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilterCondition;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
@@ -230,8 +229,8 @@ public class Softwarename2LicensePoolDialog {
 		Logging.info(this, "init modelSWnames");
 
 		this.modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
-						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD)),
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD),
 				0, new int[] {}, panelSWnames, updateCollection, true) {
 			@Override
 			public void produceRows() {
@@ -357,8 +356,8 @@ public class Softwarename2LicensePoolDialog {
 				columnNamesSWxLicensepool);
 
 		modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool,
-						ReloadEvent.INSTALLED_SOFTWARE_RELOAD, () -> produceModelSWxLicensepool(swName))),
+				DefaultTableProvider.createWithRetrieverMapSource(columnNamesSWxLicensepool,
+						ReloadEvent.INSTALLED_SOFTWARE_RELOAD, () -> produceModelSWxLicensepool(swName)),
 				0, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicensepool.setSource(modelSWxLicensepool);
 		Logging.info(this, "setTableModelSWxLicensepool, we reset the model");

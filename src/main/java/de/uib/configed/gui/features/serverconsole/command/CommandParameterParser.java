@@ -338,15 +338,16 @@ public final class CommandParameterParser {
 	private String getConfigServerName() {
 		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		for (String depot : depots) {
-			if (depot.startsWith(persistenceController.getExecutioner().getHost())) {
-				Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHost());
+			if (depot.startsWith(persistenceController.getExecutioner().getHostData().getHost())) {
+				Logging.debug(this, "getConfig_serverName ",
+						persistenceController.getExecutioner().getHostData().getHost());
 				return depot;
 			}
 		}
 
-		Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHost());
+		Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHostData().getHost());
 
-		return persistenceController.getExecutioner().getHost();
+		return persistenceController.getExecutioner().getHostData().getHost();
 	}
 
 	private String[] getSelectedClientIPs() {

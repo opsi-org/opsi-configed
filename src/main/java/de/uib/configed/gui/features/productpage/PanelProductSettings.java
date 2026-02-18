@@ -237,7 +237,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 				persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
 				// We need to rebuild the shown page in the client configuration to make changes effective
-				ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
+				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 			});
 
 			jMenuVisibleColumns.add(item);
@@ -294,7 +294,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			Logging.debug(this, "selected ", selectedRow);
 			Logging.debug(this, "selected modelIndex ", selectedRow);
 			Logging.debug(this, "selected  value at ", productTable.getValueAt(selectedRow, 0));
-			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager()
+			ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
 					.setProductEdited((String) productTable.getValueAt(selectedRow, 0), this);
 		}
 
@@ -309,7 +309,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		persistenceController.reloadData(ReloadEvent.PRODUCT_DATA_RELOAD.toString());
 
 		// We want to rebuild the shown page in the client configuration after reload
-		ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 		ChangedDataManager.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();

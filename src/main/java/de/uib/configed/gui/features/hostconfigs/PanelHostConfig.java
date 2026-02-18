@@ -9,7 +9,6 @@ package de.uib.configed.gui.features.hostconfigs;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
 
 import javax.swing.JPanel;
 
@@ -78,7 +77,7 @@ public class PanelHostConfig extends JPanel {
 
 	public void initEditing(String labeltext, Map<String, List<Object>> configVisualMap,
 			Collection<Map<String, Object>> collectionConfigStored, ConfigUpdateCollection configUpdateCollection,
-			NavigableMap<String, String> classesMap, Map<String, List<Object>> originalMap,
+			Map<String, String> classesMap, Map<String, List<Object>> originalMap,
 			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing, label:", labeltext);
 		editMapPanel.setSubpanelClasses(classesMap);

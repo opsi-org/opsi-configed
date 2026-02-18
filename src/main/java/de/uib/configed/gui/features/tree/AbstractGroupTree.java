@@ -194,29 +194,15 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		Map<String, Map<String, Object>> expandedNodes = new HashMap<>();
 
 		Enumeration<TreePath> expanded = getExpandedDescendants(new TreePath(rootNode));
-		addExpandedNodesForExpandedPaths(expanded, expandedNodes);
+
+		if (expanded != null) {
+			expanded.asIterator().forEachRemaining(
+					path -> expandedNodes.put(path.getLastPathComponent().toString(), Map.of("expanded", true)));
+		}
 
 		List<TreePath> selectionPaths = Arrays
 				.asList(getSelectionPaths() != null ? getSelectionPaths() : new TreePath[0]);
-		addExpandedNodesForSelectedPaths(selectionPaths, expandedNodes);
 
-		return expandedNodes;
-	}
-
-	private static void addExpandedNodesForExpandedPaths(Enumeration<TreePath> expanded,
-			Map<String, Map<String, Object>> expandedNodes) {
-		if (expanded != null) {
-			while (expanded.hasMoreElements()) {
-				TreePath path = expanded.nextElement();
-				Map<String, Object> map = new HashMap<>();
-				map.put("expanded", true);
-				expandedNodes.put(path.getLastPathComponent().toString(), map);
-			}
-		}
-	}
-
-	private static void addExpandedNodesForSelectedPaths(List<TreePath> selectionPaths,
-			Map<String, Map<String, Object>> expandedNodes) {
 		if (selectionPaths != null) {
 			for (TreePath path : selectionPaths) {
 				Map<String, Object> map = expandedNodes.get(path.getLastPathComponent().toString()) != null
@@ -235,6 +221,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				expandedNodes.put(parent, map);
 			}
 		}
+
+		return expandedNodes;
 	}
 
 	public void expandAndSelectNodes(Map<String, Map<String, Object>> nodes) {
@@ -307,19 +295,17 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	private static void recursivelyCollectParentIDs(DefaultMutableTreeNode node, Collection<String> nodeIds,
 			BiConsumer<String, List<String>> onMatch) {
-		Enumeration<TreeNode> children = node.children();
-
-		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+		node.children().asIterator().forEachRemaining((TreeNode child) -> {
 			String childId = child.toString();
 
 			if (nodeIds.contains(childId)) {
-				List<String> path = Arrays.stream(child.getPath()).map(Object::toString).toList();
+				List<String> path = Arrays.stream(((DefaultMutableTreeNode) child).getPath()).map(Object::toString)
+						.toList();
 				onMatch.accept(childId, path);
 			}
 
-			recursivelyCollectParentIDs(child, nodeIds, onMatch);
-		}
+			recursivelyCollectParentIDs((DefaultMutableTreeNode) child, nodeIds, onMatch);
+		});
 	}
 
 	public void updateSelectedObjectsInTable() {
@@ -623,12 +609,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	private static DefaultMutableTreeNode findLocation(Enumeration<TreeNode> children, DefaultMutableTreeNode node) {
-		DefaultMutableTreeNode insertNode = null;
-
 		String nodeObject = node.toString();
 
 		while (children.hasMoreElements()) {
-			insertNode = (DefaultMutableTreeNode) children.nextElement();
+			DefaultMutableTreeNode insertNode = (DefaultMutableTreeNode) children.nextElement();
 
 			// node with subnodes = group
 			if (insertNode.getAllowsChildren() && !node.getAllowsChildren()) {
@@ -753,17 +737,15 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	protected static DefaultMutableTreeNode getChildWithUserObjectString(String objectID,
 			DefaultMutableTreeNode groupNode) {
 		Enumeration<TreeNode> enumer = groupNode.children();
-		DefaultMutableTreeNode result = null;
 
 		while (enumer.hasMoreElements()) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) enumer.nextElement();
 			if (child.getUserObject().toString().equals(objectID)) {
-				result = child;
-				break;
+				return child;
 			}
 		}
 
-		return result;
+		return null;
 	}
 
 	public String getGroupDescription(String groupId) {
@@ -795,14 +777,12 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	protected static void addChildrenRecoursively(Enumeration<? extends TreeNode> children, Set<String> resultIds) {
-		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
-
+		children.asIterator().forEachRemaining((TreeNode child) -> {
 			if (child.getAllowsChildren()) {
 				addChildrenRecoursively(child.children(), resultIds);
 			} else {
-				resultIds.add(child.getUserObject().toString());
+				resultIds.add(((DefaultMutableTreeNode) child).getUserObject().toString());
 			}
-		}
+		});
 	}
 }

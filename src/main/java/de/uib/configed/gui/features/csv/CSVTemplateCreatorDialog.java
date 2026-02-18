@@ -36,11 +36,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
@@ -118,15 +115,11 @@ public class CSVTemplateCreatorDialog {
 			button.addItemListener((e -> delimiterAction(button, otherOption, e)));
 		}
 
-		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
-			@Override
-			public void performAction() {
-				if (!otherDelimiterInput.getText().isEmpty()) {
-					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
-				}
+		otherDelimiterInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
+			if (!otherDelimiterInput.getText().isEmpty()) {
+				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 			}
-		});
-
+		}));
 		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
 		JLabel dataSelectionLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
@@ -210,25 +203,6 @@ public class CSVTemplateCreatorDialog {
 
 	private static boolean isImportantHeader(String header) {
 		return CSVImportDataModifier.getImportantHeaders().contains(header);
-	}
-
-	private static class InputListener implements DocumentListener {
-		public void performAction() {
-			/* Should be overridden in actual implementation */}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			performAction();
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			performAction();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			/* Not needed */}
 	}
 
 	public void createTemplate() {
