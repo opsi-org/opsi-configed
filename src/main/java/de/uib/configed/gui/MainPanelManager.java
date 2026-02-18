@@ -50,9 +50,6 @@ import net.miginfocom.swing.MigLayout;
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
 
-	private ClientTree clientTree;
-	private ProductTree productTree;
-
 	private ClientConfiguration clientConfiguration;
 	private HostsStatusPanel hostsStatusPanel;
 	private JTabbedPane leftTabs;
@@ -71,36 +68,18 @@ public class MainPanelManager {
 	public MainPanelManager(ConfigedMain configedMain, MainFrame mainFrame, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
 		this.configedMain = configedMain;
-		this.clientTree = clientTree;
-		this.productTree = productTree;
 
 		topToolBarManager = new TopToolBarManager(configedMain);
 
-		initialInitialization(depotsList, mainFrame);
+		initialInitialization(depotsList, mainFrame, clientTree, productTree);
 	}
 
-	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame) {
-		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
-
-		JScrollPane scrollpaneTreeClients = new JScrollPane();
-		scrollpaneTreeClients.getViewport().add(clientTree);
-		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
-
-		JScrollPane scrollpaneTreeProducts = new JScrollPane();
-		scrollpaneTreeProducts.getViewport().add(productTree);
-		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
-
+	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame, ClientTree clientTree,
+			ProductTree productTree) {
 		leftTabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		leftTabs.addTab(null, depotListPresenter);
-		leftTabs.addTab(null, scrollpaneTreeClients);
-		leftTabs.addTab(null, scrollpaneTreeProducts);
+		leftTabs.addTab(null, new DepotListPresenter(depotsList));
+		leftTabs.addTab(null, createScrollPaneForTree(clientTree));
+		leftTabs.addTab(null, createScrollPaneForTree(productTree));
 
 		leftTabs.setTabComponentAt(0, new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
 				Configed.getResourceValue("DepotListPresenter.depots"),
@@ -121,6 +100,15 @@ public class MainPanelManager {
 		leftTabs.setMinimumSize(new Dimension());
 		clientConfiguration = new ClientConfiguration(configedMain, mainFrame, productTree);
 		hostsStatusPanel = new HostsStatusPanel(configedMain);
+	}
+
+	private static JScrollPane createScrollPaneForTree(JComponent tree) {
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.getViewport().add(tree);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setPreferredSize(tree.getMaximumSize());
+		return scrollPane;
 	}
 
 	public JTabbedPane getTabbedPane() {
