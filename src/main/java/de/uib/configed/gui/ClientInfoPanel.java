@@ -41,7 +41,6 @@ public class ClientInfoPanel extends JPanel {
 	private JLabel labelDeviceTypeIcon;
 	private JTextArea jTextAreaVendorModel;
 
-	private JScrollPane scrollpaneNotes;
 	private JScrollPane scrollpaneVendorModel;
 
 	private JLabel labelClientOSIcon;
@@ -123,10 +122,6 @@ public class ClientInfoPanel extends JPanel {
 
 		jTextAreaNotes.getDocument().addDocumentListener(
 				Utils.onDocumentChange(() -> dataChange(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY)));
-
-		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
-		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
@@ -253,7 +248,8 @@ public class ClientInfoPanel extends JPanel {
 		add(hostKeyField, "growx");
 
 		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes"), "gaptop " + GAP);
-		add(scrollpaneNotes, "grow, pushy");
+		add(new JScrollPane(jTextAreaNotes, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), "grow, pushy");
 
 		setMinimumSize(new Dimension());
 	}
@@ -434,8 +430,7 @@ public class ClientInfoPanel extends JPanel {
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-				.isGlobalReadOnly();
+		boolean writingAllowed = !persistenceController.getDataServices().userRoles.isGlobalReadOnly();
 
 		jTextFieldDescription.setEnabled(singleClient);
 		jTextFieldDescription.setEditable(writingAllowed);
