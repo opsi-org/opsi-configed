@@ -77,8 +77,8 @@ public class CopyClient {
 	private void copyClient() {
 		List<Object> client = List.of(newClientName,
 				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
-				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", "",
-				Boolean.toString(clientToCopy.getShutdownInstall()), Boolean.toString(clientToCopy.getWanConfig()), "",
+				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", List.of(""),
+				Boolean.toString(clientToCopy.getWanConfig()), Boolean.toString(clientToCopy.getShutdownInstall()), "",
 				"");
 		persistenceController.getDataServices().host.createClients(List.of(client));
 	}
