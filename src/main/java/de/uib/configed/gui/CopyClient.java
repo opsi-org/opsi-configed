@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -77,8 +78,8 @@ public class CopyClient {
 	private void copyClient() {
 		List<Object> client = List.of(newClientName,
 				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
-				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", "",
-				Boolean.toString(clientToCopy.getShutdownInstall()), Boolean.toString(clientToCopy.getWanConfig()), "",
+				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", new ArrayList<>(),
+				Boolean.toString(clientToCopy.getWanConfig()), Boolean.toString(clientToCopy.getShutdownInstall()), "",
 				"");
 		persistenceController.getDataServices().host.createClients(List.of(client));
 	}
@@ -95,7 +96,7 @@ public class CopyClient {
 		}
 
 		persistenceController.getDataServices().group.addHost2Groups(newClientNameWithDomain, clientGroups);
-		persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
+		persistenceController.reloadData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString());
 	}
 
 	private void copyProducts() {

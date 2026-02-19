@@ -279,8 +279,9 @@ public final class ServerActionManager {
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy(options);
 
+				String selectedGroup = configedMain.getSelectedGroupName();
 				configedMain.setRebuiltClientListTableModel(true, true);
-				configedMain.activateGroup(false, configedMain.getSelectedGroupName());
+				configedMain.activateGroup(false, selectedGroup);
 				configedMain.setClient(newClientNameWithDomain);
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
