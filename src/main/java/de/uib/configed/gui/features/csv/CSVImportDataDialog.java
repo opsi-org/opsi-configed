@@ -221,7 +221,7 @@ public class CSVImportDataDialog {
 
 		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
 				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader()
-				.setIgnoreSurroundingSpaces(true).get();
+				.setIgnoreSurroundingSpaces(true).setQuoteMode(QuoteMode.ALL).setSkipHeaderRecord(true).get();
 		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
 		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
 		csvImportDataDialog.setDetectedOptions();
