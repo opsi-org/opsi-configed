@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+
+import de.uib.configed.share.logging.Logging;
 
 public class CSVFormatDetector {
 	private static final Pattern doubleMinusPattern = Pattern.compile("--");
@@ -69,21 +72,26 @@ public class CSVFormatDetector {
 		Path path = Paths.get(csvFile);
 		List<String> fileAsList = Files.readAllLines(path, StandardCharsets.UTF_8);
 		String fileAsString = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+		hasHint = fileAsList.get(0).startsWith(FORMAT_HINT_INDICATOR);
+		Logging.debug(this, "Does CSV file have a format hint?", hasHint);
 
-		if (fileAsList.get(0).startsWith(FORMAT_HINT_INDICATOR)) {
-			hasHint = true;
-
+		if (hasHint) {
+			Logging.info(this, "Using options from format hint.");
 			String[] formatOptions = doubleMinusPattern
 					.split(fileAsList.get(0).replace(FORMAT_HINT_INDICATOR, "").trim());
+
+			if (formatOptions.length < 2) {
+				Logging.warning(this, "Format hint seems incomplete or malformed.");
+			}
 
 			delimiter = formatOptions[0].charAt(formatOptions[0].indexOf("=") + 1);
 			quote = formatOptions[1].charAt(formatOptions[1].indexOf("=") + 1);
 		} else {
-			hasHint = false;
-
+			Logging.info(this, "Attempting to detect format automatically.");
 			detectQoute(fileAsString);
 			detectDelimiter(fileAsList);
 		}
+		Logging.info(this, "Detected delimiter:", delimiter, "; Detected qoute:", quote);
 
 		detectHeader(fileAsList);
 	}
@@ -106,7 +114,9 @@ public class CSVFormatDetector {
 			}
 		}
 
+		Logging.debug(this, "Possible delimiter counts:", possibleDelimiters);
 		delimiter = Collections.max(possibleDelimiters.entrySet(), Entry.comparingByValue()).getKey();
+		Logging.debug(this, "Detected delimiter:", delimiter);
 	}
 
 	private void detectQoute(String fileAsString) {
@@ -119,7 +129,9 @@ public class CSVFormatDetector {
 		possibleQuotes.put(singleQuote, singleQuoteCount);
 		possibleQuotes.put(doubleQuote, doubleQuoteCount);
 
+		Logging.debug(this, "Possible quote counts:", possibleQuotes);
 		quote = Collections.max(possibleQuotes.entrySet(), Entry.comparingByValue()).getKey();
+		Logging.debug(this, "Detected quote:", quote);
 	}
 
 	private void detectHeader(List<String> fileAsList) {
@@ -130,12 +142,20 @@ public class CSVFormatDetector {
 
 		CSVHeaderDetector csvHeaderDetector = new CSVHeaderDetector(fileAsList.get(lineNumber), this);
 		hasHeader = csvHeaderDetector.detect();
-		String header = csvHeaderDetector.getHeader();
-		headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(delimiter)));
-		headers.replaceAll(String::trim);
+		Logging.info(this, "Does CSV file contain header?", hasHeader);
+		if (hasHeader) {
+			String header = csvHeaderDetector.getHeader();
+			Logging.info(this, "Detected header:", header);
+			headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(delimiter)));
+			headers.replaceAll(String::trim);
+			Logging.debug(this, "Detected header as list:", headers);
+		} else {
+			headers = new ArrayList<>();
+		}
 	}
 
 	public boolean hasExpectedHeaderNames(Collection<String> expectedHeaderNames) {
+		Logging.debug(this, "Received headers:", headers, "; Expected headers:", expectedHeaderNames);
 		return headers.stream().allMatch(header -> expectedHeaderNames.contains(header.trim()));
 	}
 }
