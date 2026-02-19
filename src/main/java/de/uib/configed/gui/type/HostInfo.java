@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.type;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -49,6 +51,9 @@ public class HostInfo {
 	public static final String CLIENT_DEVICE_MODEL_KEY = "device_model";
 	public static final String UEFI_BOOT_KEY = "uefi_boot";
 	public static final String CLIENT_MONITORING_KEY = "monitoring";
+	public static final String CSV_DOMAIN_KEY = "domain";
+	public static final String CSV_GROUPS_KEY = "groups";
+	public static final String CSV_NETBOOT_PRODUCT_KEY = "netbootProduct";
 
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
 	public static final String CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL = "clientDescription";
@@ -214,7 +219,7 @@ public class HostInfo {
 	public static Set<String> getKeysForCSV() {
 		Set<String> keys = new LinkedHashSet<>();
 		keys.add(HOSTNAME_KEY);
-		keys.add("domain");
+		keys.add(CSV_DOMAIN_KEY);
 		keys.add(DEPOT_OF_CLIENT_KEY);
 		keys.add(CLIENT_MAC_ADDRESS_KEY);
 		keys.add(CLIENT_DESCRIPTION_KEY);
@@ -222,12 +227,21 @@ public class HostInfo {
 		keys.add(CLIENT_NOTES_KEY);
 		keys.add(CLIENT_SYSTEM_UUID_KEY);
 		keys.add(CLIENT_IP_ADDRESS_KEY);
-		keys.add("groups");
+		keys.add(CSV_GROUPS_KEY);
 		keys.add(CLIENT_WAN_CONFIG_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
-		keys.add("netbootProduct");
+		keys.add(CSV_NETBOOT_PRODUCT_KEY);
 		return Collections.unmodifiableSet(keys);
+	}
+
+	public static List<String> getGroupsFromObject(Object groups) {
+		if (!((String) groups).contains(",")) {
+			List<String> result = new ArrayList<>();
+			result.add((String) groups);
+			return result;
+		}
+		return Arrays.asList(((String) groups).split(","));
 	}
 
 	public void put(String key, Object value) {

@@ -58,8 +58,9 @@ public final class ServerActionManager {
 		ServerActionManager.persistenceController = persistenceController;
 	}
 
-	public static void createClients(List<List<Object>> clients) {
-		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
+	public static void createClients(List<Map<String, Object>> clients) {
+		List<String> createdClientNames = clients.stream()
+				.map(v -> (String) v.get(HostInfo.HOSTNAME_KEY) + "." + v.get(HostInfo.CSV_DOMAIN_KEY)).toList();
 		isLocalChangeInProgress.set(true);
 
 		try {
@@ -81,10 +82,14 @@ public final class ServerActionManager {
 		}
 	}
 
-	private static String getGroupToActivate(List<List<Object>> clients) {
+	private static String getGroupToActivate(List<Map<String, Object>> clients) {
 		// We want to activate the group if we create exactly one client in exactly one group
-		if (clients.size() == 1 && ((List<?>) clients.get(0).get(9)).size() == 1) {
-			return (String) ((List<?>) clients.get(0).get(9)).get(0);
+		if (clients.size() == 1) {
+			Map<String, Object> client = clients.get(0);
+			List<String> groups = HostInfo.getGroupsFromObject(client.get(HostInfo.CSV_GROUPS_KEY));
+			if (groups.size() == 1) {
+				return groups.get(0);
+			}
 		}
 		return ClientTree.ALL_CLIENTS_NAME;
 	}

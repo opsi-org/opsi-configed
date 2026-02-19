@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.List;
+import java.util.Map;
 
 public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddClientMsg.ActionMsg, AddClientMsg.UIMsg {
 
@@ -73,7 +74,7 @@ public sealed interface AddClientMsg permits AddClientMsg.FieldChangeMsg, AddCli
 		record CSVImportRequested() implements ActionMsg {
 		}
 
-		record CSVImported(List<List<Object>> rows, boolean includeRow) implements ActionMsg {
+		record CSVImported(List<Map<String, Object>> rows, boolean includeRow) implements ActionMsg {
 		}
 	}
 

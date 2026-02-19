@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -76,11 +77,22 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		List<Object> client = List.of(newClientName,
-				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
-				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", new ArrayList<>(),
-				Boolean.toString(clientToCopy.getWanConfig()), Boolean.toString(clientToCopy.getShutdownInstall()), "",
-				"");
+		Map<String, Object> client = new HashMap<>();
+		client.put(HostInfo.HOSTNAME_KEY, newClientName);
+		client.put(HostInfo.CSV_DOMAIN_KEY,
+				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
+		client.put(HostInfo.DEPOT_OF_CLIENT_KEY, clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY));
+		client.put(HostInfo.CLIENT_MAC_ADDRESS_KEY, "");
+		client.put(HostInfo.CLIENT_DESCRIPTION_KEY, "");
+		client.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, "");
+		client.put(HostInfo.CLIENT_NOTES_KEY, "");
+		client.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, "");
+		client.put(HostInfo.CLIENT_IP_ADDRESS_KEY, "");
+		client.put(HostInfo.CSV_GROUPS_KEY, new ArrayList<>());
+		client.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(clientToCopy.getWanConfig()));
+		client.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, Boolean.toString(clientToCopy.getShutdownInstall()));
+		client.put(HostInfo.HOST_KEY_KEY, "");
+		client.put(HostInfo.CSV_NETBOOT_PRODUCT_KEY, "");
 		persistenceController.getDataServices().host.createClients(List.of(client));
 	}
 
