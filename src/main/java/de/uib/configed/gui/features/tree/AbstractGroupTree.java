@@ -424,7 +424,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		String message = String.format(Configed.getResourceValue("AbstractGroupTree.deleteNodesWarning"), memberCount,
 				groupCount);
 
-		int option = JOptionPane.showConfirmDialog(this, message,
+		int option = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
 				Configed.getResourceValue("AbstractGroupTree.deleteNodesTitle"), JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
 
