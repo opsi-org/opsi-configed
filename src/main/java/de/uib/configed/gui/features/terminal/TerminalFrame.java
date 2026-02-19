@@ -368,7 +368,6 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	private JPanel createNorthPanel() {
-
 		tabbedPane = new TerminalTabbedPane(this);
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
