@@ -26,14 +26,9 @@ public class DateTimePickerWrapper extends JFXPanel {
 		super();
 		Logging.debug("MyDateTimePicker constructor");
 		this.caller = caller;
-		showDatePicker(this);
-		initFX();
-	}
 
-	private void initFX() {
 		Platform.setImplicitExit(false);
 		Platform.runLater(() -> showDatePicker(this));
-
 	}
 
 	@Override

@@ -215,57 +215,19 @@ public class HostDataService extends DataService {
 		}
 	}
 
-	private void updateHost(String hostId, String property, Object value) {
+	public void updateHost(String hostId, String property, Object value) {
 		if (hostUpdates == null) {
 			hostUpdates = new HashMap<>();
 		}
 
-		Map<String, Object> hostUpdateMap = hostUpdates.get(hostId);
-
-		if (hostUpdateMap == null) {
-			hostUpdateMap = new HashMap<>();
-		}
-
-		hostUpdateMap.put("id", hostId);
+		Map<String, Object> hostUpdateMap = hostUpdates.computeIfAbsent(hostId, (String v) -> {
+			Map<String, Object> internalMap = new HashMap<>();
+			internalMap.put("id", hostId);
+			return internalMap;
+		});
 		hostUpdateMap.put(property, value);
 
 		hostUpdates.put(hostId, hostUpdateMap);
-	}
-
-	public void setHostDescription(String hostId, String description) {
-		updateHost(hostId, HostInfo.CLIENT_DESCRIPTION_KEY, description);
-	}
-
-	public void setClientInventoryNumber(String hostId, String inventoryNumber) {
-		updateHost(hostId, HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventoryNumber);
-	}
-
-	public void setClientOneTimePassword(String hostId, String oneTimePassword) {
-		updateHost(hostId, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY, oneTimePassword);
-	}
-
-	public void setHostNotes(String hostId, String notes) {
-		updateHost(hostId, HostInfo.CLIENT_NOTES_KEY, notes);
-	}
-
-	public void setSystemUUID(String hostId, String uuid) {
-		updateHost(hostId, HostInfo.CLIENT_SYSTEM_UUID_KEY, uuid);
-	}
-
-	public void setMacAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.CLIENT_MAC_ADDRESS_KEY, address);
-	}
-
-	public void setIpAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
-	}
-
-	public void setWanConfig(String hostId, boolean wanConfig) {
-		updateHost(hostId, HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
-	}
-
-	public void setInstallOnShutdown(String hostId, boolean installOnShutdown) {
-		updateHost(hostId, HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, installOnShutdown);
 	}
 
 	public List<Map<String, Object>> getOpsiHosts() {

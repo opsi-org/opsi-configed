@@ -38,18 +38,9 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class ClientInfoPanel extends JPanel {
-	private JLabel labelClientDescription;
-	private JLabel labelClientInventoryNumber;
-	private JLabel labelClientNotes;
-	private JLabel labelClientSystemUUID;
-	private JLabel labelClientMacAddress;
-	private JLabel labelClientIPAddress;
 	private JLabel labelDeviceTypeIcon;
 	private JTextArea jTextAreaVendorModel;
-	private JLabel labelOneTimePassword;
-	private JLabel labelOpsiHostKey;
 
-	private JScrollPane scrollpaneNotes;
 	private JScrollPane scrollpaneVendorModel;
 
 	private JLabel labelClientOSIcon;
@@ -96,18 +87,6 @@ public class ClientInfoPanel extends JPanel {
 		jTextFieldClientID = createUneditableTextField();
 		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
-		labelClientDescription = Utils.createBoldLabel("description");
-
-		labelClientInventoryNumber = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber");
-
-		labelClientNotes = Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes");
-
-		labelClientSystemUUID = Utils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID");
-
-		labelClientMacAddress = Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress");
-
-		labelClientIPAddress = Utils.createBoldLabel("ipAddress");
-
 		jTextFieldClientOS = createUneditableTextField();
 		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
 		jTextFieldClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
@@ -124,10 +103,6 @@ public class ClientInfoPanel extends JPanel {
 		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
-
-		labelOneTimePassword = Utils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword");
-
-		labelOpsiHostKey = Utils.createBoldLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
@@ -147,10 +122,6 @@ public class ClientInfoPanel extends JPanel {
 
 		jTextAreaNotes.getDocument().addDocumentListener(
 				Utils.onDocumentChange(() -> dataChange(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY)));
-
-		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
-		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
@@ -246,19 +217,19 @@ public class ClientInfoPanel extends JPanel {
 
 		add(scrollpaneVendorModel, "growx, hmin 50, gapbottom " + MIN);
 
-		add(labelClientDescription, "gaptop " + GAP);
+		add(Utils.createBoldLabel("description"), "gaptop " + GAP);
 		add(jTextFieldDescription, "growx");
 
-		add(labelClientInventoryNumber, "gaptop " + GAP);
+		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber"), "gaptop " + GAP);
 		add(jTextFieldInventoryNumber, "growx");
 
-		add(labelClientSystemUUID, "gaptop " + GAP);
+		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID"), "gaptop " + GAP);
 		add(systemUUIDField, "growx");
 
-		add(labelClientMacAddress, "gaptop " + GAP);
+		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress"), "gaptop " + GAP);
 		add(macAddressField, "growx");
 
-		add(labelClientIPAddress, "gaptop " + GAP);
+		add(Utils.createBoldLabel("ipAddress"), "gaptop " + GAP);
 		add(ipAddressField, "growx");
 
 		add(checkBoxInstallByShutdown, "gaptop " + GAP);
@@ -270,14 +241,15 @@ public class ClientInfoPanel extends JPanel {
 		add(checkBoxHealthCheckActive, "split 2, gapright " + GAP);
 		add(openHealthCheckSettingsDialogButton);
 
-		add(labelOneTimePassword, "gaptop " + GAP);
+		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword"), "gaptop " + GAP);
 		add(jTextFieldOneTimePassword, "growx");
 
-		add(labelOpsiHostKey, "gaptop " + GAP);
+		add(Utils.createBoldLabel("opsi-host-key"), "gaptop " + GAP);
 		add(hostKeyField, "growx");
 
-		add(labelClientNotes, "gaptop " + GAP);
-		add(scrollpaneNotes, "grow, pushy");
+		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes"), "gaptop " + GAP);
+		add(new JScrollPane(jTextAreaNotes, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), "grow, pushy");
 
 		setMinimumSize(new Dimension());
 	}
@@ -458,8 +430,7 @@ public class ClientInfoPanel extends JPanel {
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-				.isGlobalReadOnly();
+		boolean writingAllowed = !persistenceController.getDataServices().userRoles.isGlobalReadOnly();
 
 		jTextFieldDescription.setEnabled(singleClient);
 		jTextFieldDescription.setEditable(writingAllowed);

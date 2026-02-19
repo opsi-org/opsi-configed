@@ -196,8 +196,11 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		Enumeration<TreePath> expanded = getExpandedDescendants(new TreePath(rootNode));
 
 		if (expanded != null) {
-			expanded.asIterator().forEachRemaining(
-					path -> expandedNodes.put(path.getLastPathComponent().toString(), Map.of("expanded", true)));
+			expanded.asIterator().forEachRemaining((TreePath path) -> {
+				Map<String, Object> internalMap = new HashMap<>();
+				internalMap.put("expanded", true);
+				expandedNodes.put(path.getLastPathComponent().toString(), internalMap);
+			});
 		}
 
 		List<TreePath> selectionPaths = Arrays
