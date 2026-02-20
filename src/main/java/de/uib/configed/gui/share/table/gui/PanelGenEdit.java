@@ -138,11 +138,12 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		JPanel controlPanel = initControlPanel();
 
-		setLayout(new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]0"));
+		setLayout(new MigLayout("insets 0, wrap 1", "[grow,fill]",
+				"[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[grow, 20:100:]0[pref!]"));
 
-		add(jLabelTitle, "gapbottom " + Globals.MIN_GAP_SIZE);
-		add(tableSearchPane, "hidemode 3, gapbottom " + Globals.MIN_GAP_SIZE);
-		add(jScrollPane, "grow, push");
+		add(jLabelTitle);
+		add(tableSearchPane, "hidemode 3");
+		add(jScrollPane, "grow");
 		add(controlPanel, "hidemode 3, gaptop " + Globals.MIN_GAP_SIZE);
 	}
 

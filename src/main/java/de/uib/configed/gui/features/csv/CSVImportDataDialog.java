@@ -139,8 +139,7 @@ public class CSVImportDataDialog {
 
 		JPanel panel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]",
 				"[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE
-						+ "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[grow]"
-						+ Globals.MIN_GAP_SIZE));
+						+ "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[grow, 0:pref:]"));
 
 		panel.add(importOptionsLabel);
 
@@ -159,7 +158,7 @@ public class CSVImportDataDialog {
 		panel.add(quoteLabel, "split 2, gapright " + Globals.GAP_SIZE);
 		panel.add(quoteOptions, "growx, pushx, wrap");
 
-		panel.add(thePanel, "grow, hmin 0");
+		panel.add(thePanel, "grow, push");
 
 		return panel;
 	}
