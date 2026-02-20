@@ -300,28 +300,30 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 	private JPanel createBottomPane() {
 		JPanel bottomPane = new JPanel(
-				new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]" + Globals.GAP_SIZE + "[]"));
+				new MigLayout("insets 0, wrap 1", "[grow,fill]", "[grow]" + Globals.GAP_SIZE + "[grow, 0:0]"));
 		bottomPane.add(createPanelTask(), "grow, push");
 		bottomPane.add(panelKeys, "grow, push, hmin 0");
 		return bottomPane;
 	}
 
 	private JPanel createPanelTask() {
-		JPanel panelTask = new JPanel(new MigLayout("insets 0", "[grow]",
-				"[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]2[]2[]"));
+		JPanel panelTask = new JPanel(
+				new MigLayout("insets 0, wrap 1", "[grow]", "[pref!]" + Globals.MIN_GAP_SIZE + "[grow]"
+						+ Globals.MIN_GAP_SIZE + "[pref!]2[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]2[pref!]2[pref!]"));
 
-		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.Task") + ":"), "wrap");
-		panelTask.add(panelLicenseContracts, "grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", wrap");
-		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.ChooseType")), "wrap");
+		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.Task") + ":"));
+		panelTask.add(panelLicenseContracts,
+				"grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", h " + MIN_PANEL_TABLE_HEIGHT);
+		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.ChooseType")));
 
 		panelTask.add(jButtonCreateStandard, "split 4, sizegroup btns");
 		panelTask.add(jButtonCreateVolume, "gapleft 18, sizegroup btns");
 		panelTask.add(jButtonCreateOEM, "gapleft 18, sizegroup btns");
 		panelTask.add(jButtonCreateConcurrent, "gapleft 18, sizegroup btns, wrap");
 
-		panelTask.add(createPanelLicenseModel(), "growx, wrap");
-		panelTask.add(createPanelEnterKey(), "growx, wrap");
-		panelTask.add(jButtonSend, "wrap");
+		panelTask.add(createPanelLicenseModel(), "growx");
+		panelTask.add(createPanelEnterKey(), "growx");
+		panelTask.add(jButtonSend);
 
 		return panelTask;
 	}
