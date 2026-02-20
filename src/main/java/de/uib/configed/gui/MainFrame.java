@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -102,8 +101,8 @@ public class MainFrame extends JFrame {
 
 		showPanel(EditingTarget.CLIENTS);
 
-		setTitle("(" + persistenceController.getExecutioner().getUsername() + ") "
-				+ persistenceController.getExecutioner().getHost() + " - " + Globals.APPNAME);
+		setTitle("(" + persistenceController.getExecutioner().getHostData().getUser() + ") "
+				+ persistenceController.getExecutioner().getHostData().getHost() + " - " + Globals.APPNAME);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
@@ -112,24 +111,8 @@ public class MainFrame extends JFrame {
 				new JComponent[] { clientTablePanel });
 	}
 
-	public JTabbedPane getTabbedPane() {
-		return mainPanelManager.getTabbedPane();
-	}
-
 	public ClientTablePanel getClientTablePanel() {
 		return clientTablePanel;
-	}
-
-	public ClientConfiguration getClientConfiguration() {
-		return mainPanelManager.getClientConfiguration();
-	}
-
-	public ServerConfiguration getServerConfiguration() {
-		return mainPanelManager.getServerConfiguration();
-	}
-
-	public HostsStatusPanel getHostsStatusPanel() {
-		return mainPanelManager.getHostsStatusPanel();
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -140,10 +123,6 @@ public class MainFrame extends JFrame {
 	public void resetData() {
 		initializedPanels.clear();
 		contentPanel.removeAll();
-	}
-
-	public boolean checkSaveLicenses() {
-		return mainPanelManager.checkSavedLicenses();
 	}
 
 	public static void resetInstanceData() {
@@ -172,10 +151,14 @@ public class MainFrame extends JFrame {
 		leftToolBar.reloadServerConsoleMenu();
 	}
 
+	public MainPanelManager getMainPanelManager() {
+		return mainPanelManager;
+	}
+
 	public boolean showPanel(EditingTarget editingTarget) {
 		if (!Boolean.TRUE.equals(initializedPanels.get(editingTarget))) {
 			activateLoadingCursor();
-			JPanel panel = mainPanelManager.getPanelForEditingTarget(editingTarget);
+			JPanel panel = mainPanelManager.createPanelForEditingTarget(editingTarget);
 			if (panel == null) {
 				deactivateLoadingCursor();
 				return false;

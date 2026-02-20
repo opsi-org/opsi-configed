@@ -50,7 +50,7 @@ public class ConnectedHostsManager implements MessagebusListener {
 
 	private void updateConnectionStatusInGUI(String clientName) {
 		// Update the connection status in the HostsStatusPanel
-		ConfigedMain.getMainFrame().getHostsStatusPanel().updateClientConnectionStatus();
+		ConfigedMain.getMainFrame().getMainPanelManager().getHostsStatusPanel().updateClientConnectionStatus();
 
 		// Update the connection status in the ClientTable
 		updateConnectionStatusInTable(clientName);

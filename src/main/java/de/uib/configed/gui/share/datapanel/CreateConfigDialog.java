@@ -9,7 +9,6 @@ package de.uib.configed.gui.share.datapanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -243,7 +242,7 @@ public class CreateConfigDialog {
 		List<?> defaultValues;
 		List<?> possibleValues;
 		if (booleanButton.isSelected()) {
-			defaultValues = new ArrayList<>(Arrays.asList(isBooleanTrue.isSelected()));
+			defaultValues = new ArrayList<>(List.of(isBooleanTrue.isSelected()));
 			possibleValues = new ArrayList<>(defaultValues);
 		} else {
 			defaultValues = new ArrayList<>(defaultValuesSelectionDialog.getSelectedValues());

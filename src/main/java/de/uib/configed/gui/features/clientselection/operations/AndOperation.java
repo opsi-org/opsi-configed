@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.features.clientselection.operations;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.gui.features.clientselection.AbstractSelectGroupOperation;
@@ -22,7 +22,7 @@ public class AndOperation extends AbstractSelectGroupOperation implements Execut
 	private List<AbstractSelectOperation> operations;
 
 	public AndOperation(List<AbstractSelectOperation> operations) {
-		this.operations = new LinkedList<>();
+		this.operations = new ArrayList<>();
 		for (AbstractSelectOperation operation : operations) {
 			this.operations.add(operation);
 			registerChildOperation(operation);

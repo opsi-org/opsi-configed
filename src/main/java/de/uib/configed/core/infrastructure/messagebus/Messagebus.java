@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -136,7 +135,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private String produceURL() {
-		String host = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHost();
+		String host = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHostData().getHost();
 		if (host == null) {
 			Logging.error(this, "Host is null");
 			return null;
@@ -165,7 +164,7 @@ public class Messagebus implements MessagebusListener {
 		if (exec.isUseSAML()) {
 			return null;
 		}
-		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
+		String basicAuth = String.format("%s:%s", exec.getHostData().getUser(), exec.getHostData().getPassword());
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 
@@ -202,7 +201,7 @@ public class Messagebus implements MessagebusListener {
 		String terminalId = UUID.randomUUID().toString();
 		// to verify server response contains this requested channel
 		channelSessionTerminalId = String.format("session:%s", terminalId);
-		sendChannelSubscriptionRequest(Collections.singletonList(channelSessionTerminalId));
+		sendChannelSubscriptionRequest(List.of(channelSessionTerminalId));
 		// need to wait for the subscription to be processed
 		locker.lock(5000);
 

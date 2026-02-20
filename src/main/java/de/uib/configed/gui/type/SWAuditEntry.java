@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.type;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 	public static final String EXISTING_IDS = "(variants)";
 
-	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
+	private static final List<String> KEYS_FOR_GUI_TABLES = new ArrayList<>();
 	static {
 		KEYS_FOR_GUI_TABLES.add(ID);
 		KEYS_FOR_GUI_TABLES.add(NAME);

@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -43,11 +42,10 @@ import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.WinProductUtils;
 import de.uib.configed.gui.share.WinProductsRetriever;
 import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.share.NameProducer;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelDriverUpload extends JPanel implements NameProducer {
+public class PanelDriverUpload extends JPanel {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
 	private static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
 	private static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
@@ -62,8 +60,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private JLabel depot;
 	private JComboBox<String> comboChooseWinProduct;
-
-	private JLabel labelDriverToIntegrate;
 
 	private String depotProductDirectory = "";
 	private String driverDirectory = "";
@@ -87,27 +83,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 	}
 
-	@SuppressWarnings("java:S2972")
-	private class FileNameDocumentListener implements DocumentListener {
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			Logging.debug(this, "changedUpdate ");
-			checkFiles();
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			Logging.debug(this, "insertUpdate ");
-			checkFiles();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			Logging.debug(this, "removeUpdate ");
-			checkFiles();
-		}
-	}
-
 	private RadioButtonIntegrationType buttonByAudit;
 
 	private JTextField fieldDriverPath;
@@ -122,8 +97,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private JButton buttonUploadDrivers;
 
 	private String winProduct = "";
-
-	private JLabel jLabelTopic;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -144,16 +117,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
-		jLabelTopic = SwingUtils.createBoldLabel("PanelDriverUpload.topic");
-
-		labelDriverToIntegrate = SwingUtils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 		jLabelRetrievalText.setVisible(false);
 
 		webDAVClient = new WebDAVClient();
 
 		defineChoosers();
-
-		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
 		buildPanel();
 
@@ -253,6 +221,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldByAuditPath = new JTextField();
 		fieldByAuditPath.setEditable(false);
 
+		JLabel jLabelTopic = SwingUtils.createBoldLabel("PanelDriverUpload.topic");
+
 		labelClientName = new JLabel();
 
 		JLabel jLabelDepotServer = SwingUtils.createBoldLabel("PanelDriverUpload.DepotServer");
@@ -286,14 +256,16 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		JLabel labelTargetPath = SwingUtils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
+		DocumentListener checkFilesListener = SwingUtils.onDocumentChange(this::checkFiles);
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
-		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
+		fieldServerPath.getDocument().addDocumentListener(checkFilesListener);
+
+		JLabel labelDriverToIntegrate = SwingUtils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 
 		fieldDriverPath = new JTextField();
 		fieldDriverPath.setEditable(true);
-		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
-
+		fieldDriverPath.getDocument().addDocumentListener(checkFilesListener);
 		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
 		JLabel labelDriverLocationType = SwingUtils.createBoldLabel("PanelDriverUpload.type");
@@ -481,27 +453,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		} else {
 			fieldDriverPath.setText("");
 		}
-	}
-
-	// implements NameProducer
-	@Override
-	public String produceName() {
-		if (fieldServerPath != null) {
-			Logging.info(this, "produceName ? fieldServerPath , depotProductDirectory ", fieldServerPath.getText(),
-					" , ", depotProductDirectory);
-		}
-
-		if (fieldServerPath == null || fieldServerPath.getText().isEmpty()
-				|| fieldServerPath.getText().startsWith(depotProductDirectory)) {
-			return depotProductDirectory;
-		}
-
-		return fieldServerPath.getText();
-	}
-
-	@Override
-	public String getDefaultName() {
-		return byAuditPath;
 	}
 
 	private static String getLocalsystemPath(String[] parts) {

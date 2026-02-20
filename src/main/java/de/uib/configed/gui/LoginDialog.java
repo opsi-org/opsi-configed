@@ -8,8 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,6 +27,7 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.WindowsPositionManager;
@@ -39,7 +38,7 @@ import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 import net.miginfocom.swing.MigLayout;
 
-public class LoginDialog extends JFrame implements KeyListener {
+public class LoginDialog extends JFrame {
 	private GlassPane glassPane;
 
 	private JLabel jLabelTitle;
@@ -76,7 +75,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		}
 	};
 
-	public LoginDialog() {
+	public LoginDialog(HostData hostData) {
 		super();
 
 		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -88,18 +87,51 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		initGlassPane();
 		initSSO();
+
+		setHostData(hostData);
+	}
+
+	private void setHostData(HostData hostData) {
+		if (hostData.getHost() != null && !hostData.getHost().isEmpty()) {
+			fieldHost.setSelectedItem(hostData.getHost());
+			fieldUser.requestFocus();
+			initSSO();
+		}
+
+		if (hostData.getUser() != null) {
+			fieldUser.setText(hostData.getUser());
+			passwordField.requestFocus();
+		}
+
+		if (hostData.getPassword() != null) {
+			passwordField.setText(hostData.getPassword());
+		}
+
+		if (hostData.getOtp() != null) {
+			checkUseOTP.setSelected(!hostData.getOtp().isEmpty());
+			fieldOTP.setText(hostData.getOtp());
+		}
+
+		Logging.info("become interactive");
+		Logging.info("using sso ? ", hostData.isUseSSO());
+		setVisible(true);
+
+		if (hostData.getHost() == null) {
+			Logging.info("host is not set (yet)");
+		} else if (!hostData.isUseSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
+			Logging.info("user or password not given (yet)");
+		} else {
+			// This must be called last, so that loading frame for connection is called last
+			// and on top of the login-frame
+			Logging.info("loginDialog tryConnecting with sso ", hostData.isUseSSO());
+			tryConnectingDependOnServer(hostData.isUseSSO());
+		}
 	}
 
 	private void initGlassPane() {
 		glassPane = new GlassPane();
 
 		setGlassPane(glassPane);
-	}
-
-	public void setHost(String host) {
-		fieldHost.setSelectedItem(host);
-		fieldUser.requestFocus();
-		initSSO();
 	}
 
 	private void setServers() {
@@ -110,29 +142,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 		}
 
 		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
-	}
-
-	public void setUser(String user) {
-		if (user == null) {
-			user = "";
-		}
-		fieldUser.setText(user);
-		passwordField.requestFocus();
-	}
-
-	public void setPassword(String password) {
-		if (password == null) {
-			password = "";
-		}
-		passwordField.setText(password);
-	}
-
-	public void setOTP(String otp) {
-		if (otp == null) {
-			otp = "";
-		}
-		checkUseOTP.setSelected(!otp.isEmpty());
-		fieldOTP.setText(otp);
 	}
 
 	public void setActivated(boolean active) {
@@ -183,15 +192,15 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
+		((JTextField) fieldHost.getEditor().getEditorComponent())
+				.addActionListener(actionEvent -> login((JTextField) fieldHost.getEditor().getEditorComponent()));
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
-
-		fieldUser.addKeyListener(this);
-		passwordField.addKeyListener(this);
+		fieldUser.addActionListener(e -> login(fieldUser));
+		passwordField.addActionListener(e -> tryConnecting(false));
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, false));
-		fieldOTP.addKeyListener(this);
+		fieldOTP.addActionListener(e -> tryConnecting(false));
 		fieldOTP.setVisible(false);
 
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
@@ -200,7 +209,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
-		jButtonCancel.addActionListener(actionEvent -> endProgram());
+		jButtonCancel.addActionListener(actionEvent -> ConfigedMain.finishApp(false, 0));
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
 		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
@@ -313,7 +322,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		tryConnecting(false);
 	}
 
-	public void tryConnectingDependOnServer(boolean requestSSO) {
+	private void tryConnectingDependOnServer(boolean requestSSO) {
 		if (ssoActiveByServer == null) {
 			ssoActiveByServer = false;
 			initSSO();
@@ -336,42 +345,19 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "starting thread");
 
-		new LoginThread(this, fieldHost.getSelectedItem(), user, passwordField.getPassword(), fieldOTP.getPassword(),
-				useSSO).start();
+		new LoginThread(this, new HostData((String) fieldHost.getSelectedItem(), user,
+				String.valueOf(passwordField.getPassword()), String.valueOf(fieldOTP.getPassword()), useSSO)).start();
 	}
 
-	private static void endProgram() {
-		ConfigedMain.finishApp(false, 0);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (e.getSource() == passwordField || e.getSource() == fieldOTP) {
-				tryConnecting(false);
-			} else if (Boolean.TRUE.equals(ssoActiveByServer)) {
-				tryConnecting(true);
-			} else if (e.getSource() == fieldHost.getEditor().getEditorComponent() || fieldUser.getText().isEmpty()) {
-				fieldUser.requestFocus();
-			} else if (passwordField.getPassword().length == 0) {
-				passwordField.requestFocus();
-			} else {
-				tryConnecting(false);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			endProgram();
+	private void login(JTextField source) {
+		if (Boolean.TRUE.equals(ssoActiveByServer)) {
+			tryConnecting(true);
+		} else if (source == fieldHost.getEditor().getEditorComponent() || fieldUser.getText().isEmpty()) {
+			fieldUser.requestFocus();
+		} else if (passwordField.getPassword().length == 0) {
+			passwordField.requestFocus();
 		} else {
-			// Do nothing with other keys
+			tryConnecting(false);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// Not needed here
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// Not needed here
 	}
 }

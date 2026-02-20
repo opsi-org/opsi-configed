@@ -26,14 +26,13 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class RemoteControlDialog implements DocumentListener {
+public class RemoteControlDialog {
 	private static final int START_HEIGHT_LOGGING_AREA = 80;
 	private static final int START_HEIGHT_FRAME = 400;
 	private static final int START_WIDTH_FRAME = 500;
@@ -117,7 +116,7 @@ public class RemoteControlDialog implements DocumentListener {
 
 		extraField = new JTextField();
 		extraField.addActionListener(event -> commit());
-		extraField.getDocument().addDocumentListener(this);
+		extraField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::saveEditedText));
 
 		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);
@@ -214,21 +213,5 @@ public class RemoteControlDialog implements DocumentListener {
 		if (extraField.isEditable() && selText != null && !selText.isEmpty() && meanings.get(selText) != null) {
 			meanings.put(selText, extraField.getText());
 		}
-	}
-
-	// DocumentListener
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		saveEditedText();
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		saveEditedText();
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		saveEditedText();
 	}
 }

@@ -27,7 +27,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
@@ -36,11 +35,12 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
+public class TableSearchPane extends JPanel implements KeyListener {
 	private FlatTextField flatTextFieldSearch;
 
 	private String lastSearchString = "";
@@ -62,6 +62,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JMenuItem popupSearch;
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
+
+	private DocumentListener searchFieldDocumentListener = SwingUtils.onDocumentChange(this::documentChanged);
 
 	private boolean selectMode = true;
 
@@ -180,7 +182,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
 		flatTextFieldSearch.setShowClearButton(true);
 
-		flatTextFieldSearch.getDocument().addDocumentListener(this);
+		flatTextFieldSearch.getDocument().addDocumentListener(searchFieldDocumentListener);
 
 		flatTextFieldSearch.addKeyListener(this);
 
@@ -577,28 +579,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
-	// DocumentListener interface
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		documentChanged();
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		documentChanged();
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		documentChanged();
-	}
-
 	private void documentChanged() {
 		if (!ChangedDataManager.checkSaveAll(true)) {
-			flatTextFieldSearch.getDocument().removeDocumentListener(this);
+			flatTextFieldSearch.getDocument().removeDocumentListener(searchFieldDocumentListener);
 			SwingUtilities.invokeLater(() -> {
 				flatTextFieldSearch.setText(lastSearchString);
-				flatTextFieldSearch.getDocument().addDocumentListener(this);
+				flatTextFieldSearch.getDocument().addDocumentListener(searchFieldDocumentListener);
 			});
 			return;
 		}

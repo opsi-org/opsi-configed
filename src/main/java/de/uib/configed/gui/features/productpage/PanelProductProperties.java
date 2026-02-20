@@ -10,10 +10,7 @@ import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -21,6 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -44,8 +42,6 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.ExternalSource;
-import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.logging.Logging;
 
@@ -85,10 +81,10 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
 
-		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
-		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
-		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING);
-		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING);
+		List<SortKey> sortDescriptor = new ArrayList<>();
+		sortDescriptor.add(new SortKey(columnNames.indexOf("productId"), SortOrder.ASCENDING));
+		sortDescriptor.add(new SortKey(columnNames.indexOf("productVersion"), SortOrder.ASCENDING));
+		sortDescriptor.add(new SortKey(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING));
 
 		paneProducts.setSortOrder(sortDescriptor);
 
@@ -151,10 +147,9 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
 
-		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(new ExternalSource(columnNames, depotsList.getSelectedValuesList())), -1,
-				paneProducts, updateCollection);
+				DefaultTableProvider.createWithExternalSource(columnNames, depotsList.getSelectedValuesList()), -1,
+				paneProducts, new ArrayList<>());
 	}
 
 	@Override
@@ -253,7 +248,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 
 				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
-				depotsOfPackage = new LinkedList<>();
+				depotsOfPackage = new ArrayList<>();
 
 				for (String depot : persistenceController.getDataServices().hostInfoCollections.getDepots().keySet()) {
 					if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {

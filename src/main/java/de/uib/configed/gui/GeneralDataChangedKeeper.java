@@ -22,7 +22,8 @@ public class GeneralDataChangedKeeper extends AbstractDataChangedKeeper {
 	private void saveConfigs() {
 		Logging.info(this, "saveConfigs ");
 
-		ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().updateProductStates();
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
+				.updateProductStates();
 
 		Logging.info(this, "we should now start working on the global update collection of size  ",
 				UpdateCollectionManager.getSizeOfGlobalUpdateCollection());

@@ -18,8 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -114,22 +112,7 @@ public class DeployClientAgentParameterDialog {
 		jTextFieldClient = new JTextField();
 		jTextFieldClient
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.tooltip.tf_client"));
-		jTextFieldClient.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent documentEvent) {
-				changeClient();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent documentEvent) {
-				changeClient();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent documentEvent) {
-				changeClient();
-			}
-		});
+		jTextFieldClient.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::changeClient));
 
 		jLabelUserData = SwingUtils.createBoldLabel("DeployClientAgentParameterDialog.targetclient_authentication");
 

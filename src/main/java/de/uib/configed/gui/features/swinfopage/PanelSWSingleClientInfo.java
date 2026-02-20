@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +47,6 @@ import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.logging.Logging;
@@ -169,7 +167,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 		}
 
 		modelSWInfo = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, null, this::retrieveSWInfoMap)), -1,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, null, this::retrieveSWInfoMap), -1,
 				finalColumns, null, null);
 
 		int indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
@@ -213,7 +211,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 		if (panelTable.getGenEditTable().getRowSorter() instanceof TableRowSorter) {
 			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable
 					.getGenEditTable().getRowSorter();
-			rowSorter.setComparator(7, new OSComparator());
+			rowSorter.setComparator(7, Comparator.comparing((Boolean b) -> b).reversed());
 
 			List<RowSorter.SortKey> sortKeys = new ArrayList<>(2);
 			sortKeys.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
@@ -251,18 +249,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 		}
 	}
 
-	private static class OSComparator implements Comparator<Boolean> {
-		@Override
-		public int compare(Boolean o1, Boolean o2) {
-			boolean b1 = o1;
-			boolean b2 = o2;
-			if (b1 == b2) {
-				return 0;
-			}
-			return b1 ? -1 : 1;
-		}
-	}
-
 	private static class OSTableCellRenderer extends ColorTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -288,7 +274,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getDataServices().software
-				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
+				.getSoftwareAuditOnClients(List.of(hostId));
 
 		Map<String, Map<String, Object>> tableData = persistenceController.getDataServices().software
 				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);

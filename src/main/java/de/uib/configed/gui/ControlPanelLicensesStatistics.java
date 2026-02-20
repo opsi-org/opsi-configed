@@ -20,7 +20,6 @@ import de.uib.configed.gui.features.licenses.MultiTablePanel;
 import de.uib.configed.gui.features.licenses.PanelLicensesStatistics;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
 
@@ -58,10 +57,10 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 		MapTableUpdateItemFactory updateItemFactoryStatistics = new MapTableUpdateItemFactory(modelStatistics,
 				columnNames);
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
+				DefaultTableProvider.createWithRetrieverMapSource(columnNames, ReloadEvent.STATISTICS_DATA_RELOAD,
 						() -> CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)
 								? persistenceController.getDataServices().software.getLicenseStatistics()
-								: new HashMap<>())),
+								: new HashMap<>()),
 				0, thePanel.getPanelStatistics(), updateCollection);
 		updateItemFactoryStatistics.setSource(modelStatistics);
 

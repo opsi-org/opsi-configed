@@ -20,16 +20,11 @@ public class RetrieverMapSource extends MapSource {
 	private Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier;
 
 	public RetrieverMapSource(List<String> columnNames, Object reloadEvent,
-			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier, boolean rowCounting) {
-		super(columnNames, null, rowCounting);
+			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier) {
+		super(columnNames, null);
 		this.reloadEvent = reloadEvent;
 		this.mapSupplier = mapSupplier;
 		rows = new ArrayList<>();
-	}
-
-	public RetrieverMapSource(List<String> columnNames, Object reloadEvent,
-			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier) {
-		this(columnNames, reloadEvent, mapSupplier, false);
 	}
 
 	@Override

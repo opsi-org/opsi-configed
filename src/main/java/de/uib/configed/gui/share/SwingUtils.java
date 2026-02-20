@@ -152,6 +152,35 @@ public final class SwingUtils {
 		};
 	}
 
+	public static DocumentListener onDocumentChange(Runnable runnable) {
+		return onDocumentChange(runnable, true);
+	}
+
+	public static DocumentListener onDocumentChangeWithoutRemoveUpdate(Runnable runnable) {
+		return onDocumentChange(runnable, false);
+	}
+
+	private static DocumentListener onDocumentChange(Runnable runnable, boolean reactOnChangeUpdate) {
+		return new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				runnable.run();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (reactOnChangeUpdate) {
+					runnable.run();
+				}
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				runnable.run();
+			}
+		};
+	}
+
 	public static JLabel createBoldLabel(String ressourceId) {
 		JLabel label = new JLabel(Configed.getResourceValue(ressourceId));
 		label.setFont(label.getFont().deriveFont(Font.BOLD));

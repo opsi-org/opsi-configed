@@ -11,10 +11,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
@@ -33,7 +30,7 @@ import de.uib.configed.share.logging.Logging;
 
 public class GenEditTable extends JTable implements KeyListener {
 	private boolean deleteAllowed = true;
-	private Map<Integer, SortOrder> sortDescriptor;
+	private List<SortKey> sortDescriptor;
 
 	public GenEditTable() {
 		super.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
@@ -65,7 +62,7 @@ public class GenEditTable extends JTable implements KeyListener {
 		}
 	}
 
-	public void setSortDescriptor(Map<Integer, SortOrder> sortDescriptor) {
+	public void setSortDescriptor(List<SortKey> sortDescriptor) {
 		this.sortDescriptor = sortDescriptor;
 	}
 
@@ -90,11 +87,7 @@ public class GenEditTable extends JTable implements KeyListener {
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
 
-		List<SortKey> sortKeys = buildSortkeysFromColumns();
-
-		if (sortKeys != null && !sortKeys.isEmpty()) {
-			sorter.setSortKeys(sortKeys);
-		}
+		sorter.setSortKeys(buildSortkeysFromColumns());
 
 		setRowSorter(sorter);
 	}
@@ -173,34 +166,27 @@ public class GenEditTable extends JTable implements KeyListener {
 
 	private List<SortKey> buildSortkeysFromColumns() {
 		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor ", sortDescriptor);
-		List<SortKey> sortKeys = new ArrayList<>();
 
 		if (getColumnCount() == 0) {
 			return new ArrayList<>();
 		} else if (sortDescriptor == null) {
 			// default sorting
-			sortDescriptor = new LinkedHashMap<>();
+			sortDescriptor = new ArrayList<>();
 
 			if (getGenTableModel().getKeyCol() > -1) {
-				sortKeys.add(new SortKey(getGenTableModel().getKeyCol(), SortOrder.ASCENDING));
-
-				sortDescriptor.put(getGenTableModel().getKeyCol(), SortOrder.ASCENDING);
+				sortDescriptor.add(new SortKey(getGenTableModel().getKeyCol(), SortOrder.ASCENDING));
 			} else if (getGenTableModel().getFinalCols() != null && !getGenTableModel().getFinalCols().isEmpty()) {
 				for (Integer col : getGenTableModel().getFinalCols()) {
-					sortKeys.add(new SortKey(col, SortOrder.ASCENDING));
-
-					sortDescriptor.put(col, SortOrder.ASCENDING);
+					sortDescriptor.add(new SortKey(col, SortOrder.ASCENDING));
 				}
 			} else {
-				sortKeys = null;
+				// sortDescriptor will remain empty
 			}
 		} else {
-			for (Entry<Integer, SortOrder> entry : sortDescriptor.entrySet()) {
-				sortKeys.add(new SortKey(entry.getKey(), entry.getValue()));
-			}
+			// sortDescriptor is already set, just return it
 		}
 
-		return sortKeys;
+		return sortDescriptor;
 	}
 
 	// KeyListener interface

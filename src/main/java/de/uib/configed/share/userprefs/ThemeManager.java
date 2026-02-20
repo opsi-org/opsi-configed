@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -42,7 +41,7 @@ public final class ThemeManager {
 	private static final int JAVAFX_FONT_SIZE = 13;
 	private static final String THEMES_PACKAGE = "de.uib.configed.themes";
 
-	private static final List<String> availableThemes = Arrays.asList(THEME_LIGHT, THEME_DARK);
+	private static final List<String> availableThemes = List.of(THEME_LIGHT, THEME_DARK);
 	private static String selectedTheme = availableThemes.get(0);
 
 	private ThemeManager() {

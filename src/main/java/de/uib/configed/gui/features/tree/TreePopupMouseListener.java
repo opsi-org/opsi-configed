@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.tree;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -103,16 +102,14 @@ public class TreePopupMouseListener {
 
 		if (mousePath != null
 				&& mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode groupNode) {
-			Enumeration<TreeNode> enumer = groupNode.breadthFirstEnumeration();
 
 			List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 
-			while (enumer.hasMoreElements()) {
-				DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
-				if (!element.getAllowsChildren()) {
-					clientNodesToRemove.add(element);
+			groupNode.breadthFirstEnumeration().asIterator().forEachRemaining((TreeNode node) -> {
+				if (!node.getAllowsChildren()) {
+					clientNodesToRemove.add((DefaultMutableTreeNode) node);
 				}
-			}
+			});
 
 			if (tree.removeNodes(clientNodesToRemove)) {
 				// refresh internal view

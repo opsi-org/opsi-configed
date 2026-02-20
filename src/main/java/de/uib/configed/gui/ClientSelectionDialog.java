@@ -11,17 +11,14 @@ import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -42,8 +39,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
@@ -93,7 +88,7 @@ import net.miginfocom.swing.MigLayout;
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
-public class ClientSelectionDialog implements ActionListener, DocumentListener {
+public class ClientSelectionDialog {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -103,7 +98,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 
-	private LinkedList<ComplexGroup> complexElements;
+	private List<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
 	private SavedSearchesDialog savedSearchesDialog;
@@ -119,7 +114,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	public ClientSelectionDialog(SavedSearchesDialog savedSearchesDialog) {
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
-		complexElements = new LinkedList<>();
+		complexElements = new ArrayList<>();
 		init();
 		JPanel panel = initComponents();
 		SwingUtils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
@@ -219,7 +214,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
 		// hardware
-		List<String> hardwareList = new LinkedList<>(manager.getBackend().getLocalizedHardwareList().keySet());
+		List<String> hardwareList = new ArrayList<>(manager.getBackend().getLocalizedHardwareList().keySet());
 		Collections.sort(hardwareList);
 		for (String hardware : hardwareList) {
 			newElementBox.addItem(hardware);
@@ -477,7 +472,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		result.openParenthesis = createParenthesisCheckBox("(", true);
 		result.openParenthesis.setSelected(false);
 
-		result.groupList = new LinkedList<>();
+		result.groupList = new ArrayList<>();
 		return result;
 	}
 
@@ -631,7 +626,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		contentPane.repaint();
 	}
 
-	private static void showParenthesesForGroup(Deque<SimpleGroup> groups) {
+	private static void showParenthesesForGroup(List<SimpleGroup> groups) {
 		boolean inOr = false;
 		for (SimpleGroup group : groups) {
 			group.openParenthesis.setVisible(false);
@@ -652,13 +647,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		}
 
 		if (inOr) {
-			SimpleGroup group = groups.getLast();
+			SimpleGroup group = groups.get(groups.size() - 1);
 			group.closeParenthesis.setVisible(true);
 		}
 	}
 
 	/* Show the parentheses making sure that or will be evaluated before and. */
-	private void buildParentheses() {
+	public void buildParentheses() {
 		Logging.debug("BUILDPARENTHESES");
 		for (ComplexGroup group : complexElements) {
 			showParenthesesForGroup(group.groupList);
@@ -666,16 +661,16 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	}
 
 	private void repairParentheses() {
-		Deque<ComplexGroup> stack = new ArrayDeque<>();
+		List<ComplexGroup> stack = new ArrayList<>();
 		for (ComplexGroup complex : complexElements) {
 			if (complex.openParenthesis.isSelected() && complex.closeParenthesis.isSelected()) {
 				complex.openParenthesis.setSelected(false);
 				complex.closeParenthesis.setSelected(false);
 			} else if (complex.openParenthesis.isSelected()) {
-				stack.push(complex);
+				stack.add(complex);
 			} else if (complex.closeParenthesis.isSelected()) {
 				if (!stack.isEmpty()) {
-					stack.pop();
+					stack.remove(stack.size() - 1);
 				} else {
 					complex.closeParenthesis.setSelected(false);
 				}
@@ -770,7 +765,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			OperationWithStatus groupStatus;
 			groupStatus = getInformation(complex);
 
-			List<OperationWithStatus> childList = new LinkedList<>();
+			List<OperationWithStatus> childList = new ArrayList<>();
 
 			for (SimpleGroup group : complex.groupList) {
 				AbstractSelectOperation op = getOperation(group);
@@ -935,7 +930,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		private JCheckBox negateButton;
 		private JLabel topLabel;
 		private JCheckBox connectionType;
-		private Deque<SimpleGroup> groupList;
+		private List<SimpleGroup> groupList;
 		private JCheckBox openParenthesis;
 		private JCheckBox closeParenthesis;
 
@@ -1049,25 +1044,5 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		} else {
 			JOptionPane.showMessageDialog(dialog, "wrong name", "error", JOptionPane.OK_OPTION);
 		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		buildParentheses();
-	}
-
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		buildParentheses();
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		buildParentheses();
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		buildParentheses();
 	}
 }

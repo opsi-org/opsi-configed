@@ -12,14 +12,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.ClientInfoPanel;
 import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.gui.MainFrame;
 import de.uib.configed.share.logging.Logging;
 
 public class HostInfo {
@@ -29,7 +30,7 @@ public class HostInfo {
 	public static final String CLIENT_ONE_TIME_PASSWORD_KEY = "oneTimePassword";
 	public static final String CLIENT_NOTES_KEY = "notes";
 	public static final String CLIENT_SYSTEM_UUID_KEY = "systemUUID";
-	public static final String CLIENT_MAC_ADRESS_KEY = "hardwareAddress";
+	public static final String CLIENT_MAC_ADDRESS_KEY = "hardwareAddress";
 	public static final String LAST_SEEN_KEY = "lastSeen";
 	public static final String CREATED_KEY = "created";
 	public static final String HOSTNAME_KEY = "id";
@@ -76,7 +77,7 @@ public class HostInfo {
 
 	private static final Set<String> keys = Set.of(DEPOT_OF_CLIENT_KEY, CLIENT_DESCRIPTION_KEY,
 			CLIENT_INVENTORY_NUMBER_KEY, CLIENT_ONE_TIME_PASSWORD_KEY, CLIENT_NOTES_KEY, CLIENT_SYSTEM_UUID_KEY,
-			CLIENT_MAC_ADRESS_KEY, LAST_SEEN_KEY, CREATED_KEY, HOSTNAME_KEY, HOST_KEY_KEY, HOST_TYPE_KEY,
+			CLIENT_MAC_ADDRESS_KEY, LAST_SEEN_KEY, CREATED_KEY, HOSTNAME_KEY, HOST_KEY_KEY, HOST_TYPE_KEY,
 			CLIENT_IP_ADDRESS_KEY, CLIENT_WAN_CONFIG_KEY, CLIENT_SHUTDOWN_INSTALL_KEY, CLIENT_OS_KEY,
 			CLIENT_OS_TYPE_KEY, CLIENT_OS_ARCHITECTURE_KEY, CLIENT_DEVICE_TYPE_KEY, CLIENT_DEVICE_VENDOR_KEY,
 			CLIENT_DEVICE_MODEL_KEY, CLIENT_MONITORING_KEY, UEFI_BOOT_KEY);
@@ -160,7 +161,7 @@ public class HostInfo {
 		displayRowMap.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, data.get(CLIENT_WAN_CONFIG_KEY));
 		displayRowMap.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_IP_ADDRESS_KEY));
 		displayRowMap.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, data.get(CLIENT_SYSTEM_UUID_KEY));
-		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_MAC_ADRESS_KEY));
+		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, data.get(CLIENT_MAC_ADDRESS_KEY));
 		displayRowMap.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
 
 		displayRowMap.put(CREATED_DISPLAY_FIELD_LABEL, data.get(CREATED_KEY));
@@ -186,7 +187,7 @@ public class HostInfo {
 		unordered.put(CLIENT_ONE_TIME_PASSWORD_KEY, data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		unordered.put(CLIENT_NOTES_KEY, data.get(CLIENT_NOTES_KEY));
 		unordered.put(CLIENT_SYSTEM_UUID_KEY, data.get(CLIENT_SYSTEM_UUID_KEY));
-		unordered.put(CLIENT_MAC_ADRESS_KEY, data.get(CLIENT_MAC_ADRESS_KEY));
+		unordered.put(CLIENT_MAC_ADDRESS_KEY, data.get(CLIENT_MAC_ADDRESS_KEY));
 		unordered.put(LAST_SEEN_KEY, data.get(LAST_SEEN_KEY));
 		unordered.put(CREATED_KEY, data.get(CREATED_KEY));
 		unordered.put(HOSTNAME_KEY, data.get(HOSTNAME_KEY));
@@ -215,7 +216,7 @@ public class HostInfo {
 		keys.add(HOSTNAME_KEY);
 		keys.add("domain");
 		keys.add(DEPOT_OF_CLIENT_KEY);
-		keys.add(CLIENT_MAC_ADRESS_KEY);
+		keys.add(CLIENT_MAC_ADDRESS_KEY);
 		keys.add(CLIENT_DESCRIPTION_KEY);
 		keys.add(CLIENT_INVENTORY_NUMBER_KEY);
 		keys.add(CLIENT_NOTES_KEY);
@@ -262,39 +263,15 @@ public class HostInfo {
 		return (Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY);
 	}
 
-	public void setShutdownInstall(boolean b) {
-		data.put(CLIENT_SHUTDOWN_INSTALL_KEY, b);
-	}
-
-	public void setWanConfig(boolean b) {
-		data.put(CLIENT_WAN_CONFIG_KEY, b);
-	}
-
 	public void setType(String type) {
 		data.put(HOST_TYPE_KEY, type);
 	}
 
 	private static Object showValue(String key, Object value) {
 		if (booleanKeys.contains(key)) {
-			return showValue((Boolean) value);
+			return Boolean.TRUE.equals(value);
 		} else {
-			return showValue((String) value);
-		}
-	}
-
-	private static String showValue(String value) {
-		if (value == null || "null".equals(value)) {
-			return "";
-		} else {
-			return value;
-		}
-	}
-
-	private static boolean showValue(Boolean value) {
-		if (value == null) {
-			return false;
-		} else {
-			return value;
+			return value == null || "null".equals(value) ? "" : value;
 		}
 	}
 
@@ -353,79 +330,45 @@ public class HostInfo {
 	public void resetGui() {
 		Logging.info(this, "resetGui for ", this);
 
-		MainFrame mainFrame = ConfigedMain.getMainFrame();
+		ClientInfoPanel clientInfoPanel = ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
+				.getClientInfoPanel();
 
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientDescriptionText((String) data.get(CLIENT_DESCRIPTION_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientInventoryNumberText((String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientNotesText((String) data.get(CLIENT_NOTES_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientSystemUUID((String) data.get(CLIENT_SYSTEM_UUID_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientMacAddress((String) data.get(CLIENT_MAC_ADRESS_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientIpAddress((String) data.get(CLIENT_IP_ADDRESS_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS((String) data.get(CLIENT_OS_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendorAndModel(
-				(String) data.get(CLIENT_DEVICE_VENDOR_KEY), (String) data.get(CLIENT_DEVICE_MODEL_KEY),
-				(String) data.get(CLIENT_DEVICE_TYPE_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientMonitoring((Boolean) data.get(CLIENT_MONITORING_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setClientPlatform((String) data.get(CLIENT_OS_TYPE_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot((Boolean) data.get(UEFI_BOOT_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig((Boolean) data.get(CLIENT_WAN_CONFIG_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel()
-				.setShutdownInstall((Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
-		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey((String) data.get(HOST_KEY_KEY));
+		clientInfoPanel.setClientDescriptionText((String) data.get(CLIENT_DESCRIPTION_KEY));
+		clientInfoPanel.setClientInventoryNumberText((String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
+		clientInfoPanel.setClientNotesText((String) data.get(CLIENT_NOTES_KEY));
+		clientInfoPanel.setClientSystemUUID((String) data.get(CLIENT_SYSTEM_UUID_KEY));
+		clientInfoPanel.setClientMacAddress((String) data.get(CLIENT_MAC_ADDRESS_KEY));
+		clientInfoPanel.setClientIpAddress((String) data.get(CLIENT_IP_ADDRESS_KEY));
+		clientInfoPanel.setClientOS((String) data.get(CLIENT_OS_KEY));
+		clientInfoPanel.setClientDeviceVendorAndModel((String) data.get(CLIENT_DEVICE_VENDOR_KEY),
+				(String) data.get(CLIENT_DEVICE_MODEL_KEY), (String) data.get(CLIENT_DEVICE_TYPE_KEY));
+		clientInfoPanel.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
+		clientInfoPanel.setClientMonitoring((Boolean) data.get(CLIENT_MONITORING_KEY));
+		clientInfoPanel.setClientPlatform((String) data.get(CLIENT_OS_TYPE_KEY));
+		clientInfoPanel.setUefiBoot((Boolean) data.get(UEFI_BOOT_KEY));
+		clientInfoPanel.setWANConfig((Boolean) data.get(CLIENT_WAN_CONFIG_KEY));
+		clientInfoPanel.setShutdownInstall((Boolean) data.get(CLIENT_SHUTDOWN_INSTALL_KEY));
+		clientInfoPanel.setOpsiHostKey((String) data.get(HOST_KEY_KEY));
 	}
 
-	private void setClientDescription(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
-			data.put(CLIENT_DESCRIPTION_KEY, sourceOfChanges.get(CLIENT_DESCRIPTION_KEY));
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("description"));
+	private void setClientValue(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges, String key,
+			String displayFieldLabel, Consumer<String> setTextMethod) {
+		if (sourceOfChanges.get(key) != null) {
+			data.put(key, sourceOfChanges.get(key));
+
+			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
 			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_DESCRIPTION_KEY), row, col);
+				int row = clientTablePanel.findModelRowFromClientName(client);
+				clientTablePanel.getClientTable().setValueAt(data.get(key), row, col);
 			}
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientDescriptionText((String) data.get(CLIENT_DESCRIPTION_KEY));
+			setTextMethod.accept((String) data.get(key));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setHostDescription(client,
-					(String) data.get(CLIENT_DESCRIPTION_KEY));
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_DESCRIPTION_KEY, data.get(CLIENT_DESCRIPTION_KEY));
-		}
-	}
-
-	private void setClientInventoryNumber(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY) != null) {
-			data.put(CLIENT_INVENTORY_NUMBER_KEY, sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY));
-
-			int col = clientTablePanel.getTableModel()
-					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
-			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_INVENTORY_NUMBER_KEY), row, col);
-			}
-
-			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientInventoryNumberText((String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
-
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			persistenceController.getDataServices().host.setClientInventoryNumber(client,
-					(String) data.get(CLIENT_INVENTORY_NUMBER_KEY));
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_INVENTORY_NUMBER_KEY, data.get(CLIENT_INVENTORY_NUMBER_KEY));
+			persistenceController.getDataServices().host.updateHost(client, key, data.get(key));
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, key, data.get(key));
 		}
 	}
 
@@ -434,12 +377,12 @@ public class HostInfo {
 			data.put(CLIENT_ONE_TIME_PASSWORD_KEY, sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
 					.setClientOneTimePasswordText((String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setClientOneTimePassword(client,
-					(String) data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
+			persistenceController.getDataServices().host.updateHost(client, CLIENT_ONE_TIME_PASSWORD_KEY,
+					data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
 					CLIENT_ONE_TIME_PASSWORD_KEY, data.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		}
@@ -450,132 +393,35 @@ public class HostInfo {
 			data.put(CLIENT_NOTES_KEY, sourceOfChanges.get(CLIENT_NOTES_KEY));
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
 					.setClientNotesText((String) data.get(CLIENT_NOTES_KEY));
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setHostNotes(client, (String) data.get(CLIENT_NOTES_KEY));
+			persistenceController.getDataServices().host.updateHost(client, CLIENT_NOTES_KEY,
+					data.get(CLIENT_NOTES_KEY));
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, CLIENT_NOTES_KEY,
 					data.get(CLIENT_NOTES_KEY));
 		}
 	}
 
-	private void setClientSystemUUID(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null) {
-			data.put(CLIENT_SYSTEM_UUID_KEY, ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim());
+	private static void setClientBoolean(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
+			String key, String displayFieldLabel) {
+		if (sourceOfChanges.get(key) != null) {
+			boolean value = "true".equals(sourceOfChanges.get(key));
 
-			int col = clientTablePanel.getTableModel()
-					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
-			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_SYSTEM_UUID_KEY), row, col);
-			}
-
-			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientSystemUUID((String) data.get(CLIENT_SYSTEM_UUID_KEY));
-
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			persistenceController.getDataServices().host.setSystemUUID(client,
-					(String) data.get(CLIENT_SYSTEM_UUID_KEY));
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_SYSTEM_UUID_KEY, data.get(CLIENT_SYSTEM_UUID_KEY));
-		}
-	}
-
-	private void setClientMACAddress(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null) {
-			data.put(CLIENT_MAC_ADRESS_KEY, ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim());
-
-			int col = clientTablePanel.getTableModel()
-					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_MAC_ADRESS_KEY), row, col);
-			}
-
-			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientMacAddress((String) data.get(CLIENT_MAC_ADRESS_KEY));
-
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			persistenceController.getDataServices().host.setMacAddress(client,
-					(String) data.get(CLIENT_MAC_ADRESS_KEY));
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_MAC_ADRESS_KEY, data.get(CLIENT_MAC_ADRESS_KEY));
-		}
-	}
-
-	private void setClientIPAddress(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null) {
-			data.put(CLIENT_IP_ADDRESS_KEY, ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim());
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("ipAddress"));
-			if (col > -1) {
-				clientTablePanel.getClientTable().setValueAt(data.get(CLIENT_IP_ADDRESS_KEY), row, col);
-			}
-
-			// restoring old value
-			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
-					.setClientIpAddress((String) data.get(CLIENT_IP_ADDRESS_KEY));
-
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			persistenceController.getDataServices().host.setIpAddress(client, (String) data.get(CLIENT_IP_ADDRESS_KEY));
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_IP_ADDRESS_KEY, data.get(CLIENT_IP_ADDRESS_KEY));
-		}
-	}
-
-	private static void setClientShutdownInstall(ClientTablePanel clientTablePanel, String client,
-			Map<?, ?> sourceOfChanges, int row) {
-		if (sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY) != null) {
-			boolean shutdownInstall = false;
-
-			if ("true".equals(sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY))) {
-				shutdownInstall = true;
-			}
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
+			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
 
 			if (col > -1) {
+				int row = clientTablePanel.findModelRowFromClientName(client);
 				// write it into the visible table
-				clientTablePanel.getClientTable().setValueAt(shutdownInstall, row, col);
+				clientTablePanel.getClientTable().setValueAt(value, row, col);
 			}
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getDataServices().host.setInstallOnShutdown(client, shutdownInstall);
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
-		}
-	}
-
-	private void setClientWANConfig(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY) != null) {
-			boolean wanStandard = "true".equals(sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY));
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-
-			Logging.info(this, "showAndSave found col ", col);
-
-			if (col > -1) {
-				// write it into the visible table
-				clientTablePanel.getClientTable().setValueAt(wanStandard, row, col);
-			}
-
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			persistenceController.getDataServices().host.setWanConfig(client, wanStandard);
-			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client,
-					CLIENT_WAN_CONFIG_KEY, wanStandard);
+			persistenceController.getDataServices().host.updateHost(client, key, value);
+			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, key, value);
 		}
 	}
 
@@ -591,25 +437,33 @@ public class HostInfo {
 			return;
 		}
 
-		int row = clientTablePanel.findModelRowFromClientName(client);
+		ClientInfoPanel clientInfoPanel = ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
+				.getClientInfoPanel();
 
-		setClientDescription(clientTablePanel, client, sourceOfChanges, row);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_DESCRIPTION_KEY, "description",
+				clientInfoPanel::setClientDescriptionText);
 
-		setClientInventoryNumber(clientTablePanel, client, sourceOfChanges, row);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_INVENTORY_NUMBER_KEY,
+				"ConfigedMain.pclistTableModel.clientInventoryNumber", clientInfoPanel::setClientInventoryNumberText);
 
 		setOneTimePassword(client, sourceOfChanges);
 
 		setClientNotes(client, sourceOfChanges);
 
-		setClientSystemUUID(clientTablePanel, client, sourceOfChanges, row);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_SYSTEM_UUID_KEY,
+				"ConfigedMain.pclistTableModel.clientSystemUUID", clientInfoPanel::setClientSystemUUID);
 
-		setClientMACAddress(clientTablePanel, client, sourceOfChanges, row);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_MAC_ADDRESS_KEY,
+				"ConfigedMain.pclistTableModel.clientHardwareAddress", clientInfoPanel::setClientMacAddress);
 
-		setClientIPAddress(clientTablePanel, client, sourceOfChanges, row);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_IP_ADDRESS_KEY, "ipAddress",
+				clientInfoPanel::setClientIpAddress);
 
-		setClientShutdownInstall(clientTablePanel, client, sourceOfChanges, row);
+		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_SHUTDOWN_INSTALL_KEY,
+				"ConfigedMain.pclistTableModel." + CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 
-		setClientWANConfig(clientTablePanel, client, sourceOfChanges, row);
+		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_WAN_CONFIG_KEY,
+				"ConfigedMain.pclistTableModel." + CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 	}
 
 	@Override

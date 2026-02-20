@@ -10,15 +10,11 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.UIManager;
-import javax.swing.event.TableModelListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -29,8 +25,6 @@ import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
-import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
@@ -39,7 +33,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
@@ -70,17 +63,17 @@ public final class LicenseDisplayer {
 
 	private Stage stage;
 
-	private LicenseDisplayer() {
-		try {
-			this.initAndShowGUI();
-		} catch (IOException ioE) {
-			Logging.warning(ioE, "Unable to open FXML file.");
-		}
-	}
-
 	public static void showLicenseDisplayer() {
 		if (instance == null) {
 			instance = new LicenseDisplayer();
+			try {
+				// We need to call this here because the constructor is called in the method FXMLLoader.getController() 
+				// in initAndShowGUI, which is called in the same method. So we cannot call it in the constructor.
+				// This would leed to a recursive call of the constructor and thus a stack overflow.
+				instance.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(ioE, "Unable to open FXML file.");
+			}
 		} else {
 			instance.display();
 		}
@@ -101,15 +94,13 @@ public final class LicenseDisplayer {
 		list.add(text);
 	}
 
-	private void initAndShowGUI() throws IOException {
+	public void initAndShowGUI() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/fxml/dialogs/license_dialog.fxml"));
-		Parent root = fxmlLoader.load();
-		Scene scene = new Scene(root);
-		stage = new Stage();
 
+		stage = new Stage();
 		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Icons.getMainIcon()), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
-		stage.setScene(scene);
+		stage.setScene(new Scene(fxmlLoader.load()));
 
 		// Hide stage before showing so that we know the size before it gets visible
 		stage.setOnShowing(event -> stage.hide());
@@ -153,9 +144,9 @@ public final class LicenseDisplayer {
 
 	private String showLicenseContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persistenceController.getDataServices().license
+		Map<String, Set<String>> contractsExpired = persistenceController.getDataServices().license
 				.getLicenseContractsToNotifyPD();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getDataServices().license
+		Map<String, Set<String>> contractsToNotify = persistenceController.getDataServices().license
 				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired ", contractsExpired);
@@ -165,9 +156,9 @@ public final class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
 		result.append(":  \n");
 
-		for (Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
-			for (String ID : entry.getValue()) {
-				result.append(entry.getValue() + ": " + ID);
+		for (Set<String> valueSet : contractsExpired.values()) {
+			for (String ID : valueSet) {
+				result.append(valueSet + ": " + ID);
 				result.append("\n");
 			}
 		}
@@ -177,9 +168,9 @@ public final class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
-			for (String ID : entry.getValue()) {
-				result.append(entry.getValue() + ": " + ID);
+		for (Set<String> valueSet : contractsToNotify.values()) {
+			for (String ID : valueSet) {
+				result.append(valueSet + ": " + ID);
 				result.append("\n");
 			}
 		}
@@ -188,22 +179,14 @@ public final class LicenseDisplayer {
 	}
 
 	private String calculateVariantLicensepools() {
-		GenTableModel modelSWnames;
 
-		List<String> columnNames;
+		final Set<String> namesWithVariantPools = new TreeSet<>();
 
-		List<MapBasedTableEditItem> updateCollection;
-
-		columnNames = new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS);
-
-		updateCollection = new ArrayList<>();
-
-		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
-
-		modelSWnames = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
-						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD)),
-				0, new int[] {}, (TableModelListener) null, updateCollection) {
+		new GenTableModel(null,
+				DefaultTableProvider.createWithRetrieverMapSource(new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS),
+						ReloadEvent.INSTALLED_SOFTWARE_RELOAD,
+						persistenceController.getDataServices().software::getInstalledSoftwareName2SWinfoPD),
+				0, new int[] {}, null, new ArrayList<>()) {
 			@Override
 			public void produceRows() {
 				super.produceRows();
@@ -222,14 +205,7 @@ public final class LicenseDisplayer {
 
 				Logging.info(this, "produced rows, foundVariantLicensepools ", foundVariantLicensepools);
 			}
-		};
-
-		modelSWnames.produceRows();
-
-		List<List<Object>> specialrows = modelSWnames.getRows();
-		if (specialrows != null) {
-			Logging.info(this, "initDashInfo, modelSWnames.getRows() size ", specialrows.size());
-		}
+		}.produceRows();
 
 		StringBuilder result = new StringBuilder();
 		result.append("\n");

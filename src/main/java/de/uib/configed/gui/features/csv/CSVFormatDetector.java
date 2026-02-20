@@ -130,9 +130,9 @@ public class CSVFormatDetector {
 
 		CSVHeaderDetector csvHeaderDetector = new CSVHeaderDetector(fileAsList.get(lineNumber), this);
 		hasHeader = csvHeaderDetector.detect();
-		String header = csvHeaderDetector.getHeader();
-		headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(delimiter)));
-		headers.replaceAll(String::trim);
+		headers = Arrays.stream(
+				csvHeaderDetector.getHeader().replace(String.valueOf(quote), "").split(String.valueOf(delimiter)))
+				.map(String::trim).toList();
 	}
 
 	public boolean hasExpectedHeaderNames(Collection<String> expectedHeaderNames) {

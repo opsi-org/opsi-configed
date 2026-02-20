@@ -7,8 +7,8 @@
 package de.uib.configed.gui;
 
 import java.awt.event.MouseListener;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
@@ -89,7 +89,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 	public void activateListSelectionListener() {
 		// We want to prevent, that the listSelectionListener is added more than once
-		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(this)) {
+		if (!List.of(selectionModel.getListSelectionListeners()).contains(this)) {
 			selectionModel.addListSelectionListener(this);
 		}
 	}

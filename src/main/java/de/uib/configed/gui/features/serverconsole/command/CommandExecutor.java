@@ -121,27 +121,29 @@ public class CommandExecutor implements MessagebusListener {
 	 * @throws IllegalStateException if GUI mode is not enabled
 	 */
 	public void executeAsync() {
-		setupGuiOnEdt();
-		new Thread(this::runCommand, "CommandExecutor-Thread").start();
-	}
-
-	private void setupGuiOnEdt() {
 		if (!withGUI) {
 			throw new IllegalStateException("executeAsync() requires GUI mode; call setWithGUI(true)");
 		}
 
 		SwingUtilities.invokeLater(() -> {
-			terminalFrame.setMessagebus(Messagebus.getInstance());
+			showTerminalFrame();
 
-			if (getDialog() == null || !getDialog().isVisible()) {
-				terminalFrame.display();
-			} else {
-				terminalFrame.getTabbedPane().getSelectedTerminalWidget().clearScreen();
-				getDialog().toFront();
-			}
-
-			terminalFrame.disableUserInputForSelectedWidget();
+			// We can start this only after the terminal frame components are created, because
+			// this will write progress messages to the terminal frame.
+			new Thread(this::runCommand, "CommandExecutor-Thread").start();
 		});
+	}
+
+	private void showTerminalFrame() {
+		terminalFrame.setMessagebus(Messagebus.getInstance());
+		if (getDialog() == null || !getDialog().isVisible()) {
+			terminalFrame.display();
+		} else {
+			terminalFrame.getTabbedPane().getSelectedTerminalWidget().clearScreen();
+			getDialog().toFront();
+		}
+
+		terminalFrame.disableUserInputForSelectedWidget();
 	}
 
 	/**

@@ -6,12 +6,10 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -88,9 +86,9 @@ public class LicenseDataService extends DataService {
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS, Map.class);
 	}
 
-	public NavigableMap<String, NavigableSet<String>> getLicenseContractsToNotifyPD() {
+	public Map<String, Set<String>> getLicenseContractsToNotifyPD() {
 		retrieveLicenseContractsPD();
-		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, Map.class);
 	}
 
 	public void retrieveLicenseContractsPD() {
@@ -101,7 +99,7 @@ public class LicenseDataService extends DataService {
 
 		String today = new java.sql.Date(System.currentTimeMillis()).toString();
 		Map<String, LicenseContractEntry> licenseContracts = new HashMap<>();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = new TreeMap<>();
+		Map<String, Set<String>> contractsToNotify = new HashMap<>();
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			List<Map<String, Object>> retrieved = dataServices.exec
 					.getListOfMaps(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS);
@@ -112,8 +110,7 @@ public class LicenseDataService extends DataService {
 
 				String notiDate = entry.get(LicenseContractEntry.NOTIFICATION_DATE_KEY);
 				if (notiDate != null && !notiDate.isBlank() && notiDate.compareTo(today) <= 0) {
-					NavigableSet<String> contractSet = contractsToNotify.computeIfAbsent(notiDate,
-							s -> new TreeSet<>());
+					Set<String> contractSet = contractsToNotify.computeIfAbsent(notiDate, s -> new TreeSet<>());
 
 					contractSet.add(entry.getId());
 				}
@@ -357,8 +354,8 @@ public class LicenseDataService extends DataService {
 
 	public void retrieveLicensesUsagePD() {
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE,
-						CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
+				&& dataServices.cacheManager.isDataCached(
+						List.of(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;
 		}
 

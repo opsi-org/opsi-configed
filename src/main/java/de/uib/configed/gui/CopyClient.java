@@ -6,8 +6,8 @@
 
 package de.uib.configed.gui;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -77,8 +77,8 @@ public class CopyClient {
 	private void copyClient() {
 		List<Object> client = List.of(newClientName,
 				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
-				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", "",
-				Boolean.toString(clientToCopy.getShutdownInstall()), Boolean.toString(clientToCopy.getWanConfig()), "",
+				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", new ArrayList<>(),
+				Boolean.toString(clientToCopy.getWanConfig()), Boolean.toString(clientToCopy.getShutdownInstall()), "",
 				"");
 		persistenceController.getDataServices().host.createClients(List.of(client));
 	}
@@ -95,13 +95,13 @@ public class CopyClient {
 		}
 
 		persistenceController.getDataServices().group.addHost2Groups(newClientNameWithDomain, clientGroups);
-		persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
+		persistenceController.reloadData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString());
 	}
 
 	private void copyProducts() {
 		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persistenceController
-				.getDataServices().product.getMapOfProductStatesAndActions(
-						Collections.singleton(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
+				.getDataServices().product
+						.getMapOfProductStatesAndActions(Set.of(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
 
 		if (mapOfProductStatesAndActions.isEmpty()) {
 			return;
@@ -129,11 +129,9 @@ public class CopyClient {
 	}
 
 	private int getProductType(String productId) {
-		if (persistenceController.getDataServices().product.getAllLocalbootProductNames().contains(productId)) {
-			return OpsiPackage.TYPE_LOCALBOOT;
-		} else {
-			return OpsiPackage.TYPE_NETBOOT;
-		}
+		return persistenceController.getDataServices().product.getAllLocalbootProductNames().contains(productId)
+				? OpsiPackage.TYPE_LOCALBOOT
+				: OpsiPackage.TYPE_NETBOOT;
 	}
 
 	private void copyProductProperties() {

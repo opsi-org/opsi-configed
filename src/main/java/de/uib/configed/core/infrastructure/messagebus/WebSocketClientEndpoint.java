@@ -53,10 +53,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 	@Override
 	public boolean isOpen() {
 		WebSocket con = getConnection();
-		if (con == null) {
-			return false;
-		}
-		return con.isOpen();
+		return con != null && con.isOpen();
 	}
 
 	@Override

@@ -6,8 +6,8 @@
 
 package de.uib.configed.gui.type.licenses;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public class AuditSoftwareXLicensePool extends Relation {
 
 	private static final List<String> SOFTWARE_ATTRIBUTES;
 	static {
-		SOFTWARE_ATTRIBUTES = new LinkedList<>();
+		SOFTWARE_ATTRIBUTES = new ArrayList<>();
 		SOFTWARE_ATTRIBUTES.add(LicensepoolEntry.ID_SERVICE_KEY);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.NAME);
 		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.VERSION);
@@ -33,7 +33,7 @@ public class AuditSoftwareXLicensePool extends Relation {
 
 	private static final List<String> INTERFACED_ATTRIBUTES;
 	static {
-		INTERFACED_ATTRIBUTES = new LinkedList<>(SOFTWARE_ATTRIBUTES);
+		INTERFACED_ATTRIBUTES = new ArrayList<>(SOFTWARE_ATTRIBUTES);
 		INTERFACED_ATTRIBUTES.add(SW_ID);
 	}
 

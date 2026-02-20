@@ -137,8 +137,8 @@ public final class ServerActionManager {
 	}
 
 	public static void processActionRequestsSelectedProducts(String visibility) {
-		processActionRequests(ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs(), visibility);
+		processActionRequests(ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
+				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs(), visibility);
 	}
 
 	private static void processActionRequests(Set<String> products, String visibility) {
@@ -279,9 +279,10 @@ public final class ServerActionManager {
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy(options);
 
+				String selectedGroup = configedMain.getSelectedGroupName();
 				configedMain.setRebuiltClientListTableModel(true, true);
-				configedMain.activateGroup(false, configedMain.getSelectedGroupName());
-				configedMain.setClient(newClientNameWithDomain);
+				configedMain.activateGroup(false, selectedGroup);
+				configedMain.setClients(Set.of(newClientNameWithDomain));
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
@@ -392,7 +393,7 @@ public final class ServerActionManager {
 
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
-		ConfigedMain.getMainFrame().getClientConfiguration().updateProductTab();
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().updateProductTab();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
@@ -452,9 +453,10 @@ public final class ServerActionManager {
 					newClientName);
 
 			SwingUtilities.invokeLater(() -> {
-				configedMain.refreshClientListActivateALL();
+				configedMain.setRebuiltClientListTableModel(true, true);
+				configedMain.activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 				Logging.debug("set client refreshClientList");
-				configedMain.setClient(newClientName);
+				configedMain.setClients(Set.of(newClientName));
 			});
 		}
 	}

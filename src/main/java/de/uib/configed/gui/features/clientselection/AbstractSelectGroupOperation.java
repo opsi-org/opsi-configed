@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.features.clientselection;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public abstract class AbstractSelectGroupOperation extends AbstractSelectOperati
 
 	protected AbstractSelectGroupOperation() {
 		super(null);
-		childOperations = new LinkedList<>();
+		childOperations = new ArrayList<>();
 	}
 
 	/** Register an operation as child of this operation. */

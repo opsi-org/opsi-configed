@@ -198,12 +198,7 @@ public final class CertificateManager {
 
 	public static File getCertificates() {
 		File file = new File(getPathToCACerts(), Globals.CERTIFICATE_FILE);
-
-		if (file.exists()) {
-			return file;
-		} else {
-			return null;
-		}
+		return file.exists() ? file : null;
 	}
 
 	public static void saveCertificate() {

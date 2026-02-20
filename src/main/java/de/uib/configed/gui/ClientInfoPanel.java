@@ -21,9 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -41,19 +38,10 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class ClientInfoPanel extends JPanel implements DocumentListener {
-	private JLabel labelClientDescription;
-	private JLabel labelClientInventoryNumber;
-	private JLabel labelClientNotes;
-	private JLabel labelClientSystemUUID;
-	private JLabel labelClientMacAddress;
-	private JLabel labelClientIPAddress;
+public class ClientInfoPanel extends JPanel {
 	private JLabel labelDeviceTypeIcon;
 	private JTextArea jTextAreaVendorModel;
-	private JLabel labelOneTimePassword;
-	private JLabel labelOpsiHostKey;
 
-	private JScrollPane scrollpaneNotes;
 	private JScrollPane scrollpaneVendorModel;
 
 	private JLabel labelClientOSIcon;
@@ -100,18 +88,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextFieldClientID = createUneditableTextField();
 		jTextFieldClientID.setFont(jTextFieldClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
-		labelClientDescription = SwingUtils.createBoldLabel("description");
-
-		labelClientInventoryNumber = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber");
-
-		labelClientNotes = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.notes");
-
-		labelClientSystemUUID = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID");
-
-		labelClientMacAddress = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress");
-
-		labelClientIPAddress = SwingUtils.createBoldLabel("ipAddress");
-
 		jTextFieldClientOS = createUneditableTextField();
 		jTextFieldClientOS.setFont(jTextFieldClientOS.getFont().deriveFont(Font.BOLD));
 		jTextFieldClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
@@ -129,17 +105,15 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollpaneVendorModel.setBorder(null);
 
-		labelOneTimePassword = SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword");
-
-		labelOpsiHostKey = SwingUtils.createBoldLabel("opsi-host-key");
-
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
-		jTextFieldDescription.getDocument().addDocumentListener(this);
+		jTextFieldDescription.getDocument().addDocumentListener(
+				SwingUtils.onDocumentChange(() -> dataChange(jTextFieldDescription, HostInfo.CLIENT_DESCRIPTION_KEY)));
 
 		jTextFieldInventoryNumber = new JTextField();
 		jTextFieldInventoryNumber.setEditable(true);
-		jTextFieldInventoryNumber.getDocument().addDocumentListener(this);
+		jTextFieldInventoryNumber.getDocument().addDocumentListener(SwingUtils
+				.onDocumentChange(() -> dataChange(jTextFieldInventoryNumber, HostInfo.CLIENT_INVENTORY_NUMBER_KEY)));
 
 		jTextAreaNotes = new JTextArea();
 
@@ -147,27 +121,27 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
 
-		jTextAreaNotes.getDocument().addDocumentListener(this);
-
-		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
-		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jTextAreaNotes.getDocument().addDocumentListener(
+				SwingUtils.onDocumentChange(() -> dataChange(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY)));
 
 		systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
 				Character.MIN_VALUE, 36, true), "", 36);
-		systemUUIDField.getDocument().addDocumentListener(this);
+		systemUUIDField.getDocument().addDocumentListener(
+				SwingUtils.onDocumentChange(() -> dataChange(systemUUIDField, HostInfo.CLIENT_SYSTEM_UUID_KEY)));
 
 		macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
 				2, true), "", 17);
 
-		macAddressField.getDocument().addDocumentListener(this);
+		macAddressField.getDocument().addDocumentListener(
+				SwingUtils.onDocumentChange(() -> dataChange(macAddressField, HostInfo.CLIENT_MAC_ADDRESS_KEY)));
 
 		ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
-		ipAddressField.getDocument().addDocumentListener(this);
+		ipAddressField.getDocument().addDocumentListener(
+				SwingUtils.onDocumentChange(() -> dataChange(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY)));
 
 		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 		checkBoxUEFIBoot.setAllowIndeterminate(false);
@@ -206,7 +180,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		updateClientCheckboxText();
 
 		jTextFieldOneTimePassword = new JTextField();
-		jTextFieldOneTimePassword.getDocument().addDocumentListener(this);
+		jTextFieldOneTimePassword.getDocument().addDocumentListener(SwingUtils
+				.onDocumentChange(() -> dataChange(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY)));
 
 		hostKeyField = new FlatPasswordField();
 		hostKeyField.setEditable(false);
@@ -243,19 +218,19 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		add(scrollpaneVendorModel, "growx, hmin 50, gapbottom " + MIN);
 
-		add(labelClientDescription, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("description"), "gaptop " + GAP);
 		add(jTextFieldDescription, "growx");
 
-		add(labelClientInventoryNumber, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.clientInventoryNumber"), "gaptop " + GAP);
 		add(jTextFieldInventoryNumber, "growx");
 
-		add(labelClientSystemUUID, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.systemUUID"), "gaptop " + GAP);
 		add(systemUUIDField, "growx");
 
-		add(labelClientMacAddress, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.clientHardwareAddress"), "gaptop " + GAP);
 		add(macAddressField, "growx");
 
-		add(labelClientIPAddress, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("ipAddress"), "gaptop " + GAP);
 		add(ipAddressField, "growx");
 
 		add(checkBoxInstallByShutdown, "gaptop " + GAP);
@@ -267,63 +242,54 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		add(checkBoxHealthCheckActive, "split 2, gapright " + GAP);
 		add(openHealthCheckSettingsDialogButton);
 
-		add(labelOneTimePassword, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword"), "gaptop " + GAP);
 		add(jTextFieldOneTimePassword, "growx");
 
-		add(labelOpsiHostKey, "gaptop " + GAP);
+		add(SwingUtils.createBoldLabel("opsi-host-key"), "gaptop " + GAP);
 		add(hostKeyField, "growx");
 
-		add(labelClientNotes, "gaptop " + GAP);
-		add(scrollpaneNotes, "grow, pushy");
+		add(SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.notes"), "gaptop " + GAP);
+		add(new JScrollPane(jTextAreaNotes, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), "grow, pushy");
 
 		setMinimumSize(new Dimension());
 	}
 
 	public void setClientDescriptionText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextFieldDescription.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextFieldDescription.setText(s));
 	}
 
 	public void setClientInventoryNumberText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextFieldInventoryNumber.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextFieldInventoryNumber.setText(s));
 	}
 
 	public void setClientOneTimePasswordText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextFieldOneTimePassword.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextFieldOneTimePassword.setText(s));
 	}
 
 	public void setClientNotesText(String s) {
-		dataAreChangedProgramatically = true;
-		jTextAreaNotes.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> jTextAreaNotes.setText(s));
 	}
 
 	public void setClientMacAddress(String s) {
-		dataAreChangedProgramatically = true;
-		macAddressField.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> macAddressField.setText(s));
 	}
 
 	public void setClientSystemUUID(String s) {
-		dataAreChangedProgramatically = true;
-		systemUUIDField.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> systemUUIDField.setText(s));
 	}
 
 	public void setClientIpAddress(String s) {
-		dataAreChangedProgramatically = true;
-		ipAddressField.setText(s);
-		dataAreChangedProgramatically = false;
+		changeData(() -> ipAddressField.setText(s));
 	}
 
 	public void setClientOS(String s) {
+		changeData(() -> jTextFieldClientOS.setText(s));
+	}
+
+	private void changeData(Runnable changeDataAction) {
 		dataAreChangedProgramatically = true;
-		jTextFieldClientOS.setText(s);
+		changeDataAction.run();
 		dataAreChangedProgramatically = false;
 	}
 
@@ -375,30 +341,26 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	public void setClientMonitoring(Boolean value) {
-		dataAreChangedProgramatically = true;
-		checkBoxHealthCheckActive.setChecked(value);
-		dataAreChangedProgramatically = false;
+		changeData(() -> checkBoxHealthCheckActive.setChecked(value));
 	}
 
 	public void setClientPlatform(String value) {
-		dataAreChangedProgramatically = true;
-		labelClientOSIcon.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
-		dataAreChangedProgramatically = false;
+		changeData(() -> labelClientOSIcon.setIcon(Utils.determineIconBasedOnPlatform(value, 24)));
 	}
 
 	public void setUefiBoot(Boolean uefiBoot) {
 		Logging.info(this, "setUefiBoot ", uefiBoot);
-		checkBoxUEFIBoot.setChecked(uefiBoot);
+		changeData(() -> checkBoxUEFIBoot.setChecked(uefiBoot));
 	}
 
 	public void setWANConfig(Boolean value) {
 		Logging.info(this, "setWANConfig ", value);
-		checkBoxWANConfig.setChecked(value);
+		changeData(() -> checkBoxWANConfig.setChecked(value));
 	}
 
 	public void setShutdownInstall(Boolean value) {
 		Logging.info(this, "setShutdownInstall ", value);
-		checkBoxInstallByShutdown.setChecked(value);
+		changeData(() -> checkBoxInstallByShutdown.setChecked(value));
 	}
 
 	public void setOpsiHostKey(String s) {
@@ -440,29 +402,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		}
 	}
 
-	private void reactToClientDataChange(Document document) {
+	private void dataChange(JTextComponent editorField, String key) {
 		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: ", dataAreChangedProgramatically);
 
-		if (dataAreChangedProgramatically || configedMain.getSelectedClients().size() != 1) {
-			return;
-		}
-
-		if (document == jTextFieldDescription.getDocument()) {
-			applyChanges(jTextFieldDescription, HostInfo.CLIENT_DESCRIPTION_KEY);
-		} else if (document == jTextFieldInventoryNumber.getDocument()) {
-			applyChanges(jTextFieldInventoryNumber, HostInfo.CLIENT_INVENTORY_NUMBER_KEY);
-		} else if (document == jTextFieldOneTimePassword.getDocument()) {
-			applyChanges(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY);
-		} else if (document == jTextAreaNotes.getDocument()) {
-			applyChanges(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY);
-		} else if (document == systemUUIDField.getDocument()) {
-			applyChanges(systemUUIDField, HostInfo.CLIENT_SYSTEM_UUID_KEY);
-		} else if (document == macAddressField.getDocument()) {
-			applyChanges(macAddressField, HostInfo.CLIENT_MAC_ADRESS_KEY);
-		} else if (document == ipAddressField.getDocument()) {
-			applyChanges(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY);
-		} else {
-			Logging.warning(this, "unexpected source in reactToHostDataChange, document: ", document);
+		if (!dataAreChangedProgramatically && configedMain.getSelectedClients().size() == 1) {
+			applyChanges(editorField, key);
 		}
 	}
 
@@ -487,8 +431,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-				.isGlobalReadOnly();
+		boolean writingAllowed = !persistenceController.getDataServices().userRoles.isGlobalReadOnly();
 
 		jTextFieldDescription.setEnabled(singleClient);
 		jTextFieldDescription.setEditable(writingAllowed);
@@ -530,21 +473,5 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void hideHealthCheckActiveCheckBox(boolean hide) {
 		checkBoxHealthCheckActive.setVisible(hide);
 		openHealthCheckSettingsDialogButton.setVisible(hide);
-	}
-
-	// DocumentListener
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		reactToClientDataChange(e.getDocument());
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		reactToClientDataChange(e.getDocument());
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		reactToClientDataChange(e.getDocument());
 	}
 }

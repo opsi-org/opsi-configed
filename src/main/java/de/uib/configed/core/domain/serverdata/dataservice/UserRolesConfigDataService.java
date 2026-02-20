@@ -162,7 +162,8 @@ public class UserRolesConfigDataService extends DataService {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
 				.getDataServices().userRoles.hasServerFullPermissionPD();
-		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
+		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getMainPanelManager()
+				.getServerConfiguration();
 		boolean isCurrentUserRoleSelected = serverConfiguration != null
 				&& serverConfiguration.isCurrentUserRoleSelected();
 		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
@@ -539,7 +540,7 @@ public class UserRolesConfigDataService extends DataService {
 
 		if (applyUserSpecializedConfigPD()) {
 			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-					+ dataServices.persistenceController.getExecutioner().getUsername() + "}.";
+					+ dataServices.persistenceController.getExecutioner().getHostData().getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}

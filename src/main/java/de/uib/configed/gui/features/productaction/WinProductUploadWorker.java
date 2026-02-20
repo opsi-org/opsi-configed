@@ -9,9 +9,9 @@ package de.uib.configed.gui.features.productaction;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -95,7 +95,7 @@ public class WinProductUploadWorker extends SwingWorker<Void, Void> {
 	 * and prompts the user.
 	 */
 	private void handleProductKeyUpdate() {
-		List<String> values = Collections.singletonList(ctx.productKey);
+		List<String> values = List.of(ctx.productKey);
 
 		Map<String, Object> propsMap = persistenceController.getDataServices().product.getProductPropertiesPD(
 				persistenceController.getDataServices().hostInfoCollections.getConfigServer(), ctx.winProduct);
@@ -106,8 +106,8 @@ public class WinProductUploadWorker extends SwingWorker<Void, Void> {
 		if (!oldProductKey.equals(ctx.productKey) && confirmProductKeyChange()) {
 			setWaitCursor(true);
 			Logging.info(this, "setCommonProductPropertyValue ", ctx.depot, ", ", ctx.winProduct, ", ", values);
-			persistenceController.getDataServices().product.setCommonProductPropertyValue(
-					Collections.singleton(ctx.depot), ctx.winProduct, "productkey", values);
+			persistenceController.getDataServices().product.setCommonProductPropertyValue(Set.of(ctx.depot),
+					ctx.winProduct, "productkey", values);
 		}
 	}
 

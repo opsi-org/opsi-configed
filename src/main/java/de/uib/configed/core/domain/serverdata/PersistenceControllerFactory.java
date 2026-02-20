@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import de.uib.configed.core.domain.serverdata.dataservice.UserDataService;
 import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.share.logging.Logging;
@@ -31,18 +32,16 @@ public final class PersistenceControllerFactory {
 	 * method getPersistenceController - or construct a new one. If user, server
 	 * and otp is empty we try to use sso.
 	 */
-	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
-			String password, String otp, boolean useSSO) {
+	public static OpsiServiceNOMPersistenceController getNewPersistenceController(HostData hostData) {
 		Logging.info("getNewPersistenceController");
 
-		if (!otp.isEmpty() && !OTP_PATTERN.matcher(otp).matches()) {
+		if (!hostData.getOtp().isEmpty() && !OTP_PATTERN.matcher(hostData.getOtp()).matches()) {
 			Logging.error("One Time Password (OTP) should only contain digits and be 6 characters long.");
 			return null;
 		}
 
-		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
-				user, password, otp, useSSO);
-		if (useSSO && persistenceController.getExecutioner() == null) {
+		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(hostData);
+		if (hostData.isUseSSO() && persistenceController.getExecutioner() == null) {
 			Logging.error("Failed to create a PersistenceController instance using sso.");
 			return null;
 		}
@@ -52,7 +51,7 @@ public final class PersistenceControllerFactory {
 
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-			persistenceController.getDataServices().user.checkMultiFactorAuthenticationPD(user);
+			persistenceController.getDataServices().user.checkMultiFactorAuthenticationPD(hostData.getUser());
 		}
 
 		staticPersistControl = persistenceController;
@@ -63,7 +62,7 @@ public final class PersistenceControllerFactory {
 			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - userDataService:",
 					userDataService);
 
-			if (!useSSO) {
+			if (!hostData.isUseSSO()) {
 				isMFAEnabled = userDataService.usesMFA();
 				Logging.debug(
 						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
