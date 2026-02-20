@@ -61,7 +61,7 @@ public final class PersistenceControllerFactory {
 					userDataService);
 
 			if (!hostData.isUseSSO()) {
-				hostData.setUseSSO(userDataService.usesMultiFactorAuthentication());
+				hostData.setUseMFA(userDataService.usesMultiFactorAuthentication());
 				Logging.debug(
 						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
 						hostData.isUseMFA());

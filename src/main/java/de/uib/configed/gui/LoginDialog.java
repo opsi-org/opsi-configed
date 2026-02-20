@@ -345,7 +345,8 @@ public class LoginDialog extends JFrame {
 		Logging.info(this, "starting thread");
 
 		new LoginThread(this, new HostData((String) fieldHost.getSelectedItem(), user,
-				String.valueOf(passwordField.getPassword()), String.valueOf(fieldOTP.getPassword()), useSSO)).start();
+				String.valueOf(passwordField.getPassword()), String.valueOf(fieldOTP.getPassword()), useSSO, false))
+						.start();
 	}
 
 	private void login(JTextField source) {
