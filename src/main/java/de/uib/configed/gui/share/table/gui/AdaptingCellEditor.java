@@ -14,8 +14,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
+import de.uib.configed.gui.share.ComboBoxModeller;
 import de.uib.configed.gui.share.swing.ColoredListCellRenderer;
-import de.uib.configed.share.ComboBoxModeller;
 
 public class AdaptingCellEditor extends DefaultCellEditor {
 	private JComboBox<String> cc;
