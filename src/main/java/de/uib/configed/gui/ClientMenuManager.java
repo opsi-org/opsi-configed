@@ -68,9 +68,11 @@ public final class ClientMenuManager implements MenuListener {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
 
-		menuItemsHost = Map.of(UserRolesConfigDataService.ITEM_ADD_CLIENT,
-				clientMenuItems.get("MainFrame.jMenuAddClient"), UserRolesConfigDataService.ITEM_DELETE_CLIENT,
-				clientMenuItems.get("MainFrame.jMenuDeleteClient"), UserRolesConfigDataService.ITEM_FREE_LICENSES,
+		menuItemsHost = new HashMap<>();
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, clientMenuItems.get("MainFrame.jMenuAddClient"));
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT,
+				clientMenuItems.get("MainFrame.jMenuDeleteClient"));
+		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES,
 				clientMenuItems.get("MainFrame.jMenuFreeLicenses"));
 
 		initJMenu();
