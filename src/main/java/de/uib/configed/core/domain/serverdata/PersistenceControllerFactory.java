@@ -61,15 +61,10 @@ public final class PersistenceControllerFactory {
 					userDataService);
 
 			if (!hostData.isUseSSO()) {
-				boolean isMultiFactorAuthenticationEnabled = userDataService.usesMultiFactorAuthentication();
+				hostData.setUseSSO(userDataService.usesMultiFactorAuthentication());
 				Logging.debug(
 						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
-						isMultiFactorAuthenticationEnabled);
-
-				Utils.setMultiFactorAuthenticationEnabled(isMultiFactorAuthenticationEnabled);
-				Logging.debug(
-						"PersistenceControllerFactory.getNewPersistenceController() - setMultiFactorAuthenticationEnabled:",
-						Utils.isMultiFactorAuthenticationEnabled());
+						hostData.isUseMFA());
 			}
 
 			ParallelTaskExecutor executor = new ParallelTaskExecutor();

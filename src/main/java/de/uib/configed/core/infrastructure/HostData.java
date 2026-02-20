@@ -18,4 +18,5 @@ public class HostData {
 	private String password;
 	private String otp;
 	private boolean useSSO;
+	private boolean useMFA;
 }
