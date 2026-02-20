@@ -300,10 +300,7 @@ public class ConnectionHandler {
 			if (!ROLE_CONFIGSERVER.equals(role)) {
 				return PreflightResult.NOT_CONFIGSERVER;
 			}
-			if ("client".equals(principalType)) {
-				return PreflightResult.CLIENT_PRINCIPAL;
-			}
-			return PreflightResult.ALLOWED;
+			return "client".equals(principalType) ? PreflightResult.CLIENT_PRINCIPAL : PreflightResult.ALLOWED;
 		} finally {
 			if (connection != null) {
 				try {

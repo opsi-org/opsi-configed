@@ -436,11 +436,7 @@ public class ModuleDataService extends DataService {
 
 		Logging.info(this, "calculateModulePermission returns ", maxClients);
 
-		if (maxClients == null) {
-			return globalMaxClients;
-		} else {
-			return new ExtendedInteger(maxClients);
-		}
+		return maxClients == null ? globalMaxClients : new ExtendedInteger(maxClients);
 	}
 
 	public boolean isOpsiUserAdminPD() {

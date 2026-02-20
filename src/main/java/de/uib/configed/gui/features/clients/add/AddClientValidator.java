@@ -129,10 +129,7 @@ final class AddClientValidator {
 
 		private static boolean isValidBooleans(List<Object> client) {
 			// Expecting wan at index 10 and shutdownInstall at index 11 as boolean strings
-			if (client.size() <= 11) {
-				return false;
-			}
-			return isBoolean((String) client.get(10)) && isBoolean((String) client.get(11));
+			return client.size() > 11 && isBoolean((String) client.get(10)) && isBoolean((String) client.get(11));
 		}
 
 		private static boolean isBoolean(String bool) {

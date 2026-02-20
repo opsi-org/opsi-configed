@@ -183,10 +183,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 	@Override
 	public int compareTo(MultiCommandTemplate compareCom) {
 		int dif = this.getPriority() - compareCom.getPriority();
-		if (dif == 0) {
-			return this.getMenuText().compareTo(compareCom.getMenuText());
-		}
-		return dif;
+		return dif == 0 ? this.getMenuText().compareTo(compareCom.getMenuText()) : dif;
 	}
 
 	@Override

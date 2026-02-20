@@ -211,7 +211,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 		if (panelTable.getGenEditTable().getRowSorter() instanceof TableRowSorter) {
 			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable
 					.getGenEditTable().getRowSorter();
-			rowSorter.setComparator(7, new OSComparator());
+			rowSorter.setComparator(7, Comparator.comparing((Boolean b) -> b).reversed());
 
 			List<RowSorter.SortKey> sortKeys = new ArrayList<>(2);
 			sortKeys.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
@@ -246,18 +246,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 					actionOnPopupMenu(p);
 				}
 			};
-		}
-	}
-
-	private static class OSComparator implements Comparator<Boolean> {
-		@Override
-		public int compare(Boolean o1, Boolean o2) {
-			boolean b1 = o1;
-			boolean b2 = o2;
-			if (b1 == b2) {
-				return 0;
-			}
-			return b1 ? -1 : 1;
 		}
 	}
 

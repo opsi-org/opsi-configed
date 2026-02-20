@@ -105,11 +105,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 	}
 
 	private String getPingOption() {
-		if (pingIsRequired) {
-			return " ";
-		} else {
-			return " --ignore-failed-ping ";
-		}
+		return pingIsRequired ? " " : " --ignore-failed-ping ";
 	}
 
 	@Override

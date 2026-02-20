@@ -61,11 +61,7 @@ public class ExtendedInteger implements Comparable<Integer> {
 	}
 
 	public String getDisplay() {
-		if (value.equals(S_INFINITE)) {
-			return DISPLAY_INFINITE;
-		} else {
-			return value;
-		}
+		return value.equals(S_INFINITE) ? DISPLAY_INFINITE : value;
 	}
 
 	@Override
@@ -111,11 +107,7 @@ public class ExtendedInteger implements Comparable<Integer> {
 	// Interface Comparable
 	@Override
 	public int compareTo(Integer integer) {
-		if (this.equals(INFINITE)) {
-			return -1;
-		} else {
-			return getNumber() - integer;
-		}
+		return this.equals(INFINITE) ? 1 : this.getNumber().compareTo(integer);
 	}
 
 	@Override

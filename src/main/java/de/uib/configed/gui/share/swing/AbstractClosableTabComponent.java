@@ -34,10 +34,7 @@ public abstract class AbstractClosableTabComponent extends JPanel {
 			@Override
 			public String getText() {
 				int i = pane.indexOfTabComponent(AbstractClosableTabComponent.this);
-				if (i != -1) {
-					return pane.getTitleAt(i);
-				}
-				return null;
+				return i != -1 ? pane.getTitleAt(i) : null;
 			}
 		};
 		add(label);

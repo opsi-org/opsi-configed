@@ -73,11 +73,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public static String translateToPersistentName(String name) {
-		if (DIRECTORY_NAME.equals(name)) {
-			return DIRECTORY_PERSISTENT_NAME;
-		} else {
-			return name;
-		}
+		return DIRECTORY_NAME.equals(name) ? DIRECTORY_PERSISTENT_NAME : name;
 	}
 
 	private static class NodeComparator implements Comparator<DefaultMutableTreeNode> {

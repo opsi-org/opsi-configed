@@ -77,11 +77,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 			@Override
 			public Object getValueAt(int row, int col) {
-				if (col == 0) {
-					return values.get(row);
-				} else {
-					return "" + descriptions.get(row);
-				}
+				return col == 0 ? values.get(row) : descriptions.get(row);
 			}
 		};
 	}
@@ -104,10 +100,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public int getSelectedRow() {
-		if (getSelectedRows().length == 0) {
-			return -1;
-		}
-		return getSelectedRows()[0];
+		return getSelectedRows().length > 0 ? getSelectedRows()[0] : -1;
 	}
 
 	@Override

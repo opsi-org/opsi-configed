@@ -1049,11 +1049,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	@Override
 	public int getRowCount() {
-		if (filter == null) {
-			return sortedProductsList.size();
-		} else {
-			return filter.length;
-		}
+		return filter == null ? sortedProductsList.size() : filter.length;
 	}
 
 	@Override

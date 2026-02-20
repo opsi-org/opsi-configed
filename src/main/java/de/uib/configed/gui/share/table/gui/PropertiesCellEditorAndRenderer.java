@@ -263,11 +263,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	// If it is editable, we return the item from the editor, otherwise we return the
 	// selected item from the combo box.
 	private Object getComboBoxValue() {
-		if (comboBox.isEditable()) {
-			return comboBox.getEditor().getItem();
-		} else {
-			return comboBox.getSelectedItem();
-		}
+		return comboBox.isEditable() ? comboBox.getEditor().getItem() : comboBox.getSelectedItem();
 	}
 
 	@Override

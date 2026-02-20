@@ -129,11 +129,9 @@ public class CopyClient {
 	}
 
 	private int getProductType(String productId) {
-		if (persistenceController.getDataServices().product.getAllLocalbootProductNames().contains(productId)) {
-			return OpsiPackage.TYPE_LOCALBOOT;
-		} else {
-			return OpsiPackage.TYPE_NETBOOT;
-		}
+		return persistenceController.getDataServices().product.getAllLocalbootProductNames().contains(productId)
+				? OpsiPackage.TYPE_LOCALBOOT
+				: OpsiPackage.TYPE_NETBOOT;
 	}
 
 	private void copyProductProperties() {
