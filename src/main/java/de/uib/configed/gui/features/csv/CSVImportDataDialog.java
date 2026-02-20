@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.csv;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -69,7 +70,7 @@ public class CSVImportDataDialog {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("CSVImportDataDialog.title"));
-		dialog.setContentPane(optionPane);
+		dialog.setMinimumSize(new Dimension());
 		dialog.pack();
 
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -136,27 +137,29 @@ public class CSVImportDataDialog {
 
 		modifier.updateTable(format, startLine, thePanel);
 
-		JPanel panel = new JPanel(new MigLayout("insets " + Globals.GAP_SIZE, "[grow]", "[]0"));
+		JPanel panel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]",
+				"[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE
+						+ "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[grow]"
+						+ Globals.MIN_GAP_SIZE));
 
-		panel.add(importOptionsLabel, "wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+		panel.add(importOptionsLabel);
 
 		panel.add(startLineLabel, "split 2, gapright " + Globals.GAP_SIZE);
-		panel.add(startLineInput, "span, growx, pushx, wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+		panel.add(startLineInput, "growx, pushx, wrap");
 
-		panel.add(splittingOptionsLabel, "wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+		panel.add(splittingOptionsLabel);
 
 		panel.add(tabsOption, "split 6");
 		panel.add(commaOption, "gapleft " + Globals.GAP_SIZE);
 		panel.add(semicolonOption, "gapleft " + Globals.GAP_SIZE);
 		panel.add(spaceOption, "gapleft " + Globals.GAP_SIZE);
 		panel.add(otherOption, "gapleft " + Globals.GAP_SIZE);
-		panel.add(otherDelimiterInput,
-				"gapleft " + Globals.GAP_SIZE + ", span, growx, pushx, wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+		panel.add(otherDelimiterInput, "gapleft " + Globals.GAP_SIZE + ", growx, pushx, wrap");
 
 		panel.add(quoteLabel, "split 2, gapright " + Globals.GAP_SIZE);
-		panel.add(quoteOptions, "span, growx, pushx, wrap, gapbottom " + Globals.MIN_GAP_SIZE);
+		panel.add(quoteOptions, "growx, pushx, wrap");
 
-		panel.add(thePanel, "span, grow, push, wrap");
+		panel.add(thePanel, "grow, hmin 0");
 
 		return panel;
 	}
