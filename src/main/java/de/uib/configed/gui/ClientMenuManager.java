@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -383,17 +382,18 @@ public final class ClientMenuManager implements MenuListener {
 		item.setSelected(selected);
 
 		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
-			item.addActionListener((ActionEvent event) -> {
-				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
-						.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
-								.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
-				configedMain.toggleColumn(info.label);
-			});
-			return item;
+			item.addActionListener(event -> hideHealthCheckFieldAndToggleColumn(info.label));
+		} else {
+			item.addActionListener(event -> configedMain.toggleColumn(info.label));
 		}
-
-		item.addActionListener(event -> configedMain.toggleColumn(info.label));
 		return item;
+	}
+
+	private void hideHealthCheckFieldAndToggleColumn(String infoLabel) {
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+				.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
+						.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
+		configedMain.toggleColumn(infoLabel);
 	}
 
 	private void createPdf() {
