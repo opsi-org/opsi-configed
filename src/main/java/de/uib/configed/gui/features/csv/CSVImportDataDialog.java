@@ -31,9 +31,7 @@ import org.apache.commons.csv.QuoteMode;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
-import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -132,8 +130,7 @@ public class CSVImportDataDialog {
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
 		// don't use a definite max table width (-1), with popups
-		thePanel = new PanelGenEdit("", true, 0,
-				new int[] { PanelGenEditPopupManager.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
+		thePanel = new PanelGenEdit("", true, -1, null, true);
 
 		modifier.updateTable(format, startLine, thePanel);
 
