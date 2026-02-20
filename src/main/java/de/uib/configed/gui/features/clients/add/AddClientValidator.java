@@ -130,10 +130,7 @@ final class AddClientValidator {
 
 		private static boolean isValidBooleans(Map<String, Object> client) {
 			// Expecting wan at index 10 and shutdownInstall at index 11 as boolean strings
-			if (client.size() <= 11) {
-				return false;
-			}
-			return isBoolean((String) client.get(HostInfo.CLIENT_WAN_CONFIG_KEY))
+			return client.size() > 11 && isBoolean((String) client.get(HostInfo.CLIENT_WAN_CONFIG_KEY))
 					&& isBoolean((String) client.get(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY));
 		}
 

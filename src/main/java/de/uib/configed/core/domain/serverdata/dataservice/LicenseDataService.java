@@ -6,7 +6,6 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -354,8 +353,8 @@ public class LicenseDataService extends DataService {
 
 	public void retrieveLicensesUsagePD() {
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE,
-						CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
+				&& dataServices.cacheManager.isDataCached(
+						List.of(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;
 		}
 

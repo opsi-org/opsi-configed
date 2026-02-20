@@ -105,10 +105,6 @@ public class TextInputField extends JPanel {
 	}
 
 	public String getText() {
-		if (isValueList) {
-			return combo.getSelectedItem().toString();
-		} else {
-			return textfield.getText();
-		}
+		return isValueList ? combo.getSelectedItem().toString() : textfield.getText();
 	}
 }

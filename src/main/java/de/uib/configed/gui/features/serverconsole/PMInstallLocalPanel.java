@@ -73,10 +73,10 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE, "[grow, fill][]", "[]0[]0[]"));
+		setLayout(new MigLayout("insets 0, fillx", "[grow, fill][]", "[]0[]" + Globals.GAP_SIZE + "[]0[]"));
 		add(jLabelUploadFrom, "wrap");
 		add(jTextFieldPath, "split 2, growx");
-		add(jButtonFileChooser, "wrap, gapbottom " + Globals.GAP_SIZE);
+		add(jButtonFileChooser, "wrap");
 		add(jLabelUploadTo, "wrap");
 		add(jComboBoxAutoCompletion, "split2, growx");
 		add(jButtonAutoCompletion, "wrap");

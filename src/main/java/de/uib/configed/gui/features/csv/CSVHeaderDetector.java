@@ -38,11 +38,7 @@ public class CSVHeaderDetector {
 	}
 
 	public String getHeader() {
-		if (hasHeader) {
-			return line;
-		} else {
-			return "";
-		}
+		return hasHeader ? line : "";
 	}
 
 	public boolean detect() {

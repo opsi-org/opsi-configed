@@ -8,9 +8,7 @@ package de.uib.configed.gui;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -380,7 +378,7 @@ public class ConfigedMain {
 		fetchDepots();
 
 		depotsList.setInfo(depots);
-		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
+		List<String> oldSelectedDepots = List.of(backslashPattern
 				.matcher(Configed.getSavedStates().getProperty("selectedDepots",
 						persistenceController.getDataServices().hostInfoCollections.getConfigServer()))
 				.replaceAll("").split(","));
@@ -528,10 +526,6 @@ public class ConfigedMain {
 	private void rebuildTree() {
 		clientTree.clear();
 		clientTree.build();
-	}
-
-	public void setClient(String clientName) {
-		setClients(Collections.singleton(clientName));
 	}
 
 	public void setClients(Collection<String> clientNames) {
@@ -805,7 +799,7 @@ public class ConfigedMain {
 		String oldRepresentative = depotRepresentative;
 
 		String configServer = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
-		Set<String> clientDepots = selectedClients.isEmpty() ? Collections.emptySet() : getDepotsOfSelectedClients();
+		Set<String> clientDepots = selectedClients.isEmpty() ? Set.of() : getDepotsOfSelectedClients();
 
 		Logging.info(this, "Selected depots: " + selectedDepots);
 		Logging.info(this, "Depots of selected clients: " + clientDepots);
@@ -1038,12 +1032,6 @@ public class ConfigedMain {
 
 		clientTree.expandPath(pathToSelect);
 		clientTree.setSelectionPath(pathToSelect);
-	}
-
-	public void refreshClientListActivateALL() {
-		Logging.info(this, "refreshClientListActivateALL");
-		setRebuiltClientListTableModel(true, true);
-		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	public void reloadHosts() {

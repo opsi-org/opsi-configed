@@ -103,10 +103,7 @@ public final class CommandParameterParser {
 	}
 
 	public String[] getParameterFormats() {
-		if (formats != null) {
-			return formats;
-		}
-		return new String[0];
+		return formats == null ? new String[0] : formats;
 	}
 
 	public SingleCommand parseParameter(final SingleCommand command, CommandExecutor caller) {

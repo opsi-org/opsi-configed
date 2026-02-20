@@ -283,25 +283,9 @@ public class HostInfo {
 
 	private static Object showValue(String key, Object value) {
 		if (booleanKeys.contains(key)) {
-			return showValue((Boolean) value);
+			return Boolean.TRUE.equals(value);
 		} else {
-			return showValue((String) value);
-		}
-	}
-
-	private static String showValue(String value) {
-		if (value == null || "null".equals(value)) {
-			return "";
-		} else {
-			return value;
-		}
-	}
-
-	private static boolean showValue(Boolean value) {
-		if (value == null) {
-			return false;
-		} else {
-			return value;
+			return value == null || "null".equals(value) ? "" : value;
 		}
 	}
 

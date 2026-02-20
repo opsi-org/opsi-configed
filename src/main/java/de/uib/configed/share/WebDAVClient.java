@@ -21,7 +21,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -69,7 +68,7 @@ public class WebDAVClient {
 		String sessionID = PersistenceControllerFactory.getPersistenceController().getExecutioner().getSessionId();
 
 		if (sessionID != null) {
-			builder.setDefaultHeaders(Collections.singletonList(new BasicHeader("Cookie", sessionID)));
+			builder.setDefaultHeaders(List.of(new BasicHeader("Cookie", sessionID)));
 			sardine = new SardineImpl(builder);
 		} else {
 			sardine = new SardineImpl(builder);

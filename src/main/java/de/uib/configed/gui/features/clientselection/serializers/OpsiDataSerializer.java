@@ -445,10 +445,10 @@ public class OpsiDataSerializer {
 			// producing compatibility for version without GroupWithSubgroupsElement
 			elementName = GroupElement.class.getSimpleName();
 			refinedElement = GroupWithSubgroupsElement.class.getSimpleName();
-			elementPath = Arrays.asList(element.getPathArray());
+			elementPath = List.of(element.getPathArray());
 		} else {
 			elementName = element.getClassName();
-			elementPath = Arrays.asList(element.getPathArray());
+			elementPath = List.of(element.getPathArray());
 		}
 
 		String operationName = operation.getClassName();

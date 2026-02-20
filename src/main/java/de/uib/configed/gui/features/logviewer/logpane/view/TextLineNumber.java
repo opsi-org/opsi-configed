@@ -310,11 +310,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Prope
 		int index = root.getElementIndex(rowStartOffset);
 		Element line = root.getElement(index);
 
-		if (line.getStartOffset() == rowStartOffset) {
-			return String.valueOf(index + 1);
-		} else {
-			return "";
-		}
+		return line.getStartOffset() == rowStartOffset ? String.valueOf(index + 1) : "";
 	}
 
 	/*

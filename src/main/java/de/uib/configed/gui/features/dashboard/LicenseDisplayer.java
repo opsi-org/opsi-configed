@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -34,7 +33,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
@@ -98,13 +96,11 @@ public final class LicenseDisplayer {
 
 	public void initAndShowGUI() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/fxml/dialogs/license_dialog.fxml"));
-		Parent root = fxmlLoader.load();
-		Scene scene = new Scene(root);
-		stage = new Stage();
 
+		stage = new Stage();
 		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Icons.getMainIcon()), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
-		stage.setScene(scene);
+		stage.setScene(new Scene(fxmlLoader.load()));
 
 		// Hide stage before showing so that we know the size before it gets visible
 		stage.setOnShowing(event -> stage.hide());
@@ -160,9 +156,9 @@ public final class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
 		result.append(":  \n");
 
-		for (Entry<String, Set<String>> entry : contractsExpired.entrySet()) {
-			for (String ID : entry.getValue()) {
-				result.append(entry.getValue() + ": " + ID);
+		for (Set<String> valueSet : contractsExpired.values()) {
+			for (String ID : valueSet) {
+				result.append(valueSet + ": " + ID);
 				result.append("\n");
 			}
 		}
@@ -172,9 +168,9 @@ public final class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Entry<String, Set<String>> entry : contractsToNotify.entrySet()) {
-			for (String ID : entry.getValue()) {
-				result.append(entry.getValue() + ": " + ID);
+		for (Set<String> valueSet : contractsToNotify.values()) {
+			for (String ID : valueSet) {
+				result.append(valueSet + ": " + ID);
 				result.append("\n");
 			}
 		}

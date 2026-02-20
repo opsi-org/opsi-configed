@@ -105,11 +105,7 @@ public class Main {
 	}
 
 	public static JFrame getMainFrame() {
-		if (isLogviewer) {
-			return Logviewer.getLogFrame();
-		} else {
-			return ConfigedMain.getMainFrame();
-		}
+		return isLogviewer ? Logviewer.getLogFrame() : ConfigedMain.getMainFrame();
 	}
 
 	public static void showHelp() {

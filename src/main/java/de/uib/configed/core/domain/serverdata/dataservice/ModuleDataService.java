@@ -8,7 +8,6 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +47,8 @@ public class ModuleDataService extends DataService {
 	private static final int CLIENT_COUNT_WARNING_LIMIT = 10;
 	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
-	private static final List<String> MODULE_CHECKED = Arrays.asList("license_management", "local_imaging",
-			"monitoring", "wim-capture", "scalability1", "linux_agent", "vpn", "mysql_backend", "uefi", "userroles",
+	private static final List<String> MODULE_CHECKED = List.of("license_management", "local_imaging", "monitoring",
+			"wim-capture", "scalability1", "linux_agent", "vpn", "mysql_backend", "uefi", "userroles",
 			"directory-connector", "macos_agent", "secureboot", "win-vhd", "os_install_by_wlan");
 
 	public ModuleDataService(DataServices dataServices) {
@@ -437,11 +436,7 @@ public class ModuleDataService extends DataService {
 
 		Logging.info(this, "calculateModulePermission returns ", maxClients);
 
-		if (maxClients == null) {
-			return globalMaxClients;
-		} else {
-			return new ExtendedInteger(maxClients);
-		}
+		return maxClients == null ? globalMaxClients : new ExtendedInteger(maxClients);
 	}
 
 	public boolean isOpsiUserAdminPD() {

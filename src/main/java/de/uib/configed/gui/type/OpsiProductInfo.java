@@ -87,11 +87,7 @@ public class OpsiProductInfo extends OpsiPackage {
 	}
 
 	public int getPriority() {
-		if (priority == null) {
-			return NO_PRIORITY;
-		} else {
-			return priority;
-		}
+		return priority == null ? NO_PRIORITY : priority;
 	}
 
 	@Override

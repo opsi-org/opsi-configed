@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -143,15 +142,11 @@ public class CSVFormatDetector {
 		CSVHeaderDetector csvHeaderDetector = new CSVHeaderDetector(fileAsList.get(lineNumber), this);
 		hasHeader = csvHeaderDetector.detect();
 		Logging.info(this, "Does CSV file contain header?", hasHeader);
-		if (hasHeader) {
-			String header = csvHeaderDetector.getHeader();
-			Logging.info(this, "Detected header:", header);
-			headers = Arrays.asList(header.replace(String.valueOf(quote), "").split(String.valueOf(delimiter)));
-			headers.replaceAll(String::trim);
-			Logging.debug(this, "Detected header as list:", headers);
-		} else {
-			headers = new ArrayList<>();
-		}
+		String header = csvHeaderDetector.getHeader();
+		Logging.info(this, "Detected header:", header);
+		headers = Arrays.stream(header.replace(String.valueOf(quote), "").split(String.valueOf(delimiter)))
+				.map(String::trim).toList();
+		Logging.debug(this, "Detected header as list:", headers);
 	}
 
 	public boolean hasExpectedHeaderNames(Collection<String> expectedHeaderNames) {

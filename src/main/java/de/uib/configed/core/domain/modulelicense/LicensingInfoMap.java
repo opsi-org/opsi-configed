@@ -338,10 +338,7 @@ public final class LicensingInfoMap {
 		columnNames = new ArrayList<>();
 		columnNames.add(Configed.getResourceValue("LicensingInfo.module"));
 		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
-
-		for (Entry<String, Map<String, Map<String, Object>>> date : datesMap.entrySet()) {
-			columnNames.add(date.getKey());
-		}
+		columnNames.addAll(datesMap.keySet());
 
 		for (String currentModule : shownModules) {
 			Map<String, Object> line = new HashMap<>();

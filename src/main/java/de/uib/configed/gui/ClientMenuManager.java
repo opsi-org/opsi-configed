@@ -7,13 +7,11 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +55,7 @@ public final class ClientMenuManager implements MenuListener {
 
 	private Set<JMenuItem> clientMenuItemsDependOnSelectionCount = new HashSet<>();
 
-	private final Map<String, JMenuItem> clientMenuItems = new LinkedHashMap<>();
+	private final Map<String, JMenuItem> clientMenuItems = new HashMap<>();
 
 	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
@@ -70,7 +68,7 @@ public final class ClientMenuManager implements MenuListener {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
 
-		menuItemsHost = new LinkedHashMap<>();
+		menuItemsHost = new HashMap<>();
 		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, clientMenuItems.get("MainFrame.jMenuAddClient"));
 		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT,
 				clientMenuItems.get("MainFrame.jMenuDeleteClient"));
@@ -383,17 +381,18 @@ public final class ClientMenuManager implements MenuListener {
 		item.setSelected(selected);
 
 		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
-			item.addActionListener((ActionEvent event) -> {
-				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
-						.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
-								.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
-				configedMain.toggleColumn(info.label);
-			});
-			return item;
+			item.addActionListener(event -> hideHealthCheckFieldAndToggleColumn(info.label));
+		} else {
+			item.addActionListener(event -> configedMain.toggleColumn(info.label));
 		}
-
-		item.addActionListener(event -> configedMain.toggleColumn(info.label));
 		return item;
+	}
+
+	private void hideHealthCheckFieldAndToggleColumn(String infoLabel) {
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+				.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
+						.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
+		configedMain.toggleColumn(infoLabel);
 	}
 
 	private void createPdf() {

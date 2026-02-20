@@ -365,7 +365,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		List<Object> params = new ArrayList<>();
 
 		for (Object parameter : parameters) {
-			params.add(parameter instanceof Object[] array ? Arrays.asList(array) : parameter);
+			params.add(parameter instanceof Object[] array ? List.of(array) : parameter);
 		}
 
 		return Map.of("id", DEFAULT_JSON_ID, "method", methodname.toString(), "params", params);
