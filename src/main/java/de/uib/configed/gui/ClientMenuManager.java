@@ -12,7 +12,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,7 +55,7 @@ public final class ClientMenuManager implements MenuListener {
 
 	private Set<JMenuItem> clientMenuItemsDependOnSelectionCount = new HashSet<>();
 
-	private final Map<String, JMenuItem> clientMenuItems = new LinkedHashMap<>();
+	private final Map<String, JMenuItem> clientMenuItems = new HashMap<>();
 
 	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
@@ -69,11 +68,9 @@ public final class ClientMenuManager implements MenuListener {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
 
-		menuItemsHost = new LinkedHashMap<>();
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, clientMenuItems.get("MainFrame.jMenuAddClient"));
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT,
-				clientMenuItems.get("MainFrame.jMenuDeleteClient"));
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES,
+		menuItemsHost = Map.of(UserRolesConfigDataService.ITEM_ADD_CLIENT,
+				clientMenuItems.get("MainFrame.jMenuAddClient"), UserRolesConfigDataService.ITEM_DELETE_CLIENT,
+				clientMenuItems.get("MainFrame.jMenuDeleteClient"), UserRolesConfigDataService.ITEM_FREE_LICENSES,
 				clientMenuItems.get("MainFrame.jMenuFreeLicenses"));
 
 		initJMenu();
