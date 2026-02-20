@@ -915,7 +915,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			// Add in values in correct ordering
 			String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
-			actionsForProduct.retainAll(Arrays.asList(displayLabels));
+			actionsForProduct.retainAll(List.of(displayLabels));
 
 			Logging.debug("Possible actions as array  ", actionsForProduct);
 		}

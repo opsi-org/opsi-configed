@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.clientselection.elements;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,7 @@ public class GenericTextElement extends AbstractSelectElement {
 
 	public GenericTextElement(String[] proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = Arrays.asList(proposedData);
+		this.proposedData = List.of(proposedData);
 	}
 
 	public GenericTextElement(String[] name, String... localizedName) {

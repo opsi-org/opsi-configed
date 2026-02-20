@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -287,7 +286,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getDataServices().software
-				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
+				.getSoftwareAuditOnClients(List.of(hostId));
 
 		Map<String, Map<String, Object>> tableData = persistenceController.getDataServices().software
 				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);

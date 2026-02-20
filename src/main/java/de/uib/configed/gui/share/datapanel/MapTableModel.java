@@ -174,7 +174,7 @@ public class MapTableModel extends AbstractTableModel {
 			for (Map<String, Object> aStoreMap : storeData) {
 				aStoreMap.put(key, defaultValues);
 			}
-			configChanges = Collections.singletonMap(key, defaultValues);
+			configChanges = Map.of(key, defaultValues);
 		}
 
 		updateCollection.addMap(configChanges);
@@ -296,7 +296,7 @@ public class MapTableModel extends AbstractTableModel {
 			for (Map<String, Object> aStoreMap : storeData) {
 				aStoreMap.remove(key);
 			}
-			configChanges = Collections.singletonMap(key, null);
+			configChanges = Map.of(key, null);
 		}
 
 		notifyChange();

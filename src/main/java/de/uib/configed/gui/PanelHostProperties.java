@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +74,7 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 
 		deriveDepotMap(depotMap);
 		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
-		editMapPanel.updateData(hostUpdateCollection, Collections.singletonList(depotMap));
+		editMapPanel.updateData(hostUpdateCollection, List.of(depotMap));
 
 		editMapPanel.getMapTableModel()
 				.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
@@ -104,7 +103,7 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 		Logging.debug(this, "deriveDepotMap  ", depotMap);
 		for (Entry<String, Object> dataEntry : depotMap.entrySet()) {
 			if (!(dataEntry.getValue() instanceof List)) {
-				depotMap.put(dataEntry.getKey(), Collections.singletonList(dataEntry.getValue()));
+				depotMap.put(dataEntry.getKey(), List.of(dataEntry.getValue()));
 			}
 		}
 

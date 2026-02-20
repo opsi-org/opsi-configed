@@ -29,7 +29,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -82,7 +81,7 @@ public final class Utils {
 	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
 
 	private static Parser markdownParser = Parser.builder()
-			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
+			.extensions(List.of(AutolinkExtension.create(), TablesExtension.create())).build();
 	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
 
 	private static JFrame masterFrame;

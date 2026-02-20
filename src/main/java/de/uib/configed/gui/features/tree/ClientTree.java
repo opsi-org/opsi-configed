@@ -11,7 +11,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -603,7 +602,7 @@ public class ClientTree extends AbstractGroupTree {
 					Configed.getResourceValue("ClientTree.selectCorrectLocation"));
 			dialog.setListData(groupSet.stream().map(Object::toString).toList());
 			if (preSelected != null) {
-				dialog.setPreviousSelectionValues(Collections.singleton(preSelected.toString()));
+				dialog.setPreviousSelectionValues(Set.of(preSelected.toString()));
 			}
 
 			// Repeat until the user has selected exactly one group

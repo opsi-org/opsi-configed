@@ -7,7 +7,6 @@
 package de.uib.configed.gui.share.table.gui;
 
 import java.awt.Component;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -164,7 +163,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		Object result = startMultiLineEditor((String) table.getValueAt(row, 0), table.getValueAt(row, 1));
 
 		if (result != null && result.equals(JOptionPane.OK_OPTION)) {
-			table.setValueAt(Collections.singletonList(multiLineTextArea.getText()), table.getSelectedRow(), 1);
+			table.setValueAt(List.of(multiLineTextArea.getText()), table.getSelectedRow(), 1);
 		}
 	}
 
@@ -252,9 +251,9 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	@Override
 	public Object getCellEditorValue() {
 		return switch (selectionMode) {
-		case BOOLEAN -> Collections.singletonList(checkBox.getChecked());
-		case SINGLE_SELECTION_SINGLE_LINE -> Collections.singletonList(getComboBoxValue());
-		case SINGLE_SELECTION_MULTI_LINE -> Collections.singletonList(multiLineTextArea.getText());
+		case BOOLEAN -> List.of(checkBox.getChecked());
+		case SINGLE_SELECTION_SINGLE_LINE -> List.of(getComboBoxValue());
+		case SINGLE_SELECTION_MULTI_LINE -> List.of(multiLineTextArea.getText());
 		case MULTI_SELECTION -> listSelectionDialog.getSelectedValues();
 		default -> throw new IllegalStateException("Unexpected value: " + selectionMode);
 		};

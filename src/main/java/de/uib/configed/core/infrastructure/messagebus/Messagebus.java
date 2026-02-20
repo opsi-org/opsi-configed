@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -202,7 +201,7 @@ public class Messagebus implements MessagebusListener {
 		String terminalId = UUID.randomUUID().toString();
 		// to verify server response contains this requested channel
 		channelSessionTerminalId = String.format("session:%s", terminalId);
-		sendChannelSubscriptionRequest(Collections.singletonList(channelSessionTerminalId));
+		sendChannelSubscriptionRequest(List.of(channelSessionTerminalId));
 		// need to wait for the subscription to be processed
 		locker.lock(5000);
 

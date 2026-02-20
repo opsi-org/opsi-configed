@@ -107,7 +107,7 @@ public class ProductTable extends JTable {
 			Set<String> productIds = AbstractGroupTree.getChildrenRecursively(node);
 			setFilter(productIds);
 		} else {
-			Set<String> productIds = Collections.singleton(node.toString());
+			Set<String> productIds = Set.of(node.toString());
 			setFilter(productIds);
 			setPendingSelection(productIds);
 		}
