@@ -133,25 +133,6 @@ public final class SwingUtils {
 		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 
-	public static DocumentListener onDocumentChange(Consumer<DocumentEvent> consumer) {
-		return new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				consumer.accept(e);
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				consumer.accept(e);
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				consumer.accept(e);
-			}
-		};
-	}
-
 	public static DocumentListener onDocumentChange(Runnable runnable) {
 		return onDocumentChange(runnable, true);
 	}
