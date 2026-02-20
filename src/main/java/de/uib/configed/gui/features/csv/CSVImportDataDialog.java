@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 
@@ -57,6 +58,10 @@ public class CSVImportDataDialog {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
+	private char previousOtherDelimiterInput;
+	private int previousQuoteOptionIndex;
+	private AbstractButton previousDelimiterOption;
+
 	public CSVImportDataDialog(CSVFormat format, CSVImportDataModifier modifier) {
 		this.format = format;
 		this.modifier = modifier;
@@ -88,37 +93,21 @@ public class CSVImportDataDialog {
 		otherDelimiterInput.setEnabled(false);
 
 		quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
-		quoteOptions.addItemListener((ItemEvent e) -> {
-			if (e.getStateChange() == ItemEvent.SELECTED) {
-				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
-						.setQuoteMode(QuoteMode.ALL).get();
-				modifier.updateTable(format, startLine, thePanel);
-			}
-		});
+		quoteOptions.addItemListener(this::onQuoteOptionChange);
 
 		ButtonGroup delimiterOptions = new ButtonGroup();
 		for (AbstractButton button : List.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption)) {
 			delimiterOptions.add(button);
-			button.addItemListener((ItemEvent e) -> {
-				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
-
-				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
-					modifier.updateTable(format, startLine, thePanel);
-				}
-			});
+			button.addItemListener(e -> onDelimiterOptionChange(button, delimiterOptions, e));
 		}
 
-		otherDelimiterInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
-			if (!otherDelimiterInput.getText().isEmpty()) {
-				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
-				modifier.updateTable(format, startLine, thePanel);
-			}
-		}));
+		otherDelimiterInput.getDocument()
+				.addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(this::onOtherDelimiterInput));
 
 		startLineInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
 			if (!startLineInput.getText().isEmpty()) {
-				startLine = Integer.parseInt(startLineInput.getText());
+				String text = startLineInput.getText();
+				startLine = Integer.parseInt(text);
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		}));
@@ -164,6 +153,58 @@ public class CSVImportDataDialog {
 		JRadioButton option = new JRadioButton(label);
 		option.setActionCommand(actionCommand);
 		return option;
+	}
+
+	private static AbstractButton getSelectedOption(ButtonGroup delimiterOptions) {
+		for (Enumeration<AbstractButton> options = delimiterOptions.getElements(); options.hasMoreElements();) {
+			AbstractButton option = options.nextElement();
+
+			if (option.isSelected()) {
+				return option;
+			}
+		}
+
+		return null;
+	}
+
+	private void onDelimiterOptionChange(AbstractButton button, ButtonGroup delimiterOptions, ItemEvent e) {
+		otherDelimiterInput.setEnabled(e.getItem() == otherOption);
+
+		if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
+			format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
+			boolean tableUpdated = modifier.updateTable(format, startLine, thePanel);
+			if (tableUpdated) {
+				previousDelimiterOption = getSelectedOption(delimiterOptions);
+			} else {
+				previousDelimiterOption.setSelected(true);
+			}
+		}
+	}
+
+	private void onOtherDelimiterInput() {
+		if (!otherDelimiterInput.getText().isEmpty()) {
+			char delimiter = otherDelimiterInput.getText().charAt(0);
+			format = format.builder().setDelimiter(delimiter).get();
+			boolean tableUpdated = modifier.updateTable(format, startLine, thePanel);
+			if (tableUpdated) {
+				previousOtherDelimiterInput = delimiter;
+			} else {
+				otherDelimiterInput.setText("" + previousOtherDelimiterInput);
+			}
+		}
+	}
+
+	private void onQuoteOptionChange(ItemEvent e) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+			format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
+					.setQuoteMode(QuoteMode.ALL).get();
+			boolean tabledUpdated = modifier.updateTable(format, startLine, thePanel);
+			if (tabledUpdated) {
+				previousQuoteOptionIndex = quoteOptions.getSelectedIndex();
+			} else {
+				quoteOptions.setSelectedIndex(previousQuoteOptionIndex);
+			}
+		}
 	}
 
 	private JFormattedTextField createStartLineTextField() {

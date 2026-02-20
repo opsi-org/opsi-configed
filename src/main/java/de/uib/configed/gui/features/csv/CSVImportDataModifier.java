@@ -53,17 +53,19 @@ public class CSVImportDataModifier {
 		this.hiddenColumns = new ArrayList<>();
 	}
 
-	public void updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
+	public boolean updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
 		model = updateModel(format, startLine, thePanel);
 		if (model == null) {
-			Logging.error(this, "Failed to update table model, returned model is null");
-			return;
+			Logging.warning(this, "Failed to update table model");
+			return false;
 		}
 		thePanel.setTableModel(model);
 
 		hideEmptyColumns(thePanel);
 		makeColumnsEditable(model, columnNames);
 		disableRowSorting(thePanel);
+
+		return true;
 	}
 
 	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEdit thePanel) {
