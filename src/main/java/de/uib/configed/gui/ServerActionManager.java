@@ -282,7 +282,7 @@ public final class ServerActionManager {
 				String selectedGroup = configedMain.getSelectedGroupName();
 				configedMain.setRebuiltClientListTableModel(true, true);
 				configedMain.activateGroup(false, selectedGroup);
-				configedMain.setClient(newClientNameWithDomain);
+				configedMain.setClients(Set.of(newClientNameWithDomain));
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
@@ -453,9 +453,10 @@ public final class ServerActionManager {
 					newClientName);
 
 			SwingUtilities.invokeLater(() -> {
-				configedMain.refreshClientListActivateALL();
+				configedMain.setRebuiltClientListTableModel(true, true);
+				configedMain.activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 				Logging.debug("set client refreshClientList");
-				configedMain.setClient(newClientName);
+				configedMain.setClients(Set.of(newClientName));
 			});
 		}
 	}

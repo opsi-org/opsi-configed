@@ -528,10 +528,6 @@ public class ConfigedMain {
 		clientTree.build();
 	}
 
-	public void setClient(String clientName) {
-		setClients(Set.of(clientName));
-	}
-
 	public void setClients(Collection<String> clientNames) {
 		Logging.info(this, "setClients ", clientNames);
 		clientTablePanel.setSelectedValues(clientNames);
@@ -1036,12 +1032,6 @@ public class ConfigedMain {
 
 		clientTree.expandPath(pathToSelect);
 		clientTree.setSelectionPath(pathToSelect);
-	}
-
-	public void refreshClientListActivateALL() {
-		Logging.info(this, "refreshClientListActivateALL");
-		setRebuiltClientListTableModel(true, true);
-		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	public void reloadHosts() {
