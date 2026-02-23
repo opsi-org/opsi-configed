@@ -189,7 +189,7 @@ public final class Configed {
 
 		if (cmd.hasOption("sso")) {
 			// Single sign-on is not implemented
-			hostData.setUseSSO(true);
+			hostData.useSSO(true);
 		}
 	}
 

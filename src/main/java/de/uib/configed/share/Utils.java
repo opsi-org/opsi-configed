@@ -86,7 +86,6 @@ public final class Utils {
 
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
-	private static boolean isMultiFactorAuthenticationEnabled;
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -354,14 +353,6 @@ public final class Utils {
 		String sqlNow = new Timestamp(System.currentTimeMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
 		return sqlNow;
-	}
-
-	public static void setMultiFactorAuthenticationEnabled(boolean enabled) {
-		isMultiFactorAuthenticationEnabled = enabled;
-	}
-
-	public static boolean isMultiFactorAuthenticationEnabled() {
-		return isMultiFactorAuthenticationEnabled;
 	}
 
 	public static void setMasterFrame(JFrame frame) {
