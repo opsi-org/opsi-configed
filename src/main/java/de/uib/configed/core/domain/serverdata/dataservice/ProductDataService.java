@@ -289,11 +289,6 @@ public class ProductDataService extends DataService {
 		dataServices.persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public void retrieveProductPropertyDefinitions() {
-		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS,
-				getDepot2Product2PropertyDefinitionsPD().get(dataServices.depot.getDepot()));
-	}
-
 	public Map<String, Map<String, Map<String, ConfigOption>>> getDepot2Product2PropertyDefinitionsPD() {
 		retrieveAllProductPropertyDefinitionsPD();
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS,
@@ -714,8 +709,8 @@ public class ProductDataService extends DataService {
 
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(dataServices.depot.getDepot());
 
-		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = getDepot2Product2PropertyDefinitionsPD()
+				.get(dataServices.depot.getDepot());
 
 		for (String product : products) {
 			setDefaultValuesForProduct(productPropertyDefinitions, depotValues, product);
@@ -1213,11 +1208,10 @@ public class ProductDataService extends DataService {
 	}
 
 	public Map<String, ConfigOption> getProductPropertyOptionsMap(String productId) {
-		retrieveProductPropertyDefinitions();
-		Map<String, ConfigOption> result;
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = getDepot2Product2PropertyDefinitionsPD()
+				.get(dataServices.depot.getDepot());
 
-		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
+		Map<String, ConfigOption> result;
 		if (productPropertyDefinitions == null) {
 			result = new HashMap<>();
 		} else {
