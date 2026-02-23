@@ -59,7 +59,6 @@ public final class ClientMenuManager implements MenuListener {
 
 	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
-	private Map<String, JMenuItem> menuItemsHost;
 	private ConfigedMain configedMain;
 
 	private MainFrame mainFrame;
@@ -67,13 +66,6 @@ public final class ClientMenuManager implements MenuListener {
 	private ClientMenuManager(ConfigedMain configedMain, MainFrame mainFrame) {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
-
-		menuItemsHost = new HashMap<>();
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, clientMenuItems.get("MainFrame.jMenuAddClient"));
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT,
-				clientMenuItems.get("MainFrame.jMenuDeleteClient"));
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES,
-				clientMenuItems.get("MainFrame.jMenuFreeLicenses"));
 
 		initJMenu();
 
@@ -483,16 +475,6 @@ public final class ClientMenuManager implements MenuListener {
 				.getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
-			for (String menuActionType : disabledClientMenuEntries) {
-				JMenuItem menuItem = menuItemsHost.get(menuActionType);
-				Logging.debug("disable ", menuActionType, ", ", menuItem);
-				if (menuItem != null) {
-					menuItem.setEnabled(false);
-				} else {
-					Logging.warning(this, "Cannot disable menuItem", menuActionType, ", it does not exist");
-				}
-			}
-
 			if (!persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
 					&& persistenceController.getDataServices().userRoles.isGlobalReadOnly()) {
 				clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(false);
