@@ -746,23 +746,23 @@ public class ProductDataService extends DataService {
 	 * Collects the common property values of some product for a client
 	 * collection; Needed for local imaging handling.
 	 *
-	 * @param clients  collection of clients
-	 * @param product  for which to collect property values
-	 * @param property from which to collect values
+	 * @param clients    collection of clients
+	 * @param productId  for which to collect property values
+	 * @param propertyId from which to collect values
 	 */
-	public List<String> getCommonProductPropertyValues(Collection<String> clients, String product, String property) {
-		Logging.info(this, "getCommonProductPropertyValues for product, property, clients ", product, ", ", property,
-				"  -- ", clients);
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("objectId", clients);
-		callFilter.put("productId", product);
-		callFilter.put("propertyId", property);
-		List<Map<String, Object>> properties = dataServices.exec
-				.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, new String[0], callFilter);
+	public List<String> getCommonProductPropertyValues(Collection<String> clients, String productId,
+			String propertyId) {
+		Logging.info(this, "getCommonProductPropertyValues for product, property, clients ", productId, ", ",
+				propertyId, "  -- ", clients);
+		Set<String> productIds = Set.of(productId);
+		Set<String> propertyIds = Set.of(propertyId);
+		Map<String, Map<String, Object>> properties = dataServices.exec
+				.getMapOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, propertyIds, clients, false);
 		Set<String> resultSet = new HashSet<>();
 		boolean starting = true;
-		for (Map<String, Object> map : properties) {
-			List<?> valueList = (List<?>) map.get("values");
+		for (Map<String, Object> val : properties.values()) {
+			Map<String, Object> property = (Map<String, Object>) val.get(productId);
+			List<?> valueList = (List<?>) property.get(propertyId);
 			Set<String> values = new HashSet<>();
 			for (Object value : valueList) {
 				values.add((String) value);
