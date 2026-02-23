@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -334,11 +333,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		if (isRoot) {
 			splitPane.setRightComponent(emptyRightPane);
 		} else {
-			List<String> pathForKey = Arrays.stream(selectedPath.getPath()).map(Object::toString)
-					.collect(Collectors.toList());
-
 			// we start at 1 since we eliminate the root node
-			pathForKey.remove(0);
+			List<String> pathForKey = Arrays.stream(selectedPath.getPath()).map(Object::toString).skip(1).toList();
 
 			String key = String.join(".", pathForKey);
 
