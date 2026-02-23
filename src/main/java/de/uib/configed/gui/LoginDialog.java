@@ -112,18 +112,18 @@ public class LoginDialog extends JFrame {
 		}
 
 		Logging.info("become interactive");
-		Logging.info("using sso ? ", hostData.isUseSSO());
+		Logging.info("using sso ? ", hostData.useSSO());
 		setVisible(true);
 
 		if (hostData.getHost() == null) {
 			Logging.info("host is not set (yet)");
-		} else if (!hostData.isUseSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
+		} else if (!hostData.useSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
 			Logging.info("user or password not given (yet)");
 		} else {
 			// This must be called last, so that loading frame for connection is called last
 			// and on top of the login-frame
-			Logging.info("loginDialog tryConnecting with sso ", hostData.isUseSSO());
-			tryConnectingDependOnServer(hostData.isUseSSO());
+			Logging.info("loginDialog tryConnecting with sso ", hostData.useSSO());
+			tryConnectingDependOnServer(hostData.useSSO());
 		}
 	}
 
