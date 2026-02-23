@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.CopyClient.CopyOption;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.gui.type.HostInfo;
@@ -251,7 +252,7 @@ public final class ServerActionManager {
 			return;
 		}
 
-		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
+		Set<CopyOption> options = EnumSet.allOf(CopyOption.class);
 
 		HostInfo clientToCopy = selectedClient.get();
 
@@ -295,7 +296,7 @@ public final class ServerActionManager {
 	 * @param options
 	 * @return the new client name or null if the user cancelled the action
 	 */
-	private static String confirmCopyClient(HostInfo clientToCopy, EnumSet<CopyClient.CopyOption> options) {
+	private static String confirmCopyClient(HostInfo clientToCopy, Set<CopyOption> options) {
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
@@ -305,14 +306,14 @@ public final class ServerActionManager {
 		jTextHostname.setText(copySuffixAddition.add());
 		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
 		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
-				CopyClient.CopyOption.GROUPS);
+				CopyOption.GROUPS);
 		JCheckBox copyProducts = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.products.option"),
-				options, CopyClient.CopyOption.PRODUCTS);
+				options, CopyOption.PRODUCTS);
 		JCheckBox copyProductProperties = createOptionCheckBox(
 				Configed.getResourceValue("ConfigedMain.productProperties.option"), options,
-				CopyClient.CopyOption.PRODUCT_PROPERTIES);
+				CopyOption.PRODUCT_PROPERTIES);
 		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
-				CopyClient.CopyOption.CONFIG_STATES);
+				CopyOption.CONFIG_STATES);
 
 		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
 
@@ -339,16 +340,14 @@ public final class ServerActionManager {
 		return answer == JOptionPane.OK_OPTION ? jTextHostname.getText() : null;
 	}
 
-	private static JCheckBox createOptionCheckBox(String title, EnumSet<CopyClient.CopyOption> options,
-			CopyClient.CopyOption option) {
+	private static JCheckBox createOptionCheckBox(String title, Set<CopyOption> options, CopyOption option) {
 		JCheckBox optionCheckBox = new JCheckBox(title);
 		optionCheckBox.setSelected(true);
 		optionCheckBox.addActionListener(event -> updateOptions(options, option, optionCheckBox.isSelected()));
 		return optionCheckBox;
 	}
 
-	private static void updateOptions(Set<CopyClient.CopyOption> options, CopyClient.CopyOption option,
-			boolean include) {
+	private static void updateOptions(Set<CopyOption> options, CopyOption option, boolean include) {
 		if (include && !options.contains(option)) {
 			options.add(option);
 		} else {
