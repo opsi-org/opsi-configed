@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.share.datapanel;
 
-import java.awt.event.MouseEvent;
-
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
@@ -34,10 +32,8 @@ public class EditMapPanelHostProperties extends EditMapPanelX {
 	protected JPopupMenu createBasicPopup() {
 		Integer[] popups = new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD };
 
-		return new PopupMenuTrait(popups, (MouseEvent event) -> {
-			updatePopupMenu();
-			return true;
-		}, new JComponent[] { table, jScrollPane.getViewport() }) {
+		return new PopupMenuTrait(popups, event -> updatePopupMenu(),
+				new JComponent[] { table, jScrollPane.getViewport() }) {
 			@Override
 			public void action(int p) {
 				super.action(p);

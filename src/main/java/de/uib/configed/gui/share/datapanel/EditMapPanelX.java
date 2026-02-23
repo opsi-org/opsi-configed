@@ -9,7 +9,6 @@ package de.uib.configed.gui.share.datapanel;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -176,7 +175,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	protected void updatePopupMenu() {
+	protected boolean updatePopupMenu() {
 		int row = table.getSelectedRow();
 
 		if (row != -1 && modelProducer.isEditable(row)
@@ -197,6 +196,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 					row != -1 && !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 							.isGlobalReadOnly());
 		}
+
+		return true;
 	}
 
 	public void startMultiLineEditing() {
@@ -230,10 +231,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-		return new PopupMenuTrait(new Integer[] {}, (MouseEvent event) -> {
-			updatePopupMenu();
-			return true;
-		}, new JComponent[] { table, jScrollPane.getViewport() });
+		return new PopupMenuTrait(new Integer[] {}, event -> updatePopupMenu(),
+				new JComponent[] { table, jScrollPane.getViewport() });
 	}
 
 	private void buildPanel() {

@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -126,11 +125,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void setupPopupForUserpathes() {
 		popupForUserpathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD },
-				(MouseEvent event) -> {
-					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
-
-					return (selPath != null && isUserPath(selPath));
-				}, new JComponent[] { tree }) {
+				event -> isUserPath(tree.getPathForLocation(event.getX(), event.getY())), new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -145,11 +140,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupPopupForUserpath() {
 		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD },
-				(MouseEvent event) -> {
-					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
-					Logging.info(this, " sel path ", selPath);
-					return (selPath != null && isUserRoot(selPath));
-				}, new JComponent[] { tree }) {
+				event -> isUserRoot(tree.getPathForLocation(event.getX(), event.getY())), new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -164,11 +155,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void setupPopupForRolepathes() {
 		popupForRolepathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD },
-				(MouseEvent event) -> {
-					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
-					Logging.info(this, " sel path ", selPath);
-					return (selPath != null && isRolePath(selPath, false));
-				}, new JComponent[] { tree }) {
+				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), false),
+				new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -183,11 +171,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupPopupForRolepath() {
 		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD },
-				(MouseEvent event) -> {
-					TreePath selPath = tree.getPathForLocation(event.getX(), event.getY());
-					Logging.info(this, " sel path ", selPath);
-					return (selPath != null && isRolePath(selPath, true));
-				}, new JComponent[] { tree }) {
+				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), true),
+				new JComponent[] { tree }) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -515,6 +500,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private boolean isRolePath(TreePath path, boolean roleRoot) {
+		if (path == null) {
+			return false;
+		}
+
 		int requiredCount = 4;
 
 		if (roleRoot) {
@@ -532,11 +521,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private static boolean isUserRoot(TreePath path) {
-		return path.getPathCount() == 2 && path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER);
+		return path != null && path.getPathCount() == 2
+				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER);
 	}
 
 	private static boolean isUserPath(TreePath path) {
-		return path.getPathCount() == 3 && path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
+		return path != null && path.getPathCount() == 3
+				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);
 	}
 
