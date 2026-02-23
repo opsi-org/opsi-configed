@@ -360,11 +360,8 @@ public final class ClientMenuManager implements MenuListener {
 			return null;
 		}
 		String menuLabel = Configed.getResourceValue(resourceKey);
-		boolean selected = false;
-		if (persistenceController.getDataServices().host.getHostDisplayFields().containsKey(info.label)) {
-			Boolean val = persistenceController.getDataServices().host.getHostDisplayFields().get(info.label);
-			selected = Boolean.TRUE.equals(val);
-		}
+		boolean selected = Boolean.TRUE
+				.equals(persistenceController.getDataServices().host.getHostDisplayFields().get(info.label));
 
 		JCheckBoxMenuItem item = new JCheckBoxMenuItem(menuLabel);
 		item.setSelected(selected);
@@ -416,7 +413,7 @@ public final class ClientMenuManager implements MenuListener {
 				Configed.getResourceValue("MainFrame.popupFrameTitle"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
-		if (result == 0) {
+		if (result == JOptionPane.OK_OPTION) {
 			Float duration = 0F;
 			if (!durationTextField.getText().isEmpty()) {
 				duration = Float.parseFloat(durationTextField.getText());
@@ -435,19 +432,13 @@ public final class ClientMenuManager implements MenuListener {
 		int countSelectedClients = configedMain.getSelectedClients().size();
 		Logging.debug(" enableMenuItemsForClients, countSelectedClients ", countSelectedClients);
 
+		boolean readOnly = persistenceController.getDataServices().userRoles.isGlobalReadOnly();
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			if (clientMenuItemsDependOnSelectionCount.contains(jMenuItem)
-					&& persistenceController.getDataServices().userRoles.isGlobalReadOnly()) {
-				jMenuItem.setEnabled(false);
-			} else {
-				jMenuItem.setEnabled(countSelectedClients >= 1);
-			}
+			jMenuItem.setEnabled(!readOnly && countSelectedClients >= 1);
 		}
 
-		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(
-				countSelectedClients == 1 && !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
-		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(
-				countSelectedClients == 1 && !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
+		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(!readOnly && countSelectedClients == 1);
+		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(!readOnly && countSelectedClients == 1);
 
 		List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 
@@ -477,8 +468,7 @@ public final class ClientMenuManager implements MenuListener {
 				clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(false);
 			}
 
-			if (persistenceController.getDataServices().config.getDisabledClientMenuEntries()
-					.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
+			if (disabledClientMenuEntries.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
 				clientMenuItems.get("MainFrame.jMenuAddClient").setEnabled(false);
 			} else {
 				clientMenuItems.get("MainFrame.jMenuAddClient")
