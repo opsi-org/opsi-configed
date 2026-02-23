@@ -54,6 +54,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	private JMenuItem multiLineEditingItem;
 
+	private JPopupMenu popupMenu;
+
 	protected Map<String, Object> originalMap;
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
@@ -231,8 +233,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-		return new PopupMenuTrait(new Integer[] {}, event -> updatePopupMenu(),
-				new JComponent[] { table, jScrollPane.getViewport() });
+		return new PopupMenuTrait(List.of(), event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport()));
 	}
 
 	private void buildPanel() {

@@ -11,11 +11,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -126,8 +126,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		contentPane.setResizeWeight(1.0);
 		setComponent(contentPane);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(),
-				new JComponent[] { paneProducts, productTable });
+		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(), List.of(paneProducts, productTable));
 
 		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
 

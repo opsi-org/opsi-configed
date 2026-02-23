@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -37,7 +36,7 @@ public class TreePopupMouseListener {
 	private JMenuItem menuItemRemoveElements;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		new PopupMouseListener(jPopupMenu, this::checkAccepted, new JComponent[] { tree });
+		new PopupMouseListener(jPopupMenu, this::checkAccepted, List.of(tree));
 
 		this.tree = tree;
 
