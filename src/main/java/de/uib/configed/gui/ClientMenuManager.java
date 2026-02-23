@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -564,9 +563,9 @@ public final class ClientMenuManager implements MenuListener {
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}
-		for (ActionListener listener : sourceItem.getActionListeners()) {
-			clonedItem.addActionListener(listener);
-		}
+
+		// Add action listeners from source item to cloned item
+		List.of(sourceItem.getActionListeners()).forEach(clonedItem::addActionListener);
 
 		return clonedItem;
 	}
