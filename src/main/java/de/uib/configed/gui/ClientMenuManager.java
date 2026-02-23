@@ -28,8 +28,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
@@ -500,27 +498,13 @@ public final class ClientMenuManager implements MenuListener {
 
 	private static JPopupMenu clonePopupMenu(JMenu jMenuToClone, Runnable beforeCloneAction) {
 		JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent arg0) {
-				// Nothing to do.
+		popupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> {
+			if (beforeCloneAction != null) {
+				beforeCloneAction.run();
 			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-				// Nothing to do.
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				if (beforeCloneAction != null) {
-					beforeCloneAction.run();
-				}
-				popupMenu.removeAll();
-				cloneMenuItems(popupMenu, jMenuToClone);
-			}
-
-		});
+			popupMenu.removeAll();
+			cloneMenuItems(popupMenu, jMenuToClone);
+		}));
 		return popupMenu;
 	}
 

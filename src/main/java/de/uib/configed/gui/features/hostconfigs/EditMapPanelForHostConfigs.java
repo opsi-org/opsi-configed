@@ -21,8 +21,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreePath;
 
@@ -87,27 +85,14 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			}
 		};
 
-		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				// We don't override default behavior.
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// We don't override default behavior.
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
-						.getPersistenceController().getDataServices().userRoles;
-				boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
-						|| userRolesConfigDataService.canEditOwnServerRole();
-				Component saveComponent = jPopupMenu.getComponent(0);
-				saveComponent.setEnabled(canSave);
-			}
-		});
+		jPopupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> {
+			UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
+					.getPersistenceController().getDataServices().userRoles;
+			boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
+					|| userRolesConfigDataService.canEditOwnServerRole();
+			Component saveComponent = jPopupMenu.getComponent(0);
+			saveComponent.setEnabled(canSave);
+		}));
 
 		JMenuItem jPopupMenuCopyToClipBoard = new JMenuItem(
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.copyPropertyToClipboard"));
