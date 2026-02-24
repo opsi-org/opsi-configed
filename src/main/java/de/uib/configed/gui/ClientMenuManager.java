@@ -427,12 +427,13 @@ public final class ClientMenuManager implements MenuListener {
 
 		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(!readOnly && countSelectedClients == 1);
 		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(
-				persistenceController.getDataServices().userRoles.canCreateClient() && countSelectedClients == 1);
+				persistenceController.getDataServices().userRoles.canCreateClients() && countSelectedClients == 1);
 		clientMenuItems.get("MainFrame.jMenuAddClient")
-				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
-
+				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClients());
 		clientMenuItems.get("MainFrame.jMenuFreeLicenses").setEnabled(
 				persistenceController.getDataServices().userRoles.canFreeLicenses() && countSelectedClients >= 1);
+		clientMenuItems.get("MainFrame.jMenuDeleteClient").setEnabled(
+				persistenceController.getDataServices().userRoles.canDeleteClients() && countSelectedClients >= 1);
 
 		List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 

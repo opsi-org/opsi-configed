@@ -81,7 +81,7 @@ public class UserRolesConfigDataService extends DataService {
 				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
-	public boolean canCreateClient() {
+	public boolean canCreateClients() {
 		return !isGlobalReadOnly()
 				&& Boolean.TRUE.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION,
 						Boolean.class))
@@ -92,6 +92,11 @@ public class UserRolesConfigDataService extends DataService {
 	public boolean canFreeLicenses() {
 		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
 				.contains(UserRolesConfigDataService.ITEM_FREE_LICENSES);
+	}
+
+	public boolean canDeleteClients() {
+		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_DELETE_CLIENT);
 	}
 
 	public boolean hasDepotsFullPermissionPD() {
