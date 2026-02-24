@@ -84,8 +84,12 @@ public final class ServerActionManager {
 
 	private static String getGroupToActivate(List<List<Object>> clients) {
 		// We want to activate the group if we create exactly one client in exactly one group
-		if (clients.size() == 1 && ((List<?>) clients.get(0).get(9)).size() == 1) {
-			return (String) ((List<?>) clients.get(0).get(9)).get(0);
+		if (clients.size() == 1) {
+			List<Object> client = clients.get(0);
+			List<String> groups = HostInfo.getGroupsFromObject(client.get(9));
+			if (groups.size() == 1) {
+				return groups.get(0);
+			}
 		}
 		return ClientTree.ALL_CLIENTS_NAME;
 	}
