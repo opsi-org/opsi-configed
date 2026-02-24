@@ -571,7 +571,7 @@ public class ProductDataService extends DataService {
 		retrieveProductPropertiesPD(Set.of(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 		if (productProperties.get(pcname) == null) {
 			return new HashMap<>();
 		}
@@ -590,7 +590,7 @@ public class ProductDataService extends DataService {
 		retrieveProductPropertiesPD(Set.of(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 		if (productProperties.get(pcname) == null || productProperties.get(pcname).get(productname) == null) {
 			return new HashMap<>();
 		}
@@ -607,7 +607,7 @@ public class ProductDataService extends DataService {
 	 */
 	public void retrieveProductPropertiesPD(final Collection<String> clientNames) {
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 
 		if (productProperties != null && productProperties.keySet().containsAll(clientNames)) {
 			return;
@@ -617,7 +617,7 @@ public class ProductDataService extends DataService {
 		Set<String> propertyIds = new HashSet<>();
 		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
 				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, propertyIds, clientNames, true);
-		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTIES, retrieved);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, retrieved);
 
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(dataServices.depot.getDepot());
 		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>(depotValues);
