@@ -310,7 +310,7 @@ public class ConfigedMain {
 		Set<String> clientsSelectedInTable = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "setSelectedClients clientNames size ", clientsSelectedInTable.size());
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
 		Logging.info(this, "setSelectedClientsArray ", clientsSelectedInTable.size());
 		Logging.info(this, "selectedClients was before ", selectedClients.size());
@@ -952,7 +952,7 @@ public class ConfigedMain {
 
 		mainFrame.resetData();
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
 		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 

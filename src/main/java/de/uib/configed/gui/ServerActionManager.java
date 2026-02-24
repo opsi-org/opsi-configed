@@ -394,7 +394,7 @@ public final class ServerActionManager {
 					withDependencies, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		}
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
 		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().updateProductTab();
 
