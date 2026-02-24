@@ -47,7 +47,6 @@ import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.BrowserUtils;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
 import net.jpountz.lz4.LZ4FrameInputStream;
@@ -365,7 +364,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		List<Object> params = new ArrayList<>();
 
 		for (Object parameter : parameters) {
-			params.add(parameter instanceof Object[] array ? Arrays.asList(array) : parameter);
+			params.add(parameter instanceof Object[] array ? List.of(array) : parameter);
 		}
 
 		return Map.of("id", DEFAULT_JSON_ID, "method", methodname.toString(), "params", params);
@@ -394,8 +393,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters) {
 		Logging.info(this, "retrieveResponse started");
 
-		if ((hostData.getOtp() == null && Utils.isMultiFactorAuthenticationEnabled())
-				|| !ParallelTaskExecutor.isNewTasksAllowed()) {
+		if ((hostData.getOtp() == null && hostData.useMFA()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
 			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
 				ParallelTaskExecutor.allowNewTasks(true);
 			} else {
@@ -638,8 +636,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			// Normal response; clear error flag if needed
 			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
 		} else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
-			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
+			Logging.debug("Unauthorized: ", sessionId, ", mfa=", hostData.useMFA());
+			if (hostData.useMFA() && ConfigedMain.getMainFrame() != null) {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
 				// Don't initiate Messagebus reconnection, since the connection is restablished once

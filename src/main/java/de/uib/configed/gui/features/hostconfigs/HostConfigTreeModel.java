@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -51,12 +50,12 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 		for (String path : keys) {
 			DefaultMutableTreeNode parent = rootNode;
 
-			List<String> pathAsList = Arrays.asList(path.split("\\."));
+			List<String> pathAsList = List.of(path.split("\\."));
 
 			for (int i = 1; i <= pathAsList.size(); i++) {
-				String partialPath = String.join(".", pathAsList.subList(0, i).toArray(new String[0]));
+				String partialPath = String.join(".", pathAsList.subList(0, i));
 				if (i > 1) {
-					parent = path2Node.get(String.join(".", pathAsList.subList(0, i - 1).toArray(new String[0])));
+					parent = path2Node.get(String.join(".", pathAsList.subList(0, i - 1)));
 				}
 
 				final int lastElement = i - 1;

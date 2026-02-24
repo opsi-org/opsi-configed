@@ -282,9 +282,6 @@ public final class ComponentStyler {
 	}
 
 	public static String getHexColor(Color color) {
-		if (color == null) {
-			return "";
-		}
-		return "#" + Integer.toHexString(color.getRGB()).substring(2);
+		return color == null ? "" : ("#" + Integer.toHexString(color.getRGB()).substring(2));
 	}
 }

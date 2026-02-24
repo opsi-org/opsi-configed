@@ -174,7 +174,7 @@ public class MapTableModel extends AbstractTableModel {
 			for (Map<String, Object> aStoreMap : storeData) {
 				aStoreMap.put(key, defaultValues);
 			}
-			configChanges = Collections.singletonMap(key, defaultValues);
+			configChanges = Map.of(key, defaultValues);
 		}
 
 		updateCollection.addMap(configChanges);
@@ -296,6 +296,9 @@ public class MapTableModel extends AbstractTableModel {
 			for (Map<String, Object> aStoreMap : storeData) {
 				aStoreMap.remove(key);
 			}
+
+			// We need the singleton map here since Map.of(...) does not allow null values
+			// Actually it's probably bad code to have null here...
 			configChanges = Collections.singletonMap(key, null);
 		}
 

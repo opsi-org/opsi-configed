@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -212,7 +210,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 		if (panelTable.getGenEditTable().getRowSorter() instanceof TableRowSorter) {
 			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable
 					.getGenEditTable().getRowSorter();
-			rowSorter.setComparator(7, new OSComparator());
+			rowSorter.setComparator(7, Comparator.comparing((Boolean b) -> b).reversed());
 
 			List<RowSorter.SortKey> sortKeys = new ArrayList<>(2);
 			sortKeys.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
@@ -239,26 +237,14 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		if (withPopup) {
 			new PopupMenuTrait(
-					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY },
-					new JComponent[] { this, panelTable.getGenEditTable(), panelTable.getTheScrollpane() }) {
+					List.of(PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
+					List.of(this, panelTable.getGenEditTable(), panelTable.getTheScrollpane())) {
 				@Override
 				public void action(int p) {
 					actionOnPopupMenu(p);
 				}
 			};
-		}
-	}
-
-	private static class OSComparator implements Comparator<Boolean> {
-		@Override
-		public int compare(Boolean o1, Boolean o2) {
-			boolean b1 = o1;
-			boolean b2 = o2;
-			if (b1 == b2) {
-				return 0;
-			}
-			return b1 ? -1 : 1;
 		}
 	}
 
@@ -287,7 +273,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getDataServices().software
-				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
+				.getSoftwareAuditOnClients(List.of(hostId));
 
 		Map<String, Map<String, Object>> tableData = persistenceController.getDataServices().software
 				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);

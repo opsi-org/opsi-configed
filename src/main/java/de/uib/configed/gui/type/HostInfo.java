@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.type;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -230,6 +232,15 @@ public class HostInfo {
 		return Collections.unmodifiableSet(keys);
 	}
 
+	public static List<String> getGroupsFromObject(Object groups) {
+		if (!((String) groups).contains(",")) {
+			List<String> result = new ArrayList<>();
+			result.add((String) groups);
+			return result;
+		}
+		return Arrays.asList(((String) groups).split(","));
+	}
+
 	public void put(String key, Object value) {
 		if (keys.contains(key)) {
 			data.put(key, value);
@@ -269,25 +280,9 @@ public class HostInfo {
 
 	private static Object showValue(String key, Object value) {
 		if (booleanKeys.contains(key)) {
-			return showValue((Boolean) value);
+			return Boolean.TRUE.equals(value);
 		} else {
-			return showValue((String) value);
-		}
-	}
-
-	private static String showValue(String value) {
-		if (value == null || "null".equals(value)) {
-			return "";
-		} else {
-			return value;
-		}
-	}
-
-	private static boolean showValue(Boolean value) {
-		if (value == null) {
-			return false;
-		} else {
-			return value;
+			return value == null || "null".equals(value) ? "" : value;
 		}
 	}
 

@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.terminal;
 
-import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -177,12 +176,7 @@ public final class TerminalFrame implements MessagebusListener {
 		}
 
 		// We want to show the dialog on the owner of the terminal frame only if it is visible
-		Component owner;
-		if (frame != null && frame.isVisible()) {
-			owner = frame;
-		} else {
-			owner = ConfigedMain.getMainFrame();
-		}
+		JFrame owner = frame != null && frame.isVisible() ? frame : ConfigedMain.getMainFrame();
 
 		ListSelectionDialog sessionsDialog = new ListSelectionDialog(owner,
 				Configed.getResourceValue("Terminal.session.title"));

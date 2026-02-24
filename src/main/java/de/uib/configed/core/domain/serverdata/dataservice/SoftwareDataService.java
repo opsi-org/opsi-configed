@@ -7,7 +7,6 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -111,8 +110,7 @@ public class SoftwareDataService extends DataService {
 	}
 
 	public void retrieveRelationsAuditSoftwareToLicensePoolsPD() {
-		if (dataServices.cacheManager.isDataCached(Arrays.asList(
-				CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+		if (dataServices.cacheManager.isDataCached(List.of(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
 				CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL))) {
 			return;
@@ -260,8 +258,8 @@ public class SoftwareDataService extends DataService {
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
-		if (dataServices.cacheManager.isDataCached(
-				Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+		if (dataServices.cacheManager
+				.isDataCached(List.of(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
 						CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
 						CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
 			return;
@@ -739,7 +737,7 @@ public class SoftwareDataService extends DataService {
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
 		if (!dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				|| dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+				|| dataServices.cacheManager.isDataCached(List.of(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
 						CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}

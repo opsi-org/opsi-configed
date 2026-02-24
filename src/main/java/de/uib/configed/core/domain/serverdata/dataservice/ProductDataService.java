@@ -7,9 +7,7 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -74,7 +72,7 @@ public class ProductDataService extends DataService {
 	}
 
 	public Set<String> getAllNetbootProductNames(String depotId) {
-		return getAllNetbootProductNames(Collections.singleton(depotId));
+		return getAllNetbootProductNames(Set.of(depotId));
 	}
 
 	public Set<String> getAllNetbootProductNames(Collection<String> depotIds) {
@@ -96,7 +94,7 @@ public class ProductDataService extends DataService {
 	}
 
 	public Set<String> getAllLocalbootProductNames(String depotId) {
-		return getAllLocalbootProductNames(Collections.singleton(depotId));
+		return getAllLocalbootProductNames(Set.of(depotId));
 	}
 
 	public Set<String> getAllLocalbootProductNames(Collection<String> depotIds) {
@@ -143,9 +141,9 @@ public class ProductDataService extends DataService {
 	}
 
 	public void retrieveProductsAllDepotsPD() {
-		if (dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS,
-				CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS,
-				CacheIdentifier.DEPOT_TO_PACKAGES))) {
+		if (dataServices.cacheManager.isDataCached(
+				List.of(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS,
+						CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, CacheIdentifier.DEPOT_TO_PACKAGES))) {
 			return;
 		}
 
@@ -289,11 +287,6 @@ public class ProductDataService extends DataService {
 		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS,
 				product2versionInfo2infos);
 		dataServices.persistenceController.notifyPanelCompleteWinProducts();
-	}
-
-	public void retrieveProductPropertyDefinitions() {
-		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS,
-				getDepot2Product2PropertyDefinitionsPD().get(dataServices.depot.getDepot()));
 	}
 
 	public Map<String, Map<String, Map<String, ConfigOption>>> getDepot2Product2PropertyDefinitionsPD() {
@@ -468,7 +461,7 @@ public class ProductDataService extends DataService {
 
 	public void checkProductGlobalInfosPD(String depotId) {
 		if (dataServices.cacheManager
-				.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_GLOBAL_INFOS, CacheIdentifier.POSSIBLE_ACTIONS))
+				.isDataCached(List.of(CacheIdentifier.PRODUCT_GLOBAL_INFOS, CacheIdentifier.POSSIBLE_ACTIONS))
 				&& dataServices.depot.getDepot() != null && dataServices.depot.getDepot().equals(depotId)) {
 			return;
 		}
@@ -592,7 +585,7 @@ public class ProductDataService extends DataService {
 
 	public void retrieveProductIdsAndDefaultStatesPD() {
 		if (dataServices.cacheManager
-				.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_IDS, CacheIdentifier.PRODUCT_DEFAULT_STATES))) {
+				.isDataCached(List.of(CacheIdentifier.PRODUCT_IDS, CacheIdentifier.PRODUCT_DEFAULT_STATES))) {
 			return;
 		}
 
@@ -614,7 +607,7 @@ public class ProductDataService extends DataService {
 	public Map<String, ConfigName2ConfigValue> getProductPropertiesPD(String pcname) {
 		Logging.debug(this, "getProductsProperties for host ", pcname);
 
-		retrieveProductPropertiesPD(Collections.singleton(pcname));
+		retrieveProductPropertiesPD(Set.of(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -633,7 +626,7 @@ public class ProductDataService extends DataService {
 	public Map<String, Object> getProductPropertiesPD(String pcname, String productname) {
 		Logging.debug(this, "getProductProperties for product, host ", productname, ", ", pcname);
 
-		retrieveProductPropertiesPD(Collections.singleton(pcname));
+		retrieveProductPropertiesPD(Set.of(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
@@ -716,8 +709,8 @@ public class ProductDataService extends DataService {
 
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(dataServices.depot.getDepot());
 
-		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = getDepot2Product2PropertyDefinitionsPD()
+				.get(dataServices.depot.getDepot());
 
 		for (String product : products) {
 			setDefaultValuesForProduct(productPropertyDefinitions, depotValues, product);
@@ -1215,11 +1208,10 @@ public class ProductDataService extends DataService {
 	}
 
 	public Map<String, ConfigOption> getProductPropertyOptionsMap(String productId) {
-		retrieveProductPropertyDefinitions();
-		Map<String, ConfigOption> result;
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = getDepot2Product2PropertyDefinitionsPD()
+				.get(dataServices.depot.getDepot());
 
-		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
+		Map<String, ConfigOption> result;
 		if (productPropertyDefinitions == null) {
 			result = new HashMap<>();
 		} else {

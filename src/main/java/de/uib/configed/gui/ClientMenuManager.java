@@ -7,13 +7,10 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,8 +28,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
@@ -57,11 +52,10 @@ public final class ClientMenuManager implements MenuListener {
 
 	private Set<JMenuItem> clientMenuItemsDependOnSelectionCount = new HashSet<>();
 
-	private final Map<String, JMenuItem> clientMenuItems = new LinkedHashMap<>();
+	private final Map<String, JMenuItem> clientMenuItems = new HashMap<>();
 
 	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
-	private Map<String, JMenuItem> menuItemsHost;
 	private ConfigedMain configedMain;
 
 	private MainFrame mainFrame;
@@ -69,13 +63,6 @@ public final class ClientMenuManager implements MenuListener {
 	private ClientMenuManager(ConfigedMain configedMain, MainFrame mainFrame) {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
-
-		menuItemsHost = new LinkedHashMap<>();
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, clientMenuItems.get("MainFrame.jMenuAddClient"));
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_DELETE_CLIENT,
-				clientMenuItems.get("MainFrame.jMenuDeleteClient"));
-		menuItemsHost.put(UserRolesConfigDataService.ITEM_FREE_LICENSES,
-				clientMenuItems.get("MainFrame.jMenuFreeLicenses"));
 
 		initJMenu();
 
@@ -373,27 +360,25 @@ public final class ClientMenuManager implements MenuListener {
 			return null;
 		}
 		String menuLabel = Configed.getResourceValue(resourceKey);
-		boolean selected = false;
-		if (persistenceController.getDataServices().host.getHostDisplayFields().containsKey(info.label)) {
-			Boolean val = persistenceController.getDataServices().host.getHostDisplayFields().get(info.label);
-			selected = Boolean.TRUE.equals(val);
-		}
+		boolean selected = Boolean.TRUE
+				.equals(persistenceController.getDataServices().host.getHostDisplayFields().get(info.label));
 
 		JCheckBoxMenuItem item = new JCheckBoxMenuItem(menuLabel);
 		item.setSelected(selected);
 
 		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
-			item.addActionListener((ActionEvent event) -> {
-				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
-						.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
-								.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
-				configedMain.toggleColumn(info.label);
-			});
-			return item;
+			item.addActionListener(event -> hideHealthCheckFieldAndToggleColumn(info.label));
+		} else {
+			item.addActionListener(event -> configedMain.toggleColumn(info.label));
 		}
-
-		item.addActionListener(event -> configedMain.toggleColumn(info.label));
 		return item;
+	}
+
+	private void hideHealthCheckFieldAndToggleColumn(String infoLabel) {
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+				.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getDataServices().host
+						.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
+		configedMain.toggleColumn(infoLabel);
 	}
 
 	private void createPdf() {
@@ -428,7 +413,7 @@ public final class ClientMenuManager implements MenuListener {
 				Configed.getResourceValue("MainFrame.popupFrameTitle"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
-		if (result == 0) {
+		if (result == JOptionPane.OK_OPTION) {
 			Float duration = 0F;
 			if (!durationTextField.getText().isEmpty()) {
 				duration = Float.parseFloat(durationTextField.getText());
@@ -447,19 +432,13 @@ public final class ClientMenuManager implements MenuListener {
 		int countSelectedClients = configedMain.getSelectedClients().size();
 		Logging.debug(" enableMenuItemsForClients, countSelectedClients ", countSelectedClients);
 
+		boolean readOnly = persistenceController.getDataServices().userRoles.isGlobalReadOnly();
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
-			if (clientMenuItemsDependOnSelectionCount.contains(jMenuItem)
-					&& persistenceController.getDataServices().userRoles.isGlobalReadOnly()) {
-				jMenuItem.setEnabled(false);
-			} else {
-				jMenuItem.setEnabled(countSelectedClients >= 1);
-			}
+			jMenuItem.setEnabled(!readOnly && countSelectedClients >= 1);
 		}
 
-		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(
-				countSelectedClients == 1 && !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
-		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(
-				countSelectedClients == 1 && !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
+		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(!readOnly && countSelectedClients == 1);
+		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(!readOnly && countSelectedClients == 1);
 
 		List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 
@@ -484,23 +463,12 @@ public final class ClientMenuManager implements MenuListener {
 				.getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
-			for (String menuActionType : disabledClientMenuEntries) {
-				JMenuItem menuItem = menuItemsHost.get(menuActionType);
-				Logging.debug("disable ", menuActionType, ", ", menuItem);
-				if (menuItem != null) {
-					menuItem.setEnabled(false);
-				} else {
-					Logging.warning(this, "Cannot disable menuItem", menuActionType, ", it does not exist");
-				}
-			}
-
 			if (!persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
 					&& persistenceController.getDataServices().userRoles.isGlobalReadOnly()) {
 				clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(false);
 			}
 
-			if (persistenceController.getDataServices().config.getDisabledClientMenuEntries()
-					.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
+			if (disabledClientMenuEntries.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
 				clientMenuItems.get("MainFrame.jMenuAddClient").setEnabled(false);
 			} else {
 				clientMenuItems.get("MainFrame.jMenuAddClient")
@@ -520,27 +488,13 @@ public final class ClientMenuManager implements MenuListener {
 
 	private static JPopupMenu clonePopupMenu(JMenu jMenuToClone, Runnable beforeCloneAction) {
 		JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent arg0) {
-				// Nothing to do.
+		popupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> {
+			if (beforeCloneAction != null) {
+				beforeCloneAction.run();
 			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-				// Nothing to do.
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				if (beforeCloneAction != null) {
-					beforeCloneAction.run();
-				}
-				popupMenu.removeAll();
-				cloneMenuItems(popupMenu, jMenuToClone);
-			}
-
-		});
+			popupMenu.removeAll();
+			cloneMenuItems(popupMenu, jMenuToClone);
+		}));
 		return popupMenu;
 	}
 
@@ -583,9 +537,9 @@ public final class ClientMenuManager implements MenuListener {
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}
-		for (ActionListener listener : sourceItem.getActionListeners()) {
-			clonedItem.addActionListener(listener);
-		}
+
+		// Add action listeners from source item to cloned item
+		List.of(sourceItem.getActionListeners()).forEach(clonedItem::addActionListener);
 
 		return clonedItem;
 	}

@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -64,7 +63,7 @@ public class SwExporter implements ActionListener {
 			panelSWInfo.updateModel();
 
 			Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-					.getDataServices().software.getSoftwareAuditOnClients(Collections.singletonList(client));
+					.getDataServices().software.getSoftwareAuditOnClients(List.of(client));
 			String scandate = persistenceController.getDataServices().software
 					.getLastSoftwareAuditModification(swAuditClientEntries, client);
 			if (scandate != null) {

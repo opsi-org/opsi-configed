@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.productpage;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,13 +37,12 @@ public class ProductSettingsTableRowSorter extends TableRowSorter<TableModel> {
 		if (columnName.equals(Configed.getResourceValue("InstallationStateTableModel.productId"))) {
 			comparator = Comparator.comparing(String::toString);
 		} else if (columnName.equals(Configed.getResourceValue("InstallationStateTableModel.installationStatus"))) {
-			List<String> order = Arrays.asList(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_UNKNOWN,
+			List<String> order = List.of(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_UNKNOWN,
 					InstallationStatus.KEY_NOT_INSTALLED);
 			comparator = (o1, o2) -> Integer.compare(order.indexOf(o1), order.indexOf(o2));
 		} else if (columnName.equals(Configed.getResourceValue("InstallationStateTableModel.actionRequest"))) {
-			List<String> order = Arrays.asList(ActionRequest.KEY_SETUP, ActionRequest.KEY_UPDATE,
-					ActionRequest.KEY_UNINSTALL, ActionRequest.KEY_ALWAYS, ActionRequest.KEY_ONCE,
-					ActionRequest.KEY_CUSTOM, ActionRequest.KEY_NONE);
+			List<String> order = List.of(ActionRequest.KEY_SETUP, ActionRequest.KEY_UPDATE, ActionRequest.KEY_UNINSTALL,
+					ActionRequest.KEY_ALWAYS, ActionRequest.KEY_ONCE, ActionRequest.KEY_CUSTOM, ActionRequest.KEY_NONE);
 			comparator = (o1, o2) -> Integer.compare(order.indexOf(o1), order.indexOf(o2));
 		} else {
 			comparator = super.getComparator(column);

@@ -7,8 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -78,7 +76,7 @@ public class TopToolBarManager {
 			opsiLicensing.reload();
 		});
 
-		return Collections.singletonList(reloadButton);
+		return List.of(reloadButton);
 	}
 
 	public List<JButton> getHealthCheckButtons(HealthCheckComponent healthCheck) {
@@ -92,7 +90,7 @@ public class TopToolBarManager {
 				actionEvent -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain));
 		healthCheckSettingsButton.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
-		return Arrays.asList(downloadButton, healthCheckSettingsButton);
+		return List.of(downloadButton, healthCheckSettingsButton);
 	}
 
 	public List<JButton> getConfigurationButtons() {
@@ -111,7 +109,7 @@ public class TopToolBarManager {
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		clientSearchButton.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
-		return Arrays.asList(addClientButton, clientSearchButton);
+		return List.of(addClientButton, clientSearchButton);
 	}
 
 	public List<JButton> getLicensingManagementButtons(MainPanelManager mainPanelManager) {
@@ -119,6 +117,6 @@ public class TopToolBarManager {
 		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 
-		return Arrays.asList(reloadButton);
+		return List.of(reloadButton);
 	}
 }

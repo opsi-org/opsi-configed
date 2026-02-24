@@ -368,11 +368,6 @@ public enum CacheIdentifier {
 	PRODUCT_PROPERTIES("product_properties"),
 
 	/**
-	 * return type {@code Map<String, Map<String, ListCellOptions>>}
-	 */
-	PRODUCT_PROPERTY_DEFINITIONS("product_property_definitions"),
-
-	/**
 	 * return type {@code Set<Object>}
 	 */
 	SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL("software_without_associated_license_pool"),
