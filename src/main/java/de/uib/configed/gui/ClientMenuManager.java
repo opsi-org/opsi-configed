@@ -134,8 +134,9 @@ public final class ClientMenuManager implements MenuListener {
 						.withIcon("delete").dependOnSelectionCount(true)));
 		jMenuClients.add(createSubMenu(ClientMenuItemConfig
 				.submenu("MainFrame.jMenuResetProducts", () -> initResetProductsMenu()).dependOnSelectionCount(true)));
-		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuFreeLicenses",
-				ServerActionManager::freeAllPossibleLicensesForSelectedClients)));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig
+				.item("MainFrame.jMenuFreeLicenses", ServerActionManager::freeAllPossibleLicensesForSelectedClients)
+				.dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuChangeClientID", ServerActionManager::callChangeClientIDDialog)
 				.dependOnSelectionCount(true)));
@@ -429,6 +430,9 @@ public final class ClientMenuManager implements MenuListener {
 				persistenceController.getDataServices().userRoles.canCreateClient() && countSelectedClients == 1);
 		clientMenuItems.get("MainFrame.jMenuAddClient")
 				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
+
+		clientMenuItems.get("MainFrame.jMenuFreeLicenses").setEnabled(
+				persistenceController.getDataServices().userRoles.canFreeLicenses() && countSelectedClients >= 1);
 
 		List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 

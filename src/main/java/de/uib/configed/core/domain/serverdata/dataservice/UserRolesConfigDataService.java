@@ -89,6 +89,11 @@ public class UserRolesConfigDataService extends DataService {
 						.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT);
 	}
 
+	public boolean canFreeLicenses() {
+		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_FREE_LICENSES);
+	}
+
 	public boolean hasDepotsFullPermissionPD() {
 		return Boolean.TRUE
 				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
