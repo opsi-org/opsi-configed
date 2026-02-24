@@ -78,44 +78,37 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void addClientActions() {
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuWakeOnLan", ServerActionManager::wakeSelectedClients)
+						.dependOnSelectionCount(true)));
+		jMenuClients.add(createSubMenu(
+				ClientMenuItemConfig.submenu("MainFrame.jMenuOpsiClientdEvent", this::initOpsiclientdEventMenu)
+						.dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
-				.item("MainFrame.jMenuWakeOnLan", ServerActionManager::wakeSelectedClients).dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
-		jMenuClients.add(createSubMenu(ClientMenuItemConfig
-				.submenu("MainFrame.jMenuOpsiClientdEvent", this::initOpsiclientdEventMenu).dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
-		jMenuClients.add(createMenuItem(ClientMenuItemConfig
-				.item("MainFrame.jMenuShowPopupMessage", this::showPopupOnClientsAction).dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+				.item("MainFrame.jMenuShowPopupMessage", this::showPopupOnClientsAction).dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuRequestSessionInfo", () -> SessionInfoRetriever.retrieveSessionInfo(configedMain))
-				.withIcon("user").withInvertedIcon(true).dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+				.withIcon("user").withInvertedIcon(true).dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuDeletePackageCaches", ServerActionManager::deletePackageCachesOfSelectedClients)
-				.dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+				.dependOnSelectionCount(true)));
 	}
 
 	private void addClientSystemManagementActions() {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuShutdownClient", ServerActionManager::shutdownSelectedClients)
-						.dependOnSelectionCount(true)
-						.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+						.dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuRebootClient", ServerActionManager::rebootSelectedClients)
-						.dependOnSelectionCount(true)
-						.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+						.dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuOpenTerminal", TerminalController::openTerminalOnClient)
-						.withIcon("terminal").dependOnSelectionCount(true)
-						.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+						.withIcon("terminal").dependOnSelectionCount(true)));
 
 		JMenuItem jMenuRemoteControl = createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuRemoteControl",
 						() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController))
-				.dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly()));
+				.dependOnSelectionCount(true));
 
 		// Space should only be active on the client table, but not on other where you 
 		// could accidently start remote control by pressing space in a text field etc.
@@ -132,26 +125,20 @@ public final class ClientMenuManager implements MenuListener {
 	private void addClientAdministrationActions() {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callAddClientDialog)
-						.withIcon("add").dependOnSelectionCount(true)
-						.readOnly(!persistenceController.getDataServices().userRoles.canCreateClient())));
-		jMenuClients.add(createMenuItem(ClientMenuItemConfig
-				.item("MainFrame.jMenuCopyClient", ServerActionManager::copySelectedClient).dependOnSelectionCount(true)
-				.readOnly(!persistenceController.getDataServices().userRoles.canCreateClient())));
+						.withIcon("add").dependOnSelectionCount(true)));
+		jMenuClients.add(createMenuItem(
+				ClientMenuItemConfig.item("MainFrame.jMenuCopyClient", ServerActionManager::copySelectedClient)
+						.dependOnSelectionCount(true)));
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuDeleteClient", ServerActionManager::deleteSelectedClients)
-						.withIcon("delete").dependOnSelectionCount(true)
-						.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+						.withIcon("delete").dependOnSelectionCount(true)));
 		jMenuClients.add(createSubMenu(ClientMenuItemConfig
-				.submenu("MainFrame.jMenuResetProducts", () -> initResetProductsMenu()).dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
-		jMenuClients.add(createMenuItem(ClientMenuItemConfig
-				.item("MainFrame.jMenuFreeLicenses", ServerActionManager::freeAllPossibleLicensesForSelectedClients)
-				.dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+				.submenu("MainFrame.jMenuResetProducts", () -> initResetProductsMenu()).dependOnSelectionCount(true)));
+		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("MainFrame.jMenuFreeLicenses",
+				ServerActionManager::freeAllPossibleLicensesForSelectedClients)));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuChangeClientID", ServerActionManager::callChangeClientIDDialog)
-				.dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+				.dependOnSelectionCount(true)));
 
 		// is multiDepot
 		if (persistenceController.getDataServices().hostInfoCollections.getDepots().size() != 1) {
@@ -171,7 +158,8 @@ public final class ClientMenuManager implements MenuListener {
 
 	private void addClientTableActions() {
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("save", () -> ChangedDataManager.checkSaveAll(false))
-				.withIcon("save").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK))));
+				.withIcon("save").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK))
+				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig.item("reload", configedMain::reloadHosts)
 				.withIcon("refresh").withKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0))));
 
