@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -187,7 +188,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
 		case AddClientEffect.ServiceEffect.LoadInitialData _ -> loadInitialData();
-		case AddClientEffect.ServiceEffect.CreateClients(List<List<Object>> rows) -> ServerActionManager
+		case AddClientEffect.ServiceEffect.CreateClients(List<Map<String, Object>> rows) -> ServerActionManager
 				.createClients(rows);
 		}
 	}
@@ -417,7 +418,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 			if (csvImportDataDialog.show()) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
-				List<List<Object>> rows = modifier.getRows();
+				List<Map<String, Object>> rows = modifier.getRowsAsListOfMaps();
 				dispatch(new AddClientMsg.ActionMsg.CSVImported(rows, false));
 			}
 		}

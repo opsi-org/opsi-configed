@@ -39,7 +39,7 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 
 public class CSVImportDataModifier {
-	private static final List<String> IMPORTANT_HEADER_NAMES = List.of(HostInfo.HOSTNAME_KEY, "domain",
+	private static final List<String> IMPORTANT_HEADER_NAMES = List.of(HostInfo.HOSTNAME_KEY, HostInfo.CSV_DOMAIN_KEY,
 			HostInfo.DEPOT_OF_CLIENT_KEY, HostInfo.CLIENT_MAC_ADDRESS_KEY);
 
 	private GenTableModel model;
@@ -53,17 +53,19 @@ public class CSVImportDataModifier {
 		this.hiddenColumns = new ArrayList<>();
 	}
 
-	public void updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
+	public boolean updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
 		model = updateModel(format, startLine, thePanel);
 		if (model == null) {
-			Logging.error(this, "Failed to update table model, returned model is null");
-			return;
+			Logging.warning(this, "Failed to update table model");
+			return false;
 		}
 		thePanel.setTableModel(model);
 
 		hideEmptyColumns(thePanel);
 		makeColumnsEditable(model, columnNames);
 		disableRowSorting(thePanel);
+
+		return true;
 	}
 
 	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEdit thePanel) {
@@ -218,8 +220,14 @@ public class CSVImportDataModifier {
 		model.setEditableColumns(editableColumns);
 	}
 
-	public List<List<Object>> getRows() {
-		return model.getRows();
+	public List<Map<String, Object>> getRowsAsListOfMaps() {
+		return model.getRows().parallelStream().map((List<Object> row) -> {
+			Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
+			for (int i = 0; i < model.getColumnNames().size(); i++) {
+				map.put(model.getColumnNames().get(i), row.get(i));
+			}
+			return map;
+		}).toList();
 	}
 
 	public static List<String> getImportantHeaders() {

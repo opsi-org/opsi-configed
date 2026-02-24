@@ -61,29 +61,30 @@ public class HostDataService extends DataService {
 		super(dataServices);
 	}
 
-	public boolean createClients(Iterable<List<Object>> clients) {
+	public boolean createClients(Iterable<Map<String, Object>> clients) {
 		List<Map<String, Object>> clientsJsonObject = new ArrayList<>();
 		List<Map<String, Object>> productsNetbootJsonObject = new ArrayList<>();
 		List<Map<String, Object>> groupsJsonObject = new ArrayList<>();
 
-		for (List<Object> client : clients) {
-			String hostname = ((String) client.get(0)).trim();
-			String domain = ((String) client.get(1)).trim();
-			String depotId = ((String) client.get(2)).trim();
-			String macaddress = ((String) client.get(3)).trim();
-			String description = ((String) client.get(4)).trim();
-			String inventorynumber = ((String) client.get(5)).trim();
-			String notes = ((String) client.get(6)).trim();
-			String systemUUID = ((String) client.get(7)).trim();
-			String ipaddress = ((String) client.get(8)).trim();
-			List<String> groups = HostInfo.getGroupsFromObject(client.get(9));
+		for (Map<String, Object> client : clients) {
+			String hostname = ((String) client.get(HostInfo.HOSTNAME_KEY)).trim();
+			String domain = ((String) client.get(HostInfo.CSV_DOMAIN_KEY)).trim();
+			String depotId = ((String) client.get(HostInfo.DEPOT_OF_CLIENT_KEY)).trim();
+			String macaddress = ((String) client.get(HostInfo.CLIENT_MAC_ADDRESS_KEY)).trim();
+			String description = ((String) client.get(HostInfo.CLIENT_DESCRIPTION_KEY)).trim();
+			String inventorynumber = ((String) client.get(HostInfo.CLIENT_INVENTORY_NUMBER_KEY)).trim();
+			String notes = ((String) client.get(HostInfo.CLIENT_NOTES_KEY)).trim();
+			String systemUUID = ((String) client.get(HostInfo.CLIENT_SYSTEM_UUID_KEY)).trim();
+			String ipaddress = ((String) client.get(HostInfo.CLIENT_IP_ADDRESS_KEY)).trim();
+			List<String> groups = HostInfo.getGroupsFromObject(client.get(HostInfo.CSV_GROUPS_KEY));
 
-			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
+			boolean wanConfig = Boolean.parseBoolean((String) client.get(HostInfo.CLIENT_WAN_CONFIG_KEY));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY));
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
-			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
-			String netbootProduct = ((String) client.get(13)).trim();
+			String opsiHostKey = ((String) client.get(HostInfo.HOST_KEY_KEY)).isBlank() ? null
+					: ((String) client.get(HostInfo.HOST_KEY_KEY)).trim();
+			String netbootProduct = ((String) client.get(HostInfo.CSV_NETBOOT_PRODUCT_KEY)).trim();
 
 			String newClientId = hostname + "." + domain;
 
