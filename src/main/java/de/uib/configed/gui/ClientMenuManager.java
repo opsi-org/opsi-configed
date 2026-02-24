@@ -133,10 +133,10 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuAddClient", ExtraFrameController::callAddClientDialog)
 						.withIcon("add").dependOnSelectionCount(true)
-						.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+						.readOnly(!persistenceController.getDataServices().userRoles.canCreateClient())));
 		jMenuClients.add(createMenuItem(ClientMenuItemConfig
 				.item("MainFrame.jMenuCopyClient", ServerActionManager::copySelectedClient).dependOnSelectionCount(true)
-				.readOnly(persistenceController.getDataServices().userRoles.isGlobalReadOnly())));
+				.readOnly(!persistenceController.getDataServices().userRoles.canCreateClient())));
 		jMenuClients.add(createMenuItem(
 				ClientMenuItemConfig.item("MainFrame.jMenuDeleteClient", ServerActionManager::deleteSelectedClients)
 						.withIcon("delete").dependOnSelectionCount(true)
@@ -437,7 +437,10 @@ public final class ClientMenuManager implements MenuListener {
 		}
 
 		clientMenuItems.get("MainFrame.jMenuChangeClientID").setEnabled(!readOnly && countSelectedClients == 1);
-		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(!readOnly && countSelectedClients == 1);
+		clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(
+				persistenceController.getDataServices().userRoles.canCreateClient() && countSelectedClients == 1);
+		clientMenuItems.get("MainFrame.jMenuAddClient")
+				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
 
 		List<Object> forbiddenItems = persistenceController.getDataServices().userRoles.terminalsForbidden();
 
@@ -453,16 +456,6 @@ public final class ClientMenuManager implements MenuListener {
 					.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
 			clientMenuItems.get("MainFrame.jMenuOpenTerminal").setEnabled(countSelectedClients == 1);
 		}
-
-		checkMenuItemsDisabling();
-	}
-
-	private void checkMenuItemsDisabling() {
-		clientMenuItems.get("MainFrame.jMenuCopyClient")
-				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
-
-		clientMenuItems.get("MainFrame.jMenuAddClient")
-				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
 	}
 
 	public static JPopupMenu getPopupMenuClone(JMenu jMenuToClone) {
