@@ -298,7 +298,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			jComponent.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
-		} else if (!defaultValue.equals(table.getValueAt(row, 1))) {
+		} else if (!defaultValue.equals(table.getValueAt(row, 1))
+				|| (originalMap != null && originalMap.containsKey(names.get(row)))) {
 			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else {
 			// Do nothing when default equals real value

@@ -265,8 +265,12 @@ public class ProductPageManager implements MessagebusListener {
 
 		Logging.debug(this, " --- mergedProductProperties ", mergedProductProperties);
 
+		Map<String, List<Object>> originalMap = ConfigedUtilityMethods
+				.mergeMaps(persistenceController.getDataServices().product
+						.getProductPropertiesWithoutDefaults(configedMain.getSelectedClients(), productname));
+
 		sourcePanel.initEditing(productname, productProperties, POJOReMapper.remap(mergedProductProperties),
-				clientProductpropertiesUpdateCollection);
+				clientProductpropertiesUpdateCollection, originalMap);
 	}
 
 	private void collectTheProductProperties(String productEdited) {

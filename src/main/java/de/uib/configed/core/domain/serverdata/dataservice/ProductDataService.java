@@ -598,6 +598,25 @@ public class ProductDataService extends DataService {
 		return productProperties.get(pcname).get(productname);
 	}
 
+	public List<Map<String, Object>> getProductPropertiesWithoutDefaults(List<String> objectIds, String productId) {
+		Logging.info(this, "getProductPropertiesWithoutDefaults for ", objectIds);
+
+		if (objectIds == null || objectIds.isEmpty()) {
+			return new ArrayList<>();
+		}
+
+		List<Map<String, Object>> result = new ArrayList<>();
+		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
+				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, Set.of(productId), Set.of(), objectIds, false);
+		for (String objectId : objectIds) {
+			if (retrieved.get(objectId) == null) {
+				continue;
+			}
+			result.add((Map<String, Object>) retrieved.get(objectId).get(productId));
+		}
+		return result;
+	}
+
 	/**
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
