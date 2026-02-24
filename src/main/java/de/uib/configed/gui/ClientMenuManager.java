@@ -33,7 +33,6 @@ import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
 import de.uib.configed.gui.share.table.AbstractExportTable;
@@ -459,23 +458,11 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void checkMenuItemsDisabling() {
-		List<String> disabledClientMenuEntries = persistenceController.getDataServices().config
-				.getDisabledClientMenuEntries();
+		clientMenuItems.get("MainFrame.jMenuCopyClient")
+				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
 
-		if (disabledClientMenuEntries != null) {
-			if (!persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
-					&& persistenceController.getDataServices().userRoles.isGlobalReadOnly()) {
-				clientMenuItems.get("MainFrame.jMenuCopyClient").setEnabled(false);
-			}
-
-			if (disabledClientMenuEntries.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
-				clientMenuItems.get("MainFrame.jMenuAddClient").setEnabled(false);
-			} else {
-				clientMenuItems.get("MainFrame.jMenuAddClient")
-						.setEnabled(persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
-								&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
-			}
-		}
+		clientMenuItems.get("MainFrame.jMenuAddClient")
+				.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
 	}
 
 	public static JPopupMenu getPopupMenuClone(JMenu jMenuToClone) {

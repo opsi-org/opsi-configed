@@ -81,9 +81,12 @@ public class UserRolesConfigDataService extends DataService {
 				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
-	public boolean hasCreateClientPermissionPD() {
-		return Boolean.TRUE.equals(
-				dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
+	public boolean canCreateClient() {
+		return !isGlobalReadOnly()
+				&& Boolean.TRUE.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION,
+						Boolean.class))
+				&& !dataServices.config.getDisabledClientMenuEntries()
+						.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT);
 	}
 
 	public boolean hasDepotsFullPermissionPD() {

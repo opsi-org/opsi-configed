@@ -18,7 +18,6 @@ import de.uib.configed.core.domain.modulelicense.LicensingInfoMap;
 import de.uib.configed.core.domain.modulelicense.OpsiLicensing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
 import de.uib.configed.share.Icons;
@@ -97,13 +96,7 @@ public class TopToolBarManager {
 		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 		addClientButton.addActionListener(event -> ExtraFrameController.callAddClientDialog());
-		if (persistenceController.getDataServices().config.getDisabledClientMenuEntries()
-				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
-			addClientButton.setEnabled(false);
-		} else {
-			addClientButton.setEnabled(persistenceController.getDataServices().userRoles.hasCreateClientPermissionPD()
-					&& !persistenceController.getDataServices().userRoles.isGlobalReadOnly());
-		}
+		addClientButton.setEnabled(persistenceController.getDataServices().userRoles.canCreateClient());
 
 		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
