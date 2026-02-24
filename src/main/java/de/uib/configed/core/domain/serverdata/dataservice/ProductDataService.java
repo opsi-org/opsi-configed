@@ -289,11 +289,6 @@ public class ProductDataService extends DataService {
 		dataServices.persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public void retrieveProductPropertyDefinitions() {
-		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS,
-				getDepot2Product2PropertyDefinitionsPD().get(dataServices.depot.getDepot()));
-	}
-
 	public Map<String, Map<String, Map<String, ConfigOption>>> getDepot2Product2PropertyDefinitionsPD() {
 		retrieveAllProductPropertyDefinitionsPD();
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS,
@@ -411,45 +406,6 @@ public class ProductDataService extends DataService {
 		dataServices.cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS,
 				depot2product2dependencyInfos);
 		dataServices.persistenceController.notifyPanelCompleteWinProducts();
-	}
-
-	private List<Map<String, Object>> getProductPropertyStates(Collection<String> clients) {
-		Logging.info(this, "retrieveProductPropertyStates for ", clients);
-		return produceProductPropertyStates(clients);
-	}
-
-	private List<Map<String, Object>> getProductPropertyDepotStates(Set<String> depots) {
-		Logging.info(this, "retrieveProductPropertyDepotStates for depots ", depots);
-		List<Map<String, Object>> productPropertyDepotStates = produceProductPropertyStates(depots);
-		Logging.info(this, "retrieveProductPropertyDepotStates ready  size ", productPropertyDepotStates.size());
-		return productPropertyDepotStates;
-	}
-
-	// client is a set of added hosts, host represents the totality and will be
-	// updated as a side effect
-	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients) {
-		Logging.info(this, "produceProductPropertyStates new hosts ", clients);
-		List<String> newClients = null;
-		if (clients == null) {
-			newClients = new ArrayList<>();
-		} else {
-			newClients = new ArrayList<>(clients);
-		}
-
-		List<Map<String, Object>> result = null;
-
-		if (newClients.isEmpty()) {
-			// look if propstates is initialized
-			result = new ArrayList<>();
-		} else {
-			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("objectId", newClients);
-
-			result = dataServices.exec.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, new String[0],
-					callFilter);
-		}
-
-		return result;
 	}
 
 	public Map<String, Map<String, Object>> getProductGlobalInfosPD(String depotId) {
@@ -615,7 +571,7 @@ public class ProductDataService extends DataService {
 		retrieveProductPropertiesPD(Set.of(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 		if (productProperties.get(pcname) == null) {
 			return new HashMap<>();
 		}
@@ -634,12 +590,31 @@ public class ProductDataService extends DataService {
 		retrieveProductPropertiesPD(Set.of(pcname));
 
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 		if (productProperties.get(pcname) == null || productProperties.get(pcname).get(productname) == null) {
 			return new HashMap<>();
 		}
 
 		return productProperties.get(pcname).get(productname);
+	}
+
+	public List<Map<String, Object>> getProductPropertiesWithoutDefaults(List<String> objectIds, String productId) {
+		Logging.info(this, "getProductPropertiesWithoutDefaults for ", objectIds);
+
+		if (objectIds == null || objectIds.isEmpty()) {
+			return new ArrayList<>();
+		}
+
+		List<Map<String, Object>> result = new ArrayList<>();
+		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
+				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, Set.of(productId), Set.of(), objectIds, false);
+		for (String objectId : objectIds) {
+			if (retrieved.get(objectId) == null) {
+				continue;
+			}
+			result.add((Map<String, Object>) retrieved.get(objectId).get(productId));
+		}
+		return result;
 	}
 
 	/**
@@ -651,71 +626,24 @@ public class ProductDataService extends DataService {
 	 */
 	public void retrieveProductPropertiesPD(final Collection<String> clientNames) {
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTIES, Map.class);
+				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 
 		if (productProperties != null && productProperties.keySet().containsAll(clientNames)) {
 			return;
 		}
 
-		productProperties = new HashMap<>();
-		Map<String, Map<String, Map<String, Object>>> productPropertiesRetrieved = new HashMap<>();
-
-		List<Map<String, Object>> retrieved = getProductPropertyStates(clientNames);
-		Set<String> productsWithProductPropertyStates = new HashSet<>();
-
-		for (Map<String, Object> map : retrieved) {
-			String host = (String) map.get("objectId");
-
-			productsWithProductPropertyStates.add((String) map.get("productId"));
-
-			Map<String, Map<String, Object>> productproperties1Client = productPropertiesRetrieved.computeIfAbsent(host,
-					s -> new HashMap<>());
-
-			Map<String, Object> properties = productproperties1Client.computeIfAbsent((String) map.get("productId"),
-					s -> new HashMap<>());
-
-			properties.put((String) map.get("propertyId"), POJOReMapper.remap(map.get("values")));
-		}
-
-		Logging.info(this, " retrieveProductproperties  productsWithProductPropertyStates ",
-				productsWithProductPropertyStates);
-
-		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductPropertiesPD(
-				dataServices.depot.getDepot());
-
-		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>(defaultProperties);
-
-		Set<String> products = defaultPropertiesRetrieved.keySet();
-
-		for (String host : clientNames) {
-			Map<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
-			productProperties.put(host, productproperties1Client);
-
-			Map<String, Map<String, Object>> retrievedProperties = productPropertiesRetrieved.get(host);
-			if (retrievedProperties == null) {
-				retrievedProperties = defaultPropertiesRetrieved;
-			}
-
-			for (String product : products) {
-				Map<String, Object> retrievedProperties1Product = retrievedProperties.get(product);
-				// complete set of default values
-				Map<String, Object> properties1Product = new HashMap<>(defaultPropertiesRetrieved.get(product));
-
-				if (retrievedProperties1Product != null) {
-					properties1Product.putAll(retrievedProperties1Product);
-				}
-
-				ConfigName2ConfigValue state = new ConfigName2ConfigValue(properties1Product);
-				productproperties1Client.put(product, state);
-			}
-		}
-
-		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTIES, productProperties);
+		Set<String> productIds = new HashSet<>();
+		Set<String> propertyIds = new HashSet<>();
+		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
+				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, propertyIds, clientNames, true);
+		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, retrieved);
 
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(dataServices.depot.getDepot());
+		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>(depotValues);
+		Set<String> products = defaultPropertiesRetrieved.keySet();
 
-		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = getDepot2Product2PropertyDefinitionsPD()
+				.get(dataServices.depot.getDepot());
 
 		for (String product : products) {
 			setDefaultValuesForProduct(productPropertyDefinitions, depotValues, product);
@@ -769,57 +697,67 @@ public class ProductDataService extends DataService {
 
 		Logging.info(this, "retrieveDepotProductProperties, build depot2product2properties");
 
-		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = new HashMap<>();
-		List<Map<String, Object>> retrieved = getProductPropertyDepotStates(
-				dataServices.hostInfoCollections.getDepots().keySet());
+		Map<String, Map<String, ConfigName2ConfigValue>> depot2Product2Properties = new HashMap<>();
+		Set<String> depotHosts = dataServices.hostInfoCollections.getDepots().keySet();
+		Map<String, Map<String, Object>> retrieved = dataServices.exec
+				.getMapOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, Set.of(), Set.of(), depotHosts, true);
 
-		for (Map<String, Object> map : retrieved) {
-			String host = (String) map.get("objectId");
+		for (Entry<String, Map<String, Object>> depotEntry : retrieved.entrySet()) {
+			String host = depotEntry.getKey();
 
-			if (!dataServices.hostInfoCollections.getDepots().keySet().contains(host)) {
+			if (!depotHosts.contains(host)) {
 				Logging.warning(this, "should be a productPropertyState for a depot, but host ", host);
 				continue;
 			}
 
-			Map<String, ConfigName2ConfigValue> productproperties1Host = depot2product2properties.computeIfAbsent(host,
+			Map<String, ConfigName2ConfigValue> productMap = depot2Product2Properties.computeIfAbsent(host,
 					arg -> new HashMap<>());
-
-			ConfigName2ConfigValue properties = productproperties1Host.computeIfAbsent(
-					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
-					arg -> new ConfigName2ConfigValue(new HashMap<>()));
-
-			properties.put((String) map.get("propertyId"), map.get("values"));
-			properties.getRetrieved().put((String) map.get("propertyId"), map.get("values"));
-
-			Logging.debug(this, "retrieveDepotProductProperties product properties ",
-					map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
+			fillProductMapWithProductProperties(depotEntry.getValue(), productMap);
 		}
 
 		dataServices.cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES,
-				depot2product2properties);
+				depot2Product2Properties);
+	}
+
+	private void fillProductMapWithProductProperties(Map<String, Object> products,
+			Map<String, ConfigName2ConfigValue> productMap) {
+		for (Entry<String, Object> productEntry : products.entrySet()) {
+			String productId = productEntry.getKey();
+			Map<String, Object> properties = (Map<String, Object>) productEntry.getValue();
+
+			ConfigName2ConfigValue config = productMap.computeIfAbsent(productId,
+					id -> new ConfigName2ConfigValue(new HashMap<>()));
+
+			properties.forEach((String key, Object value) -> {
+				config.put(key, value);
+				config.getRetrieved().put(key, value);
+			});
+
+			Logging.debug(this, "retrieveDepotProductProperties product properties ", productId);
+		}
 	}
 
 	/**
 	 * Collects the common property values of some product for a client
 	 * collection; Needed for local imaging handling.
 	 *
-	 * @param clients  collection of clients
-	 * @param product  for which to collect property values
-	 * @param property from which to collect values
+	 * @param clients    collection of clients
+	 * @param productId  for which to collect property values
+	 * @param propertyId from which to collect values
 	 */
-	public List<String> getCommonProductPropertyValues(Collection<String> clients, String product, String property) {
-		Logging.info(this, "getCommonProductPropertyValues for product, property, clients ", product, ", ", property,
-				"  -- ", clients);
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("objectId", clients);
-		callFilter.put("productId", product);
-		callFilter.put("propertyId", property);
-		List<Map<String, Object>> properties = dataServices.exec
-				.getListOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_OBJECTS, new String[0], callFilter);
+	public List<String> getCommonProductPropertyValues(Collection<String> clients, String productId,
+			String propertyId) {
+		Logging.info(this, "getCommonProductPropertyValues for product, property, clients ", productId, ", ",
+				propertyId, "  -- ", clients);
+		Set<String> productIds = Set.of(productId);
+		Set<String> propertyIds = Set.of(propertyId);
+		Map<String, Map<String, Object>> properties = dataServices.exec
+				.getMapOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, propertyIds, clients, false);
 		Set<String> resultSet = new HashSet<>();
 		boolean starting = true;
-		for (Map<String, Object> map : properties) {
-			List<?> valueList = (List<?>) map.get("values");
+		for (Map<String, Object> val : properties.values()) {
+			Map<String, Object> property = (Map<String, Object>) val.get(productId);
+			List<?> valueList = (List<?>) property.get(propertyId);
 			Set<String> values = new HashSet<>();
 			for (Object value : valueList) {
 				values.add((String) value);
@@ -1213,11 +1151,10 @@ public class ProductDataService extends DataService {
 	}
 
 	public Map<String, ConfigOption> getProductPropertyOptionsMap(String productId) {
-		retrieveProductPropertyDefinitions();
-		Map<String, ConfigOption> result;
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = getDepot2Product2PropertyDefinitionsPD()
+				.get(dataServices.depot.getDepot());
 
-		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = dataServices.cacheManager
-				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
+		Map<String, ConfigOption> result;
 		if (productPropertyDefinitions == null) {
 			result = new HashMap<>();
 		} else {

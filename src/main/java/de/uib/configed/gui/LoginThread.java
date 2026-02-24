@@ -39,7 +39,7 @@ public class LoginThread extends Thread {
 		boolean invalidUser = selectedHost.getUser() == null || selectedHost.getUser().isEmpty();
 		boolean invalidPw = String.valueOf(selectedHost.getPassword()) == null
 				|| String.valueOf(selectedHost.getPassword()).isEmpty();
-		if (!selectedHost.isUseSSO() && (invalidHost || invalidUser || invalidPw)) {
+		if (!selectedHost.useSSO() && (invalidHost || invalidUser || invalidPw)) {
 			Logging.error(this, "No host, user or password provided");
 			Logging.debug(this, "Validate credentials: invalids ", invalidHost, invalidUser, invalidPw);
 			loginDialog.setActivated(true);
@@ -84,7 +84,7 @@ public class LoginThread extends Thread {
 	private void login() {
 		loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 		Logging.info(this, "connected with persis ", persistenceController);
-		if (selectedHost.isUseSSO()) {
+		if (selectedHost.useSSO()) {
 			// Using SSO, so the browser window is currently in the foreground.
 			// Bring the login dialog back to the front.
 			loginDialog.setVisible(true);

@@ -6,9 +6,8 @@
 
 package de.uib.configed.gui.share.datapanel;
 
-import java.awt.event.MouseEvent;
+import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
@@ -32,12 +31,8 @@ public class EditMapPanelHostProperties extends EditMapPanelX {
 
 	@Override
 	protected JPopupMenu createBasicPopup() {
-		Integer[] popups = new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD };
-
-		return new PopupMenuTrait(popups, (MouseEvent event) -> {
-			updatePopupMenu();
-			return true;
-		}, new JComponent[] { table, jScrollPane.getViewport() }) {
+		return new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD),
+				event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
 			@Override
 			public void action(int p) {
 				super.action(p);

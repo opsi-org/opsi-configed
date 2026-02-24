@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
@@ -97,7 +96,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		splitPane.setResizeWeight(1.0);
 
 		PopupMouseListener.addPopupMouseListenerToComponents(createPopupMenu(),
-				new JComponent[] { paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane() });
+				List.of(paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane()));
 
 		setComponent(splitPane);
 	}

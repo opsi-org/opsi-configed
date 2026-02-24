@@ -53,6 +53,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
@@ -86,7 +88,6 @@ public final class Utils {
 
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
-	private static boolean isMultiFactorAuthenticationEnabled;
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -356,14 +357,6 @@ public final class Utils {
 		return sqlNow;
 	}
 
-	public static void setMultiFactorAuthenticationEnabled(boolean enabled) {
-		isMultiFactorAuthenticationEnabled = enabled;
-	}
-
-	public static boolean isMultiFactorAuthenticationEnabled() {
-		return isMultiFactorAuthenticationEnabled;
-	}
-
 	public static void setMasterFrame(JFrame frame) {
 		masterFrame = frame;
 	}
@@ -608,6 +601,25 @@ public final class Utils {
 	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable) {
 		Logging.info(keyStroke.toString(), " added to ", component.getClass().getSimpleName());
 		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+	}
+
+	public static PopupMenuListener createPopupMenuListenerOnVisible(Runnable runnable) {
+		return new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				runnable.run();
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// do nothing
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// do nothing
+			}
+		};
 	}
 
 	public static DocumentListener onDocumentChange(Runnable runnable) {

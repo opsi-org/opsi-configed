@@ -9,7 +9,6 @@ package de.uib.configed.gui.share.datapanel;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +53,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private JMenuItem setDefaultValue;
 
 	private JMenuItem multiLineEditingItem;
+
+	private JPopupMenu popupMenu;
 
 	protected Map<String, Object> originalMap;
 
@@ -176,7 +177,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	protected void updatePopupMenu() {
+	protected boolean updatePopupMenu() {
 		int row = table.getSelectedRow();
 
 		if (row != -1 && modelProducer.isEditable(row)
@@ -197,6 +198,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 					row != -1 && !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 							.isGlobalReadOnly());
 		}
+
+		return true;
 	}
 
 	public void startMultiLineEditing() {
@@ -230,10 +233,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-		return new PopupMenuTrait(new Integer[] {}, (MouseEvent event) -> {
-			updatePopupMenu();
-			return true;
-		}, new JComponent[] { table, jScrollPane.getViewport() });
+		return new PopupMenuTrait(List.of(), event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport()));
 	}
 
 	private void buildPanel() {
@@ -298,7 +298,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			jComponent.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
-		} else if (!defaultValue.equals(table.getValueAt(row, 1))) {
+		} else if (!defaultValue.equals(table.getValueAt(row, 1))
+				|| (originalMap != null && originalMap.containsKey(names.get(row)))) {
 			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else {
 			// Do nothing when default equals real value

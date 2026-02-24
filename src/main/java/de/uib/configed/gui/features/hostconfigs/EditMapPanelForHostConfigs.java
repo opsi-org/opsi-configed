@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreePath;
 
@@ -71,11 +68,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	protected JPopupMenu createBasicPopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 		JPopupMenu jPopupMenu = new PopupMenuTrait(
-				new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF },
-				(MouseEvent event) -> {
-					updatePopupMenu();
-					return true;
-				}, new JComponent[] { table, jScrollPane.getViewport() }) {
+				List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF),
+				event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -87,27 +81,14 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			}
 		};
 
-		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				// We don't override default behavior.
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// We don't override default behavior.
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
-						.getPersistenceController().getDataServices().userRoles;
-				boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
-						|| userRolesConfigDataService.canEditOwnServerRole();
-				Component saveComponent = jPopupMenu.getComponent(0);
-				saveComponent.setEnabled(canSave);
-			}
-		});
+		jPopupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> {
+			UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
+					.getPersistenceController().getDataServices().userRoles;
+			boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
+					|| userRolesConfigDataService.canEditOwnServerRole();
+			Component saveComponent = jPopupMenu.getComponent(0);
+			saveComponent.setEnabled(canSave);
+		}));
 
 		JMenuItem jPopupMenuCopyToClipBoard = new JMenuItem(
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.copyPropertyToClipboard"));
