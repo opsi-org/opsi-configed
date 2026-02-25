@@ -636,6 +636,11 @@ public class ProductDataService extends DataService {
 		Set<String> propertyIds = new HashSet<>();
 		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
 				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, propertyIds, clientNames, true);
+
+		// These values always need to be of type ConfigName2ConfigValue, so we transform them here.
+		retrieved.values().forEach(map -> map.entrySet()
+				.forEach(entry -> entry.setValue(new ConfigName2ConfigValue(POJOReMapper.remap(entry.getValue())))));
+
 		dataServices.cacheManager.setCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, retrieved);
 
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(dataServices.depot.getDepot());
