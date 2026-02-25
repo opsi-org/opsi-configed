@@ -75,6 +75,7 @@ signandupload:
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
+    - mv target/bom.json opsi-configed/bom.json
     - mkdir opsi-configed/mac_x64/
     - mv mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS opsi-configed/mac_x64/
     - git fetch --unshallow
