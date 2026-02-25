@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
@@ -231,18 +230,19 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
 			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
 			item.setState(productDisplayField.getValue());
-			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = productDisplayField.getValue();
-				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
-				persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
-
-				// We need to rebuild the shown page in the client configuration to make changes effective
-				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
-			});
+			item.addItemListener(itemEvent -> toggleDisplayField(productDisplayField));
 
 			jMenuVisibleColumns.add(item);
 		}
 		return popup;
+	}
+
+	private void toggleDisplayField(Entry<String, Boolean> productDisplayField) {
+		getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !productDisplayField.getValue());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
+
+		// We need to rebuild the shown page in the client configuration to make changes effective
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 	}
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
