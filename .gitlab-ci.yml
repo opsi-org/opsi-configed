@@ -36,7 +36,7 @@ compile_and_package:
     - mvn package -Djavafx.platform=mac
     - mkdir mac_x64
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS
-    - mvn clean package
+    - mvn clean package -P bom
     - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun" > target/module.deps
     # jdk.crypto.ec is needed for TLS (HTTPS)
     - echo "   jdk.crypto.ec" >> target/module.deps
@@ -46,6 +46,7 @@ compile_and_package:
     paths:
       - mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS
       - target/$CONFIGED_JAR_NAME_WITH_DEPS
+      - target/bom.json
       - target/module.deps
     expire_in: 2 day
   needs:
@@ -74,8 +75,7 @@ signandupload:
     - opsi-dev-cli --version
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
-    - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
-    - mv target/bom.json opsi-configed/bom.json
+    - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps target/bom.json opsi-configed/
     - mkdir opsi-configed/mac_x64/
     - mv mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS opsi-configed/mac_x64/
     - git fetch --unshallow
