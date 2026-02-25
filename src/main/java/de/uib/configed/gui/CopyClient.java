@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +86,7 @@ public class CopyClient {
 		client.put(HostInfo.CLIENT_NOTES_KEY, "");
 		client.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, "");
 		client.put(HostInfo.CLIENT_IP_ADDRESS_KEY, "");
-		client.put(HostInfo.CSV_GROUPS_KEY, new ArrayList<>());
+		client.put(HostInfo.CSV_GROUPS_KEY, "");
 		client.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(clientToCopy.getWanConfig()));
 		client.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, Boolean.toString(clientToCopy.getShutdownInstall()));
 		client.put(HostInfo.HOST_KEY_KEY, "");
@@ -148,7 +147,7 @@ public class CopyClient {
 
 	private void copyProductProperties() {
 		Map<String, ConfigName2ConfigValue> products = persistenceController.getDataServices().product
-				.getProductPropertiesPD(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
+				.getProductPropertiesWithoutDefaults(List.of(clientToCopy.getString(HostInfo.HOSTNAME_KEY)), List.of());
 
 		if (products.isEmpty()) {
 			return;
