@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.type;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -233,12 +232,13 @@ public class HostInfo {
 	}
 
 	public static List<String> getGroupsFromObject(Object groups) {
-		if (!((String) groups).contains(",")) {
-			List<String> result = new ArrayList<>();
-			result.add((String) groups);
-			return result;
+		if (groups == null || ((String) groups).isEmpty()) {
+			return List.of();
+		} else if (!((String) groups).contains(",")) {
+			return List.of((String) groups);
+		} else {
+			return Arrays.asList(((String) groups).split(","));
 		}
-		return Arrays.asList(((String) groups).split(","));
 	}
 
 	public void put(String key, Object value) {

@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
+import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.OpsiPackage;
@@ -77,7 +77,7 @@ public class CopyClient {
 	private void copyClient() {
 		List<Object> client = List.of(newClientName,
 				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
-				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", new ArrayList<>(),
+				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", "",
 				Boolean.toString(clientToCopy.getWanConfig()), Boolean.toString(clientToCopy.getShutdownInstall()), "",
 				"");
 		persistenceController.getDataServices().host.createClients(List.of(client));
@@ -88,7 +88,9 @@ public class CopyClient {
 				.getFHostGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getString(HostInfo.HOSTNAME_KEY)))
-				.toList();
+
+				// Exclude "Not assigned" group, as it is not a real group and should not be assigned to the new client.
+				.filter(group -> !group.equals(ClientTree.DIRECTORY_NOT_ASSIGNED_NAME)).toList();
 
 		if (clientGroups.isEmpty()) {
 			return;
