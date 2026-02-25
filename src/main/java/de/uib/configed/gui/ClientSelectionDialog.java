@@ -11,7 +11,6 @@ import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -355,18 +354,19 @@ public class ClientSelectionDialog {
 		jCheckBox.setFocusable(false);
 		jCheckBox.setDisabledIcon(new ImageIcon());
 		jCheckBox.setEnabled(enabled);
-
-		jCheckBox.addItemListener((ItemEvent itemEvent) -> {
-			// We change the alpha value of the item. When the checkbox is not selected, it will be less visible
-			int alpha = jCheckBox.isSelected() ? 255 : 64;
-			Color foreground = jCheckBox.getForeground();
-			foreground = new Color(foreground.getRed(), foreground.getGreen(), foreground.getBlue(), alpha);
-			jCheckBox.setForeground(foreground);
-		});
+		jCheckBox.addItemListener(itemEvent -> updateCheckbox(jCheckBox));
 
 		// We want to macke the parenthesis a little larger
 		jCheckBox.setFont(jCheckBox.getFont().deriveFont((float) (jCheckBox.getFont().getSize() + 5)));
 		return jCheckBox;
+	}
+
+	private static void updateCheckbox(JCheckBox jCheckBox) {
+		// We change the alpha value of the item. When the checkbox is not selected, it will be less visible
+		int alpha = jCheckBox.isSelected() ? 255 : 64;
+		Color foreground = jCheckBox.getForeground();
+		foreground = new Color(foreground.getRed(), foreground.getGreen(), foreground.getBlue(), alpha);
+		jCheckBox.setForeground(foreground);
 	}
 
 	private ComplexGroup createHostGroup() {
