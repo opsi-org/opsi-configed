@@ -262,7 +262,7 @@ public class MakeProductFileDialog {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 		SingleCommandOpsiSetRights opsiSetRightsCommand = new SingleCommandOpsiSetRights(dir);
 		CommandExecutor executor = new CommandExecutor(configedMain, opsiSetRightsCommand);
-		executor.execute();
+		executor.executeAsync();
 	}
 
 	private void execute() {

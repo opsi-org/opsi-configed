@@ -83,11 +83,12 @@ public final class ServerActionManager {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static String getGroupToActivate(List<Map<String, Object>> clients) {
 		// We want to activate the group if we create exactly one client in exactly one group
 		if (clients.size() == 1) {
 			Map<String, Object> client = clients.get(0);
-			List<String> groups = HostInfo.getGroupsFromObject(client.get(HostInfo.CSV_GROUPS_KEY));
+			List<String> groups = (List<String>) client.get(HostInfo.CSV_GROUPS_KEY);
 			if (groups.size() == 1) {
 				return groups.get(0);
 			}

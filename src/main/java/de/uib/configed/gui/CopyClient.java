@@ -17,6 +17,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
+import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.OpsiPackage;
@@ -59,10 +60,8 @@ public class CopyClient {
 	 */
 	public void copy(Collection<CopyOption> options) {
 		Logging.debug("Copy client: ", clientToCopy, " -> ", newClientNameWithDomain);
-		copyClient();
-		if (options.contains(CopyOption.GROUPS)) {
-			copyGroups();
-		}
+		copyClient(options.contains(CopyOption.GROUPS));
+
 		if (options.contains(CopyOption.PRODUCTS)) {
 			copyProducts();
 		}
@@ -74,7 +73,7 @@ public class CopyClient {
 		}
 	}
 
-	private void copyClient() {
+	private void copyClient(boolean copyGroups) {
 		Map<String, Object> client = new HashMap<>();
 		client.put(HostInfo.HOSTNAME_KEY, newClientName);
 		client.put(HostInfo.CSV_DOMAIN_KEY,
@@ -86,27 +85,27 @@ public class CopyClient {
 		client.put(HostInfo.CLIENT_NOTES_KEY, "");
 		client.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, "");
 		client.put(HostInfo.CLIENT_IP_ADDRESS_KEY, "");
-		client.put(HostInfo.CSV_GROUPS_KEY, "");
+		client.put(HostInfo.CSV_GROUPS_KEY, copyGroups ? getAssignedGroupsForClient() : List.of());
 		client.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(clientToCopy.getWanConfig()));
 		client.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, Boolean.toString(clientToCopy.getShutdownInstall()));
 		client.put(HostInfo.HOST_KEY_KEY, "");
 		client.put(HostInfo.CSV_NETBOOT_PRODUCT_KEY, "");
 		persistenceController.getDataServices().host.createClients(List.of(client));
+
+		if (copyGroups) {
+			// To see changes directly, we need to reload groups cache.
+			persistenceController.reloadData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString());
+		}
 	}
 
-	private void copyGroups() {
+	private List<String> getAssignedGroupsForClient() {
 		Map<String, Set<String>> fGroup2Members = persistenceController.getDataServices().group
 				.getFHostGroup2MembersPD();
-		List<String> clientGroups = fGroup2Members.keySet().stream()
+		return fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getString(HostInfo.HOSTNAME_KEY)))
-				.toList();
 
-		if (clientGroups.isEmpty()) {
-			return;
-		}
-
-		persistenceController.getDataServices().group.addHost2Groups(newClientNameWithDomain, clientGroups);
-		persistenceController.reloadData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString());
+				// Exclude "Not assigned" group, as it is not a real group and should not be assigned to the new client.
+				.filter(group -> !group.equals(ClientTree.DIRECTORY_NOT_ASSIGNED_NAME)).toList();
 	}
 
 	private void copyProducts() {

@@ -76,7 +76,7 @@ public class HostDataService extends DataService {
 			String notes = ((String) client.get(HostInfo.CLIENT_NOTES_KEY)).trim();
 			String systemUUID = ((String) client.get(HostInfo.CLIENT_SYSTEM_UUID_KEY)).trim();
 			String ipaddress = ((String) client.get(HostInfo.CLIENT_IP_ADDRESS_KEY)).trim();
-			List<String> groups = HostInfo.getGroupsFromObject(client.get(HostInfo.CSV_GROUPS_KEY));
+			List<String> groups = (List<String>) client.get(HostInfo.CSV_GROUPS_KEY);
 
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(HostInfo.CLIENT_WAN_CONFIG_KEY));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY));
