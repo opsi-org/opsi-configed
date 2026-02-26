@@ -13,6 +13,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -228,12 +229,22 @@ public class CSVImportDataModifier {
 		Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
 		for (int i = 0; i < model.getColumnNames().size(); i++) {
 			if (model.getColumnNames().get(i).equals(HostInfo.CSV_GROUPS_KEY)) {
-				map.put(model.getColumnNames().get(i), HostInfo.getGroupsFromObject(row.get(i)));
+				map.put(model.getColumnNames().get(i), getGroupsFromObject(row.get(i)));
 			} else {
 				map.put(model.getColumnNames().get(i), row.get(i));
 			}
 		}
 		return map;
+	}
+
+	private static List<String> getGroupsFromObject(Object groups) {
+		if (groups == null || ((String) groups).isEmpty()) {
+			return List.of();
+		} else if (!((String) groups).contains(",")) {
+			return List.of((String) groups);
+		} else {
+			return Arrays.asList(((String) groups).split(","));
+		}
 	}
 
 	public static List<String> getImportantHeaders() {
