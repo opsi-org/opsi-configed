@@ -228,11 +228,12 @@ public class CSVImportDataModifier {
 	private Map<String, Object> buildMapFromRow(List<Object> row) {
 		Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
 		for (int i = 0; i < model.getColumnNames().size(); i++) {
-			if (model.getColumnNames().get(i).equals(HostInfo.CSV_GROUPS_KEY)) {
-				map.put(model.getColumnNames().get(i), getGroupsFromObject(row.get(i)));
-			} else {
-				map.put(model.getColumnNames().get(i), row.get(i));
+			String key = model.getColumnName(i);
+			Object value = row.get(i);
+			if (key.equals(HostInfo.CSV_GROUPS_KEY)) {
+				value = getGroupsFromObject(value);
 			}
+			map.put(key, value);
 		}
 		return map;
 	}
