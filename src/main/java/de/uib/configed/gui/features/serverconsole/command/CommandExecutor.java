@@ -152,7 +152,7 @@ public class CommandExecutor implements MessagebusListener {
 	 */
 	public String execute() {
 		if (SwingUtilities.isEventDispatchThread()) {
-			throw new IllegalStateException("executeSync must not be called on the EDT");
+			throw new IllegalStateException("execute must not be called on the EDT");
 		}
 
 		return runCommand();
