@@ -85,7 +85,6 @@ public class LoginDialog extends JFrame {
 		finishAndMakeVisible();
 
 		initGlassPane();
-		initSSO();
 
 		setHostData(hostData);
 	}
