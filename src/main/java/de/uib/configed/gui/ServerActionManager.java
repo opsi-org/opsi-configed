@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.CopyClient.CopyOption;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.gui.type.HostInfo;
@@ -58,8 +59,9 @@ public final class ServerActionManager {
 		ServerActionManager.persistenceController = persistenceController;
 	}
 
-	public static void createClients(List<List<Object>> clients) {
-		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
+	public static void createClients(List<Map<String, Object>> clients) {
+		List<String> createdClientNames = clients.stream()
+				.map(v -> (String) v.get(HostInfo.HOSTNAME_KEY) + "." + v.get(HostInfo.CSV_DOMAIN_KEY)).toList();
 		isLocalChangeInProgress.set(true);
 
 		try {
@@ -81,10 +83,14 @@ public final class ServerActionManager {
 		}
 	}
 
-	private static String getGroupToActivate(List<List<Object>> clients) {
+	private static String getGroupToActivate(List<Map<String, Object>> clients) {
 		// We want to activate the group if we create exactly one client in exactly one group
-		if (clients.size() == 1 && ((List<?>) clients.get(0).get(9)).size() == 1) {
-			return (String) ((List<?>) clients.get(0).get(9)).get(0);
+		if (clients.size() == 1) {
+			Map<String, Object> client = clients.get(0);
+			List<String> groups = HostInfo.getGroupsFromObject(client.get(HostInfo.CSV_GROUPS_KEY));
+			if (groups.size() == 1) {
+				return groups.get(0);
+			}
 		}
 		return ClientTree.ALL_CLIENTS_NAME;
 	}
@@ -137,8 +143,8 @@ public final class ServerActionManager {
 	}
 
 	public static void processActionRequestsSelectedProducts(String visibility) {
-		processActionRequests(ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs(), visibility);
+		processActionRequests(ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
+				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs(), visibility);
 	}
 
 	private static void processActionRequests(Set<String> products, String visibility) {
@@ -251,7 +257,7 @@ public final class ServerActionManager {
 			return;
 		}
 
-		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
+		Set<CopyOption> options = EnumSet.allOf(CopyOption.class);
 
 		HostInfo clientToCopy = selectedClient.get();
 
@@ -279,9 +285,10 @@ public final class ServerActionManager {
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy(options);
 
+				String selectedGroup = configedMain.getSelectedGroupName();
 				configedMain.setRebuiltClientListTableModel(true, true);
-				configedMain.activateGroup(false, configedMain.getSelectedGroupName());
-				configedMain.setClient(newClientNameWithDomain);
+				configedMain.activateGroup(false, selectedGroup);
+				configedMain.setClients(Set.of(newClientNameWithDomain));
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
@@ -294,7 +301,7 @@ public final class ServerActionManager {
 	 * @param options
 	 * @return the new client name or null if the user cancelled the action
 	 */
-	private static String confirmCopyClient(HostInfo clientToCopy, EnumSet<CopyClient.CopyOption> options) {
+	private static String confirmCopyClient(HostInfo clientToCopy, Set<CopyOption> options) {
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
@@ -304,14 +311,14 @@ public final class ServerActionManager {
 		jTextHostname.setText(copySuffixAddition.add());
 		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
 		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
-				CopyClient.CopyOption.GROUPS);
+				CopyOption.GROUPS);
 		JCheckBox copyProducts = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.products.option"),
-				options, CopyClient.CopyOption.PRODUCTS);
+				options, CopyOption.PRODUCTS);
 		JCheckBox copyProductProperties = createOptionCheckBox(
 				Configed.getResourceValue("ConfigedMain.productProperties.option"), options,
-				CopyClient.CopyOption.PRODUCT_PROPERTIES);
+				CopyOption.PRODUCT_PROPERTIES);
 		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
-				CopyClient.CopyOption.CONFIG_STATES);
+				CopyOption.CONFIG_STATES);
 
 		JPanel panel = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "", "[]0"));
 
@@ -338,16 +345,14 @@ public final class ServerActionManager {
 		return answer == JOptionPane.OK_OPTION ? jTextHostname.getText() : null;
 	}
 
-	private static JCheckBox createOptionCheckBox(String title, EnumSet<CopyClient.CopyOption> options,
-			CopyClient.CopyOption option) {
+	private static JCheckBox createOptionCheckBox(String title, Set<CopyOption> options, CopyOption option) {
 		JCheckBox optionCheckBox = new JCheckBox(title);
 		optionCheckBox.setSelected(true);
 		optionCheckBox.addActionListener(event -> updateOptions(options, option, optionCheckBox.isSelected()));
 		return optionCheckBox;
 	}
 
-	private static void updateOptions(Set<CopyClient.CopyOption> options, CopyClient.CopyOption option,
-			boolean include) {
+	private static void updateOptions(Set<CopyOption> options, CopyOption option, boolean include) {
 		if (include && !options.contains(option)) {
 			options.add(option);
 		} else {
@@ -390,9 +395,9 @@ public final class ServerActionManager {
 					withDependencies, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		}
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
-		ConfigedMain.getMainFrame().getClientConfiguration().updateProductTab();
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().updateProductTab();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
@@ -452,9 +457,10 @@ public final class ServerActionManager {
 					newClientName);
 
 			SwingUtilities.invokeLater(() -> {
-				configedMain.refreshClientListActivateALL();
+				configedMain.setRebuiltClientListTableModel(true, true);
+				configedMain.activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 				Logging.debug("set client refreshClientList");
-				configedMain.setClient(newClientName);
+				configedMain.setClients(Set.of(newClientName));
 			});
 		}
 	}

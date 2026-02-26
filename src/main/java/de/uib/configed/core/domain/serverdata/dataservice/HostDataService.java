@@ -61,29 +61,30 @@ public class HostDataService extends DataService {
 		super(dataServices);
 	}
 
-	public boolean createClients(Iterable<List<Object>> clients) {
+	public boolean createClients(Iterable<Map<String, Object>> clients) {
 		List<Map<String, Object>> clientsJsonObject = new ArrayList<>();
 		List<Map<String, Object>> productsNetbootJsonObject = new ArrayList<>();
 		List<Map<String, Object>> groupsJsonObject = new ArrayList<>();
 
-		for (List<Object> client : clients) {
-			String hostname = ((String) client.get(0)).trim();
-			String domain = ((String) client.get(1)).trim();
-			String depotId = ((String) client.get(2)).trim();
-			String macaddress = ((String) client.get(3)).trim();
-			String description = ((String) client.get(4)).trim();
-			String inventorynumber = ((String) client.get(5)).trim();
-			String notes = ((String) client.get(6)).trim();
-			String systemUUID = ((String) client.get(7)).trim();
-			String ipaddress = ((String) client.get(8)).trim();
-			List<String> groups = (List<String>) client.get(9);
+		for (Map<String, Object> client : clients) {
+			String hostname = ((String) client.get(HostInfo.HOSTNAME_KEY)).trim();
+			String domain = ((String) client.get(HostInfo.CSV_DOMAIN_KEY)).trim();
+			String depotId = ((String) client.get(HostInfo.DEPOT_OF_CLIENT_KEY)).trim();
+			String macaddress = ((String) client.get(HostInfo.CLIENT_MAC_ADDRESS_KEY)).trim();
+			String description = ((String) client.get(HostInfo.CLIENT_DESCRIPTION_KEY)).trim();
+			String inventorynumber = ((String) client.get(HostInfo.CLIENT_INVENTORY_NUMBER_KEY)).trim();
+			String notes = ((String) client.get(HostInfo.CLIENT_NOTES_KEY)).trim();
+			String systemUUID = ((String) client.get(HostInfo.CLIENT_SYSTEM_UUID_KEY)).trim();
+			String ipaddress = ((String) client.get(HostInfo.CLIENT_IP_ADDRESS_KEY)).trim();
+			List<String> groups = HostInfo.getGroupsFromObject(client.get(HostInfo.CSV_GROUPS_KEY));
 
-			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
+			boolean wanConfig = Boolean.parseBoolean((String) client.get(HostInfo.CLIENT_WAN_CONFIG_KEY));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY));
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
-			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
-			String netbootProduct = ((String) client.get(13)).trim();
+			String opsiHostKey = ((String) client.get(HostInfo.HOST_KEY_KEY)).isBlank() ? null
+					: ((String) client.get(HostInfo.HOST_KEY_KEY)).trim();
+			String netbootProduct = ((String) client.get(HostInfo.CSV_NETBOOT_PRODUCT_KEY)).trim();
 
 			String newClientId = hostname + "." + domain;
 
@@ -96,7 +97,7 @@ public class HostDataService extends DataService {
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
 			hostItem.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUID);
-			hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
+			hostItem.put(HostInfo.CLIENT_MAC_ADDRESS_KEY, macaddress);
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 			hostItem.put(HostInfo.HOST_KEY_KEY, opsiHostKey);
@@ -215,57 +216,19 @@ public class HostDataService extends DataService {
 		}
 	}
 
-	private void updateHost(String hostId, String property, Object value) {
+	public void updateHost(String hostId, String property, Object value) {
 		if (hostUpdates == null) {
 			hostUpdates = new HashMap<>();
 		}
 
-		Map<String, Object> hostUpdateMap = hostUpdates.get(hostId);
-
-		if (hostUpdateMap == null) {
-			hostUpdateMap = new HashMap<>();
-		}
-
-		hostUpdateMap.put("id", hostId);
+		Map<String, Object> hostUpdateMap = hostUpdates.computeIfAbsent(hostId, (String v) -> {
+			Map<String, Object> internalMap = new HashMap<>();
+			internalMap.put("id", hostId);
+			return internalMap;
+		});
 		hostUpdateMap.put(property, value);
 
 		hostUpdates.put(hostId, hostUpdateMap);
-	}
-
-	public void setHostDescription(String hostId, String description) {
-		updateHost(hostId, HostInfo.CLIENT_DESCRIPTION_KEY, description);
-	}
-
-	public void setClientInventoryNumber(String hostId, String inventoryNumber) {
-		updateHost(hostId, HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventoryNumber);
-	}
-
-	public void setClientOneTimePassword(String hostId, String oneTimePassword) {
-		updateHost(hostId, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY, oneTimePassword);
-	}
-
-	public void setHostNotes(String hostId, String notes) {
-		updateHost(hostId, HostInfo.CLIENT_NOTES_KEY, notes);
-	}
-
-	public void setSystemUUID(String hostId, String uuid) {
-		updateHost(hostId, HostInfo.CLIENT_SYSTEM_UUID_KEY, uuid);
-	}
-
-	public void setMacAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.CLIENT_MAC_ADRESS_KEY, address);
-	}
-
-	public void setIpAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
-	}
-
-	public void setWanConfig(String hostId, boolean wanConfig) {
-		updateHost(hostId, HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
-	}
-
-	public void setInstallOnShutdown(String hostId, boolean installOnShutdown) {
-		updateHost(hostId, HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, installOnShutdown);
 	}
 
 	public List<Map<String, Object>> getOpsiHosts() {

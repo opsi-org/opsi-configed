@@ -53,7 +53,7 @@ public class LogTabComponent extends LogPaneComponent {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		Rectangle visibleRectangle = logTextPane.getVisibleRect();
 		int caretPosition = logTextPane.getCaretPosition();
-		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType, true);
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().setLogFileTab(logFileType, true);
 		SwingUtilities.invokeLater(() -> {
 			logTextPane.setCaretPosition(caretPosition);
 			logTextPane.scrollRectToVisible(visibleRectangle);

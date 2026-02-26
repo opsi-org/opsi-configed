@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -46,7 +45,7 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 		// We want a small gap on top, between the client tabs and the log tabs
 		tabbedPane.setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE, 0, 0, 0));
 
-		logTypesList = Arrays.asList(logTypes);
+		logTypesList = List.of(logTypes);
 
 		textPanes = new LogTabComponent[logTypes.length];
 

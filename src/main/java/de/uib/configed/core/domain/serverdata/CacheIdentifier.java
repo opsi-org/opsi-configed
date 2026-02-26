@@ -7,8 +7,8 @@
 package de.uib.configed.core.domain.serverdata;
 
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.configed.core.domain.serverdata.reload.handler.AbstractReloadHandler;
+import de.uib.configed.core.domain.serverdata.reload.handler.DefaultDataReloadHandler;
 
 /**
  * Identifiers for internally cached data.
@@ -163,22 +163,22 @@ public enum CacheIdentifier {
 	SOFTWARE_LIST("software_list"),
 
 	/**
-	 * return type {@code NavigableMap<String, SWAuditEntry>}
+	 * return type {@code Map<String, SWAuditEntry>}
 	 */
 	INSTALLED_SOFTWARE_INFORMATION("installed_software_information"),
 
 	/**
-	 * return type {@code NavigableMap<String, SWAuditEntry>}
+	 * return type {@code Map<String, SWAuditEntry>}
 	 */
 	INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING("installed_software_information_for_licensing"),
 
 	/**
-	 * return type {@code NavigableMap<String, Map<String, String>>}
+	 * return type {@code Map<String, Map<String, String>>}
 	 */
 	INSTALLED_SOFTWARE_NAME_TO_SW_INFO("installed_software_name_to_sw_info"),
 
 	/**
-	 * return type {@code NavigableMap<String, Set<String>>}
+	 * return type {@code Map<String, Set<String>>}
 	 */
 	NAME_TO_SW_IDENTS("name_to_sw_idents"),
 
@@ -203,7 +203,7 @@ public enum CacheIdentifier {
 	LICENSE_CONTRACTS("license_contracts"),
 
 	/**
-	 * return type {@code NavigableMap<String, NavigableSet<String>>}
+	 * return type {@code Map<String, Set<String>>}
 	 */
 	LICENSE_CONTRACTS_TO_NOTIFY("license_contracts_to_notify"),
 
@@ -353,7 +353,7 @@ public enum CacheIdentifier {
 	POSSIBLE_ACTIONS("possible_actions"),
 
 	/**
-	 * return type {@code NavigableSet<Set>}
+	 * return type {@code Set<Set>}
 	 */
 	PRODUCT_IDS("product_ids"),
 
@@ -365,15 +365,10 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Map<String, ConfigName2ConfigValue>>}
 	 */
-	PRODUCT_PROPERTIES("product_properties"),
+	PRODUCT_PROPERTY_STATES("product_property_states"),
 
 	/**
-	 * return type {@code Map<String, Map<String, ListCellOptions>>}
-	 */
-	PRODUCT_PROPERTY_DEFINITIONS("product_property_definitions"),
-
-	/**
-	 * return type {@code NavigableSet<Object>}
+	 * return type {@code Set<Object>}
 	 */
 	SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL("software_without_associated_license_pool"),
 

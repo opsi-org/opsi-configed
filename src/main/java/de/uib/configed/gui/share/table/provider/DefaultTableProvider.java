@@ -8,18 +8,34 @@ package de.uib.configed.gui.share.table.provider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
+import java.util.function.Supplier;
 
 import de.uib.configed.share.logging.Logging;
 
-public class DefaultTableProvider {
+public final class DefaultTableProvider {
 	private TableSource source;
 	private List<String> columnNames;
 	private List<List<Object>> rows;
 	private List<List<Object>> rowsCopy;
 
-	public DefaultTableProvider(TableSource source) {
+	private DefaultTableProvider(TableSource source) {
 		this.source = source;
+	}
+
+	public static DefaultTableProvider createWithMapSource(List<String> columnNames,
+			Map<String, ? extends Map<String, ? extends Object>> table) {
+		return new DefaultTableProvider(new MapSource(columnNames, table));
+	}
+
+	public static DefaultTableProvider createWithExternalSource(List<String> columnNames, List<String> depotIds) {
+		return new DefaultTableProvider(new ExternalSource(columnNames, depotIds));
+	}
+
+	public static DefaultTableProvider createWithRetrieverMapSource(List<String> columnNames, Object reloadEvent,
+			Supplier<Map<String, ? extends Map<String, ? extends Object>>> mapSupplier) {
+		return new DefaultTableProvider(new RetrieverMapSource(columnNames, reloadEvent, mapSupplier));
 	}
 
 	public List<String> getColumnNames() {

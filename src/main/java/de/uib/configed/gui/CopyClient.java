@@ -7,7 +7,7 @@
 package de.uib.configed.gui;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +17,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ConfigDataService;
+import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.OpsiPackage;
@@ -75,11 +76,22 @@ public class CopyClient {
 	}
 
 	private void copyClient() {
-		List<Object> client = List.of(newClientName,
-				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)),
-				clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY), "", "", "", "", "", "", "",
-				Boolean.toString(clientToCopy.getShutdownInstall()), Boolean.toString(clientToCopy.getWanConfig()), "",
-				"");
+		Map<String, Object> client = new HashMap<>();
+		client.put(HostInfo.HOSTNAME_KEY, newClientName);
+		client.put(HostInfo.CSV_DOMAIN_KEY,
+				Utils.getDomainFromClientName(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
+		client.put(HostInfo.DEPOT_OF_CLIENT_KEY, clientToCopy.getString(HostInfo.DEPOT_OF_CLIENT_KEY));
+		client.put(HostInfo.CLIENT_MAC_ADDRESS_KEY, "");
+		client.put(HostInfo.CLIENT_DESCRIPTION_KEY, "");
+		client.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, "");
+		client.put(HostInfo.CLIENT_NOTES_KEY, "");
+		client.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, "");
+		client.put(HostInfo.CLIENT_IP_ADDRESS_KEY, "");
+		client.put(HostInfo.CSV_GROUPS_KEY, "");
+		client.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(clientToCopy.getWanConfig()));
+		client.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, Boolean.toString(clientToCopy.getShutdownInstall()));
+		client.put(HostInfo.HOST_KEY_KEY, "");
+		client.put(HostInfo.CSV_NETBOOT_PRODUCT_KEY, "");
 		persistenceController.getDataServices().host.createClients(List.of(client));
 	}
 
@@ -88,20 +100,22 @@ public class CopyClient {
 				.getFHostGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
 				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getString(HostInfo.HOSTNAME_KEY)))
-				.toList();
+
+				// Exclude "Not assigned" group, as it is not a real group and should not be assigned to the new client.
+				.filter(group -> !group.equals(ClientTree.DIRECTORY_NOT_ASSIGNED_NAME)).toList();
 
 		if (clientGroups.isEmpty()) {
 			return;
 		}
 
 		persistenceController.getDataServices().group.addHost2Groups(newClientNameWithDomain, clientGroups);
-		persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
+		persistenceController.reloadData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString());
 	}
 
 	private void copyProducts() {
 		Map<String, List<Map<String, String>>> mapOfProductStatesAndActions = persistenceController
-				.getDataServices().product.getMapOfProductStatesAndActions(
-						Collections.singleton(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
+				.getDataServices().product
+						.getMapOfProductStatesAndActions(Set.of(clientToCopy.getString(HostInfo.HOSTNAME_KEY)));
 
 		if (mapOfProductStatesAndActions.isEmpty()) {
 			return;
@@ -129,11 +143,9 @@ public class CopyClient {
 	}
 
 	private int getProductType(String productId) {
-		if (persistenceController.getDataServices().product.getAllLocalbootProductNames().contains(productId)) {
-			return OpsiPackage.TYPE_LOCALBOOT;
-		} else {
-			return OpsiPackage.TYPE_NETBOOT;
-		}
+		return persistenceController.getDataServices().product.getAllLocalbootProductNames().contains(productId)
+				? OpsiPackage.TYPE_LOCALBOOT
+				: OpsiPackage.TYPE_NETBOOT;
 	}
 
 	private void copyProductProperties() {

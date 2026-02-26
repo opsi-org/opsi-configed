@@ -40,8 +40,8 @@ public class DefaultDataReloadHandler extends AbstractReloadHandler {
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 			dataServices.hardware.retrieveHardwareOnClientPD();
 		});
-		eventHandlers.put(CacheIdentifier.FHOST_TO_GROUPS.toString(), (Void v) -> {
-			dataServices.cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
+		eventHandlers.put(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString(), (Void v) -> {
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 			dataServices.group.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
 					CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 		});
@@ -53,8 +53,8 @@ public class DefaultDataReloadHandler extends AbstractReloadHandler {
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
 			dataServices.config.retrieveHostConfigsPD();
 		});
-		eventHandlers.put(CacheIdentifier.PRODUCT_PROPERTIES.toString(),
-				(Void v) -> dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES));
+		eventHandlers.put(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString(),
+				(Void v) -> dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES));
 		eventHandlers.put(CacheIdentifier.ALL_DATA.toString(), (Void v) -> dataServices.cacheManager.clearForReload());
 		eventHandlers.put(CacheIdentifier.LICENSES.toString(), (Void v) -> {
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.LICENSES);

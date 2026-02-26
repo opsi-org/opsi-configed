@@ -27,6 +27,7 @@ import de.uib.configed.core.domain.modulelicense.LicensingInfoMap;
 import de.uib.configed.core.domain.permission.UserConfigProducing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.clientselection.SavedSearchQuery;
@@ -49,11 +50,7 @@ public final class Configed {
 	private static Properties extraLocalization;
 	private static boolean showLocalizationStrings;
 
-	private static String host;
-	private static String user;
-	private static String password;
-	private static String otp;
-	private static boolean useSSO;
+	private static HostData paramHostData;
 
 	private static boolean optionCLIQuerySearch;
 	private static String savedSearch;
@@ -70,14 +67,10 @@ public final class Configed {
 	private static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
-	private static String paramHost;
-	private static String paramUser;
-	private static String paramPassword;
-	private static String paramOTP;
-	private static Boolean paramSSO;
+	private static HostData hostData = new HostData();
 
-	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP, boolean paramSSO) {
-		setParamValues(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
+	private Configed(HostData paramHostData) {
+		setParamValues(paramHostData);
 
 		Logging.debug("starting ", getClass().getName());
 		Logging.debug("default charset is ", Charset.defaultCharset().displayName());
@@ -116,31 +109,18 @@ public final class Configed {
 
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
-		String host = paramHost;
-		String user = paramUser;
-		String password = paramPassword;
-		String otp = paramOTP;
-		boolean useSSO = paramSSO;
+		HostData hostData = paramHostData;
 
 		if (persistenceController != null) {
 			ServerFacade exec = persistenceController.getExecutioner();
-			host = exec.getHost();
-			user = exec.getUsername();
-			password = exec.getPassword();
-			otp = exec.getOTP();
-			useSSO = exec.useSSO();
+			hostData = exec.getHostData();
 		}
 
-		ConfigedMain.setupLoginDialog(host, user, password, otp, useSSO);
+		ConfigedMain.setupLoginDialog(hostData);
 	}
 
-	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,
-			Boolean paramSSO) {
-		Configed.paramHost = paramHost;
-		Configed.paramUser = paramUser;
-		Configed.paramPassword = paramPassword;
-		Configed.paramOTP = paramOTP;
-		Configed.paramSSO = paramSSO;
+	private static void setParamValues(HostData paramHostData) {
+		Configed.paramHostData = paramHostData;
 	}
 
 	public static String getResourceValue(String key) {
@@ -175,40 +155,41 @@ public final class Configed {
 	}
 
 	private static void addMissingArgs() {
-		if (host == null) {
-			host = Utils.getCLIParam("Host: ");
+		if (hostData.getHost() == null) {
+			hostData.setHost(Utils.getCLIParam("Host: "));
 		}
-		if (user == null) {
-			user = Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT);
+		if (hostData.getUser() == null) {
+			hostData.setUser(Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT));
 		}
-		if (password == null) {
-			password = Utils.getCLIPasswordParam("Password: ");
+		if (hostData.getPassword() == null) {
+			hostData.setPassword(Utils.getCLIPasswordParam("Password: "));
 		}
-		if (otp == null) {
-			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+		if (hostData.getOtp() == null) {
+			hostData.setOtp(
+					Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): "));
 		}
 	}
 
 	private static void processLoginOptions(CommandLine cmd) {
 		if (cmd.hasOption("h")) {
-			host = cmd.getOptionValue("h");
+			hostData.setHost(cmd.getOptionValue("h"));
 		}
 
 		if (cmd.hasOption("u")) {
-			user = cmd.getOptionValue("u");
+			hostData.setUser(cmd.getOptionValue("u"));
 		}
 
 		if (cmd.hasOption("p")) {
-			password = cmd.getOptionValue("p");
+			hostData.setPassword(cmd.getOptionValue("p"));
 		}
 
 		if (cmd.hasOption("otp")) {
-			otp = cmd.getOptionValue("otp");
+			hostData.setOtp(cmd.getOptionValue("otp"));
 		}
 
 		if (cmd.hasOption("sso")) {
 			// Single sign-on is not implemented
-			useSSO = true;
+			hostData.useSSO(true);
 		}
 	}
 
@@ -350,18 +331,18 @@ public final class Configed {
 
 		if (optionCLIQuerySearch) {
 			addMissingArgs();
-			initSavedStates(host);
+			initSavedStates(hostData.getHost());
 			Logging.debug("optionCLIQuerySearch");
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(hostData, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIDefineGroupBySearch) {
 			addMissingArgs();
-			initSavedStates(host);
+			initSavedStates(hostData.getHost());
 			Logging.debug("optionCLIDefineGroupBySearch");
 
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(hostData, savedSearch);
 
 			Collection<String> newGroupMembers = query.runSearch(false);
 
@@ -370,7 +351,7 @@ public final class Configed {
 		} else if (optionCLISwAuditPDF) {
 			Logging.debug("optionCLISwAuditPDF");
 			SwPdfExporter exporter = new SwPdfExporter();
-			exporter.setArgs(host, user, password, otp, useSSO, clientsFile, outDir);
+			exporter.setArgs(hostData, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -378,7 +359,7 @@ public final class Configed {
 		} else if (optionCLISwAuditCSV) {
 			Logging.debug("optionCLISwAuditCSV");
 			SWcsvExporter exporter = new SWcsvExporter();
-			exporter.setArgs(host, user, password, otp, useSSO, clientsFile, outDir);
+			exporter.setArgs(hostData, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -387,12 +368,12 @@ public final class Configed {
 			Logging.debug("UserConfigProducing");
 
 			addMissingArgs();
-			initSavedStates(host);
+			initSavedStates(hostData.getHost());
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getNewPersistenceController(host, user, password, otp, useSSO);
+					.getNewPersistenceController(hostData);
 
-			new UserConfigProducing(false, host,
+			new UserConfigProducing(false, hostData.getHost(),
 					persistenceController.getDataServices().hostInfoCollections.getDepotNamesList(),
 					persistenceController.getDataServices().group.getHostGroupIds(),
 					persistenceController.getDataServices().group.getProductGroupsPD().keySet(),
@@ -404,7 +385,7 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		new Configed(host, user, password, otp, useSSO);
+		new Configed(hostData);
 	}
 
 	public static void initSavedStates(String host) {

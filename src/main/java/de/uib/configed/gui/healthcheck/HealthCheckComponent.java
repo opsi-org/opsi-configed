@@ -310,7 +310,8 @@ public class HealthCheckComponent extends
 	}
 
 	private static String getDirectoryLocation() {
-		String dirname = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHost();
+		String dirname = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHostData()
+				.getHost();
 		if (dirname.contains(":")) {
 			dirname = dirname.replace(":", "_");
 		}
@@ -343,7 +344,7 @@ public class HealthCheckComponent extends
 				fileName = fileName.concat(".zip");
 			}
 
-			String dirname = persistenceController.getExecutioner().getHost();
+			String dirname = persistenceController.getExecutioner().getHostData().getHost();
 
 			if (dirname.contains(":")) {
 				dirname = dirname.replace(":", "_");

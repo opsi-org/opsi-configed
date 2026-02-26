@@ -243,10 +243,7 @@ public class LogTextPane extends JTextPane {
 
 	public int computeCaretFromContext(CaretContext context) {
 		Integer newStart = lineCount2docLinestartPosition.get(context.line());
-		if (newStart != null) {
-			return Math.max(0, newStart + context.offset());
-		}
-		return 0;
+		return newStart != null ? Math.max(0, newStart + context.offset()) : 0;
 	}
 
 	public void setParsedText(LogTextPane logTextPane) {

@@ -8,10 +8,8 @@ package de.uib.configed.gui.features.tree;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -26,7 +24,7 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
-public class TreePopupMouseListener extends PopupMouseListener {
+public class TreePopupMouseListener {
 	private AbstractGroupTree tree;
 
 	private TreePath mousePath;
@@ -38,7 +36,8 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemRemoveElements;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		super(jPopupMenu, new JComponent[] { tree });
+		new PopupMouseListener(jPopupMenu, this::checkAccepted, List.of(tree));
+
 		this.tree = tree;
 
 		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
@@ -102,16 +101,14 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 		if (mousePath != null
 				&& mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode groupNode) {
-			Enumeration<TreeNode> enumer = groupNode.breadthFirstEnumeration();
 
 			List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 
-			while (enumer.hasMoreElements()) {
-				DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
-				if (!element.getAllowsChildren()) {
-					clientNodesToRemove.add(element);
+			groupNode.breadthFirstEnumeration().asIterator().forEachRemaining((TreeNode node) -> {
+				if (!node.getAllowsChildren()) {
+					clientNodesToRemove.add((DefaultMutableTreeNode) node);
 				}
-			}
+			});
 
 			if (tree.removeNodes(clientNodesToRemove)) {
 				// refresh internal view
@@ -186,12 +183,5 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		}
 
 		return numberVisibleItems > 0;
-	}
-
-	@Override
-	protected void maybeShowPopup(MouseEvent e) {
-		if (checkAccepted(e)) {
-			super.maybeShowPopup(e);
-		}
 	}
 }

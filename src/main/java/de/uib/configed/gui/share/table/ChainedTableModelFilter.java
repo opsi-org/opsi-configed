@@ -6,17 +6,14 @@
 
 package de.uib.configed.gui.share.table;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class ChainedTableModelFilter extends TableModelFilter {
-	private Map<String, TableModelFilter> chain;
-
-	public ChainedTableModelFilter() {
-		chain = new LinkedHashMap<>();
-	}
+	private final Map<String, TableModelFilter> chain = new HashMap<>();
 
 	public ChainedTableModelFilter set(String filterName, TableModelFilter filter) {
 		chain.put(filterName, filter);
@@ -33,13 +30,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 
 	@Override
 	public boolean isInUse() {
-		for (TableModelFilter filter : chain.values()) {
-			if (filter.isInUse()) {
-				return true;
-			}
-		}
-
-		return false;
+		return chain.values().stream().anyMatch(TableModelFilter::isInUse);
 	}
 
 	@Override
@@ -48,32 +39,14 @@ public class ChainedTableModelFilter extends TableModelFilter {
 			return true;
 		}
 
-		boolean testresult = true;
+		boolean testResult = chain.values().stream().filter(TableModelFilter::isInUse).allMatch(f -> f.test(row));
 
-		for (TableModelFilter filter : chain.values()) {
-			if (filter.isInUse()) {
-				testresult = testresult && filter.test(row);
-			}
-		}
-
-		if (inverted) {
-			testresult = !testresult;
-		}
-
-		return testresult;
+		return inverted ? !testResult : testResult;
 	}
 
 	public String getActiveFilters() {
-		StringBuilder result = new StringBuilder();
-
-		for (Entry<String, TableModelFilter> filterEntry : chain.entrySet()) {
-			if (filterEntry.getValue().isInUse()) {
-				result.append(" - ");
-				result.append(filterEntry.getKey());
-			}
-		}
-
-		return result.toString();
+		return chain.entrySet().stream().filter(e -> e.getValue().isInUse()).map(Entry::getKey)
+				.collect(Collectors.joining(" - "));
 	}
 
 	@Override

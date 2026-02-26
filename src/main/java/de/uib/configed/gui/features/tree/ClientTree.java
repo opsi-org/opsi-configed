@@ -11,7 +11,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -74,11 +73,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public static String translateToPersistentName(String name) {
-		if (DIRECTORY_NAME.equals(name)) {
-			return DIRECTORY_PERSISTENT_NAME;
-		} else {
-			return name;
-		}
+		return DIRECTORY_NAME.equals(name) ? DIRECTORY_PERSISTENT_NAME : name;
 	}
 
 	private static class NodeComparator implements Comparator<DefaultMutableTreeNode> {
@@ -104,8 +99,8 @@ public class ClientTree extends AbstractGroupTree {
 	@Override
 	public void reactOnTreeSelection() {
 		if (ConfigedMain.getMainFrame() != null) {
-			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-					.getTabComponentAt(1);
+			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+					.getTabbedPane().getTabComponentAt(1);
 			comp.showButton(getSelectionPaths() == null
 					|| !ALL_CLIENTS_NAME.equals(getSelectionPath().getLastPathComponent().toString())
 					|| getSelectionPaths().length > 1);
@@ -603,7 +598,7 @@ public class ClientTree extends AbstractGroupTree {
 					Configed.getResourceValue("ClientTree.selectCorrectLocation"));
 			dialog.setListData(groupSet.stream().map(Object::toString).toList());
 			if (preSelected != null) {
-				dialog.setPreviousSelectionValues(Collections.singleton(preSelected.toString()));
+				dialog.setPreviousSelectionValues(Set.of(preSelected.toString()));
 			}
 
 			// Repeat until the user has selected exactly one group

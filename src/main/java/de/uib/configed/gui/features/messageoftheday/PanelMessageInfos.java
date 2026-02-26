@@ -27,14 +27,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -198,22 +197,9 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 				selectInfiniteDateOption();
 			}
 		});
-		textArea.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				markdownPreview.setText(textArea.getText());
-			}
 
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				markdownPreview.setText(textArea.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				markdownPreview.setText(textArea.getText());
-			}
-		});
+		textArea.getDocument()
+				.addDocumentListener(Utils.onDocumentChange(() -> markdownPreview.setText(textArea.getText())));
 	}
 
 	private void defineLayout() {

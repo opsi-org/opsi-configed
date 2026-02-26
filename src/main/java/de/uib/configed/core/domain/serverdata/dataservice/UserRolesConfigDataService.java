@@ -81,9 +81,22 @@ public class UserRolesConfigDataService extends DataService {
 				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
-	public boolean hasCreateClientPermissionPD() {
-		return Boolean.TRUE.equals(
-				dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
+	public boolean canCreateClients() {
+		return !isGlobalReadOnly()
+				&& Boolean.TRUE.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION,
+						Boolean.class))
+				&& !dataServices.config.getDisabledClientMenuEntries()
+						.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT);
+	}
+
+	public boolean canFreeLicenses() {
+		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_FREE_LICENSES);
+	}
+
+	public boolean canDeleteClients() {
+		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_DELETE_CLIENT);
 	}
 
 	public boolean hasDepotsFullPermissionPD() {
@@ -161,7 +174,8 @@ public class UserRolesConfigDataService extends DataService {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
 				.getDataServices().userRoles.hasServerFullPermissionPD();
-		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
+		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getMainPanelManager()
+				.getServerConfiguration();
 		boolean isCurrentUserRoleSelected = serverConfiguration != null
 				&& serverConfiguration.isCurrentUserRoleSelected();
 		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
@@ -537,7 +551,7 @@ public class UserRolesConfigDataService extends DataService {
 
 		if (applyUserSpecializedConfigPD()) {
 			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-					+ dataServices.persistenceController.getExecutioner().getUsername() + "}.";
+					+ dataServices.persistenceController.getExecutioner().getHostData().getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}

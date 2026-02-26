@@ -35,10 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
@@ -99,17 +96,8 @@ public class CSVTemplateCreatorDialog {
 		ButtonGroup delimiterOptions = new ButtonGroup();
 		Stream.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
 
-		MaskFormatter maskFormatter;
-		try {
-			maskFormatter = new MaskFormatter("*");
-		} catch (ParseException e) {
-			Logging.debug(this, "INVALID MASK");
-			return null;
-		}
+		MaskFormatter maskFormatter = createMaskFormatter();
 
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
-		maskFormatter.setAllowsInvalid(false);
-		maskFormatter.setCommitsOnValidEdit(true);
 		otherDelimiterInput = new JFormattedTextField(maskFormatter);
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
@@ -125,24 +113,14 @@ public class CSVTemplateCreatorDialog {
 		});
 
 		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
-			button.addItemListener((ItemEvent e) -> {
-				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
-
-				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
-				}
-			});
+			button.addItemListener((e -> delimiterAction(button, otherOption, e)));
 		}
 
-		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
-			@Override
-			public void performAction() {
-				if (!otherDelimiterInput.getText().isEmpty()) {
-					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
-				}
+		otherDelimiterInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
+			if (!otherDelimiterInput.getText().isEmpty()) {
+				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 			}
-		});
-
+		}));
 		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
 		JLabel dataSelectionLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
@@ -182,6 +160,28 @@ public class CSVTemplateCreatorDialog {
 		return centerPanel;
 	}
 
+	public static MaskFormatter createMaskFormatter() {
+		MaskFormatter maskFormatter;
+		try {
+			maskFormatter = new MaskFormatter("*");
+		} catch (ParseException e) {
+			Logging.warning(e, "INVALID MASK");
+			maskFormatter = new MaskFormatter();
+		}
+		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
+		maskFormatter.setAllowsInvalid(false);
+		maskFormatter.setCommitsOnValidEdit(true);
+		return maskFormatter;
+	}
+
+	private void delimiterAction(AbstractButton button, AbstractButton otherOption, ItemEvent e) {
+		otherDelimiterInput.setEnabled(e.getItem() == otherOption);
+
+		if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
+			format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
+		}
+	}
+
 	private static JRadioButton radio(String key, String cmd, boolean selected) {
 		JRadioButton b = new JRadioButton(Configed.getResourceValue(key));
 		b.setActionCommand(cmd);
@@ -204,25 +204,6 @@ public class CSVTemplateCreatorDialog {
 
 	private static boolean isImportantHeader(String header) {
 		return CSVImportDataModifier.getImportantHeaders().contains(header);
-	}
-
-	private static class InputListener implements DocumentListener {
-		public void performAction() {
-			/* Should be overridden in actual implementation */}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			performAction();
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			performAction();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			/* Not needed */}
 	}
 
 	public void createTemplate() {

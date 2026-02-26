@@ -32,8 +32,6 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
-import de.uib.configed.gui.share.table.provider.MapSource;
-import de.uib.configed.gui.share.table.provider.TableSource;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
@@ -41,8 +39,8 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 
 public class CSVImportDataModifier {
-	private static final List<String> IMPORTANT_HEADER_NAMES = List.of(HostInfo.HOSTNAME_KEY, "domain",
-			HostInfo.DEPOT_OF_CLIENT_KEY, HostInfo.CLIENT_MAC_ADRESS_KEY);
+	private static final List<String> IMPORTANT_HEADER_NAMES = List.of(HostInfo.HOSTNAME_KEY, HostInfo.CSV_DOMAIN_KEY,
+			HostInfo.DEPOT_OF_CLIENT_KEY, HostInfo.CLIENT_MAC_ADDRESS_KEY);
 
 	private GenTableModel model;
 	private String csvFile;
@@ -55,17 +53,19 @@ public class CSVImportDataModifier {
 		this.hiddenColumns = new ArrayList<>();
 	}
 
-	public void updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
+	public boolean updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
 		model = updateModel(format, startLine, thePanel);
 		if (model == null) {
-			Logging.error(this, "Failed to update table model, returned model is null");
-			return;
+			Logging.warning(this, "Failed to update table model");
+			return false;
 		}
 		thePanel.setTableModel(model);
 
 		hideEmptyColumns(thePanel);
 		makeColumnsEditable(model, columnNames);
 		disableRowSorting(thePanel);
+
+		return true;
 	}
 
 	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEdit thePanel) {
@@ -143,11 +143,11 @@ public class CSVImportDataModifier {
 		populateSourceMap(theSourceMap, csvData);
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
-		TableSource source = new MapSource(columnNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames);
 
-		GenTableModel createdModel = new GenTableModel(updateItemFactory, new DefaultTableProvider(source), 0,
-				new int[] {}, thePanel, updateCollection);
+		GenTableModel createdModel = new GenTableModel(updateItemFactory,
+				DefaultTableProvider.createWithMapSource(columnNames, theSourceMap), 0, new int[] {}, thePanel,
+				updateCollection);
 
 		updateItemFactory.setSource(createdModel);
 
@@ -220,8 +220,14 @@ public class CSVImportDataModifier {
 		model.setEditableColumns(editableColumns);
 	}
 
-	public List<List<Object>> getRows() {
-		return model.getRows();
+	public List<Map<String, Object>> getRowsAsListOfMaps() {
+		return model.getRows().parallelStream().map((List<Object> row) -> {
+			Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
+			for (int i = 0; i < model.getColumnNames().size(); i++) {
+				map.put(model.getColumnNames().get(i), row.get(i));
+			}
+			return map;
+		}).toList();
 	}
 
 	public static List<String> getImportantHeaders() {

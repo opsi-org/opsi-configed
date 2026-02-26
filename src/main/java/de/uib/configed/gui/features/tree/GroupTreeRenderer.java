@@ -8,7 +8,7 @@ package de.uib.configed.gui.features.tree;
 
 import java.awt.Component;
 import java.awt.font.TextAttribute;
-import java.util.Collections;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
@@ -87,10 +87,9 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		if (hasFocus) {
-			setFont(getFont()
-					.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
+			setFont(getFont().deriveFont(Map.of(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
 		} else {
-			setFont(getFont().deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, -1)));
+			setFont(getFont().deriveFont(Map.of(TextAttribute.UNDERLINE, -1)));
 		}
 
 		return this;

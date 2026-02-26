@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
 import de.uib.configed.core.domain.datachanges.UpdateCollection;
 import de.uib.configed.gui.Configed;
@@ -27,8 +26,6 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean showToolTip = true;
 
 	protected Actor actor;
-
-	protected JPopupMenu popupMenu;
 
 	protected List<String> names;
 	protected Map<String, ConfigOption> optionsMap;
