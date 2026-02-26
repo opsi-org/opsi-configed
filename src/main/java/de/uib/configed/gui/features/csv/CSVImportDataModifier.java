@@ -221,13 +221,19 @@ public class CSVImportDataModifier {
 	}
 
 	public List<Map<String, Object>> getRowsAsListOfMaps() {
-		return model.getRows().parallelStream().map((List<Object> row) -> {
-			Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
-			for (int i = 0; i < model.getColumnNames().size(); i++) {
+		return model.getRows().parallelStream().map(this::buildMapFromRow).toList();
+	}
+
+	private Map<String, Object> buildMapFromRow(List<Object> row) {
+		Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
+		for (int i = 0; i < model.getColumnNames().size(); i++) {
+			if (model.getColumnNames().get(i).equals(HostInfo.CSV_GROUPS_KEY)) {
+				map.put(model.getColumnNames().get(i), HostInfo.getGroupsFromObject(row.get(i)));
+			} else {
 				map.put(model.getColumnNames().get(i), row.get(i));
 			}
-			return map;
-		}).toList();
+		}
+		return map;
 	}
 
 	public static List<String> getImportantHeaders() {
