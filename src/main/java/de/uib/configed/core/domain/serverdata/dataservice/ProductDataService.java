@@ -8,7 +8,6 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -604,7 +603,7 @@ public class ProductDataService extends DataService {
 		Logging.info(this, "getProductPropertiesWithoutDefaults for ", objectIds);
 
 		if (objectIds == null || objectIds.isEmpty()) {
-			return Collections.emptyMap();
+			return new HashMap<>();
 		}
 
 		Map<String, ConfigName2ConfigValue> result = new HashMap<>();
