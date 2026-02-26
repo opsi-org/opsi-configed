@@ -32,7 +32,6 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientMenuManager;
@@ -347,7 +346,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
 			Map<String, Object> editableProductProperties, ProductpropertiesUpdateCollection updateCollection,
-			Map<String, List<Object>> originalMap) {
+			Map<String, Object> originalMap) {
 		infoPane.setProductId(productID);
 		infoPane.setProductName(persistenceController.getDataServices().product.getProductTitle(productID));
 		infoPane.setProductInfo(persistenceController.getDataServices().product.getProductInfo(productID));
@@ -360,7 +359,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
-		propertiesPanel.setOriginalMap(POJOReMapper.remap(originalMap));
+		propertiesPanel.setOriginalMap(originalMap);
 		propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 

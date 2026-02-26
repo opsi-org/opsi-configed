@@ -598,22 +598,26 @@ public class ProductDataService extends DataService {
 		return productProperties.get(pcname).get(productname);
 	}
 
-	public List<Map<String, Object>> getProductPropertiesWithoutDefaults(List<String> objectIds, String productId) {
+	public Map<String, ConfigName2ConfigValue> getProductPropertiesWithoutDefaults(List<String> objectIds,
+			List<String> productIds) {
 		Logging.info(this, "getProductPropertiesWithoutDefaults for ", objectIds);
 
 		if (objectIds == null || objectIds.isEmpty()) {
-			return new ArrayList<>();
+			return new HashMap<>();
 		}
 
-		List<Map<String, Object>> result = new ArrayList<>();
-		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
-				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, Set.of(productId), Set.of(), objectIds, false);
+		Map<String, ConfigName2ConfigValue> result = new HashMap<>();
+
+		Map<String, Map<String, Object>> retrieved = dataServices.exec
+				.getMapOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, Set.of(), objectIds, false);
+
 		for (String objectId : objectIds) {
-			if (retrieved.get(objectId) == null) {
-				continue;
+			Map<String, Object> objectData = retrieved.get(objectId);
+			if (objectData != null) {
+				fillProductMapWithProductProperties(objectData, result);
 			}
-			result.add((Map<String, Object>) retrieved.get(objectId).get(productId));
 		}
+
 		return result;
 	}
 
