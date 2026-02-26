@@ -125,9 +125,7 @@ public class Main {
 	}
 
 	private static void setGlobalValues() {
-		if (!UserPreferences.get(UserPreferences.LANGUAGE).isBlank()) {
-			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
-		}
+		Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
 
 		if (!UserPreferences.get(UserPreferences.THEME).isBlank()) {
 			ThemeManager.setTheme(UserPreferences.get(UserPreferences.THEME));
