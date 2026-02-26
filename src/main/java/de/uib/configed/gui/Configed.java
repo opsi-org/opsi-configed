@@ -323,6 +323,8 @@ public final class Configed {
 
 		initLogging();
 
+		createSavedStatesDir();
+
 		checkArgsAndStart();
 	}
 
@@ -388,12 +390,28 @@ public final class Configed {
 		new Configed(hostData);
 	}
 
-	public static void initSavedStates(String host) {
-		String location = resolveLocation();
-		File directory = prepareDirectory(location, host);
+	private static void createSavedStatesDir() {
+		savedStatesLocationName = resolveLocation();
+		File dir = new File(savedStatesLocationName);
+		if (dir.exists()) {
+			Logging.info("Saved states location exists", savedStatesLocationName);
+			return;
+		}
 
+		if (dir.mkdirs()) {
+			Logging.info("Successfully created the saved states location", savedStatesLocationName);
+		} else {
+			Logging.warning("Failed to create saved states location", savedStatesLocationName);
+		}
+
+		if (!dir.setWritable(true, true)) {
+			Logging.warning("Setting savedStatesDir writable failed");
+		}
+	}
+
+	public static void initSavedStates(String host) {
+		File directory = prepareDirectory(savedStatesLocationName, host);
 		savedStates = new SavedStates(new File(directory, Configed.SAVED_STATES_FILENAME));
-		savedStatesLocationName = location;
 
 		loadSavedStates();
 		incrementUsageCounter();
@@ -401,12 +419,12 @@ public final class Configed {
 
 	private static String resolveLocation() {
 		if (savedStatesLocationName != null) {
-			Logging.info("Trying to write saved states to ", savedStatesLocationName);
+			Logging.info("Trying to write saved states to", savedStatesLocationName);
 			return savedStatesLocationName;
 		}
 
 		String defaultLocation = Utils.getSavedStatesDefaultLocation();
-		Logging.info("Writing saved states to default location ", defaultLocation);
+		Logging.info("Writing saved states to default location", defaultLocation);
 		return defaultLocation;
 	}
 
@@ -415,7 +433,7 @@ public final class Configed {
 		File dir = new File(directoryName);
 
 		if (!dir.exists() && !dir.mkdirs()) {
-			Logging.warning("mkdirs for saved states failed for ", dir);
+			Logging.warning("mkdirs for saved states failed for", dir);
 		}
 
 		if (!dir.setWritable(true, true)) {
@@ -423,6 +441,10 @@ public final class Configed {
 		}
 
 		return dir;
+	}
+
+	private static String getSavedStatesDirectoryName(String locationName, String host) {
+		return locationName + File.separator + host.replace(":", "_");
 	}
 
 	private static void loadSavedStates() {
@@ -436,10 +458,6 @@ public final class Configed {
 	private static void incrementUsageCounter() {
 		int oldUsageCount = Integer.parseInt(savedStates.getProperty("saveUsageCount", "0"));
 		savedStates.setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
-	}
-
-	private static String getSavedStatesDirectoryName(String locationName, String host) {
-		return locationName + File.separator + host.replace(":", "_");
 	}
 
 	public static SavedStates getSavedStates() {
