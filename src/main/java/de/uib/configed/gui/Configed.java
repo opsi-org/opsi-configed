@@ -64,7 +64,6 @@ public final class Configed {
 	private static boolean optionCLIuserConfigProducing;
 
 	private static SavedStates savedStates;
-	private static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
 	private static HostData hostData = new HostData();
@@ -247,20 +246,6 @@ public final class Configed {
 
 		processLocalizationOptions(cmd);
 
-		if (cmd.hasOption("s")) {
-			savedStatesLocationName = cmd.getOptionValue("s");
-
-			String canonicalPath = null;
-			try {
-				canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
-			} catch (IOException ex) {
-				Logging.debug("savedstates argument ", ex);
-			}
-			if (canonicalPath != null) {
-				savedStatesLocationName = canonicalPath;
-			}
-		}
-
 		if (cmd.hasOption("disable-certificate-verification")) {
 			Utils.setDisableCertificateVerification(true);
 		}
@@ -322,8 +307,6 @@ public final class Configed {
 		Logging.debug("configed: args recognized");
 
 		initLogging();
-
-		createSavedStatesDir();
 
 		checkArgsAndStart();
 	}
@@ -390,42 +373,12 @@ public final class Configed {
 		new Configed(hostData);
 	}
 
-	private static void createSavedStatesDir() {
-		savedStatesLocationName = resolveLocation();
-		File dir = new File(savedStatesLocationName);
-		if (dir.exists()) {
-			Logging.info("Saved states location exists", savedStatesLocationName);
-			return;
-		}
-
-		if (dir.mkdirs()) {
-			Logging.info("Successfully created the saved states location", savedStatesLocationName);
-		} else {
-			Logging.warning("Failed to create saved states location", savedStatesLocationName);
-		}
-
-		if (!dir.setWritable(true, true)) {
-			Logging.warning("Setting savedStatesDir writable failed");
-		}
-	}
-
 	public static void initSavedStates(String host) {
-		File directory = prepareDirectory(savedStatesLocationName, host);
+		File directory = prepareDirectory(Main.getSavedStatesLocationName(), host);
 		savedStates = new SavedStates(new File(directory, Configed.SAVED_STATES_FILENAME));
 
 		loadSavedStates();
 		incrementUsageCounter();
-	}
-
-	private static String resolveLocation() {
-		if (savedStatesLocationName != null) {
-			Logging.info("Trying to write saved states to", savedStatesLocationName);
-			return savedStatesLocationName;
-		}
-
-		String defaultLocation = Utils.getSavedStatesDefaultLocation();
-		Logging.info("Writing saved states to default location", defaultLocation);
-		return defaultLocation;
 	}
 
 	private static File prepareDirectory(String location, String host) {
@@ -462,9 +415,5 @@ public final class Configed {
 
 	public static SavedStates getSavedStates() {
 		return savedStates;
-	}
-
-	public static String getSavedStatesLocationName() {
-		return savedStatesLocationName;
 	}
 }

@@ -46,6 +46,7 @@ import javax.swing.text.StyleContext;
 
 import org.json.JSONObject;
 
+import de.uib.configed.app.Main;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.AbstractTeaComponent;
@@ -314,7 +315,7 @@ public class HealthCheckComponent extends
 		if (dirname.contains(":")) {
 			dirname = dirname.replace(":", "_");
 		}
-		return new File(Configed.getSavedStatesLocationName(), dirname).toString();
+		return new File(Main.getSavedStatesLocationName(), dirname).toString();
 	}
 
 	private void writeToFile(File file, ByteBuffer data) {
@@ -353,9 +354,9 @@ public class HealthCheckComponent extends
 			saveDiagnosticDataToFile();
 
 			List<File> files = new ArrayList<>();
-			files.add(new File(Configed.getSavedStatesLocationName(),
+			files.add(new File(Main.getSavedStatesLocationName(),
 					dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
-			files.add(new File(Configed.getSavedStatesLocationName(),
+			files.add(new File(Main.getSavedStatesLocationName(),
 					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
 			files.add(new File(Logging.getCurrentLogfilePath()));
 			zipFiles(fileName, files);
