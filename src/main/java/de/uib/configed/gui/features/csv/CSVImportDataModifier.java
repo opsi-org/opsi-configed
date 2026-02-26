@@ -13,6 +13,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,13 +222,30 @@ public class CSVImportDataModifier {
 	}
 
 	public List<Map<String, Object>> getRowsAsListOfMaps() {
-		return model.getRows().parallelStream().map((List<Object> row) -> {
-			Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
-			for (int i = 0; i < model.getColumnNames().size(); i++) {
-				map.put(model.getColumnNames().get(i), row.get(i));
+		return model.getRows().parallelStream().map(this::buildMapFromRow).toList();
+	}
+
+	private Map<String, Object> buildMapFromRow(List<Object> row) {
+		Map<String, Object> map = new HashMap<>(model.getColumnNames().size());
+		for (int i = 0; i < model.getColumnNames().size(); i++) {
+			String key = model.getColumnName(i);
+			Object value = row.get(i);
+			if (key.equals(HostInfo.CSV_GROUPS_KEY)) {
+				value = getGroupsFromObject(value);
 			}
-			return map;
-		}).toList();
+			map.put(key, value);
+		}
+		return map;
+	}
+
+	private static List<String> getGroupsFromObject(Object groups) {
+		if (groups == null || ((String) groups).isEmpty()) {
+			return List.of();
+		} else if (!((String) groups).contains(",")) {
+			return List.of((String) groups);
+		} else {
+			return Arrays.asList(((String) groups).split(","));
+		}
 	}
 
 	public static List<String> getImportantHeaders() {

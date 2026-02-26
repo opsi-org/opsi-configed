@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.type;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -232,16 +231,6 @@ public class HostInfo {
 		keys.add(HOST_KEY_KEY);
 		keys.add(CSV_NETBOOT_PRODUCT_KEY);
 		return Collections.unmodifiableSet(keys);
-	}
-
-	public static List<String> getGroupsFromObject(Object groups) {
-		if (groups == null || ((String) groups).isEmpty()) {
-			return List.of();
-		} else if (!((String) groups).contains(",")) {
-			return List.of((String) groups);
-		} else {
-			return Arrays.asList(((String) groups).split(","));
-		}
 	}
 
 	public void put(String key, Object value) {
