@@ -111,7 +111,7 @@ final class AddClientUpdate {
 		row.add(model.getNotes());
 		row.add(model.getSystemUUID());
 		row.add(model.getIpAddress());
-		row.add(model.getGroups());
+		row.add(String.join(",", model.getGroups()));
 		row.add(Boolean.toString(model.isWanSelected()));
 		row.add(Boolean.toString(model.isShutdownInstallSelected()));
 		row.add("");
