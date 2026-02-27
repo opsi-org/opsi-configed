@@ -229,16 +229,16 @@ public class CompleteWinProductsDialog {
 
 		panel.add(labelFolderWinPE);
 		panel.add(fieldPathWinPE, "growx, split 2");
-		panel.add(buttonCallSelectFolderWinPE, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
+		panel.add(buttonCallSelectFolderWinPE, "align center, wrap");
 
-		panel.add(labelFolderInstallFiles);
+		panel.add(labelFolderInstallFiles, "gaptop " + Globals.GAP_SIZE);
 		panel.add(fieldPathInstallFiles, "growx, split 2");
-		panel.add(buttonCallSelectFolderInstallFiles, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
+		panel.add(buttonCallSelectFolderInstallFiles, "align center, wrap");
 
-		panel.add(labelTargetPath);
-		panel.add(fieldTargetPath, "growx, gapbottom " + Globals.GAP_SIZE);
+		panel.add(labelTargetPath, "gaptop " + Globals.GAP_SIZE);
+		panel.add(fieldTargetPath, "growx");
 
-		panel.add(labelProductKey);
+		panel.add(labelProductKey, "gaptop " + Globals.GAP_SIZE);
 		panel.add(fieldProductKey, "growx");
 
 		return panel;
