@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -218,16 +217,18 @@ public class MenuBarController {
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
 
-			themeItem.addActionListener((ActionEvent e) -> {
-				UserPreferences.set(UserPreferences.THEME, theme);
-				ThemeManager.setTheme(theme);
-				ThemeManager.setOpsiLaf();
-
-				runnable.run();
-			});
+			themeItem.addActionListener(actionEvent -> changeTheme(runnable, theme));
 		}
 
 		return jMenuTheme;
+	}
+
+	private static void changeTheme(Runnable runnable, String theme) {
+		UserPreferences.set(UserPreferences.THEME, theme);
+		ThemeManager.setTheme(theme);
+		ThemeManager.setOpsiLaf();
+
+		runnable.run();
 	}
 
 	private JMenu jMenuExtras() {
@@ -251,7 +252,7 @@ public class MenuBarController {
 
 		if (ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3.15.2")) {
 			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MessageOfTheDay.title"));
-			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> new MessageOfTheDayDialog());
+			jMenuFrameMsgOfTheDay.addActionListener(actionEvent -> new MessageOfTheDayDialog());
 
 			jMenuFrameMsgOfTheDay.setEnabled(!forbiddenMOTD);
 			if (forbiddenMOTD) {
@@ -401,18 +402,20 @@ public class MenuBarController {
 				.setContents(new StringSelection(Logging.getCurrentLogfilePath()), null));
 
 		JButton buttonOpen = new JButton(Configed.getResourceValue("MainFrame.showLogFileOpen"));
-		buttonOpen.addActionListener((ActionEvent event) -> {
-			try {
-				Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
-			} catch (IOException ex) {
-				Logging.error(ex, "cannot open: ", Logging.getCurrentLogfilePath());
-			}
-		});
+		buttonOpen.addActionListener(actionEvent -> openFile());
 
 		JOptionPane.showOptionDialog(centerFrame, jTextArea,
 				Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null,
 				new Object[] { Configed.getResourceValue("buttonClose"), buttonCopy, buttonOpen }, null);
+	}
+
+	private static void openFile() {
+		try {
+			Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
+		} catch (IOException ex) {
+			Logging.error(ex, "cannot open: ", Logging.getCurrentLogfilePath());
+		}
 	}
 
 	public JPopupMenu getPopupMenuClone() {
