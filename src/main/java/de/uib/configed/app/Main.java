@@ -255,8 +255,15 @@ public class Main {
 		return defaultLocation;
 	}
 
+	private static void initLogging() {
+		Logging.initLogFile();
+		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
+	}
+
 	public static void main(String[] args) {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
+
+		initLogging();
 
 		createSavedStatesDir();
 

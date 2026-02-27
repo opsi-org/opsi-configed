@@ -290,14 +290,6 @@ public final class Configed {
 		return true;
 	}
 
-	private static void initLogging() {
-		Logging.initLogFile();
-		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
-		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
-			Logging.setLogLevelConsole(0);
-		}
-	}
-
 	public static void main(CommandLine cmd) {
 		processArgs(cmd);
 
@@ -306,7 +298,9 @@ public final class Configed {
 		System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
 		Logging.debug("configed: args recognized");
 
-		initLogging();
+		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
+			Logging.setLogLevelConsole(0);
+		}
 
 		checkArgsAndStart();
 	}
