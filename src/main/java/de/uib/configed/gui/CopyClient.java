@@ -146,7 +146,7 @@ public class CopyClient {
 
 	private void copyProductProperties() {
 		Map<String, ConfigName2ConfigValue> products = persistenceController.getDataServices().product
-				.getProductPropertiesPD(clientToCopy.getString(HostInfo.HOSTNAME_KEY));
+				.getProductPropertiesWithoutDefaults(List.of(clientToCopy.getString(HostInfo.HOSTNAME_KEY)), List.of());
 
 		if (products.isEmpty()) {
 			return;
