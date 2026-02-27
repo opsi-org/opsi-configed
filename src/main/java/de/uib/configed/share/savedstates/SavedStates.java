@@ -25,6 +25,12 @@ public class SavedStates {
 	}
 
 	public void load() throws IOException {
+		if (!propertiesFile.exists() && !propertiesFile.createNewFile()) {
+			Logging.warning(this, "failed to create saved states properties file", propertiesFile);
+		} else {
+			Logging.info(this, "successfully created saved states properties file", propertiesFile);
+		}
+
 		try (FileInputStream in = new FileInputStream(propertiesFile)) {
 			properties.load(in);
 		} catch (FileNotFoundException e) {

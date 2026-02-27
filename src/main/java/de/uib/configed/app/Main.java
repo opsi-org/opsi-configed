@@ -121,11 +121,9 @@ public class Main {
 	}
 
 	private static void setGlobalValues() {
-		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
-			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
-		}
+		Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
 
-		if (UserPreferences.get(UserPreferences.THEME) != null) {
+		if (!UserPreferences.get(UserPreferences.THEME).isBlank()) {
 			ThemeManager.setTheme(UserPreferences.get(UserPreferences.THEME));
 			ThemeManager.setOpsiLaf();
 		}
@@ -209,8 +207,15 @@ public class Main {
 		}
 	}
 
+	private static void initLogging() {
+		Logging.initLogFile();
+		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
+	}
+
 	public static void main(String[] args) {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
+
+		initLogging();
 
 		setGlobalValues();
 

@@ -85,7 +85,6 @@ public class LoginDialog extends JFrame {
 		finishAndMakeVisible();
 
 		initGlassPane();
-		initSSO();
 
 		setHostData(hostData);
 	}
@@ -246,6 +245,8 @@ public class LoginDialog extends JFrame {
 			String authMethods = headers.get("X-opsi-auth-methods").toString();
 			ssoActiveByServer = authMethods.contains("saml");
 			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
+		} else {
+			ssoActiveByServer = false;
 		}
 
 		jButtonSSO.setVisible(ssoActiveByServer);
