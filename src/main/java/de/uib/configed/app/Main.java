@@ -207,8 +207,15 @@ public class Main {
 		}
 	}
 
+	private static void initLogging() {
+		Logging.initLogFile();
+		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
+	}
+
 	public static void main(String[] args) {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
+
+		initLogging();
 
 		setGlobalValues();
 
