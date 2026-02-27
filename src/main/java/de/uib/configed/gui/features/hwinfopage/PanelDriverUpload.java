@@ -148,7 +148,7 @@ public class PanelDriverUpload extends JPanel {
 
 		chooserDriverPath = new SystemFileChooser();
 		chooserDriverPath.setFileHidingEnabled(false);
-
+		chooserDriverPath.setFileSelectionMode(SystemFileChooser.DIRECTORIES_ONLY);
 		chooserDriverPath.setDialogType(SystemFileChooser.OPEN_DIALOG);
 		chooserDriverPath.setDialogTitle(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 	}

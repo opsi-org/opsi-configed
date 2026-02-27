@@ -194,9 +194,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	private void buttonCallSelectExportDirectory() {
 		chooserDirectory.setCurrentDirectory(exportDirectory);
 
-		int returnVal = chooserDirectory.showOpenDialog(this);
-
-		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+		if (chooserDirectory.showOpenDialog(this) == SystemFileChooser.APPROVE_OPTION) {
 			exportDirectory = chooserDirectory.getSelectedFile();
 			Logging.info(this, "selected directory ", exportDirectory);
 

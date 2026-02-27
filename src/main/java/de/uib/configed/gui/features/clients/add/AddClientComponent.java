@@ -402,9 +402,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		fileChooser.setFileFilter(new FileNameExtensionFilter("CSV (.csv)", "csv"));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = fileChooser.showOpenDialog(dialog);
-
-		if (returnValue == SystemFileChooser.APPROVE_OPTION) {
+		if (fileChooser.showOpenDialog(dialog) == SystemFileChooser.APPROVE_OPTION) {
 			String csvFile = fileChooser.getSelectedFile().getAbsolutePath();
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");

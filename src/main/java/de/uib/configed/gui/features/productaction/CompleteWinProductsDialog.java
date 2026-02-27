@@ -110,7 +110,6 @@ public class CompleteWinProductsDialog {
 		chooserFolder = new SystemFileChooser();
 		chooserFolder.setFileHidingEnabled(false);
 		chooserFolder.setFileSelectionMode(SystemFileChooser.DIRECTORIES_ONLY);
-
 		chooserFolder.setDialogType(SystemFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Configed.getResourceValue("CompleteWinProducts.chooser"));
 
@@ -154,9 +153,7 @@ public class CompleteWinProductsDialog {
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserFolder.showOpenDialog(dialog);
-
-			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+			if (chooserFolder.showOpenDialog(dialog) == SystemFileChooser.APPROVE_OPTION) {
 				String pathWinPE = chooserFolder.getSelectedFile().getPath();
 				fieldPathWinPE.setText(pathWinPE);
 				fieldPathWinPE.setCaretPosition(pathWinPE.length());
@@ -172,9 +169,7 @@ public class CompleteWinProductsDialog {
 		fieldPathInstallFiles = new JTextField();
 
 		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserFolder.showOpenDialog(dialog);
-
-			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+			if (chooserFolder.showOpenDialog(dialog) == SystemFileChooser.APPROVE_OPTION) {
 				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
 				fieldPathInstallFiles.setText(pathInstallFiles);
 				fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());

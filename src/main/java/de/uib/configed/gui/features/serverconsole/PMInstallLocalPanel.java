@@ -62,8 +62,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jButtonFileChooser = new JButton(Icons.getIntellijIcon("open"));
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = fileChooser.showOpenDialog(this);
-			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(this) == SystemFileChooser.APPROVE_OPTION) {
 				String pathModules = fileChooser.getSelectedFile().getPath();
 				jTextFieldPath.setText(pathModules);
 			} else {

@@ -243,8 +243,7 @@ public class LogFrame extends JFrame {
 		chooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(title);
 
-		int returnVal = chooser.showOpenDialog(Main.getMainFrame());
-		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+		if (chooser.showOpenDialog(Main.getMainFrame()) == SystemFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 
