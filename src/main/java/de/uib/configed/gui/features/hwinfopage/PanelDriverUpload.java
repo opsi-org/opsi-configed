@@ -10,7 +10,6 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,9 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import com.formdev.flatlaf.util.SystemFileChooser;
 
@@ -321,10 +317,6 @@ public class PanelDriverUpload extends JPanel {
 				.addItemListener(itemEvent -> reactToIntegrationTypeChange(itemEvent.getStateChange(), button)));
 
 		JPanel panelButtonGroup = new JPanel();
-		panelButtonGroup.setBorder(
-				BorderFactory.createCompoundBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 1, true),
-						new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-								Globals.MIN_GAP_SIZE)));
 
 		panelButtonGroup.setLayout(new MigLayout("insets 0, wrap 1", "", "[]0"));
 
