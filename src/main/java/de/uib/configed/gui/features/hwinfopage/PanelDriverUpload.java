@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.hwinfopage;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.List;
@@ -25,7 +24,6 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.util.SystemFileChooser;
 
@@ -139,11 +137,7 @@ public class PanelDriverUpload extends JPanel {
 		depot = new JLabel(persistenceController.getDataServices().hostInfoCollections.getDepotNamesList().getFirst());
 
 		comboChooseWinProduct = new JComboBox<>();
-		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
-			winProduct = "" + comboChooseWinProduct.getSelectedItem();
-			Logging.info(this, "winProduct  ", winProduct);
-			produceTarget();
-		});
+		comboChooseWinProduct.addActionListener(actionEvent -> chooseWinProduct());
 
 		chooserDriverPath = new SystemFileChooser();
 		chooserDriverPath.setFileHidingEnabled(false);
@@ -158,12 +152,14 @@ public class PanelDriverUpload extends JPanel {
 		ctx.webDAVClient = webDAVClient;
 		ctx.msg = jLabelRetrievalText;
 		ctx.options = comboChooseWinProduct;
-		ctx.onDone = () -> {
-			winProduct = (String) comboChooseWinProduct.getSelectedItem();
-			produceTarget();
-		};
+		ctx.onDone = this::chooseWinProduct;
 		WinProductsRetriever retriever = new WinProductsRetriever(ctx);
 		retriever.execute();
+	}
+
+	private void chooseWinProduct() {
+		winProduct = (String) comboChooseWinProduct.getSelectedItem();
+		produceTarget();
 	}
 
 	private boolean checkFiles() {
@@ -233,26 +229,25 @@ public class PanelDriverUpload extends JPanel {
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		JButton btnCreateDrivers = new JButton(Icons.getIntellijIcon("run"));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
-		btnCreateDrivers.addActionListener((ActionEvent actionEvent) -> {
-			CommandExecutor executor = new CommandExecutor(configedMain,
-					new SingleCommandTemplate("create_driver_links.py", "/var/lib/opsi/depot/"
-							+ comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
-							"create_driver_links.py"));
-			executor.executeAsync();
-		});
+		btnCreateDrivers
+				.addActionListener(
+						actionEvent -> new CommandExecutor(configedMain,
+								new SingleCommandTemplate("create_driver_links.py",
+										"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
+												+ "/create_driver_links.py ",
+										"create_driver_links.py")).executeAsync());
 
 		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
-		DocumentListener checkFilesListener = Utils.onDocumentChange(this::checkFiles);
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
-		fieldServerPath.getDocument().addDocumentListener(checkFilesListener);
+		fieldServerPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkFiles));
 
 		JLabel labelDriverToIntegrate = Utils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 
 		fieldDriverPath = new JTextField();
 		fieldDriverPath.setEditable(true);
-		fieldDriverPath.getDocument().addDocumentListener(checkFilesListener);
+		fieldDriverPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkFiles));
 		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
 		JLabel labelDriverLocationType = Utils.createBoldLabel("PanelDriverUpload.type");
