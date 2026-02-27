@@ -46,8 +46,6 @@ public class PanelDriverUpload extends JPanel {
 	private static final String[] DIRECTORY_DRIVERS_BY_AUDIT = new String[] { "drivers", "drivers", "additional",
 			"byAudit" };
 
-	private String byAuditPath = "";
-
 	private JTextField fieldByAuditPath;
 	private JLabel labelClientName;
 
@@ -88,8 +86,6 @@ public class PanelDriverUpload extends JPanel {
 	private File targetPath;
 
 	private JButton buttonUploadDrivers;
-
-	private String winProduct = "";
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -133,7 +129,7 @@ public class PanelDriverUpload extends JPanel {
 		depot = new JLabel(persistenceController.getDataServices().hostInfoCollections.getDepotNamesList().getFirst());
 
 		comboChooseWinProduct = new JComboBox<>();
-		comboChooseWinProduct.addActionListener(actionEvent -> chooseWinProduct());
+		comboChooseWinProduct.addActionListener(actionEvent -> produceTarget());
 
 		chooserDriverPath = new SystemFileChooser();
 		chooserDriverPath.setFileHidingEnabled(false);
@@ -148,14 +144,9 @@ public class PanelDriverUpload extends JPanel {
 		ctx.webDAVClient = webDAVClient;
 		ctx.msg = jLabelRetrievalText;
 		ctx.options = comboChooseWinProduct;
-		ctx.onDone = this::chooseWinProduct;
+		ctx.onDone = this::produceTarget;
 		WinProductsRetriever retriever = new WinProductsRetriever(ctx);
 		retriever.execute();
-	}
-
-	private void chooseWinProduct() {
-		winProduct = (String) comboChooseWinProduct.getSelectedItem();
-		produceTarget();
 	}
 
 	private boolean checkFiles() {
@@ -377,9 +368,8 @@ public class PanelDriverUpload extends JPanel {
 		new PanelDriverUploadWorker(ctx).execute();
 	}
 
-	public void setByAuditPath(String s) {
-		byAuditPath = s;
-		fieldByAuditPath.setText(s);
+	public void setByAuditPath(String byAuditPath) {
+		fieldByAuditPath.setText(byAuditPath);
 		produceTarget();
 	}
 
@@ -397,11 +387,13 @@ public class PanelDriverUpload extends JPanel {
 			return;
 		}
 
+		String winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		winProduct = winProduct == null || "null".equals(winProduct) ? "" : winProduct;
+
 		String result = depotProductDirectory + winProduct + driverDirectory + "/";
 
 		if (buttonByAudit.isSelected()) {
-			result = result + byAuditPath + "/";
+			result += fieldByAuditPath.getText() + "/";
 		}
 
 		fieldServerPath.setText(result);
