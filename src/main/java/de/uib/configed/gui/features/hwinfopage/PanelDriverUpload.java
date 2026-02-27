@@ -121,8 +121,6 @@ public class PanelDriverUpload extends JPanel {
 
 		webDAVClient = new WebDAVClient();
 
-		defineChoosers();
-
 		buildPanel();
 
 		// We init the values later, since there are listeners attached to it.
@@ -153,13 +151,6 @@ public class PanelDriverUpload extends JPanel {
 
 		chooserDriverPath.setDialogType(SystemFileChooser.OPEN_DIALOG);
 		chooserDriverPath.setDialogTitle(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
-
-		SystemFileChooser chooserServerpath = new SystemFileChooser();
-		chooserServerpath.setFileHidingEnabled(false);
-		chooserServerpath.setFileSelectionMode(SystemFileChooser.DIRECTORIES_ONLY);
-
-		chooserServerpath.setDialogType(SystemFileChooser.OPEN_DIALOG);
-		chooserServerpath.setDialogTitle(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 	}
 
 	protected void evaluateWinProducts() {
