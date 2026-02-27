@@ -302,13 +302,13 @@ public class MenuBarController {
 				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiAdminWebPage"));
 		jMenuItemAdminLink.addActionListener(actionEvent -> BrowserUtils.openLink("https://" + host + "/admin/"));
 
-		JMenuItem jMenuItemLicensesLink = new JMenuItem(
-				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiWebGUI"));
-		jMenuItemLicensesLink
+		JMenuItem jMenuItemWebGUI = new JMenuItem(Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiWebGUI"));
+		Icons.addIntellijIconToMenuItem(jMenuItemWebGUI, "opsiWebgui", 16);
+		jMenuItemWebGUI
 				.addActionListener(actionEvent -> BrowserUtils.openLink("https://" + host + "/addons/webgui/app/"));
 
 		jMenuHelp.add(jMenuItemAdminLink);
-		jMenuHelp.add(jMenuItemLicensesLink);
+		jMenuHelp.add(jMenuItemWebGUI);
 	}
 
 	public JMenuBar initMenuBar(LeftToolBar leftToolBar, MainFrame mainFrame) {
