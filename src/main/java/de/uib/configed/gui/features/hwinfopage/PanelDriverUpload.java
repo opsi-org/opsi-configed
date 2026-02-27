@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.hwinfopage;
 
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -35,6 +34,7 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.WinProductUtils;
 import de.uib.configed.share.WinProductsRetriever;
+import de.uib.configed.share.WinProductsRetriever.Context;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -139,7 +139,7 @@ public class PanelDriverUpload extends JPanel {
 	}
 
 	protected void evaluateWinProducts() {
-		WinProductsRetriever.Context ctx = new WinProductsRetriever.Context();
+		Context ctx = new Context();
 		ctx.owner = dialog;
 		ctx.webDAVClient = webDAVClient;
 		ctx.msg = jLabelRetrievalText;
@@ -291,27 +291,28 @@ public class PanelDriverUpload extends JPanel {
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
 				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
 
-		List<RadioButtonIntegrationType> radioButtons = List.of(
-				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.standard"),
-						getLocalsystemPath(DIRECTORY_DRIVERS)),
-				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-						getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED)),
-				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-						getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED)),
-				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.additional"),
-						getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL)),
-				buttonByAudit);
-
 		ButtonGroup buttonGroup = new ButtonGroup();
-		radioButtons.forEach(buttonGroup::add);
-		radioButtons.forEach(button -> button
-				.addItemListener(itemEvent -> reactToIntegrationTypeChange(itemEvent.getStateChange(), button)));
+		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.standard"),
+				getLocalsystemPath(DIRECTORY_DRIVERS)));
+		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.preferred"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED)));
+		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.excluded"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED)));
+		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.additional"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL)));
+		buttonGroup.add(buttonByAudit);
+
+		// Add listeners to all buttons in the group
+		buttonGroup.getElements().asIterator().forEachRemaining(
+				button -> button.addItemListener(itemEvent -> reactToIntegrationTypeChange(itemEvent.getStateChange(),
+						(RadioButtonIntegrationType) button)));
 
 		JPanel panelButtonGroup = new JPanel();
 
 		panelButtonGroup.setLayout(new MigLayout("insets 0, wrap 1", "", "[]0"));
 
-		radioButtons.forEach(panelButtonGroup::add);
+		// Add buttons to the panel
+		buttonGroup.getElements().asIterator().forEachRemaining(panelButtonGroup::add);
 
 		panelButtonGroup.add(jLabelByAuditDriverLocationPath, "split 2, gapleft 50, aligny center");
 		panelButtonGroup.add(fieldByAuditPath, "gapleft " + Globals.MIN_GAP_SIZE + ", wrap");
