@@ -301,6 +301,9 @@ public class PanelDriverUpload extends JPanel {
 		JLabel jLabelByAuditDriverLocationPath = new JLabel(
 				Configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 
+		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
+
 		List<RadioButtonIntegrationType> radioButtons = List.of(
 				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.standard"),
 						getLocalsystemPath(DIRECTORY_DRIVERS)),
@@ -310,8 +313,7 @@ public class PanelDriverUpload extends JPanel {
 						getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED)),
 				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.additional"),
 						getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL)),
-				new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-						getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT)));
+				buttonByAudit);
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		radioButtons.forEach(buttonGroup::add);
