@@ -29,11 +29,7 @@ public class StringIntegerRowSorter extends TableRowSorter<TableModel> {
 		if (integerColumns != null && integerColumns.contains(column)) {
 			return Comparator.comparingInt((Object o) -> {
 				String value = o.toString();
-				if (ExtendedInteger.DISPLAY_INFINITE.equals(value)) {
-					return Integer.MAX_VALUE;
-				} else {
-					return Integer.parseInt(value);
-				}
+				return ExtendedInteger.DISPLAY_INFINITE.equals(value) ? Integer.MAX_VALUE : Integer.parseInt(value);
 			});
 		} else {
 			return super.getComparator(column);

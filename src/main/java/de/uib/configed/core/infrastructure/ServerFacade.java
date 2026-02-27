@@ -47,7 +47,6 @@ import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.BrowserUtils;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
 import net.jpountz.lz4.LZ4FrameInputStream;
@@ -77,12 +76,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private static OpsiServerVersionRetriever versionRetriever;
 	private CountDownLatch otpWaiter;
 
-	private String host;
-	private String username;
-	private String password;
-	private String otp;
-	private boolean useSSO;
+	private HostData hostData = new HostData();
+
 	private String sessionId;
+	private String hostWithoutPort;
 	private int portHTTPS = Globals.DEFAULT_PORT;
 	private boolean useSAML;
 
@@ -95,7 +92,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		if (host == null) {
 			return;
 		}
-		this.host = host;
+		hostData.setHost(host);
 		if (connect) {
 			connect(host, null, null, null, true);
 		}
@@ -117,7 +114,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private synchronized void connect(String host, String username, String password, String otp, boolean useSAML) {
 		this.useSAML = useSAML;
-		this.host = host;
+		hostData.setHost(host);
+
 		int idx = -1;
 		if (host.contains("[") && host.contains("]")) {
 			idx = host.indexOf(":", host.indexOf("]"));
@@ -126,19 +124,22 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		if (idx > -1) {
-			this.host = host.substring(0, idx);
+			hostWithoutPort = host.substring(0, idx);
 			this.portHTTPS = Integer.parseInt(host.substring(idx + 1, host.length()));
+		} else {
+			hostWithoutPort = host;
 		}
-		this.username = username;
-		this.password = password;
-		this.otp = otp;
+
+		hostData.setUser(username);
+		hostData.setPassword(password);
+		hostData.setOtp(otp);
 
 		setConnectionState(new ConnectionState());
 		if (useSAML && !connectSAML()) {
 			Logging.error(this, "SAML connection failed");
 			return;
 		}
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), this.host + "_" + portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), hostWithoutPort + "_" + portHTTPS);
 		checkServerVersion();
 	}
 
@@ -198,7 +199,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		String localKeySID = "respondSessionId";
 		//////// register and get new session id
 		URL urlGetSid = makeURL("/auth/session_id");
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), hostWithoutPort + "_" + portHTTPS);
 		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		Map<String, Object> result = retrieveResponse(urlGetSid, RequestMethod.GET, requestProperties, jsonProperties,
 				localKeySID);
@@ -267,7 +268,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			if (uname == null) {
 				Logging.error(this, "username not received");
 			} else {
-				username = userPattern.split(uname, 2)[1];
+				hostData.setUser(userPattern.split(uname, 2)[1]);
 				isAuthenticated = (boolean) result.get("authenticated");
 			}
 		}
@@ -279,7 +280,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		if (useSAML) {
 			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), sessionId);
 		} else {
-			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
+			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), hostData.getUser(),
+					hostData.getPassword());
 		}
 		versionRetriever.checkServerVersion();
 	}
@@ -292,7 +294,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, String> requestProperties = new HashMap<>();
 		if (!useSAML) {
 			String authorization = Base64.getEncoder()
-					.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
+					.encodeToString((hostData.getUser() + ":" + hostData.getPassword() + hostData.getOtp())
+							.getBytes(StandardCharsets.UTF_8));
 			requestProperties.put("Authorization", "Basic " + authorization);
 		}
 
@@ -319,12 +322,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String produceBaseURL(String rpcPath) {
 		String url;
 
-		if (host.contains("://")) {
-			url = host + ":" + portHTTPS + rpcPath;
-		} else if (host.contains(":")) {
-			url = "https://" + host + rpcPath;
+		if (hostData.getHost().contains("://")) {
+			url = hostData.getHost() + ":" + portHTTPS + rpcPath;
+		} else if (hostData.getHost().contains(":")) {
+			url = "https://" + hostData.getHost() + rpcPath;
 		} else {
-			url = "https://" + host + ":" + portHTTPS + rpcPath;
+			url = "https://" + hostData.getHost() + ":" + portHTTPS + rpcPath;
 		}
 		return url;
 	}
@@ -361,7 +364,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		List<Object> params = new ArrayList<>();
 
 		for (Object parameter : parameters) {
-			params.add(parameter instanceof Object[] array ? Arrays.asList(array) : parameter);
+			params.add(parameter instanceof Object[] array ? List.of(array) : parameter);
 		}
 
 		return Map.of("id", DEFAULT_JSON_ID, "method", methodname.toString(), "params", params);
@@ -390,7 +393,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters) {
 		Logging.info(this, "retrieveResponse started");
 
-		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
+		if ((hostData.getOtp() == null && hostData.useMFA()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
 			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
 				ParallelTaskExecutor.allowNewTasks(true);
 			} else {
@@ -633,8 +636,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			// Normal response; clear error flag if needed
 			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
 		} else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
-			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
+			Logging.debug("Unauthorized: ", sessionId, ", mfa=", hostData.useMFA());
+			if (hostData.useMFA() && ConfigedMain.getMainFrame() != null) {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
 				// Don't initiate Messagebus reconnection, since the connection is restablished once
@@ -643,12 +646,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Messagebus.getInstance().setReconnecting(true);
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				setConnectionState(new ConnectionState(ConnectionState.NOT_CONNECTED));
-				if (otp != null && otp.equals(getOTP())) {
+				if (hostData.getOtp() != null) {
 					Logging.debug(this, "MFA error encountered, we wait for new OTP input");
-					otp = waitForOTPInput();
+					hostData.setOtp(waitForOTPInput());
 				} else {
 					Logging.debug(this, "old OTP was used, we set it to use new OTP");
-					otp = getOTP();
+					hostData.setOtp(hostData.getOtp());
 				}
 				setConnectionState(new ConnectionState(ConnectionState.RETRY_CONNECTION));
 			} else {
@@ -736,40 +739,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return stream;
 	}
 
-	/**
-	 * Retrieve used host by the connection.
-	 *
-	 * @return used host by the connection.
-	 */
-	public String getHost() {
-		return host;
+	public HostData getHostData() {
+		return hostData;
 	}
 
-	/**
-	 * Retrieve used username by the connection.
-	 *
-	 * @return used username by the connection.
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * Retrieve used port by the connection.
-	 *
-	 * @return used port by the connection.
-	 */
-	public int getPort() {
+	public int getPortHTTPS() {
 		return portHTTPS;
-	}
-
-	/**
-	 * Retrieve used password by the connection.
-	 *
-	 * @return used password by the connection.
-	 */
-	public String getPassword() {
-		return password;
 	}
 
 	/**
@@ -782,14 +757,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public synchronized void setOTP(String otp) {
-		this.otp = otp;
+		hostData.setOtp(otp);
 		if (otpWaiter != null) {
 			otpWaiter.countDown();
 		}
-	}
-
-	public synchronized String getOTP() {
-		return otp;
 	}
 
 	/**
@@ -816,15 +787,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error("ConfigedMain waiting for OTP interrupted: " + e.getMessage());
 			return null;
 		}
-		return otp;
-	}
-
-	public void setUseSSO(boolean useSSO) {
-		this.useSSO = useSSO;
-	}
-
-	public boolean useSSO() {
-		return useSSO;
+		return hostData.getOtp();
 	}
 
 	/**
@@ -832,20 +795,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * data in memory.
 	 */
 	public void clearAuthenticationData() {
-		host = null;
-		username = null;
+		wipeSensitiveString(hostData.getPassword());
+		wipeSensitiveString(hostData.getOtp());
 
-		wipeSensitiveString(password);
-		password = null;
-
-		wipeSensitiveString(otp);
-		otp = null;
+		hostData = new HostData();
 
 		wipeSensitiveString(sessionId);
 		sessionId = null;
 
 		otpWaiter = null;
-		useSSO = false;
 	}
 
 	/**

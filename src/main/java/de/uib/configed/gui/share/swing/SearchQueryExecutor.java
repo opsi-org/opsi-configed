@@ -47,7 +47,7 @@ public class SearchQueryExecutor extends SwingWorker<Collection<String>, Void> {
 
 		// because of potential memory problems we switch to
 		// client view
-		ConfigedMain.getMainFrame().getClientConfiguration().setSelectedIndex(0);
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().setSelectedIndex(0);
 
 		try {
 			Collection<String> clients = get();

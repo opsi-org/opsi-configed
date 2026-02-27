@@ -51,7 +51,7 @@ public enum RPCMethodName {
 
 	PRODUCT_PROPERTY_GET_OBJECTS("productProperty_getObjects"),
 
-	PRODUCT_PROPERTY_STATE_GET_OBJECTS("productPropertyState_getObjects"),
+	PRODUCT_PROPERTY_STATE_GET_VALUES("productPropertyState_getValues"),
 	PRODUCT_PROPERTY_STATE_UPDATE_OBJECTS("productPropertyState_updateObjects"),
 	PRODUCT_PROPERTY_STATE_DELETE_OBJECTS("productPropertyState_deleteObjects"),
 	PRODUCT_PROPERTY_STATE_DELETE("productPropertyState_delete"),

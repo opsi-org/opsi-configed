@@ -25,8 +25,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
@@ -34,6 +32,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.Utilities;
 
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -49,7 +48,7 @@ import de.uib.configed.share.logging.Logging;
 //   - Updated depracted method usage.
 //   - Minor changes to reduce SonarQube warnings.
 @SuppressWarnings("java:S1200")
-public final class TextLineNumber extends JPanel implements CaretListener, DocumentListener, PropertyChangeListener {
+public final class TextLineNumber extends JPanel implements CaretListener, PropertyChangeListener {
 	public static final float LEFT = 0.0F;
 	public static final float CENTER = 0.5F;
 	public static final float RIGHT = 1.0F;
@@ -104,7 +103,11 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 		setDigitAlignment(RIGHT);
 		setMinimumDisplayDigits(minimumDisplayDigits);
 
-		component.getDocument().addDocumentListener(this);
+		//  View of the component has not been updated at the time
+		//  the DocumentEvent is fired. A document change may affect the number of displayed lines of text.
+		// Therefore the lines numbers will also change.
+		component.getDocument().addDocumentListener(
+				Utils.onDocumentChange(() -> SwingUtilities.invokeLater(this::handleResizeIfNeeded)));
 		component.addCaretListener(this);
 		component.addPropertyChangeListener("font", this);
 	}
@@ -307,11 +310,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 		int index = root.getElementIndex(rowStartOffset);
 		Element line = root.getElement(index);
 
-		if (line.getStartOffset() == rowStartOffset) {
-			return String.valueOf(index + 1);
-		} else {
-			return "";
-		}
+		return line.getStartOffset() == rowStartOffset ? String.valueOf(index + 1) : "";
 	}
 
 	/*
@@ -385,35 +384,6 @@ public final class TextLineNumber extends JPanel implements CaretListener, Docum
 			getParent().repaint();
 			lastLine = currentLine;
 		}
-	}
-
-	//
-	//  Implement DocumentListener interface
-	//
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		documentChanged();
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		documentChanged();
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		documentChanged();
-	}
-
-	/*
-	 *  A document change may affect the number of displayed lines of text.
-	 *  Therefore the lines numbers will also change.
-	 */
-	private void documentChanged() {
-		//  View of the component has not been updated at the time
-		//  the DocumentEvent is fired
-
-		SwingUtilities.invokeLater(this::handleResizeIfNeeded);
 	}
 
 	private void handleResizeIfNeeded() {

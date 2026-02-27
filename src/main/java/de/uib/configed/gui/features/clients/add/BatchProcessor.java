@@ -7,7 +7,9 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.RowValidation;
@@ -22,10 +24,10 @@ public class BatchProcessor {
 
 	public UpdateResult<AddClientModel, AddClientEffect> process(AddClientModel model) {
 
-		List<List<Object>> toImport = new ArrayList<>(model.getRowsToImport());
+		List<Map<String, Object>> toImport = new ArrayList<>(model.getRowsToImport());
 
 		while (!toImport.isEmpty()) {
-			List<Object> row = toImport.remove(0);
+			Map<String, Object> row = toImport.remove(0);
 
 			for (RowValidation validator : validators) {
 				var result = validator.validate(row, model);
@@ -47,19 +49,20 @@ public class BatchProcessor {
 				}
 			}
 
-			List<List<Object>> accepted = new ArrayList<>(model.getAcceptedRows());
+			List<Map<String, Object>> accepted = new ArrayList<>(model.getAcceptedRows());
 			accepted.add(row);
 			model = model.withAcceptedRows(accepted);
 		}
 
-		List<List<Object>> finalRows = new ArrayList<>(model.getAcceptedRows());
+		List<Map<String, Object>> finalRows = new ArrayList<>(model.getAcceptedRows());
 		model = model.toBuilder().acceptedRows(new ArrayList<>()).rowsToImport(new ArrayList<>())
-				.pendingSingleRow(new ArrayList<>()).build();
+				.pendingSingleRow(new HashMap<>()).build();
 
 		return UpdateResult.withEffect(model, new AddClientEffect.ServiceEffect.CreateClients(finalRows));
 	}
 
-	public UpdateResult<AddClientModel, AddClientEffect> processSingleRow(AddClientModel model, List<Object> row) {
+	public UpdateResult<AddClientModel, AddClientEffect> processSingleRow(AddClientModel model,
+			Map<String, Object> row) {
 		AddClientModel working = model;
 
 		for (RowValidation validator : validators) {

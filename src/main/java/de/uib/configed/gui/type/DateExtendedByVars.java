@@ -63,10 +63,7 @@ public final class DateExtendedByVars extends Date {
 			return Optional.empty();
 		}
 		int second = s.indexOf(CHAR_DELIMITER, first + 1);
-		if (second == -1) {
-			return Optional.empty();
-		}
-		return Optional.of(s.substring(first + 1, second));
+		return second == -1 ? Optional.empty() : Optional.of(s.substring(first + 1, second));
 	}
 
 	private static Optional<Integer> parseSubtrahend(String s) {

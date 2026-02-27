@@ -27,14 +27,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -133,8 +132,6 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			Logging.debug("PanelMessageInfos resetData 0: ", 0);
 			selectInfiniteDateOption();
 		} else {
-			Logging.debug("PanelMessageInfos resetData 1: ", date, " => ",
-					dateTimePicker.getDateTimePicker().getDateTimeValue());
 			selectDateOption();
 		}
 	}
@@ -148,7 +145,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		if (date == null) {
 			date = "0";
 		}
-		dateTimePicker.getDateTimePicker().setDateTimeValue(Long.valueOf(date));
+		dateTimePicker.setDateTimeValue(Long.valueOf(date));
 	}
 
 	private void selectInfiniteDateOption() {
@@ -156,7 +153,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		dateChooserButton.setSelected(false);
 		dateTimePicker.setEnabled(false);
 		infiniteDateChooserButton.setSelected(true);
-		dateTimePicker.getDateTimePicker().setDateTimeValue(0);
+		dateTimePicker.setDateTimeValue(0);
 		date = "0";
 		dateChooserText.setText("0");
 	}
@@ -198,22 +195,9 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 				selectInfiniteDateOption();
 			}
 		});
-		textArea.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				markdownPreview.setText(textArea.getText());
-			}
 
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				markdownPreview.setText(textArea.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				markdownPreview.setText(textArea.getText());
-			}
-		});
+		textArea.getDocument()
+				.addDocumentListener(Utils.onDocumentChange(() -> markdownPreview.setText(textArea.getText())));
 	}
 
 	private void defineLayout() {

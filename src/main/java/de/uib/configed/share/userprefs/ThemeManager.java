@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -42,7 +41,7 @@ public final class ThemeManager {
 	private static final int JAVAFX_FONT_SIZE = 13;
 	private static final String THEMES_PACKAGE = "de.uib.configed.themes";
 
-	private static final List<String> availableThemes = Arrays.asList(THEME_LIGHT, THEME_DARK);
+	private static final List<String> availableThemes = List.of(THEME_LIGHT, THEME_DARK);
 	private static String selectedTheme = availableThemes.get(0);
 
 	private ThemeManager() {
@@ -79,7 +78,7 @@ public final class ThemeManager {
 		if (availableThemes.contains(newTheme)) {
 			selectedTheme = newTheme;
 		} else {
-			Logging.warning("Failing to set theme that does not exist: ", newTheme);
+			Logging.warning("Failed to set theme that does not exist:", newTheme);
 		}
 	}
 
@@ -94,7 +93,7 @@ public final class ThemeManager {
 		switch (getSelectedTheme()) {
 		case THEME_LIGHT -> FlatLightLaf.setup();
 		case THEME_DARK -> FlatDarkLaf.setup();
-		default -> Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
+		default -> Logging.warning("Tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 		}
 
 		Globals.setTableColors();

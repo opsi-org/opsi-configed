@@ -29,7 +29,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +53,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
@@ -82,12 +83,11 @@ public final class Utils {
 	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
 
 	private static Parser markdownParser = Parser.builder()
-			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
+			.extensions(List.of(AutolinkExtension.create(), TablesExtension.create())).build();
 	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
 
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
-	private static boolean isMultiFactorAuthenticationEnabled;
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -357,14 +357,6 @@ public final class Utils {
 		return sqlNow;
 	}
 
-	public static void setMultiFactorAuthenticationEnabled(boolean enabled) {
-		isMultiFactorAuthenticationEnabled = enabled;
-	}
-
-	public static boolean isMultiFactorAuthenticationEnabled() {
-		return isMultiFactorAuthenticationEnabled;
-	}
-
 	public static void setMasterFrame(JFrame frame) {
 		masterFrame = frame;
 	}
@@ -611,21 +603,50 @@ public final class Utils {
 		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 
-	public static DocumentListener onDocumentChange(Consumer<DocumentEvent> consumer) {
+	public static PopupMenuListener createPopupMenuListenerOnVisible(Runnable runnable) {
+		return new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				runnable.run();
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// do nothing
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// do nothing
+			}
+		};
+	}
+
+	public static DocumentListener onDocumentChange(Runnable runnable) {
+		return onDocumentChange(runnable, true);
+	}
+
+	public static DocumentListener onDocumentChangeWithoutRemoveUpdate(Runnable runnable) {
+		return onDocumentChange(runnable, false);
+	}
+
+	private static DocumentListener onDocumentChange(Runnable runnable, boolean reactOnChangeUpdate) {
 		return new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				runnable.run();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				if (reactOnChangeUpdate) {
+					runnable.run();
+				}
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				runnable.run();
 			}
 		};
 	}

@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.features.clientselection.elements;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.gui.features.clientselection.AbstractSelectElement;
@@ -20,7 +20,7 @@ public class GenericBooleanElement extends AbstractSelectElement {
 
 	@Override
 	public List<AbstractSelectOperation> supportedOperations() {
-		List<AbstractSelectOperation> result = new LinkedList<>();
+		List<AbstractSelectOperation> result = new ArrayList<>();
 		result.add(new BooleanEqualsOperation(this));
 		return result;
 	}

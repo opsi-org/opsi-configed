@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.clientselection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +46,7 @@ public class SelectionManager {
 	public SelectionManager() {
 		this.backend = new OpsiDataBackend();
 		serializer = new OpsiDataSerializer(this);
-		groupWithStatusList = new LinkedList<>();
+		groupWithStatusList = new ArrayList<>();
 	}
 
 	/**
@@ -271,8 +270,8 @@ public class SelectionManager {
 		};
 	}
 
-	private static LinkedList<OperationWithStatus> createDefaultReverseBuild(AbstractSelectOperation operation) {
-		LinkedList<OperationWithStatus> result = new LinkedList<>();
+	private static List<OperationWithStatus> createDefaultReverseBuild(AbstractSelectOperation operation) {
+		List<OperationWithStatus> result = new ArrayList<>();
 		result.add(reverseParseNot(operation, ConnectionStatus.AND));
 		result.getLast().setParenthesisOpen(false);
 		result.getLast().setParenthesisClose(false);
@@ -280,7 +279,7 @@ public class SelectionManager {
 	}
 
 	private static List<OperationWithStatus> reverseBuildAndOperation(AndOperation operation, boolean isTopOperation) {
-		LinkedList<OperationWithStatus> result = new LinkedList<>();
+		List<OperationWithStatus> result = new ArrayList<>();
 
 		for (AbstractSelectOperation op : operation.getChildOperations()) {
 			result.addAll(reverseBuild(op, false));
@@ -295,7 +294,7 @@ public class SelectionManager {
 	}
 
 	private static List<OperationWithStatus> reverseBuildOrOperation(OrOperation operation, boolean isTopOperation) {
-		LinkedList<OperationWithStatus> result = new LinkedList<>();
+		List<OperationWithStatus> result = new ArrayList<>();
 
 		for (AbstractSelectOperation op : operation.getChildOperations()) {
 			result.addAll(reverseBuild(op, false));
@@ -326,7 +325,7 @@ public class SelectionManager {
 			return operation.getOperation();
 		}
 
-		List<AbstractSelectOperation> arg = new LinkedList<>();
+		List<AbstractSelectOperation> arg = new ArrayList<>();
 		arg.add(operation.getOperation());
 
 		return new NotOperation(arg.get(0));

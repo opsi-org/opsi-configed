@@ -295,18 +295,16 @@ public class MenuBarController {
 
 	private static void addToolsLinks(JMenu jMenuHelp) {
 		ServerFacade serverFacade = PersistenceControllerFactory.getPersistenceController().getExecutioner();
-		String host = serverFacade.getHost();
-		int port = serverFacade.getPort();
+		String host = serverFacade.getHostData().getHost() + ":" + serverFacade.getPortHTTPS();
 
 		JMenuItem jMenuItemAdminLink = new JMenuItem(
 				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiAdminWebPage"));
-		jMenuItemAdminLink
-				.addActionListener(actionEvent -> BrowserUtils.openLink("https://" + host + ":" + port + "/admin/"));
+		jMenuItemAdminLink.addActionListener(actionEvent -> BrowserUtils.openLink("https://" + host + "/admin/"));
 
 		JMenuItem jMenuItemLicensesLink = new JMenuItem(
 				Configed.getResourceValue("MenuBarController.jMenuHelp.OpsiWebGUI"));
-		jMenuItemLicensesLink.addActionListener(
-				actionEvent -> BrowserUtils.openLink("https://" + host + ":" + port + "/addons/webgui/app/"));
+		jMenuItemLicensesLink
+				.addActionListener(actionEvent -> BrowserUtils.openLink("https://" + host + "/addons/webgui/app/"));
 
 		jMenuHelp.add(jMenuItemAdminLink);
 		jMenuHelp.add(jMenuItemLicensesLink);

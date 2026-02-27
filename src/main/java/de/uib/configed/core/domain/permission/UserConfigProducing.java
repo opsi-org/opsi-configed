@@ -55,14 +55,16 @@ public class UserConfigProducing {
 		Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
-		Logging.info(this, "we have got logged in user ", persistenceController.getExecutioner().getUsername(),
-				" and configure based on it ", notUsingDefaultUser);
+		Logging.info(this, "we have got logged in user ",
+				persistenceController.getExecutioner().getHostData().getUser(), " and configure based on it ",
+				notUsingDefaultUser);
 
-		if (notUsingDefaultUser && persistenceController.getExecutioner().getUsername() != null
-				&& !serverconfigValuesMap.containsKey(persistenceController.getExecutioner().getUsername())) {
+		if (notUsingDefaultUser && persistenceController.getExecutioner().getHostData().getUser() != null
+				&& !serverconfigValuesMap.containsKey(persistenceController.getExecutioner().getHostData().getUser())) {
 			Logging.info(this, "supply logged in user");
-			userparts.add(persistenceController.getExecutioner().getUsername());
-			createPropertySubclass(persistenceController.getExecutioner().getUsername(), UserConfig.CONFIGKEY_STR_USER);
+			userparts.add(persistenceController.getExecutioner().getHostData().getUser());
+			createPropertySubclass(persistenceController.getExecutioner().getHostData().getUser(),
+					UserConfig.CONFIGKEY_STR_USER);
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);

@@ -26,20 +26,15 @@ public class DateTimePickerWrapper extends JFXPanel {
 		super();
 		Logging.debug("MyDateTimePicker constructor");
 		this.caller = caller;
-		showDatePicker(this);
-		initFX();
-	}
 
-	private void initFX() {
 		Platform.setImplicitExit(false);
 		Platform.runLater(() -> showDatePicker(this));
-
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
 		Logging.debug("MyDateTimePicker setEnabled: ", enabled);
-		dateTimePicker.setDisable(!enabled);
+		Platform.runLater(() -> dateTimePicker.setDisable(!enabled));
 	}
 
 	private void showDatePicker(JFXPanel jfxPanel) {
@@ -61,7 +56,8 @@ public class DateTimePickerWrapper extends JFXPanel {
 		jfxPanel.setScene(scene);
 	}
 
-	public DateTimePicker getDateTimePicker() {
-		return dateTimePicker;
+	public void setDateTimeValue(long dateTimeValue) {
+		Logging.debug("MyDateTimePicker setDateTimeValue: ", dateTimeValue);
+		Platform.runLater(() -> dateTimePicker.setDateTimeValue(dateTimeValue));
 	}
 }

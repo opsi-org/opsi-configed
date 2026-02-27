@@ -103,10 +103,7 @@ public final class CommandParameterParser {
 	}
 
 	public String[] getParameterFormats() {
-		if (formats != null) {
-			return formats;
-		}
-		return new String[0];
+		return formats == null ? new String[0] : formats;
 	}
 
 	public SingleCommand parseParameter(final SingleCommand command, CommandExecutor caller) {
@@ -338,15 +335,16 @@ public final class CommandParameterParser {
 	private String getConfigServerName() {
 		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
 		for (String depot : depots) {
-			if (depot.startsWith(persistenceController.getExecutioner().getHost())) {
-				Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHost());
+			if (depot.startsWith(persistenceController.getExecutioner().getHostData().getHost())) {
+				Logging.debug(this, "getConfig_serverName ",
+						persistenceController.getExecutioner().getHostData().getHost());
 				return depot;
 			}
 		}
 
-		Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHost());
+		Logging.debug(this, "getConfig_serverName ", persistenceController.getExecutioner().getHostData().getHost());
 
-		return persistenceController.getExecutioner().getHost();
+		return persistenceController.getExecutioner().getHostData().getHost();
 	}
 
 	private String[] getSelectedClientIPs() {

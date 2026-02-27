@@ -195,9 +195,6 @@ public class OpsiDataClient {
 			hardwareIterator = values.iterator();
 			hardwareIteratorNext();
 		}
-		if (hardwareValue != null) {
-			return hardwareValue;
-		}
-		return new HashMap<>();
+		return hardwareValue != null ? hardwareValue : new HashMap<>();
 	}
 }

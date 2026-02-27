@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.swing.DefaultComboBoxModel;
@@ -282,18 +283,18 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	private void initPopupMenu() {
-		Integer[] popups;
+		List<Integer> popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
-					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY, PopupMenuTrait.POPUP_DOWNLOAD,
+					PopupMenuTrait.POPUP_FLOATING_COPY);
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY,
-					PopupMenuTrait.POPUP_DOWNLOAD, PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP,
-					PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATING_COPY };
+			popups = List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY, PopupMenuTrait.POPUP_DOWNLOAD,
+					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
+					PopupMenuTrait.POPUP_FLOATING_COPY);
 		}
 
-		new PopupMenuTrait(popups, new JComponent[] { logTextPane }) {
+		new PopupMenuTrait(popups, List.of(logTextPane)) {
 			@Override
 			public void action(int p) {
 				treatPopupAction(p);

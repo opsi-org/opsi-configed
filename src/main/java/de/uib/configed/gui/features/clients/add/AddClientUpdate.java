@@ -7,7 +7,9 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.BooleanValidator;
@@ -15,6 +17,7 @@ import de.uib.configed.gui.features.clients.add.AddClientValidator.HostCollision
 import de.uib.configed.gui.features.clients.add.AddClientValidator.HostnameDomainValidator;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.NetbiosValidator;
 import de.uib.configed.gui.features.clients.add.AddClientValidator.RowValidation;
+import de.uib.configed.gui.type.HostInfo;
 
 final class AddClientUpdate {
 	private static final List<RowValidation> VALIDATORS = List.of(new BooleanValidator(), new HostnameDomainValidator(),
@@ -69,7 +72,7 @@ final class AddClientUpdate {
 						.selectedDomain(domains.isEmpty() ? "" : domains.get(0)).build());
 		case AddClientMsg.ActionMsg.CSVImportRequested() -> UpdateResult.withEffect(model,
 				new AddClientEffect.UIEffect.OpenCSVImportDialog());
-		case AddClientMsg.ActionMsg.CSVImported(List<List<Object>> rows, boolean includeRow) -> handleCSVImportedMsg(
+		case AddClientMsg.ActionMsg.CSVImported(List<Map<String, Object>> rows, boolean includeRow) -> handleCSVImportedMsg(
 				model, rows, includeRow);
 		case AddClientMsg.ActionMsg.CreateClient() -> handleCreateClientMsg(model);
 		};
@@ -85,7 +88,7 @@ final class AddClientUpdate {
 	}
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleCSVImportedMsg(AddClientModel model,
-			List<List<Object>> rows, boolean includeRow) {
+			List<Map<String, Object>> rows, boolean includeRow) {
 		if (rows != null && !rows.isEmpty()) {
 			model = model.withRowsToImport(new ArrayList<>(rows));
 		}
@@ -93,7 +96,7 @@ final class AddClientUpdate {
 		if (includeRow && !model.getPendingSingleRow().isEmpty()) {
 			var accepted = new ArrayList<>(model.getAcceptedRows());
 			accepted.add(model.getPendingSingleRow());
-			model = model.withAcceptedRows(accepted).withPendingSingleRow(new ArrayList<>());
+			model = model.withAcceptedRows(accepted).withPendingSingleRow(new HashMap<>());
 		}
 
 		BatchProcessor processor = new BatchProcessor(VALIDATORS);
@@ -101,21 +104,21 @@ final class AddClientUpdate {
 	}
 
 	private static UpdateResult<AddClientModel, AddClientEffect> handleCreateClientMsg(AddClientModel model) {
-		List<Object> row = new ArrayList<>();
-		row.add(model.getHostname());
-		row.add(model.getSelectedDomain());
-		row.add(model.getSelectedDepot());
-		row.add(model.getMacAddress());
-		row.add(model.getDescription());
-		row.add(model.getInventoryNumber());
-		row.add(model.getNotes());
-		row.add(model.getSystemUUID());
-		row.add(model.getIpAddress());
-		row.add(model.getGroups());
-		row.add(Boolean.toString(model.isWanSelected()));
-		row.add(Boolean.toString(model.isShutdownInstallSelected()));
-		row.add("");
-		row.add(model.getSelectedNetbootProduct());
+		Map<String, Object> row = new HashMap<>();
+		row.put(HostInfo.HOSTNAME_KEY, model.getHostname());
+		row.put(HostInfo.CSV_DOMAIN_KEY, model.getSelectedDomain());
+		row.put(HostInfo.DEPOT_OF_CLIENT_KEY, model.getSelectedDepot());
+		row.put(HostInfo.CLIENT_MAC_ADDRESS_KEY, model.getMacAddress());
+		row.put(HostInfo.CLIENT_DESCRIPTION_KEY, model.getDescription());
+		row.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, model.getInventoryNumber());
+		row.put(HostInfo.CLIENT_NOTES_KEY, model.getNotes());
+		row.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, model.getSystemUUID());
+		row.put(HostInfo.CLIENT_IP_ADDRESS_KEY, model.getIpAddress());
+		row.put(HostInfo.CSV_GROUPS_KEY, model.getGroups());
+		row.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(model.isWanSelected()));
+		row.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, Boolean.toString(model.isShutdownInstallSelected()));
+		row.put(HostInfo.HOST_KEY_KEY, "");
+		row.put(HostInfo.CSV_NETBOOT_PRODUCT_KEY, model.getSelectedNetbootProduct());
 
 		BatchProcessor processor = new BatchProcessor(VALIDATORS);
 		return processor.processSingleRow(model, row);

@@ -9,7 +9,7 @@ package de.uib.configed.gui.share.swing;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -59,7 +59,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			Logging.warning(this, "missing label");
 		}
 
-		this.labels = new LinkedHashMap<>();
+		this.labels = new HashMap<>();
 
 		for (int i = 0; i < values.length; i++) {
 			if (labels == null || i > labels.length - 1) {
@@ -110,7 +110,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	private void initComponents() {
 		ButtonGroup buttonGroup = new ButtonGroup();
-		groupedButtons = new LinkedHashMap<>();
+		groupedButtons = new HashMap<>();
 
 		for (Enum<E> val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));

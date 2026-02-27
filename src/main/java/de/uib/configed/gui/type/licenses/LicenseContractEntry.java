@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.type.licenses;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class LicenseContractEntry extends StringValuedRelationElement {
 
 	private static final List<String> DB_ATTRIBUTES;
 	static {
-		DB_ATTRIBUTES = new LinkedList<>();
+		DB_ATTRIBUTES = new ArrayList<>();
 		DB_ATTRIBUTES.add(ID_DB_KEY);
 		DB_ATTRIBUTES.add(PARTNER_KEY);
 		DB_ATTRIBUTES.add(CONCLUSION_DATE_KEY);
@@ -39,7 +39,7 @@ public class LicenseContractEntry extends StringValuedRelationElement {
 
 	private static final List<String> INTERFACED_ATTRIBUTES;
 	static {
-		INTERFACED_ATTRIBUTES = new LinkedList<>();
+		INTERFACED_ATTRIBUTES = new ArrayList<>();
 		INTERFACED_ATTRIBUTES.add(ID_DB_KEY);
 		INTERFACED_ATTRIBUTES.add(PARTNER_KEY);
 		INTERFACED_ATTRIBUTES.add(CONCLUSION_DATE_KEY);
@@ -50,7 +50,7 @@ public class LicenseContractEntry extends StringValuedRelationElement {
 
 	private static final List<String> ALLOWED_ATTRIBUTES;
 	static {
-		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);
+		ALLOWED_ATTRIBUTES = new ArrayList<>(DB_ATTRIBUTES);
 		ALLOWED_ATTRIBUTES.add(ID_KEY);
 		ALLOWED_ATTRIBUTES.add(IDENT_KEY);
 		ALLOWED_ATTRIBUTES.add(TYPE_KEY);

@@ -50,9 +50,6 @@ import net.miginfocom.swing.MigLayout;
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
 
-	private ClientTree clientTree;
-	private ProductTree productTree;
-
 	private ClientConfiguration clientConfiguration;
 	private HostsStatusPanel hostsStatusPanel;
 	private JTabbedPane leftTabs;
@@ -71,42 +68,18 @@ public class MainPanelManager {
 	public MainPanelManager(ConfigedMain configedMain, MainFrame mainFrame, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
 		this.configedMain = configedMain;
-		this.clientTree = clientTree;
-		this.productTree = productTree;
 
 		topToolBarManager = new TopToolBarManager(configedMain);
 
-		initialInitialization(depotsList, mainFrame);
+		initialInitialization(depotsList, mainFrame, clientTree, productTree);
 	}
 
-	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame) {
-		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
-
-		JScrollPane scrollpaneTreeClients = new JScrollPane();
-		scrollpaneTreeClients.getViewport().add(clientTree);
-		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
-
-		JScrollPane scrollpaneTreeProducts = new JScrollPane();
-		scrollpaneTreeProducts.getViewport().add(productTree);
-		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
-
+	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame, ClientTree clientTree,
+			ProductTree productTree) {
 		leftTabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		leftTabs.addTab(null, depotListPresenter);
-		leftTabs.addTab(null, scrollpaneTreeClients);
-		leftTabs.addTab(null, scrollpaneTreeProducts);
+		leftTabs.addTab(null, new DepotListPresenter(depotsList));
+		leftTabs.addTab(null, createScrollPaneForTree(clientTree));
+		leftTabs.addTab(null, createScrollPaneForTree(productTree));
 
 		leftTabs.setTabComponentAt(0, new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
 				Configed.getResourceValue("DepotListPresenter.depots"),
@@ -129,23 +102,31 @@ public class MainPanelManager {
 		hostsStatusPanel = new HostsStatusPanel(configedMain);
 	}
 
+	private static JScrollPane createScrollPaneForTree(JComponent tree) {
+		JScrollPane scrollPane = new JScrollPane(tree);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setPreferredSize(tree.getMaximumSize());
+		return scrollPane;
+	}
+
 	public JTabbedPane getTabbedPane() {
 		return leftTabs;
 	}
 
-	public JPanel getPanelForEditingTarget(EditingTarget editingTarget) {
+	public JPanel createPanelForEditingTarget(EditingTarget editingTarget) {
 		return switch (editingTarget) {
-		case CLIENTS -> getClientConfigurationPanel();
-		case DEPOTS -> getDepotConfigurationSplitPane();
-		case SERVER -> getServerConfigurationPanel();
-		case DASHBOARD -> getDashBoardPanel();
-		case OPSI_MODULES -> getOpsiLicensingPanel();
-		case HEALTH_CHECK -> getHealthCheckPanel();
-		case LICENSE_MANAGEMENT -> getLicenseManagementPanel();
+		case CLIENTS -> createClientConfigurationPanel();
+		case DEPOTS -> createDepotConfigurationPanel();
+		case SERVER -> createServerConfigurationPanel();
+		case DASHBOARD -> createDashBoardPanel();
+		case OPSI_MODULES -> createOpsiLicensingPanel();
+		case HEALTH_CHECK -> createHealthCheckPanel();
+		case LICENSE_MANAGEMENT -> createLicenseManagementPanel();
 		};
 	}
 
-	private JPanel getClientConfigurationPanel() {
+	private JPanel createClientConfigurationPanel() {
 		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, clientConfiguration);
 		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
@@ -154,11 +135,10 @@ public class MainPanelManager {
 		jPanel.add(jSplitPane, "grow");
 		jPanel.add(hostsStatusPanel, "growx");
 
-		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(),
-				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(), "MainFrame.labelClientsConfiguration");
 	}
 
-	private JPanel getDepotConfigurationSplitPane() {
+	private JPanel createDepotConfigurationPanel() {
 		DepotsList depotsList = new DepotsList(configedMain);
 		depotsList.setListData(persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList());
 		depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
@@ -181,21 +161,21 @@ public class MainPanelManager {
 		depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 		depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 
-		return createPanel(depotConfigurationSplitPane, null, Configed.getResourceValue("depotConfiguration"));
+		return createPanel(depotConfigurationSplitPane, null, "depotConfiguration");
 	}
 
-	private JPanel getServerConfigurationPanel() {
+	private JPanel createServerConfigurationPanel() {
 		serverConfiguration = new ServerConfiguration();
 		serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
-		return createPanel(serverConfiguration, null, Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		return createPanel(serverConfiguration, null, "MainFrame.labelServerConfiguration");
 	}
 
-	public JPanel getDashBoardPanel() {
+	private JPanel createDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
-		return createPanel(new Dashboard(configedMain), null, Configed.getResourceValue("Dashboard.title"));
+		return createPanel(new Dashboard(), null, "Dashboard.title");
 	}
 
-	public JPanel getOpsiLicensingPanel() {
+	private JPanel createOpsiLicensingPanel() {
 		if (!persistenceController.getDataServices().module.isOpsiUserAdminPD()) {
 			Map<String, Object> modulesInfo = persistenceController.getDataServices().module.getOpsiModulesInfosPD();
 
@@ -213,18 +193,18 @@ public class MainPanelManager {
 		} else {
 			OpsiLicensing opsiLicensing = new OpsiLicensing();
 			return createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingButtons(opsiLicensing),
-					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+					"MainFrame.jMenuHelpOpsiModuleInformation");
 		}
 	}
 
-	public JPanel getHealthCheckPanel() {
+	private JPanel createHealthCheckPanel() {
 		Logging.info(this, "init health check panel");
 		HealthCheckComponent healthCheck = new HealthCheckComponent();
 		return createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
-				Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+				"MainFrame.jMenuHelpCheckHealth");
 	}
 
-	public JPanel getLicenseManagementPanel() {
+	private JPanel createLicenseManagementPanel() {
 		Logging.info(this, "startLicensingManagement called");
 
 		if (!persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
@@ -240,7 +220,7 @@ public class MainPanelManager {
 				// using it since it is not needed.
 				new JFXPanel();
 
-				Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
+				Platform.runLater(LicenseDisplayer::showLicenseDisplayer);
 			}
 		}).start();
 
@@ -255,9 +235,9 @@ public class MainPanelManager {
 				Configed.getResourceValue("MainFrame.labelLicenses"));
 	}
 
-	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String title) {
+	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String titleKey) {
 		JLabel opsiLogo = new JLabel(Icons.getOpsiLogoWide());
-		JLabel titleLabel = new JLabel(title);
+		JLabel titleLabel = new JLabel(Configed.getResourceValue(titleKey));
 		titleLabel.setFont(
 				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 2)));
 
