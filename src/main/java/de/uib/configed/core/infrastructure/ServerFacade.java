@@ -743,6 +743,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return hostData;
 	}
 
+	public int getPortHTTPS() {
+		return portHTTPS;
+	}
+
 	/**
 	 * Retrieve used session by the connection.
 	 *
