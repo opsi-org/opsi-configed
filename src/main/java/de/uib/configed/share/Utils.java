@@ -63,7 +63,6 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 
-import de.uib.configed.app.Main;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -166,19 +165,19 @@ public final class Utils {
 
 		boolean success = true;
 
-		if (Main.getSavedStatesLocationName() != null) {
-			Logging.info("trying to find saved states in ", Main.getSavedStatesLocationName());
+		if (Configed.getSavedStatesLocationName() != null) {
+			Logging.info("trying to find saved states in ", Configed.getSavedStatesLocationName());
 
-			savedStatesLocation = new File(Main.getSavedStatesLocationName());
+			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
 			savedStatesLocation.mkdirs();
 			success = savedStatesLocation.setReadable(true);
 		}
 
 		if (!success) {
-			Logging.warning("cannot not find saved states in ", Main.getSavedStatesLocationName());
+			Logging.warning("cannot not find saved states in ", Configed.getSavedStatesLocationName());
 		}
 
-		if (Main.getSavedStatesLocationName() == null || !success) {
+		if (Configed.getSavedStatesLocationName() == null || !success) {
 			Logging.info("searching saved states in ", Utils.getSavedStatesDefaultLocation());
 			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
 			savedStatesLocation.mkdirs();

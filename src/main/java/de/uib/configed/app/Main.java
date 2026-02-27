@@ -6,7 +6,6 @@
 
 package de.uib.configed.app;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Set;
@@ -31,7 +30,6 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.Logviewer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.FeatureActivationChecker;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.UncaughtConfigedExceptionHandler;
 import de.uib.configed.share.userprefs.ThemeManager;
@@ -51,8 +49,6 @@ public class Main {
 	private static boolean isLogviewer;
 
 	private static Options options;
-
-	private static String savedStatesLocationName;
 
 	private static void createOptions() {
 		options = new Options();
@@ -174,20 +170,6 @@ public class Main {
 			FeatureActivationChecker.setActivatedFeatures(activatedFeatures);
 		}
 
-		if (cmd.hasOption("s")) {
-			savedStatesLocationName = cmd.getOptionValue("s");
-
-			String canonicalPath = null;
-			try {
-				canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
-			} catch (IOException ex) {
-				Logging.debug("savedstates argument ", ex);
-			}
-			if (canonicalPath != null) {
-				savedStatesLocationName = canonicalPath;
-			}
-		}
-
 		// After setting locale then we can use localization values
 		Set<String> existingLocales = Messages.getLocaleNames();
 		Logging.info("Available locales: ", existingLocales);
@@ -225,47 +207,8 @@ public class Main {
 		}
 	}
 
-	private static void createSavedStatesDir() {
-		savedStatesLocationName = resolveLocation();
-		File dir = new File(savedStatesLocationName);
-		if (dir.exists()) {
-			Logging.info("Saved states location exists", savedStatesLocationName);
-			return;
-		}
-
-		if (dir.mkdirs()) {
-			Logging.info("Successfully created the saved states location", savedStatesLocationName);
-		} else {
-			Logging.warning("Failed to create saved states location", savedStatesLocationName);
-		}
-
-		if (!dir.setWritable(true, true)) {
-			Logging.warning("Setting savedStatesDir writable failed");
-		}
-	}
-
-	private static String resolveLocation() {
-		if (savedStatesLocationName != null) {
-			Logging.info("Trying to write saved states to", savedStatesLocationName);
-			return savedStatesLocationName;
-		}
-
-		String defaultLocation = Utils.getSavedStatesDefaultLocation();
-		Logging.info("Writing saved states to default location", defaultLocation);
-		return defaultLocation;
-	}
-
-	private static void initLogging() {
-		Logging.initLogFile();
-		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
-	}
-
 	public static void main(String[] args) {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
-
-		initLogging();
-
-		createSavedStatesDir();
 
 		setGlobalValues();
 
@@ -302,9 +245,5 @@ public class Main {
 		} else {
 			Configed.main(cmd);
 		}
-	}
-
-	public static String getSavedStatesLocationName() {
-		return savedStatesLocationName;
 	}
 }
