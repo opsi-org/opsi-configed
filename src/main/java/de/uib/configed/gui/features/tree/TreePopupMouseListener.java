@@ -178,14 +178,16 @@ public class TreePopupMouseListener {
 
 		List<DefaultMutableTreeNode> selectedNodes = getSelectedNodes();
 
+		boolean oneGroupSelected = selectedNodes.stream().filter(TreeNode::getAllowsChildren).count() == 1;
 		boolean anyGroupsSelected = selectedNodes.stream().anyMatch(TreeNode::getAllowsChildren);
 		boolean anyMembersSelected = selectedNodes.stream().anyMatch(n -> !n.getAllowsChildren());
 
-		setMenuItemVisible(menuItemCreateNode, contextIsAssignable);
-		setMenuItemVisible(menuItemEditNode, contextIsAssignable && !contextIsFixed);
+		setMenuItemVisible(menuItemCreateNode, oneGroupSelected && contextIsAssignable);
+		setMenuItemVisible(menuItemEditNode, oneGroupSelected && contextIsAssignable && !contextIsFixed);
 		setMenuItemVisible(menuItemDeleteGroupNode, anyGroupsSelected && !contextIsFixed);
 		setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextParentIsFixed);
-		setMenuItemVisible(menuItemRemoveElements, anyGroupsSelected && !anyMembersSelected && !contextIsFixed);
+		setMenuItemVisible(menuItemRemoveElements,
+				oneGroupSelected && anyGroupsSelected && !anyMembersSelected && !contextIsFixed);
 
 		updateContextLabels(contextNode);
 
