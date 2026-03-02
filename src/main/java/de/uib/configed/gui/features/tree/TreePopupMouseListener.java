@@ -29,8 +29,6 @@ import de.uib.configed.share.logging.Logging;
 public class TreePopupMouseListener {
 	private AbstractGroupTree tree;
 
-	private TreePath mousePath;
-
 	private JMenuItem menuItemCreateNode;
 	private JMenuItem menuItemEditNode;
 	private JMenuItem menuItemDeleteNode;
@@ -54,7 +52,7 @@ public class TreePopupMouseListener {
 
 		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editGroup"));
 		Icons.addIntellijIconToMenuItem(menuItemEditNode, "edit");
-		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(mousePath));
+		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(tree.getSelectionPath()));
 		menuItemEditNode.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 		jPopupMenu.add(menuItemEditNode);
@@ -87,9 +85,10 @@ public class TreePopupMouseListener {
 	}
 
 	private void makeSubGroup() {
-		GroupNode resultNode = tree.makeSubgroupAt(mousePath);
+		TreePath selectedPath = tree.getSelectionPath();
+		GroupNode resultNode = tree.makeSubgroupAt(selectedPath);
 		if (resultNode != null) {
-			tree.makeVisible(mousePath.pathByAddingChild(resultNode));
+			tree.makeVisible(selectedPath.pathByAddingChild(resultNode));
 			tree.repaint();
 		}
 	}
@@ -103,8 +102,10 @@ public class TreePopupMouseListener {
 			return;
 		}
 
-		if (mousePath != null
-				&& mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode groupNode) {
+		TreePath selectedPath = tree.getSelectionPath();
+
+		if (selectedPath != null
+				&& selectedPath.getPathComponent(selectedPath.getPathCount() - 1) instanceof GroupNode groupNode) {
 
 			List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 
@@ -121,35 +122,35 @@ public class TreePopupMouseListener {
 		}
 	}
 
-	private boolean shouldShow(MouseEvent e) {
-		if (!tree.isEnabled()) {
+	private boolean shouldShow() {
+		TreePath selectedPath = tree.getSelectionPath();
+
+		if (selectedPath == null) {
 			return false;
 		}
 
-		int mouseRow = tree.getRowForLocation(e.getX(), e.getY());
-		mousePath = tree.getPathForLocation(e.getX(), e.getY());
+		Logging.debug(this, "shouldShow clickPath  ", selectedPath);
 
-		// no node selection area
-		if (mouseRow == -1) {
-			mousePath = null;
-			return false;
-		}
-
-		Logging.debug(this, "shouldShow clickPath  ", mousePath);
-
-		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 
 		return !tree.isGroupNodeFullList(clickNode);
 	}
 
 	private boolean checkAccepted(MouseEvent e) {
-		if (!shouldShow(e)) {
+		if (!tree.isEnabled()) {
+			return false;
+		}
+
+		selectMousePathIfNotSelected(e);
+
+		if (!shouldShow()) {
 			return false;
 		}
 
 		hideAllMenuItems();
 
-		DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+		TreePath selectedPath = tree.getSelectionPath();
+		DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 
 		boolean contextIsGroup = contextNode.getAllowsChildren();
 		boolean contextIsFixed = contextIsGroup && ((GroupNode) contextNode).isFixed();
@@ -170,6 +171,25 @@ public class TreePopupMouseListener {
 		updateContextLabels(contextNode);
 
 		return anyVisible;
+	}
+
+	private void selectMousePathIfNotSelected(MouseEvent e) {
+		TreePath mousePath = getMousePath(e);
+		if (mousePath == null) {
+			return;
+		}
+
+		boolean isSelected = Arrays.asList(tree.getSelectionPaths()).contains(mousePath);
+		if (!isSelected) {
+			tree.setSelectionPath(mousePath);
+		}
+	}
+
+	private TreePath getMousePath(MouseEvent e) {
+		int mouseRow = tree.getRowForLocation(e.getX(), e.getY());
+		TreePath mousePath = tree.getPathForLocation(e.getX(), e.getY());
+
+		return mouseRow == -1 ? null : mousePath;
 	}
 
 	private void hideAllMenuItems() {
