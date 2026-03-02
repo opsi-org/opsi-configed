@@ -31,7 +31,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.app.Main;
@@ -44,6 +43,7 @@ import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.GroupNode;
 import de.uib.configed.gui.features.tree.GroupTreeTransferHandler;
@@ -716,18 +716,31 @@ public class ConfigedMain {
 		clientTablePanel.setFilterMark(false);
 
 		clientsFilteredByTree.clear();
-		if (selTreePaths != null) {
-			for (TreePath selectionPath : selTreePaths) {
-				clientsFilteredByTree.add(selectionPath.getLastPathComponent().toString());
+
+		if (selTreePaths == null || selTreePaths.length == 0) {
+			setRebuiltClientListTableModel(true, false, Set.of());
+			return;
+		}
+
+		Set<String> selectedValues = new HashSet<>();
+		List<DefaultMutableTreeNode> filteredNodes = clientTree
+				.filterMostSpecificNodes(clientTree.extractNodes(selTreePaths));
+
+		for (DefaultMutableTreeNode node : filteredNodes) {
+			if (node.getAllowsChildren()) {
+				AbstractGroupTree.addAllDescendants(node, clientsFilteredByTree);
+			} else {
+				String value = node.getUserObject().toString();
+				clientsFilteredByTree.add(value);
+				selectedValues.add(value);
 			}
 		}
 
-		if (selTreePaths != null && selTreePaths.length == 1) {
+		if (selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
-			Logging.info(this, "treeClientsSelectAction selTreePaths length: ",
-					selTreePaths == null ? 0 : selTreePaths.length);
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+			Logging.info(this, "treeClientsSelectAction selTreePaths length: ", selTreePaths.length);
+			setRebuiltClientListTableModel(true, false, selectedValues);
 		}
 	}
 
@@ -751,13 +764,7 @@ public class ConfigedMain {
 		clientTree.initActiveParents();
 		// Get all leaves from the node which should be a group
 		clientsFilteredByTree.clear();
-		node.breadthFirstEnumeration().asIterator().forEachRemaining((TreeNode child) -> {
-			if (!child.getAllowsChildren()) {
-				String nodeinfo = (String) ((DefaultMutableTreeNode) child).getUserObject();
-				clientsFilteredByTree.add(nodeinfo);
-			}
-
-		});
+		AbstractGroupTree.addAllDescendants(node, clientsFilteredByTree);
 
 		clientTree.repaint();
 	}

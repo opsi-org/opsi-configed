@@ -788,4 +788,48 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			}
 		});
 	}
+
+	public List<DefaultMutableTreeNode> extractNodes(TreePath[] paths) {
+		List<DefaultMutableTreeNode> nodes = new ArrayList<>();
+
+		if (paths == null || paths.length == 0) {
+			return nodes;
+		}
+
+		for (TreePath path : paths) {
+			nodes.add((DefaultMutableTreeNode) path.getLastPathComponent());
+		}
+
+		return nodes;
+	}
+
+	public List<DefaultMutableTreeNode> filterMostSpecificNodes(Iterable<DefaultMutableTreeNode> nodes) {
+		List<DefaultMutableTreeNode> result = new ArrayList<>();
+
+		for (DefaultMutableTreeNode node : nodes) {
+			boolean hasSelectedDescendant = false;
+
+			for (DefaultMutableTreeNode other : nodes) {
+				if (other != node && node.isNodeDescendant(other)) {
+					hasSelectedDescendant = true;
+					break;
+				}
+			}
+
+			if (!hasSelectedDescendant) {
+				result.add(node);
+			}
+		}
+
+		return result;
+	}
+
+	public static void addAllDescendants(DefaultMutableTreeNode node, Set<String> data) {
+		node.breadthFirstEnumeration().asIterator().forEachRemaining((TreeNode child) -> {
+			if (!child.getAllowsChildren()) {
+				String nodeinfo = (String) ((DefaultMutableTreeNode) child).getUserObject();
+				data.add(nodeinfo);
+			}
+		});
+	}
 }

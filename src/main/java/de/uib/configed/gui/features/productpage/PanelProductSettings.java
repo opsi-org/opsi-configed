@@ -329,7 +329,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
 		groupPanel.setFilterMark(false);
-		productTable.valueChanged(doSelection, productTree.getSelectionPaths());
+		productTable.valueChanged(doSelection,
+				productTree.filterMostSpecificNodes(productTree.extractNodes(productTree.getSelectionPaths())));
 	}
 
 	public void setTableModel(InstallationStateTableModel istm) {
