@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +139,7 @@ public final class ServerActionManager {
 	}
 
 	public static void processActionRequestsAllProducts(String visibility) {
-		processActionRequests(Collections.emptySet(), visibility);
+		processActionRequests(Set.of(), visibility);
 	}
 
 	public static void processActionRequestsSelectedProducts(String visibility) {
@@ -239,9 +238,9 @@ public final class ServerActionManager {
 				+ Utils.getListStringRepresentation(configedMain.getSelectedClients()).replace(";", "");
 
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
-				Configed.getResourceValue("ConfigedMain.TitleClientAction"), 0);
+				Configed.getResourceValue("ConfigedMain.TitleClientAction"), JOptionPane.YES_NO_OPTION);
 
-		return answer == 0;
+		return answer == JOptionPane.YES_OPTION;
 	}
 
 	public static void copySelectedClient() {
@@ -373,7 +372,7 @@ public final class ServerActionManager {
 				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE);
 
-		return answer == 0;
+		return answer == JOptionPane.YES_OPTION;
 	}
 
 	public static void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,

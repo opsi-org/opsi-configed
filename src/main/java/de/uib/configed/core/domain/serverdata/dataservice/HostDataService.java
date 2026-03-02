@@ -9,7 +9,6 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -326,7 +325,7 @@ public class HostDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(CacheIdentifier.SESSION_INFO)) {
 			return dataServices.cacheManager.getCachedData(CacheIdentifier.SESSION_INFO, Map.class);
 		} else {
-			return Collections.emptyMap();
+			return Map.of();
 		}
 	}
 

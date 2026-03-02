@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -160,7 +159,7 @@ public class ProductTable extends JTable {
 		List<? extends SortKey> saveSortKeys = getSortKeys();
 		if (saveSortKeys == null || saveSortKeys.isEmpty() || getColumnCount() == 0) {
 			Logging.debug(this, "getSortedNames sort keys is null or empty");
-			return Collections.emptyMap();
+			return Map.of();
 		}
 		Logging.debug(this, "getSortedNames sort keys ", saveSortKeys);
 		// This needs to be a LinkedHashMap since the ordering is important

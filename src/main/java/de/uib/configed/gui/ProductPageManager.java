@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +83,7 @@ public class ProductPageManager implements MessagebusListener {
 	}
 
 	public void setNetbootProductsPage() {
-		setProductsPage(collectChangedNetbootStates, Collections.emptyList(), OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
+		setProductsPage(collectChangedNetbootStates, List.of(), OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
 				clientConfiguration.getPanelNetbootProductSettings(), getNetbootProductDisplayFieldsList());
 	}
 
