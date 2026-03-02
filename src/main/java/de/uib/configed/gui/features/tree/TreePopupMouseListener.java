@@ -172,6 +172,7 @@ public class TreePopupMouseListener {
 
 		boolean contextIsGroup = contextNode.getAllowsChildren();
 		boolean contextIsFixed = contextIsGroup && ((GroupNode) contextNode).isFixed();
+		boolean contextParentIsFixed = ((GroupNode) contextNode.getParent()).isFixed();
 		boolean contextIsAssignable = contextIsGroup
 				&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(contextNode.toString());
 
@@ -183,7 +184,7 @@ public class TreePopupMouseListener {
 		setMenuItemVisible(menuItemCreateNode, contextIsAssignable);
 		setMenuItemVisible(menuItemEditNode, contextIsAssignable && !contextIsFixed);
 		setMenuItemVisible(menuItemDeleteGroupNode, anyGroupsSelected && !contextIsFixed);
-		setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextIsFixed);
+		setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextParentIsFixed);
 		setMenuItemVisible(menuItemRemoveElements, anyGroupsSelected && !anyMembersSelected && !contextIsFixed);
 
 		updateContextLabels(contextNode);
