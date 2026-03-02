@@ -133,7 +133,25 @@ public class TreePopupMouseListener {
 
 		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 
-		return !tree.isGroupNodeFullList(clickNode);
+		return !containsGroupAndNode(tree.getSelectionPaths()) && !tree.isGroupNodeFullList(clickNode);
+	}
+
+	private static boolean containsGroupAndNode(TreePath[] paths) {
+		boolean containsNode = false;
+		boolean containsGroup = false;
+
+		for (TreePath path : paths) {
+			DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+			boolean isGroup = contextNode.getAllowsChildren();
+			containsGroup |= isGroup;
+			containsNode |= !isGroup;
+
+			if (containsGroup && containsNode) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean checkAccepted(MouseEvent e) {
