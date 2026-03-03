@@ -119,7 +119,7 @@ public class ListSelectionList extends JList<String> {
 	public void setModel(ListModel<String> model) {
 		// Treat DefaultListModel as authoritative (unfiltered) data source.
 		if (model instanceof DefaultListModel) {
-			// Sync incoming data into the master model and use it for the view.
+			// Sync incoming data into the original model and use it for the view.
 			originalModel = (DefaultListModel<String>) model;
 			super.setModel(originalModel);
 		} else {
