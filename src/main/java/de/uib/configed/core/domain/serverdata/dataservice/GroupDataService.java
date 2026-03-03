@@ -403,7 +403,11 @@ public class GroupDataService extends DataService {
 		return result;
 	}
 
-	public boolean deleteGroup(String groupId) {
+	public boolean deleteGroup(String groupId, String type) {
+		return deleteGroups(List.of(groupId), type);
+	}
+
+	public boolean deleteGroups(List<String> groupId, String type) {
 		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
@@ -415,10 +419,21 @@ public class GroupDataService extends DataService {
 		boolean result = dataServices.exec.doCall(RPCMethodName.GROUP_DELETE, groupId);
 
 		if (result) {
-			dataServices.persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+			reloadGroupBasedOnType(type);
 		}
 
 		return result;
+	}
+
+	private void reloadGroupBasedOnType(String type) {
+		if (type == null) {
+			return;
+		}
+		if (type.equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
+			dataServices.persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+		} else {
+			dataServices.persistenceController.reloadData(CacheIdentifier.PRODUCT_GROUPS.toString());
+		}
 	}
 
 	public boolean updateGroup(String groupId, Map<String, String> updateInfo, boolean isHostGroup) {
