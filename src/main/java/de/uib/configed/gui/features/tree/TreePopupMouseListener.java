@@ -170,28 +170,36 @@ public class TreePopupMouseListener {
 		TreePath selectedPath = tree.getSelectionPath();
 		DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 
-		boolean contextIsGroup = contextNode.getAllowsChildren();
-		boolean contextIsFixed = contextIsGroup && ((GroupNode) contextNode).isFixed();
-		boolean contextParentIsFixed = ((GroupNode) contextNode.getParent()).isFixed();
-		boolean contextIsAssignable = contextIsGroup
-				&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(contextNode.toString());
-
-		List<DefaultMutableTreeNode> selectedNodes = getSelectedNodes();
-
-		boolean oneGroupSelected = selectedNodes.stream().filter(TreeNode::getAllowsChildren).count() == 1;
-		boolean anyGroupsSelected = selectedNodes.stream().anyMatch(TreeNode::getAllowsChildren);
-		boolean anyMembersSelected = selectedNodes.stream().anyMatch(n -> !n.getAllowsChildren());
-
-		setMenuItemVisible(menuItemCreateNode, oneGroupSelected && contextIsAssignable);
-		setMenuItemVisible(menuItemEditNode, oneGroupSelected && contextIsAssignable && !contextIsFixed);
-		setMenuItemVisible(menuItemDeleteGroupNode, anyGroupsSelected && !contextIsFixed);
-		setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextParentIsFixed);
-		setMenuItemVisible(menuItemRemoveElements,
-				oneGroupSelected && anyGroupsSelected && !anyMembersSelected && !contextIsFixed);
+		configureMenuVisibility(contextNode);
 
 		updateContextLabels(contextNode);
 
 		return anyVisible;
+	}
+
+	private void configureMenuVisibility(DefaultMutableTreeNode contextNode) {
+		boolean contextIsGroup = contextNode.getAllowsChildren();
+
+		List<DefaultMutableTreeNode> selectedNodes = getSelectedNodes();
+
+		if (contextIsGroup) {
+			boolean contextIsFixed = ((GroupNode) contextNode).isFixed();
+			boolean contextIsAssignable = !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(contextNode.toString());
+
+			long selectedGroupCount = selectedNodes.stream().filter(TreeNode::getAllowsChildren).count();
+			boolean oneGroupSelected = selectedGroupCount == 1;
+			boolean anyGroupsSelected = selectedGroupCount > 0;
+
+			setMenuItemVisible(menuItemCreateNode, oneGroupSelected && contextIsAssignable);
+			setMenuItemVisible(menuItemEditNode, oneGroupSelected && contextIsAssignable && !contextIsFixed);
+			setMenuItemVisible(menuItemDeleteGroupNode, anyGroupsSelected && !contextIsFixed);
+			setMenuItemVisible(menuItemRemoveElements, oneGroupSelected && !contextIsFixed);
+		} else {
+			boolean contextParentIsFixed = ((GroupNode) contextNode.getParent()).isFixed();
+			boolean anyMembersSelected = selectedNodes.stream().anyMatch(n -> !n.getAllowsChildren());
+
+			setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextParentIsFixed);
+		}
 	}
 
 	private void selectMousePathIfNotSelected(MouseEvent e) {
