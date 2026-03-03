@@ -105,7 +105,7 @@ public class DepotListPresenter extends JPanel {
 	 * after the depotslist has been updated
 	 */
 	private void updatePopupMenuItem(JMenuItem showShell) {
-		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
+		if (depotslist.getSelectedValuesList().size() != 1) {
 			// Disable the button if no depots selected or more than one depot
 			showShell.setEnabled(false);
 		} else if (selectedServerForbidden()) {
