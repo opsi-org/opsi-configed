@@ -636,10 +636,8 @@ public class ProductDataService extends DataService {
 			return;
 		}
 
-		Set<String> productIds = new HashSet<>();
-		Set<String> propertyIds = new HashSet<>();
-		Map<String, Map<String, Object>> retrieved = dataServices.exec.getMapOfMaps(
-				RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, productIds, propertyIds, clientNames, true);
+		Map<String, Map<String, Object>> retrieved = dataServices.exec
+				.getMapOfMaps(RPCMethodName.PRODUCT_PROPERTY_STATE_GET_VALUES, Set.of(), Set.of(), clientNames, true);
 
 		// These values always need to be of type ConfigName2ConfigValue, so we transform them here.
 		retrieved.values().forEach(map -> map.entrySet()
@@ -967,9 +965,7 @@ public class ProductDataService extends DataService {
 	}
 
 	private List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds, String productType) {
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("clientId", clientIds);
-		callFilter.put("productType", productType);
+		Map<String, Object> callFilter = Map.of("clientId", clientIds, "productType", productType);
 
 		return dataServices.exec.getListOfMaps(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS, new String[0], callFilter);
 	}

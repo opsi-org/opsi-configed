@@ -53,8 +53,7 @@ public class GroupDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(CacheIdentifier.PRODUCT_GROUPS)) {
 			return;
 		}
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
+		Map<String, String> callFilter = Map.of("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		Map<String, Map<String, String>> result = dataServices.exec.getStringMappedObjectsByKey(
 				RPCMethodName.GROUP_GET_OBJECTS, new Object[] { new String[0], callFilter }, "ident",
 				new String[] { "id", "parentGroupId", "description" },
@@ -71,8 +70,7 @@ public class GroupDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HOST_GROUPS)) {
 			return;
 		}
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+		Map<String, String> callFilter = Map.of("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 
 		List<Map<String, Object>> result = dataServices.exec.getListOfMaps(RPCMethodName.GROUP_GET_OBJECTS,
 				new String[0], callFilter);
@@ -175,8 +173,7 @@ public class GroupDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(cacheId)) {
 			return;
 		}
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("groupType", groupType);
+		Map<String, String> callFilter = Map.of("groupType", groupType);
 		Map<String, Map<String, String>> mappedRelations = dataServices.exec.getStringMappedObjectsByKey(
 				RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new Object[] { new String[0], callFilter }, "ident",
 				new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });

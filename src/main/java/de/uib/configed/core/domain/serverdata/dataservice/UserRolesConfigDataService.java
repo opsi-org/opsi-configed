@@ -214,12 +214,10 @@ public class UserRolesConfigDataService extends DataService {
 
 		if (dataServices.config.getConfigDefaultValuesPD()
 				.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null || setUserRegisterVal) {
-			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
 					keyUserRegisterValue, "without given values the primary value setting is false");
-			readyObjects.add(item);
 
-			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, List.of(item));
 		}
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(), dataServices.hostInfoCollections.getConfigServer(),
