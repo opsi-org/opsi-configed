@@ -197,7 +197,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		if (expanded != null) {
 			expanded.asIterator().forEachRemaining((TreePath path) -> {
-				Map<String, Object> internalMap = Map.of("expanded", true);
+				Map<String, Object> internalMap = new HashMap<>();
+				internalMap.put("expanded", true);
 				expandedNodes.put(path.getLastPathComponent().toString(), internalMap);
 			});
 		}
