@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.gui.Configed;
@@ -108,7 +109,7 @@ public final class ClientData {
 			List<String> notConnectedClientsByMessagebusInDepot = persistenceController
 					.getDataServices().hostInfoCollections.getMapOfAllPCInfoMaps().values().stream()
 							.filter(v -> depot.equals(v.getString(HostInfo.DEPOT_OF_CLIENT_KEY)))
-							.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).toList();
+							.map(hostInfo -> hostInfo.getString(HostInfo.HOSTNAME_KEY)).collect(Collectors.toList());
 			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
 					.filter(notConnectedClientsByMessagebusInDepot::contains).toList();
 			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
