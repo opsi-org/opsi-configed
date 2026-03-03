@@ -207,8 +207,7 @@ public class TreePopupMouseListener {
 			return;
 		}
 
-		boolean isSelected = Arrays.asList(tree.getSelectionPaths()).contains(mousePath);
-		if (!isSelected) {
+		if (!tree.isPathSelected(mousePath)) {
 			tree.setSelectionPath(mousePath);
 		}
 	}
