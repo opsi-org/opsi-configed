@@ -103,7 +103,6 @@ public class ListSelectionList extends JList<String> {
 			return;
 		}
 
-		// Always add to the original model first
 		if (!originalModel.contains(element)) {
 			originalModel.addElement(element);
 		}
