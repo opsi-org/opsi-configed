@@ -420,7 +420,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return parent;
 	}
 
-	private boolean confirmNodeDeletion(int memberCount, int groupCount) {
+	private static boolean confirmNodeDeletion(int memberCount, int groupCount) {
 		String message = String.format(Configed.getResourceValue("AbstractGroupTree.deleteNodesWarning"), memberCount,
 				groupCount);
 
@@ -824,7 +824,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		return result;
 	}
 
-	public static void addAllDescendants(DefaultMutableTreeNode node, Set<String> data) {
+	public static void addAllDescendants(DefaultMutableTreeNode node, Collection<String> data) {
 		node.breadthFirstEnumeration().asIterator().forEachRemaining((TreeNode child) -> {
 			if (!child.getAllowsChildren()) {
 				String nodeinfo = (String) ((DefaultMutableTreeNode) child).getUserObject();
