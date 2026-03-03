@@ -20,6 +20,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.DepotsList;
+import de.uib.configed.gui.ListSelectionList;
 import de.uib.configed.share.logging.Logging;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -339,9 +341,18 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		tableModel.fireTableChanged(new TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
 
+		List<String> selectedValues = jList.getSelectedValuesList();
 		jList.setListData(theValues.toArray(new String[0]));
 		if (!theValues.isEmpty()) {
-			jList.setSelectedIndex(0);
+			if (!selectedValues.isEmpty()) {
+				switch (jList) {
+				case ListSelectionList s -> s.setPreviousSelectionValues(selectedValues);
+				case DepotsList l -> l.setSelectedValues(selectedValues);
+				default -> Logging.debug(this, "caught unhandled type list", jList);
+				}
+			} else {
+				jList.setSelectedIndex(0);
+			}
 		} else {
 			jList.clearSelection();
 		}
