@@ -21,6 +21,9 @@ import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.logging.Logging;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private JList<String> jList;
@@ -32,7 +35,25 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private List<String> unfilteredD;
 	private int[] unfilteredSelection;
 
+	private FilterContext filterContext;
+
+	@Data
+	@NoArgsConstructor
+	public static class FilterContext {
+		private String query;
+		private int column;
+		@Accessors(fluent = true)
+		private boolean useRegex;
+		@Accessors(fluent = true)
+		private boolean caseSensitive;
+	}
+
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
+		this(jList, values, descriptions, null);
+	}
+
+	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions,
+			FilterContext filterContext) {
 		this.jList = jList;
 		unfilteredV = values;
 		unfilteredD = descriptions;
@@ -52,6 +73,10 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		tableModel = setupTableModel(theValues, theDescriptions);
 
 		super.setTable(new JTable(tableModel));
+
+		if (filterContext != null) {
+			reapplyFilter(filterContext);
+		}
 	}
 
 	@SuppressWarnings({ "java:S1188" })
@@ -235,12 +260,27 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			filterValues(query, column, useRegex, caseSensitive, pattern);
 		}
 
+		filterContext = new FilterContext();
+		filterContext.setQuery(query);
+		filterContext.setColumn(column);
+		filterContext.useRegex(useRegex);
+		filterContext.caseSensitive(caseSensitive);
+
 		updateUI();
 	}
 
 	private void restoreUnfiltered() {
 		theValues.addAll(unfilteredV);
 		theDescriptions.addAll(unfilteredD);
+	}
+
+	private void reapplyFilter(FilterContext filterContext) {
+		applyFilter(filterContext.getQuery(), filterContext.getColumn(), filterContext.useRegex(),
+				filterContext.caseSensitive());
+	}
+
+	public FilterContext getFilterContext() {
+		return filterContext;
 	}
 
 	private Pattern compilePattern(String query, boolean useRegex, boolean caseSensitive) {

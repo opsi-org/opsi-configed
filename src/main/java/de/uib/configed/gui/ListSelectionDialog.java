@@ -30,6 +30,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList.FilterContext;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
@@ -47,6 +48,8 @@ public class ListSelectionDialog {
 
 	protected JOptionPane jOptionPane;
 	protected JDialog dialog;
+
+	private SearchTargetModelFromJList searchTargetModel;
 
 	public ListSelectionDialog(Component owner, String title) {
 		this(owner, title, false);
@@ -83,8 +86,7 @@ public class ListSelectionDialog {
 		JScrollPane listScrollPane = new JScrollPane(listSelectionList);
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(),
-				new ArrayList<>());
+		searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(), new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setNarrow(true);
 
@@ -192,7 +194,8 @@ public class ListSelectionDialog {
 			list.add(element);
 		}
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, list, list);
+		FilterContext filterContext = searchTargetModel.getFilterContext();
+		searchTargetModel = new SearchTargetModelFromJList(listSelectionList, list, list, filterContext);
 		searchPane.setTargetModel(searchTargetModel);
 	}
 
@@ -228,13 +231,13 @@ public class ListSelectionDialog {
 		listSelectionList.addItem(element);
 
 		// Without this the search won't work
-		updateSearchTargetModel(listSelectionList.getModel());
+		updateSearchTargetModel(listSelectionList.getOriginalModel());
 	}
 
 	private void removeItem(String element) {
 		listSelectionList.removeItem(element);
 
 		// Without this the search won't work
-		updateSearchTargetModel(listSelectionList.getModel());
+		updateSearchTargetModel(listSelectionList.getOriginalModel());
 	}
 }
