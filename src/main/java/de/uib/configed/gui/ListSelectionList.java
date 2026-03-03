@@ -107,13 +107,13 @@ public class ListSelectionList extends JList<String> {
 		if (!originalModel.contains(element)) {
 			originalModel.addElement(element);
 		}
+	}
 
-		// If current view is unfiltered (backed by masterModel), reflect immediately
-		if (getModel() == originalModel) {
-			int idx = originalModel.getSize() - 1;
-			addSelectionInterval(idx, idx);
-			ensureIndexIsVisible(getMaxSelectionIndex());
-		}
+	public void updateSelection() {
+		int idx = getModel().getSize() - 1;
+
+		addSelectionInterval(idx, idx);
+		ensureIndexIsVisible(getMaxSelectionIndex());
 	}
 
 	@Override

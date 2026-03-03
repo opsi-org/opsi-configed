@@ -232,6 +232,7 @@ public class ListSelectionDialog {
 
 		// Without this the search won't work
 		updateSearchTargetModel(listSelectionList.getOriginalModel());
+		listSelectionList.updateSelection();
 	}
 
 	private void removeItem(String element) {
