@@ -42,7 +42,7 @@ public class TreePopupMouseListener {
 
 		this.tree = tree;
 
-		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
+		menuItemCreateNode = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItemCreateNode, "add");
 		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
 		menuItemCreateNode
@@ -50,7 +50,7 @@ public class TreePopupMouseListener {
 						.isGlobalReadOnly());
 		jPopupMenu.add(menuItemCreateNode);
 
-		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editGroup"));
+		menuItemEditNode = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItemEditNode, "edit");
 		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(tree.getSelectionPath()));
 		menuItemEditNode.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
@@ -94,18 +94,18 @@ public class TreePopupMouseListener {
 	}
 
 	private void removeElements() {
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("AbstractGroupTree.removeAllElements.message"),
-				Configed.getResourceValue("AbstractGroupTree.removeAllElements.title"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE);
-		if (answer != JOptionPane.YES_OPTION) {
-			return;
-		}
-
 		TreePath selectedPath = tree.getSelectionPath();
 
 		if (selectedPath != null
 				&& selectedPath.getPathComponent(selectedPath.getPathCount() - 1) instanceof GroupNode groupNode) {
+
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					String.format(Configed.getResourceValue("AbstractGroupTree.removeAllElements.message"), groupNode),
+					Configed.getResourceValue("AbstractGroupTree.removeAllElements.title"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (answer != JOptionPane.YES_OPTION) {
+				return;
+			}
 
 			List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 

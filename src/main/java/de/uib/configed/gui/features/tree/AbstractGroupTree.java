@@ -341,8 +341,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		JLabel labelDescription = Utils.createBoldLabel("description");
 
 		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), labelDescription,
-				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
-				null, groups.get(groupId).get("description"));
+				String.format(Configed.getResourceValue("ClientTree.editGroup"), groupId), JOptionPane.PLAIN_MESSAGE,
+				null, null, groups.get(groupId).get("description"));
 
 		if (answer != null) {
 			groups.get(groupId).put("description", answer);
@@ -555,7 +555,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			};
 
 			JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ClientTree.addNode"));
+					String.format(Configed.getResourceValue("ClientTree.addNode"), node.toString()));
 
 			do {
 				optionPane.setMessage(new Object[] { inscription, panel });
