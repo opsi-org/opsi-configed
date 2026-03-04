@@ -28,7 +28,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -36,7 +35,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
@@ -44,6 +42,9 @@ import javax.swing.text.NumberFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.gui.CheckBoxList;
 import de.uib.configed.gui.Configed;
@@ -219,16 +220,15 @@ public class CSVTemplateCreatorDialog {
 			return;
 		}
 
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		jFileChooser.setFileHidingEnabled(false);
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");
-		jFileChooser.addChoosableFileFilter(fileFilter);
-		jFileChooser.setAcceptAllFileFilterUsed(false);
+		SystemFileChooser fileChooser = new SystemFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("CSV (.csv)", "csv"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
+		int returnValue = fileChooser.showSaveDialog(ConfigedMain.getMainFrame());
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
+		if (returnValue == SystemFileChooser.APPROVE_OPTION) {
+			String csvFile = fileChooser.getSelectedFile().getAbsolutePath();
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
 			}

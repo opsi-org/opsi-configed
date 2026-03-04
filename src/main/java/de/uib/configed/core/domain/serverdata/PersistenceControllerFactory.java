@@ -41,7 +41,7 @@ public final class PersistenceControllerFactory {
 		}
 
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(hostData);
-		if (hostData.isUseSSO() && persistenceController.getExecutioner() == null) {
+		if (hostData.useSSO() && persistenceController.getExecutioner() == null) {
 			Logging.error("Failed to create a PersistenceController instance using sso.");
 			return null;
 		}
@@ -62,11 +62,11 @@ public final class PersistenceControllerFactory {
 			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - userDataService:",
 					userDataService);
 
-			if (!hostData.isUseSSO()) {
-				isMFAEnabled = userDataService.usesMFA();
+			if (!hostData.useSSO()) {
+				hostData.useMFA(userDataService.usesMFA());
 				Logging.debug(
 						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
-						isMFAEnabled);
+						hostData.useMFA());
 			}
 
 			ParallelTaskExecutor executor = new ParallelTaskExecutor();

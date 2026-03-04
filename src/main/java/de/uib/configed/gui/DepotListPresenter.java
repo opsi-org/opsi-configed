@@ -16,13 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
@@ -95,22 +94,8 @@ public class DepotListPresenter extends JPanel {
 		Icons.addIntellijIconToMenuItem(showShell, "terminal");
 		jPopupMenu.add(showShell);
 
-		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent event) {
-				// We don't need this action here
-			}
-
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {
-				updatePopupMenuItem(showShell);
-			}
-
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
-				// We don't need this action here
-			}
-		});
+		jPopupMenu.addPopupMenuListener(
+				SwingUtils.createPopupMenuListenerOnVisible(() -> updatePopupMenuItem(showShell)));
 
 		depotslist.setComponentPopupMenu(jPopupMenu);
 	}
@@ -121,7 +106,7 @@ public class DepotListPresenter extends JPanel {
 	 * after the depotslist has been updated
 	 */
 	private void updatePopupMenuItem(JMenuItem showShell) {
-		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
+		if (depotslist.getSelectedValuesList().size() != 1) {
 			// Disable the button if no depots selected or more than one depot
 			showShell.setEnabled(false);
 		} else if (selectedServerForbidden()) {

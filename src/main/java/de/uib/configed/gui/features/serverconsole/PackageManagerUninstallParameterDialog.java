@@ -183,7 +183,7 @@ public class PackageManagerUninstallParameterDialog {
 
 	private void init() {
 		jLabelUninstall = SwingUtils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
-		jLabelLoglevel = SwingUtils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelLoglevel");
+		jLabelLoglevel = SwingUtils.createBoldLabel("loglevel");
 
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -296,9 +296,9 @@ public class PackageManagerUninstallParameterDialog {
 		uninstallPanel.add(jComboBoxOpsiProducts, "growx, gapbottom " + Globals.GAP_SIZE);
 		uninstallPanel.add(jLabelOn);
 		uninstallPanel.add(textFieldSelectedDepots, "split 2, growx, gapright " + Globals.GAP_SIZE);
-		uninstallPanel.add(jButtonDepotSelection, "wrap, gapbottom " + Globals.GAP_SIZE);
-		uninstallPanel.add(jLabelLoglevel);
-		uninstallPanel.add(jComboBoxLogLevel, "gapbottom " + Globals.GAP_SIZE);
-		uninstallPanel.add(checkBoxKeepFiles);
+		uninstallPanel.add(jButtonDepotSelection, "wrap");
+		uninstallPanel.add(jLabelLoglevel, "gaptop " + Globals.GAP_SIZE);
+		uninstallPanel.add(jComboBoxLogLevel);
+		uninstallPanel.add(checkBoxKeepFiles, "gaptop " + Globals.GAP_SIZE);
 	}
 }

@@ -17,9 +17,9 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
@@ -33,7 +33,7 @@ public class LogTabComponent extends LogPaneComponent {
 	private static final String LOGFILE_EXTENSION = ".log";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
-	private JFileChooser chooser;
+	private SystemFileChooser chooser;
 	private ConfigedMain configedMain;
 	private String logFileType;
 
@@ -127,7 +127,7 @@ public class LogTabComponent extends LogPaneComponent {
 		chooser.setSelectedFile(f);
 
 		int returnVal = chooser.showSaveDialog(ConfigedMain.getMainFrame());
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 
@@ -135,11 +135,12 @@ public class LogTabComponent extends LogPaneComponent {
 	}
 
 	private void setFileChooser() {
-		chooser = new JFileChooser();
+		chooser = new SystemFileChooser();
 		chooser.setFileHidingEnabled(false);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setFileFilter(new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
-		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
+		chooser.setFileFilter(new SystemFileChooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log",
+				"zip", "gz", "7z"));
+		chooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
 	}
 

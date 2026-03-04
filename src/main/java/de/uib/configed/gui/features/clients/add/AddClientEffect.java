@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.List;
+import java.util.Map;
 
 public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddClientEffect.ServiceEffect {
 	sealed interface UIEffect extends AddClientEffect permits UIEffect.ShowOverwriteHostDialog,
@@ -36,7 +37,7 @@ public sealed interface AddClientEffect permits AddClientEffect.UIEffect, AddCli
 		record LoadInitialData() implements ServiceEffect {
 		}
 
-		record CreateClients(List<List<Object>> rows) implements ServiceEffect {
+		record CreateClients(List<Map<String, Object>> rows) implements ServiceEffect {
 		}
 	}
 }

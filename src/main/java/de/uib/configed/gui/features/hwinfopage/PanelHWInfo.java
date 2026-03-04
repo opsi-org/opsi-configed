@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -146,8 +145,9 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
-			new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATING_COPY }, new JComponent[] { tree, table }) {
+			new PopupMenuTrait(
+					List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
+					List.of(tree, table)) {
 				@Override
 				public void action(int p) {
 					switch (p) {

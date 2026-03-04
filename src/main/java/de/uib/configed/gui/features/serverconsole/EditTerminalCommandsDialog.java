@@ -158,8 +158,8 @@ public final class EditTerminalCommandsDialog {
 		controlPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
 		controlPanel.add(labelMenuText);
 		controlPanel.add(jComboBoxMenuText, "split 2, growx");
-		controlPanel.add(buttonDelete, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
-		controlPanel.add(labelParentMenuText);
+		controlPanel.add(buttonDelete, "align center, wrap");
+		controlPanel.add(labelParentMenuText, "gaptop " + Globals.GAP_SIZE);
 		controlPanel.add(jComboBoxParentMenuText, "growx, gapbottom " + Globals.GAP_SIZE);
 		controlPanel.add(labelTooltipText);
 		controlPanel.add(jTextFieldDescription, "growx, gapbottom " + Globals.GAP_SIZE);

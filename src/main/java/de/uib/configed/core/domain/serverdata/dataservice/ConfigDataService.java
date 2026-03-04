@@ -385,7 +385,6 @@ public class ConfigDataService extends DataService {
 	}
 
 	private void addRoleAndUserConfig(String configkey, String rolename) {
-		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		String role = rolename;
 
 		if (role == null) {
@@ -398,9 +397,7 @@ public class ConfigDataService extends DataService {
 		Map<String, Object> itemRole = ConfigUtils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configkey,
 				"which role should determine this configuration", false, false, selectedValuesRole, selectedValuesRole);
 
-		readyObjects.add(itemRole);
-
-		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, Set.of(itemRole));
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		configDefaultValues.put(configkey, selectedValuesRole);
@@ -410,18 +407,14 @@ public class ConfigDataService extends DataService {
 	public void deleteSavedSearch(String name) {
 		Logging.debug(this, "deleteSavedSearch ", name);
 		SavedSearches savedSearches = getSavedSearchesPD();
-		List<Map<String, Object>> readyObjects = new ArrayList<>();
-		Map<String, Object> item;
 
-		item = ConfigUtils.createNOMitem("UnicodeConfig");
-		item.put("id", SavedSearch.CONFIG_KEY + "." + name);
-		readyObjects.add(item);
+		Map<String, Object> item1 = ConfigUtils.createNOMitem("UnicodeConfig");
+		item1.put("id", SavedSearch.CONFIG_KEY + "." + name);
 
-		item = ConfigUtils.createNOMitem("UnicodeConfig");
-		item.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
-		readyObjects.add(item);
+		Map<String, Object> item2 = ConfigUtils.createNOMitem("UnicodeConfig");
+		item2.put("id", SavedSearch.CONFIG_KEY + "." + name + "." + SavedSearch.DESCRIPTION_KEY);
 
-		if (dataServices.exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, readyObjects)) {
+		if (dataServices.exec.doCall(RPCMethodName.CONFIG_DELETE_OBJECTS, Set.of(item1, item2))) {
 			savedSearches.remove(name);
 			dataServices.cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
 		}
@@ -507,9 +500,8 @@ public class ConfigDataService extends DataService {
 		}
 
 		List<Map<String, Object>> result = new ArrayList<>();
-		Set<String> configIds = new HashSet<>();
 		Map<String, Map<String, Object>> retrieved = dataServices.exec
-				.getMapOfMaps(RPCMethodName.CONFIG_STATE_GET_VALUES, configIds, objectIds, true);
+				.getMapOfMaps(RPCMethodName.CONFIG_STATE_GET_VALUES, Set.of(), objectIds, true);
 		for (Entry<String, Map<String, Object>> entry : retrieved.entrySet()) {
 			result.add(new ConfigName2ConfigValue(entry.getValue(), getConfigOptionsPD()));
 		}
@@ -864,10 +856,7 @@ public class ConfigDataService extends DataService {
 		item.put("editable", true);
 		item.put("multiValue", true);
 
-		List<Map<String, Object>> readyObjects = new ArrayList<>();
-		readyObjects.add(item);
-
-		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+		dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, Set.of(item));
 
 		Map<String, List<Object>> configDefaultValues = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);

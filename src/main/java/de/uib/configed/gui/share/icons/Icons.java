@@ -136,9 +136,13 @@ public final class Icons {
 	}
 
 	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
-		abstractButton.setIcon(getIntellijIcon(name));
+		addIntellijIconToMenuItem(abstractButton, name, 16);
+	}
 
-		FlatSVGIcon selectedIcon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + name + ".svg");
+	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name, int size) {
+		abstractButton.setIcon(getIntellijIcon(name, size));
+
+		FlatSVGIcon selectedIcon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + name + ".svg").derive(size, size);
 		selectedIcon.setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK));
 		abstractButton.setSelectedIcon(selectedIcon);
 	}

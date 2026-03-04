@@ -78,7 +78,7 @@ public final class ThemeManager {
 		if (availableThemes.contains(newTheme)) {
 			selectedTheme = newTheme;
 		} else {
-			Logging.warning("Failing to set theme that does not exist: ", newTheme);
+			Logging.warning("Failed to set theme that does not exist:", newTheme);
 		}
 	}
 
@@ -93,7 +93,7 @@ public final class ThemeManager {
 		switch (getSelectedTheme()) {
 		case THEME_LIGHT -> FlatLightLaf.setup();
 		case THEME_DARK -> FlatDarkLaf.setup();
-		default -> Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
+		default -> Logging.warning("Tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 		}
 
 		Globals.setTableColors();

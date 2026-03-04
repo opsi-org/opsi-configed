@@ -40,7 +40,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
-import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.core.infrastructure.ConnectionHandler.RequestMethod;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
@@ -394,8 +393,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(RPCMethodName methodname, Object[] parameters) {
 		Logging.info(this, "retrieveResponse started");
 
-		if ((hostData.getOtp() == null && PersistenceControllerFactory.isMFAEnabled())
-				|| !ParallelTaskExecutor.isNewTasksAllowed()) {
+		if ((hostData.getOtp() == null && hostData.useMFA()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
 			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
 				ParallelTaskExecutor.allowNewTasks(true);
 			} else {
@@ -638,9 +636,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			// Normal response; clear error flag if needed
 			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
 		} else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			boolean isMFAEnabled = PersistenceControllerFactory.isMFAEnabled();
-			Logging.debug("Unauthorized: ", sessionId, ", mfa=", isMFAEnabled);
-			if (isMFAEnabled && ConfigedMain.getMainFrame() != null) {
+			Logging.debug("Unauthorized: ", sessionId, ", mfa=", hostData.useMFA());
+			if (hostData.useMFA() && ConfigedMain.getMainFrame() != null) {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
 				// Don't initiate Messagebus reconnection, since the connection is restablished once
@@ -744,6 +741,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	public HostData getHostData() {
 		return hostData;
+	}
+
+	public int getPortHTTPS() {
+		return portHTTPS;
 	}
 
 	/**

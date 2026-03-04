@@ -120,14 +120,14 @@ public class OpsiServiceNOMPersistenceController {
 
 	OpsiServiceNOMPersistenceController(HostData hostData) {
 		Logging.info(this, "start construction, \nconnect to ", hostData.getHost(), " as ", hostData.getUser(), " sso ",
-				hostData.isUseSSO());
+				hostData.useSSO());
 
 		if (hostData.getHost() == null || hostData.getHost().isEmpty()) {
 			Logging.error(this.getClass(), "no server given");
 			return;
 		}
 
-		if (hostData.isUseSSO()) {
+		if (hostData.useSSO()) {
 			Logging.info(this.getClass(), "OSNOM try sso/saml");
 		} else if (hostData.getUser() == null || hostData.getUser().isEmpty() || hostData.getPassword() == null
 				|| hostData.getPassword().isEmpty()) {
@@ -140,14 +140,14 @@ public class OpsiServiceNOMPersistenceController {
 
 		init();
 		ParallelTaskExecutor.allowNewTasks(true);
-		if (hostData.isUseSSO()) {
+		if (hostData.useSSO()) {
 			Logging.info("ONOMPC useSSO true");
 			exec = new ServerFacade(hostData.getHost());
-			exec.getHostData().setUseSSO(true);
+			exec.getHostData().useSSO(true);
 		} else {
 			Logging.info("ONOMPC useSSO false server ", hostData.getHost(), " user ", hostData.getUser());
 			exec = new ServerFacade(hostData.getHost(), hostData.getUser(), hostData.getPassword(), hostData.getOtp());
-			exec.getHostData().setUseSSO(false);
+			exec.getHostData().useSSO(false);
 		}
 
 		Logging.info(this, "connection state ", exec.getConnectionState());
@@ -224,7 +224,7 @@ public class OpsiServiceNOMPersistenceController {
 				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTIES.toString(), defaultDataReloadHandler);
+		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_CONFIGS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.ALL_DATA.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSES.toString(), defaultDataReloadHandler);

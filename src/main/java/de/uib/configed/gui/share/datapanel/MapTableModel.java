@@ -296,7 +296,10 @@ public class MapTableModel extends AbstractTableModel {
 			for (Map<String, Object> aStoreMap : storeData) {
 				aStoreMap.remove(key);
 			}
-			configChanges = Map.of(key, null);
+
+			// We need the singleton map here since Map.of(...) does not allow null values
+			// Actually it's probably bad code to have null here...
+			configChanges = Collections.singletonMap(key, null);
 		}
 
 		notifyChange();

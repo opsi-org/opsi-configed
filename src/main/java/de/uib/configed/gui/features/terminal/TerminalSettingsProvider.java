@@ -9,7 +9,7 @@ package de.uib.configed.gui.features.terminal;
 import java.awt.Font;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.Collections;
+import java.util.List;
 
 import javax.swing.KeyStroke;
 
@@ -35,8 +35,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	@Override
 	public @NotNull TerminalActionPresentation getOpenUrlActionPresentation() {
-		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.openAsUrl"),
-				Collections.emptyList());
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.openAsUrl"), List.of());
 	}
 
 	@Override
@@ -95,8 +94,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	@Override
 	public @NotNull TerminalActionPresentation getSelectAllActionPresentation() {
-		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.selectAll"),
-				Collections.emptyList());
+		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.selectAll"), List.of());
 	}
 
 	public @NotNull TerminalActionPresentation getNewWindowActionPresentation() {

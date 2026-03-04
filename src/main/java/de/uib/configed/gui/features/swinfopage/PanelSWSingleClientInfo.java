@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -238,9 +237,9 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		if (withPopup) {
 			new PopupMenuTrait(
-					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY },
-					new JComponent[] { this, panelTable.getGenEditTable(), panelTable.getTheScrollpane() }) {
+					List.of(PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
+					List.of(this, panelTable.getGenEditTable(), panelTable.getTheScrollpane())) {
 				@Override
 				public void action(int p) {
 					actionOnPopupMenu(p);

@@ -365,12 +365,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Map<String, ConfigName2ConfigValue>>}
 	 */
-	PRODUCT_PROPERTIES("product_properties"),
-
-	/**
-	 * return type {@code Map<String, Map<String, ListCellOptions>>}
-	 */
-	PRODUCT_PROPERTY_DEFINITIONS("product_property_definitions"),
+	PRODUCT_PROPERTY_STATES("product_property_states"),
 
 	/**
 	 * return type {@code Set<Object>}

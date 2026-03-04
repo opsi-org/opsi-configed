@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +83,7 @@ public class ProductPageManager implements MessagebusListener {
 	}
 
 	public void setNetbootProductsPage() {
-		setProductsPage(collectChangedNetbootStates, Collections.emptyList(), OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
+		setProductsPage(collectChangedNetbootStates, List.of(), OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
 				clientConfiguration.getPanelNetbootProductSettings(), getNetbootProductDisplayFieldsList());
 	}
 
@@ -235,38 +234,42 @@ public class ProductPageManager implements MessagebusListener {
 		return attributes;
 	}
 
-	public void setProductEdited(String productname, PanelProductSettings sourcePanel) {
+	public void setProductEdited(String productName, PanelProductSettings sourcePanel) {
 		// called from ProductSettings
 
-		Logging.debug(this, "setProductEdited ", productname);
+		Logging.debug(this, "setProductEdited ", productName);
 
 		if (clientProductpropertiesUpdateCollection != null) {
 			UpdateCollectionManager.removeFromGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
 		}
 		clientProductpropertiesUpdateCollection = null;
 
-		if (clientProductpropertiesUpdateCollections.get(productname) == null) {
+		if (clientProductpropertiesUpdateCollections.get(productName) == null) {
 			// have we got already a clientProductpropertiesUpdateCollection for this
 			// product?
 			// if not, we produce one
 
 			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
-					configedMain.getSelectedClients(), productname);
+					configedMain.getSelectedClients(), productName);
 
-			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
+			clientProductpropertiesUpdateCollections.put(productName, clientProductpropertiesUpdateCollection);
 			UpdateCollectionManager.addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
 		} else {
-			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productname);
+			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productName);
 		}
 
-		collectTheProductProperties(productname);
+		collectTheProductProperties(productName);
 
-		configedMain.getDependenciesModel().setActualProduct(productname);
+		configedMain.getDependenciesModel().setActualProduct(productName);
 
 		Logging.debug(this, " --- mergedProductProperties ", mergedProductProperties);
 
-		sourcePanel.initEditing(productname, productProperties, POJOReMapper.remap(mergedProductProperties),
-				clientProductpropertiesUpdateCollection);
+		Map<String, Object> originalMap = persistenceController.getDataServices().product
+				.getProductPropertiesWithoutDefaults(configedMain.getSelectedClients(), List.of(productName))
+				.get(productName);
+
+		sourcePanel.initEditing(productName, productProperties, POJOReMapper.remap(mergedProductProperties),
+				clientProductpropertiesUpdateCollection, originalMap);
 	}
 
 	private void collectTheProductProperties(String productEdited) {

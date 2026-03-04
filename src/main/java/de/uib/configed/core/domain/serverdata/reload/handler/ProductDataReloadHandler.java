@@ -34,7 +34,7 @@ public class ProductDataReloadHandler extends AbstractReloadHandler {
 		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
 		executor.runInParallel(dataServices.group::retrieveProductGroupsPD);
 
-		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES);
+		dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES);
 
 		executor.waitForCompletion();
 	}

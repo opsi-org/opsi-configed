@@ -132,8 +132,6 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			Logging.debug("PanelMessageInfos resetData 0: ", 0);
 			selectInfiniteDateOption();
 		} else {
-			Logging.debug("PanelMessageInfos resetData 1: ", date, " => ",
-					dateTimePicker.getDateTimePicker().getDateTimeValue());
 			selectDateOption();
 		}
 	}
@@ -147,7 +145,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		if (date == null) {
 			date = "0";
 		}
-		dateTimePicker.getDateTimePicker().setDateTimeValue(Long.valueOf(date));
+		dateTimePicker.setDateTimeValue(Long.valueOf(date));
 	}
 
 	private void selectInfiniteDateOption() {
@@ -155,7 +153,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		dateChooserButton.setSelected(false);
 		dateTimePicker.setEnabled(false);
 		infiniteDateChooserButton.setSelected(true);
-		dateTimePicker.getDateTimePicker().setDateTimeValue(0);
+		dateTimePicker.setDateTimeValue(0);
 		date = "0";
 		dateChooserText.setText("0");
 	}

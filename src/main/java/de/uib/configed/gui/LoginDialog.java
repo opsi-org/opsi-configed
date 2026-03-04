@@ -86,7 +86,6 @@ public class LoginDialog extends JFrame {
 		finishAndMakeVisible();
 
 		initGlassPane();
-		initSSO();
 
 		setHostData(hostData);
 	}
@@ -113,18 +112,18 @@ public class LoginDialog extends JFrame {
 		}
 
 		Logging.info("become interactive");
-		Logging.info("using sso ? ", hostData.isUseSSO());
+		Logging.info("using sso ? ", hostData.useSSO());
 		setVisible(true);
 
 		if (hostData.getHost() == null) {
 			Logging.info("host is not set (yet)");
-		} else if (!hostData.isUseSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
+		} else if (!hostData.useSSO() && (hostData.getUser() == null || hostData.getPassword() == null)) {
 			Logging.info("user or password not given (yet)");
 		} else {
 			// This must be called last, so that loading frame for connection is called last
 			// and on top of the login-frame
-			Logging.info("loginDialog tryConnecting with sso ", hostData.isUseSSO());
-			tryConnectingDependOnServer(hostData.isUseSSO());
+			Logging.info("loginDialog tryConnecting with sso ", hostData.useSSO());
+			tryConnectingDependOnServer(hostData.useSSO());
 		}
 	}
 
@@ -247,6 +246,8 @@ public class LoginDialog extends JFrame {
 			String authMethods = headers.get("X-opsi-auth-methods").toString();
 			ssoActiveByServer = authMethods.contains("saml");
 			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
+		} else {
+			ssoActiveByServer = false;
 		}
 
 		jButtonSSO.setVisible(ssoActiveByServer);
@@ -346,7 +347,8 @@ public class LoginDialog extends JFrame {
 		Logging.info(this, "starting thread");
 
 		new LoginThread(this, new HostData((String) fieldHost.getSelectedItem(), user,
-				String.valueOf(passwordField.getPassword()), String.valueOf(fieldOTP.getPassword()), useSSO)).start();
+				String.valueOf(passwordField.getPassword()), String.valueOf(fieldOTP.getPassword()), useSSO, false))
+						.start();
 	}
 
 	private void login(JTextField source) {

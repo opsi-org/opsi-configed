@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -22,7 +23,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,10 +31,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -189,7 +190,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void handleServiceEffect(AddClientEffect.ServiceEffect effect) {
 		switch (effect) {
 		case AddClientEffect.ServiceEffect.LoadInitialData _ -> loadInitialData();
-		case AddClientEffect.ServiceEffect.CreateClients(List<List<Object>> rows) -> ServerActionManager
+		case AddClientEffect.ServiceEffect.CreateClients(List<Map<String, Object>> rows) -> ServerActionManager
 				.createClients(rows);
 		}
 	}
@@ -398,16 +399,13 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	}
 
 	private void importCSV() {
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		jFileChooser.setFileHidingEnabled(false);
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");
-		jFileChooser.addChoosableFileFilter(fileFilter);
-		jFileChooser.setAcceptAllFileFilterUsed(false);
+		SystemFileChooser fileChooser = new SystemFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("CSV (.csv)", "csv"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showOpenDialog(dialog);
-
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
+		if (fileChooser.showOpenDialog(dialog) == SystemFileChooser.APPROVE_OPTION) {
+			String csvFile = fileChooser.getSelectedFile().getAbsolutePath();
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
 			}
@@ -419,7 +417,7 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 			if (csvImportDataDialog.show()) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
-				List<List<Object>> rows = modifier.getRows();
+				List<Map<String, Object>> rows = modifier.getRowsAsListOfMaps();
 				dispatch(new AddClientMsg.ActionMsg.CSVImported(rows, false));
 			}
 		}

@@ -6,10 +6,8 @@
 
 package de.uib.configed.gui.share;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
 
@@ -68,13 +66,7 @@ public final class WinProductUtils {
 	 */
 	public static void uploadFileOrDirectory(WebDAVClient webDAVClient, File source, String targetPath)
 			throws IOException {
-		if (source.isDirectory()) {
-			webDAVClient.uploadDirectory(source, targetPath.endsWith("/") ? targetPath : (targetPath + "/"));
-		} else {
-			byte[] fileBytes = Files.readAllBytes(source.toPath());
-			webDAVClient.uploadFile((targetPath.endsWith("/") ? targetPath : (targetPath + "/")) + source.getName(),
-					new ByteArrayInputStream(fileBytes));
-		}
+		webDAVClient.uploadDirectory(source, targetPath.endsWith("/") ? targetPath : (targetPath + "/"));
 	}
 
 	/**

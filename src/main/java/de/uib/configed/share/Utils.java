@@ -139,10 +139,6 @@ public final class Utils {
 		};
 	}
 
-	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
-		return determineIconBasedOnDeviceType(value, 16);
-	}
-
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
 		return switch (value) {
 		case "server" -> Icons.getThemeSVGRepoIcon("server", size);
@@ -151,6 +147,7 @@ public final class Utils {
 		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
 		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
 		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
+		case null -> Icons.getThemeIntellijIcon("questionMark", size);
 		default -> Icons.getThemeIntellijIcon("questionMark", size);
 		};
 	}

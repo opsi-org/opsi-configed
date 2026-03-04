@@ -43,6 +43,7 @@ public class ListSelectionDialog {
 	protected TableSearchPane searchPane;
 
 	private FlatTextField editingTextField;
+	private JButton addMultiLineValueButton;
 
 	protected JOptionPane jOptionPane;
 	protected JDialog dialog;
@@ -94,12 +95,12 @@ public class ListSelectionDialog {
 
 		if (editable) {
 			createEditableOptions();
-			panel.add(editingTextField, "split 2, growx, gapy " + Globals.GAP_SIZE);
-			JButton addMultiLineValueButton = new JButton();
+			panel.add(editingTextField, "split 2, hidemode 3, growx, gapy " + Globals.GAP_SIZE);
+			addMultiLineValueButton = new JButton();
 			addMultiLineValueButton.setIcon(Icons.getIntellijIcon("openNewTab"));
 			addMultiLineValueButton.addActionListener(actionEvent -> addMultilineItem(null, false));
 			addMultiLineValueButton.setToolTipText(Configed.getResourceValue("ListSelectionDialog.addMultiLineValue"));
-			panel.add(addMultiLineValueButton, "gapy " + Globals.GAP_SIZE + ", wrap");
+			panel.add(addMultiLineValueButton, "hidemode 3, gapy " + Globals.GAP_SIZE + ", wrap");
 		}
 
 		return panel;
@@ -174,6 +175,7 @@ public class ListSelectionDialog {
 	public void setEditable(boolean editable) {
 		editingTextField.setText(null);
 		editingTextField.setVisible(editable);
+		addMultiLineValueButton.setVisible(editable);
 	}
 
 	public void setModel(ListModel<String> model) {

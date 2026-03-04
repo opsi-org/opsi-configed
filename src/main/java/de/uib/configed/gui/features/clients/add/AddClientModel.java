@@ -7,7 +7,9 @@
 package de.uib.configed.gui.features.clients.add;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Builder;
 import lombok.Value;
@@ -59,9 +61,9 @@ public class AddClientModel {
 
 	// Pending state for validation/confirmations
 	@Builder.Default
-	List<Object> pendingSingleRow = new ArrayList<>();
+	Map<String, Object> pendingSingleRow = new HashMap<>();
 	@Builder.Default
-	List<List<Object>> acceptedRows = new ArrayList<>();
+	List<Map<String, Object>> acceptedRows = new ArrayList<>();
 	@Builder.Default
-	List<List<Object>> rowsToImport = new ArrayList<>();
+	List<Map<String, Object>> rowsToImport = new ArrayList<>();
 }
