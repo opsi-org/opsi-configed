@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.features.tree;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,10 +21,9 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 
-public class TreePopupMouseListener {
+public class GroupTreePopupMenu extends JPopupMenu {
 	private AbstractGroupTree tree;
 
 	private JMenuItem menuItemCreateNode;
@@ -36,51 +34,36 @@ public class TreePopupMouseListener {
 
 	private boolean anyVisible;
 
-	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		tree.addMouseListener(new PopupMouseListener(jPopupMenu, this::checkAccepted));
-
+	public GroupTreePopupMenu(AbstractGroupTree tree) {
 		this.tree = tree;
 
-		menuItemCreateNode = new JMenuItem();
-		Icons.addIntellijIconToMenuItem(menuItemCreateNode, "add");
-		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
-		menuItemCreateNode
-				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-						.isGlobalReadOnly());
-		jPopupMenu.add(menuItemCreateNode);
+		menuItemCreateNode = createAndAddMenuItem(null, "add", this::makeSubGroup);
 
-		menuItemEditNode = new JMenuItem();
-		Icons.addIntellijIconToMenuItem(menuItemEditNode, "edit");
-		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(tree.getSelectionPath()));
-		menuItemEditNode.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-				.isGlobalReadOnly());
-		jPopupMenu.add(menuItemEditNode);
+		menuItemEditNode = createAndAddMenuItem(null, "edit", () -> tree.editGroupNode(tree.getSelectionPath()));
 
-		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"));
-		Icons.addIntellijIconToMenuItem(menuItemDeleteNode, "remove");
-		menuItemDeleteNode.addActionListener(actionEvent -> tree.deleteNodes(tree.getSelectionPaths()));
-		menuItemDeleteNode
-				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-						.isGlobalReadOnly());
-		jPopupMenu.add(menuItemDeleteNode);
+		menuItemDeleteNode = createAndAddMenuItem("ClientTree.deleteNode", "remove",
+				() -> tree.deleteNodes(tree.getSelectionPaths()));
 
-		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
-		Icons.addIntellijIconToMenuItem(menuItemDeleteGroupNode, "delete");
-		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteGroupNodes(tree.getSelectionPaths()));
-		menuItemDeleteGroupNode
-				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-						.isGlobalReadOnly());
-		jPopupMenu.add(menuItemDeleteGroupNode);
+		menuItemDeleteGroupNode = createAndAddMenuItem("ClientTree.deleteGroupNode", "delete",
+				() -> tree.deleteGroupNodes(tree.getSelectionPaths()));
 
 		String removeAllKey = tree instanceof ClientTree ? "ClientTree.removeAllElements"
 				: "ProductTree.removeAllElements";
-		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey));
-		Icons.addIntellijIconToMenuItem(menuItemRemoveElements, "remove");
-		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
-		menuItemRemoveElements
-				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-						.isGlobalReadOnly());
-		jPopupMenu.add(menuItemRemoveElements);
+
+		menuItemRemoveElements = createAndAddMenuItem(removeAllKey, "remove", this::removeElements);
+	}
+
+	private JMenuItem createAndAddMenuItem(String textKey, String iconKey, Runnable action) {
+		String text = textKey != null ? Configed.getResourceValue(textKey) : "";
+		JMenuItem menuItem = new JMenuItem(text);
+		Icons.addIntellijIconToMenuItem(menuItem, iconKey);
+		menuItem.addActionListener(actionEvent -> action.run());
+		menuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+				.isGlobalReadOnly());
+
+		add(menuItem);
+
+		return menuItem;
 	}
 
 	private void makeSubGroup() {
@@ -153,7 +136,7 @@ public class TreePopupMouseListener {
 		return false;
 	}
 
-	private boolean checkAccepted(MouseEvent e) {
+	public boolean checkAccepted() {
 		if (!shouldShow()) {
 			return false;
 		}
