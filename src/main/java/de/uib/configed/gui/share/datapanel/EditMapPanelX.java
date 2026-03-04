@@ -278,8 +278,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
-		jComponent.setToolTipText(
-				SwingUtils.createTooltipForPropertyName(names.get(row), defaultsMap, descriptionsMap, null));
+		jComponent.setToolTipText(createTooltipForPropertyName(names.get(row), defaultsMap, descriptionsMap, null));
 
 		// check equals with default
 		Object defaultValue;
@@ -304,9 +303,44 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		if (col == 1 && jComponent instanceof JLabel jLabel
-				&& SwingUtils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
+				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
+	}
+
+	protected static String createTooltipForPropertyName(String propertyName, Map<String, Object> defaultsMap,
+			Map<String, String> descriptionsMap, String additionalTooltipText) {
+		if (propertyName == null) {
+			return "";
+		}
+
+		StringBuilder tooltip = new StringBuilder();
+
+		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
+			if (additionalTooltipText != null && !additionalTooltipText.isEmpty()) {
+				tooltip.append("default (" + additionalTooltipText + "): ");
+			} else {
+				tooltip.append("default: ");
+			}
+
+			if (PropertiesCellEditorAndRenderer.isKeyForSecretValue(propertyName)) {
+				tooltip.append(Globals.STARRED_STRING);
+			} else {
+				tooltip.append(defaultsMap.get(propertyName));
+			}
+		}
+
+		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
+			tooltip.append(SwingUtils.parseMarkdown(descriptionsMap.get(propertyName)));
+		}
+
+		if (tooltip.length() > 200) {
+			Logging.debug("tooltip length is ", tooltip.length());
+			tooltip.insert(0, "<div style='width: 500px'>");
+			tooltip.append("</div>");
+		}
+
+		return "<html>" + tooltip + "</html>";
 	}
 
 	@Override

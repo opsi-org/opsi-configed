@@ -10,9 +10,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -35,7 +32,6 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.Globals;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -51,61 +47,11 @@ import de.uib.configed.share.logging.Logging;
  * </p>
  */
 public final class SwingUtils {
-	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
-	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
-
 	private static Parser markdownParser = Parser.builder()
 			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
 	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
 
 	private SwingUtils() {
-	}
-
-	public static String createTooltipForPropertyName(String propertyName, Map<String, Object> defaultsMap,
-			Map<String, String> descriptionsMap, String additionalTooltipText) {
-		if (propertyName == null) {
-			return "";
-		}
-
-		StringBuilder tooltip = new StringBuilder();
-
-		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-			if (additionalTooltipText != null && !additionalTooltipText.isEmpty()) {
-				tooltip.append("default (" + additionalTooltipText + "): ");
-			} else {
-				tooltip.append("default: ");
-			}
-
-			if (isKeyForSecretValue(propertyName)) {
-				tooltip.append(Globals.STARRED_STRING);
-			} else {
-				tooltip.append(defaultsMap.get(propertyName));
-			}
-		}
-
-		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-			tooltip.append(parseMarkdown(descriptionsMap.get(propertyName)));
-		}
-
-		if (tooltip.length() > 200) {
-			Logging.debug("tooltip length is ", tooltip.length());
-			tooltip.insert(0, "<div style='width: 500px'>");
-			tooltip.append("</div>");
-		}
-
-		return "<html>" + tooltip + "</html>";
-	}
-
-	public static boolean isKeyForSecretValue(String key) {
-		String keyLowerCase = key.toLowerCase(Locale.ROOT);
-
-		if (BLACKLISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
-			return true;
-		} else if (WHITELISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
-			return false;
-		} else {
-			return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
-		}
 	}
 
 	public static String parseMarkdown(String markdown) {
