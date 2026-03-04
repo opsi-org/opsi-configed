@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.features.serverconsole.command;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.share.logging.Logging;
@@ -14,8 +14,8 @@ import de.uib.configed.share.logging.Logging;
 public class MultiCommandTemplate implements MultiCommand, Comparable<MultiCommandTemplate> {
 	private String id;
 	private String menuText;
-	private List<SingleCommand> commands = new LinkedList<>();
-	private List<SingleCommand> originalCommand = new LinkedList<>();
+	private List<SingleCommand> commands = new ArrayList<>();
+	private List<SingleCommand> originalCommand = new ArrayList<>();
 	private String parentMenuText = CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
 	private String tooltipText = "";
 	private int priority;
@@ -134,7 +134,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 
 	@Override
 	public List<String> getCommandsRaw() {
-		List<String> commandsStringList = new LinkedList<>();
+		List<String> commandsStringList = new ArrayList<>();
 		for (SingleCommand c : commands) {
 			String comstr = c.getCommandRaw();
 			if (!(comstr == null || comstr.isBlank())) {
@@ -183,10 +183,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 	@Override
 	public int compareTo(MultiCommandTemplate compareCom) {
 		int dif = this.getPriority() - compareCom.getPriority();
-		if (dif == 0) {
-			return this.getMenuText().compareTo(compareCom.getMenuText());
-		}
-		return dif;
+		return dif == 0 ? this.getMenuText().compareTo(compareCom.getMenuText()) : dif;
 	}
 
 	@Override

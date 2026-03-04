@@ -6,11 +6,12 @@
 
 package de.uib.configed.gui.features.clients.add;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.type.HostInfo;
 
 final class AddClientValidator {
 	static final Pattern NUMERIC_PATTERN = Pattern.compile("\\d+");
@@ -110,7 +111,7 @@ final class AddClientValidator {
 		 * @return A {@link Result} indicating whether validation succeeded,
 		 *         failed, or requires user confirmation.
 		 */
-		Result validate(List<Object> row, AddClientModel model);
+		Result validate(Map<String, Object> row, AddClientModel model);
 	}
 
 	private AddClientValidator() {
@@ -118,7 +119,7 @@ final class AddClientValidator {
 
 	protected static class BooleanValidator implements RowValidation {
 		@Override
-		public Result validate(List<Object> row, AddClientModel model) {
+		public Result validate(Map<String, Object> row, AddClientModel model) {
 			if (!isValidBooleans(row)) {
 				return Result.drop(new AddClientEffect.UIEffect.ShowErrorMessage(
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"),
@@ -127,12 +128,10 @@ final class AddClientValidator {
 			return Result.success();
 		}
 
-		private static boolean isValidBooleans(List<Object> client) {
+		private static boolean isValidBooleans(Map<String, Object> client) {
 			// Expecting wan at index 10 and shutdownInstall at index 11 as boolean strings
-			if (client.size() <= 11) {
-				return false;
-			}
-			return isBoolean((String) client.get(10)) && isBoolean((String) client.get(11));
+			return client.size() > 11 && isBoolean((String) client.get(HostInfo.CLIENT_WAN_CONFIG_KEY))
+					&& isBoolean((String) client.get(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY));
 		}
 
 		private static boolean isBoolean(String bool) {
@@ -143,9 +142,9 @@ final class AddClientValidator {
 
 	protected static class HostnameDomainValidator implements RowValidation {
 		@Override
-		public Result validate(List<Object> row, AddClientModel model) {
-			String hostname = (String) row.get(0);
-			String domain = (String) row.get(1);
+		public Result validate(Map<String, Object> row, AddClientModel model) {
+			String hostname = (String) row.get(HostInfo.HOSTNAME_KEY);
+			String domain = (String) row.get("domain");
 
 			if (!areValuesValid(hostname, domain)) {
 				return Result.drop(new AddClientEffect.UIEffect.ShowErrorMessage(Configed.getResourceValue("error"),
@@ -164,9 +163,9 @@ final class AddClientValidator {
 
 	protected static class HostCollisionValidator implements RowValidation {
 		@Override
-		public Result validate(List<Object> row, AddClientModel model) {
-			String hostname = (String) row.get(0);
-			String domain = (String) row.get(1);
+		public Result validate(Map<String, Object> row, AddClientModel model) {
+			String hostname = (String) row.get(HostInfo.HOSTNAME_KEY);
+			String domain = (String) row.get("domain");
 			String opsiHostKey = hostname + "." + domain;
 
 			if (!model.getHostnames().contains(opsiHostKey)) {
@@ -185,8 +184,8 @@ final class AddClientValidator {
 
 	protected static class NetbiosValidator implements RowValidation {
 		@Override
-		public Result validate(List<Object> row, AddClientModel model) {
-			String hostname = (String) row.get(0);
+		public Result validate(Map<String, Object> row, AddClientModel model) {
+			String hostname = (String) row.get(HostInfo.HOSTNAME_KEY);
 
 			if (!requiresNetbiosConfirmation(hostname)) {
 				return Result.success();

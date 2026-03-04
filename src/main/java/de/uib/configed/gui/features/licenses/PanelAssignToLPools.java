@@ -98,7 +98,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		panel.add(label("PanelAssignToLPools.Licenses.SectiontitleWindowsSoftware2LPool.supplement"));
 		panel.add(createWorkNameBasedPanel(), "growx, push");
-		panel.add(createDirectionOfAssignmentPanelPanel(), "growx, push");
+		panel.add(createDirectionOfAssignmentPanel(), "growx, push");
 
 		return panel;
 	}
@@ -139,23 +139,14 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		};
 	}
 
-	private JPanel createDirectionOfAssignmentPanelPanel() {
-		PanelStateSwitch<SoftwareDirectionOfAssignment> dirSwitch = createDirectionOfAssignmentPanel();
-		JPanel panel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE, "[grow, fill]", ""));
-		panel.add(dirSwitch, "growx, pushx");
-		return panel;
-	}
-
-	private PanelStateSwitch<ControlPanelAssignToLPools.SoftwareDirectionOfAssignment> createDirectionOfAssignmentPanel() {
+	private PanelStateSwitch<SoftwareDirectionOfAssignment> createDirectionOfAssignmentPanel() {
 		return new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
-				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE,
-				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.values(),
+				SoftwareDirectionOfAssignment.POOL2SOFTWARE, SoftwareDirectionOfAssignment.values(),
 				new String[] { text("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
 						text("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL") },
-				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.class,
-				val -> ((ControlPanelAssignToLPools) controller).setSoftwareDirectionOfAssignment(
-						(ControlPanelAssignToLPools.SoftwareDirectionOfAssignment) val));
+				SoftwareDirectionOfAssignment.class, val -> ((ControlPanelAssignToLPools) controller)
+						.setSoftwareDirectionOfAssignment((SoftwareDirectionOfAssignment) val));
 	}
 
 	private JPanel createInfoConfigWindowsSoftwarePanel() {
@@ -188,13 +179,13 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		return panel;
 	}
 
-	private PanelStateSwitch<ControlPanelAssignToLPools.SoftwareShowAllMeans> createSoftwareSelectionPanel() {
+	private PanelStateSwitch<SoftwareShowAllMeans> createSoftwareSelectionPanel() {
 		return new PanelStateSwitch<>(null, SoftwareShowAllMeans.ALL, SoftwareShowAllMeans.values(),
 				new String[] { text("PanelAssignToLPools.radiobuttonALL"),
 						text("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
 						text("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING") },
-				ControlPanelAssignToLPools.SoftwareShowAllMeans.class, val -> ((ControlPanelAssignToLPools) controller)
-						.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val));
+				SoftwareShowAllMeans.class,
+				val -> ((ControlPanelAssignToLPools) controller).setSoftwareShowAllMeans((SoftwareShowAllMeans) val));
 	}
 
 	private void createLicenseTables() {
@@ -234,8 +225,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected ",
 				panelRadiobuttonsPreselectionForName2Pool.getValue());
 		fSoftwarename2LicensePool.setPreselectionForName2Pool(
-				(Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
-						.getValue());
+				(Softwarename2LicensepoolRestriction) panelRadiobuttonsPreselectionForName2Pool.getValue());
 
 		fSoftwarename2LicensePool.show();
 

@@ -154,11 +154,11 @@ public final class Logging {
 		File logDirectory = getDirectory();
 		File currentLogfile = new File(getCurrentLogfilePath());
 		File updatedLogFile = new File(logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_"
-				+ executioner.getHost() + "_" + executioner.getUsername() + extension);
+				+ executioner.getHostData().getHost() + "_" + executioner.getHostData().getUser() + extension);
 
 		if (NUMBER_OF_LOG_FILES > 0) {
-			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, executioner.getHost(),
-					executioner.getUsername());
+			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, executioner.getHostData().getHost(),
+					executioner.getHostData().getUser());
 		}
 
 		closeLogWriter();
@@ -201,7 +201,7 @@ public final class Logging {
 			baseLogDirectoryPath = logDirectory.getAbsolutePath();
 		}
 
-		if (executioner != null && executioner.getHost() != null) {
+		if (executioner != null && executioner.getHostData().getHost() != null) {
 			logDirectory = changeLogDirectory(logDirectory);
 		}
 
@@ -224,8 +224,8 @@ public final class Logging {
 
 	private static File changeLogDirectory(File logDirectory) {
 		final ServerFacade executioner = PersistenceControllerFactory.getPersistenceController().getExecutioner();
-		String newDirPath = logDirectory.getAbsolutePath() + File.separator + executioner.getHost() + File.separator
-				+ LOGS_DIR;
+		String newDirPath = logDirectory.getAbsolutePath() + File.separator + executioner.getHostData().getHost()
+				+ File.separator + LOGS_DIR;
 		File newLogDirectory = new File(newDirPath);
 
 		if (!newLogDirectory.exists()) {
@@ -514,8 +514,7 @@ public final class Logging {
 
 			JOptionPane optionPane = new JOptionPane(scrollPane);
 
-			dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("problemsOccurred"));
+			dialog = optionPane.createDialog(Configed.getResourceValue("problemsOccurred"));
 			dialog.setModal(false);
 
 			/**
@@ -534,7 +533,7 @@ public final class Logging {
 
 		// Get the text as a string, each element separated by a newline
 		jTextArea.setText(errorList.toString().replace("[", "").replace("]", "").replace(",", "\n"));
-		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setLocationRelativeTo(ConfigedMain.getVisibleFrame());
 		dialog.setVisible(true);
 	}
 

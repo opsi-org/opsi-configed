@@ -6,8 +6,6 @@
 
 package de.uib.configed.core.domain.serverdata.dataservice;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,11 +41,8 @@ public class UserDataService extends DataService {
 	}
 
 	private String getOTPSecret(String userId) {
-		List<String> callAttributes = new ArrayList<>();
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("id", userId);
-		List<Map<String, Object>> result = dataServices.exec.getListOfMaps(RPCMethodName.USER_GET_OBJECTS,
-				callAttributes, callFilter);
+		List<Map<String, Object>> result = dataServices.exec.getListOfMaps(RPCMethodName.USER_GET_OBJECTS, List.of(),
+				Map.of("id", userId));
 
 		if (result.isEmpty()) {
 			return null;

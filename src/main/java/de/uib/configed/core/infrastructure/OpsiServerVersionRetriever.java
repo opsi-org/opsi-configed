@@ -73,10 +73,7 @@ public class OpsiServerVersionRetriever {
 	 * @param compareVersion version to compare to of format x.y.z...
 	 */
 	public boolean isServerVersionAtLeast(String compareVersion) {
-		if (compareVersion == null) {
-			return false;
-		}
-		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
+		return compareVersion != null && serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}
 
 	public String getServerVersion() {

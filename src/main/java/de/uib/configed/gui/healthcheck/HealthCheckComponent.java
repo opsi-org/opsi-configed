@@ -29,13 +29,11 @@ import java.util.zip.ZipOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -45,6 +43,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
 import org.json.JSONObject;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -309,7 +310,8 @@ public class HealthCheckComponent extends
 	}
 
 	private static String getDirectoryLocation() {
-		String dirname = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHost();
+		String dirname = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHostData()
+				.getHost();
 		if (dirname.contains(":")) {
 			dirname = dirname.replace(":", "_");
 		}
@@ -329,21 +331,20 @@ public class HealthCheckComponent extends
 	}
 
 	public void saveAsZip() {
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		jFileChooser.setFileHidingEnabled(false);
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
-		jFileChooser.addChoosableFileFilter(fileFilter);
-		jFileChooser.setAcceptAllFileFilterUsed(false);
+		SystemFileChooser fileChooser = new SystemFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Zip file (.zip)", "zip"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
+		int returnValue = fileChooser.showSaveDialog(ConfigedMain.getMainFrame());
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			String fileName = jFileChooser.getSelectedFile().getAbsolutePath();
+		if (returnValue == SystemFileChooser.APPROVE_OPTION) {
+			String fileName = fileChooser.getSelectedFile().getAbsolutePath();
 			if (!fileName.endsWith(".zip")) {
 				fileName = fileName.concat(".zip");
 			}
 
-			String dirname = persistenceController.getExecutioner().getHost();
+			String dirname = persistenceController.getExecutioner().getHostData().getHost();
 
 			if (dirname.contains(":")) {
 				dirname = dirname.replace(":", "_");

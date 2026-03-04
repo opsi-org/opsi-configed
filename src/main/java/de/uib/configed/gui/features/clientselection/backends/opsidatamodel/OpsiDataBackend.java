@@ -6,9 +6,9 @@
 
 package de.uib.configed.gui.features.clientselection.backends.opsidatamodel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -171,7 +171,7 @@ public final class OpsiDataBackend {
 		Logging.debug(this, "createFromOperationData ", operation.getClassName());
 
 		if (operation instanceof AbstractSelectGroupOperation groupOperation) {
-			List<AbstractSelectOperation> children = new LinkedList<>();
+			List<AbstractSelectOperation> children = new ArrayList<>();
 			for (AbstractSelectOperation child : groupOperation.getChildOperations()) {
 				children.add((AbstractSelectOperation) createExecutableOperation(child));
 			}
@@ -389,7 +389,7 @@ public final class OpsiDataBackend {
 	}
 
 	private List<OpsiDataClient> getClients() {
-		List<OpsiDataClient> clients = new LinkedList<>();
+		List<OpsiDataClient> clients = new ArrayList<>();
 
 		checkInitData();
 
@@ -445,7 +445,7 @@ public final class OpsiDataBackend {
 			Map<String, Object> hardwareMapLocalized = hwConfigLocalized.get(i);
 			String hardwareName = (String) Map.class.cast(hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) Map.class.cast(hardwareMapLocalized.get("Class")).get("UI");
-			List<AbstractSelectElement> elementList = new LinkedList<>();
+			List<AbstractSelectElement> elementList = new ArrayList<>();
 			List<Map<String, Object>> values = POJOReMapper.remap(hardwareMap.get("Values"));
 			List<Map<String, Object>> valuesLocalized = POJOReMapper.remap(hardwareMapLocalized.get("Values"));
 			for (int j = 0; j < values.size(); j++) {
@@ -496,7 +496,7 @@ public final class OpsiDataBackend {
 		hardwareOnClient = persistenceController.getDataServices().hardware.getHardwareOnClientPD();
 		clientToHardware = new HashMap<>();
 		for (String clientName : clientNames) {
-			clientToHardware.put(clientName, new LinkedList<>());
+			clientToHardware.put(clientName, new ArrayList<>());
 		}
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(OpsiServiceNOMPersistenceController.HOST_KEY);
@@ -509,11 +509,8 @@ public final class OpsiDataBackend {
 	}
 
 	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients(Set<String> clientNames) {
-		if (!hasSwAudit) {
-			return new HashMap<>();
-		} else {
-			return persistenceController.getDataServices().software.getSoftwareAuditOnClients(clientNames);
-		}
+		return hasSwAudit ? persistenceController.getDataServices().software.getSoftwareAuditOnClients(clientNames)
+				: new HashMap<>();
 	}
 
 	private void getHardwareConfig() {

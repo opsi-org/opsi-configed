@@ -86,7 +86,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 		HostInfo pcInfo = persistenceController.getDataServices().hostInfoCollections.getMapOfPCInfoMaps()
 				.get(targetClient);
 		values.put("%ipaddress%", pcInfo.getString(HostInfo.CLIENT_IP_ADDRESS_KEY));
-		values.put("%hardwareaddress%", pcInfo.getString(HostInfo.CLIENT_MAC_ADRESS_KEY));
+		values.put("%hardwareaddress%", pcInfo.getString(HostInfo.CLIENT_MAC_ADDRESS_KEY));
 		values.put("%inventorynumber%", pcInfo.getString(HostInfo.CLIENT_INVENTORY_NUMBER_KEY));
 		values.put("%opsihostkey%", pcInfo.getString(HostInfo.HOST_KEY_KEY));
 		values.put("%depotid%", pcInfo.getString(HostInfo.DEPOT_OF_CLIENT_KEY));

@@ -7,18 +7,14 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -79,10 +75,10 @@ public class SoftwareDataService extends DataService {
 		super(dataServices);
 	}
 
-	public NavigableSet<Object> getSoftwareWithoutAssociatedLicensePoolPD() {
+	public Set<Object> getSoftwareWithoutAssociatedLicensePoolPD() {
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
-				NavigableSet.class);
+				Set.class);
 	}
 
 	public List<String> getSoftwareListByLicensePoolPD(String licensePoolId) {
@@ -114,8 +110,7 @@ public class SoftwareDataService extends DataService {
 	}
 
 	public void retrieveRelationsAuditSoftwareToLicensePoolsPD() {
-		if (dataServices.cacheManager.isDataCached(Arrays.asList(
-				CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+		if (dataServices.cacheManager.isDataCached(List.of(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
 				CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL))) {
 			return;
@@ -124,7 +119,7 @@ public class SoftwareDataService extends DataService {
 		Map<String, String> fSoftware2LicensePool = new HashMap<>();
 		Map<String, List<String>> fLicensePool2SoftwareList = new HashMap<>();
 		Map<String, List<String>> fLicensePool2UnknownSoftwareList = new HashMap<>();
-		NavigableSet<String> softwareWithoutAssociatedLicensePool = new TreeSet<>(
+		Set<String> softwareWithoutAssociatedLicensePool = new TreeSet<>(
 				getInstalledSoftwareInformationForLicensingPD().keySet());
 
 		dataServices.cacheManager.setCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, fSoftware2LicensePool);
@@ -199,27 +194,25 @@ public class SoftwareDataService extends DataService {
 		Logging.info(this, "retrieveAuditSoftwareXLicensePool retrieved ");
 	}
 
-	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationPD() {
+	public Map<String, SWAuditEntry> getInstalledSoftwareInformationPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
-				NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, Map.class);
 	}
 
-	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensingPD() {
+	public Map<String, SWAuditEntry> getInstalledSoftwareInformationForLicensingPD() {
 		retrieveInstalledSoftwareInformationPD();
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
-				NavigableMap.class);
+				Map.class);
 	}
 
-	public NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfoPD() {
+	public Map<String, Map<String, String>> getInstalledSoftwareName2SWinfoPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
-				NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO, Map.class);
 	}
 
-	public NavigableMap<String, Set<String>> getName2SWIdentsPD() {
+	public Map<String, Set<String>> getName2SWIdentsPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return dataServices.cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, Map.class);
 	}
 
 	public Set<String> getSoftwareListPD() {
@@ -265,8 +258,8 @@ public class SoftwareDataService extends DataService {
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
-		if (dataServices.cacheManager.isDataCached(
-				Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+		if (dataServices.cacheManager
+				.isDataCached(List.of(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
 						CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
 						CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
 			return;
@@ -279,11 +272,11 @@ public class SoftwareDataService extends DataService {
 		List<Map<String, Object>> list = dataServices.exec.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
 				callAttributes);
 
-		NavigableMap<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
-		NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
-		NavigableMap<String, Set<String>> name2SWIdents = new TreeMap<>();
-		NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo = new TreeMap<>();
-		NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool = new TreeMap<>();
+		Map<String, SWAuditEntry> installedSoftwareInformation = new TreeMap<>();
+		Map<String, SWAuditEntry> installedSoftwareInformationForLicensing = new TreeMap<>();
+		Map<String, Set<String>> name2SWIdents = new TreeMap<>();
+		Map<String, Map<String, String>> installedSoftwareName2SWinfo = new TreeMap<>();
+		Map<String, Map<String, Map<String, String>>> name2ident2infoWithPool = new TreeMap<>();
 
 		int i = 0;
 		Logging.info(this, "getInstalledSoftwareInformation build map");
@@ -365,8 +358,7 @@ public class SoftwareDataService extends DataService {
 			executor.runInParallel(() -> {
 				for (Map<String, Object> item : getAuditSoftwareOnClients(clientListForCall)) {
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-					client2software.computeIfAbsent(clientEntry.getClientId(), v -> new LinkedList<>())
-							.add(clientEntry);
+					client2software.computeIfAbsent(clientEntry.getClientId(), v -> new ArrayList<>()).add(clientEntry);
 				}
 			});
 		}
@@ -590,8 +582,8 @@ public class SoftwareDataService extends DataService {
 			List<String> newList = new ArrayList<>(intermediateSet);
 			fLicensePool2SoftwareList.put(licensePoolId, newList);
 
-			NavigableSet<Object> softwareWithoutAssociatedLicensePool = dataServices.cacheManager
-					.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
+			Set<Object> softwareWithoutAssociatedLicensePool = dataServices.cacheManager
+					.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, Set.class);
 			softwareWithoutAssociatedLicensePool.addAll(entriesToRemove);
 			softwareWithoutAssociatedLicensePool.removeAll(softwareToAssign);
 
@@ -745,7 +737,7 @@ public class SoftwareDataService extends DataService {
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
 		if (!dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				|| dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+				|| dataServices.cacheManager.isDataCached(List.of(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
 						CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}
@@ -962,8 +954,7 @@ public class SoftwareDataService extends DataService {
 
 	private List<Map<String, Object>> getAuditSoftwareOnClients(List<String> clients) {
 		Logging.info(this, "getAuditSoftwareOnClients request started");
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("clientId", clients);
+		Map<String, Object> callFilter = Map.of("clientId", clients);
 
 		List<Map<String, Object>> softwareAuditOnClients = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS, new String[0], callFilter);

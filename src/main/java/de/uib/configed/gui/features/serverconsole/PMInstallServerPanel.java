@@ -76,11 +76,6 @@ public class PMInstallServerPanel extends PMInstallPanel {
 
 		SingleCommandOpsiPackageManagerInstall com = new SingleCommandOpsiPackageManagerInstall();
 		com.setOpsiproduct(product.replace("\n", ""));
-
-		if (com.checkCommand()) {
-			return com;
-		} else {
-			return null;
-		}
+		return com.checkCommand() ? com : null;
 	}
 }

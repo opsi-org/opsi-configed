@@ -70,9 +70,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private List<String> sortedProductsList;
 
-	private int onGoingCollectiveChangeEventCount = -1;
-
-	private Map<Integer, Map<String, String>> changeEventCount2product2request;
+	private Map<String, String> product2request = new HashMap<>();
 
 	// state key (column name) --> product name --> visual value
 	private Map<String, Map<String, String>> combinedVisualValues;
@@ -497,13 +495,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private void checkForContradictingAssignments(String clientId, String product, String stateType, String state) {
-		if (changeEventCount2product2request == null) {
-			changeEventCount2product2request = new HashMap<>();
-		}
-
-		Map<String, String> product2request = changeEventCount2product2request
-				.computeIfAbsent(onGoingCollectiveChangeEventCount, arg -> new HashMap<>());
-
 		Logging.debug(this, "checkForContradictingAssignments === product2request ", product2request);
 
 		String existingRequest = product2request.get(product);
@@ -517,8 +508,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					", product ", product, ", stateType ", stateType, ", state ", state);
 		} else {
 			boolean contradicting = !existingRequest.equals(state);
-			info = info + " for onGoingCollectiveChangeEventCount " + onGoingCollectiveChangeEventCount
-					+ " contradicting " + contradicting;
+			info = info + " contradicting " + contradicting;
 			if (contradicting) {
 				if (actualProduct.equals(product)) {
 					Logging.info(this, "checkForContradictingAssignments new setting for product is ", state);
@@ -557,8 +547,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			}
 		}
 
-		Logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request ",
-				onGoingCollectiveChangeEventCount, ": ", product2request);
+		Logging.info(this, "checkForContradictingAssignments === product2request ", ": ", product2request);
 	}
 
 	private void setChangedState(String clientId, String product, String stateType, String state) {
@@ -610,7 +599,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	public void initCollectiveChange() {
 		Logging.debug(this, "initCollectiveChange");
-		setOnGoingCollectiveChangeCount();
+		product2request = new HashMap<>();
 		missingImplementationForAR.clear();
 	}
 
@@ -926,7 +915,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			// Add in values in correct ordering
 			String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
-			actionsForProduct.retainAll(Arrays.asList(displayLabels));
+			actionsForProduct.retainAll(List.of(displayLabels));
 
 			Logging.debug("Possible actions as array  ", actionsForProduct);
 		}
@@ -1060,11 +1049,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	@Override
 	public int getRowCount() {
-		if (filter == null) {
-			return sortedProductsList.size();
-		} else {
-			return filter.length;
-		}
+		return filter == null ? sortedProductsList.size() : filter.length;
 	}
 
 	@Override
@@ -1076,10 +1061,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		String product = sortedProductsList.get(originRow(row));
 
 		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(product);
-	}
-
-	private void setOnGoingCollectiveChangeCount() {
-		onGoingCollectiveChangeEventCount++;
 	}
 
 	// this method may be overwritten e.g.for row filtering but retrieveValue

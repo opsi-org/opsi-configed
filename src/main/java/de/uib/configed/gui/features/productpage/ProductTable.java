@@ -7,7 +7,6 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,7 +19,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.productstate.InstallationStatus;
 import de.uib.configed.gui.Configed;
@@ -107,7 +105,7 @@ public class ProductTable extends JTable {
 			Set<String> productIds = AbstractGroupTree.getChildrenRecursively(node);
 			setFilter(productIds);
 		} else {
-			Set<String> productIds = Collections.singleton(node.toString());
+			Set<String> productIds = Set.of(node.toString());
 			setFilter(productIds);
 			setPendingSelection(productIds);
 		}
@@ -160,7 +158,7 @@ public class ProductTable extends JTable {
 		List<? extends SortKey> saveSortKeys = getSortKeys();
 		if (saveSortKeys == null || saveSortKeys.isEmpty() || getColumnCount() == 0) {
 			Logging.debug(this, "getSortedNames sort keys is null or empty");
-			return Collections.emptyMap();
+			return Map.of();
 		}
 		Logging.debug(this, "getSortedNames sort keys ", saveSortKeys);
 		// This needs to be a LinkedHashMap since the ordering is important
@@ -233,11 +231,7 @@ public class ProductTable extends JTable {
 
 	@SuppressWarnings("java:S1452")
 	public List<? extends SortKey> getSortKeys() {
-		if (getRowSorter() != null) {
-			return getRowSorter().getSortKeys();
-		} else {
-			return getPrimaryOrderingKeys();
-		}
+		return getRowSorter() != null ? getRowSorter().getSortKeys() : getPrimaryOrderingKeys();
 	}
 
 	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
@@ -309,23 +303,29 @@ public class ProductTable extends JTable {
 		return strippIt;
 	}
 
-	public void valueChanged(boolean doSelection, TreePath[] selectionPaths) {
-		if (selectionPaths == null) {
+	public void valueChanged(boolean doSelection, List<DefaultMutableTreeNode> filteredNodes) {
+		if (filteredNodes.isEmpty()) {
 			setFilter(null);
-		} else if (selectionPaths.length == 1) {
-			nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
+		} else if (filteredNodes.size() == 1) {
+			nodeSelection(filteredNodes.get(0));
 		} else {
 			Set<String> productIds = new HashSet<>();
-			for (TreePath path : selectionPaths) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-				if (!node.getAllowsChildren()) {
-					productIds.add(node.getUserObject().toString());
+			Set<String> selectedValues = new HashSet<>();
+
+			for (DefaultMutableTreeNode node : filteredNodes) {
+				if (node.getAllowsChildren()) {
+					AbstractGroupTree.addAllDescendants(node, productIds);
+				} else {
+					String value = node.getUserObject().toString();
+					productIds.add(value);
+					selectedValues.add(value);
 				}
 			}
+
 			setFilter(productIds);
 
 			if (doSelection) {
-				setPendingSelection(productIds);
+				setPendingSelection(selectedValues);
 			}
 		}
 	}

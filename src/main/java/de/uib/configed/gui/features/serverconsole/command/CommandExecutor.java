@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -65,6 +66,11 @@ public class CommandExecutor implements MessagebusListener {
 		this.multiCommand = multiCommand;
 	}
 
+	/**
+	 * Enables or disables GUI mode.
+	 * <p>
+	 * GUI mode must be enabled before calling {@link #executeAsync()}.
+	 */
 	public void setWithGUI(boolean withGUI) {
 		this.withGUI = withGUI;
 	}
@@ -102,36 +108,71 @@ public class CommandExecutor implements MessagebusListener {
 		return terminalFrame.getFrame();
 	}
 
-	public String execute() {
-		if (singleCommand == null && multiCommand == null) {
-			return null;
+	/**
+	 * Executes the command asynchronously and returns immediately.
+	 * <p>
+	 * This method is intended for GUI usage only. The executor must be
+	 * configured with GUI support before calling this method (i.e.
+	 * {@link #setWithGUI(boolean)} must be called with {@code true}).
+	 * <p>
+	 * The command is executed in a background thread. UI initialization and
+	 * result handling are performed on the Swing Event Dispatch Thread (EDT).
+	 *
+	 * @throws IllegalStateException if GUI mode is not enabled
+	 */
+	public void executeAsync() {
+		if (!withGUI) {
+			throw new IllegalStateException("executeAsync() requires GUI mode; call setWithGUI(true)");
 		}
 
+		SwingUtilities.invokeLater(() -> {
+			showTerminalFrame();
+
+			// We can start this only after the terminal frame components are created, because
+			// this will write progress messages to the terminal frame.
+			new Thread(this::runCommand, "CommandExecutor-Thread").start();
+		});
+	}
+
+	private void showTerminalFrame() {
+		terminalFrame.setMessagebus(Messagebus.getInstance());
+		if (getDialog() == null || !getDialog().isVisible()) {
+			terminalFrame.display();
+		} else {
+			terminalFrame.getTabbedPane().getSelectedTerminalWidget().clearScreen();
+			getDialog().toFront();
+		}
+
+		terminalFrame.disableUserInputForSelectedWidget();
+	}
+
+	/**
+	 * Executes the command synchronously. Blocks until finished and returns the
+	 * result. Must NOT be called on the EDT.
+	 */
+	public String execute() {
+		if (SwingUtilities.isEventDispatchThread()) {
+			throw new IllegalStateException("execute must not be called on the EDT");
+		}
+
+		return runCommand();
+	}
+
+	private String runCommand() {
 		stopCommandExecution = false;
 
-		terminalFrame.setMessagebus(Messagebus.getInstance());
-		if (withGUI) {
-			if (getDialog() == null || !getDialog().isVisible()) {
-				terminalFrame.display();
-			} else {
-				terminalFrame.getTabbedPane().getSelectedTerminalWidget().clearScreen();
-				getDialog().toFront();
-			}
-			terminalFrame.disableUserInputForSelectedWidget();
-		}
+		Messagebus.getInstance().getWebSocket().registerListener(this);
 
-		Messagebus.getInstance().getWebSocket().registerListener(CommandExecutor.this);
-
-		if (singleCommand != null) {
-			startBackgroundThread(() -> {
+		try {
+			if (singleCommand != null) {
 				execute(singleCommand);
-				Messagebus.getInstance().getWebSocket().unregisterListener(CommandExecutor.this);
-			});
-		} else {
-			startBackgroundThread(this::handleMultiCommand);
+			} else {
+				handleMultiCommand();
+			}
+			return commandProcess != null ? commandProcess.getResult() : "";
+		} finally {
+			Messagebus.getInstance().getWebSocket().unregisterListener(this);
 		}
-
-		return commandProcess != null ? commandProcess.getResult() : "";
 	}
 
 	private void handleMultiCommand() {
@@ -187,20 +228,6 @@ public class CommandExecutor implements MessagebusListener {
 				.matcher(parameterParser.parseParameter(command, this).getCommand()).replaceAll(" ");
 		commandProcess = new CommandProcess(locker, commandRepresentation);
 		commandProcess.sendProcessStartRequest();
-	}
-
-	private void startBackgroundThread(Runnable runnable) {
-		Thread backgroundThread = new Thread(runnable);
-		backgroundThread.start();
-
-		if (!withGUI) {
-			try {
-				backgroundThread.join();
-			} catch (InterruptedException e) {
-				Logging.warning(this, "Thread was interrupted");
-				Thread.currentThread().interrupt();
-			}
-		}
 	}
 
 	@Override

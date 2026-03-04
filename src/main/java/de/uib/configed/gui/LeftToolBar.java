@@ -157,7 +157,7 @@ public class LeftToolBar extends JToolBar {
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
 				CommandExecutor executor = new CommandExecutor(configedMain, com);
-				executor.execute();
+				executor.executeAsync();
 			});
 
 			String parentMenuName = parentMenu.getText();

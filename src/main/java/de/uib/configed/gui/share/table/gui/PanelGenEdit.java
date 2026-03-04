@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,7 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SortOrder;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -143,8 +142,9 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		add(jLabelTitle, "gapbottom " + Globals.MIN_GAP_SIZE);
 		add(tableSearchPane, "hidemode 3, gapbottom " + Globals.MIN_GAP_SIZE);
-		add(jScrollPane, "grow, push");
+		add(jScrollPane, "grow, push, hmin 20, h 100");
 		add(controlPanel, "hidemode 3, gaptop " + Globals.MIN_GAP_SIZE);
+
 	}
 
 	private JPanel initControlPanel() {
@@ -200,7 +200,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		return jScrollPane;
 	}
 
-	public void setSortOrder(Map<Integer, SortOrder> sortDescriptor) {
+	public void setSortOrder(List<SortKey> sortDescriptor) {
 		genEditTable.setSortDescriptor(sortDescriptor);
 	}
 

@@ -51,8 +51,7 @@ public class HardwareDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST)) {
 			return;
 		}
-		Map<String, String> filterMap = new HashMap<>();
-		filterMap.put("state", "1");
+		Map<String, String> filterMap = Map.of("state", "1");
 		List<Map<String, Object>> relationsAuditHardwareOnHost = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new String[0], filterMap);
 		dataServices.cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST,
@@ -93,12 +92,10 @@ public class HardwareDataService extends DataService {
 			return new HashMap<>();
 		}
 
-		List<String> callAttributes = new ArrayList<>();
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("hostId", clientId);
+		Map<String, String> callFilter = Map.of("hostId", clientId);
 
 		List<Map<String, Object>> hardwareInfos = dataServices.exec
-				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, callAttributes, callFilter);
+				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, Set.of(), callFilter);
 
 		// Every "lastseen" is the same for a client, so we take the first one
 		String scanTime = hardwareInfos.isEmpty() ? ""

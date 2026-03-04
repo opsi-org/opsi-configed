@@ -183,7 +183,7 @@ public class PackageManagerUninstallParameterDialog {
 
 	private void init() {
 		jLabelUninstall = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
-		jLabelLoglevel = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelLoglevel");
+		jLabelLoglevel = Utils.createBoldLabel("loglevel");
 
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -286,17 +286,8 @@ public class PackageManagerUninstallParameterDialog {
 			return;
 		}
 
-		Thread execThread = new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "start exec thread ");
-				CommandExecutor executor = new CommandExecutor(configedMain, commandPMUninstall);
-				executor.execute();
-				Logging.debug(this, "end exec thread");
-			}
-		};
-
-		execThread.start();
+		CommandExecutor executor = new CommandExecutor(configedMain, commandPMUninstall);
+		executor.executeAsync();
 	}
 
 	private void initLayout() {
@@ -305,9 +296,9 @@ public class PackageManagerUninstallParameterDialog {
 		uninstallPanel.add(jComboBoxOpsiProducts, "growx, gapbottom " + Globals.GAP_SIZE);
 		uninstallPanel.add(jLabelOn);
 		uninstallPanel.add(textFieldSelectedDepots, "split 2, growx, gapright " + Globals.GAP_SIZE);
-		uninstallPanel.add(jButtonDepotSelection, "wrap, gapbottom " + Globals.GAP_SIZE);
-		uninstallPanel.add(jLabelLoglevel);
-		uninstallPanel.add(jComboBoxLogLevel, "gapbottom " + Globals.GAP_SIZE);
-		uninstallPanel.add(checkBoxKeepFiles);
+		uninstallPanel.add(jButtonDepotSelection, "wrap");
+		uninstallPanel.add(jLabelLoglevel, "gaptop " + Globals.GAP_SIZE);
+		uninstallPanel.add(jComboBoxLogLevel);
+		uninstallPanel.add(checkBoxKeepFiles, "gaptop " + Globals.GAP_SIZE);
 	}
 }

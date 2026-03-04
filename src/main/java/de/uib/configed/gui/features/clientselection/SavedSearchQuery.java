@@ -15,40 +15,33 @@ import de.uib.configed.app.Main;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.type.Object2GroupEntry;
 import de.uib.configed.share.logging.Logging;
 
 /**
  * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
-	private String host;
-	private String user;
-	private String password;
-	private String otp;
-	private boolean sso;
+	private HostData hostData;
 	private String searchName;
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public SavedSearchQuery(String host, String user, String password, String otp, boolean sso, String searchName) {
-		setArgs(host, user, password, otp, sso, searchName);
+	public SavedSearchQuery(HostData hostData, String searchName) {
+		setArgs(hostData, searchName);
 		initConnection();
 	}
 
-	private void setArgs(String host, String user, String password, String otp, boolean sso, String searchName) {
-		Logging.info(this, "setArgs ", host, ", PASSWORD, ", searchName);
-		this.host = host;
-		this.user = user;
-		this.password = password;
-		this.otp = otp;
-		this.sso = sso;
+	private void setArgs(HostData hostData, String searchName) {
+		Logging.info(this, "setArgs ", hostData.getHost(), ", PASSWORD, ", searchName);
+		this.hostData = hostData;
 		this.searchName = searchName;
 	}
 
 	private void initConnection() {
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password, otp,
-				sso);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(hostData);
 
 		if (persistenceController == null
 				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
@@ -100,7 +93,8 @@ public class SavedSearchQuery {
 			Main.endApp(5);
 		}
 
-		if (!persistenceController.getDataServices().group.deleteGroup(groupName)) {
+		if (!persistenceController.getDataServices().group.deleteGroup(groupName,
+				Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
 			Logging.error("delete group error, groupName ", groupName);
 			Main.endApp(6);
 		}

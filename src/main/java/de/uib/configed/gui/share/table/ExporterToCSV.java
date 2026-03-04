@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
+
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.share.logging.Logging;
 
@@ -33,7 +34,6 @@ public class ExporterToCSV extends AbstractExportTable {
 
 		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
-		defaultExportFilename = "export.csv";
 		extension = THIS_EXTENSION;
 	}
 

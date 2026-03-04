@@ -10,8 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTextField;
@@ -39,42 +37,12 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		labelUser = Utils.createBoldLabel("username");
 
 		textFieldUser = new FlatTextField();
-		textFieldUser.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent documentEvent) {
-				changeUser();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent documentEvent) {
-				changeUser();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent documentEvent) {
-				changeUser();
-			}
-		});
+		textFieldUser.getDocument().addDocumentListener(Utils.onDocumentChange(this::changeUser));
 
 		labelPassword = Utils.createBoldLabel("password");
 		passwordField = new FlatPasswordField();
 
-		passwordField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent documentEvent) {
-				changePassw();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent documentEvent) {
-				changePassw();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent documentEvent) {
-				changePassw();
-			}
-		});
+		passwordField.getDocument().addDocumentListener(Utils.onDocumentChange(this::changePassw));
 
 		initLayout();
 	}

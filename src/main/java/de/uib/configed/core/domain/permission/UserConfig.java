@@ -7,7 +7,7 @@
 package de.uib.configed.core.domain.permission;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +66,9 @@ public class UserConfig {
 	public UserConfig(String userName) {
 		Logging.info(this, "create for ", userName);
 		this.username = userName;
-		booleanMap = new LinkedHashMap<>();
-		valuesMap = new LinkedHashMap<>();
-		possibleValuesMap = new LinkedHashMap<>();
+		booleanMap = new HashMap<>();
+		valuesMap = new HashMap<>();
+		possibleValuesMap = new HashMap<>();
 	}
 
 	public static Set<String> getUserBoolKeys() {

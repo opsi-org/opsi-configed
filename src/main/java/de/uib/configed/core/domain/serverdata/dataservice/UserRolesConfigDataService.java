@@ -7,7 +7,6 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -81,9 +80,22 @@ public class UserRolesConfigDataService extends DataService {
 				.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
-	public boolean hasCreateClientPermissionPD() {
-		return Boolean.TRUE.equals(
-				dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
+	public boolean canCreateClients() {
+		return !isGlobalReadOnly()
+				&& Boolean.TRUE.equals(dataServices.cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION,
+						Boolean.class))
+				&& !dataServices.config.getDisabledClientMenuEntries()
+						.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT);
+	}
+
+	public boolean canFreeLicenses() {
+		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_FREE_LICENSES);
+	}
+
+	public boolean canDeleteClients() {
+		return !isGlobalReadOnly() && !dataServices.config.getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_DELETE_CLIENT);
 	}
 
 	public boolean hasDepotsFullPermissionPD() {
@@ -161,7 +173,8 @@ public class UserRolesConfigDataService extends DataService {
 		boolean isViewServerConfiguration = ConfigedMain.getEditingTarget() == EditingTarget.SERVER;
 		boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
 				.getDataServices().userRoles.hasServerFullPermissionPD();
-		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getServerConfiguration();
+		ServerConfiguration serverConfiguration = ConfigedMain.getMainFrame().getMainPanelManager()
+				.getServerConfiguration();
 		boolean isCurrentUserRoleSelected = serverConfiguration != null
 				&& serverConfiguration.isCurrentUserRoleSelected();
 		return isViewServerConfiguration && hasServerFullPermission && isCurrentUserRoleSelected;
@@ -201,12 +214,10 @@ public class UserRolesConfigDataService extends DataService {
 
 		if (dataServices.config.getConfigDefaultValuesPD()
 				.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null || setUserRegisterVal) {
-			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
 					keyUserRegisterValue, "without given values the primary value setting is false");
-			readyObjects.add(item);
 
-			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, readyObjects);
+			dataServices.exec.doCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, List.of(item));
 		}
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(), dataServices.hostInfoCollections.getConfigServer(),
@@ -399,7 +410,7 @@ public class UserRolesConfigDataService extends DataService {
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			dataServices.cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
 		} else {
-			dataServices.cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
+			dataServices.cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.of());
 		}
 	}
 
@@ -537,7 +548,7 @@ public class UserRolesConfigDataService extends DataService {
 
 		if (applyUserSpecializedConfigPD()) {
 			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
-					+ dataServices.persistenceController.getExecutioner().getUsername() + "}.";
+					+ dataServices.persistenceController.getExecutioner().getHostData().getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
@@ -601,11 +612,9 @@ public class UserRolesConfigDataService extends DataService {
 
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 
-		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add(dataServices.config.getOpsiDefaultDomainPD());
+		List<Object> defaultValues = List.of(dataServices.config.getOpsiDefaultDomainPD());
 
-		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(dataServices.config.getOpsiDefaultDomainPD());
+		List<Object> possibleValues = List.of(dataServices.config.getOpsiDefaultDomainPD());
 
 		item.put("ident", OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
 		item.put("description", "saved domains for creating clients");
@@ -624,15 +633,10 @@ public class UserRolesConfigDataService extends DataService {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 		// key not yet configured
-		List<Object> defaultValues = new ArrayList<>();
+		List<Object> defaultValues = List.of();
 		// example for standard configuration other than empty
 		// extra columns for license management, page licenses reconciliation
-		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add("description");
-		possibleValues.add("inventoryNumber");
-		possibleValues.add("notes");
-		possibleValues.add("ipAddress");
-		possibleValues.add("lastSeen");
+		List<Object> possibleValues = List.of("description", "inventoryNumber", "notes", "ipAddress", "lastSeen");
 
 		// create config for service
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
@@ -655,12 +659,9 @@ public class UserRolesConfigDataService extends DataService {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
 				ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
 		// key not yet configured
-		List<Object> defaultValues = Collections.emptyList();
+		List<Object> defaultValues = List.of();
 
-		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(ITEM_ADD_CLIENT);
-		possibleValues.add(ITEM_DELETE_CLIENT);
-		possibleValues.add(ITEM_FREE_LICENSES);
+		List<Object> possibleValues = List.of(ITEM_ADD_CLIENT, ITEM_DELETE_CLIENT, ITEM_FREE_LICENSES);
 
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 		item.put("id", ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
@@ -680,13 +681,10 @@ public class UserRolesConfigDataService extends DataService {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
 				ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
 		// key not yet configured
-		List<Object> defaultValues = Collections
-				.singletonList(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
+		List<Object> defaultValues = List.of();
 
-		List<Object> possibleValues = new ArrayList<>();
-
-		possibleValues.add(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
-		possibleValues.add(OPSI_CLIENTD_EVENT_SILENT_INSTALL);
+		List<Object> possibleValues = List.of(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND,
+				OPSI_CLIENTD_EVENT_SILENT_INSTALL);
 
 		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 		item.put("id", ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);

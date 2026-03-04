@@ -17,9 +17,9 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneComponent;
@@ -29,9 +29,10 @@ import de.uib.configed.share.logging.Logging;
 
 public class LogTabComponent extends LogPaneComponent {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
+	private static final String LOGFILE_EXTENSION = ".log";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
-	private JFileChooser chooser;
+	private SystemFileChooser chooser;
 	private ConfigedMain configedMain;
 	private String logFileType;
 
@@ -52,7 +53,7 @@ public class LogTabComponent extends LogPaneComponent {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		Rectangle visibleRectangle = logTextPane.getVisibleRect();
 		int caretPosition = logTextPane.getCaretPosition();
-		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType, true);
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().setLogFileTab(logFileType, true);
 		SwingUtilities.invokeLater(() -> {
 			logTextPane.setCaretPosition(caretPosition);
 			logTextPane.scrollRectToVisible(visibleRectangle);
@@ -64,7 +65,7 @@ public class LogTabComponent extends LogPaneComponent {
 	public void download() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), logFileType);
-		String filePath = retrieveFilePath(fileName + ".log");
+		String filePath = retrieveFilePath(fileName + LOGFILE_EXTENSION);
 		if (filePath != null && !filePath.isEmpty()) {
 			saveToFile(filePath, getLines());
 		}
@@ -125,7 +126,7 @@ public class LogTabComponent extends LogPaneComponent {
 		chooser.setSelectedFile(f);
 
 		int returnVal = chooser.showSaveDialog(ConfigedMain.getMainFrame());
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 
@@ -133,11 +134,12 @@ public class LogTabComponent extends LogPaneComponent {
 	}
 
 	private void setFileChooser() {
-		chooser = new JFileChooser();
+		chooser = new SystemFileChooser();
 		chooser.setFileHidingEnabled(false);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setFileFilter(new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
-		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
+		chooser.setFileFilter(new SystemFileChooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log",
+				"zip", "gz", "7z"));
+		chooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
 	}
 
@@ -173,7 +175,7 @@ public class LogTabComponent extends LogPaneComponent {
 				if (logFiles.get(ident) != null && logFiles.get(ident).split("\n").length > 1) {
 					String fileName = retrieveFileName(configedMain.getSelectedClients().get(0).replace(".", "_"),
 							ident);
-					ZipEntry entry = new ZipEntry(fileName + ".log");
+					ZipEntry entry = new ZipEntry(fileName + LOGFILE_EXTENSION);
 					out.putNextEntry(entry);
 					writeToOutputStream(logFiles.get(ident).split("\n"), out);
 				}
@@ -186,7 +188,7 @@ public class LogTabComponent extends LogPaneComponent {
 	private static void saveToZipFile(String filePath, String fileName, String[] lines) {
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(filePath))) {
 			out.setMethod(ZipOutputStream.DEFLATED);
-			ZipEntry entry = new ZipEntry(fileName);
+			ZipEntry entry = new ZipEntry(fileName + LOGFILE_EXTENSION);
 			out.putNextEntry(entry);
 			writeToOutputStream(lines, out);
 		} catch (IOException ex) {

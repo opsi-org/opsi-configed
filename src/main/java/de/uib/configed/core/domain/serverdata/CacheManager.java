@@ -6,7 +6,6 @@
 
 package de.uib.configed.core.domain.serverdata;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public final class CacheManager {
 
 	// This is a list of caches that we want to keep in a reload since it contains data about the GUI
 	// that should not change.
-	private List<CacheIdentifier> cacheToKeep = Arrays.asList(CacheIdentifier.HOST_DISPLAY_FIELDS,
+	private List<CacheIdentifier> cacheToKeep = List.of(CacheIdentifier.HOST_DISPLAY_FIELDS,
 			CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
 			CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS);
 

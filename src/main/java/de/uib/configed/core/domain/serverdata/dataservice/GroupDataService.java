@@ -53,8 +53,7 @@ public class GroupDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(CacheIdentifier.PRODUCT_GROUPS)) {
 			return;
 		}
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
+		Map<String, String> callFilter = Map.of("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		Map<String, Map<String, String>> result = dataServices.exec.getStringMappedObjectsByKey(
 				RPCMethodName.GROUP_GET_OBJECTS, new Object[] { new String[0], callFilter }, "ident",
 				new String[] { "id", "parentGroupId", "description" },
@@ -71,8 +70,7 @@ public class GroupDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(CacheIdentifier.HOST_GROUPS)) {
 			return;
 		}
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+		Map<String, String> callFilter = Map.of("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 
 		List<Map<String, Object>> result = dataServices.exec.getListOfMaps(RPCMethodName.GROUP_GET_OBJECTS,
 				new String[0], callFilter);
@@ -175,8 +173,7 @@ public class GroupDataService extends DataService {
 		if (dataServices.cacheManager.isDataCached(cacheId)) {
 			return;
 		}
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("groupType", groupType);
+		Map<String, String> callFilter = Map.of("groupType", groupType);
 		Map<String, Map<String, String>> mappedRelations = dataServices.exec.getStringMappedObjectsByKey(
 				RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS, new Object[] { new String[0], callFilter }, "ident",
 				new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
@@ -406,7 +403,11 @@ public class GroupDataService extends DataService {
 		return result;
 	}
 
-	public boolean deleteGroup(String groupId) {
+	public boolean deleteGroup(String groupId, String type) {
+		return deleteGroups(List.of(groupId), type);
+	}
+
+	public boolean deleteGroups(List<String> groupId, String type) {
 		if (!dataServices.userRoles.hasServerFullPermissionPD()) {
 			return false;
 		}
@@ -418,10 +419,21 @@ public class GroupDataService extends DataService {
 		boolean result = dataServices.exec.doCall(RPCMethodName.GROUP_DELETE, groupId);
 
 		if (result) {
-			dataServices.persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+			reloadGroupBasedOnType(type);
 		}
 
 		return result;
+	}
+
+	private void reloadGroupBasedOnType(String type) {
+		if (type == null) {
+			return;
+		}
+		if (type.equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
+			dataServices.persistenceController.reloadData(CacheIdentifier.HOST_GROUPS.toString());
+		} else {
+			dataServices.persistenceController.reloadData(CacheIdentifier.PRODUCT_GROUPS.toString());
+		}
 	}
 
 	public boolean updateGroup(String groupId, Map<String, String> updateInfo, boolean isHostGroup) {

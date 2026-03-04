@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -306,7 +305,7 @@ public class OpsiDataSerializer {
 	private List<AbstractSelectOperation> buildChildOperations(OperationNode node,
 			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
 		List<OperationNode> childrenData = node.children();
-		List<AbstractSelectOperation> children = new LinkedList<>();
+		List<AbstractSelectOperation> children = new ArrayList<>();
 		if (childrenData != null) {
 			for (OperationNode child : childrenData) {
 				children.add(getOperation(child, hardware));
@@ -446,10 +445,10 @@ public class OpsiDataSerializer {
 			// producing compatibility for version without GroupWithSubgroupsElement
 			elementName = GroupElement.class.getSimpleName();
 			refinedElement = GroupWithSubgroupsElement.class.getSimpleName();
-			elementPath = Arrays.asList(element.getPathArray());
+			elementPath = List.of(element.getPathArray());
 		} else {
 			elementName = element.getClassName();
-			elementPath = Arrays.asList(element.getPathArray());
+			elementPath = List.of(element.getPathArray());
 		}
 
 		String operationName = operation.getClassName();
@@ -458,7 +457,7 @@ public class OpsiDataSerializer {
 
 		List<OperationNode> children = null;
 		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			children = new LinkedList<>();
+			children = new ArrayList<>();
 			for (AbstractSelectOperation child : abstractSelectGroupOperation.getChildOperations()) {
 				children.add(produceOperationNode(child));
 			}

@@ -6,12 +6,10 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -88,9 +86,9 @@ public class LicenseDataService extends DataService {
 		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS, Map.class);
 	}
 
-	public NavigableMap<String, NavigableSet<String>> getLicenseContractsToNotifyPD() {
+	public Map<String, Set<String>> getLicenseContractsToNotifyPD() {
 		retrieveLicenseContractsPD();
-		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, NavigableMap.class);
+		return dataServices.cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, Map.class);
 	}
 
 	public void retrieveLicenseContractsPD() {
@@ -101,7 +99,7 @@ public class LicenseDataService extends DataService {
 
 		String today = new java.sql.Date(System.currentTimeMillis()).toString();
 		Map<String, LicenseContractEntry> licenseContracts = new HashMap<>();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = new TreeMap<>();
+		Map<String, Set<String>> contractsToNotify = new HashMap<>();
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			List<Map<String, Object>> retrieved = dataServices.exec
 					.getListOfMaps(RPCMethodName.LICENSE_CONTRACT_GET_OBJECTS);
@@ -112,8 +110,7 @@ public class LicenseDataService extends DataService {
 
 				String notiDate = entry.get(LicenseContractEntry.NOTIFICATION_DATE_KEY);
 				if (notiDate != null && !notiDate.isBlank() && notiDate.compareTo(today) <= 0) {
-					NavigableSet<String> contractSet = contractsToNotify.computeIfAbsent(notiDate,
-							s -> new TreeSet<>());
+					Set<String> contractSet = contractsToNotify.computeIfAbsent(notiDate, s -> new TreeSet<>());
 
 					contractSet.add(entry.getId());
 				}
@@ -180,21 +177,17 @@ public class LicenseDataService extends DataService {
 	// retrieves the used software license - or tries to reserve one - for the given
 	// host and license pool
 	public String getLicenseUsage(String hostId, String licensePoolId) {
-		String result = null;
-		Map<String, Object> resultMap = null;
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId,
-					licensePoolId);
+			Map<String, Object> resultMap = dataServices.exec
+					.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId, licensePoolId);
 
 			if (!resultMap.isEmpty()) {
-				result = Utils
-						.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
-								"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+				return Utils.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
+						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
 
-		return result;
+		return null;
 	}
 
 	public String editLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
@@ -203,21 +196,17 @@ public class LicenseDataService extends DataService {
 			return null;
 		}
 
-		String result = null;
-		Map<String, Object> resultMap = null;
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE, softwareLicenseId,
-					licensePoolId, hostId, licenseKey, notes);
+			Map<String, Object> resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE,
+					softwareLicenseId, licensePoolId, hostId, licenseKey, notes);
 
 			if (!resultMap.isEmpty()) {
-				result = Utils
-						.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
-								"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+				return Utils.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
+						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
 
-		return result;
+		return null;
 	}
 
 	public void addDeletionLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId) {
@@ -356,8 +345,8 @@ public class LicenseDataService extends DataService {
 
 	public void retrieveLicensesUsagePD() {
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE,
-						CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
+				&& dataServices.cacheManager.isDataCached(
+						List.of(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;
 		}
 
@@ -419,17 +408,15 @@ public class LicenseDataService extends DataService {
 			return "";
 		}
 
-		String result = "";
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			if (dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_CREATE, licensePoolId, description)) {
-				result = licensePoolId;
+				return licensePoolId;
 			} else {
 				Logging.warning(this, "could not create licensepool ", licensePoolId);
 			}
 		}
 
-		return result;
+		return "";
 	}
 
 	public boolean deleteLicensePool(String licensePoolId) {
@@ -451,8 +438,6 @@ public class LicenseDataService extends DataService {
 			return "";
 		}
 
-		String result = "";
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
 
@@ -462,13 +447,13 @@ public class LicenseDataService extends DataService {
 			licensePool.put("productIds", licensePoolProductIds);
 
 			if (dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool)) {
-				result = licensePoolId;
+				return licensePoolId;
 			} else {
 				Logging.error(this, "could not update product ", productId, " to licensepool ", licensePoolId);
 			}
 		}
 
-		return result;
+		return "";
 	}
 
 	public boolean deleteRelationProductId2LPool(String productId, String licensePoolId) {
@@ -490,10 +475,7 @@ public class LicenseDataService extends DataService {
 	}
 
 	public Map<String, Object> getLicensePool(String licensePoolId) {
-		List<String> callAttributes = new ArrayList<>();
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("id", licensePoolId);
-		return dataServices.exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, callAttributes, callFilter)
-				.get(0);
+		Map<String, String> callFilter = Map.of("id", licensePoolId);
+		return dataServices.exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, Set.of(), callFilter).get(0);
 	}
 }

@@ -11,10 +11,11 @@ import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
@@ -51,20 +52,18 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jComboBoxAutoCompletion.setEnabled(true);
 		jButtonAutoCompletion = autocompletion.getButton();
 
-		JFileChooser jFileChooser = new JFileChooser();
-		jFileChooser.setFileHidingEnabled(false);
-		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		jFileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
-		jFileChooser.setFileFilter(filter);
+		SystemFileChooser fileChooser = new SystemFileChooser();
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
+		fileChooser.setDialogType(SystemFileChooser.OPEN_DIALOG);
+		fileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi"));
 
 		jButtonFileChooser = new JButton(Icons.getIntellijIcon("open"));
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = jFileChooser.showOpenDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String pathModules = jFileChooser.getSelectedFile().getPath();
+			if (fileChooser.showOpenDialog(this) == SystemFileChooser.APPROVE_OPTION) {
+				String pathModules = fileChooser.getSelectedFile().getPath();
 				jTextFieldPath.setText(pathModules);
 			} else {
 				jTextFieldPath.setText("");
@@ -73,10 +72,10 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initLayout() {
-		setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE, "[grow, fill][]", "[]0[]0[]"));
+		setLayout(new MigLayout("insets 0, fillx", "[grow, fill][]", "[]0[]" + Globals.GAP_SIZE + "[]0[]"));
 		add(jLabelUploadFrom, "wrap");
 		add(jTextFieldPath, "split 2, growx");
-		add(jButtonFileChooser, "wrap, gapbottom " + Globals.GAP_SIZE);
+		add(jButtonFileChooser, "wrap");
 		add(jLabelUploadTo, "wrap");
 		add(jComboBoxAutoCompletion, "split2, growx");
 		add(jButtonAutoCompletion, "wrap");

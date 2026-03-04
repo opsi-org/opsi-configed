@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -158,8 +157,8 @@ public final class EditTerminalCommandsDialog {
 		controlPanel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
 		controlPanel.add(labelMenuText);
 		controlPanel.add(jComboBoxMenuText, "split 2, growx");
-		controlPanel.add(buttonDelete, "align center, gapbottom " + Globals.GAP_SIZE + ", wrap");
-		controlPanel.add(labelParentMenuText);
+		controlPanel.add(buttonDelete, "align center, wrap");
+		controlPanel.add(labelParentMenuText, "gaptop " + Globals.GAP_SIZE);
 		controlPanel.add(jComboBoxParentMenuText, "growx, gapbottom " + Globals.GAP_SIZE);
 		controlPanel.add(labelTooltipText);
 		controlPanel.add(jTextFieldDescription, "growx, gapbottom " + Globals.GAP_SIZE);
@@ -290,14 +289,11 @@ public final class EditTerminalCommandsDialog {
 		Logging.debug(this, "doActionTestCommand buildCommand ", command);
 		Logging.debug(this, "doActionTestCommand buildCommand commandlist ", command.getCommands());
 
-		new Thread() {
-			@Override
-			public void run() {
-				executor.setMultiCommand(command);
-				executor.execute();
-				SwingUtilities.invokeLater(() -> jTextAreaCommands.requestFocus());
-			}
-		}.start();
+		Utils.runSwingWorker(() -> {
+			executor.setMultiCommand(command);
+			executor.executeAsync();
+			return null;
+		}, (Void _) -> jTextAreaCommands.requestFocus(), null);
 	}
 
 	private boolean canCommandBeSaved() {

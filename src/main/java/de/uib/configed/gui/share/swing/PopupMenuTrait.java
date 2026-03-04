@@ -9,7 +9,6 @@ package de.uib.configed.gui.share.swing;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -64,21 +63,21 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private JMenuItem[] menuItems;
 
-	private JComponent[] components;
+	private List<JComponent> components;
 
-	public PopupMenuTrait(Integer[] popups, Predicate<MouseEvent> condition, JComponent[] components) {
-		listPopups = Arrays.asList(popups);
+	public PopupMenuTrait(List<Integer> listPopups, Predicate<MouseEvent> condition, List<JComponent> components) {
+		this.listPopups = listPopups;
 		this.components = components;
-		menuItems = new JMenuItem[popups.length];
+		menuItems = new JMenuItem[listPopups.size()];
 
-		for (Integer popup : popups) {
+		for (Integer popup : listPopups) {
 			addPopup(popup);
 		}
 
 		PopupMouseListener.addPopupMouseListenerToComponents(this, condition, components);
 	}
 
-	public PopupMenuTrait(Integer[] popups, JComponent[] components) {
+	public PopupMenuTrait(List<Integer> popups, List<JComponent> components) {
 		this(popups, null, components);
 	}
 

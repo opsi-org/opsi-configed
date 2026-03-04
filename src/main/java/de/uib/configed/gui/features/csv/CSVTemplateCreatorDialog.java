@@ -28,7 +28,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -36,17 +35,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.gui.CheckBoxList;
 import de.uib.configed.gui.Configed;
@@ -98,17 +96,8 @@ public class CSVTemplateCreatorDialog {
 		ButtonGroup delimiterOptions = new ButtonGroup();
 		Stream.of(tabsOption, commaOption, semicolonOption, spaceOption, otherOption).forEach(delimiterOptions::add);
 
-		MaskFormatter maskFormatter;
-		try {
-			maskFormatter = new MaskFormatter("*");
-		} catch (ParseException e) {
-			Logging.debug(this, "INVALID MASK");
-			return null;
-		}
+		MaskFormatter maskFormatter = createMaskFormatter();
 
-		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
-		maskFormatter.setAllowsInvalid(false);
-		maskFormatter.setCommitsOnValidEdit(true);
 		otherDelimiterInput = new JFormattedTextField(maskFormatter);
 		otherDelimiterInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherDelimiterInput.setEnabled(false);
@@ -124,24 +113,14 @@ public class CSVTemplateCreatorDialog {
 		});
 
 		for (AbstractButton button : Collections.list(delimiterOptions.getElements())) {
-			button.addItemListener((ItemEvent e) -> {
-				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
-
-				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
-				}
-			});
+			button.addItemListener((e -> delimiterAction(button, otherOption, e)));
 		}
 
-		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
-			@Override
-			public void performAction() {
-				if (!otherDelimiterInput.getText().isEmpty()) {
-					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
-				}
+		otherDelimiterInput.getDocument().addDocumentListener(Utils.onDocumentChangeWithoutRemoveUpdate(() -> {
+			if (!otherDelimiterInput.getText().isEmpty()) {
+				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 			}
-		});
-
+		}));
 		JPanel centerPanel = new JPanel(new MigLayout("insets 0, wrap 1", "[grow]", "[]0"));
 
 		JLabel dataSelectionLabel = Utils.createBoldLabel("CSVTemplateCreatorDialog.dataSelectionLabel");
@@ -181,6 +160,28 @@ public class CSVTemplateCreatorDialog {
 		return centerPanel;
 	}
 
+	public static MaskFormatter createMaskFormatter() {
+		MaskFormatter maskFormatter;
+		try {
+			maskFormatter = new MaskFormatter("*");
+		} catch (ParseException e) {
+			Logging.warning(e, "INVALID MASK");
+			maskFormatter = new MaskFormatter();
+		}
+		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;+*");
+		maskFormatter.setAllowsInvalid(false);
+		maskFormatter.setCommitsOnValidEdit(true);
+		return maskFormatter;
+	}
+
+	private void delimiterAction(AbstractButton button, AbstractButton otherOption, ItemEvent e) {
+		otherDelimiterInput.setEnabled(e.getItem() == otherOption);
+
+		if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
+			format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
+		}
+	}
+
 	private static JRadioButton radio(String key, String cmd, boolean selected) {
 		JRadioButton b = new JRadioButton(Configed.getResourceValue(key));
 		b.setActionCommand(cmd);
@@ -205,25 +206,6 @@ public class CSVTemplateCreatorDialog {
 		return CSVImportDataModifier.getImportantHeaders().contains(header);
 	}
 
-	private static class InputListener implements DocumentListener {
-		public void performAction() {
-			/* Should be overridden in actual implementation */}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			performAction();
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			performAction();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			/* Not needed */}
-	}
-
 	public void createTemplate() {
 		boolean proceed = true;
 		for (JCheckBox headerCheckBox : headerCheckBoxes) {
@@ -237,16 +219,15 @@ public class CSVTemplateCreatorDialog {
 			return;
 		}
 
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		jFileChooser.setFileHidingEnabled(false);
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");
-		jFileChooser.addChoosableFileFilter(fileFilter);
-		jFileChooser.setAcceptAllFileFilterUsed(false);
+		SystemFileChooser fileChooser = new SystemFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("CSV (.csv)", "csv"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
+		int returnValue = fileChooser.showSaveDialog(ConfigedMain.getMainFrame());
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
+		if (returnValue == SystemFileChooser.APPROVE_OPTION) {
+			String csvFile = fileChooser.getSelectedFile().getAbsolutePath();
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
 			}

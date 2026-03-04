@@ -7,8 +7,6 @@
 package de.uib.configed.gui.features.clientselection.elements;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +25,7 @@ public class GenericTextElement extends AbstractSelectElement {
 
 	public GenericTextElement(String[] proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = Arrays.asList(proposedData);
+		this.proposedData = List.of(proposedData);
 	}
 
 	public GenericTextElement(String[] name, String... localizedName) {
@@ -36,7 +34,7 @@ public class GenericTextElement extends AbstractSelectElement {
 
 	@Override
 	public List<AbstractSelectOperation> supportedOperations() {
-		List<AbstractSelectOperation> result = new LinkedList<>();
+		List<AbstractSelectOperation> result = new ArrayList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

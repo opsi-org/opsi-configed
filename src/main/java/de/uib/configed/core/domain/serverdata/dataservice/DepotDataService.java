@@ -8,7 +8,6 @@ package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +42,7 @@ public class DepotDataService extends DataService {
 		for (String depot : depots) {
 			List<String> productIdents = new ArrayList<>();
 			String callReturnType = "dict";
-			Map<String, String> callFilter = new HashMap<>();
-			callFilter.put("depotId", depot);
+			Map<String, String> callFilter = Map.of("depotId", depot);
 			List<Map<String, Object>> products = dataServices.exec
 					.getListOfMaps(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS, callReturnType, callFilter);
 			for (Map<String, Object> product : products) {

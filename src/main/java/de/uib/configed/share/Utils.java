@@ -29,7 +29,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +36,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -49,8 +50,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
@@ -79,12 +83,11 @@ public final class Utils {
 	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
 
 	private static Parser markdownParser = Parser.builder()
-			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
+			.extensions(List.of(AutolinkExtension.create(), TablesExtension.create())).build();
 	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
 
 	private static JFrame masterFrame;
 	private static boolean disableCertificateVerification;
-	private static boolean isMultiFactorAuthenticationEnabled;
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -354,14 +357,6 @@ public final class Utils {
 		return sqlNow;
 	}
 
-	public static void setMultiFactorAuthenticationEnabled(boolean enabled) {
-		isMultiFactorAuthenticationEnabled = enabled;
-	}
-
-	public static boolean isMultiFactorAuthenticationEnabled() {
-		return isMultiFactorAuthenticationEnabled;
-	}
-
 	public static void setMasterFrame(JFrame frame) {
 		masterFrame = frame;
 	}
@@ -574,10 +569,6 @@ public final class Utils {
 		};
 	}
 
-	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
-		return determineIconBasedOnDeviceType(value, 16);
-	}
-
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
 		return switch (value) {
 		case "server" -> Icons.getThemeSVGRepoIcon("server", size);
@@ -586,6 +577,7 @@ public final class Utils {
 		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
 		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
 		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
+		case null -> Icons.getThemeIntellijIcon("questionMark", size);
 		default -> Icons.getThemeIntellijIcon("questionMark", size);
 		};
 	}
@@ -608,21 +600,50 @@ public final class Utils {
 		addKeyBindingToJComponent(component, keyStroke, runnable, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 
-	public static DocumentListener onDocumentChange(Consumer<DocumentEvent> consumer) {
+	public static PopupMenuListener createPopupMenuListenerOnVisible(Runnable runnable) {
+		return new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				runnable.run();
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// do nothing
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// do nothing
+			}
+		};
+	}
+
+	public static DocumentListener onDocumentChange(Runnable runnable) {
+		return onDocumentChange(runnable, true);
+	}
+
+	public static DocumentListener onDocumentChangeWithoutRemoveUpdate(Runnable runnable) {
+		return onDocumentChange(runnable, false);
+	}
+
+	private static DocumentListener onDocumentChange(Runnable runnable, boolean reactOnChangeUpdate) {
 		return new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				runnable.run();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				if (reactOnChangeUpdate) {
+					runnable.run();
+				}
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				consumer.accept(e);
+				runnable.run();
 			}
 		};
 	}
@@ -659,5 +680,33 @@ public final class Utils {
 		if (map.get(key) instanceof String timestampString && !timestampString.isEmpty()) {
 			map.put(key, formatDateTimeStringToLocal(timestampString));
 		}
+	}
+
+	public static <T> void runSwingWorker(Supplier<T> backgroundTask, Consumer<T> doneTask,
+			Consumer<Exception> exceptionHandler) {
+
+		Consumer<Exception> finalExceptionHandler = exceptionHandler != null ? exceptionHandler : ((Exception e) -> {
+		});
+
+		SwingWorker<T, Void> worker = new SwingWorker<>() {
+			@Override
+			protected T doInBackground() {
+				return backgroundTask.get();
+			}
+
+			@Override
+			protected void done() {
+				try {
+					T result = get();
+					doneTask.accept(result);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					finalExceptionHandler.accept(e);
+				} catch (ExecutionException e) {
+					finalExceptionHandler.accept(e);
+				}
+			}
+		};
+		worker.execute();
 	}
 }

@@ -6,7 +6,7 @@
 
 package de.uib.configed.core.domain.serverdata.reload.handler;
 
-import java.util.Arrays;
+import java.util.List;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
@@ -50,8 +50,8 @@ public class LicenseDataReloadHandler extends AbstractReloadHandler {
 		dataServices.cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
 		dataServices.license.retrieveSoftwareLicense2LicensePoolPD();
 		executor.runInParallel(dataServices.license::retrieveSoftwareLicense2LicensePoolPD);
-		if (dataServices.cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
-				CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
+		if (dataServices.cacheManager.isDataCached(
+				List.of(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			// This must be cleared so that the clients for the depots are updated
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS);
 

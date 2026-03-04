@@ -8,10 +8,7 @@ package de.uib.configed.gui;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +18,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
@@ -30,7 +29,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.app.Main;
@@ -39,9 +37,11 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.GroupNode;
 import de.uib.configed.gui.features.tree.GroupTreeTransferHandler;
@@ -111,7 +111,11 @@ public class ConfigedMain {
 		return mainFrame;
 	}
 
-	public LoginDialog getLoginDialog() {
+	public static JFrame getVisibleFrame() {
+		return mainFrame != null ? mainFrame : loginDialog;
+	}
+
+	public static LoginDialog getLoginDialog() {
 		return loginDialog;
 	}
 
@@ -150,14 +154,14 @@ public class ConfigedMain {
 		if (Messagebus.getInstance().getWebSocket().isOpen()) {
 			// Fake opening event on registering listener since this listener
 			// does not know yet if it's open
-			mainFrame.getHostsStatusPanel().onOpen(null);
+			mainFrame.getMainPanelManager().getHostsStatusPanel().onOpen(null);
 		} else {
 			Logging.warning(this, "Messagebus is not open, but should be on start");
 		}
 
 		Logging.debug(this, "initialTreeActivation");
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 	}
 
 	private void connectTreesWithTables() {
@@ -167,9 +171,9 @@ public class ConfigedMain {
 
 		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
 		productTree.setTransferHandler(productTransferHandler);
-		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
 				.setTransferHandler(productTransferHandler);
-		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
 				.setTransferHandler(productTransferHandler);
 	}
 
@@ -178,17 +182,18 @@ public class ConfigedMain {
 	}
 
 	public void initTabComponents() {
-		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
+		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getMainPanelManager().getTabbedPane()
+				.getTabComponentAt(0);
 		depotComp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
 
-		ButtonTabComponent clientComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-				.getTabComponentAt(1);
+		ButtonTabComponent clientComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+				.getTabbedPane().getTabComponentAt(1);
 		clientComp.showButton(clientTree.getSelectionPaths() == null
 				|| !ClientTree.ALL_CLIENTS_NAME.equals(clientTree.getSelectionPath().getLastPathComponent().toString())
 				|| clientTree.getSelectionPaths().length > 1);
 
-		ButtonTabComponent productComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
-				.getTabComponentAt(2);
+		ButtonTabComponent productComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getMainPanelManager()
+				.getTabbedPane().getTabComponentAt(2);
 		productComp.showButton(productTree.getSelectionPaths() == null
 				|| !Configed.getResourceValue("ProductTree.allProducts")
 						.equals(productTree.getSelectionPath().getLastPathComponent().toString())
@@ -197,10 +202,10 @@ public class ConfigedMain {
 
 	public void registerMessagebusListeners() {
 		Messagebus.getInstance().getWebSocket().registerListener(connectedHostsManager);
-		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
+		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getMainPanelManager().getHostsStatusPanel());
 		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
 		Messagebus.getInstance().getWebSocket()
-				.registerListener(mainFrame.getClientConfiguration().getProductPageManager());
+				.registerListener(mainFrame.getMainPanelManager().getClientConfiguration().getProductPageManager());
 	}
 
 	public ClientSearch getClientSearch() {
@@ -305,7 +310,7 @@ public class ConfigedMain {
 		Set<String> clientsSelectedInTable = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "setSelectedClients clientNames size ", clientsSelectedInTable.size());
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
 		Logging.info(this, "setSelectedClientsArray ", clientsSelectedInTable.size());
 		Logging.info(this, "selectedClients was before ", selectedClients.size());
@@ -314,19 +319,20 @@ public class ConfigedMain {
 
 		clientTree.produceActiveParents();
 
-		mainFrame.getClientConfiguration().stateChanged(null);
+		mainFrame.getMainPanelManager().getClientConfiguration().stateChanged(null);
 
 		hostInfo.resetValues();
 
 		updateHostInfo();
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
-				selectedClients.isEmpty());
+		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+				.setClientInfoEditing(selectedClients.size() == 1, selectedClients.isEmpty());
 
 		if (selectedClients.size() == 1) {
-			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
+			mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel()
+					.setClientID(selectedClients.get(0));
 		} else {
-			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
+			mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().setClientID("");
 		}
 
 		hostInfo.resetGui();
@@ -334,8 +340,8 @@ public class ConfigedMain {
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
 				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
-				hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel()
+				.updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients, hostInfo);
 
 		clientTree.updateSelectedObjectsInTable();
 	}
@@ -354,10 +360,10 @@ public class ConfigedMain {
 
 			HostInfo secondInfo = new HostInfo();
 
-			for (int i = 1; i < selectedClients.size(); i++) {
-				secondInfo.setValues(pcinfos.get(selectedClients.get(i)).getMap());
+			selectedClients.stream().skip(1).forEach((String clientId) -> {
+				secondInfo.setValues(pcinfos.get(clientId).getMap());
 				hostInfo.combineWith(secondInfo);
-			}
+			});
 		}
 	}
 
@@ -372,7 +378,7 @@ public class ConfigedMain {
 		fetchDepots();
 
 		depotsList.setInfo(depots);
-		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
+		List<String> oldSelectedDepots = List.of(backslashPattern
 				.matcher(Configed.getSavedStates().getProperty("selectedDepots",
 						persistenceController.getDataServices().hostInfoCollections.getConfigServer()))
 				.replaceAll("").split(","));
@@ -414,41 +420,8 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	public static void setupLoginDialog(String host, String user, String password, String otp, boolean useSSO) {
-		Logging.debug(" create password dialog ");
-		loginDialog = new LoginDialog();
-
-		if (host != null && !host.isEmpty()) {
-			loginDialog.setHost(host);
-		}
-
-		if (user != null) {
-			loginDialog.setUser(user);
-		}
-
-		if (password != null) {
-			loginDialog.setPassword(password);
-		}
-
-		if (otp != null) {
-			loginDialog.setOTP(otp);
-		}
-
-		Logging.info("become interactive");
-		Logging.info("using sso ? ", useSSO);
-		loginDialog.setVisible(true);
-
-		if (host == null) {
-			Logging.info("host is not set (yet)");
-		}
-		if (!useSSO && (user == null || password == null)) {
-			Logging.info("user or password not given (yet)");
-		} else {
-			// This must be called last, so that loading frame for connection is called last
-			// and on top of the login-frame
-			Logging.info("loginDialog tryConnecting with sso ", useSSO);
-			loginDialog.tryConnectingDependOnServer(useSSO);
-		}
+	public static void setupLoginDialog(HostData hostData) {
+		loginDialog = new LoginDialog(hostData);
 	}
 
 	public void setPersistenceController(OpsiServiceNOMPersistenceController persistenceController) {
@@ -470,7 +443,7 @@ public class ConfigedMain {
 				.getClientsForDepots(depotsList.getSelectedValuesList(), getAllowedClients()));
 
 		if (mainFrame != null) {
-			mainFrame.getHostsStatusPanel().updateAllClientsCount(clientsForDepots.size());
+			mainFrame.getMainPanelManager().getHostsStatusPanel().updateAllClientsCount(clientsForDepots.size());
 			clientTablePanel.updateTable();
 		}
 
@@ -527,23 +500,13 @@ public class ConfigedMain {
 			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
 			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
-
-			String sessionValue = "";
-			if (persistenceController.getDataServices().host.getSessionInfo().get(clientId) != null) {
-				sessionValue = persistenceController.getDataServices().host.getSessionInfo().get(clientId);
-			}
-
-			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
+			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL,
+					persistenceController.getDataServices().host.getSessionInfo().getOrDefault(clientId, ""));
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
 
-			List<Object> rowItems = new ArrayList<>();
-
-			for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
-					.entrySet()) {
-				if (Boolean.TRUE.equals(entry.getValue())) {
-					rowItems.add(rowmap.get(entry.getKey()));
-				}
-			}
+			List<Object> rowItems = persistenceController.getDataServices().host.getHostDisplayFields().entrySet()
+					.stream().filter(entry -> Boolean.TRUE.equals(entry.getValue()))
+					.map(entry -> rowmap.get(entry.getKey())).toList();
 
 			model.addRow(rowItems.toArray());
 		}
@@ -554,7 +517,8 @@ public class ConfigedMain {
 		selectedClients.clear();
 		if (mainFrame != null) {
 			// Update the info on the bottom with new data
-			mainFrame.getHostsStatusPanel().updateSelectedClientsCount(selectedClients.size(), clientIds.size());
+			mainFrame.getMainPanelManager().getHostsStatusPanel().updateSelectedClientsCount(selectedClients.size(),
+					clientIds.size());
 		}
 		return model;
 	}
@@ -562,10 +526,6 @@ public class ConfigedMain {
 	private void rebuildTree() {
 		clientTree.clear();
 		clientTree.build();
-	}
-
-	public void setClient(String clientName) {
-		setClients(Collections.singleton(clientName));
 	}
 
 	public void setClients(Collection<String> clientNames) {
@@ -750,18 +710,31 @@ public class ConfigedMain {
 		clientTablePanel.setFilterMark(false);
 
 		clientsFilteredByTree.clear();
-		if (selTreePaths != null) {
-			for (TreePath selectionPath : selTreePaths) {
-				clientsFilteredByTree.add(selectionPath.getLastPathComponent().toString());
+
+		if (selTreePaths == null || selTreePaths.length == 0) {
+			setRebuiltClientListTableModel(true, false, Set.of());
+			return;
+		}
+
+		Set<String> selectedValues = new HashSet<>();
+		List<DefaultMutableTreeNode> filteredNodes = clientTree
+				.filterMostSpecificNodes(clientTree.extractNodes(selTreePaths));
+
+		for (DefaultMutableTreeNode node : filteredNodes) {
+			if (node.getAllowsChildren()) {
+				AbstractGroupTree.addAllDescendants(node, clientsFilteredByTree);
+			} else {
+				String value = node.getUserObject().toString();
+				clientsFilteredByTree.add(value);
+				selectedValues.add(value);
 			}
 		}
 
-		if (selTreePaths != null && selTreePaths.length == 1) {
+		if (selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
-			Logging.info(this, "treeClientsSelectAction selTreePaths length: ",
-					selTreePaths == null ? 0 : selTreePaths.length);
-			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+			Logging.info(this, "treeClientsSelectAction selTreePaths length: ", selTreePaths.length);
+			setRebuiltClientListTableModel(true, false, selectedValues);
 		}
 	}
 
@@ -785,15 +758,7 @@ public class ConfigedMain {
 		clientTree.initActiveParents();
 		// Get all leaves from the node which should be a group
 		clientsFilteredByTree.clear();
-		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
-		while (e.hasMoreElements()) {
-			DefaultMutableTreeNode element = (DefaultMutableTreeNode) e.nextElement();
-
-			if (!element.getAllowsChildren()) {
-				String nodeinfo = (String) element.getUserObject();
-				clientsFilteredByTree.add(nodeinfo);
-			}
-		}
+		AbstractGroupTree.addAllDescendants(node, clientsFilteredByTree);
 
 		clientTree.repaint();
 	}
@@ -841,21 +806,14 @@ public class ConfigedMain {
 		String oldRepresentative = depotRepresentative;
 
 		String configServer = persistenceController.getDataServices().hostInfoCollections.getConfigServer();
-		Set<String> clientDepots = selectedClients.isEmpty() ? Collections.emptySet() : getDepotsOfSelectedClients();
+		Set<String> clientDepots = selectedClients.isEmpty() ? Set.of() : getDepotsOfSelectedClients();
 
 		Logging.info(this, "Selected depots: " + selectedDepots);
 		Logging.info(this, "Depots of selected clients: " + clientDepots);
 
-		String newRepresentative;
-
-		if (selectedDepots.isEmpty() || clientDepots.contains(configServer)) {
-			newRepresentative = configServer;
-		} else if (selectedDepots.size() == 1) {
-			String onlyDepot = selectedDepots.get(0);
-			newRepresentative = clientDepots.contains(onlyDepot) ? onlyDepot : configServer;
-		} else {
-			newRepresentative = selectedDepots.stream().filter(clientDepots::contains).findFirst().orElse(configServer);
-		}
+		String newRepresentative = Stream
+				.concat(selectedDepots.stream().filter(clientDepots::contains), Stream.of(configServer)).findFirst()
+				.orElse(configServer);
 
 		Logging.debug(this, "Old representative: " + oldRepresentative + ", new: " + newRepresentative);
 
@@ -987,10 +945,10 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs();
-		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
-				.getProductTable().getSelectedIDs();
+		Set<String> selectedLocalbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
+				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs();
+		Set<String> selectedNetbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
+				.getPanelNetbootProductSettings().getProductTable().getSelectedIDs();
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotListSelectionListener);
 
@@ -1001,9 +959,9 @@ public class ConfigedMain {
 
 		mainFrame.resetData();
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
-		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getMainPanelManager().getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 
 		Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
 
@@ -1025,9 +983,9 @@ public class ConfigedMain {
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
-		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
 				.setPendingSelection(selectedLocalbootProducts);
-		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
 				.setPendingSelection(selectedNetbootProducts);
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
@@ -1055,7 +1013,7 @@ public class ConfigedMain {
 		// We need to update the client configuration since it will not be done
 		// automatically in the method setEditingTarget!
 		if (t == EditingTarget.CLIENTS) {
-			mainFrame.getClientConfiguration().stateChanged(null);
+			mainFrame.getMainPanelManager().getClientConfiguration().stateChanged(null);
 		}
 	}
 
@@ -1083,12 +1041,6 @@ public class ConfigedMain {
 		clientTree.setSelectionPath(pathToSelect);
 	}
 
-	public void refreshClientListActivateALL() {
-		Logging.info(this, "refreshClientListActivateALL");
-		setRebuiltClientListTableModel(true, true);
-		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
-	}
-
 	public void reloadHosts() {
 		mainFrame.activateLoadingCursor();
 		List<String> clientsLeft = getClientSelectionBasedOnDepotSelection(
@@ -1100,24 +1052,17 @@ public class ConfigedMain {
 		hostInfo.resetGui();
 		clientTablePanel.restoreFilter();
 		this.selectedClients = clientsLeft;
-		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(),
-				this.selectedClients, hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel()
+				.updateValues(clientTablePanel.getClientTable().getRowCount(), this.selectedClients, hostInfo);
 		clientTablePanel.setSelectedValues(this.selectedClients);
 
 		mainFrame.deactivateLoadingCursor();
 	}
 
 	private List<String> getClientSelectionBasedOnDepotSelection(Set<String> selValuesList) {
-		List<String> clientsLeft = new ArrayList<>();
-		for (String client : selValuesList) {
-			String depotForClient = persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot()
-					.get(client);
-
-			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
-				clientsLeft.add(client);
-			}
-		}
-		return clientsLeft;
+		return selValuesList.stream().filter(client -> depotsList.getSelectedValuesList().contains(
+				persistenceController.getDataServices().hostInfoCollections.getMapPcBelongsToDepot().get(client)))
+				.toList();
 	}
 
 	public void invertSelection() {
@@ -1155,7 +1100,7 @@ public class ConfigedMain {
 		boolean result = true;
 
 		if (mainFrame != null) {
-			result = mainFrame.checkSaveLicenses();
+			result = mainFrame.getMainPanelManager().checkSavedLicenses();
 			if (result) {
 				mainFrame.setVisible(false);
 				mainFrame.dispose();

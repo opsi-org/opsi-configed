@@ -7,15 +7,14 @@
 package de.uib.configed.gui.features.productpage;
 
 import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -126,8 +125,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		contentPane.setResizeWeight(1.0);
 		setComponent(contentPane);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(),
-				new JComponent[] { paneProducts, productTable });
+		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(), List.of(paneProducts, productTable));
 
 		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
 
@@ -231,18 +229,19 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
 			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
 			item.setState(productDisplayField.getValue());
-			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = productDisplayField.getValue();
-				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
-				persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-
-				// We need to rebuild the shown page in the client configuration to make changes effective
-				ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
-			});
+			item.addItemListener(itemEvent -> toggleDisplayField(productDisplayField));
 
 			jMenuVisibleColumns.add(item);
 		}
 		return popup;
+	}
+
+	private void toggleDisplayField(Entry<String, Boolean> productDisplayField) {
+		getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !productDisplayField.getValue());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
+
+		// We need to rebuild the shown page in the client configuration to make changes effective
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 	}
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
@@ -294,7 +293,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			Logging.debug(this, "selected ", selectedRow);
 			Logging.debug(this, "selected modelIndex ", selectedRow);
 			Logging.debug(this, "selected  value at ", productTable.getValueAt(selectedRow, 0));
-			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager()
+			ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
 					.setProductEdited((String) productTable.getValueAt(selectedRow, 0), this);
 		}
 
@@ -309,7 +308,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		persistenceController.reloadData(ReloadEvent.PRODUCT_DATA_RELOAD.toString());
 
 		// We want to rebuild the shown page in the client configuration after reload
-		ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
+		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 		ChangedDataManager.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
@@ -318,7 +317,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	private void saveAndExecuteAction() {
 		Logging.info(this, "saveAndExecuteAction");
 		ChangedDataManager.checkSaveAll(false);
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 		ServerActionManager.processActionRequestsAllProducts(groupPanel.getVisibility());
 	}
 
@@ -329,7 +328,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
 		groupPanel.setFilterMark(false);
-		productTable.valueChanged(doSelection, productTree.getSelectionPaths());
+		productTable.valueChanged(doSelection,
+				productTree.filterMostSpecificNodes(productTree.extractNodes(productTree.getSelectionPaths())));
 	}
 
 	public void setTableModel(InstallationStateTableModel istm) {
@@ -346,7 +346,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	}
 
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
-			Map<String, Object> editableProductProperties, ProductpropertiesUpdateCollection updateCollection) {
+			Map<String, Object> editableProductProperties, ProductpropertiesUpdateCollection updateCollection,
+			Map<String, Object> originalMap) {
 		infoPane.setProductId(productID);
 		infoPane.setProductName(persistenceController.getDataServices().product.getProductTitle(productID));
 		infoPane.setProductInfo(persistenceController.getDataServices().product.getProductInfo(productID));
@@ -359,6 +360,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
+		propertiesPanel.setOriginalMap(originalMap);
 		propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 
