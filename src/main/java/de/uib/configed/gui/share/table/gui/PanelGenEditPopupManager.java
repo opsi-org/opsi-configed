@@ -79,13 +79,11 @@ public class PanelGenEditPopupManager {
 						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
 				menuItemSortAgain
 						.addActionListener(actionEvent -> panelGenEdit.getGenEditTable().sortAgainAsConfigured());
-
 				addPopupItem(menuItemSortAgain);
 			}, POPUP_DELETE_ROW, () -> addPopupMenuDeleteRow(), PopupMenuTrait.POPUP_PRINT, () -> {
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
 				Icons.addIntellijIconToMenuItem(menuItemPrint, "print");
 				menuItemPrint.addActionListener(actionEvent -> print());
-
 				addPopupItem(menuItemPrint);
 			}, PopupMenuTrait.POPUP_EXPORT_CSV, () -> {
 				ExporterToCSV exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());

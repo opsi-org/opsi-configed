@@ -145,19 +145,9 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
-			new PopupMenuTrait(
-					List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					jScrollPaneInfo.getViewport()) {
-				@Override
-				public void action(int p) {
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD -> reload();
-					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
-					case PopupMenuTrait.POPUP_PDF -> exportPDF();
-					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-					}
-				}
-			};
+			PopupMenuTrait.createAndBindJPopupMenu(jScrollPaneInfo.getViewport(),
+					Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_PDF, this::exportPDF,
+							PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal));
 		}
 	}
 

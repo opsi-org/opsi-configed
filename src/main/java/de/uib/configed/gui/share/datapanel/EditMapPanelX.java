@@ -231,7 +231,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-		return new PopupMenuTrait(List.of(), event -> updatePopupMenu(), table);
+		return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(), event -> updatePopupMenu());
 	}
 
 	private void buildPanel() {
