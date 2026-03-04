@@ -294,7 +294,7 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 					PopupMenuTrait.POPUP_FLOATING_COPY);
 		}
 
-		new PopupMenuTrait(popups, List.of(logTextPane)) {
+		new PopupMenuTrait(popups, logTextPane) {
 			@Override
 			public void action(int p) {
 				treatPopupAction(p);

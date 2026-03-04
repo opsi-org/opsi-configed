@@ -239,7 +239,7 @@ public class PanelSWSingleClientInfo extends JPanel {
 			new PopupMenuTrait(
 					List.of(PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
 							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					List.of(this, panelTable.getGenEditTable(), panelTable.getTheScrollpane())) {
+					panelTable.getGenEditTable()) {
 				@Override
 				public void action(int p) {
 					actionOnPopupMenu(p);

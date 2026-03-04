@@ -63,22 +63,22 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	private JMenuItem[] menuItems;
 
-	private List<JComponent> components;
+	private JComponent component;
 
-	public PopupMenuTrait(List<Integer> listPopups, Predicate<MouseEvent> condition, List<JComponent> components) {
+	public PopupMenuTrait(List<Integer> listPopups, Predicate<MouseEvent> condition, JComponent component) {
 		this.listPopups = listPopups;
-		this.components = components;
+		this.component = component;
 		menuItems = new JMenuItem[listPopups.size()];
 
 		for (Integer popup : listPopups) {
 			addPopup(popup);
 		}
 
-		PopupMouseListener.addPopupMouseListenerToComponents(this, condition, components);
+		component.addMouseListener(new PopupMouseListener(this, condition));
 	}
 
-	public PopupMenuTrait(List<Integer> popups, List<JComponent> components) {
-		this(popups, null, components);
+	public PopupMenuTrait(List<Integer> popups, JComponent component) {
+		this(popups, null, component);
 	}
 
 	private void addPopup(final int p) {
@@ -95,11 +95,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(menuItems[i], "refresh");
 
-		if (components != null) {
-			for (JComponent component : components) {
-				Utils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), () -> action(p));
-			}
-		}
+		Utils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), () -> action(p));
 
 		// not work
 		addItem(p);

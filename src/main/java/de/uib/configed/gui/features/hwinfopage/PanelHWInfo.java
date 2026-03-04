@@ -147,7 +147,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		if (withPopup) {
 			new PopupMenuTrait(
 					List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					List.of(tree, table)) {
+					jScrollPaneInfo.getViewport()) {
 				@Override
 				public void action(int p) {
 					switch (p) {

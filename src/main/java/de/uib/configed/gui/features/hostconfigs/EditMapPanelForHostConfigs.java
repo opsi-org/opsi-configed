@@ -69,7 +69,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 		JPopupMenu jPopupMenu = new PopupMenuTrait(
 				List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF),
-				event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
+				event -> updatePopupMenu(), table) {
 			@Override
 			public void action(int p) {
 				switch (p) {

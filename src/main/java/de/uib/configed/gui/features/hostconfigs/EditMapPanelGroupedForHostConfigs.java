@@ -104,7 +104,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void setupPopupForUserpathes() {
 		popupForUserpathes = new PopupMenuTrait(
 				List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD),
-				event -> isUserPath(tree.getPathForLocation(event.getX(), event.getY())), List.of(tree)) {
+				event -> isUserPath(tree.getPathForLocation(event.getX(), event.getY())), tree) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -119,7 +119,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupPopupForUserpath() {
 		popupForUserpath = new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD),
-				event -> isUserRoot(tree.getPathForLocation(event.getX(), event.getY())), List.of(tree)) {
+				event -> isUserRoot(tree.getPathForLocation(event.getX(), event.getY())), tree) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -134,7 +134,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private void setupPopupForRolepathes() {
 		popupForRolepathes = new PopupMenuTrait(
 				List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD),
-				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), false), List.of(tree)) {
+				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), false), tree) {
 			@Override
 			public void action(int p) {
 				switch (p) {
@@ -149,7 +149,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupPopupForRolepath() {
 		popupForRolepath = new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD),
-				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), true), List.of(tree)) {
+				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), true), tree) {
 			@Override
 			public void action(int p) {
 				switch (p) {

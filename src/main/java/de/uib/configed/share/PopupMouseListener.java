@@ -8,23 +8,24 @@ package de.uib.configed.share;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.util.function.Predicate;
 
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 public class PopupMouseListener extends MouseAdapter {
 	private JPopupMenu popupMenu;
 	private Predicate<MouseEvent> condition;
 
-	public PopupMouseListener(JPopupMenu popup, Predicate<MouseEvent> condition, List<JComponent> components) {
+	public PopupMouseListener(JPopupMenu popup) {
+		this(popup, null);
+	}
+
+	public PopupMouseListener(JPopupMenu popup, Predicate<MouseEvent> condition) {
 		popupMenu = popup;
 		this.condition = condition;
-
-		for (JComponent component : components) {
-			component.addMouseListener(this);
-		}
 	}
 
 	@Override
@@ -38,17 +39,32 @@ public class PopupMouseListener extends MouseAdapter {
 	}
 
 	protected void maybeShowPopup(MouseEvent e) {
-		if (e.isPopupTrigger() && (condition == null || condition.test(e))) {
-			popupMenu.show(e.getComponent(), e.getX(), e.getY());
+		if (e.isPopupTrigger()) {
+			switch (e.getSource()) {
+			case JTree tree -> updateSelectionInTree(tree, e);
+			case JTable table -> updateSelectionInTable(table, e);
+			default -> {
+				// for other components, we can not (and should not) change the selection
+			}
+			}
+
+			if (condition == null || condition.test(e)) {
+				popupMenu.show(e.getComponent(), e.getX(), e.getY());
+			}
 		}
 	}
 
-	public static void addPopupMouseListenerToComponents(JPopupMenu popup, List<JComponent> components) {
-		new PopupMouseListener(popup, null, components);
+	private static void updateSelectionInTree(JTree tree, MouseEvent e) {
+		TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+		if (path != null && !tree.isPathSelected(path)) {
+			tree.setSelectionPath(path);
+		}
 	}
 
-	public static void addPopupMouseListenerToComponents(JPopupMenu popup, Predicate<MouseEvent> condition,
-			List<JComponent> components) {
-		new PopupMouseListener(popup, condition, components);
+	private static void updateSelectionInTable(JTable table, MouseEvent e) {
+		int row = table.rowAtPoint(e.getPoint());
+		if (row != -1 && !table.isRowSelected(row)) {
+			table.setRowSelectionInterval(row, row);
+		}
 	}
 }

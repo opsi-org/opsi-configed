@@ -32,7 +32,7 @@ public class EditMapPanelHostProperties extends EditMapPanelX {
 	@Override
 	protected JPopupMenu createBasicPopup() {
 		return new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD),
-				event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
+				event -> updatePopupMenu(), table) {
 			@Override
 			public void action(int p) {
 				super.action(p);

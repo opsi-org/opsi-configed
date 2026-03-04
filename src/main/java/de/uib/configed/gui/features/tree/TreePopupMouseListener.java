@@ -37,7 +37,7 @@ public class TreePopupMouseListener {
 	private boolean anyVisible;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
-		new PopupMouseListener(jPopupMenu, this::checkAccepted, List.of(tree));
+		tree.addMouseListener(new PopupMouseListener(jPopupMenu, this::checkAccepted));
 
 		this.tree = tree;
 
@@ -154,12 +154,6 @@ public class TreePopupMouseListener {
 	}
 
 	private boolean checkAccepted(MouseEvent e) {
-		if (!tree.isEnabled()) {
-			return false;
-		}
-
-		selectMousePathIfNotSelected(e);
-
 		if (!shouldShow()) {
 			return false;
 		}
@@ -199,24 +193,6 @@ public class TreePopupMouseListener {
 
 			setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextParentIsFixed);
 		}
-	}
-
-	private void selectMousePathIfNotSelected(MouseEvent e) {
-		TreePath mousePath = getMousePath(e);
-		if (mousePath == null) {
-			return;
-		}
-
-		if (!tree.isPathSelected(mousePath)) {
-			tree.setSelectionPath(mousePath);
-		}
-	}
-
-	private TreePath getMousePath(MouseEvent e) {
-		int mouseRow = tree.getRowForLocation(e.getX(), e.getY());
-		TreePath mousePath = tree.getPathForLocation(e.getX(), e.getY());
-
-		return mouseRow == -1 ? null : mousePath;
 	}
 
 	private void hideAllMenuItems() {

@@ -186,8 +186,7 @@ public class PanelGenEditPopupManager {
 		if (popupMenu == null) {
 			// for the first item, we create the menu
 			popupMenu = new JPopupMenu();
-			PopupMouseListener.addPopupMouseListenerToComponents(popupMenu,
-					List.of(panelGenEdit.getGenEditTable(), panelGenEdit.getTheScrollpane()));
+			panelGenEdit.getGenEditTable().addMouseListener(new PopupMouseListener(popupMenu));
 		}
 
 		if (item == null) {
