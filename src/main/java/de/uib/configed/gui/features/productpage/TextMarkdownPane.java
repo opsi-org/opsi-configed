@@ -6,16 +6,28 @@
 
 package de.uib.configed.gui.features.productpage;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.DefaultCaret;
 
-import de.uib.configed.gui.share.SwingUtils;
+import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
+
 import de.uib.configed.gui.share.swing.WrapEditorKit;
 import de.uib.configed.share.BrowserUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class TextMarkdownPane extends JTextPane {
+	private static Parser markdownParser = Parser.builder()
+			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
+	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
+
 	public TextMarkdownPane() {
 		super.addHyperlinkListener(this::hyperlinkUpdate);
 		super.setEditable(false);
@@ -29,7 +41,7 @@ public class TextMarkdownPane extends JTextPane {
 
 	@Override
 	public void setText(String s) {
-		super.setText(SwingUtils.parseMarkdown(s));
+		super.setText(parseMarkdown(s));
 	}
 
 	private void hyperlinkUpdate(HyperlinkEvent event) {
@@ -48,5 +60,14 @@ public class TextMarkdownPane extends JTextPane {
 		} else {
 			// Do nothing on other hyperlink events
 		}
+	}
+
+	public static String parseMarkdown(String markdown) {
+		if (markdown == null) {
+			return "";
+		}
+
+		Node document = markdownParser.parse(markdown);
+		return renderer.render(document);
 	}
 }

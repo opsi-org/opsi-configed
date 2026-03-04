@@ -8,8 +8,6 @@ package de.uib.configed.gui.share;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -24,12 +22,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-
-import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
-import com.vladsch.flexmark.ext.tables.TablesExtension;
-import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.util.ast.Node;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.logging.Logging;
@@ -47,20 +39,7 @@ import de.uib.configed.share.logging.Logging;
  * </p>
  */
 public final class SwingUtils {
-	private static Parser markdownParser = Parser.builder()
-			.extensions(Arrays.asList(AutolinkExtension.create(), TablesExtension.create())).build();
-	private static HtmlRenderer renderer = HtmlRenderer.builder().extensions(List.of(TablesExtension.create())).build();
-
 	private SwingUtils() {
-	}
-
-	public static String parseMarkdown(String markdown) {
-		if (markdown == null) {
-			return "";
-		}
-
-		Node document = markdownParser.parse(markdown);
-		return renderer.render(document);
 	}
 
 	public static void addKeyBindingToJComponent(JComponent component, KeyStroke keyStroke, Runnable runnable,

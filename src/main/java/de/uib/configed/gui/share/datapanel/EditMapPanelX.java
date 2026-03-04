@@ -29,7 +29,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.features.productpage.TextMarkdownPane;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
@@ -331,7 +331,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-			tooltip.append(SwingUtils.parseMarkdown(descriptionsMap.get(propertyName)));
+			tooltip.append(TextMarkdownPane.parseMarkdown(descriptionsMap.get(propertyName)));
 		}
 
 		if (tooltip.length() > 200) {
