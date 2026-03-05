@@ -14,37 +14,50 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
-import de.uib.configed.gui.share.ComboBoxModeller;
 import de.uib.configed.gui.share.swing.ColoredListCellRenderer;
 
 public class AdaptingCellEditor extends DefaultCellEditor {
-	private JComboBox<String> cc;
-	private ComboBoxModeller cbm;
-	private ComboBoxModel<String> nullModel;
+	private final JComboBox<String> cc;
+	private final ComboBoxModeller cbm;
+	private final ComboBoxModel<String> nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
-	public AdaptingCellEditor(JComboBox<String> cc, ComboBoxModeller cbm) {
-		super(cc);
-		this.cc = cc;
-		this.cbm = cbm;
-		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
+	private final boolean tooltipFromValue;
 
-		cc.setRenderer(new ColoredListCellRenderer());
+	public AdaptingCellEditor(JComboBox<String> comboBox, ComboBoxModeller modeller) {
+		this(comboBox, modeller, false);
+	}
+
+	public AdaptingCellEditor(JComboBox<String> comboBox, ComboBoxModeller modeller, boolean tooltipFromValue) {
+		super(comboBox);
+		this.cc = comboBox;
+		this.cbm = modeller;
+		this.tooltipFromValue = tooltipFromValue;
+
+		comboBox.setRenderer(new ColoredListCellRenderer());
 	}
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
-		if (cbm == null || cbm.getComboBoxModel(modelRow, modelColumn).getSize() <= 1) {
+		if (cbm == null || cbm.getComboBoxModel(modelRow, modelColumn) == null
+				|| cbm.getComboBoxModel(modelRow, modelColumn).getSize() <= 1) {
 			cc.setModel(nullModel);
 
-			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
+			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn) != null
+					&& cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
 				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 		}
 
-		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
+		Component component = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+
+		if (tooltipFromValue) {
+			((JComboBox<?>) component).setToolTipText("" + value);
+		}
+
+		return component;
 	}
 }

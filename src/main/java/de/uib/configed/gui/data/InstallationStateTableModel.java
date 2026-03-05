@@ -35,7 +35,7 @@ import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.share.ComboBoxModeller;
+import de.uib.configed.gui.share.table.gui.ComboBoxModeller;
 import de.uib.configed.share.logging.Logging;
 
 /**

@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.share;
+package de.uib.configed.gui.share.table.gui;
 
 import javax.swing.ComboBoxModel;
 

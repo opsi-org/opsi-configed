@@ -15,8 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
-import de.uib.configed.gui.share.ComboBoxModeller;
-
 public class DynamicCellEditor extends DefaultCellEditor {
 	private JComboBox<String> cc;
 	private ComboBoxModeller cbm;

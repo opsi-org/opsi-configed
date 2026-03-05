@@ -25,7 +25,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.data.ColoredTableCellRenderer;
 import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
 import de.uib.configed.gui.data.InstallationStateTableModel;
-import de.uib.configed.gui.share.table.gui.AdaptingCellEditorValuesByIndex;
+import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
@@ -124,7 +124,7 @@ public class ProductSettingsTableModel {
 
 			JComboBox<String> statesCombo = new JComboBox<>();
 
-			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm));
+			statusColumn.setCellEditor(new AdaptingCellEditor(statesCombo, istm, true));
 			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
@@ -133,7 +133,7 @@ public class ProductSettingsTableModel {
 			TableColumn actionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			JComboBox<String> actionsCombo = new JComboBox<>();
-			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm));
+			actionColumn.setCellEditor(new AdaptingCellEditor(actionsCombo, istm, true));
 			actionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer);
 		}
