@@ -46,7 +46,8 @@ public class PopupMouseListener extends MouseAdapter {
 			case JTable table -> updateSelectionInTable(table, e);
 			case JList<?> list -> updateSelectionInList(list, e);
 			default -> {
-				// for other components, we can not (and should not) change the selection
+				// for other components, we can not change the selection, since we also use this
+				// listener for other components, e.g. JPanel.
 			}
 			}
 
