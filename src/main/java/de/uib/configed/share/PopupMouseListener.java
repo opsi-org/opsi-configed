@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Predicate;
 
+import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
@@ -43,6 +44,7 @@ public class PopupMouseListener extends MouseAdapter {
 			switch (e.getSource()) {
 			case JTree tree -> updateSelectionInTree(tree, e);
 			case JTable table -> updateSelectionInTable(table, e);
+			case JList<?> list -> updateSelectionInList(list, e);
 			default -> {
 				// for other components, we can not (and should not) change the selection
 			}
@@ -65,6 +67,13 @@ public class PopupMouseListener extends MouseAdapter {
 		int row = table.rowAtPoint(e.getPoint());
 		if (row != -1 && !table.isRowSelected(row)) {
 			table.setRowSelectionInterval(row, row);
+		}
+	}
+
+	private static void updateSelectionInList(JList<?> list, MouseEvent e) {
+		int index = list.locationToIndex(e.getPoint());
+		if (index != -1 && !list.isSelectedIndex(index)) {
+			list.setSelectedIndex(index);
 		}
 	}
 }

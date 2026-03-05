@@ -25,7 +25,7 @@ import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -94,9 +94,8 @@ public class DepotListPresenter extends JPanel {
 		Icons.addIntellijIconToMenuItem(showShell, "terminal");
 		jPopupMenu.add(showShell);
 
-		jPopupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> updatePopupMenuItem(showShell)));
+		depotslist.addMouseListener(new PopupMouseListener(jPopupMenu, e -> updatePopupMenuItem(showShell)));
 
-		depotslist.setComponentPopupMenu(jPopupMenu);
 	}
 
 	/***
@@ -104,7 +103,7 @@ public class DepotListPresenter extends JPanel {
 	 * update the selected depot (e.g. open terminal on the selected depot)
 	 * after the depotslist has been updated
 	 */
-	private void updatePopupMenuItem(JMenuItem showShell) {
+	private boolean updatePopupMenuItem(JMenuItem showShell) {
 		if (depotslist.getSelectedValuesList().size() != 1) {
 			// Disable the button if no depots selected or more than one depot
 			showShell.setEnabled(false);
@@ -122,6 +121,8 @@ public class DepotListPresenter extends JPanel {
 			}
 			showShell.addActionListener(event -> TerminalController.openTerminalOnDepot());
 		}
+
+		return true;
 	}
 
 	/**
