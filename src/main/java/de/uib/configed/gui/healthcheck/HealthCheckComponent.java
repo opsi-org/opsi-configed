@@ -115,6 +115,7 @@ public class HealthCheckComponent extends
 		textPane.setAutoscrolls(false);
 		textPane.setEditable(false);
 		textPane.setInheritsPopupMenu(true);
+		textPane.addMouseListener(new PopupMouseListener(createPopupMenu()));
 		textPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
@@ -132,7 +133,6 @@ public class HealthCheckComponent extends
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		scrollPane.setInheritsPopupMenu(true);
-		textPane.addMouseListener(new PopupMouseListener(createPopupMenu()));
 		panel.add(scrollPane, "grow");
 
 		return panel;
