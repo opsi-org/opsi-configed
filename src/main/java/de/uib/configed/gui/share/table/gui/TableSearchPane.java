@@ -36,6 +36,7 @@ import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -250,7 +251,7 @@ public class TableSearchPane extends JPanel implements KeyListener {
 		searchMenu.add(popupMarkAndFilter);
 		searchMenu.add(popupEmptySearchfield);
 
-		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
+		flatTextFieldSearch.addMouseListener(new PopupMouseListener(searchMenu));
 	}
 
 	private void initNavigationPanel() {

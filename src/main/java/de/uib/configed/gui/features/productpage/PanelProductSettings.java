@@ -126,7 +126,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		productTable.addMouseListener(new PopupMouseListener(producePopupMenu()));
 
-		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
+		productTable.getTableHeader()
+				.addMouseListener(new PopupMouseListener(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns)));
 
 		Utils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
