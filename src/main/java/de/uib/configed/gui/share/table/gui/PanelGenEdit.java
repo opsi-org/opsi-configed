@@ -32,6 +32,7 @@ import de.uib.configed.gui.share.table.CursorrowObserver;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.RowNoTableModelFilterCondition;
 import de.uib.configed.gui.share.table.TableModelFilter;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.updates.UpdateController;
 import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.logging.Logging;

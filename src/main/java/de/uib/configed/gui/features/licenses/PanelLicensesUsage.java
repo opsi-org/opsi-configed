@@ -26,7 +26,7 @@ import de.uib.configed.gui.ControlPanelLicensesUsage;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import net.miginfocom.swing.MigLayout;
