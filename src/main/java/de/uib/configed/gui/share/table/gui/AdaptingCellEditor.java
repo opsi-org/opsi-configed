@@ -11,10 +11,10 @@ import java.awt.Component;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JTable;
-
-import de.uib.configed.gui.share.swing.ColoredListCellRenderer;
 
 public class AdaptingCellEditor extends DefaultCellEditor {
 	private final JComboBox<String> cc;
@@ -60,4 +60,17 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 
 		return component;
 	}
+
+	private static class ColoredListCellRenderer extends DefaultListCellRenderer {
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+			ColorTableCellRenderer.colorize(c, isSelected, index);
+
+			return c;
+		}
+	}
+
 }

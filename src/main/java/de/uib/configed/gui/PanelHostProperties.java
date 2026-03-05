@@ -12,17 +12,21 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
+import javax.swing.JPopupMenu;
+
 import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.share.datapanel.EditMapPanelHostProperties;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelHostProperties extends AbstractConfigurationTab {
-	// delegate
-	private EditMapPanelHostProperties editMapPanel;
+	private EditMapPanelX editMapPanel;
 
 	private HostUpdateCollection hostUpdateCollection;
 
@@ -40,11 +44,39 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelHostProperties(false, false, this::updateContent);
+		editMapPanel = new EditMapPanelX(false, false) {
+			@Override
+			protected JPopupMenu createBasicPopup() {
+				return new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD),
+						event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
+					@Override
+					public void action(int p) {
+						super.action(p);
+						handlePopupMenuActions(p);
+					}
+				};
+			}
+		};
 		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		editMapPanel.setShowToolTip(false);
 
 		setComponent(editMapPanel);
+	}
+
+	private void handlePopupMenuActions(int p) {
+		if (p == PopupMenuTrait.POPUP_RELOAD) {
+			ConfigedMain.getMainFrame().activateLoadingCursor();
+			if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
+				persistenceController.reloadData(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString());
+			}
+
+			updateContent();
+
+			ConfigedMain.getMainFrame().deactivateLoadingCursor();
+		}
+		if (p == PopupMenuTrait.POPUP_SAVE) {
+			ChangedDataManager.checkSaveAll(false);
+		}
 	}
 
 	@Override
