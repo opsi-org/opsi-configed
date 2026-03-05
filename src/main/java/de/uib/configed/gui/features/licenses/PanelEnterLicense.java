@@ -183,8 +183,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		if (clients == null) {
 			comboClient.setEnabled(false);
-			comboClient.addItem("");
 			comboClient.removeAllItems();
+			comboClient.addItem("");
 		} else {
 			comboClient.setModel(new DefaultComboBoxModel<>(clients.toArray(new String[0])));
 			comboClient.setEnabled(true);
@@ -384,8 +384,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		m.put(LicenseEntry.TYPE_KEY, jTextFieldLicenseType.getText());
 		m.put(LicenseEntry.MAX_INSTALLATIONS_KEY,
 				LicenseEntry.produceNormalizedCount(jTextFieldMaxInstallations.getText()));
-		m.put(LicenseEntry.BOUND_TO_HOST_KEY,
-				comboClient.getSelectedItem() == null ? null : comboClient.getSelectedItem().toString());
+		m.put(LicenseEntry.BOUND_TO_HOST_KEY, comboClient.getSelectedItem().toString());
 		m.put(LicenseEntry.EXPIRATION_DATE_KEY, jTextFieldEndOfLicense.getText());
 
 		String contractSendValue = jTextFieldLicenseContract.getText();
