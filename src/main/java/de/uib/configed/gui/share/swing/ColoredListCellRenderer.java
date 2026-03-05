@@ -19,7 +19,7 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 			boolean cellHasFocus) {
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		ColorTableCellRenderer.colorize(c, isSelected, index % 2 == 0);
+		ColorTableCellRenderer.colorize(c, isSelected, index);
 
 		return c;
 	}

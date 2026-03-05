@@ -17,8 +17,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer {
-	private Border noFocusBorder;
-	private Border focusBorder;
+	private Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+	private Border focusBorder = UIManager.getBorder("Table.focusCellHighlightBorder");
 
 	public CheckBoxTableCellRenderer() {
 		super();
@@ -31,21 +31,11 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		ColorTableCellRenderer.colorize(this, isSelected, row % 2 == 0, column % 2 == 0);
+		ColorTableCellRenderer.colorize(this, isSelected, row, column);
 
-		if (hasFocus) {
-			if (focusBorder == null) {
-				focusBorder = UIManager.getBorder("Table.focusCellHighlightBorder");
-			}
-			setBorder(focusBorder);
-		} else {
-			if (noFocusBorder == null) {
-				noFocusBorder = new EmptyBorder(1, 1, 1, 1);
-			}
-			setBorder(noFocusBorder);
-		}
-
+		setBorder(hasFocus ? focusBorder : noFocusBorder);
 		setSelected(Boolean.TRUE.equals(value));
+
 		return this;
 	}
 }

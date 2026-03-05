@@ -144,7 +144,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 				result = getSingleValueEditor(value, row);
 			}
 
-			ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
+			ColorTableCellRenderer.colorize(result, isSelected, row, column);
 		}
 
 		return result;
@@ -292,7 +292,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			result = rendererCheckBox;
 		}
 
-		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
+		ColorTableCellRenderer.colorize(result, isSelected, row, column);
 
 		return result;
 	}
