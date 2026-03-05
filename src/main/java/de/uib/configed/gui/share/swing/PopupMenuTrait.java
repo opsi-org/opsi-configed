@@ -27,6 +27,10 @@ import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class PopupMenuTrait extends JPopupMenu {
+	public enum PopupType {
+		USER, USERS, ROLE, ROLES
+	}
+
 	public static final int POPUP_SEPARATOR = 0;
 	public static final int POPUP_RELOAD = 4;
 
@@ -59,14 +63,16 @@ public final class PopupMenuTrait extends JPopupMenu {
 			Map.entry(POPUP_PDF, PopupMenuTrait::addItemPDF),
 			Map.entry(POPUP_EXPORT_CSV, PopupMenuTrait::addItemExportCSV),
 			Map.entry(POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait::addItemExportSelectedCSV),
-			Map.entry(POPUP_DELETE, PopupMenuTrait::addItemDelete), Map.entry(POPUP_ADD, PopupMenuTrait::addItemAdd));
+			Map.entry(POPUP_DELETE, this::addItemDelete), Map.entry(POPUP_ADD, this::addItemAdd));
 
 	private JComponent component;
 	private Map<Integer, Runnable> actions;
+	private PopupType popupType;
 
-	private PopupMenuTrait(JComponent component, Map<Integer, Runnable> actions) {
+	private PopupMenuTrait(JComponent component, Map<Integer, Runnable> actions, PopupType popupType) {
 		this.component = component;
 		this.actions = actions;
+		this.popupType = popupType;
 
 		// We want to have the popups in the order defined by the int constants
 		for (int i : new TreeSet<>(actions.keySet())) {
@@ -82,7 +88,12 @@ public final class PopupMenuTrait extends JPopupMenu {
 
 	public static JPopupMenu createAndBindJPopupMenu(JComponent component, Map<Integer, Runnable> actions,
 			Predicate<MouseEvent> condition) {
-		JPopupMenu popupMenu = new PopupMenuTrait(component, actions);
+		return createAndBindJPopupMenu(component, actions, condition, null);
+	}
+
+	public static JPopupMenu createAndBindJPopupMenu(JComponent component, Map<Integer, Runnable> actions,
+			Predicate<MouseEvent> condition, PopupType popupType) {
+		JPopupMenu popupMenu = new PopupMenuTrait(component, actions, popupType);
 
 		component.addMouseListener(new PopupMouseListener(popupMenu, condition));
 
@@ -99,12 +110,14 @@ public final class PopupMenuTrait extends JPopupMenu {
 	}
 
 	private JMenuItem createItemReload() {
-		JMenuItem item = new JMenuItem(Configed.getResourceValue("reload"));
+		String ressourceKey = popupType == null ? "reload" : "EditMapPanelGroupedForHostConfigs.reconstructUsers";
+
+		JMenuItem item = new JMenuItem(Configed.getResourceValue(ressourceKey));
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(item, "refresh");
 
 		Utils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
-				() -> action(POPUP_RELOAD));
+				() -> actions.get(POPUP_RELOAD).run());
 
 		return item;
 	}
@@ -177,48 +190,57 @@ public final class PopupMenuTrait extends JPopupMenu {
 		return item;
 	}
 
-	private static JMenuItem addItemDelete() {
+	private JMenuItem addItemDelete() {
 		JMenuItem item = new JMenuItem();
+
+		switch (popupType) {
+		case USER:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser"));
+			item.setToolTipText(
+					Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser.ToolTip"));
+			break;
+
+		case ROLE:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole"));
+			item.setToolTipText(
+					Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole.ToolTip"));
+			break;
+
+		default:
+			Logging.warning(this, "popupType ", popupType, " not defined for delete item");
+			break;
+		}
+
 		Icons.addIntellijIconToMenuItem(item, "remove");
 		item.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 
 		return item;
+
 	}
 
-	private static JMenuItem addItemAdd() {
+	private JMenuItem addItemAdd() {
 		JMenuItem item = new JMenuItem();
+
+		switch (popupType) {
+		case USER, USERS:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
+			item.setToolTipText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
+			break;
+
+		case ROLE, ROLES:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
+			item.setToolTipText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
+			break;
+
+		case null:
+			Logging.warning(this, "popupType is null, cannot set text for add item");
+			break;
+		}
+
 		Icons.addIntellijIconToMenuItem(item, "add");
 		item.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 		return item;
-	}
-
-	public void setText(int popup, String s) {
-		//int i = listPopups.indexOf(popup);
-		//if (i < 0) {
-		//	Logging.info(this, "setText - popup ", popup, " not in list");
-		//	return;
-		//}
-
-		//menuItems[i].setText(s);
-	}
-
-	public void setToolTipText(int popup, String s) {
-		//int i = listPopups.indexOf(popup);
-		//if (i < 0) {
-		//	Logging.info(this, "setToolTipText - popup ", popup, " not in list");
-		//	return;
-		//}
-
-		//menuItems[i].setToolTipText(s);
-	}
-
-	private void action(int p) {
-		if (actions.containsKey(p)) {
-			actions.get(p).run();
-		} else {
-			Logging.warning(this, "no action defined for popup ", p);
-		}
 	}
 }

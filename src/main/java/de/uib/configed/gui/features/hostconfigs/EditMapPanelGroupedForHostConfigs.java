@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -60,11 +59,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private JPopupMenu popupForUserpath;
-	private JPopupMenu popupForUserpathes;
-	private JPopupMenu popupForRolepath;
-	private JPopupMenu popupForRolepathes;
-
 	private List<String> theRoles;
 
 	private boolean isServerConfig;
@@ -92,78 +86,31 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		setupLayout();
 
 		setupPopups();
-		//setupPopupTexts();
 	}
 
 	private void setupPopups() {
-		popupForUserpathes = PopupMenuTrait.createAndBindJPopupMenu(tree,
+		PopupMenuTrait.createAndBindJPopupMenu(tree,
 				Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_DELETE, this::deleteUser,
 						PopupMenuTrait.POPUP_ADD, this::addUser),
-				event -> isUserPath(tree.getPathForLocation(event.getX(), event.getY())));
+				event -> isUserPath(tree.getPathForLocation(event.getX(), event.getY())),
+				PopupMenuTrait.PopupType.USER);
 
-		popupForUserpath = PopupMenuTrait.createAndBindJPopupMenu(tree,
+		PopupMenuTrait.createAndBindJPopupMenu(tree,
 				Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_ADD, this::addUser),
-				event -> isUserRoot(tree.getPathForLocation(event.getX(), event.getY())));
+				event -> isUserRoot(tree.getPathForLocation(event.getX(), event.getY())),
+				PopupMenuTrait.PopupType.USERS);
 
-		popupForRolepathes = PopupMenuTrait.createAndBindJPopupMenu(tree,
+		PopupMenuTrait.createAndBindJPopupMenu(tree,
 				Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_DELETE, this::deleteUser,
 						PopupMenuTrait.POPUP_ADD, this::addRole),
-				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), false));
+				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), false),
+				PopupMenuTrait.PopupType.ROLE);
 
-		popupForRolepath = PopupMenuTrait.createAndBindJPopupMenu(tree,
+		PopupMenuTrait.createAndBindJPopupMenu(tree,
 				Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_ADD, this::addRole),
-				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), true));
+				event -> isRolePath(tree.getPathForLocation(event.getX(), event.getY()), true),
+				PopupMenuTrait.PopupType.ROLES);
 	}
-
-	/*private void setupPopupTexts() {
-		popupForUserpath.setText(PopupMenuTrait.POPUP_RELOAD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
-	
-		popupForUserpathes.setText(PopupMenuTrait.POPUP_RELOAD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
-	
-		popupForRolepath.setText(PopupMenuTrait.POPUP_RELOAD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
-	
-		popupForRolepathes.setText(PopupMenuTrait.POPUP_RELOAD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
-	
-		popupForUserpath.setText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
-	
-		popupForUserpath.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
-	
-		popupForUserpathes.setText(PopupMenuTrait.POPUP_DELETE,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser"));
-	
-		popupForUserpathes.setToolTipText(PopupMenuTrait.POPUP_DELETE,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser.ToolTip"));
-	
-		popupForRolepathes.setText(PopupMenuTrait.POPUP_DELETE,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole"));
-	
-		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_DELETE,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole.ToolTip"));
-	
-		popupForUserpathes.setText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
-	
-		popupForUserpathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
-	
-		popupForRolepath.setText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
-	
-		popupForRolepath.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
-	
-		popupForRolepathes.setText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
-	
-		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
-	}*/
 
 	public void setSubpanelClasses(Map<String, String> classesMap) {
 		cellRenderer.setTooltips(classesMap);
