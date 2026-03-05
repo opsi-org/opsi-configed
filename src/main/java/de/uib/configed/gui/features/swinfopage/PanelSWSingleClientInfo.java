@@ -42,8 +42,8 @@ import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilter;
 import de.uib.configed.gui.share.table.TableModelFilterCondition;
-import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.type.SWAuditClientEntry;
@@ -223,8 +223,8 @@ public class PanelSWSingleClientInfo extends JPanel {
 		panelTable.getGenEditTable().getColumnModel().getColumn(0).setPreferredWidth(400);
 		panelTable.getGenEditTable().getColumnModel().getColumn(1).setPreferredWidth(200);
 		panelTable.getGenEditTable().getColumnModel().getColumn(2).setPreferredWidth(100);
-		panelTable.getGenEditTable().getColumnModel().getColumn(7)
-				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
+		panelTable.getGenEditTable().getColumnModel().getColumn(7).setCellRenderer(new IconTableCellRenderer<Boolean>(
+				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark")), false));
 
 		csvExportTable = new ExporterToCSV(panelTable.getGenEditTable());
 	}

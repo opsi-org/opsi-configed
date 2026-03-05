@@ -35,7 +35,7 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilter;
 import de.uib.configed.gui.share.table.TableModelFilterCondition;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
-import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
@@ -606,7 +606,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.getPanelRegisteredSoftware().getGenEditTable().getColumnModel()
 				.getColumn(COLUMN_MARK_CURSOR_ROW);
 		col.setMaxWidth(12);
-		col.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("localChanges"), null));
+		col.setCellRenderer(new IconTableCellRenderer<Boolean>(
+				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("localChanges")), false));
 
 		col = thePanel.getPanelRegisteredSoftware().getGenEditTable().getColumnModel()
 				.getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);

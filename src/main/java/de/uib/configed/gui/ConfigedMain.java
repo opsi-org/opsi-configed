@@ -49,9 +49,7 @@ import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.WindowsPositionManager;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
-import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
-import de.uib.configed.gui.share.table.gui.DeviceTypeIconTableCellRenderer;
-import de.uib.configed.gui.share.table.gui.PlatfromIconTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -588,12 +586,14 @@ public class ConfigedMain {
 	}
 
 	private void setSelectionPanelCols() {
-		BooleanIconTableCellRenderer defaultCheckMarkCellRenderer = new BooleanIconTableCellRenderer(
-				Icons.getIntellijIcon("checkmark", null), null);
-		BooleanIconTableCellRenderer opsiCheckMarkCellRenderer = new BooleanIconTableCellRenderer(
-				Icons.getIntellijIcon("checkmark", Globals.OPSI_OK), null);
-		PlatfromIconTableCellRenderer platformIconTableCellRenderer = new PlatfromIconTableCellRenderer();
-		DeviceTypeIconTableCellRenderer deviceTypeIconTableCellRenderer = new DeviceTypeIconTableCellRenderer();
+		IconTableCellRenderer<Boolean> defaultCheckMarkCellRenderer = new IconTableCellRenderer<>(
+				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark", null)), false);
+		IconTableCellRenderer<Boolean> opsiCheckMarkCellRenderer = new IconTableCellRenderer<>(
+				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark", Globals.OPSI_OK)), false);
+		IconTableCellRenderer<String> platformIconTableCellRenderer = new IconTableCellRenderer<>(
+				IconTableCellRenderer.PLATFORM_ICONS);
+		IconTableCellRenderer<String> deviceTypeIconTableCellRenderer = new IconTableCellRenderer<>(
+				IconTableCellRenderer.DEVICE_ICONS);
 
 		configureColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, opsiCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
