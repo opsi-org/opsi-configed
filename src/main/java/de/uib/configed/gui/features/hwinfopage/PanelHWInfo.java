@@ -145,9 +145,16 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
-			PopupMenuTrait.createAndBindJPopupMenu(jScrollPaneInfo.getViewport(),
-					Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_PDF, this::exportPDF,
-							PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal));
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_PDF,
+					this::exportPDF, PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal);
+
+			// We want to add the menu to all three components, 
+			// since we want it to be available, no matter where the user right clicks
+			// We cannot add it to the splitPane since the table will consume the event,
+			// it would not arrive at the splitPane
+			PopupMenuTrait.createAndBindJPopupMenu(table, actions);
+			PopupMenuTrait.createAndBindJPopupMenu(tree, actions);
+			PopupMenuTrait.createAndBindJPopupMenu(jScrollPaneInfo.getViewport(), actions);
 		}
 	}
 

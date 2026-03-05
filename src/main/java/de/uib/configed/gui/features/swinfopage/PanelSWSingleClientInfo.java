@@ -236,11 +236,13 @@ public class PanelSWSingleClientInfo extends JPanel {
 		this.add(panelTable, "grow, push");
 
 		if (withPopup) {
-			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(),
-					Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_FLOATING_COPY,
-							this::floatExternalX, PopupMenuTrait.POPUP_PDF, this::sendToPDF,
-							PopupMenuTrait.POPUP_EXPORT_CSV, this::sendToCSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-							this::sendToCSVonlySelected));
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
+					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternalX, PopupMenuTrait.POPUP_PDF, this::sendToPDF,
+					PopupMenuTrait.POPUP_EXPORT_CSV, this::sendToCSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+					this::sendToCSVonlySelected);
+
+			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(), actions);
+			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getTheScrollpane().getViewport(), actions);
 		}
 	}
 
