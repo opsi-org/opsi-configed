@@ -286,16 +286,10 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	}
 
 	private void addLicense() {
-		Object[] a = new Object[6];
-		a[0] = "l_" + Utils.getSeconds();
-		a[1] = "";
-		a[2] = LicenseEntry.LICENSE_TYPES.get(0);
-		a[3] = "1";
-		a[4] = "";
-		a[5] = "";
+		String[] a = new String[] { "l_" + Utils.getSeconds(), "", LicenseEntry.LICENSE_TYPES.get(0), "1", "", "" };
 
 		modelSoftwarelicenses.addRow(a);
-		thePanel.getPanelSoftwarelicenses().moveToValue("" + a[0], 0);
+		thePanel.getPanelSoftwarelicenses().moveToValue(a[0], 0);
 	}
 
 	private void pickSoftwareLicense() {
