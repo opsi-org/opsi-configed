@@ -7,6 +7,9 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,10 +37,12 @@ import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
+	public static final DateTimeFormatter DATE_TIME_FORMATTER_UNDERSCORE = DateTimeFormatter
+			.ofPattern("yyyy-MM-dd_HH:mm:ss");
+
 	private PanelEditLicenses thePanel;
 
 	private GenTableModel modelLicensekeys;
@@ -287,7 +292,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	}
 
 	private void addLicense() {
-		String[] a = new String[] { "l_" + Utils.getSeconds(), "", LicenseEntry.LICENSE_TYPES.get(0), "1", "", "" };
+		String[] a = new String[] { "l_" + LocalDateTime.now().format(DATE_TIME_FORMATTER_UNDERSCORE), "",
+				LicenseEntry.LICENSE_TYPES.get(0), "1", "", "" };
 
 		modelSoftwarelicenses.addRow(a);
 		thePanel.getPanelSoftwarelicenses().moveToValue(a[0], 0);
@@ -331,7 +337,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	}
 
 	public static void addContract(GenTableModel modelLicensecontracts, PanelGenEdit panelLicensecontracts) {
-		String[] a = new String[] { "c_" + Utils.getSeconds(), "", Utils.getDate(), "", "", "" };
+		String[] a = new String[] { "c_" + LocalDateTime.now().format(DATE_TIME_FORMATTER_UNDERSCORE), "",
+				LocalDate.now().toString(), "", "", "" };
 
 		modelLicensecontracts.addRow(a);
 		panelLicensecontracts.moveToValue(a[0], 0);
