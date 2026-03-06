@@ -10,39 +10,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import de.uib.configed.gui.type.SWAuditEntry;
 import de.uib.configed.share.ConfigUtils;
-import de.uib.configed.share.datastructure.Relation;
 import de.uib.configed.share.datastructure.StringValuedRelationElement;
 import de.uib.configed.share.logging.Logging;
 
-public class AuditSoftwareXLicensePool extends Relation {
+public class AuditSoftwareXLicensePool {
 	public static final String SW_ID = "swId";
 
-	private static final List<String> SOFTWARE_ATTRIBUTES;
-	static {
-		SOFTWARE_ATTRIBUTES = new ArrayList<>();
-		SOFTWARE_ATTRIBUTES.add(LicensepoolEntry.ID_SERVICE_KEY);
-		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.NAME);
-		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.VERSION);
-		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.SUB_VERSION);
-		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.LANGUAGE);
-		SOFTWARE_ATTRIBUTES.add(SWAuditEntry.ARCHITECTURE);
-	}
+	private static final List<String> SOFTWARE_ATTRIBUTES = List.of(LicensepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
+			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE);
 
-	private static final List<String> INTERFACED_ATTRIBUTES;
-	static {
-		INTERFACED_ATTRIBUTES = new ArrayList<>(SOFTWARE_ATTRIBUTES);
-		INTERFACED_ATTRIBUTES.add(SW_ID);
-	}
+	private static final List<String> INTERFACED_ATTRIBUTES = Stream
+			.concat(SOFTWARE_ATTRIBUTES.stream(), Stream.of(SW_ID)).toList();
 
 	public static final List<String> SERVICE_ATTRIBUTES = List.of(LicensepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE);
 
-	public AuditSoftwareXLicensePool() {
-		super(SOFTWARE_ATTRIBUTES);
-	}
+	private List<StringValuedRelationElement> relations = new ArrayList<>();
 
 	private static String produceSWident(Map<String, Object> m) {
 		return ConfigUtils.pseudokey(new String[] { getStringValue(m.get(SWAuditEntry.NAME)),
@@ -80,9 +67,13 @@ public class AuditSoftwareXLicensePool extends Relation {
 		rowmap.put(SW_ID, swIdent);
 
 		rowmap.put(LicensepoolEntry.ID_SERVICE_KEY, getStringValue(m.get(LicensepoolEntry.ID_SERVICE_KEY)));
-		add(rowmap);
+		relations.add(rowmap);
 
 		return rowmap;
+	}
+
+	public List<StringValuedRelationElement> getRelations() {
+		return relations;
 	}
 
 	private static String getStringValue(Object s) {

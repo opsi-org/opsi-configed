@@ -325,8 +325,9 @@ public class LicenseDataService extends DataService {
 	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
 		Map<String, Map<String, String>> rowsLicensePoolXOpsiProduct = new HashMap<>();
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			Logging.info(this, "licensePoolXOpsiProduct size ", getLicensePoolXOpsiProductPD().size());
-			for (StringValuedRelationElement element : getLicensePoolXOpsiProductPD()) {
+			List<StringValuedRelationElement> relations = getLicensePoolXOpsiProductPD().getRelations();
+			Logging.info(this, "licensePoolXOpsiProduct size ", relations.size());
+			for (StringValuedRelationElement element : relations) {
 				rowsLicensePoolXOpsiProduct
 						.put(ConfigUtils.pseudokey(new String[] { element.get(LicensePoolXOpsiProduct.LICENSE_POOL_KEY),
 								element.get(LicensePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);

@@ -141,7 +141,7 @@ public class SoftwareDataService extends DataService {
 			return;
 		}
 
-		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicensePools) {
+		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicensePools.getRelations()) {
 			SWAuditEntry entry = new SWAuditEntry(retrieved);
 			String licensePoolKEY = retrieved.get(LicensepoolEntry.ID_SERVICE_KEY);
 			String swKEY = entry.getIdent();
@@ -910,7 +910,7 @@ public class SoftwareDataService extends DataService {
 		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
 		// we take Set since we count only one usage per client
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = getAuditSoftwareXLicensePoolPD();
-		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool) {
+		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool.getRelations()) {
 			Logging.debug(this, " retrieveStatistics1 relationElement  ", swXpool);
 			String pool = swXpool.get(LicensepoolEntry.ID_SERVICE_KEY);
 
