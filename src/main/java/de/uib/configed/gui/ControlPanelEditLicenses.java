@@ -239,7 +239,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
-		menuItemAddContract.addActionListener(actionEvent -> addContract());
+		menuItemAddContract.addActionListener(
+				actionEvent -> addContract(modelLicensecontracts, thePanel.getPanelLicensecontracts()));
 		menuItemAddContract.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemAddContract);
