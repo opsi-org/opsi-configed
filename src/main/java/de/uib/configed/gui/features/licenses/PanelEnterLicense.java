@@ -183,8 +183,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		if (clients == null) {
 			comboClient.setEnabled(false);
-			comboClient.addItem("");
 			comboClient.removeAllItems();
+			comboClient.addItem("");
 		} else {
 			comboClient.setModel(new DefaultComboBoxModel<>(clients.toArray(new String[0])));
 			comboClient.setEnabled(true);
