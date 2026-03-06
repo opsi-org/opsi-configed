@@ -28,6 +28,7 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.CellDateEditor;
 import de.uib.configed.gui.share.table.gui.CellInputDialogEditor;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
@@ -334,17 +335,11 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		thePanel.getPanelKeys().setValueAt(val, thePanel.getPanelKeys().getGenEditTable().getSelectedRow(), 0);
 	}
 
-	private void addContract() {
-		Object[] a = new Object[6];
-		a[0] = "c_" + Utils.getSeconds();
-		a[1] = "";
-		a[2] = Utils.getDate();
-		a[3] = "";
-		a[4] = "";
-		a[5] = "";
+	public static void addContract(GenTableModel modelLicensecontracts, PanelGenEdit panelLicensecontracts) {
+		String[] a = new String[] { "c_" + Utils.getSeconds(), "", Utils.getDate(), "", "", "" };
 
 		modelLicensecontracts.addRow(a);
-		thePanel.getPanelLicensecontracts().moveToValue("" + a[0], 0);
+		panelLicensecontracts.moveToValue(a[0], 0);
 	}
 
 	private void pickLicenseContract() {
