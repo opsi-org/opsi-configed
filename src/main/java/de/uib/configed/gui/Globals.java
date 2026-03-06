@@ -24,7 +24,7 @@ public final class Globals {
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
 	public static final String VERDATE = "2026-03-03";
 
-	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
+	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - " + VERDATE.substring(0, 4) + " (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
 	public static final String MIN_MAJOR_VERSION = "4.3";
