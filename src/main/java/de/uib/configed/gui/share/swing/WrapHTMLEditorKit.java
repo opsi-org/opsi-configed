@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.share.swing;
 
-import javax.swing.SizeRequirements;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.Element;
 import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
@@ -26,7 +26,7 @@ import javax.swing.text.html.ParagraphView;
  * </p>
  */
 public final class WrapHTMLEditorKit extends HTMLEditorKit {
-	private final ViewFactory factory = new WrapViewFactory();
+	private final ViewFactory factory = new CharWrapViewFactory();
 
 	protected WrapHTMLEditorKit() {
 		super();
@@ -37,21 +37,33 @@ public final class WrapHTMLEditorKit extends HTMLEditorKit {
 		return factory;
 	}
 
-	private static class WrapViewFactory extends HTMLEditorKit.HTMLFactory {
-
+	/**
+	 * Custom HTMLFactory that replaces the default views with our
+	 * character-wrapping versions.
+	 */
+	private static class CharWrapViewFactory extends HTMLEditorKit.HTMLFactory {
 		@Override
 		public View create(Element elem) {
 			View view = super.create(elem);
 			return switch (view) {
-			case InlineView _ -> new WrapInlineView(elem);
+			case InlineView _ when AbstractDocument.ContentElementName.equals(elem.getName()) -> new CharWrapInlineView(
+					elem);
 			case ParagraphView _ -> new CharWrapParagraphView(elem);
 			default -> view;
 			};
 		}
 	}
 
-	private static class WrapInlineView extends InlineView {
-		public WrapInlineView(Element elem) {
+	/**
+	 * InlineView that supports character-level wrapping.
+	 * <p>
+	 * Overrides breakView and getBreakWeight so that lines can break at any
+	 * character instead of only at word boundaries.
+	 * </p>
+	 */
+	@SuppressWarnings("java:S2972")
+	private static class CharWrapInlineView extends InlineView {
+		public CharWrapInlineView(Element elem) {
 			super(elem);
 		}
 
@@ -64,6 +76,7 @@ public final class WrapHTMLEditorKit extends HTMLEditorKit {
 		public View breakView(int axis, int p0, float pos, float len) {
 			if (axis == View.X_AXIS) {
 				checkPainter();
+
 				int p1 = getGlyphPainter().getBoundedPosition(this, p0, pos, len);
 				if (p0 == getStartOffset() && p1 == getEndOffset()) {
 					return this;
@@ -72,26 +85,38 @@ public final class WrapHTMLEditorKit extends HTMLEditorKit {
 			}
 			return this;
 		}
+
+		@Override
+		public float getMinimumSpan(int axis) {
+			if (axis == X_AXIS) {
+				// allow the layout to shrink to 1 character (useful for very long words/URLs)
+				return 0;
+			}
+			return super.getMinimumSpan(axis);
+		}
 	}
 
+	/**
+	 * Paragraph view that allows character-level shrinking.
+	 * <p>
+	 * Only the minimum span is overridden to allow lines to shrink to a single
+	 * character. We do not override the layout, because the default Swing HTML
+	 * layout already handles {@code <br>
+	 * } correctly
+	 * </p>
+	 */
 	private static class CharWrapParagraphView extends ParagraphView {
 		public CharWrapParagraphView(Element elem) {
 			super(elem);
 		}
 
 		@Override
-		protected SizeRequirements calculateMinorAxisRequirements(int axis, SizeRequirements r) {
-			if (r == null) {
-				r = new SizeRequirements();
+		public float getMinimumSpan(int axis) {
+			if (axis == View.X_AXIS) {
+				// allow shrinking to a single character
+				return 0;
 			}
-			float pref = layoutPool.getPreferredSpan(axis);
-			float min = layoutPool.getMinimumSpan(axis);
-			// Don't include insets, Box.getXXXSpan will include them. 
-			r.minimum = (int) min;
-			r.preferred = Math.max(r.minimum, (int) pref);
-			r.maximum = Integer.MAX_VALUE;
-			r.alignment = 0.5F;
-			return r;
+			return super.getMinimumSpan(axis);
 		}
 	}
 }
