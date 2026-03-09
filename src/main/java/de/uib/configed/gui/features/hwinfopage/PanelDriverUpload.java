@@ -105,6 +105,10 @@ public class PanelDriverUpload extends JPanel {
 
 	private WebDAVClient webDAVClient;
 
+	private enum DriverAction {
+		CREATE_DRIVERS, SHOW_DRIVERS;
+	}
+
 	public PanelDriverUpload(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
@@ -241,18 +245,13 @@ public class PanelDriverUpload extends JPanel {
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
 		JButton buttonShowDrivers = new JButton(Icons.getIntellijIcon("run"));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
-		buttonShowDrivers.addActionListener(actionEvent -> showDrivers());
+		buttonShowDrivers.addActionListener(actionEvent -> executeDriverAction(DriverAction.SHOW_DRIVERS));
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		JButton btnCreateDrivers = new JButton(Icons.getIntellijIcon("run"));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
-		btnCreateDrivers.addActionListener((ActionEvent actionEvent) -> {
-			CommandExecutor executor = new CommandExecutor(configedMain,
-					new SingleCommandTemplate("create_driver_links.py", "/var/lib/opsi/depot/"
-							+ comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
-							"create_driver_links.py"));
-			executor.executeAsync();
-		});
+		btnCreateDrivers
+				.addActionListener((ActionEvent actionEvent) -> executeDriverAction(DriverAction.CREATE_DRIVERS));
 
 		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
@@ -396,11 +395,12 @@ public class PanelDriverUpload extends JPanel {
 		Logging.info(this, "makePath result ", path, " exists or created ", result);
 	}
 
-	private void showDrivers() {
+	private void executeDriverAction(DriverAction action) {
+		String pythonScript = action == DriverAction.CREATE_DRIVERS ? "create_driver_links.py" : "show_drivers.py";
+
 		CommandExecutor executor = new CommandExecutor(configedMain,
-				new SingleCommandTemplate("show_drivers.py", "/var/lib/opsi/depot/"
-						+ comboChooseWinProduct.getSelectedItem() + "/show_drivers.py " + labelClientName.getText(),
-						"show_drivers.py"));
+				new SingleCommandTemplate(pythonScript, "/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
+						+ "/" + pythonScript + " " + labelClientName.getText(), pythonScript));
 		executor.executeAsync();
 	}
 
