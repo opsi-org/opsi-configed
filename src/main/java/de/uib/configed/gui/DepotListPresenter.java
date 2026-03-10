@@ -121,6 +121,7 @@ public class DepotListPresenter extends JPanel {
 				showShell.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot"));
 			}
 			showShell.addActionListener(event -> TerminalController.openTerminalOnDepot());
+			showShell.setEnabled(true);
 		}
 	}
 
