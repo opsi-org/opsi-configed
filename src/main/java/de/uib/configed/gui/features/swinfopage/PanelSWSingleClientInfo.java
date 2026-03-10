@@ -242,7 +242,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 					this::sendToCSVonlySelected);
 
 			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(), actions);
-			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getTheScrollpane().getViewport(), actions);
 		}
 	}
 

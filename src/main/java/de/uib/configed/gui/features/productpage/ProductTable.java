@@ -32,6 +32,7 @@ public class ProductTable extends JTable {
 	public ProductTable() {
 		super.setDragEnabled(true);
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		super.setFillsViewportHeight(true);
 	}
 
 	@Override

@@ -264,6 +264,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setFillsViewportHeight(true);
 
 		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
 

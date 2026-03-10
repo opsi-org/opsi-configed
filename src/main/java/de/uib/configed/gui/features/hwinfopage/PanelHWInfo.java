@@ -123,6 +123,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
+		table.setFillsViewportHeight(true);
 		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
@@ -154,7 +155,6 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 			// it would not arrive at the splitPane
 			PopupMenuTrait.createAndBindJPopupMenu(table, actions);
 			PopupMenuTrait.createAndBindJPopupMenu(tree, actions);
-			PopupMenuTrait.createAndBindJPopupMenu(jScrollPaneInfo.getViewport(), actions);
 		}
 	}
 
