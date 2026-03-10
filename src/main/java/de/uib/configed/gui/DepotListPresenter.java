@@ -80,11 +80,11 @@ public class DepotListPresenter extends JPanel {
 
 	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
+		JMenuItem selectWithEqualProperties = new JMenuItem(
+				Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 		if (persistenceController.getDataServices().hostInfoCollections.getDepots().size() != 1) {
 			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 			selectAll.addActionListener(event -> depotslist.selectAll());
-			JMenuItem selectWithEqualProperties = new JMenuItem(
-					Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 			selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 			jPopupMenu.add(selectAll);
 			jPopupMenu.add(selectWithEqualProperties);
@@ -94,7 +94,8 @@ public class DepotListPresenter extends JPanel {
 		Icons.addIntellijIconToMenuItem(showShell, "terminal");
 		jPopupMenu.add(showShell);
 
-		jPopupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> updatePopupMenuItem(showShell)));
+		jPopupMenu.addPopupMenuListener(Utils
+				.createPopupMenuListenerOnVisible(() -> updatePopupMenuItem(showShell, selectWithEqualProperties)));
 
 		depotslist.setComponentPopupMenu(jPopupMenu);
 	}
@@ -104,10 +105,12 @@ public class DepotListPresenter extends JPanel {
 	 * update the selected depot (e.g. open terminal on the selected depot)
 	 * after the depotslist has been updated
 	 */
-	private void updatePopupMenuItem(JMenuItem showShell) {
+	private void updatePopupMenuItem(JMenuItem showShell, JMenuItem selectWithEqualProperties) {
 		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
 			// Disable the button if no depots selected or more than one depot
 			showShell.setEnabled(false);
+
+			selectWithEqualProperties.setEnabled(false);
 		} else if (selectedServerForbidden()) {
 			// Disable the button if the selected configserver is selected but forbidden 
 			//  or if depot is selected but forbidden by config "connect.terminal.forbidden"
@@ -122,6 +125,8 @@ public class DepotListPresenter extends JPanel {
 			}
 			showShell.addActionListener(event -> TerminalController.openTerminalOnDepot());
 			showShell.setEnabled(true);
+
+			selectWithEqualProperties.setEnabled(true);
 		}
 	}
 
