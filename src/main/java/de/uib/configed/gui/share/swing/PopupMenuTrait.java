@@ -75,9 +75,9 @@ public final class PopupMenuTrait extends JPopupMenu {
 		this.popupType = popupType;
 
 		// We want to have the popups in the order defined by the int constants
-		for (int i : new TreeSet<>(actions.keySet())) {
-			JMenuItem item = addPopup(i);
-			item.addActionListener(event -> actions.get(i).run());
+		for (int p : new TreeSet<>(actions.keySet())) {
+			JMenuItem item = createPopupForAction(p);
+			item.addActionListener(event -> actions.get(p).run());
 			super.add(item);
 		}
 	}
@@ -100,7 +100,7 @@ public final class PopupMenuTrait extends JPopupMenu {
 		return popupMenu;
 	}
 
-	private JMenuItem addPopup(final int p) {
+	private JMenuItem createPopupForAction(final int p) {
 		if (popupCreators.containsKey(p)) {
 			return popupCreators.get(p).get();
 		} else {
