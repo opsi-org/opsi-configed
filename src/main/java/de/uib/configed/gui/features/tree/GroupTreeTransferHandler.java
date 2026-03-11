@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
@@ -21,6 +22,8 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ClientTable;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.share.logging.Logging;
 
@@ -269,6 +272,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
 		Logging.debug(this, "importData, groupNode ", groupNode);
 
+		if (!confirmMovingNode(selectedObject, dropParentID)) {
+			return;
+		}
+
 		if (groupNode != null) {
 			// it is a group, and it will be moved, but only inside one partial tree
 			tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
@@ -284,5 +291,15 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 
 		Logging.debug(this, "importData ready, selectedObject ", selectedObject);
+	}
+
+	private static boolean confirmMovingNode(String movingNode, String group) {
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				String.format(Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.message"),
+						movingNode, group),
+				Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.title"),
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+		return answer == JOptionPane.YES_OPTION;
 	}
 }
