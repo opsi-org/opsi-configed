@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -299,7 +298,7 @@ public final class LicensingInfoMap {
 		} else {
 			moduleInfo = new HashMap<>();
 			moduleInfo.put(CLIENT_NUMBER, 0);
-			moduleInfo.put(LICENSE_IDS, Collections.emptyList());
+			moduleInfo.put(LICENSE_IDS, List.of());
 			moduleInfo.put(STATE, STATE_UNLICENSED);
 		}
 

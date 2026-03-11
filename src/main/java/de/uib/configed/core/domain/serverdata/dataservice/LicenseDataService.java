@@ -177,21 +177,17 @@ public class LicenseDataService extends DataService {
 	// retrieves the used software license - or tries to reserve one - for the given
 	// host and license pool
 	public String getLicenseUsage(String hostId, String licensePoolId) {
-		String result = null;
-		Map<String, Object> resultMap = null;
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId,
-					licensePoolId);
+			Map<String, Object> resultMap = dataServices.exec
+					.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_GET_OR_CREATE_OBJECT, hostId, licensePoolId);
 
 			if (!resultMap.isEmpty()) {
-				result = Utils
-						.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
-								"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+				return Utils.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
+						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
 
-		return result;
+		return null;
 	}
 
 	public String editLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
@@ -200,21 +196,17 @@ public class LicenseDataService extends DataService {
 			return null;
 		}
 
-		String result = null;
-		Map<String, Object> resultMap = null;
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE, softwareLicenseId,
-					licensePoolId, hostId, licenseKey, notes);
+			Map<String, Object> resultMap = dataServices.exec.getMapResult(RPCMethodName.LICENSE_ON_CLIENT_CREATE,
+					softwareLicenseId, licensePoolId, hostId, licenseKey, notes);
 
 			if (!resultMap.isEmpty()) {
-				result = Utils
-						.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
-								"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+				return Utils.pseudokey(new String[] { "" + resultMap.get(OpsiServiceNOMPersistenceController.HOST_KEY),
+						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
 
-		return result;
+		return null;
 	}
 
 	public void addDeletionLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId) {
@@ -416,17 +408,15 @@ public class LicenseDataService extends DataService {
 			return "";
 		}
 
-		String result = "";
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			if (dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_CREATE, licensePoolId, description)) {
-				result = licensePoolId;
+				return licensePoolId;
 			} else {
 				Logging.warning(this, "could not create licensepool ", licensePoolId);
 			}
 		}
 
-		return result;
+		return "";
 	}
 
 	public boolean deleteLicensePool(String licensePoolId) {
@@ -448,8 +438,6 @@ public class LicenseDataService extends DataService {
 			return "";
 		}
 
-		String result = "";
-
 		if (dataServices.module.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			Map<String, Object> licensePool = getLicensePool(licensePoolId);
 
@@ -459,13 +447,13 @@ public class LicenseDataService extends DataService {
 			licensePool.put("productIds", licensePoolProductIds);
 
 			if (dataServices.exec.doCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, licensePool)) {
-				result = licensePoolId;
+				return licensePoolId;
 			} else {
 				Logging.error(this, "could not update product ", productId, " to licensepool ", licensePoolId);
 			}
 		}
 
-		return result;
+		return "";
 	}
 
 	public boolean deleteRelationProductId2LPool(String productId, String licensePoolId) {
@@ -487,10 +475,7 @@ public class LicenseDataService extends DataService {
 	}
 
 	public Map<String, Object> getLicensePool(String licensePoolId) {
-		List<String> callAttributes = new ArrayList<>();
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("id", licensePoolId);
-		return dataServices.exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, callAttributes, callFilter)
-				.get(0);
+		Map<String, String> callFilter = Map.of("id", licensePoolId);
+		return dataServices.exec.getListOfMaps(RPCMethodName.LICENSE_POOL_GET_OBJECTS, Set.of(), callFilter).get(0);
 	}
 }

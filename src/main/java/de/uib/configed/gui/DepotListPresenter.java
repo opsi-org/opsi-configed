@@ -107,7 +107,7 @@ public class DepotListPresenter extends JPanel {
 	 * after the depotslist has been updated
 	 */
 	private void updatePopupMenuItem(JMenuItem showShell, JMenuItem selectWithEqualProperties, JMenuItem selectAll) {
-		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
+		if (depotslist.getSelectedValuesList().size() != 1) {
 			if (depotslist.getSelectedValuesList().size() == depotslist.getModel().getSize()) {
 				selectAll.setEnabled(false);
 			}

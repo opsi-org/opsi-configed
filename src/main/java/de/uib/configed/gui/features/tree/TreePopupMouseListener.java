@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.tree;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -27,20 +28,20 @@ import de.uib.configed.share.logging.Logging;
 public class TreePopupMouseListener {
 	private AbstractGroupTree tree;
 
-	private TreePath mousePath;
-
 	private JMenuItem menuItemCreateNode;
 	private JMenuItem menuItemEditNode;
 	private JMenuItem menuItemDeleteNode;
 	private JMenuItem menuItemDeleteGroupNode;
 	private JMenuItem menuItemRemoveElements;
 
+	private boolean anyVisible;
+
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
 		new PopupMouseListener(jPopupMenu, this::checkAccepted, List.of(tree));
 
 		this.tree = tree;
 
-		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
+		menuItemCreateNode = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItemCreateNode, "add");
 		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
 		menuItemCreateNode
@@ -48,16 +49,16 @@ public class TreePopupMouseListener {
 						.isGlobalReadOnly());
 		jPopupMenu.add(menuItemCreateNode);
 
-		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editGroup"));
+		menuItemEditNode = new JMenuItem();
 		Icons.addIntellijIconToMenuItem(menuItemEditNode, "edit");
-		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(mousePath));
+		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(tree.getSelectionPath()));
 		menuItemEditNode.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 		jPopupMenu.add(menuItemEditNode);
 
 		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"));
 		Icons.addIntellijIconToMenuItem(menuItemDeleteNode, "remove");
-		menuItemDeleteNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
+		menuItemDeleteNode.addActionListener(actionEvent -> tree.deleteNodes(tree.getSelectionPaths()));
 		menuItemDeleteNode
 				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 						.isGlobalReadOnly());
@@ -65,7 +66,7 @@ public class TreePopupMouseListener {
 
 		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
 		Icons.addIntellijIconToMenuItem(menuItemDeleteGroupNode, "delete");
-		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
+		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteGroupNodes(tree.getSelectionPaths()));
 		menuItemDeleteGroupNode
 				.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 						.isGlobalReadOnly());
@@ -83,24 +84,27 @@ public class TreePopupMouseListener {
 	}
 
 	private void makeSubGroup() {
-		GroupNode resultNode = tree.makeSubgroupAt(mousePath);
+		TreePath selectedPath = tree.getSelectionPath();
+		GroupNode resultNode = tree.makeSubgroupAt(selectedPath);
 		if (resultNode != null) {
-			tree.makeVisible(mousePath.pathByAddingChild(resultNode));
+			tree.makeVisible(selectedPath.pathByAddingChild(resultNode));
 			tree.repaint();
 		}
 	}
 
 	private void removeElements() {
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("AbstractGroupTree.removeAllElements.message"),
-				Configed.getResourceValue("AbstractGroupTree.removeAllElements.title"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE);
-		if (answer != JOptionPane.YES_OPTION) {
-			return;
-		}
+		TreePath selectedPath = tree.getSelectionPath();
 
-		if (mousePath != null
-				&& mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode groupNode) {
+		if (selectedPath != null
+				&& selectedPath.getPathComponent(selectedPath.getPathCount() - 1) instanceof GroupNode groupNode) {
+
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					String.format(Configed.getResourceValue("AbstractGroupTree.removeAllElements.message"), groupNode),
+					Configed.getResourceValue("AbstractGroupTree.removeAllElements.title"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (answer != JOptionPane.YES_OPTION) {
+				return;
+			}
 
 			List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 
@@ -117,71 +121,138 @@ public class TreePopupMouseListener {
 		}
 	}
 
-	private boolean shouldShow(MouseEvent e) {
+	private boolean shouldShow() {
+		TreePath selectedPath = tree.getSelectionPath();
+
+		if (selectedPath == null) {
+			return false;
+		}
+
+		Logging.debug(this, "shouldShow clickPath  ", selectedPath);
+
+		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+
+		return !containsGroupAndNode(tree.getSelectionPaths()) && !tree.isGroupNodeFullList(clickNode);
+	}
+
+	private static boolean containsGroupAndNode(TreePath[] paths) {
+		boolean containsNode = false;
+		boolean containsGroup = false;
+
+		for (TreePath path : paths) {
+			DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+			boolean isGroup = contextNode.getAllowsChildren();
+			containsGroup |= isGroup;
+			containsNode |= !isGroup;
+
+			if (containsGroup && containsNode) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean checkAccepted(MouseEvent e) {
 		if (!tree.isEnabled()) {
 			return false;
 		}
 
-		int mouseRow = tree.getRowForLocation(e.getX(), e.getY());
-		mousePath = tree.getPathForLocation(e.getX(), e.getY());
+		selectMousePathIfNotSelected(e);
 
-		// no node selection area
-		if (mouseRow == -1) {
-			mousePath = null;
+		if (!shouldShow()) {
 			return false;
 		}
 
-		Logging.debug(this, "shouldShow clickPath  ", mousePath);
+		hideAllMenuItems();
 
-		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
+		TreePath selectedPath = tree.getSelectionPath();
+		DefaultMutableTreeNode contextNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 
-		return !tree.isGroupNodeFullList(clickNode);
+		configureMenuVisibility(contextNode);
+
+		updateContextLabels(contextNode);
+
+		return anyVisible;
 	}
 
-	private boolean checkAccepted(MouseEvent e) {
-		if (!shouldShow(e)) {
-			return false;
+	private void configureMenuVisibility(DefaultMutableTreeNode contextNode) {
+		boolean contextIsGroup = contextNode.getAllowsChildren();
+
+		List<DefaultMutableTreeNode> selectedNodes = getSelectedNodes();
+
+		if (contextIsGroup) {
+			boolean contextIsFixed = ((GroupNode) contextNode).isFixed();
+			boolean contextIsAssignable = !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(contextNode.toString());
+
+			long selectedGroupCount = selectedNodes.stream().filter(TreeNode::getAllowsChildren).count();
+			boolean oneGroupSelected = selectedGroupCount == 1;
+			boolean anyGroupsSelected = selectedGroupCount > 0;
+
+			setMenuItemVisible(menuItemCreateNode, oneGroupSelected && contextIsAssignable);
+			setMenuItemVisible(menuItemEditNode, oneGroupSelected && contextIsAssignable && !contextIsFixed);
+			setMenuItemVisible(menuItemDeleteGroupNode, anyGroupsSelected && !contextIsFixed);
+			setMenuItemVisible(menuItemRemoveElements, oneGroupSelected && !contextIsFixed);
+		} else {
+			boolean contextParentIsFixed = ((GroupNode) contextNode.getParent()).isFixed();
+			boolean anyMembersSelected = selectedNodes.stream().anyMatch(n -> !n.getAllowsChildren());
+
+			setMenuItemVisible(menuItemDeleteNode, anyMembersSelected && !contextParentIsFixed);
+		}
+	}
+
+	private void selectMousePathIfNotSelected(MouseEvent e) {
+		TreePath mousePath = getMousePath(e);
+		if (mousePath == null) {
+			return;
 		}
 
+		if (!tree.isPathSelected(mousePath)) {
+			tree.setSelectionPath(mousePath);
+		}
+	}
+
+	private TreePath getMousePath(MouseEvent e) {
+		int mouseRow = tree.getRowForLocation(e.getX(), e.getY());
+		TreePath mousePath = tree.getPathForLocation(e.getX(), e.getY());
+
+		return mouseRow == -1 ? null : mousePath;
+	}
+
+	private void hideAllMenuItems() {
 		menuItemCreateNode.setVisible(false);
 		menuItemEditNode.setVisible(false);
 		menuItemDeleteNode.setVisible(false);
 		menuItemDeleteGroupNode.setVisible(false);
 		menuItemRemoveElements.setVisible(false);
+	}
 
-		int numberVisibleItems = 0;
-
-		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
-		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
-
-		if (clickNode.getAllowsChildren()) {
-			if (!ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(clickNode.toString())) {
-				menuItemCreateNode.setVisible(true);
-				numberVisibleItems++;
-			}
-
-			if (!ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(clickNode.toString())
-					&& !(((GroupNode) clickNode).isFixed())) {
-				menuItemEditNode.setVisible(true);
-				numberVisibleItems++;
-			}
-
-			if (!(((GroupNode) clickNode).isFixed())) {
-				menuItemDeleteGroupNode.setVisible(true);
-				numberVisibleItems++;
-			}
-
-			if (!(((GroupNode) clickNode).isFixed())) {
-				menuItemRemoveElements.setVisible(true);
-				numberVisibleItems++;
-			}
-		} else if (!(((GroupNode) parentNode).isFixed())) {
-			menuItemDeleteNode.setVisible(true);
-			numberVisibleItems++;
-		} else {
-			// Do nothing since no item visible
+	private List<DefaultMutableTreeNode> getSelectedNodes() {
+		TreePath[] paths = tree.getSelectionPaths();
+		if (paths == null) {
+			return List.of();
 		}
+		return Arrays.stream(paths).map(p -> (DefaultMutableTreeNode) p.getLastPathComponent()).toList();
+	}
 
-		return numberVisibleItems > 0;
+	private void updateContextLabels(DefaultMutableTreeNode contextNode) {
+		if (menuItemCreateNode.isVisible()) {
+			menuItemCreateNode.setText(
+					String.format(Configed.getResourceValue("ClientTree.addNode"), contextNode.getUserObject()));
+		}
+		if (menuItemEditNode.isVisible()) {
+			menuItemEditNode.setText(
+					String.format(Configed.getResourceValue("ClientTree.editGroup"), contextNode.getUserObject()));
+		}
+		if (menuItemRemoveElements.isVisible()) {
+			menuItemRemoveElements.setText(String.format(Configed.getResourceValue(
+					tree instanceof ClientTree ? "ClientTree.removeAllElements" : "ProductTree.removeAllElements"),
+					contextNode.getUserObject()));
+		}
+	}
+
+	private void setMenuItemVisible(JMenuItem menuItem, boolean visible) {
+		menuItem.setVisible(visible);
+		anyVisible |= menuItem.isVisible();
 	}
 }

@@ -82,8 +82,7 @@ public class RPCMethodExecutor extends DataService {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
-			Map<String, Object> jO = POJOReMapper.remap(response.getValue());
-			String error = dataServices.exec.getErrorFromResponse(jO);
+			String error = dataServices.exec.getErrorFromResponse(POJOReMapper.remap(response.getValue()));
 
 			if (error != null) {
 				error = response.getKey() + ":\t" + error;

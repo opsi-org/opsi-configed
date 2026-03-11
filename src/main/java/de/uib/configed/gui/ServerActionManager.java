@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +58,9 @@ public final class ServerActionManager {
 		ServerActionManager.persistenceController = persistenceController;
 	}
 
-	public static void createClients(List<List<Object>> clients) {
-		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
+	public static void createClients(List<Map<String, Object>> clients) {
+		List<String> createdClientNames = clients.stream()
+				.map(v -> (String) v.get(HostInfo.HOSTNAME_KEY) + "." + v.get(HostInfo.CSV_DOMAIN_KEY)).toList();
 		isLocalChangeInProgress.set(true);
 
 		try {
@@ -82,11 +82,12 @@ public final class ServerActionManager {
 		}
 	}
 
-	private static String getGroupToActivate(List<List<Object>> clients) {
+	@SuppressWarnings("unchecked")
+	private static String getGroupToActivate(List<Map<String, Object>> clients) {
 		// We want to activate the group if we create exactly one client in exactly one group
 		if (clients.size() == 1) {
-			List<Object> client = clients.get(0);
-			List<String> groups = HostInfo.getGroupsFromObject(client.get(9));
+			Map<String, Object> client = clients.get(0);
+			List<String> groups = (List<String>) client.get(HostInfo.CSV_GROUPS_KEY);
 			if (groups.size() == 1) {
 				return groups.get(0);
 			}
@@ -138,7 +139,7 @@ public final class ServerActionManager {
 	}
 
 	public static void processActionRequestsAllProducts(String visibility) {
-		processActionRequests(Collections.emptySet(), visibility);
+		processActionRequests(Set.of(), visibility);
 	}
 
 	public static void processActionRequestsSelectedProducts(String visibility) {
@@ -237,9 +238,9 @@ public final class ServerActionManager {
 				+ Utils.getListStringRepresentation(configedMain.getSelectedClients()).replace(";", "");
 
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
-				Configed.getResourceValue("ConfigedMain.TitleClientAction"), 0);
+				Configed.getResourceValue("ConfigedMain.TitleClientAction"), JOptionPane.YES_NO_OPTION);
 
-		return answer == 0;
+		return answer == JOptionPane.YES_OPTION;
 	}
 
 	public static void copySelectedClient() {
@@ -371,7 +372,7 @@ public final class ServerActionManager {
 				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE);
 
-		return answer == 0;
+		return answer == JOptionPane.YES_OPTION;
 	}
 
 	public static void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
@@ -394,7 +395,7 @@ public final class ServerActionManager {
 					withDependencies, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		}
 
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
 
 		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().updateProductTab();
 

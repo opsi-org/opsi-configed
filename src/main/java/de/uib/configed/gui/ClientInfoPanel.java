@@ -13,7 +13,6 @@ import java.awt.datatransfer.StringSelection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -292,14 +291,6 @@ public class ClientInfoPanel extends JPanel {
 		dataAreChangedProgramatically = false;
 	}
 
-	public static ImageIcon getDeviceTypeIcon(String deviceType) {
-		if (deviceType == null || "<<intern:empty>>".equals(deviceType)) {
-			deviceType = "";
-		}
-
-		return Utils.determineIconBasedOnDeviceType(deviceType, 20);
-	}
-
 	public static String transformDeviceType(String deviceType) {
 		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
 		if ("<<intern:empty>>".equals(deviceTypeResourceKey)) {
@@ -312,7 +303,7 @@ public class ClientInfoPanel extends JPanel {
 	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
 		dataAreChangedProgramatically = true;
 
-		labelDeviceTypeIcon.setIcon(getDeviceTypeIcon(deviceType));
+		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceType, 20));
 
 		jTextFieldDeviceType.setText(transformDeviceType(deviceType));
 

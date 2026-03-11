@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ControlPanelEditLicenses;
 import de.uib.configed.gui.ControlPanelEnterLicense;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
@@ -41,7 +43,6 @@ import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
-import de.uib.configed.share.Utils;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
 import net.miginfocom.swing.MigLayout;
@@ -151,7 +152,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 		}
 
 		jTextFieldLicenseID.setEnabled(true);
-		jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
+		jTextFieldLicenseID
+				.setText("l_" + LocalDateTime.now().format(ControlPanelEditLicenses.DATE_TIME_FORMATTER_UNDERSCORE));
 
 		jTextFieldEndOfLicense.setEnabled(true);
 		jTextFieldEndOfLicense.setText("");
@@ -192,7 +194,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		if (enableLicenseID) {
 			jTextFieldLicenseID.setEnabled(true);
-			jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
+			jTextFieldLicenseID.setText(
+					"l_" + LocalDateTime.now().format(ControlPanelEditLicenses.DATE_TIME_FORMATTER_UNDERSCORE));
 		}
 	}
 
@@ -300,28 +303,30 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 	private JPanel createBottomPane() {
 		JPanel bottomPane = new JPanel(
-				new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]" + Globals.GAP_SIZE + "[]"));
+				new MigLayout("insets 0, wrap 1", "[grow,fill]", "[grow]" + Globals.GAP_SIZE + "[grow, 0:0]"));
 		bottomPane.add(createPanelTask(), "grow, push");
 		bottomPane.add(panelKeys, "grow, push, hmin 0");
 		return bottomPane;
 	}
 
 	private JPanel createPanelTask() {
-		JPanel panelTask = new JPanel(new MigLayout("insets 0", "[grow]",
-				"[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]" + Globals.MIN_GAP_SIZE + "[]2[]2[]"));
+		JPanel panelTask = new JPanel(
+				new MigLayout("insets 0, wrap 1", "[grow]", "[pref!]" + Globals.MIN_GAP_SIZE + "[grow]"
+						+ Globals.MIN_GAP_SIZE + "[pref!]2[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]2[pref!]2[pref!]"));
 
-		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.Task") + ":"), "wrap");
-		panelTask.add(panelLicenseContracts, "grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", wrap");
-		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.ChooseType")), "wrap");
+		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.Task") + ":"));
+		panelTask.add(panelLicenseContracts,
+				"grow, push, hmin " + MIN_PANEL_TABLE_HEIGHT + ", h " + MIN_PANEL_TABLE_HEIGHT);
+		panelTask.add(new JLabel(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.ChooseType")));
 
 		panelTask.add(jButtonCreateStandard, "split 4, sizegroup btns");
 		panelTask.add(jButtonCreateVolume, "gapleft 18, sizegroup btns");
 		panelTask.add(jButtonCreateOEM, "gapleft 18, sizegroup btns");
 		panelTask.add(jButtonCreateConcurrent, "gapleft 18, sizegroup btns, wrap");
 
-		panelTask.add(createPanelLicenseModel(), "growx, wrap");
-		panelTask.add(createPanelEnterKey(), "growx, wrap");
-		panelTask.add(jButtonSend, "wrap");
+		panelTask.add(createPanelLicenseModel(), "growx");
+		panelTask.add(createPanelEnterKey(), "growx");
+		panelTask.add(jButtonSend);
 
 		return panelTask;
 	}

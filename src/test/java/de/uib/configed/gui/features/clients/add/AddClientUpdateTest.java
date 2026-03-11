@@ -14,11 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.type.HostInfo;
 
 class AddClientUpdateTest {
 	private static AddClientModel baseModel() {
@@ -29,9 +32,25 @@ class AddClientUpdateTest {
 				.netbootProducts(List.of("nb1", "nb2")).build();
 	}
 
-	private static List<Object> row(String hostname, String domain, String depot, String desc, String inv, String notes,
-			String ip, String uuid, String mac, String netboot, String shutdown, String wan, String groups) {
-		return List.of(hostname, domain, depot, mac, desc, inv, notes, uuid, ip, groups, wan, shutdown, netboot);
+	private Map<String, Object> map(String hostname, String domain, String depot, String description, String inventory,
+			String notes, String ipAddress, String uuid, String macAddress, String netbootProduct, String wanConfig,
+			String installOnShutdown, String groups, String key) {
+		Map<String, Object> client = new HashMap<>();
+		client.put(HostInfo.HOSTNAME_KEY, hostname);
+		client.put(HostInfo.CSV_DOMAIN_KEY, domain);
+		client.put(HostInfo.DEPOT_OF_CLIENT_KEY, depot);
+		client.put(HostInfo.CLIENT_MAC_ADDRESS_KEY, macAddress);
+		client.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
+		client.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventory);
+		client.put(HostInfo.CLIENT_NOTES_KEY, notes);
+		client.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, uuid);
+		client.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipAddress);
+		client.put(HostInfo.CSV_GROUPS_KEY, groups);
+		client.put(HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
+		client.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, installOnShutdown);
+		client.put(HostInfo.HOST_KEY_KEY, key);
+		client.put(HostInfo.CSV_NETBOOT_PRODUCT_KEY, netbootProduct);
+		return client;
 	}
 
 	@Test
@@ -242,11 +261,11 @@ class AddClientUpdateTest {
 	@Test
 	void shouldTriggerCreateClients_whenCSVImported() {
 		AddClientModel model = baseModel();
-		List<List<Object>> rows = new ArrayList<>();
-		rows.add(
-				row("h2", "dom", "d", "d", "i", "notes", "ip", "uuid", "mac", "netboot", "true", "false", "grp1;grp2"));
-		rows.add(
-				row("h3", "dom", "d", "d", "i", "notes", "ip", "uuid", "mac", "netboot", "true", "false", "grp1;grp2"));
+		List<Map<String, Object>> rows = new ArrayList<>();
+		rows.add(map("h2", "dom", "d", "d", "i", "notes", "ip", "uuid", "mac", "netboot", "true", "false", "grp1,grp2",
+				""));
+		rows.add(map("h3", "dom", "d", "d", "i", "notes", "ip", "uuid", "mac", "netboot", "true", "false", "grp1,grp2",
+				""));
 
 		UpdateResult<AddClientModel, AddClientEffect> result = AddClientUpdate
 				.update(new AddClientMsg.ActionMsg.CSVImported(rows, true), model);

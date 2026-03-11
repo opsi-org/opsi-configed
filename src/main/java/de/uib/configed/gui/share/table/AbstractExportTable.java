@@ -12,12 +12,12 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.formdev.flatlaf.util.SystemFileChooser;
+import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -31,7 +31,6 @@ public abstract class AbstractExportTable {
 	protected Map<String, String> metaData;
 
 	protected FileNameExtensionFilter extensionFilter;
-	protected String defaultExportFilename;
 
 	private File exportDirectory;
 
@@ -131,32 +130,23 @@ public abstract class AbstractExportTable {
 
 	protected String checkFile(String filename, FileNameExtensionFilter exFilter) {
 		if (filename == null) {
-			JFileChooser chooser = new JFileChooser(exportDirectory);
-			chooser.setFileHidingEnabled(false);
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			SystemFileChooser fileChooser = new SystemFileChooser(exportDirectory);
+			fileChooser.setFileHidingEnabled(false);
+			fileChooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
 
-			chooser.addChoosableFileFilter(exFilter);
+			fileChooser.addChoosableFileFilter(exFilter);
 
-			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
+			fileChooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
+			fileChooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
 
-			chooser.setApproveButtonText(Configed.getResourceValue("buttonOK"));
-			chooser.setApproveButtonToolTipText(Configed.getResourceValue("ExportTable.approveTooltip"));
+			fileChooser.setApproveButtonText(Configed.getResourceValue("buttonOK"));
 
-			SwingUtilities.updateComponentTreeUI(chooser);
+			int returnVal = fileChooser.showDialog(ConfigedMain.getMainFrame(), null);
+			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+				filename = fileChooser.getSelectedFile().getAbsolutePath();
 
-			int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), null);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				filename = chooser.getSelectedFile().getAbsolutePath();
-
-				File file = new File(filename);
-
-				if (file.isDirectory()) {
-					filename = filename + File.separator + defaultExportFilename;
-				} else if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
+				if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
 					filename = filename + ".csv";
-				} else {
-					// Do nothing when it's a file with ending ".csv"
 				}
 
 				Logging.debug(this, "filename ", filename);
@@ -200,18 +190,17 @@ public abstract class AbstractExportTable {
 
 		File defaultFile = new File(writeToFile);
 
-		JFileChooser chooser = new JFileChooser(exportDirectory);
-		chooser.setFileHidingEnabled(false);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
+		SystemFileChooser fileChooser = new SystemFileChooser(exportDirectory);
+		fileChooser.setFileHidingEnabled(false);
+		fileChooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
 
-		chooser.setSelectedFile(defaultFile);
-		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		chooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
-
-		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			fileName = chooser.getSelectedFile().getAbsolutePath();
+		fileChooser.setSelectedFile(defaultFile);
+		fileChooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
+		fileChooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
+		int returnVal = fileChooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
+		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
+			fileName = fileChooser.getSelectedFile().getAbsolutePath();
 			Logging.info(this, "clicked ok on JFileChosser, get now fileName: ", fileName);
 		}
 

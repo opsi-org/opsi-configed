@@ -204,11 +204,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	public void startMultiLineEditing() {
 		int row = table.getSelectedRow();
-		if (row == -1) {
-			return;
+		if (row != -1) {
+			propertiesCellEditorAndRenderer.editMultiValueSingleLine(table, row);
 		}
-
-		propertiesCellEditorAndRenderer.editMultiValueSingleLine(table, row);
 	}
 
 	public void setOriginalMap(Map<String, Object> originalMap) {
@@ -298,7 +296,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			jComponent.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
-		} else if (!defaultValue.equals(table.getValueAt(row, 1))) {
+		} else if (!defaultValue.equals(table.getValueAt(row, 1))
+				|| (originalMap != null && originalMap.containsKey(names.get(row)))) {
 			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else {
 			// Do nothing when default equals real value
@@ -333,20 +332,16 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	private boolean checkKey(String s) {
-		boolean ok = false;
-
-		if (s != null && !s.isEmpty()) {
-			ok = true;
-
-			if (names.contains(s)) {
-				ok = JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("EditMapPanelX.entryAlreadyExists"),
-						Configed.getResourceValue("EditMapPanelX.titleEntryAlreadyExists"),
-						JOptionPane.OK_CANCEL_OPTION);
-			}
+		if (s == null || s.isEmpty()) {
+			return false;
 		}
 
-		return ok;
+		if (!names.contains(s)) {
+			return true;
+		}
+		return JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("EditMapPanelX.entryAlreadyExists"),
+				Configed.getResourceValue("EditMapPanelX.titleEntryAlreadyExists"), JOptionPane.OK_CANCEL_OPTION);
 	}
 
 	public boolean addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable,

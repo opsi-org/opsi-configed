@@ -9,6 +9,8 @@ package de.uib.configed.gui.features.csv;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import de.uib.configed.share.logging.Logging;
+
 public class CSVHeaderDetector {
 	private static final Pattern containsDigitsPattern = Pattern.compile(".*\\d.*");
 
@@ -42,8 +44,20 @@ public class CSVHeaderDetector {
 	public boolean detect() {
 		hasHeader = true;
 
-		if (containsDigits() || containsEmptyFields() || containsFieldsWithEmbeddedQuotes()) {
+		boolean containsDigits = containsDigits();
+		boolean containsEmptyFields = containsEmptyFields();
+		boolean containsFieldsWithEmbeddedQuotes = containsFieldsWithEmbeddedQuotes();
+		boolean containsNotAllowedCharactersInHeader = containsDigits || containsEmptyFields
+				|| containsFieldsWithEmbeddedQuotes;
+
+		Logging.debug(this, "Checking if the line is a header:", line);
+		Logging.debug(this, "Line check details: contains digits =", containsDigits, ", contains empty fields =",
+				containsEmptyFields, ", contains fields with embedded quotes =", containsFieldsWithEmbeddedQuotes);
+		Logging.debug(this, "Does the line contain any not allowed characters?", containsNotAllowedCharactersInHeader);
+
+		if (containsNotAllowedCharactersInHeader) {
 			hasHeader = false;
+
 			return hasHeader;
 		}
 
