@@ -19,8 +19,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
@@ -29,7 +27,6 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
-import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.DepotsList;
@@ -45,7 +42,7 @@ import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 
-public class PanelProductProperties extends AbstractConfigurationTab implements AncestorListener {
+public class PanelProductProperties extends AbstractConfigurationTab {
 	private PanelGenEdit paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
@@ -60,8 +57,6 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		super(true, false);
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
-
-		super.addAncestorListener(this);
 
 		init();
 	}
@@ -270,20 +265,5 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 			}
 		}
-	}
-
-	@Override
-	public void ancestorAdded(AncestorEvent event) {
-		splitPane.setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
-	}
-
-	@Override
-	public void ancestorMoved(AncestorEvent event) {
-		// Not needed for this here
-	}
-
-	@Override
-	public void ancestorRemoved(AncestorEvent event) {
-		// Not needed for this here
 	}
 }
