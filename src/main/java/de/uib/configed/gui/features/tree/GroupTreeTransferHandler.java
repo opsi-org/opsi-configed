@@ -40,11 +40,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
-		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
-			return false;
-		}
-
-		if (!canImportToThisComponent(support.getComponent())) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
+				|| !canImportToThisComponent(support.getComponent())) {
 			return false;
 		}
 
@@ -107,7 +104,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	*/
 	private static boolean nodesAreNotEqualOrAncestor(GroupNode sourceNode, GroupNode targetNode) {
 		return AbstractGroupTree.ALL_GROUPS_NAME.equals(targetNode.toString()) || (!sourceNode.equals(targetNode)
-				&& !sourceNode.isNodeAncestor(targetNode) && !targetNode.isNodeAncestor(sourceNode));
+				&& !targetNode.isNodeAncestor(sourceNode) && sourceNode.getParent() != targetNode);
 	}
 
 	private boolean canImportToThisComponent(Component target) {
