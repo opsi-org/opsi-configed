@@ -100,7 +100,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		JPanel panelTop = new JPanel();
 		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));
-		panelTop.add(scrollpaneDepots, "growx");
+		panelTop.add(scrollpaneDepots, "grow");
 		panelTop.add(buttonSetValuesFromPackage, "aligny bottom");
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
