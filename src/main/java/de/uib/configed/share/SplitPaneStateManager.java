@@ -37,23 +37,35 @@ public final class SplitPaneStateManager {
 	 * @param key       A unique key to store the divider location
 	 */
 	public static void registerSplitPane(JSplitPane splitPane, String key) {
-		// Restore saved divider location
-		String value = UserPreferences.get(buildDividerLocationKey(key));
-		if (value != null) {
-			try {
-				int dividerLocation = Integer.parseInt(value);
-				SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(dividerLocation));
-			} catch (NumberFormatException ignored) {
-				Logging.warning("Failed to convert string to numeric value " + value);
-			}
-		}
+		restoreDividerLocation(splitPane, key);
 
-		// Listen for changes and persist automatically
 		PropertyChangeListener listener = (PropertyChangeEvent evt) -> {
 			int loc = splitPane.getDividerLocation();
 			UserPreferences.set(buildDividerLocationKey(key), String.valueOf(loc));
 		};
 		splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, listener);
+	}
+
+	/**
+	 * Restores the saved divider location of a {@link JSplitPane} from user
+	 * preferences.
+	 *
+	 * @param splitPane The split pane whose divider location should be restored
+	 * @param key       A unique key used to retrieve the stored divider
+	 *                  location
+	 */
+	public static void restoreDividerLocation(JSplitPane splitPane, String key) {
+		String value = UserPreferences.get(buildDividerLocationKey(key));
+		if (value == null) {
+			return;
+		}
+
+		try {
+			int dividerLocation = Integer.parseInt(value);
+			SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(dividerLocation));
+		} catch (NumberFormatException ignored) {
+			Logging.warning("Failed to convert string to numeric value " + value);
+		}
 	}
 
 	private static String buildDividerLocationKey(String key) {
