@@ -62,7 +62,6 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	public void componentShown(ComponentEvent e) {
 		ensureIndexIsVisible(getSelectedIndex());
 	}
-	// ===
 
 	private int getIndexOf(Object value) {
 		return saveV.indexOf(value);
