@@ -28,6 +28,7 @@ public final class UserPreferences {
 	public static final String CLIENTS_TABLE_COLUMN_WIDTHS = "clients_table.column_widths";
 	public static final String WINDOW_BOUNDS = "window_bounds";
 	public static final String WINDOW_STATE = "window_state";
+	public static final String DIVIDER_LOCATION = "split.divider_location";
 
 	private static Properties properties = new Properties();
 	private static File propertiesFile = new File(

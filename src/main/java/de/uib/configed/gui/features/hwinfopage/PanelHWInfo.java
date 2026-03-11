@@ -46,6 +46,7 @@ import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -135,6 +136,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
 		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT);
 
 		JPanel contentPanel = new JPanel();
 		setComponent(contentPanel);

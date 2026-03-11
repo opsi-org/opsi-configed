@@ -17,6 +17,7 @@ import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
@@ -78,6 +79,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 				clientInfoPanel);
 
 		panelClientSelection.setResizeWeight(1.0);
+		SplitPaneStateManager.registerSplitPane(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT);
 
 		panelLocalbootProductSettings = new PanelProductSettings(configedMain, productTree,
 				ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);

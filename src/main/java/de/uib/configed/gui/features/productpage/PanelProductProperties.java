@@ -42,6 +42,7 @@ import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelProductProperties extends AbstractConfigurationTab implements AncestorListener {
@@ -94,6 +95,8 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 		splitPane.setRightComponent(infoPane);
 		splitPane.setResizeWeight(1.0);
+
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.PRODUCT_PROPERTIES_SPLIT);
 
 		PopupMouseListener.addPopupMouseListenerToComponents(createPopupMenu(),
 				List.of(paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane()));

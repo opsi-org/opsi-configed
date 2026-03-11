@@ -41,6 +41,7 @@ import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
@@ -129,6 +130,7 @@ public class MainPanelManager {
 	private JPanel createClientConfigurationPanel() {
 		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, clientConfiguration);
 		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
+		SplitPaneStateManager.registerSplitPane(jSplitPane, SplitPaneStateManager.CLIENT_CONFIGURATION_SPLIT);
 
 		JPanel jPanel = new JPanel();
 		jPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[grow][]"));
@@ -160,6 +162,9 @@ public class MainPanelManager {
 
 		depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 		depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
+
+		SplitPaneStateManager.registerSplitPane(depotConfigurationSplitPane,
+				SplitPaneStateManager.DEPOT_CONFIGURATION_SPLIT);
 
 		return createPanel(depotConfigurationSplitPane, null, "depotConfiguration");
 	}
