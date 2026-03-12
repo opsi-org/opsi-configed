@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.swinfopage;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -416,21 +415,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
-	}
-
-	public void setSoftwareNullInfo(String hostId) {
-		Logging.info(this, "setSoftwareNullInfo,  ", hostId);
-
-		this.hostId = hostId;
-		title = this.hostId;
-
-		String timeS = "" + new Timestamp(System.currentTimeMillis());
-		String[] parts = timeS.split(":");
-		if (parts.length > 2) {
-			timeS = parts[0] + ":" + parts[1];
-		}
-
-		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
 	}
 
 	public void setHost(String hostId) {

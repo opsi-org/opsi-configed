@@ -109,6 +109,10 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	private void updateSelectedClientInfo(HostInfo hostInfo) {
+		if (hostInfo == null) {
+			return;
+		}
+
 		labelOS.setText(hostInfo.getString(HostInfo.CLIENT_OS_KEY));
 		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getString(HostInfo.CLIENT_OS_KEY), 20));
 
@@ -117,11 +121,13 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelDeviceType
 				.setIcon(Utils.determineIconBasedOnDeviceType(hostInfo.getString(HostInfo.CLIENT_DEVICE_TYPE_KEY), 20));
 		StringBuilder tooltipText = new StringBuilder();
-		if (!hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY).isBlank()) {
+		if (hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY) != null
+				&& !hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY).isBlank()) {
 			tooltipText.append(hostInfo.getString(HostInfo.CLIENT_DEVICE_VENDOR_KEY));
 		}
 
-		if (!hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY).isBlank()) {
+		if (hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY) != null
+				&& !hostInfo.getString(HostInfo.CLIENT_DEVICE_MODEL_KEY).isBlank()) {
 			if (tooltipText.length() > 0) {
 				tooltipText.append("\n");
 			}

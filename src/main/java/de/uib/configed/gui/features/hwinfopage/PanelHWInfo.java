@@ -189,6 +189,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 	private void floatExternal() {
 		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain, clientConfiguration);
 		copyOfMe.setHardwareInfo(hwInfo);
+		copyOfMe.updateTab(configedMain.getSelectedClients().size());
 
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
