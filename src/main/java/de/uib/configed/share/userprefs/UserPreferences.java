@@ -97,7 +97,6 @@ public final class UserPreferences {
 
 	public static void set(String key, String value) {
 		properties.put(key, value);
-		store();
 	}
 
 	public static String get(String key) {
@@ -110,7 +109,6 @@ public final class UserPreferences {
 
 	public static void setBoolean(String key, Boolean value) {
 		properties.put(key, Boolean.toString(value));
-		store();
 	}
 
 	public static Boolean getBoolean(String key) {
@@ -119,11 +117,6 @@ public final class UserPreferences {
 
 	public static void remove(String key) {
 		properties.remove(key);
-		store();
-	}
-
-	public static void store() {
-		store(null);
 	}
 
 	public static void store(String comments) {
