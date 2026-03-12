@@ -248,7 +248,7 @@ public class ClientInfoPanel extends JPanel {
 
 		add(Utils.createBoldLabel("ConfigedMain.pclistTableModel.notes"), "gaptop " + GAP);
 		add(new JScrollPane(jTextAreaNotes, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), "grow, pushy");
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), "grow, pushy, hmin 100");
 
 		setMinimumSize(new Dimension());
 	}
