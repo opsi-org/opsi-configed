@@ -79,6 +79,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		JScrollPane clientInfoScrollPane = new JScrollPane(clientInfoPanel,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		clientInfoScrollPane.setBorder(null);
 		clientInfoScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
