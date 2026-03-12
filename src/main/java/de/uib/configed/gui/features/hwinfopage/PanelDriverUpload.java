@@ -165,7 +165,7 @@ public class PanelDriverUpload extends JPanel {
 			Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
 			Logging.info(this, "checkFiles  stateServerPath isDirectory ", stateServerPath);
 
-			boolean stateDriverPath = driverPath.exists();
+			boolean stateDriverPath = driverPath.exists() && driverPath.isAbsolute();
 			driverPathChecked.setSelected(stateDriverPath);
 			Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
 
