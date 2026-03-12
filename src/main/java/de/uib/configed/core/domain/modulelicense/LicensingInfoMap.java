@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -259,7 +260,7 @@ public final class LicensingInfoMap {
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap(Map<String, Object> licensingInfo,
 			List<LocalDate> datesKeys) {
-		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
+		Map<String, Map<String, Map<String, Object>>> resultMap = new LinkedHashMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
 		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap(datesKeys);
 		Map<String, Map<String, Object>> licenses = produceLicenses(licensingInfo);
