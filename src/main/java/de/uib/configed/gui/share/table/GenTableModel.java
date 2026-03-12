@@ -178,12 +178,9 @@ public class GenTableModel extends AbstractTableModel {
 	/**
 	 * sets (puts) a filter for a filtername
 	 */
-	public GenTableModel chainFilter(String filterName, TableModelFilter filter) {
+	public void chainFilter(String filterName, TableModelFilter filter) {
 		chainedFilter.set(filterName, filter);
 		Logging.info(this, "chainFilter, we have chainedFilter ", chainedFilter);
-
-		// for chaining in notation
-		return this;
 	}
 
 	public Set<Object> getExistingKeys() {
