@@ -171,10 +171,6 @@ public class GenTableModel extends AbstractTableModel {
 		chainedFilter.clear();
 	}
 
-	public String getFilterInfo() {
-		return chainedFilter.toString();
-	}
-
 	/**
 	 * sets (puts) a filter for a filtername
 	 */
@@ -184,16 +180,14 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public Set<Object> getExistingKeys() {
-		int keycol = getKeyCol();
-
-		if (keycol < 0) {
+		if (keyCol < 0) {
 			return new HashSet<>();
 		}
 
 		TreeSet<Object> result = new TreeSet<>();
 		for (int row = 0; row < getRowCount(); row++) {
-			if (getValueAt(row, keycol) != null) {
-				result.add(getValueAt(row, keycol));
+			if (getValueAt(row, keyCol) != null) {
+				result.add(getValueAt(row, keyCol));
 			}
 		}
 
@@ -271,19 +265,6 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
-	private void refresh() {
-		if (!modelDataValid) {
-			// perhaps the action should not depend on this condition,
-			// since the necessary requests are already sent to the
-			// table provider
-
-			produceRows();
-
-			fireTableDataChanged();
-			modelDataValid = true;
-		}
-	}
-
 	public TableModelFilter getFilter(String name) {
 		return chainedFilter.getElement(name);
 	}
@@ -314,11 +295,6 @@ public class GenTableModel extends AbstractTableModel {
 		Logging.info(this, "setUsingFilter we got rows: ", getRowCount());
 	}
 
-	private void clearUpdates() {
-		addedRows.clear();
-		updatedRows.clear();
-	}
-
 	/**
 	 * Retrieves locally available data and applies it to a model (without
 	 * retrieving it from the server).
@@ -335,8 +311,20 @@ public class GenTableModel extends AbstractTableModel {
 	 */
 	public void reset() {
 		Logging.info(this, "reset()");
-		refresh();
-		clearUpdates();
+		if (!modelDataValid) {
+			// perhaps the action should not depend on this condition,
+			// since the necessary requests are already sent to the
+			// table provider
+
+			produceRows();
+
+			fireTableDataChanged();
+			modelDataValid = true;
+		}
+
+		addedRows.clear();
+		updatedRows.clear();
+
 		cursorrow = -1;
 	}
 
@@ -405,10 +393,6 @@ public class GenTableModel extends AbstractTableModel {
 		cursorrowObservable.addObserver(o);
 	}
 
-	private void notifyCursorrowObservers(int newrow) {
-		cursorrowObservable.notifyObservers(newrow);
-	}
-
 	public int getCursorRow() {
 		Logging.info(this, "cursorrow ", cursorrow);
 		return cursorrow;
@@ -441,7 +425,7 @@ public class GenTableModel extends AbstractTableModel {
 
 			if (change) {
 				fireTableCellUpdated(cursorrow, colMarkCursorRow);
-				notifyCursorrowObservers(cursorrow);
+				cursorrowObservable.notifyObservers(cursorrow);
 			}
 		}
 	}
