@@ -33,7 +33,8 @@ public final class SplitPaneStateManager {
 	/**
 	 * Registers a JSplitPane to automatically persist its divider location.
 	 * 
-	 * @param splitPane The split pane
+	 * @param splitPane The split pane whose divider location should be
+	 *                  persisted
 	 * @param key       A unique key to store the divider location
 	 */
 	public static void registerSplitPane(JSplitPane splitPane, String key) {
