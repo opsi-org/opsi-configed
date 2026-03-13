@@ -42,7 +42,10 @@ public final class SplitPaneStateManager {
 
 		PropertyChangeListener listener = (PropertyChangeEvent evt) -> {
 			int loc = splitPane.getDividerLocation();
-			UserPreferences.set(buildDividerLocationKey(key), String.valueOf(loc));
+			int totalSize = splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT ? splitPane.getWidth()
+					: splitPane.getHeight();
+			double proportion = (double) loc / totalSize;
+			UserPreferences.set(buildDividerLocationKey(key), String.valueOf(proportion));
 		};
 		splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, listener);
 	}
@@ -62,7 +65,7 @@ public final class SplitPaneStateManager {
 		}
 
 		try {
-			int dividerLocation = Integer.parseInt(value);
+			float dividerLocation = Float.parseFloat(value);
 			SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(dividerLocation));
 		} catch (NumberFormatException ignored) {
 			Logging.warning("Failed to convert string to numeric value " + value);
