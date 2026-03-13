@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ControlPanelEditLicenses;
 import de.uib.configed.gui.ControlPanelEnterLicense;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
@@ -41,7 +43,6 @@ import de.uib.configed.gui.share.table.gui.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
-import de.uib.configed.share.Utils;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
 import net.miginfocom.swing.MigLayout;
@@ -151,7 +152,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 		}
 
 		jTextFieldLicenseID.setEnabled(true);
-		jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
+		jTextFieldLicenseID
+				.setText("l_" + LocalDateTime.now().format(ControlPanelEditLicenses.DATE_TIME_FORMATTER_UNDERSCORE));
 
 		jTextFieldEndOfLicense.setEnabled(true);
 		jTextFieldEndOfLicense.setText("");
@@ -183,8 +185,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		if (clients == null) {
 			comboClient.setEnabled(false);
-			comboClient.addItem("");
 			comboClient.removeAllItems();
+			comboClient.addItem("");
 		} else {
 			comboClient.setModel(new DefaultComboBoxModel<>(clients.toArray(new String[0])));
 			comboClient.setEnabled(true);
@@ -192,7 +194,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		if (enableLicenseID) {
 			jTextFieldLicenseID.setEnabled(true);
-			jTextFieldLicenseID.setText("l_" + Utils.getSeconds());
+			jTextFieldLicenseID.setText(
+					"l_" + LocalDateTime.now().format(ControlPanelEditLicenses.DATE_TIME_FORMATTER_UNDERSCORE));
 		}
 	}
 

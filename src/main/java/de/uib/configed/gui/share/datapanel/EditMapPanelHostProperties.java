@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui.share.datapanel;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPopupMenu;
 
@@ -31,25 +31,19 @@ public class EditMapPanelHostProperties extends EditMapPanelX {
 
 	@Override
 	protected JPopupMenu createBasicPopup() {
-		return new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD),
-				event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
-			@Override
-			public void action(int p) {
-				super.action(p);
-				if (p == PopupMenuTrait.POPUP_RELOAD) {
-					ConfigedMain.getMainFrame().activateLoadingCursor();
-					if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
-						persistenceController.reloadData(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString());
-					}
+		return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(PopupMenuTrait.POPUP_SAVE,
+				() -> ChangedDataManager.checkSaveAll(false), PopupMenuTrait.POPUP_RELOAD, this::reload),
+				event -> updatePopupMenu());
+	}
 
-					updateContent.run();
+	private void reload() {
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+		if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
+			persistenceController.reloadData(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString());
+		}
 
-					ConfigedMain.getMainFrame().deactivateLoadingCursor();
-				}
-				if (p == PopupMenuTrait.POPUP_SAVE) {
-					ChangedDataManager.checkSaveAll(false);
-				}
-			}
-		};
+		updateContent.run();
+
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 }

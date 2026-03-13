@@ -7,6 +7,9 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,15 +31,18 @@ import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.CellDateEditor;
 import de.uib.configed.gui.share.table.gui.CellInputDialogEditor;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
 import de.uib.configed.gui.share.table.updates.MapBasedUpdater;
 import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
 import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
 import de.uib.configed.gui.type.licenses.LicenseEntry;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
+	public static final DateTimeFormatter DATE_TIME_FORMATTER_UNDERSCORE = DateTimeFormatter
+			.ofPattern("yyyy-MM-dd_HH:mm:ss");
+
 	private PanelEditLicenses thePanel;
 
 	private GenTableModel modelLicensekeys;
@@ -238,7 +244,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
-		menuItemAddContract.addActionListener(actionEvent -> addContract());
+		menuItemAddContract.addActionListener(
+				actionEvent -> addContract(modelLicensecontracts, thePanel.getPanelLicensecontracts()));
 		menuItemAddContract.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemAddContract);
@@ -285,16 +292,11 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	}
 
 	private void addLicense() {
-		Object[] a = new Object[6];
-		a[0] = "l_" + Utils.getSeconds();
-		a[1] = "";
-		a[2] = LicenseEntry.LICENSE_TYPES.get(0);
-		a[3] = "1";
-		a[4] = "";
-		a[5] = "";
+		String[] a = new String[] { "l_" + LocalDateTime.now().format(DATE_TIME_FORMATTER_UNDERSCORE), "",
+				LicenseEntry.LICENSE_TYPES.get(0), "1", "", "" };
 
 		modelSoftwarelicenses.addRow(a);
-		thePanel.getPanelSoftwarelicenses().moveToValue("" + a[0], 0);
+		thePanel.getPanelSoftwarelicenses().moveToValue(a[0], 0);
 	}
 
 	private void pickSoftwareLicense() {
@@ -334,17 +336,12 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		thePanel.getPanelKeys().setValueAt(val, thePanel.getPanelKeys().getGenEditTable().getSelectedRow(), 0);
 	}
 
-	private void addContract() {
-		Object[] a = new Object[6];
-		a[0] = "c_" + Utils.getSeconds();
-		a[1] = "";
-		a[2] = Utils.getDate();
-		a[3] = "";
-		a[4] = "";
-		a[5] = "";
+	public static void addContract(GenTableModel modelLicensecontracts, PanelGenEdit panelLicensecontracts) {
+		String[] a = new String[] { "c_" + LocalDateTime.now().format(DATE_TIME_FORMATTER_UNDERSCORE), "",
+				LocalDate.now().toString(), "", "", "" };
 
 		modelLicensecontracts.addRow(a);
-		thePanel.getPanelLicensecontracts().moveToValue("" + a[0], 0);
+		panelLicensecontracts.moveToValue(a[0], 0);
 	}
 
 	private void pickLicenseContract() {

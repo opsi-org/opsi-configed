@@ -32,6 +32,7 @@ import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -104,7 +105,7 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		jPopupMenu.add(edit);
 		jPopupMenu.add(add);
 
-		listSelectionList.setComponentPopupMenu(jPopupMenu);
+		listSelectionList.addMouseListener(new PopupMouseListener(jPopupMenu));
 	}
 
 	private void commit() {

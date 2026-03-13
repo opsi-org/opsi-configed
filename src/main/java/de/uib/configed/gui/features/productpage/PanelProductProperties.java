@@ -95,8 +95,7 @@ public class PanelProductProperties extends AbstractConfigurationTab implements 
 		splitPane.setRightComponent(infoPane);
 		splitPane.setResizeWeight(1.0);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(createPopupMenu(),
-				List.of(paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane()));
+		paneProducts.getGenEditTable().addMouseListener(new PopupMouseListener(createPopupMenu()));
 
 		setComponent(splitPane);
 	}

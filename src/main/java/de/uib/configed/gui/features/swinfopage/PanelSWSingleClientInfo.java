@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.swinfopage;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -228,15 +227,15 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 		this.add(panelTable, "grow, push");
 
 		if (withPopup) {
-			new PopupMenuTrait(
-					List.of(PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					List.of(this, panelTable.getGenEditTable(), panelTable.getTheScrollpane())) {
-				@Override
-				public void action(int p) {
-					actionOnPopupMenu(p);
-				}
-			};
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
+					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternalX, PopupMenuTrait.POPUP_PDF,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build().export(),
+					PopupMenuTrait.POPUP_EXPORT_CSV,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV).build().export(),
+					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+					() -> getSingleClientExporter().toBuilder().onlySelectedRows(true).build().export());
+
+			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(), actions);
 		}
 	}
 
@@ -292,18 +291,19 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 		return tableData;
 	}
 
-	private void actionOnPopupMenu(int p) {
-		switch (p) {
-		case PopupMenuTrait.POPUP_RELOAD -> reload();
-		case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternalX();
-		case PopupMenuTrait.POPUP_PDF -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build()
-				.export();
-		case PopupMenuTrait.POPUP_EXPORT_CSV -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV)
-				.build().export();
-		case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV -> getSingleClientExporter().toBuilder()
-				.kindOfExport(KindOfExport.CSV).onlySelectedRows(true).build().export();
-		default -> Logging.warning(this, "no case found for popupmenutrait");
-		}
+	@Override
+	public void setWriteToFile(String path) {
+		exportFilename = path;
+	}
+
+	@Override
+	public void setAskForOverwrite(boolean b) {
+		askForOverwrite = b;
+	}
+
+	@Override
+	public void setKindOfExport(KindOfExport k) {
+		kindOfExport = k;
 	}
 
 	public void setWithMsUpdates(boolean b) {
@@ -382,21 +382,6 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
-	}
-
-	public void setSoftwareNullInfo(String hostId) {
-		Logging.info(this, "setSoftwareNullInfo,  ", hostId);
-
-		this.hostId = hostId;
-		title = this.hostId;
-
-		String timeS = "" + new Timestamp(System.currentTimeMillis());
-		String[] parts = timeS.split(":");
-		if (parts.length > 2) {
-			timeS = parts[0] + ":" + parts[1];
-		}
-
-		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
 	}
 
 	public void setHost(String hostId) {

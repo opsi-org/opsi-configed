@@ -97,7 +97,7 @@ public class PackageUpdaterDialog {
 
 		Logging.info(this, "doAction2 opsi-package-updater: ", command);
 		CommandExecutor executor = new CommandExecutor(configedMain, command);
-		executor.execute();
+		executor.executeAsync();
 	}
 
 	private JPanel initPanel() {

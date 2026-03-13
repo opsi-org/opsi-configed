@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -230,15 +229,6 @@ public final class Utils {
 		}
 	}
 
-	public static List<Object> getNowTimeListValue() {
-		List<Object> result = new ArrayList<>();
-		String now = new Timestamp(System.currentTimeMillis()).toString();
-		now = now.substring(0, now.indexOf("."));
-		result.add(now);
-		Logging.info("getNowTimeListValue", result);
-		return result;
-	}
-
 	public static String pseudokey(String[] partialvalues) {
 		StringBuilder resultBuilder = new StringBuilder();
 
@@ -339,22 +329,6 @@ public final class Utils {
 		}
 
 		return "<html>" + tooltip + "</html>";
-	}
-
-	public static String getSeconds() {
-		String sqlNow = new Timestamp(System.currentTimeMillis()).toString();
-		int i = sqlNow.lastIndexOf(' ');
-		String date = sqlNow.substring(0, i);
-		date = date.replace(' ', '-');
-		String time = sqlNow.substring(i + 1);
-		time = time.substring(0, time.indexOf('.'));
-		return date + "_" + time;
-	}
-
-	public static String getDate() {
-		String sqlNow = new Timestamp(System.currentTimeMillis()).toString();
-		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
-		return sqlNow;
 	}
 
 	public static void setMasterFrame(JFrame frame) {
@@ -561,6 +535,10 @@ public final class Utils {
 	}
 
 	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
+		if (platform == null) {
+			return Icons.getThemeIntellijIcon("questionMark", size);
+		}
+
 		return switch (platform) {
 		case "macos" -> Icons.getThemeSVGRepoIcon("macos", size);
 		case "windows" -> Icons.getThemeSVGRepoIcon("windows", size);
@@ -569,15 +547,18 @@ public final class Utils {
 		};
 	}
 
-	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
-		return switch (value) {
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String device, int size) {
+		if (device == null) {
+			return Icons.getThemeIntellijIcon("questionMark", size);
+		}
+
+		return switch (device) {
 		case "server" -> Icons.getThemeSVGRepoIcon("server", size);
 		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
 		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
 		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
 		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
 		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
-		case null -> Icons.getThemeIntellijIcon("questionMark", size);
 		default -> Icons.getThemeIntellijIcon("questionMark", size);
 		};
 	}

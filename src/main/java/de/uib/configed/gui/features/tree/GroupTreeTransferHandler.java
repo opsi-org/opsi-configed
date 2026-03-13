@@ -40,11 +40,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "can import?");
-		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
-			return false;
-		}
-
-		if (!canImportToThisComponent(support.getComponent())) {
+		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
+				|| !canImportToThisComponent(support.getComponent())) {
 			return false;
 		}
 
@@ -94,11 +91,16 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				return isNormalGroup(targetNode);
 			} else {
 				// A group in the tree is selected
-				return isNormalGroup(sourceNode) && !targetNode.isImmutable()
-						&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString())
-						&& nodesAreNotEqualOrAncestor(sourceNode, targetNode);
+				return isValidDropTarget(sourceNode, targetNode) && shouldMoveNode((String) sourceNode.getUserObject(),
+						new TreePath(targetNode.getPath()), true);
 			}
 		}
+	}
+
+	private static boolean isValidDropTarget(GroupNode sourceNode, GroupNode targetNode) {
+		return isNormalGroup(sourceNode) && !targetNode.isImmutable()
+				&& !ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString())
+				&& nodesAreNotEqualOrAncestor(sourceNode, targetNode);
 	}
 
 	/*
@@ -106,8 +108,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	 * But we exclude the ALL_GROUPS node as source, because it's not a "real" group.
 	*/
 	private static boolean nodesAreNotEqualOrAncestor(GroupNode sourceNode, GroupNode targetNode) {
-		return AbstractGroupTree.ALL_GROUPS_NAME.equals(targetNode.toString()) || (!sourceNode.equals(targetNode)
-				&& !sourceNode.isNodeAncestor(targetNode) && !targetNode.isNodeAncestor(sourceNode));
+		return (!sourceNode.equals(targetNode) && !targetNode.isNodeAncestor(sourceNode)
+				&& sourceNode.getParent() != targetNode);
 	}
 
 	private boolean canImportToThisComponent(Component target) {
@@ -180,20 +182,19 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	 * inside the directory (because it can appear only once anyways), otherwise
 	 * we copy the object.
 	 */
-	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
-		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath ", sourceGroupName, " , ", dropPath);
-
-		boolean result = false;
+	private boolean shouldMoveNode(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
+		Logging.info(this, "shouldMoveNode sourceGroupName, dropPath ", sourceGroupName, " , ", dropPath);
 
 		boolean stayInsideDIRECTORY = tree.isInDirectory(sourceGroupName) && tree.isInDirectory(dropPath);
 		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath) && isLeaf;
 
-		Logging.info(this, "chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS ", stayInsideDIRECTORY, ", ",
+		Logging.info(this, "shouldMovenOde stayInsideDIRECTORY,", stayInsideDIRECTORY, ", stayInsideGROUPS",
 				stayInsideGROUPS);
 
-		Logging.debug(this, "chooseMOVE  ", result);
+		boolean result = stayInsideDIRECTORY || stayInsideGROUPS;
+		Logging.debug(this, "shouldMoveNode", result);
 
-		return stayInsideDIRECTORY || stayInsideGROUPS;
+		return result;
 	}
 
 	@Override
@@ -271,21 +272,17 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
 		Logging.debug(this, "importData, groupNode ", groupNode);
 
+		if (!confirmMovingNode(selectedObject, dropParentID)) {
+			return;
+		}
+
 		if (groupNode != null) {
 			// it is a group, and it will be moved, but only inside one partial tree
-			if (chooseMove(sourceParentID, dropPath, true)) {
-				tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
-			} else {
-				JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("GroupTreeTransferHandler.cannotMoveGroup.message"),
-						Configed.getResourceValue("GroupTreeTransferHandler.cannotMoveGroup.title"),
-						JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-				Logging.warning(this, "importData: this group will not be moved");
-			}
+			tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
 		} else {
 			// import node
 			Logging.debug(this, "importData handling selectedObject ", selectedObject);
-			if (chooseMove(sourceParentID, dropPath, false)) {
+			if (shouldMoveNode(sourceParentID, dropPath, false)) {
 				tree.moveObjectTo(selectedObject, sourceParentID, sourceParentNode, dropParentNode, dropPath,
 						dropParentID);
 			} else {
@@ -294,5 +291,15 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 
 		Logging.debug(this, "importData ready, selectedObject ", selectedObject);
+	}
+
+	private static boolean confirmMovingNode(String movingNode, String group) {
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				String.format(Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.message"),
+						movingNode, group),
+				Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.title"),
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+		return answer == JOptionPane.YES_OPTION;
 	}
 }

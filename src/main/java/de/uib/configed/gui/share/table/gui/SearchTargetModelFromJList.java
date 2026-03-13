@@ -20,7 +20,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.DepotsList;
+import de.uib.configed.gui.ListSelectionList;
 import de.uib.configed.share.logging.Logging;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private JList<String> jList;
@@ -32,7 +37,25 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private List<String> unfilteredD;
 	private int[] unfilteredSelection;
 
+	private FilterContext filterContext;
+
+	@Data
+	@NoArgsConstructor
+	public static class FilterContext {
+		private String query;
+		private int column;
+		@Accessors(fluent = true)
+		private boolean useRegex;
+		@Accessors(fluent = true)
+		private boolean caseSensitive;
+	}
+
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
+		this(jList, values, descriptions, null);
+	}
+
+	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions,
+			FilterContext filterContext) {
 		this.jList = jList;
 		unfilteredV = values;
 		unfilteredD = descriptions;
@@ -52,6 +75,10 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		tableModel = setupTableModel(theValues, theDescriptions);
 
 		super.setTable(new JTable(tableModel));
+
+		if (filterContext != null) {
+			reapplyFilter(filterContext);
+		}
 	}
 
 	@SuppressWarnings({ "java:S1188" })
@@ -235,12 +262,27 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			filterValues(query, column, useRegex, caseSensitive, pattern);
 		}
 
+		filterContext = new FilterContext();
+		filterContext.setQuery(query);
+		filterContext.setColumn(column);
+		filterContext.useRegex(useRegex);
+		filterContext.caseSensitive(caseSensitive);
+
 		updateUI();
 	}
 
 	private void restoreUnfiltered() {
 		theValues.addAll(unfilteredV);
 		theDescriptions.addAll(unfilteredD);
+	}
+
+	private void reapplyFilter(FilterContext filterContext) {
+		applyFilter(filterContext.getQuery(), filterContext.getColumn(), filterContext.useRegex(),
+				filterContext.caseSensitive());
+	}
+
+	public FilterContext getFilterContext() {
+		return filterContext;
 	}
 
 	private Pattern compilePattern(String query, boolean useRegex, boolean caseSensitive) {
@@ -299,9 +341,18 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		tableModel.fireTableChanged(new TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
 
+		List<String> selectedValues = jList.getSelectedValuesList();
 		jList.setListData(theValues.toArray(new String[0]));
 		if (!theValues.isEmpty()) {
-			jList.setSelectedIndex(0);
+			if (!selectedValues.isEmpty()) {
+				switch (jList) {
+				case ListSelectionList s -> s.setPreviousSelectionValues(selectedValues);
+				case DepotsList l -> l.setSelectedValues(selectedValues);
+				default -> Logging.debug(this, "caught unhandled type list", jList);
+				}
+			} else {
+				jList.setSelectedIndex(0);
+			}
 		} else {
 			jList.clearSelection();
 		}

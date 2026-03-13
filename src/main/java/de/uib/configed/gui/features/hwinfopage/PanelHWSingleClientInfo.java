@@ -119,6 +119,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
+		table.setFillsViewportHeight(true);
 		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
@@ -137,22 +138,18 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		this.add(splitPane, "grow");
 
 		if (withPopup) {
-			new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_FLOATING_COPY), List.of(tree, table)) {
-				@Override
-				public void action(int p) {
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD -> reload();
-					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
-					case PopupMenuTrait.POPUP_PDF -> getSingleClientExporter().toBuilder()
-							.kindOfExport(KindOfExport.PDF).build().export();
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
+					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal, PopupMenuTrait.POPUP_PDF,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build().export(),
+					PopupMenuTrait.POPUP_EXPORT_CSV,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV).build().export());
 
-					case PopupMenuTrait.POPUP_EXPORT_CSV -> getSingleClientExporter().toBuilder()
-							.kindOfExport(KindOfExport.CSV).build().export();
-					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-					}
-				}
-			};
+			// We want to add the menu to all three components, 
+			// since we want it to be available, no matter where the user right clicks
+			// We cannot add it to the splitPane since the table will consume the event,
+			// it would not arrive at the splitPane
+			PopupMenuTrait.createAndBindJPopupMenu(table, actions);
+			PopupMenuTrait.createAndBindJPopupMenu(tree, actions);
 		}
 	}
 
