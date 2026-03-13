@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.CardLayout;
 import java.awt.event.WindowEvent;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -107,8 +106,8 @@ public class MainFrame extends JFrame {
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(menuBarController.getPopupMenuClone(),
-				List.of(clientTablePanel));
+		clientTablePanel.getClientTable()
+				.addMouseListener(new PopupMouseListener(menuBarController.getPopupMenuClone()));
 	}
 
 	public ClientTablePanel getClientTablePanel() {

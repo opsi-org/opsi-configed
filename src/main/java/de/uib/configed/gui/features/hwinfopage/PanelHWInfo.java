@@ -123,6 +123,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
+		table.setFillsViewportHeight(true);
 		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
@@ -145,19 +146,15 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
-			new PopupMenuTrait(
-					List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					List.of(tree, table)) {
-				@Override
-				public void action(int p) {
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD -> reload();
-					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
-					case PopupMenuTrait.POPUP_PDF -> exportPDF();
-					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-					}
-				}
-			};
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_PDF,
+					this::exportPDF, PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal);
+
+			// We want to add the menu to all three components, 
+			// since we want it to be available, no matter where the user right clicks
+			// We cannot add it to the splitPane since the table will consume the event,
+			// it would not arrive at the splitPane
+			PopupMenuTrait.createAndBindJPopupMenu(table, actions);
+			PopupMenuTrait.createAndBindJPopupMenu(tree, actions);
 		}
 	}
 

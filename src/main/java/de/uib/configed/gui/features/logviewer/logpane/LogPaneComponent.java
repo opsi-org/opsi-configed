@@ -15,7 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.swing.DefaultComboBoxModel;
@@ -222,7 +223,6 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 
 	private void addKeyBindings() {
 		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
-
 				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
 				JComponent.WHEN_FOCUSED);
 
@@ -283,35 +283,19 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	private void initPopupMenu() {
-		List<Integer> popups;
+		Map<Integer, Runnable> popups = new HashMap<>();
+		popups.put(PopupMenuTrait.POPUP_RELOAD, () -> dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG));
+		popups.put(PopupMenuTrait.POPUP_COPY, () -> dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS));
+		popups.put(PopupMenuTrait.POPUP_DOWNLOAD, () -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG));
+		popups.put(PopupMenuTrait.POPUP_FLOATING_COPY, () -> dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL));
 
-		if (Main.isLogviewer()) {
-			popups = List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_FLOATING_COPY);
-		} else {
-			popups = List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_COPY, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATING_COPY);
+		if (!Main.isLogviewer()) {
+			popups.put(PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, () -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP));
+			popups.put(PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
+					() -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP));
 		}
 
-		new PopupMenuTrait(popups, List.of(logTextPane)) {
-			@Override
-			public void action(int p) {
-				treatPopupAction(p);
-			}
-		};
-	}
-
-	private void treatPopupAction(int p) {
-		switch (p) {
-		case PopupMenuTrait.POPUP_RELOAD -> dispatch(LogPaneMsg.SimpleMsg.RELOAD_LOG);
-		case PopupMenuTrait.POPUP_COPY -> dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS);
-		case PopupMenuTrait.POPUP_DOWNLOAD -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG);
-		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_LOG_AS_ZIP);
-		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP -> dispatch(LogPaneMsg.SimpleMsg.DOWNLOAD_ALL_AS_ZIP);
-		case PopupMenuTrait.POPUP_FLOATING_COPY -> dispatch(LogPaneMsg.SimpleMsg.FLOAT_EXTERNAL);
-		default -> Logging.warning(this, "no case found for popupMenuTrait in LogPane");
-		}
+		PopupMenuTrait.createAndBindJPopupMenu(logTextPane, popups);
 	}
 
 	public Integer getMaxExistingLevel() {

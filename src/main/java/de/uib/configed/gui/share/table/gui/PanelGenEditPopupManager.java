@@ -79,13 +79,11 @@ public class PanelGenEditPopupManager {
 						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
 				menuItemSortAgain
 						.addActionListener(actionEvent -> panelGenEdit.getGenEditTable().sortAgainAsConfigured());
-
 				addPopupItem(menuItemSortAgain);
 			}, POPUP_DELETE_ROW, () -> addPopupMenuDeleteRow(), PopupMenuTrait.POPUP_PRINT, () -> {
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
 				Icons.addIntellijIconToMenuItem(menuItemPrint, "print");
 				menuItemPrint.addActionListener(actionEvent -> print());
-
 				addPopupItem(menuItemPrint);
 			}, PopupMenuTrait.POPUP_EXPORT_CSV, () -> {
 				ExporterToCSV exportTable = new ExporterToCSV(panelGenEdit.getGenEditTable());
@@ -186,8 +184,7 @@ public class PanelGenEditPopupManager {
 		if (popupMenu == null) {
 			// for the first item, we create the menu
 			popupMenu = new JPopupMenu();
-			PopupMouseListener.addPopupMouseListenerToComponents(popupMenu,
-					List.of(panelGenEdit.getGenEditTable(), panelGenEdit.getTheScrollpane()));
+			panelGenEdit.getGenEditTable().addMouseListener(new PopupMouseListener(popupMenu));
 		}
 
 		if (item == null) {

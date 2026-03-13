@@ -27,7 +27,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
@@ -46,6 +45,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.type.Object2GroupEntry;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -137,7 +137,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		setShowsRootHandles(true);
 
 		// popups on nodes
-		new TreePopupMouseListener(new JPopupMenu(), this);
+		GroupTreePopupMenu groupTreePopupMenu = new GroupTreePopupMenu(this);
+		addMouseListener(new PopupMouseListener(groupTreePopupMenu, event -> groupTreePopupMenu.checkAccepted()));
 
 		// Drag and drop needs to be enabled
 		setDragEnabled(true);

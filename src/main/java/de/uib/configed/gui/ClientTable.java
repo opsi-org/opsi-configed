@@ -50,6 +50,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 		super.setAutoCreateRowSorter(true);
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		super.getTableHeader().setReorderingAllowed(false);
+		super.setFillsViewportHeight(true);
 
 		// true destroys setSelectedRow etc
 		super.setColumnSelectionAllowed(false);
