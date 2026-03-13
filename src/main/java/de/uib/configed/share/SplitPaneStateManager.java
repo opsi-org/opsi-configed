@@ -32,6 +32,10 @@ public final class SplitPaneStateManager {
 
 	/**
 	 * Registers a JSplitPane to automatically persist its divider location.
+	 * <p>
+	 * The divider location is stored as a proportional value between
+	 * {@code 0.0} and {@code 1.0}, relative to the current size of the split
+	 * pane.
 	 * 
 	 * @param splitPane The split pane whose divider location should be
 	 *                  persisted
@@ -51,24 +55,56 @@ public final class SplitPaneStateManager {
 	}
 
 	/**
-	 * Restores the saved divider location of a {@link JSplitPane} from user
-	 * preferences.
+	 * Restores the divider location of the specified {@link JSplitPane} from
+	 * user preferences.
+	 * <p>
+	 * If a saved value exists for the given key, it will be applied. Otherwise
+	 * the divider location remains unchanged.
 	 *
-	 * @param splitPane The split pane whose divider location should be restored
-	 * @param key       A unique key used to retrieve the stored divider
+	 * @param splitPane the split pane whose divider location should be restored
+	 * @param key       a unique identifier used to look up the stored divider
 	 *                  location
 	 */
 	public static void restoreDividerLocation(JSplitPane splitPane, String key) {
+		restoreDividerLocation(splitPane, key, null);
+	}
+
+	/**
+	 * Restores the divider location of the specified {@link JSplitPane} from
+	 * user preferences.
+	 * <p>
+	 * The stored value is expected to be a floating-point number representing
+	 * the proportional divider location (between {@code 0.0} and {@code 1.0}).
+	 * <p>
+	 * If no value is stored for the given key, the provided
+	 * {@code defaultValue} will be used. If both the stored value and the
+	 * default value are {@code null}, the divider location is left unchanged.
+	 *
+	 * @param splitPane    the split pane whose divider location should be
+	 *                     restored
+	 * @param key          a unique identifier used to look up the stored
+	 *                     divider location
+	 * @param defaultValue the divider location to use when no stored value
+	 *                     exists; may be {@code null}
+	 */
+	public static void restoreDividerLocation(JSplitPane splitPane, String key, Float defaultValue) {
 		String value = UserPreferences.get(buildDividerLocationKey(key));
-		if (value == null) {
-			return;
+
+		Float dividerLocation = null;
+
+		if (value != null && !value.isEmpty()) {
+			try {
+				dividerLocation = Float.parseFloat(value);
+			} catch (NumberFormatException e) {
+				Logging.warning("Invalid divider location '" + value + "'");
+			}
+		} else {
+			dividerLocation = defaultValue;
 		}
 
-		try {
-			float dividerLocation = Float.parseFloat(value);
-			SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(dividerLocation));
-		} catch (NumberFormatException ignored) {
-			Logging.warning("Failed to convert string to numeric value " + value);
+		if (dividerLocation != null) {
+			float location = dividerLocation;
+			SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(location));
 		}
 	}
 
