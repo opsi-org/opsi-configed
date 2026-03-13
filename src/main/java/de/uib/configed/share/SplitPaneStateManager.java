@@ -21,7 +21,8 @@ public final class SplitPaneStateManager {
 	public static final String CLIENT_CONFIGURATION_SPLIT = "client_configuration";
 	public static final String DEPOT_CONFIGURATION_SPLIT = "depot_configuration";
 	public static final String PRODUCT_PROPERTIES_SPLIT = "product_properties";
-	public static final String PRODUCT_SETTINGS_SPLIT = "product_settings";
+	public static final String LOCALBOOT_PRODUCT_SETTINGS_SPLIT = "localboot.product_settings";
+	public static final String NETBOOT_PRODUCT_SETTINGS_SPLIT = "netboot.product_settings";
 	public static final String CLIENT_HOST_PARAMETERS_SPLIT = "client.host_parameteres";
 	public static final String DEPOT_HOST_PARAMETERS_SPLIT = "depot.host_parameteres";
 	public static final String SERVER_HOST_PARAMETERS_SPLIT = "server.host_parameteres";

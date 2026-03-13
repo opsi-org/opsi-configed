@@ -155,9 +155,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		SplitPaneStateManager.restoreDividerLocation(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT,
 				DIVIDER_LOCATION);
 		SplitPaneStateManager.restoreDividerLocation(panelLocalbootProductSettings.getContentPane(),
-				SplitPaneStateManager.PRODUCT_SETTINGS_SPLIT, DIVIDER_LOCATION);
+				SplitPaneStateManager.LOCALBOOT_PRODUCT_SETTINGS_SPLIT, DIVIDER_LOCATION);
 		SplitPaneStateManager.restoreDividerLocation(panelNetbootProductSettings.getContentPane(),
-				SplitPaneStateManager.PRODUCT_SETTINGS_SPLIT, DIVIDER_LOCATION);
+				SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT, DIVIDER_LOCATION);
 	}
 
 	public void updateProductTab() {

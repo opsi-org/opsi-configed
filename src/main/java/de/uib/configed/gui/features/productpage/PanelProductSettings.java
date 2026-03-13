@@ -124,7 +124,10 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
 		contentPane.setResizeWeight(1.0);
-		SplitPaneStateManager.registerSplitPane(contentPane, SplitPaneStateManager.PRODUCT_SETTINGS_SPLIT);
+		SplitPaneStateManager.registerSplitPane(contentPane,
+				type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+						? SplitPaneStateManager.LOCALBOOT_PRODUCT_SETTINGS_SPLIT
+						: SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT);
 		setComponent(contentPane);
 
 		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(), List.of(paneProducts, productTable));
