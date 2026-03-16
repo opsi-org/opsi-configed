@@ -40,6 +40,7 @@ public class GenEditTable extends JTable implements KeyListener {
 		super.setDragEnabled(true);
 		super.setDropMode(DropMode.ON);
 		super.setAutoCreateRowSorter(false);
+		super.setFillsViewportHeight(true);
 
 		// ComponentListener for table
 		super.addComponentListener(new ComponentAdapter() {

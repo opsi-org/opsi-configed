@@ -6,8 +6,10 @@
 
 package de.uib.configed.gui;
 
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -75,8 +77,14 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void init() {
 		clientInfoPanel = new ClientInfoPanel(configedMain);
+
+		JScrollPane clientInfoScrollPane = new JScrollPane(clientInfoPanel,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		clientInfoScrollPane.setBorder(null);
+		clientInfoScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
-				clientInfoPanel);
+				clientInfoScrollPane);
 
 		panelClientSelection.setResizeWeight(1.0);
 		SplitPaneStateManager.registerSplitPane(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT);

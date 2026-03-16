@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -424,10 +423,9 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 	private void loadInitialData() {
 		List<String> domains = persistenceController.getDataServices().config.getDomains();
 		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getDepotNamesList();
-		Set<String> netbootProductNames = persistenceController.getDataServices().product.getAllNetbootProductNames();
 		List<String> netboots = new ArrayList<>();
 		netboots.add(null);
-		netboots.addAll(netbootProductNames);
+		netboots.addAll(persistenceController.getDataServices().product.getAllNetbootProductNames());
 		List<String> hostnames = persistenceController.getDataServices().hostInfoCollections.getOpsiHostNames();
 
 		boolean isWanActive = persistenceController.getDataServices().module.isOpsiModuleActive(OpsiModule.VPN);

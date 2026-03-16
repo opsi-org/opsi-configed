@@ -10,7 +10,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -130,9 +129,10 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 						: SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT);
 		setComponent(contentPane);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(), List.of(paneProducts, productTable));
+		productTable.addMouseListener(new PopupMouseListener(producePopupMenu()));
 
-		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
+		productTable.getTableHeader()
+				.addMouseListener(new PopupMouseListener(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns)));
 
 		Utils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}

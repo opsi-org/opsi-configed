@@ -39,12 +39,11 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class PanelDriverUpload extends JPanel {
-	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
-	private static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
-	private static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
-	private static final String[] DIRECTORY_DRIVERS_ADDITIONAL = new String[] { "drivers", "drivers", "additional" };
-	private static final String[] DIRECTORY_DRIVERS_BY_AUDIT = new String[] { "drivers", "drivers", "additional",
-			"byAudit" };
+	private static final String DIRECTORY_DRIVERS = "drivers/drivers";
+	private static final String DIRECTORY_DRIVERS_PREFERRED = "drivers/drivers/preferred";
+	private static final String DIRECTORY_DRIVERS_EXCLUDED = "drivers/drivers/excluded";
+	private static final String DIRECTORY_DRIVERS_ADDITIONAL = "drivers/drivers/additional";
+	private static final String DIRECTORY_DRIVERS_BY_AUDIT = "drivers/drivers/additional/byAudit";
 
 	private JTextField fieldByAuditPath;
 	private JLabel labelClientName;
@@ -166,7 +165,7 @@ public class PanelDriverUpload extends JPanel {
 			Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
 			Logging.info(this, "checkFiles  stateServerPath isDirectory ", stateServerPath);
 
-			boolean stateDriverPath = driverPath.exists();
+			boolean stateDriverPath = driverPath.exists() && driverPath.isAbsolute();
 			driverPathChecked.setSelected(stateDriverPath);
 			Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
 
@@ -287,17 +286,17 @@ public class PanelDriverUpload extends JPanel {
 				Configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
+				DIRECTORY_DRIVERS_BY_AUDIT);
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.standard"),
-				getLocalsystemPath(DIRECTORY_DRIVERS)));
+				DIRECTORY_DRIVERS));
 		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED)));
+				DIRECTORY_DRIVERS_PREFERRED));
 		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED)));
+				DIRECTORY_DRIVERS_EXCLUDED));
 		buttonGroup.add(new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.additional"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL)));
+				DIRECTORY_DRIVERS_ADDITIONAL));
 		buttonGroup.add(buttonByAudit);
 
 		// Add listeners to all buttons in the group
@@ -388,7 +387,9 @@ public class PanelDriverUpload extends JPanel {
 		}
 
 		String winProduct = (String) comboChooseWinProduct.getSelectedItem();
-		winProduct = winProduct == null || "null".equals(winProduct) ? "" : winProduct;
+		if (winProduct == null) {
+			winProduct = "";
+		}
 
 		String result = depotProductDirectory + winProduct + driverDirectory + "/";
 
@@ -407,19 +408,5 @@ public class PanelDriverUpload extends JPanel {
 		} else {
 			fieldDriverPath.setText("");
 		}
-	}
-
-	private static String getLocalsystemPath(String[] parts) {
-		if (parts == null || parts.length == 0) {
-			return "";
-		}
-
-		StringBuilder result = new StringBuilder(parts[0]);
-
-		for (int i = 1; i < parts.length; i++) {
-			result.append("/" + parts[i]);
-		}
-
-		return result.toString();
 	}
 }

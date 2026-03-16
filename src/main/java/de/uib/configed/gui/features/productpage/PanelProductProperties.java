@@ -93,8 +93,7 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 
 		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.PRODUCT_PROPERTIES_SPLIT);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(createPopupMenu(),
-				List.of(paneProducts, paneProducts.getGenEditTable(), paneProducts.getTheScrollpane()));
+		paneProducts.getGenEditTable().addMouseListener(new PopupMouseListener(createPopupMenu()));
 
 		setComponent(splitPane);
 	}

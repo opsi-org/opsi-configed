@@ -14,6 +14,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.UIManager;
 
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
@@ -22,9 +23,13 @@ import de.uib.configed.share.Icons;
 public class ListSelectionList extends JList<String> {
 	private Set<Integer> nonDeselectableIndices = new HashSet<>();
 
+	// Original unfiltered model to preserve original data regardless of filtered views
+	private DefaultListModel<String> originalModel = new DefaultListModel<>();
+
 	public ListSelectionList() {
 		super.setFixedCellHeight(20);
 		super.setCellRenderer(this::renderLabel);
+		super.setModel(originalModel);
 	}
 
 	@SuppressWarnings("java:S4968")
@@ -94,17 +99,45 @@ public class ListSelectionList extends JList<String> {
 	}
 
 	public void addItem(String element) {
-		DefaultListModel<String> model = (DefaultListModel<String>) getModel();
-		if (!model.contains(element) && !element.isBlank()) {
-			model.addElement(element);
-			addSelectionInterval(model.size() - 1, model.size() - 1);
-			ensureIndexIsVisible(getMaxSelectionIndex());
+		if (element == null || element.isBlank()) {
+			return;
+		}
+
+		if (!originalModel.contains(element)) {
+			originalModel.addElement(element);
+		}
+	}
+
+	public void updateSelection() {
+		int idx = getModel().getSize() - 1;
+
+		addSelectionInterval(idx, idx);
+		ensureIndexIsVisible(getMaxSelectionIndex());
+	}
+
+	@Override
+	public void setModel(ListModel<String> model) {
+		// Treat DefaultListModel as authoritative (unfiltered) data source.
+		if (model instanceof DefaultListModel) {
+			// Sync incoming data into the original model and use it for the view.
+			originalModel = (DefaultListModel<String>) model;
+			super.setModel(originalModel);
+		} else {
+			// Non-default models (e.g., arrays from setListData during filtering) are treated as
+			// transient filtered snapshots. Show them without altering the original model.
+			super.setModel(model);
 		}
 	}
 
 	public void removeItem(String element) {
-		DefaultListModel<String> model = (DefaultListModel<String>) getModel();
-		model.removeElement(element);
+		if (element == null) {
+			return;
+		}
+		originalModel.removeElement(element);
+	}
+
+	public DefaultListModel<String> getOriginalModel() {
+		return originalModel;
 	}
 
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {

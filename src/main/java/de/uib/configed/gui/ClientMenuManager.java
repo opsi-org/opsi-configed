@@ -42,6 +42,7 @@ import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -65,8 +66,8 @@ public final class ClientMenuManager implements MenuListener {
 
 		initJMenu();
 
-		mainFrame.getClientTablePanel().getClientTable().getTableHeader()
-				.setComponentPopupMenu(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns")));
+		mainFrame.getClientTablePanel().getClientTable().getTableHeader().addMouseListener(
+				new PopupMouseListener(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns"))));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
