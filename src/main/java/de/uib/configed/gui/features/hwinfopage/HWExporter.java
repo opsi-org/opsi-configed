@@ -40,6 +40,6 @@ public class HWExporter extends AbstractMultiClientExporter<PanelHWSingleClientI
 				.getDataServices().hardware.getHardwareInfo(client);
 
 		List<Map<String, Object>> scanProperty = hardwareInfo.get(PanelHWSingleClientInfo.SCANPROPERTYNAME);
-		return scanProperty.get(0).get(PanelHWSingleClientInfo.SCANTIME).toString();
+		return scanProperty != null ? scanProperty.get(0).get(PanelHWSingleClientInfo.SCANTIME).toString() : null;
 	}
 }
