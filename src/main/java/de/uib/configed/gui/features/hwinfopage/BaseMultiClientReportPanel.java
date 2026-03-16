@@ -45,19 +45,23 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private String exportDirKey;
 	private String exportFilePrefixKey;
 
+	private JLabel labelSwauditMultiClientReport1;
+
 	public BaseMultiClientReportPanel() {
 		this(Configed.getResourceValue("PanelHWMultiClientReport.title2"),
 				Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix"), "hwaudit_kind_of_export",
 				"hwaudit_export_dir", "hwaudit_export_file_prefix");
 	}
 
-	public BaseMultiClientReportPanel(String title, String filenamePrefix, String exportKey, String exportDirKey,
+	@SuppressWarnings("java:S1699")
+	protected BaseMultiClientReportPanel(String title, String filenamePrefix, String exportKey, String exportDirKey,
 			String exportFilePrefixKey) {
 		this.title = title;
 		this.filenamePrefix = filenamePrefix;
 		this.exportKey = exportKey;
 		this.exportDirKey = exportDirKey;
 		this.exportFilePrefixKey = exportFilePrefixKey;
+
 		setupPanel();
 	}
 
@@ -92,8 +96,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private void setupPanel() {
 		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
 
-		JLabel labelSwauditMultiClientReport1 = new JLabel(
-				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
+		labelSwauditMultiClientReport1 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.title"));
 		JLabel labelSwauditMultiClientReport2 = new JLabel(title);
 
 		this.add(labelSwauditMultiClientReport1);
@@ -188,6 +191,15 @@ public class BaseMultiClientReportPanel extends JPanel {
 
 		panel.add(checkAskForOverwrite, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
 		panel.add(labelAskForOverwrite, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
+	}
+
+	public void updateTitle1Label(int size, String extraInfo) {
+		if (size == 0) {
+			labelSwauditMultiClientReport1.setText(Configed.getResourceValue("PanelSWMultiClientReport.title1"));
+		} else {
+			labelSwauditMultiClientReport1.setText(String.format(extraInfo,
+					Configed.getResourceValue("PanelSWMultiClientReport.title1").replace(":", ""), size));
+		}
 	}
 
 	protected void addCustomOptions(JPanel panel) {

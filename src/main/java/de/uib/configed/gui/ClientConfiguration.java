@@ -6,6 +6,9 @@
 
 package de.uib.configed.gui;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -13,6 +16,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.hostconfigs.PanelConfigurationHostConfig;
 import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
 import de.uib.configed.gui.features.hwinfopage.HWExporter;
@@ -24,6 +28,8 @@ import de.uib.configed.gui.features.swinfopage.SWExporter;
 import de.uib.configed.gui.features.swinfopage.SWMultiClientReportPanel;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.infopage.GenericAuditPanelInfo;
+import de.uib.configed.gui.type.SWAuditClientEntry;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
@@ -131,6 +137,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			setComponentAt(getSelectedIndex(), panelSWInfo);
 		}
 
+		Utils.runSwingWorker(
+				() -> PersistenceControllerFactory.getPersistenceController().getDataServices().software
+						.getSoftwareAuditOnClients(configedMain.getSelectedClients()),
+				(Map<String, List<SWAuditClientEntry>> data) -> panelSWInfo.getMultiPanel().updateTitle1Label(
+						configedMain.getSelectedClients().size() - data.keySet().size(),
+						Configed.getResourceValue("PanelSWMultiClientReport.title1.withInfo")),
+				null);
 		panelSWInfo.updateTab(configedMain.getSelectedClients().size());
 	}
 
@@ -144,6 +157,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			setComponentAt(getSelectedIndex(), panelHWInfo);
 		}
 
+		Utils.runSwingWorker(
+				() -> PersistenceControllerFactory.getPersistenceController().getDataServices().hardware
+						.getHardwareAuditOnClients(configedMain.getSelectedClients()),
+				(Map<String, List<Map<String, Object>>> data) -> panelHWInfo.getMultiPanel().updateTitle1Label(
+						configedMain.getSelectedClients().size() - data.keySet().size(),
+						Configed.getResourceValue("PanelHWMultiClientReport.title1.withInfo")),
+				null);
 		panelHWInfo.updateTab(configedMain.getSelectedClients().size());
 	}
 

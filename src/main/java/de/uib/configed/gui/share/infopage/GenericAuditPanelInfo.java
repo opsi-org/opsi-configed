@@ -47,6 +47,10 @@ public class GenericAuditPanelInfo<S extends AbstractSingleClientInfoPanel, M ex
 		setComponent(contentPanel);
 	}
 
+	public M getMultiPanel() {
+		return multiClientPanel;
+	}
+
 	@Override
 	protected final void updateContent() {
 		int count = configedMain.getSelectedClients().size();
