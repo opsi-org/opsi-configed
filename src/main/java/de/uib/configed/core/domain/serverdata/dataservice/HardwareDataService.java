@@ -7,17 +7,22 @@
 package de.uib.configed.core.domain.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.gui.features.hwinfopage.PanelHWSingleClientInfo;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -116,5 +121,49 @@ public class HardwareDataService extends DataService {
 		result.put(PanelHWSingleClientInfo.SCANPROPERTYNAME,
 				List.of(Map.of(PanelHWSingleClientInfo.SCANTIME, scanTime)));
 		return result.size() > 1 ? result : new HashMap<>();
+	}
+
+	public Map<String, List<Map<String, Object>>> getHardwareAuditOnClients(Collection<String> clients) {
+		Logging.info(this, "getHardwareAuditOnClients used memory on start ", Utils.usedMemory());
+		Logging.info(this, "getHardwareAuditOnClients clients count: ", clients.size());
+		Map<String, List<Map<String, Object>>> client2hardware = new ConcurrentHashMap<>();
+
+		int stepSize = 100;
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
+		Iterator<String> clientIterator = clients.iterator();
+
+		while (clientIterator.hasNext()) {
+			List<String> clientListForCall = new ArrayList<>();
+			for (int i = 0; i < stepSize && clientIterator.hasNext(); i++) {
+				clientListForCall.add(clientIterator.next());
+			}
+
+			executor.runInParallel(() -> {
+				for (Map<String, Object> item : getAuditHardwareOnClients(clientListForCall)) {
+					String clientId = (String) item.get("hostId");
+					if (clientId == null) {
+						continue;
+					}
+					client2hardware.computeIfAbsent(clientId, v -> new ArrayList<>()).add(item);
+				}
+			});
+		}
+
+		executor.waitForCompletion();
+
+		Logging.info(this, "getHardwareAuditOnClients used memory on end ", Utils.usedMemory());
+
+		return client2hardware;
+	}
+
+	private List<Map<String, Object>> getAuditHardwareOnClients(List<String> clients) {
+		Logging.info(this, "getAuditHardwareOnClients request started");
+		Map<String, Object> callFilter = Map.of("hostId", clients);
+
+		List<Map<String, Object>> hardwareAuditOnClients = dataServices.exec
+				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new String[0], callFilter);
+		Logging.info(this, "getAuditHardwareOnClients, finished a request, map size ", hardwareAuditOnClients.size());
+
+		return hardwareAuditOnClients;
 	}
 }
