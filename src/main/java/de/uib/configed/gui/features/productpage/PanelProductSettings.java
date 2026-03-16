@@ -117,7 +117,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
-		infoPane = new ProductInfoPane(panelEditProperties);
+		infoPane = new ProductInfoPane(panelEditProperties, type);
 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 

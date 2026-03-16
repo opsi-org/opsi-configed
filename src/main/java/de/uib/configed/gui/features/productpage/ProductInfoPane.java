@@ -21,9 +21,11 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.gui.type.OpsiProductInfo;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -51,9 +53,12 @@ public class ProductInfoPane extends JSplitPane {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
+	private ProductSettingsType type;
+
 	/** Creates new ProductInfoPane */
-	public ProductInfoPane(AbstractPanelEditProperties panelEditProperties) {
+	public ProductInfoPane(AbstractPanelEditProperties panelEditProperties, ProductSettingsType type) {
 		super(JSplitPane.VERTICAL_SPLIT);
+		this.type = type;
 		this.panelEditProperties = panelEditProperties;
 		initComponents();
 		setupLayout();
@@ -99,6 +104,8 @@ public class ProductInfoPane extends JSplitPane {
 		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
 		productSplitPane.setResizeWeight(0.5);
 
+		SplitPaneStateManager.registerSplitPane(productSplitPane, getSplitPaneKey(true));
+
 		dependenciesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"));
 		dependenciesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
@@ -111,6 +118,19 @@ public class ProductInfoPane extends JSplitPane {
 		propertiesActivateButton.setFocusable(false);
 	}
 
+	private String getSplitPaneKey(boolean isAdvice) {
+		String key;
+		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
+			key = SplitPaneStateManager.LOCALBOOT_PRODUCT_INFO_SPLIT;
+		} else if (type == ProductSettingsType.NETBOOT_PRODUCT_SETTINGS) {
+			key = SplitPaneStateManager.NETBOOT_PRODUCT_INFO_SPLIT;
+		} else {
+			key = SplitPaneStateManager.DEPOT_PRODUCT_INFO_SPLIT;
+		}
+
+		return isAdvice ? (key + ".info_advice") : key;
+	}
+
 	private void setupLayout() {
 		setupTopComponent();
 		setupBottomComponent();
@@ -119,6 +139,8 @@ public class ProductInfoPane extends JSplitPane {
 		setMinimumSize(new Dimension());
 
 		setDividerLocation(START_DIVIDER_LOCATION);
+
+		SplitPaneStateManager.registerSplitPane(this, getSplitPaneKey(false));
 	}
 
 	private void setupTopComponent() {

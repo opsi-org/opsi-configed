@@ -86,7 +86,7 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(paneProducts);
 
-		infoPane = new ProductInfoPane(panelEditProperties);
+		infoPane = new ProductInfoPane(panelEditProperties, null);
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 		splitPane.setRightComponent(infoPane);
 		splitPane.setResizeWeight(1.0);
