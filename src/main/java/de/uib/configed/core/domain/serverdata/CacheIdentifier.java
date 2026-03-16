@@ -52,11 +52,6 @@ public enum CacheIdentifier {
 	HW_AUDIT_CONF("hw_audit_conf"),
 
 	/**
-	 * return type {@code List<Map<String, Object>>}
-	 */
-	RELATIONS_AUDIT_HARDWARE_ON_HOST("relations_audit_hardware_on_host"),
-
-	/**
 	 * return type {@code Set<String>}
 	 */
 	PERMITTED_PRODUCTS("permitted_products"),

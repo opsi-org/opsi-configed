@@ -129,7 +129,6 @@ public final class OpsiDataBackend {
 	private Map<String, Set<String>> superGroups;
 	private Map<String, List<Map<String, String>>> softwareMap;
 	private Map<String, List<SWAuditClientEntry>> swauditMap;
-	private List<Map<String, Object>> hardwareOnClient;
 	private Map<String, List<Map<String, Object>>> clientToHardware;
 
 	private List<Map<String, Object>> hwConfig;
@@ -338,7 +337,6 @@ public final class OpsiDataBackend {
 		swauditMap = null;
 		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 
-		hardwareOnClient = null;
 		clientToHardware = null;
 		persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 	}
@@ -373,16 +371,13 @@ public final class OpsiDataBackend {
 		}
 
 		if (hasSwAudit) {
-			swauditMap = getSwAuditOnClients(clientNames);
+			swauditMap = persistenceController.getDataServices().software.getSoftwareAuditOnClients(clientNames);
 		}
 
 		Logging.debug(this, "getClients hasHardware ", hasHardware);
 		if (hasHardware) {
 			getHardwareConfig();
-			getHardwareOnClient(clientNames);
-		} else {
-			// dont use older data after a reload request
-			hardwareOnClient = null;
+			clientToHardware = persistenceController.getDataServices().hardware.getHardwareAuditOnClients(clientNames);
 		}
 
 		reloadRequested = false;
@@ -490,27 +485,6 @@ public final class OpsiDataBackend {
 		}
 		Logging.error(this, "Element not found: ", Arrays.toString(elementPath));
 		return "";
-	}
-
-	private void getHardwareOnClient(Set<String> clientNames) {
-		hardwareOnClient = persistenceController.getDataServices().hardware.getHardwareOnClientPD();
-		clientToHardware = new HashMap<>();
-		for (String clientName : clientNames) {
-			clientToHardware.put(clientName, new ArrayList<>());
-		}
-		for (Map<String, Object> map : hardwareOnClient) {
-			String name = (String) map.get(OpsiServiceNOMPersistenceController.HOST_KEY);
-			if (!clientToHardware.containsKey(name)) {
-				Logging.debug(this, "Non-client hostid: ", name);
-				continue;
-			}
-			clientToHardware.get(name).add(map);
-		}
-	}
-
-	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients(Set<String> clientNames) {
-		return hasSwAudit ? persistenceController.getDataServices().software.getSoftwareAuditOnClients(clientNames)
-				: new HashMap<>();
 	}
 
 	private void getHardwareConfig() {

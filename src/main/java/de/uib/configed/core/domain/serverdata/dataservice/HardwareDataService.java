@@ -47,22 +47,6 @@ public class HardwareDataService extends DataService {
 		super(dataServices);
 	}
 
-	public List<Map<String, Object>> getHardwareOnClientPD() {
-		retrieveHardwareOnClientPD();
-		return dataServices.cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class);
-	}
-
-	public void retrieveHardwareOnClientPD() {
-		if (dataServices.cacheManager.isDataCached(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST)) {
-			return;
-		}
-		Map<String, String> filterMap = Map.of("state", "1");
-		List<Map<String, Object>> relationsAuditHardwareOnHost = dataServices.exec
-				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new String[0], filterMap);
-		dataServices.cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST,
-				relationsAuditHardwareOnHost);
-	}
-
 	public List<Map<String, Object>> getOpsiHWAuditConfPD(String locale) {
 		retrieveOpsiHWAuditConfPD(locale);
 		Map<String, List<Map<String, Object>>> hwAuditConf = dataServices.cacheManager
@@ -138,15 +122,7 @@ public class HardwareDataService extends DataService {
 				clientListForCall.add(clientIterator.next());
 			}
 
-			executor.runInParallel(() -> {
-				for (Map<String, Object> item : getAuditHardwareOnClients(clientListForCall)) {
-					String clientId = (String) item.get("hostId");
-					if (clientId == null) {
-						continue;
-					}
-					client2hardware.computeIfAbsent(clientId, v -> new ArrayList<>()).add(item);
-				}
-			});
+			executor.runInParallel(() -> computeClient2Hardware(client2hardware, clientListForCall));
 		}
 
 		executor.waitForCompletion();
@@ -156,9 +132,19 @@ public class HardwareDataService extends DataService {
 		return client2hardware;
 	}
 
+	private void computeClient2Hardware(Map<String, List<Map<String, Object>>> client2hardware, List<String> clients) {
+		for (Map<String, Object> item : getAuditHardwareOnClients(clients)) {
+			String clientId = (String) item.get("hostId");
+			if (clientId == null) {
+				continue;
+			}
+			client2hardware.computeIfAbsent(clientId, v -> new ArrayList<>()).add(item);
+		}
+	}
+
 	private List<Map<String, Object>> getAuditHardwareOnClients(List<String> clients) {
 		Logging.info(this, "getAuditHardwareOnClients request started");
-		Map<String, Object> callFilter = Map.of("hostId", clients);
+		Map<String, Object> callFilter = Map.of("hostId", clients, "state", "1");
 
 		List<Map<String, Object>> hardwareAuditOnClients = dataServices.exec
 				.getListOfMaps(RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new String[0], callFilter);
