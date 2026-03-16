@@ -40,11 +40,41 @@ public class SingleClientExporter {
 	 * Exports the data according to kindOfExport
 	 */
 	public void export() {
+		if (!hasData(onlySelectedRows)) {
+			Logging.info(SingleClientExporter.class, "No data to export for file: ", filename, ", skipping export");
+			return;
+		}
+
 		switch (kindOfExport) {
 		case CSV -> exportToCSV();
 		case PDF -> exportToPDF();
 		default -> Logging.warning(SingleClientExporter.class, "unexpected kindOfExport ", kindOfExport);
 		}
+	}
+
+	/**
+	 * Returns true if the table contains any data to export. If
+	 * onlySelectedRows is true, only considers selected rows.
+	 */
+	private boolean hasData(boolean onlySelected) {
+		if (table == null || table.getRowCount() == 0 || table.getColumnCount() == 0) {
+			return false;
+		}
+
+		for (int r = 0; r < table.getRowCount(); r++) {
+			if (onlySelected && !table.isRowSelected(r)) {
+				continue;
+			}
+
+			for (int c = 0; c < table.getColumnCount(); c++) {
+				Object val = table.getValueAt(r, c);
+				if (val != null && !val.toString().trim().isEmpty()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	private void exportToCSV() {
