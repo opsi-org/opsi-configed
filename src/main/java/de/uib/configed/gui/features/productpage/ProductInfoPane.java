@@ -104,7 +104,7 @@ public class ProductInfoPane extends JSplitPane {
 		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
 		productSplitPane.setResizeWeight(0.5);
 
-		SplitPaneStateManager.registerSplitPane(productSplitPane, getSplitPaneKey(true));
+		SplitPaneStateManager.registerSplitPane(productSplitPane, getSplitPaneKey(true), 0.5F);
 
 		dependenciesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"));
 		dependenciesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
@@ -138,9 +138,7 @@ public class ProductInfoPane extends JSplitPane {
 		// Make it possible to close the info pane
 		setMinimumSize(new Dimension());
 
-		setDividerLocation(START_DIVIDER_LOCATION);
-
-		SplitPaneStateManager.registerSplitPane(this, getSplitPaneKey(false));
+		SplitPaneStateManager.registerSplitPane(this, getSplitPaneKey(false), START_DIVIDER_LOCATION);
 	}
 
 	private void setupTopComponent() {

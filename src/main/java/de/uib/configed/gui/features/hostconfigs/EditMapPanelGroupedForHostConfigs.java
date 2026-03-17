@@ -146,8 +146,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		splitPane.setLeftComponent(jScrollPaneTree);
 		splitPane.setRightComponent(emptyRightPane);
-		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
-		SplitPaneStateManager.registerSplitPane(splitPane, getSplitPaneKey());
+		SplitPaneStateManager.registerSplitPane(splitPane, getSplitPaneKey(), INITIAL_DIVIDER_LOCATION);
 
 		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));
 		this.add(splitPane, "grow");

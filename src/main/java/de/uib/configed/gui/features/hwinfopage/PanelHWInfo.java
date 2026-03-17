@@ -136,8 +136,8 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
-		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT);
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT,
+				INITIAL_DIVIDER_LOCATION);
 
 		JPanel contentPanel = new JPanel();
 		setComponent(contentPanel);

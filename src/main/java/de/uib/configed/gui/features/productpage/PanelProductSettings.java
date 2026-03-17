@@ -45,7 +45,6 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
-import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -123,10 +122,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
 		contentPane.setResizeWeight(1.0);
-		SplitPaneStateManager.registerSplitPane(contentPane,
-				type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
-						? SplitPaneStateManager.LOCALBOOT_PRODUCT_SETTINGS_SPLIT
-						: SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT);
 		setComponent(contentPane);
 
 		productTable.addMouseListener(new PopupMouseListener(producePopupMenu()));

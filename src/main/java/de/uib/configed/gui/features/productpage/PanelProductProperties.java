@@ -91,7 +91,7 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		splitPane.setRightComponent(infoPane);
 		splitPane.setResizeWeight(1.0);
 
-		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.PRODUCT_PROPERTIES_SPLIT);
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.PRODUCT_PROPERTIES_SPLIT, 0.8F);
 
 		paneProducts.getGenEditTable().addMouseListener(new PopupMouseListener(createPopupMenu()));
 

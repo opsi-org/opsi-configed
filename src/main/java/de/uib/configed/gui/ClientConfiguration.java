@@ -87,7 +87,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 				clientInfoScrollPane);
 
 		panelClientSelection.setResizeWeight(1.0);
-		SplitPaneStateManager.registerSplitPane(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT);
 
 		panelLocalbootProductSettings = new PanelProductSettings(configedMain, productTree,
 				ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
@@ -160,11 +159,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	public void initSplitPanes() {
-		SplitPaneStateManager.restoreDividerLocation(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT,
+		SplitPaneStateManager.registerSplitPane(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT,
 				DIVIDER_LOCATION);
-		SplitPaneStateManager.restoreDividerLocation(panelLocalbootProductSettings.getContentPane(),
+		SplitPaneStateManager.registerSplitPane(panelLocalbootProductSettings.getContentPane(),
 				SplitPaneStateManager.LOCALBOOT_PRODUCT_SETTINGS_SPLIT, DIVIDER_LOCATION);
-		SplitPaneStateManager.restoreDividerLocation(panelNetbootProductSettings.getContentPane(),
+		SplitPaneStateManager.registerSplitPane(panelNetbootProductSettings.getContentPane(),
 				SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT, DIVIDER_LOCATION);
 	}
 

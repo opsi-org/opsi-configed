@@ -134,9 +134,9 @@ public class RemoteControlDialog {
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, loggingScrollPane);
 		splitPane.setResizeWeight(1.0);
-		splitPane.setDividerLocation(START_HEIGHT_FRAME - START_HEIGHT_LOGGING_AREA);
 
-		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.REMOTE_CONTROL_SPLIT);
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.REMOTE_CONTROL_SPLIT,
+				START_HEIGHT_FRAME - START_HEIGHT_LOGGING_AREA);
 
 		JPanel mainPanel = new JPanel(new MigLayout("insets 0, fill", "[]", "[]0"));
 		mainPanel.add(splitPane, "grow, w " + START_WIDTH_FRAME + ", h " + START_HEIGHT_FRAME);
