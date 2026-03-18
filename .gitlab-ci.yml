@@ -3,7 +3,7 @@ image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
 stages:
   - set_variables
-  - code_coverage_analysis
+  # - code_coverage_analysis
   - build_and_analyze
   - sign
   - make_opsiproduct
@@ -73,8 +73,8 @@ sonarqube-check:
       - .sonar/cache
   script:
     - mvn verify sonar:sonar -Pcoverage -Dsonar.projectKey=configed
-  only:
-    - v4.3 # the name of your main branch
+  # only:
+  #   - v4.3 # the name of your main branch
 
 signandupload:
   stage: sign
