@@ -83,12 +83,10 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 
 		paneProducts.setSortOrder(sortDescriptor);
 
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setLeftComponent(paneProducts);
-
 		infoPane = new ProductInfoPane(panelEditProperties, null);
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
-		splitPane.setRightComponent(infoPane);
+
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneProducts, infoPane);
 		splitPane.setResizeWeight(1.0);
 
 		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.PRODUCT_PROPERTIES_SPLIT, 0.8F);

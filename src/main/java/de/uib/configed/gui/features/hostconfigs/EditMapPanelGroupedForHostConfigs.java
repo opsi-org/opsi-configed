@@ -127,7 +127,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupLayout() {
-		splitPane = new JSplitPane();
 
 		tree = new XTree();
 
@@ -144,8 +143,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		emptyRightPane = new JPanel();
 
-		splitPane.setLeftComponent(jScrollPaneTree);
-		splitPane.setRightComponent(emptyRightPane);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, emptyRightPane);
 		SplitPaneStateManager.registerSplitPane(splitPane, getSplitPaneKey(), INITIAL_DIVIDER_LOCATION);
 
 		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));

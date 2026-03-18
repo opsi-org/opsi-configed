@@ -106,10 +106,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		panelTop.add(scrollpaneDepots, "grow");
 		panelTop.add(buttonSetValuesFromPackage, "aligny bottom");
 
-		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panelTop, productPropertiesPanel);
 		splitter.setResizeWeight(0.3);
-		splitter.setTopComponent(panelTop);
-		splitter.setBottomComponent(productPropertiesPanel);
 
 		SplitPaneStateManager.registerSplitPane(splitter, SplitPaneStateManager.DEPOT_PRODUCT_PROPERTIES_SPLIT);
 

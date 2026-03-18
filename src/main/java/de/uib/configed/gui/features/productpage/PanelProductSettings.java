@@ -33,6 +33,7 @@ import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
+import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -45,6 +46,7 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -122,6 +124,11 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
 		contentPane.setResizeWeight(1.0);
+		SplitPaneStateManager.registerSplitPane(contentPane,
+				type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+						? SplitPaneStateManager.LOCALBOOT_PRODUCT_SETTINGS_SPLIT
+						: SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT,
+				ClientConfiguration.DIVIDER_LOCATION);
 		setComponent(contentPane);
 
 		productTable.addMouseListener(new PopupMouseListener(producePopupMenu()));

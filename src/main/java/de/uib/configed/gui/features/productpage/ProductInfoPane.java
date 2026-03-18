@@ -99,12 +99,10 @@ public class ProductInfoPane extends JSplitPane {
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		productSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		productSplitPane.setTopComponent(jScrollPaneProductInfo);
-		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
+		productSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jScrollPaneProductInfo, jScrollPaneProductAdvice);
 		productSplitPane.setResizeWeight(0.5);
 
-		SplitPaneStateManager.registerSplitPane(productSplitPane, getSplitPaneKey(true), 0.5F);
+		SplitPaneStateManager.registerSplitPane(productSplitPane, getSplitPaneKey(true));
 
 		dependenciesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"));
 		dependenciesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
@@ -202,10 +200,12 @@ public class ProductInfoPane extends JSplitPane {
 
 	public void setProductAdvice(String s) {
 		jTextAreaProductAdvice.setText(s);
+		SplitPaneStateManager.restoreDividerLocation(productSplitPane, getSplitPaneKey(true));
 	}
 
 	public void setProductInfo(String s) {
 		jTextAreaProductInfo.setText(s);
+		SplitPaneStateManager.restoreDividerLocation(productSplitPane, getSplitPaneKey(true));
 	}
 
 	public void setProductId(String s) {

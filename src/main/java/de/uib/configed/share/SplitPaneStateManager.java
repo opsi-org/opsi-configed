@@ -34,6 +34,8 @@ public final class SplitPaneStateManager {
 	public static final String SERVER_HOST_PARAMETERS_SPLIT = "server.host_parameteres";
 	public static final String REMOTE_CONTROL_SPLIT = "remote_control";
 
+	private static final String CLIENT_PROPERTY_ADJUSTING = "SplitPane.adjusting";
+
 	private SplitPaneStateManager() {
 		// Hide constructor.
 	}
@@ -68,12 +70,55 @@ public final class SplitPaneStateManager {
 	 *                     (pixel position) or {@link Float} (proportion).
 	 */
 	public static void registerSplitPane(JSplitPane splitPane, String key, Number defaultValue) {
-		if (splitPane.isShowing() && getTotalSize(splitPane) > 0) {
-			resolveDividerLocation(splitPane, key, defaultValue);
-			addPropertyChangeListener(key, splitPane);
-		} else {
-			addComponentListener(splitPane, key, defaultValue);
-		}
+		Runnable restore = new Runnable() {
+			@Override
+			public void run() {
+				if (getTotalSize(splitPane) > 0) {
+					resolveDividerLocation(splitPane, key, defaultValue);
+				} else {
+					SwingUtilities.invokeLater(this);
+				}
+			}
+		};
+
+		splitPane.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				restore();
+			}
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				restore();
+			}
+
+			private void restore() {
+				if (splitPane.isShowing() && getTotalSize(splitPane) > 0) {
+					restore.run();
+					addPropertyChangeListener(key, splitPane);
+					splitPane.removeComponentListener(this);
+				}
+			}
+		});
+
+		SwingUtilities.invokeLater(restore);
+	}
+
+	/**
+	 * Restores the divider location of the given {@link JSplitPane} from
+	 * persisted user preferences.
+	 * <p>
+	 * The divider location is stored as a proportional value (0.0–1.0) and is
+	 * applied relative to the current size of the split pane.
+	 * </p>
+	 * 
+	 * @param splitPane the split pane whose divider location should be restored
+	 * @param key       the unique key used to retrieve the stored divider
+	 *                  position
+	 */
+	public static void restoreDividerLocation(JSplitPane splitPane, String key) {
+		Double dividerLocation = loadStoredLocation(key);
+		applyDividerLocation(splitPane, dividerLocation);
 	}
 
 	private static void resolveDividerLocation(JSplitPane splitPane, String key, Number defaultVal) {
@@ -144,47 +189,33 @@ public final class SplitPaneStateManager {
 			return;
 		}
 
-		SwingUtilities.invokeLater(() -> {
-			splitPane.setDividerLocation(dividerLocation);
-		});
-	}
-
-	private static void addComponentListener(JSplitPane splitPane, String key, Number defaultValue) {
-		final Number capturedDefault = defaultValue;
-
-		splitPane.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				splitPane.removeComponentListener(this);
-				resolveDividerLocation(splitPane, key, capturedDefault);
-				addPropertyChangeListener(key, splitPane);
-			}
-
-			@Override
-			public void componentResized(ComponentEvent e) {
-				if (splitPane.isShowing() && getTotalSize(splitPane) > 0) {
-					splitPane.removeComponentListener(this);
-					resolveDividerLocation(splitPane, key, capturedDefault);
-					addPropertyChangeListener(key, splitPane);
-				}
-			}
-		});
+		splitPane.putClientProperty(CLIENT_PROPERTY_ADJUSTING, Boolean.TRUE);
+		splitPane.setDividerLocation(dividerLocation);
+		splitPane.putClientProperty(CLIENT_PROPERTY_ADJUSTING, Boolean.FALSE);
 	}
 
 	private static void addPropertyChangeListener(String key, JSplitPane splitPane) {
 		PropertyChangeListener listener = (PropertyChangeEvent evt) -> {
-			Integer totalSize = getTotalSize(splitPane);
-			if (totalSize > 0) {
-				int loc = splitPane.getDividerLocation();
-				Double proportion = convertPixelToProportionSize(loc, totalSize);
-
-				if (proportion != null && proportion >= 0.0F && proportion <= 1.0F) {
-					UserPreferences.set(buildDividerLocationKey(key), String.valueOf(proportion));
-				}
+			if (Boolean.TRUE.equals(splitPane.getClientProperty(CLIENT_PROPERTY_ADJUSTING))) {
+				return;
 			}
+
+			storeDividerLocation(key, splitPane);
 		};
 
 		splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, listener);
+	}
+
+	private static void storeDividerLocation(String key, JSplitPane splitPane) {
+		Integer totalSize = getTotalSize(splitPane);
+		if (totalSize > 0) {
+			int loc = splitPane.getDividerLocation();
+			Double proportion = convertPixelToProportionSize(loc, totalSize);
+
+			if (proportion != null && proportion >= 0.0F && proportion <= 1.0F) {
+				UserPreferences.set(buildDividerLocationKey(key), String.valueOf(proportion));
+			}
+		}
 	}
 
 	private static Double convertPixelToProportionSize(Integer pixelSize, Integer totalSize) {
@@ -196,7 +227,7 @@ public final class SplitPaneStateManager {
 			Logging.warning("Invalid proportion calculated: " + proportion);
 			return null;
 		}
-		return Math.round(proportion * 1000.0) / 1000.0;
+		return Math.round(proportion * 100.0) / 100.0;
 	}
 
 	private static int getTotalSize(JSplitPane splitPane) {

@@ -128,7 +128,8 @@ public class MainPanelManager {
 	}
 
 	private JPanel createClientConfigurationPanel() {
-		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, clientConfiguration);
+		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftTabs, clientConfiguration);
+		jSplitPane.setContinuousLayout(false);
 		SplitPaneStateManager.registerSplitPane(jSplitPane, SplitPaneStateManager.CLIENT_CONFIGURATION_SPLIT,
 				DIVIDER_LOCATION_CENTRAL_PANE);
 
@@ -157,9 +158,9 @@ public class MainPanelManager {
 
 		depotsListPanel.setMinimumSize(new Dimension());
 
-		JSplitPane depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, depotsListPanel,
+		JSplitPane depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, depotsListPanel,
 				depotConfiguration);
-
+		depotConfigurationSplitPane.setContinuousLayout(false);
 		depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 
 		SplitPaneStateManager.registerSplitPane(depotConfigurationSplitPane,
