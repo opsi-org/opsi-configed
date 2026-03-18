@@ -52,14 +52,6 @@ compile_and_package:
   needs:
     - set_variables
 
-# jacoco-check:
-#   stage: code_coverage_analysis
-#   image: maven:3.8.6-openjdk-18
-#   script:
-#     - mvn jacoco:report
-#   only:
-#     - main
-
 sonarqube-check:
   stage: build_and_analyze
   image: sensedia/openjdk-25-pipeline
@@ -72,8 +64,8 @@ sonarqube-check:
       - .sonar/cache
   script:
     - mvn verify sonar:sonar -Pcoverage -Dsonar.projectKey=configed
-  # only:
-  #   - v4.3 # the name of your main branch
+  only:
+    - v4.3 # the name of your main branch
 
 signandupload:
   stage: sign
