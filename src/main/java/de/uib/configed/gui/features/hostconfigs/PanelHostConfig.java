@@ -32,10 +32,10 @@ public class PanelHostConfig extends JPanel {
 
 	private Runnable configUpdater;
 
-	public PanelHostConfig(Runnable configUpdater, boolean isServerConfig) {
+	public PanelHostConfig(Runnable configUpdater, boolean isServerConfig, boolean isClientConfig) {
 		this.configUpdater = configUpdater;
 
-		buildPanel(isServerConfig);
+		buildPanel(isServerConfig, isClientConfig);
 	}
 
 	private void reloadHostConfig() {
@@ -56,7 +56,7 @@ public class PanelHostConfig extends JPanel {
 		ChangedDataManager.checkSaveAll(false);
 	}
 
-	private void buildPanel(boolean isServerConfig) {
+	private void buildPanel(boolean isServerConfig, boolean isClientConfig) {
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(new DefaultEditMapPanel.Actor() {
 			@Override
 			public void reloadData() {
@@ -67,7 +67,7 @@ public class PanelHostConfig extends JPanel {
 			public void saveData() {
 				saveHostConfig();
 			}
-		}, isServerConfig);
+		}, isServerConfig, isClientConfig);
 
 		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getHostConfigsDataChangedKeeper());
 
