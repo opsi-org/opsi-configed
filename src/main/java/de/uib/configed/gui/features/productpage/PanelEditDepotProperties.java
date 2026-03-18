@@ -42,6 +42,7 @@ import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -102,13 +103,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		JPanel panelTop = new JPanel();
 		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));
-		panelTop.add(scrollpaneDepots, "growx");
+		panelTop.add(scrollpaneDepots, "grow");
 		panelTop.add(buttonSetValuesFromPackage, "aligny bottom");
 
-		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panelTop, productPropertiesPanel);
 		splitter.setResizeWeight(0.3);
-		splitter.setTopComponent(panelTop);
-		splitter.setBottomComponent(productPropertiesPanel);
+
+		SplitPaneStateManager.registerSplitPane(splitter, SplitPaneStateManager.DEPOT_PRODUCT_PROPERTIES_SPLIT);
 
 		this.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[grow, fill]"));
 		this.add(splitter, "grow, push");

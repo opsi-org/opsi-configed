@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
-import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList.FilterContext;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
@@ -170,7 +169,7 @@ public class ListSelectionDialog {
 
 	public void setListData(List<String> v) {
 		listSelectionList.setListData(v.toArray(String[]::new));
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(listSelectionList, v, v);
+		searchTargetModel = new SearchTargetModelFromJList(listSelectionList, v, v);
 		searchPane.setTargetModel(searchTargetModel);
 	}
 

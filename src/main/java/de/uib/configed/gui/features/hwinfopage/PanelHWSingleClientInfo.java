@@ -45,6 +45,7 @@ import de.uib.configed.gui.share.infopage.SingleClientExporter;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.Icons;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -131,7 +132,8 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT,
+				INITIAL_DIVIDER_LOCATION);
 
 		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
 		this.add(panelByAuditInfo);

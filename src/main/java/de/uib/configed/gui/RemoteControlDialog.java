@@ -27,6 +27,7 @@ import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -133,7 +134,9 @@ public class RemoteControlDialog {
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, loggingScrollPane);
 		splitPane.setResizeWeight(1.0);
-		splitPane.setDividerLocation(START_HEIGHT_FRAME - START_HEIGHT_LOGGING_AREA);
+
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.REMOTE_CONTROL_SPLIT,
+				START_HEIGHT_FRAME - START_HEIGHT_LOGGING_AREA);
 
 		JPanel mainPanel = new JPanel(new MigLayout("insets 0, fill", "[]", "[]0"));
 		mainPanel.add(splitPane, "grow, w " + START_WIDTH_FRAME + ", h " + START_HEIGHT_FRAME);

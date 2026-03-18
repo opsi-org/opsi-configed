@@ -9,8 +9,11 @@ package de.uib.configed.gui.features.tree;
 import java.awt.Component;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -82,19 +85,33 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		AbstractGroupTree sourceTree = (AbstractGroupTree) source;
 		TreePath[] sourcePaths = sourceTree.getSelectionPaths();
 
-		if (sourcePaths == null || sourcePaths.length > 1) {
+		if (sourcePaths == null || sourcePaths.length == 0) {
 			return false;
-		} else {
-			GroupNode sourceNode = tree.getGroupNode(sourcePaths[0].getLastPathComponent().toString());
-			if (sourceNode == null) {
-				// An object in the tree is selected
-				return isNormalGroup(targetNode);
-			} else {
-				// A group in the tree is selected
-				return isValidDropTarget(sourceNode, targetNode) && shouldMoveNode((String) sourceNode.getUserObject(),
-						new TreePath(targetNode.getPath()), true);
+		}
+
+		boolean result = false;
+		GroupNode selectedGroup = null;
+		int groupCount = 0;
+
+		for (TreePath path : sourcePaths) {
+			GroupNode node = tree.getGroupNode(path.getLastPathComponent().toString());
+
+			if (node != null) {
+				groupCount++;
+				selectedGroup = node;
 			}
 		}
+
+		if (groupCount == 0) {
+			result = isNormalGroup(targetNode);
+		} else if (groupCount == 1 && sourcePaths.length == 1) {
+			result = isValidDropTarget(selectedGroup, targetNode)
+					&& shouldMoveNode((String) selectedGroup.getUserObject(), new TreePath(targetNode.getPath()), true);
+		} else {
+			// Do nothing.
+		}
+
+		return result;
 	}
 
 	private static boolean isValidDropTarget(GroupNode sourceNode, GroupNode targetNode) {
@@ -207,9 +224,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean importFromTree(TransferSupport support) {
-		String selectedObject = ((AbstractGroupTree) source).getSelectionPath().getLastPathComponent().toString();
+		TreePath[] selectionPaths = ((AbstractGroupTree) source).getSelectionPaths();
+		Set<String> selectedObjects = selectionPaths == null ? Collections.emptySet()
+				: Arrays.stream(selectionPaths).map(path -> path.getLastPathComponent().toString())
+						.collect(Collectors.toSet());
 
-		return importObjects(Set.of(selectedObject), support);
+		return importObjects(selectedObjects, support);
 	}
 
 	private boolean importFromTable(TransferSupport support) {
@@ -234,6 +254,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		DefaultMutableTreeNode dropParentNode = (DefaultMutableTreeNode) dropPath.getLastPathComponent();
 		String dropParentID = dropParentNode.getUserObject().toString();
+
+		if (!confirmMovingNodes(selectedObjects.size(), dropParentID)) {
+			return false;
+		}
 
 		Logging.debug(this, "dropPath ", dropPath);
 
@@ -272,10 +296,6 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
 		Logging.debug(this, "importData, groupNode ", groupNode);
 
-		if (!confirmMovingNode(selectedObject, dropParentID)) {
-			return;
-		}
-
 		if (groupNode != null) {
 			// it is a group, and it will be moved, but only inside one partial tree
 			tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
@@ -293,10 +313,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "importData ready, selectedObject ", selectedObject);
 	}
 
-	private static boolean confirmMovingNode(String movingNode, String group) {
+	private static boolean confirmMovingNodes(int amount, String group) {
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				String.format(Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.message"),
-						movingNode, group),
+				String.format(Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.message"), amount,
+						group),
 				Configed.getResourceValue("GroupTreeTransferHandler.confirmMovingNode.title"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 

@@ -46,6 +46,7 @@ import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -62,6 +63,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private List<String> theRoles;
 
 	private boolean isServerConfig;
+	private boolean isClientConfig;
 
 	private JSplitPane splitPane;
 	protected XTree tree;
@@ -77,11 +79,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean isServerConfig) {
+	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean isServerConfig,
+			boolean isClientConfig) {
 		super();
 
 		this.actor = actor;
 		this.isServerConfig = isServerConfig;
+		this.isClientConfig = isClientConfig;
 
 		setupLayout();
 
@@ -123,7 +127,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupLayout() {
-		splitPane = new JSplitPane();
 
 		tree = new XTree();
 
@@ -140,12 +143,22 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		emptyRightPane = new JPanel();
 
-		splitPane.setLeftComponent(jScrollPaneTree);
-		splitPane.setRightComponent(emptyRightPane);
-		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, emptyRightPane);
+		SplitPaneStateManager.registerSplitPane(splitPane, getSplitPaneKey(), INITIAL_DIVIDER_LOCATION);
 
 		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fill", "[]", "[]0"));
 		this.add(splitPane, "grow");
+	}
+
+	private String getSplitPaneKey() {
+		if (isServerConfig) {
+			return SplitPaneStateManager.SERVER_HOST_PARAMETERS_SPLIT;
+		}
+		if (isClientConfig) {
+			return SplitPaneStateManager.CLIENT_HOST_PARAMETERS_SPLIT;
+		} else {
+			return SplitPaneStateManager.DEPOT_HOST_PARAMETERS_SPLIT;
+		}
 	}
 
 	/**
