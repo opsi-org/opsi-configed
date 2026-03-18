@@ -63,7 +63,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn compile sonar:sonar -Dsonar.projectKey=configed
+    - mvn verify sonar:sonar -Pcoverage -Dsonar.projectKey=configed
   only:
     - v4.3 # the name of your main branch
 
