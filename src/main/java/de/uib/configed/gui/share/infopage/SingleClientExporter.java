@@ -92,6 +92,7 @@ public class SingleClientExporter {
 			pdfExporter.setMetaData(metaData);
 		}
 		pdfExporter.setPageSizeA4Landscape();
+		pdfExporter.setAskForOverwrite(askForOverwrite);
 		return pdfExporter.execute(filename, onlySelectedRows);
 	}
 }

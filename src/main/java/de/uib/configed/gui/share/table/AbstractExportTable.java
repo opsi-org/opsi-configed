@@ -148,15 +148,15 @@ public abstract class AbstractExportTable {
 				if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
 					filename = filename + ".csv";
 				}
-
-				Logging.debug(this, "filename ", filename);
-
-				if (askForOverwrite) {
-					filename = askForOverride(filename);
-				}
 			}
 		} else {
 			exportDirectory = new File(filename).getParentFile();
+		}
+
+		Logging.debug(this, "filename ", filename);
+
+		if (askForOverwrite) {
+			filename = askForOverride(filename);
 		}
 
 		Logging.debug(this, "export to ", filename);
