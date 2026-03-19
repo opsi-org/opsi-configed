@@ -21,7 +21,7 @@ public class SWMultiClientReportPanel extends BaseMultiClientReportPanel {
 	public SWMultiClientReportPanel() {
 		super(Configed.getResourceValue("PanelSWMultiClientReport.title2"),
 				Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix"), "swaudit_kind_of_export",
-				"swaudit_export_dir", "swaudit_export_file_prefix");
+				"swaudit_export_dir", "swaudit_export_file_prefix", "swaudit_export_allow_overwrite");
 	}
 
 	public boolean wantsWithMsUpdates() {
@@ -39,7 +39,12 @@ public class SWMultiClientReportPanel extends BaseMultiClientReportPanel {
 		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
 
 		checkWithMsUpdates = new JCheckBox();
+		checkWithMsUpdates.addItemListener(e -> Configed.getSavedStates().setProperty("swaudit_export_ms_updates",
+				Boolean.toString(checkWithMsUpdates.isSelected())));
+
 		checkWithMsUpdates2 = new JCheckBox();
+		checkWithMsUpdates2.addItemListener(e -> Configed.getSavedStates().setProperty("swaudit_export_ms_updates2",
+				Boolean.toString(checkWithMsUpdates2.isSelected())));
 
 		panel.add(checkWithMsUpdates, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
 		panel.add(labelWithMsUpdates, "wrap");

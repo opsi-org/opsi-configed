@@ -44,23 +44,25 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private String exportKey;
 	private String exportDirKey;
 	private String exportFilePrefixKey;
+	private String exportAllowOverwriteKey;
 
 	private JLabel labelSwauditMultiClientReport1;
 
 	public BaseMultiClientReportPanel() {
 		this(Configed.getResourceValue("PanelHWMultiClientReport.title2"),
 				Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix"), "hwaudit_kind_of_export",
-				"hwaudit_export_dir", "hwaudit_export_file_prefix");
+				"hwaudit_export_dir", "hwaudit_export_file_prefix", "hwaudit_export_allow_overwrite");
 	}
 
 	@SuppressWarnings("java:S1699")
 	protected BaseMultiClientReportPanel(String title, String filenamePrefix, String exportKey, String exportDirKey,
-			String exportFilePrefixKey) {
+			String exportFilePrefixKey, String exportAllowOverwriteKey) {
 		this.title = title;
 		this.filenamePrefix = filenamePrefix;
 		this.exportKey = exportKey;
 		this.exportDirKey = exportDirKey;
 		this.exportFilePrefixKey = exportFilePrefixKey;
+		this.exportAllowOverwriteKey = exportAllowOverwriteKey;
 
 		setupPanel();
 	}
@@ -119,7 +121,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 
 		addCustomOptions(panel);
 
-		addAskForOverwrite(panel);
+		addAllowOverwriting(panel);
 
 		return panel;
 	}
@@ -184,13 +186,16 @@ public class BaseMultiClientReportPanel extends JPanel {
 		panel.add(labelFilenameInformation, "span, gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 	}
 
-	private void addAskForOverwrite(JPanel panel) {
-		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
+	private void addAllowOverwriting(JPanel panel) {
+		JLabel labelAllowOverwriting = new JLabel(
+				Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
 
 		checkAllowOverwriting = new JCheckBox();
+		checkAllowOverwriting.addItemListener(e -> Configed.getSavedStates().setProperty(exportAllowOverwriteKey,
+				Boolean.toString(checkAllowOverwriting.isSelected())));
 
 		panel.add(checkAllowOverwriting, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
-		panel.add(labelAskForOverwrite, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
+		panel.add(labelAllowOverwriting, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 	}
 
 	public void updateTitle1Label(int size, String extraInfo) {
