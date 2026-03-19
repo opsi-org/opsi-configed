@@ -51,7 +51,7 @@ public abstract class AbstractExportTable {
 		askForOverwrite = b;
 	}
 
-	protected abstract void execute(String fileName, boolean onlySelectedRows);
+	protected abstract boolean execute(String fileName, boolean onlySelectedRows);
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));

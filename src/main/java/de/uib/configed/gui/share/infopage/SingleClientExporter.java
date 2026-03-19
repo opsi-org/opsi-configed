@@ -39,17 +39,20 @@ public class SingleClientExporter {
 	/**
 	 * Exports the data according to kindOfExport
 	 */
-	public void export() {
+	public boolean export() {
 		if (!hasData(onlySelectedRows)) {
 			Logging.info(SingleClientExporter.class, "No data to export for file: ", filename, ", skipping export");
-			return;
+			return false;
 		}
 
-		switch (kindOfExport) {
+		return switch (kindOfExport) {
 		case CSV -> exportToCSV();
 		case PDF -> exportToPDF();
-		default -> Logging.warning(SingleClientExporter.class, "unexpected kindOfExport ", kindOfExport);
+		default -> {
+			Logging.warning(SingleClientExporter.class, "unexpected kindOfExport ", kindOfExport);
+			yield false;
 		}
+		};
 	}
 
 	/**
@@ -77,18 +80,18 @@ public class SingleClientExporter {
 		return false;
 	}
 
-	private void exportToCSV() {
+	private boolean exportToCSV() {
 		ExporterToCSV exporter = new ExporterToCSV(table);
 		exporter.setAskForOverwrite(askForOverwrite);
-		exporter.execute(filename, onlySelectedRows);
+		return exporter.execute(filename, onlySelectedRows);
 	}
 
-	private void exportToPDF() {
+	private boolean exportToPDF() {
 		ExporterToPDF pdfExporter = new ExporterToPDF(table);
 		if (metaData != null) {
 			pdfExporter.setMetaData(metaData);
 		}
 		pdfExporter.setPageSizeA4Landscape();
-		pdfExporter.execute(filename, onlySelectedRows);
+		return pdfExporter.execute(filename, onlySelectedRows);
 	}
 }

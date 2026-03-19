@@ -51,6 +51,8 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 		panelInfo.setKindOfExport(reportPanel.wantsKindOfExport());
 		applyExtraSettings();
 
+		int failedExports = 0;
+
 		for (String client : configedMain.getSelectedClients()) {
 			updatePanelForClient(client);
 
@@ -67,7 +69,20 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 			String filepath = filepathStart + client + "__scan_" + scanDate + extension;
 			Logging.debug(this, "actionPerformed, write to ", filepath);
 			panelInfo.setWriteToFile(filepath);
-			panelInfo.getSingleClientExporter().export();
+			if (!panelInfo.getSingleClientExporter().export()) {
+				failedExports++;
+			}
+		}
+
+		if (failedExports != 0) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					String.format(Configed.getResourceValue("AbstractMultiClientExporter.exportFailed.message"),
+							failedExports),
+					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("AbstractMultiClientExporter.exportSucceeded.message"),
+					Configed.getResourceValue("info"), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
