@@ -26,7 +26,7 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class BaseMultiClientReportPanel extends JPanel {
-	private JButton buttonStart;
+	private JButton buttonExport;
 	private ActionListener actionListenerForStart;
 
 	private JCheckBox checkAskForOverwrite;
@@ -68,12 +68,12 @@ public class BaseMultiClientReportPanel extends JPanel {
 	public void setActionListenerForStart(ActionListener li) {
 		Logging.info(this, "setActionListenerForStart ", li);
 		if (actionListenerForStart != null) {
-			buttonStart.removeActionListener(actionListenerForStart);
+			buttonExport.removeActionListener(actionListenerForStart);
 		}
 
 		if (li != null) {
 			actionListenerForStart = li;
-			buttonStart.addActionListener(actionListenerForStart);
+			buttonExport.addActionListener(actionListenerForStart);
 		}
 	}
 
@@ -105,8 +105,8 @@ public class BaseMultiClientReportPanel extends JPanel {
 		JPanel subpanelPreConfig = setupSubPanelPreConfig();
 		this.add(subpanelPreConfig, "growx, pushx, gaptop " + Globals.GAP_SIZE + ", gapbottom " + Globals.GAP_SIZE);
 
-		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
-		this.add(buttonStart, "gaptop " + Globals.GAP_SIZE);
+		buttonExport = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
+		this.add(buttonExport, "gaptop " + Globals.GAP_SIZE);
 	}
 
 	private JPanel setupSubPanelPreConfig() {
