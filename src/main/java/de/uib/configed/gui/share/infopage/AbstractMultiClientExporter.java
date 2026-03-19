@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
+import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
 import de.uib.configed.share.logging.Logging;
 
 @SuppressWarnings("java:S103")
@@ -34,50 +35,77 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String exportDirectory = reportPanel.getExportDirectory();
+
 		if (exportDirectory == null || exportDirectory.isEmpty()) {
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("AbstractMultiClientExporter.missingInformation.message"),
-					Configed.getResourceValue("AbstractMultiClientExporter.missingInformation.title"),
-					JOptionPane.INFORMATION_MESSAGE);
+			showMissingDirectoryMessage();
 			return;
 		}
 
-		Configed.getSavedStates().setProperty(getExportPrefixKey(), reportPanel.getExportfilePrefix());
+		String prefix = reportPanel.getExportfilePrefix();
+		KindOfExport exportType = reportPanel.wantsKindOfExport();
+		String extension = "." + exportType.toString().toLowerCase(Locale.ROOT);
+		String filePathPrefix = exportDirectory + File.separator + prefix;
 
-		String filepathStart = exportDirectory + File.separator + reportPanel.getExportfilePrefix();
-		String extension = "." + reportPanel.wantsKindOfExport().toString().toLowerCase(Locale.ROOT);
+		Configed.getSavedStates().setProperty(getExportPrefixKey(), prefix);
 
+		configurePanel(exportType);
+
+		int failedCount = exportClients(filePathPrefix, extension);
+
+		showResultMessage(failedCount);
+	}
+
+	private void configurePanel(KindOfExport exportType) {
 		panelInfo.setAskForOverwrite(reportPanel.wantsAskForOverwrite());
-		panelInfo.setKindOfExport(reportPanel.wantsKindOfExport());
+		panelInfo.setKindOfExport(exportType);
 		applyExtraSettings();
+	}
 
-		int failedExports = 0;
+	private int exportClients(String filePathPrefix, String extension) {
+		int failedCount = 0;
 
 		for (String client : configedMain.getSelectedClients()) {
 			updatePanelForClient(client);
 
-			String scanDate = getScanDateForClient(client);
-			if (scanDate == null) {
-				scanDate = "__";
-			} else {
-				int spaceIndex = scanDate.indexOf(' ');
-				if (spaceIndex >= 0) {
-					scanDate = scanDate.substring(0, spaceIndex);
-				}
-			}
+			String scanDate = formatScanDate(getScanDateForClient(client));
+			String filePath = buildFilePath(filePathPrefix, client, scanDate, extension);
 
-			String filepath = filepathStart + client + "__scan_" + scanDate + extension;
-			Logging.debug(this, "actionPerformed, write to ", filepath);
-			panelInfo.setWriteToFile(filepath);
+			Logging.debug(this, "Exporting to ", filePath);
+
+			panelInfo.setWriteToFile(filePath);
+
 			if (!panelInfo.getSingleClientExporter().export()) {
-				failedExports++;
+				failedCount++;
 			}
 		}
 
-		if (failedExports != 0) {
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					String.format(Configed.getResourceValue("AbstractMultiClientExporter.exportFailed.message"),
-							failedExports),
+		return failedCount;
+	}
+
+	private static String formatScanDate(String scanDate) {
+		if (scanDate == null) {
+			return "__";
+		}
+
+		int spaceIndex = scanDate.indexOf(' ');
+		return (spaceIndex >= 0) ? scanDate.substring(0, spaceIndex) : scanDate;
+	}
+
+	private static String buildFilePath(String prefix, String client, String scanDate, String extension) {
+		return prefix + client + "__scan_" + scanDate + extension;
+	}
+
+	private static void showMissingDirectoryMessage() {
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("AbstractMultiClientExporter.missingInformation.message"),
+				Configed.getResourceValue("AbstractMultiClientExporter.missingInformation.title"),
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private static void showResultMessage(int failedCount) {
+		if (failedCount > 0) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), String
+					.format(Configed.getResourceValue("AbstractMultiClientExporter.exportFailed.message"), failedCount),
 					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 		} else {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
