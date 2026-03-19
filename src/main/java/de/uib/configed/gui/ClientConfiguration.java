@@ -6,8 +6,10 @@
 
 package de.uib.configed.gui;
 
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -17,10 +19,11 @@ import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
-	public static final float DIVIDER_LOCATION = 0.8F;
+	public static final double DIVIDER_LOCATION = 0.8;
 
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
@@ -74,10 +77,18 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void init() {
 		clientInfoPanel = new ClientInfoPanel(configedMain);
-		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
-				clientInfoPanel);
 
+		JScrollPane clientInfoScrollPane = new JScrollPane(clientInfoPanel,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		clientInfoScrollPane.setBorder(null);
+		clientInfoScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+
+		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
+				clientInfoScrollPane);
 		panelClientSelection.setResizeWeight(1.0);
+
+		SplitPaneStateManager.registerSplitPane(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT,
+				DIVIDER_LOCATION);
 
 		panelLocalbootProductSettings = new PanelProductSettings(configedMain, productTree,
 				ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
@@ -147,12 +158,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public void setLogFileTab(String logtype, final boolean resetCaret) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
 		tabbedLogPane.setDocument(logtype, resetCaret);
-	}
-
-	public void initSplitPanes() {
-		panelClientSelection.setDividerLocation(DIVIDER_LOCATION);
-		panelLocalbootProductSettings.getContentPane().setDividerLocation(DIVIDER_LOCATION);
-		panelNetbootProductSettings.getContentPane().setDividerLocation(DIVIDER_LOCATION);
 	}
 
 	public void updateProductTab() {

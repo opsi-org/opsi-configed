@@ -247,8 +247,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, " stateChanged ", e);
-		Logging.info(this, " stateChanged modelSWnames filterinfo ",
-				fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
 		int selectedRow = panelRegisteredSoftware.getGenEditTable().getSelectedRow();
 		int columnNameIndex = panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME);
 		if (selectedRow == -1 || columnNameIndex == -1) {

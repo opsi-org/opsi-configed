@@ -91,7 +91,7 @@ public class MakeProductFileDialog {
 		jComboBoxMainDir.setEnabled(true);
 
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
-		buttonExecute.addActionListener(actionEvent -> new Thread(this::execute));
+		buttonExecute.addActionListener(actionEvent -> execute());
 
 		JButton buttonPackageManager = new JButton(
 				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
@@ -203,12 +203,11 @@ public class MakeProductFileDialog {
 		dialog.pack();
 	}
 
-	private String doActionGetVersions() {
-		String dir = FileUtils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem())
-				+ "OPSI/control";
-		Logging.info(this, "doActionGetVersions, dir ", dir);
+	private String doActionGetVersions(String dir) {
+		String serverPath = FileUtils.getServerPathFromWebDAVPath(dir) + "OPSI/control";
+		Logging.info(this, "doActionGetVersions, serverPath ", serverPath);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
-				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, dir));
+				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, serverPath));
 		CommandExecutor executor = new CommandExecutor(configedMain, getVersions);
 		executor.setWithGUI(false);
 		Logging.info(this, "doActionGetVersions, command ", getVersions);
@@ -216,7 +215,7 @@ public class MakeProductFileDialog {
 		Logging.info(this, "doActionGetVersions result ", result);
 
 		if (result == null || result.isEmpty()) {
-			Logging.warning(this, "doActionGetVersions, could not find versions in file ", dir,
+			Logging.warning(this, "doActionGetVersions, could not find versions in file ", serverPath,
 					".Please check if directory exists and contains the file OPSI/control.\n",
 					"Please also check the rights of the file/s.");
 		} else {
@@ -232,7 +231,8 @@ public class MakeProductFileDialog {
 	}
 
 	private final void doSetActionGetVersions() {
-		SwingUtils.runSwingWorker(this::doActionGetVersions, this::setVersions, null);
+		String dir = (String) jComboBoxMainDir.getEditor().getItem();
+		SwingUtils.runSwingWorker(() -> doActionGetVersions(dir), this::setVersions, null);
 	}
 
 	private void setVersions(String versions) {
@@ -272,25 +272,43 @@ public class MakeProductFileDialog {
 			Logging.warning(this, "Please select a valid opsi product directory.");
 			return;
 		}
-		MultiCommandTemplate commands = new MultiCommandTemplate();
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
+		String prodVersion = checkVersion(jTextFieldProductVersion.getText(),
+				Configed.getResourceValue("MakeProductFileDialog.keepVersions"), "");
+		String packVersion = checkVersion(jTextFieldPackageVersion.getText(),
+				Configed.getResourceValue("MakeProductFileDialog.keepVersions"), "");
+
+		boolean overwrite = jCheckBoxOverwrite.isSelected();
+		boolean setRights = advancedOptionsPanel.setRights();
+
+		SwingUtils.runSwingWorker(() -> getCommands(dir, prodVersion, packVersion, overwrite, setRights),
+				(MultiCommandTemplate commands) -> {
+					Logging.info(this, "Start Commands ", commands);
+					CommandExecutor executor = new CommandExecutor(configedMain, commands);
+					executor.setWithGUI(true);
+					executor.executeAsync();
+				}, null);
+	}
+
+	private MultiCommandTemplate getCommands(String dir, String prodVersion, String packVersion, boolean overwrite,
+			boolean setRights) {
 		String dirLocationInServer = FileUtils.getServerPathFromWebDAVPath(dir);
 
-		String prodVersion = jTextFieldProductVersion.getText();
-		String packVersion = jTextFieldPackageVersion.getText();
-		prodVersion = checkVersion(prodVersion, Configed.getResourceValue("MakeProductFileDialog.keepVersions"), "");
-		packVersion = checkVersion(packVersion, Configed.getResourceValue("MakeProductFileDialog.keepVersions"), "");
 		SingleCommandOpsiMakeProductFile opsiMakeProductFileCommand = new SingleCommandOpsiMakeProductFile(
 				dirLocationInServer, packVersion, prodVersion, advancedOptionsPanel.useMD5Sum(),
 				advancedOptionsPanel.useZsync());
+
+		MultiCommandTemplate commands = new MultiCommandTemplate();
 		commands.setMainName(opsiMakeProductFileCommand.getMenuText());
-		if (jCheckBoxOverwrite.isSelected()) {
-			String versions = doActionGetVersions();
+
+		if (overwrite) {
+			String versions = doActionGetVersions(dir);
 
 			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
 
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);
+
 			String packageID = getPackageID(dirLocationInServer);
 			filename = dir + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi";
 			String serverPath = dirLocationInServer + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi";
@@ -310,19 +328,13 @@ public class MakeProductFileDialog {
 
 			commands.addCommand(removeExistingPackage);
 		}
-		if (advancedOptionsPanel.setRights()) {
+
+		if (setRights) {
 			commands.addCommand(new SingleCommandOpsiSetRights(dirLocationInServer));
 		}
-		commands.addCommand(opsiMakeProductFileCommand);
 
-		Logging.info(this, "Start Commands ", commands);
-		new Thread() {
-			@Override
-			public void run() {
-				CommandExecutor executor = new CommandExecutor(configedMain, commands);
-				executor.execute();
-			}
-		}.start();
+		commands.addCommand(opsiMakeProductFileCommand);
+		return commands;
 	}
 
 	private static String checkVersion(String v, String compareWith, String overwriteWith) {

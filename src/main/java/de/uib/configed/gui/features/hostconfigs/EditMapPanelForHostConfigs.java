@@ -68,19 +68,11 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	@Override
 	protected JPopupMenu createBasicPopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-		JPopupMenu jPopupMenu = new PopupMenuTrait(
-				List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF),
-				event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
-			@Override
-			public void action(int p) {
-				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD -> reload();
-				case PopupMenuTrait.POPUP_SAVE -> actor.saveData();
-				case PopupMenuTrait.POPUP_PDF -> createPDF();
-				default -> Logging.warning(this, "no case found for JPopupMenu in definePopup");
-				}
-			}
-		};
+		JPopupMenu jPopupMenu = PopupMenuTrait
+				.createAndBindJPopupMenu(
+						table, Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_SAVE,
+								actor::saveData, PopupMenuTrait.POPUP_PDF, this::createPDF),
+						event -> updatePopupMenu());
 
 		jPopupMenu.addPopupMenuListener(SwingUtils.createPopupMenuListenerOnVisible(() -> {
 			UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory

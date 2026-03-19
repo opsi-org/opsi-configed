@@ -41,7 +41,8 @@ public class TextMarkdownPane extends JTextPane {
 
 	@Override
 	public void setText(String s) {
-		super.setText(parseMarkdown(s));
+		String parsedText = parseMarkdown(s);
+		super.setText(parsedText);
 	}
 
 	private void hyperlinkUpdate(HyperlinkEvent event) {

@@ -46,6 +46,7 @@ import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -123,6 +124,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 
 		tableModel = new HWInfoTableModel();
 		JTable table = new JTable(tableModel, null);
+		table.setFillsViewportHeight(true);
 		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
@@ -134,7 +136,8 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
+		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT,
+				INITIAL_DIVIDER_LOCATION);
 
 		JPanel contentPanel = new JPanel();
 		setComponent(contentPanel);
@@ -145,19 +148,15 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		contentPanel.add(splitPane, "grow");
 
 		if (withPopup) {
-			new PopupMenuTrait(
-					List.of(PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					List.of(tree, table)) {
-				@Override
-				public void action(int p) {
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD -> reload();
-					case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternal();
-					case PopupMenuTrait.POPUP_PDF -> exportPDF();
-					default -> Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
-					}
-				}
-			};
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_PDF,
+					this::exportPDF, PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal);
+
+			// We want to add the menu to all three components, 
+			// since we want it to be available, no matter where the user right clicks
+			// We cannot add it to the splitPane since the table will consume the event,
+			// it would not arrive at the splitPane
+			PopupMenuTrait.createAndBindJPopupMenu(table, actions);
+			PopupMenuTrait.createAndBindJPopupMenu(tree, actions);
 		}
 	}
 
@@ -192,6 +191,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 	private void floatExternal() {
 		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain, clientConfiguration);
 		copyOfMe.setHardwareInfo(hwInfo);
+		copyOfMe.updateTab(configedMain.getSelectedClients().size());
 
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());

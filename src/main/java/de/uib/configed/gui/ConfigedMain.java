@@ -677,6 +677,10 @@ public class ConfigedMain {
 		// did lose the selection since last setting
 		clientTablePanel.setSelectedValues(selectValues);
 
+		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
+				clientTablePanel.getClientTable().getRowCount(),
+				selectValues != null ? new ArrayList<>(selectValues) : new ArrayList<>(), hostInfo);
+
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel ",
 				Logging.getSize(clientTablePanel.getClientTable().getSelectedSet()));
 

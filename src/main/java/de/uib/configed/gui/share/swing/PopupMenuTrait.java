@@ -9,10 +9,10 @@ package de.uib.configed.gui.share.swing;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.TreeSet;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -26,7 +26,11 @@ import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 
-public class PopupMenuTrait extends JPopupMenu {
+public final class PopupMenuTrait extends JPopupMenu {
+	public enum PopupType {
+		USER, USERS, ROLE, ROLES
+	}
+
 	public static final int POPUP_SEPARATOR = 0;
 	public static final int POPUP_RELOAD = 4;
 
@@ -50,191 +54,193 @@ public class PopupMenuTrait extends JPopupMenu {
 	public static final int POPUP_PRINT = 30;
 
 	// map of popup type to method to create the popup item depending on the type
-	private Map<Integer, Consumer<Integer>> popupCreators = Map.ofEntries(Map.entry(POPUP_RELOAD, this::addItemReload),
-			Map.entry(POPUP_FLOATING_COPY, p -> addPopupFloatingCopy()), Map.entry(POPUP_SAVE, this::addItemSave),
-			Map.entry(POPUP_COPY, this::addItemCopyText), Map.entry(POPUP_DOWNLOAD, this::addItemDownload),
-			Map.entry(POPUP_DOWNLOAD_AS_ZIP, this::addItemDownloadAsZIP),
-			Map.entry(POPUP_DOWNLOAD_ALL_AS_ZIP, this::addItemDownloadAllAsZIP), Map.entry(POPUP_PDF, this::addItemPDF),
-			Map.entry(POPUP_EXPORT_CSV, this::addItemExportCSV),
-			Map.entry(POPUP_EXPORT_SELECTED_CSV, this::addItemExportSelectedCSV),
+	private Map<Integer, Supplier<JMenuItem>> popupCreators = Map.ofEntries(
+			Map.entry(POPUP_RELOAD, this::createItemReload), Map.entry(POPUP_FLOATING_COPY, this::addPopupFloatingCopy),
+			Map.entry(POPUP_SAVE, PopupMenuTrait::addItemSave), Map.entry(POPUP_COPY, PopupMenuTrait::addItemCopyText),
+			Map.entry(POPUP_DOWNLOAD, PopupMenuTrait::addItemDownload),
+			Map.entry(POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait::addItemDownloadAsZIP),
+			Map.entry(POPUP_DOWNLOAD_ALL_AS_ZIP, PopupMenuTrait::addItemDownloadAllAsZIP),
+			Map.entry(POPUP_PDF, PopupMenuTrait::addItemPDF),
+			Map.entry(POPUP_EXPORT_CSV, PopupMenuTrait::addItemExportCSV),
+			Map.entry(POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait::addItemExportSelectedCSV),
 			Map.entry(POPUP_DELETE, this::addItemDelete), Map.entry(POPUP_ADD, this::addItemAdd));
 
-	private List<Integer> listPopups;
+	private JComponent component;
+	private Map<Integer, Runnable> actions;
+	private PopupType popupType;
 
-	private JMenuItem[] menuItems;
+	private PopupMenuTrait(JComponent component, Map<Integer, Runnable> actions, PopupType popupType) {
+		this.component = component;
+		this.actions = actions;
+		this.popupType = popupType;
 
-	private List<JComponent> components;
-
-	public PopupMenuTrait(List<Integer> listPopups, Predicate<MouseEvent> condition, List<JComponent> components) {
-		this.listPopups = listPopups;
-		this.components = components;
-		menuItems = new JMenuItem[listPopups.size()];
-
-		for (Integer popup : listPopups) {
-			addPopup(popup);
+		// We want to have the popups in the order defined by the int constants
+		for (int p : new TreeSet<>(actions.keySet())) {
+			JMenuItem item = createPopupForAction(p);
+			item.addActionListener(event -> actions.get(p).run());
+			super.add(item);
 		}
-
-		PopupMouseListener.addPopupMouseListenerToComponents(this, condition, components);
 	}
 
-	public PopupMenuTrait(List<Integer> popups, List<JComponent> components) {
-		this(popups, null, components);
+	public static JPopupMenu createAndBindJPopupMenu(JComponent component, Map<Integer, Runnable> actions) {
+		return createAndBindJPopupMenu(component, actions, null);
 	}
 
-	private void addPopup(final int p) {
+	public static JPopupMenu createAndBindJPopupMenu(JComponent component, Map<Integer, Runnable> actions,
+			Predicate<MouseEvent> condition) {
+		return createAndBindJPopupMenu(component, actions, condition, null);
+	}
+
+	public static JPopupMenu createAndBindJPopupMenu(JComponent component, Map<Integer, Runnable> actions,
+			Predicate<MouseEvent> condition, PopupType popupType) {
+		JPopupMenu popupMenu = new PopupMenuTrait(component, actions, popupType);
+
+		component.addMouseListener(new PopupMouseListener(popupMenu, condition));
+
+		return popupMenu;
+	}
+
+	private JMenuItem createPopupForAction(final int p) {
 		if (popupCreators.containsKey(p)) {
-			popupCreators.get(p).accept(p);
+			return popupCreators.get(p).get();
 		} else {
-			Logging.info(this, "popuptype ", p, " not implemented");
+			Logging.warning(this, "popup ", p, " not defined in popupCreators");
+			return new JMenuItem();
 		}
 	}
 
-	private void addItemReload(int p) {
-		int i = listPopups.indexOf(POPUP_RELOAD);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("reload"));
-		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "refresh");
+	private JMenuItem createItemReload() {
+		String ressourceKey = popupType == null ? "reload" : "EditMapPanelGroupedForHostConfigs.reconstructUsers";
 
-		if (components != null) {
-			for (JComponent component : components) {
-				SwingUtils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
-						() -> action(p));
-			}
-		}
+		JMenuItem item = new JMenuItem(Configed.getResourceValue(ressourceKey));
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		Icons.addIntellijIconToMenuItem(item, "refresh");
 
-		// not work
-		addItem(p);
+		SwingUtils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+				() -> actions.get(POPUP_RELOAD).run());
+
+		return item;
 	}
 
-	private void addPopupFloatingCopy() {
-		int i = listPopups.indexOf(POPUP_FLOATING_COPY);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.floatingInstance"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "copy");
+	private JMenuItem addPopupFloatingCopy() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.floatingInstance"));
+		Icons.addIntellijIconToMenuItem(item, "copy");
 
 		addSeparator();
-		addItem(POPUP_FLOATING_COPY);
+		return item;
 	}
 
-	private void addItemSave(int p) {
-		int i = listPopups.indexOf(POPUP_SAVE);
-
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("save"));
-		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "save");
-		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+	private static JMenuItem addItemSave() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("save"));
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+		Icons.addIntellijIconToMenuItem(item, "save");
+		item.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 				.isGlobalReadOnly());
 
-		addItem(p);
+		return item;
 	}
 
-	private void addItemDownload(int p) {
-		int i = listPopups.indexOf(POPUP_DOWNLOAD);
+	private static JMenuItem addItemDownload() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("download"));
+		Icons.addIntellijIconToMenuItem(item, "download");
 
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("download"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "download");
-
-		addItem(p);
+		return item;
 	}
 
-	private void addItemDownloadAsZIP(int p) {
-		int i = listPopups.indexOf(POPUP_DOWNLOAD_AS_ZIP);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAsZip"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "download");
+	private static JMenuItem addItemDownloadAsZIP() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAsZip"));
+		Icons.addIntellijIconToMenuItem(item, "download");
 
-		addItem(p);
+		return item;
 	}
 
-	private void addItemDownloadAllAsZIP(int p) {
-		int i = listPopups.indexOf(POPUP_DOWNLOAD_ALL_AS_ZIP);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAllAsZip"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "download");
+	private static JMenuItem addItemDownloadAllAsZIP() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAllAsZip"));
+		Icons.addIntellijIconToMenuItem(item, "download");
 
-		addItem(p);
+		return item;
 	}
 
-	private void addItemCopyText(int p) {
-		int i = listPopups.indexOf(POPUP_COPY);
+	private static JMenuItem addItemCopyText() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("copy"));
+		Icons.addIntellijIconToMenuItem(item, "copy");
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("copy"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "copy");
-		menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-
-		addItem(p);
+		return item;
 	}
 
-	private void addItemPDF(int p) {
-		int i = listPopups.indexOf(POPUP_PDF);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-		Icons.addThemeIconInvertedToMenuItem(menuItems[i], "anyType");
+	private static JMenuItem addItemPDF() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+		Icons.addThemeIconInvertedToMenuItem(item, "anyType");
 
-		addItem(p);
+		return item;
 	}
 
-	private void addItemExportCSV(int p) {
-		int i = listPopups.indexOf(POPUP_EXPORT_CSV);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "export");
+	private static JMenuItem addItemExportCSV() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
+		Icons.addIntellijIconToMenuItem(item, "export");
 
-		addItem(p);
+		return item;
 	}
 
-	private void addItemExportSelectedCSV(int p) {
-		int i = listPopups.indexOf(POPUP_EXPORT_SELECTED_CSV);
-		menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
-		Icons.addIntellijIconToMenuItem(menuItems[i], "export");
+	private static JMenuItem addItemExportSelectedCSV() {
+		JMenuItem item = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
+		Icons.addIntellijIconToMenuItem(item, "export");
 
-		addItem(p);
+		return item;
 	}
 
-	private void addItemDelete(int p) {
-		int i = listPopups.indexOf(POPUP_DELETE);
-		menuItems[i] = new JMenuItem();
-		Icons.addIntellijIconToMenuItem(menuItems[i], "remove");
-		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-				.isGlobalReadOnly());
+	private JMenuItem addItemDelete() {
+		JMenuItem item = new JMenuItem();
 
-		addItem(p);
-	}
+		switch (popupType) {
+		case USER:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser"));
+			item.setToolTipText(
+					Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser.ToolTip"));
+			break;
 
-	private void addItemAdd(int p) {
-		int i = listPopups.indexOf(POPUP_ADD);
-		menuItems[i] = new JMenuItem();
-		Icons.addIntellijIconToMenuItem(menuItems[i], "add");
-		menuItems[i].setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
-				.isGlobalReadOnly());
+		case ROLE:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole"));
+			item.setToolTipText(
+					Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole.ToolTip"));
+			break;
 
-		addItem(p);
-	}
-
-	public void setText(int popup, String s) {
-		int i = listPopups.indexOf(popup);
-		if (i < 0) {
-			Logging.info(this, "setText - popup ", popup, " not in list");
-			return;
+		default:
+			Logging.warning(this, "popupType ", popupType, " not defined for delete item");
+			break;
 		}
 
-		menuItems[i].setText(s);
+		Icons.addIntellijIconToMenuItem(item, "remove");
+		item.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+				.isGlobalReadOnly());
+
+		return item;
+
 	}
 
-	public void setToolTipText(int popup, String s) {
-		int i = listPopups.indexOf(popup);
-		if (i < 0) {
-			Logging.info(this, "setToolTipText - popup ", popup, " not in list");
-			return;
+	private JMenuItem addItemAdd() {
+		JMenuItem item = new JMenuItem();
+
+		switch (popupType) {
+		case USER, USERS:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
+			item.setToolTipText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
+			break;
+
+		case ROLE, ROLES:
+			item.setText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
+			item.setToolTipText(Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
+			break;
+
+		case null:
+			Logging.warning(this, "popupType is null, cannot set text for add item");
+			break;
 		}
 
-		menuItems[i].setToolTipText(s);
-	}
-
-	private void addItem(final int p) {
-		int i = listPopups.indexOf(p);
-		menuItems[i].addActionListener(actionEvent -> action(p));
-
-		add(menuItems[i]);
-	}
-
-	// should be overwritten for specific actions in subclasses
-	public void action(int p) {
-		Logging.debug(this, "action called for type ", p);
+		Icons.addIntellijIconToMenuItem(item, "add");
+		item.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+				.isGlobalReadOnly());
+		return item;
 	}
 }

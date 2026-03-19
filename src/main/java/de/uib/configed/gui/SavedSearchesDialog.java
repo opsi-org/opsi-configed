@@ -28,6 +28,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.features.clientselection.SelectionManager;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
@@ -104,7 +105,7 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 		jPopupMenu.add(edit);
 		jPopupMenu.add(add);
 
-		listSelectionList.setComponentPopupMenu(jPopupMenu);
+		listSelectionList.addMouseListener(new PopupMouseListener(jPopupMenu));
 	}
 
 	private void commit() {

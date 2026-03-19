@@ -54,6 +54,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.healthcheck.HealthCheckUpdate.HealthCheckEffect;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -105,8 +106,6 @@ public class HealthCheckComponent extends
 	private JPanel createHealthCheckPanel() {
 		JPanel panel = new JPanel();
 
-		JPopupMenu popupMenu = createPopupMenu();
-		panel.setComponentPopupMenu(popupMenu);
 		panel.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
 
 		styledDocument = new DefaultStyledDocument();
@@ -116,6 +115,7 @@ public class HealthCheckComponent extends
 		textPane.setAutoscrolls(false);
 		textPane.setEditable(false);
 		textPane.setInheritsPopupMenu(true);
+		textPane.addMouseListener(new PopupMouseListener(createPopupMenu()));
 		textPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {

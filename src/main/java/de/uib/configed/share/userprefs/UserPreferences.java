@@ -28,6 +28,7 @@ public final class UserPreferences {
 	public static final String CLIENTS_TABLE_COLUMN_WIDTHS = "clients_table.column_widths";
 	public static final String WINDOW_BOUNDS = "window_bounds";
 	public static final String WINDOW_STATE = "window_state";
+	public static final String DIVIDER_LOCATION = "split.divider_location";
 
 	private static Properties properties = new Properties();
 	private static File propertiesFile = new File(
@@ -96,7 +97,6 @@ public final class UserPreferences {
 
 	public static void set(String key, String value) {
 		properties.put(key, value);
-		store();
 	}
 
 	public static String get(String key) {
@@ -109,7 +109,6 @@ public final class UserPreferences {
 
 	public static void setBoolean(String key, Boolean value) {
 		properties.put(key, Boolean.toString(value));
-		store();
 	}
 
 	public static Boolean getBoolean(String key) {
@@ -118,11 +117,6 @@ public final class UserPreferences {
 
 	public static void remove(String key) {
 		properties.remove(key);
-		store();
-	}
-
-	public static void store() {
-		store(null);
 	}
 
 	public static void store(String comments) {

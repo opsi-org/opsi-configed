@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -180,14 +179,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(
 				persistenceController.getDataServices().software.getSoftwareWithoutAssociatedLicensePoolPD().size()));
 
-		List<String> selectKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
+		List<String> selectKeys;
 
 		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
 			selectKeys = softwareIdsForPool;
 			thePanel.getFieldCountAssignedInEditing().setText(produceCount(softwareIdsForPool.size(), poolID == null));
 		} else {
-			Set<Object> existingKeys = modelWindowsSoftwareIds.getExistingKeys();
-			Set<Object> intersectionSet = new HashSet<>(existingKeys);
+			selectKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
+			Set<Object> intersectionSet = modelWindowsSoftwareIds.getExistingKeys();
 			intersectionSet.retainAll(selectKeys);
 
 			thePanel.getFieldCountAssignedInEditing().setText(produceCount(intersectionSet.size()));

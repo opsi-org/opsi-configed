@@ -29,7 +29,7 @@ import de.uib.configed.share.logging.Logging;
  * </p>
  */
 public final class TimeUtils {
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	private TimeUtils() {
 	}

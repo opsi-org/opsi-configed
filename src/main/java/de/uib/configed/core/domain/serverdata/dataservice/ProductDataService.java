@@ -633,7 +633,8 @@ public class ProductDataService extends DataService {
 		Map<String, Map<String, ConfigName2ConfigValue>> productProperties = dataServices.cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_STATES, Map.class);
 
-		if (productProperties != null && productProperties.keySet().containsAll(clientNames)) {
+		if (clientNames.isEmpty()
+				|| (productProperties != null && productProperties.keySet().containsAll(clientNames))) {
 			return;
 		}
 

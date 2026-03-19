@@ -10,7 +10,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,6 +33,7 @@ import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.AbstractConfigurationTab;
 import de.uib.configed.gui.ChangedDataManager;
+import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -47,6 +47,7 @@ import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -117,17 +118,23 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
-		infoPane = new ProductInfoPane(panelEditProperties);
+		infoPane = new ProductInfoPane(panelEditProperties, type);
 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, infoPane);
 		contentPane.setResizeWeight(1.0);
+		SplitPaneStateManager.registerSplitPane(contentPane,
+				type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+						? SplitPaneStateManager.LOCALBOOT_PRODUCT_SETTINGS_SPLIT
+						: SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT,
+				ClientConfiguration.DIVIDER_LOCATION);
 		setComponent(contentPane);
 
-		PopupMouseListener.addPopupMouseListenerToComponents(producePopupMenu(), List.of(paneProducts, productTable));
+		productTable.addMouseListener(new PopupMouseListener(producePopupMenu()));
 
-		productTable.getTableHeader().setComponentPopupMenu(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns));
+		productTable.getTableHeader()
+				.addMouseListener(new PopupMouseListener(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns)));
 
 		SwingUtils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}

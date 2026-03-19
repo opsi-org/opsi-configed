@@ -231,7 +231,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-		return new PopupMenuTrait(List.of(), event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport()));
+		return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(), event -> updatePopupMenu());
 	}
 
 	private void buildPanel() {
@@ -264,6 +264,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setFillsViewportHeight(true);
 
 		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
 

@@ -7,6 +7,7 @@
 package de.uib.configed.gui.share.datapanel;
 
 import java.text.Collator;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -415,7 +416,9 @@ public class MapTableModel extends AbstractTableModel {
 				// produces as well rowModiTime
 
 				if (rowModiTime > -1 && row != rowModiTime) {
-					setValueAt(TimeUtils.getNowTimeListValue(), rowModiTime, 1);
+					List<Object> nowTimeListValue = new ArrayList<>();
+					nowTimeListValue.add(LocalDateTime.now().format(TimeUtils.DATE_TIME_FORMATTER));
+					setValueAt(nowTimeListValue, rowModiTime, 1);
 				}
 			}
 		}

@@ -30,7 +30,7 @@ public class PanelConfigurationHostConfig extends AbstractConfigurationTab {
 	public PanelConfigurationHostConfig(boolean isClientConfig, Supplier<List<String>> getSelectedHosts) {
 		super(true, isClientConfig);
 		this.getSelectedHosts = getSelectedHosts;
-		panelHostConfig = new PanelHostConfig(this::updateContent, false);
+		panelHostConfig = new PanelHostConfig(this::updateContent, false, isClientConfig);
 
 		super.setComponent(panelHostConfig);
 	}

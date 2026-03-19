@@ -38,9 +38,11 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.gui.UpdateCollectionManager;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
+import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -78,7 +80,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
-		JPopupMenu jPopupMenu = new JPopupMenu();
 		JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 		selectAll.addActionListener(event -> selectAllDepots());
 
@@ -86,9 +87,11 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 		selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 
+		JPopupMenu jPopupMenu = new JPopupMenu();
 		jPopupMenu.add(selectAll);
 		jPopupMenu.add(selectWithEqualProperties);
-		listDepots.setComponentPopupMenu(jPopupMenu);
+
+		listDepots.addMouseListener(new PopupMouseListener(jPopupMenu));
 
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
@@ -100,13 +103,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		JPanel panelTop = new JPanel();
 		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));
-		panelTop.add(scrollpaneDepots, "growx");
+		panelTop.add(scrollpaneDepots, "grow");
 		panelTop.add(buttonSetValuesFromPackage, "aligny bottom");
 
-		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panelTop, productPropertiesPanel);
 		splitter.setResizeWeight(0.3);
-		splitter.setTopComponent(panelTop);
-		splitter.setBottomComponent(productPropertiesPanel);
+
+		SplitPaneStateManager.registerSplitPane(splitter, SplitPaneStateManager.DEPOT_PRODUCT_PROPERTIES_SPLIT);
 
 		this.setLayout(new MigLayout("insets 0, fill", "[grow, fill]", "[grow, fill]"));
 		this.add(splitter, "grow, push");

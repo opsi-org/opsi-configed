@@ -192,9 +192,9 @@ public class LoginDialog extends JFrame {
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		((JTextField) fieldHost.getEditor().getEditorComponent())
-				.addActionListener(actionEvent -> login((JTextField) fieldHost.getEditor().getEditorComponent()));
+				.addActionListener(actionEvent -> loginFromHostField());
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
-		fieldUser.addActionListener(e -> login(fieldUser));
+		fieldUser.addActionListener(e -> loginFromUserField());
 		passwordField.addActionListener(e -> tryConnecting(false));
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
@@ -351,11 +351,18 @@ public class LoginDialog extends JFrame {
 						.start();
 	}
 
-	private void login(JTextField source) {
+	private void loginFromHostField() {
+		initSSO();
 		if (Boolean.TRUE.equals(ssoActiveByServer)) {
 			tryConnecting(true);
-		} else if (source == fieldHost.getEditor().getEditorComponent() || fieldUser.getText().isEmpty()) {
+		} else {
 			fieldUser.requestFocus();
+		}
+	}
+
+	private void loginFromUserField() {
+		if (Boolean.TRUE.equals(ssoActiveByServer)) {
+			tryConnecting(true);
 		} else if (passwordField.getPassword().length == 0) {
 			passwordField.requestFocus();
 		} else {

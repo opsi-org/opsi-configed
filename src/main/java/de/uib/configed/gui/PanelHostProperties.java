@@ -47,15 +47,11 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 		editMapPanel = new EditMapPanelX(false, false) {
 			@Override
 			protected JPopupMenu createBasicPopup() {
-				return new PopupMenuTrait(List.of(PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD),
-						event -> updatePopupMenu(), List.of(table, jScrollPane.getViewport())) {
-					@Override
-					public void action(int p) {
-						super.action(p);
-						handlePopupMenuActions(p);
-					}
-				};
+				return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(PopupMenuTrait.POPUP_SAVE,
+						() -> ChangedDataManager.checkSaveAll(false), PopupMenuTrait.POPUP_RELOAD, () -> reload()),
+						event -> updatePopupMenu());
 			}
+
 		};
 		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		editMapPanel.setShowToolTip(false);
@@ -63,20 +59,15 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 		setComponent(editMapPanel);
 	}
 
-	private void handlePopupMenuActions(int p) {
-		if (p == PopupMenuTrait.POPUP_RELOAD) {
-			ConfigedMain.getMainFrame().activateLoadingCursor();
-			if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
-				persistenceController.reloadData(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString());
-			}
-
-			updateContent();
-
-			ConfigedMain.getMainFrame().deactivateLoadingCursor();
+	private void reload() {
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+		if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
+			persistenceController.reloadData(ReloadEvent.DEPOT_PROPERTIES_DATA_RELOAD.toString());
 		}
-		if (p == PopupMenuTrait.POPUP_SAVE) {
-			ChangedDataManager.checkSaveAll(false);
-		}
+
+		updateContent();
+
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	@Override

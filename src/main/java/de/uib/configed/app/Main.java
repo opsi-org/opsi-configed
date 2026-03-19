@@ -178,11 +178,13 @@ public class Main {
 	public static void endApp(int exitcode) {
 		if (Configed.getSavedStates() != null) {
 			try {
-				Configed.getSavedStates().store("states on finishing configed");
+				Configed.getSavedStates().store("states saved on configed exit");
 			} catch (IOException iox) {
 				Logging.debug("could not store saved states, ", iox);
 			}
 		}
+
+		UserPreferences.store("user preferences saved on configed exit");
 
 		Logging.info("regularly exiting app with code ", exitcode);
 

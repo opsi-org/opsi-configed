@@ -290,11 +290,10 @@ public final class EditTerminalCommandsDialog {
 		Logging.debug(this, "doActionTestCommand buildCommand ", command);
 		Logging.debug(this, "doActionTestCommand buildCommand commandlist ", command.getCommands());
 
-		SwingUtils.runSwingWorker(() -> {
-			executor.setMultiCommand(command);
-			executor.executeAsync();
-			return null;
-		}, (Void _) -> jTextAreaCommands.requestFocus(), null);
+		executor.setMultiCommand(command);
+		executor.executeAsync();
+
+		jTextAreaCommands.requestFocus();
 	}
 
 	private boolean canCommandBeSaved() {

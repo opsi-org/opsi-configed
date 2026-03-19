@@ -8,7 +8,6 @@ package de.uib.configed.gui.features.swinfopage;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -236,15 +235,12 @@ public class PanelSWSingleClientInfo extends JPanel {
 		this.add(panelTable, "grow, push");
 
 		if (withPopup) {
-			new PopupMenuTrait(
-					List.of(PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY),
-					List.of(this, panelTable.getGenEditTable(), panelTable.getTheScrollpane())) {
-				@Override
-				public void action(int p) {
-					actionOnPopupMenu(p);
-				}
-			};
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
+					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternalX, PopupMenuTrait.POPUP_PDF, this::sendToPDF,
+					PopupMenuTrait.POPUP_EXPORT_CSV, this::sendToCSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+					this::sendToCSVonlySelected);
+
+			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(), actions);
 		}
 	}
 
@@ -298,17 +294,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		Logging.debug(this, " got scanInfo ", scanInfo);
 		return tableData;
-	}
-
-	private void actionOnPopupMenu(int p) {
-		switch (p) {
-		case PopupMenuTrait.POPUP_RELOAD -> reload();
-		case PopupMenuTrait.POPUP_FLOATING_COPY -> floatExternalX();
-		case PopupMenuTrait.POPUP_PDF -> sendToPDF();
-		case PopupMenuTrait.POPUP_EXPORT_CSV -> sendToCSV();
-		case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV -> sendToCSVonlySelected();
-		default -> Logging.warning(this, "no case found for popupmenutrait");
-		}
 	}
 
 	public void setWriteToFile(String path) {
@@ -430,21 +415,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
-	}
-
-	public void setSoftwareNullInfo(String hostId) {
-		Logging.info(this, "setSoftwareNullInfo,  ", hostId);
-
-		this.hostId = hostId;
-		title = this.hostId;
-
-		String timeS = "" + new Timestamp(System.currentTimeMillis());
-		String[] parts = timeS.split(":");
-		if (parts.length > 2) {
-			timeS = parts[0] + ":" + parts[1];
-		}
-
-		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
 	}
 
 	public void setHost(String hostId) {

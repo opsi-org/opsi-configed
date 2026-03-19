@@ -34,6 +34,7 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
@@ -65,8 +66,8 @@ public final class ClientMenuManager implements MenuListener {
 
 		initJMenu();
 
-		mainFrame.getClientTablePanel().getClientTable().getTableHeader()
-				.setComponentPopupMenu(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns")));
+		mainFrame.getClientTablePanel().getClientTable().getTableHeader().addMouseListener(
+				new PopupMouseListener(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns"))));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
