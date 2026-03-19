@@ -42,7 +42,7 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 		}
 
 		String prefix = reportPanel.getExportfilePrefix();
-		KindOfExport exportType = reportPanel.wantsKindOfExport();
+		KindOfExport exportType = reportPanel.getKindOfExport();
 		String extension = "." + exportType.toString().toLowerCase(Locale.ROOT);
 		String filePathPrefix = exportDirectory + File.separator + prefix;
 
@@ -56,7 +56,7 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 	}
 
 	private void configurePanel(KindOfExport exportType) {
-		panelInfo.setAskForOverwrite(reportPanel.wantsAskForOverwrite());
+		panelInfo.setAskForOverwrite(!reportPanel.allowOverwriting());
 		panelInfo.setKindOfExport(exportType);
 		applyExtraSettings();
 	}

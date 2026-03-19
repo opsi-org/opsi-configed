@@ -29,7 +29,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private JButton buttonExport;
 	private ActionListener actionListenerForStart;
 
-	private JCheckBox checkAskForOverwrite;
+	private JCheckBox checkAllowOverwriting;
 
 	private KindOfExport kindOfExport;
 
@@ -77,11 +77,11 @@ public class BaseMultiClientReportPanel extends JPanel {
 		}
 	}
 
-	public boolean wantsAskForOverwrite() {
-		return checkAskForOverwrite.isSelected();
+	public boolean allowOverwriting() {
+		return checkAllowOverwriting.isSelected();
 	}
 
-	public KindOfExport wantsKindOfExport() {
+	public KindOfExport getKindOfExport() {
 		return kindOfExport;
 	}
 
@@ -187,9 +187,9 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private void addAskForOverwrite(JPanel panel) {
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
 
-		checkAskForOverwrite = new JCheckBox();
+		checkAllowOverwriting = new JCheckBox();
 
-		panel.add(checkAskForOverwrite, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
+		panel.add(checkAllowOverwriting, "split 2, gaptop " + Globals.MIN_GAP_SIZE + ", gapright " + Globals.GAP_SIZE);
 		panel.add(labelAskForOverwrite, "gaptop " + Globals.MIN_GAP_SIZE + ", wrap");
 	}
 
