@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Locale;
 
+import javax.swing.JOptionPane;
+
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
@@ -31,9 +33,18 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		String exportDirectory = reportPanel.getExportDirectory();
+		if (exportDirectory == null || exportDirectory.isEmpty()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("AbstractMultiClientExporter.missingInformation.message"),
+					Configed.getResourceValue("AbstractMultiClientExporter.missingInformation.title"),
+					JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+
 		Configed.getSavedStates().setProperty(getExportPrefixKey(), reportPanel.getExportfilePrefix());
 
-		String filepathStart = reportPanel.getExportDirectory() + File.separator + reportPanel.getExportfilePrefix();
+		String filepathStart = exportDirectory + File.separator + reportPanel.getExportfilePrefix();
 		String extension = "." + reportPanel.wantsKindOfExport().toString().toLowerCase(Locale.ROOT);
 
 		panelInfo.setAskForOverwrite(reportPanel.wantsAskForOverwrite());
