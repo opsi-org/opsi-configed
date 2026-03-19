@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.hwinfopage;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ConfigedMain;
@@ -41,5 +42,11 @@ public class HWExporter extends AbstractMultiClientExporter<PanelHWSingleClientI
 
 		List<Map<String, Object>> scanProperty = hardwareInfo.get(PanelHWSingleClientInfo.SCANPROPERTYNAME);
 		return scanProperty != null ? scanProperty.get(0).get(PanelHWSingleClientInfo.SCANTIME).toString() : null;
+	}
+
+	@Override
+	protected Set<String> getClients() {
+		return PersistenceControllerFactory.getPersistenceController().getDataServices().hardware
+				.getHardwareAuditOnClients(configedMain.getSelectedClients()).keySet();
 	}
 }

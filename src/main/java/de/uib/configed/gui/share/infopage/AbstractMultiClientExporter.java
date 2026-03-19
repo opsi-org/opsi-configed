@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -50,9 +51,11 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 
 		configurePanel(exportType);
 
-		int failedCount = exportClients(filePathPrefix, extension);
+		Set<String> clients = getClients();
 
-		showResultMessage(failedCount);
+		int failedCount = exportClients(filePathPrefix, extension, clients);
+
+		showResultMessage(failedCount, clients);
 	}
 
 	private void configurePanel(KindOfExport exportType) {
@@ -61,10 +64,10 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 		applyExtraSettings();
 	}
 
-	private int exportClients(String filePathPrefix, String extension) {
+	private int exportClients(String filePathPrefix, String extension, Set<String> clients) {
 		int failedCount = 0;
 
-		for (String client : configedMain.getSelectedClients()) {
+		for (String client : clients) {
 			updatePanelForClient(client);
 
 			String scanDate = formatScanDate(getScanDateForClient(client));
@@ -74,7 +77,8 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 
 			panelInfo.setWriteToFile(filePath);
 
-			if (!panelInfo.getSingleClientExporter().export()) {
+			boolean exported = panelInfo.getSingleClientExporter().export();
+			if (!exported) {
 				failedCount++;
 			}
 		}
@@ -102,16 +106,33 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	private static void showResultMessage(int failedCount) {
+	private void showResultMessage(int failedCount, Set<String> clients) {
+		StringBuilder msgBuilder = new StringBuilder();
+		int msgType = JOptionPane.INFORMATION_MESSAGE;
+
 		if (failedCount > 0) {
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), String
-					.format(Configed.getResourceValue("AbstractMultiClientExporter.exportFailed.message"), failedCount),
-					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
+			msgBuilder
+					.append(Configed.getResourceValue("AbstractMultiClientExporter.exportFinished.withIssues.message"));
+			msgBuilder.append("\n");
+			msgBuilder.append(
+					String.format(Configed.getResourceValue("AbstractMultiClientExporter.export.failedClients.message"),
+							failedCount));
+
+			msgType = JOptionPane.WARNING_MESSAGE;
 		} else {
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("AbstractMultiClientExporter.exportSucceeded.message"),
-					Configed.getResourceValue("info"), JOptionPane.INFORMATION_MESSAGE);
+			msgBuilder.append(Configed.getResourceValue("AbstractMultiClientExporter.exportFinished.message"));
 		}
+
+		int skippedClients = configedMain.getSelectedClients().size() - clients.size();
+		if (skippedClients != 0) {
+			msgBuilder.append("\n");
+			msgBuilder.append(String.format(
+					Configed.getResourceValue("AbstractMultiClientExporter.export.skippedClients.message"),
+					skippedClients));
+		}
+
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), msgBuilder.toString(),
+				Configed.getResourceValue("AbstractMultiClientExporter.exportFinished.title"), msgType);
 	}
 
 	protected abstract String getExportPrefixKey();
@@ -121,4 +142,6 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 	protected abstract void updatePanelForClient(String client);
 
 	protected abstract String getScanDateForClient(String client);
+
+	protected abstract Set<String> getClients();
 }

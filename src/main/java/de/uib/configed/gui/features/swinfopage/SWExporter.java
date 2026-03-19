@@ -9,6 +9,7 @@ package de.uib.configed.gui.features.swinfopage;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ConfigedMain;
@@ -45,5 +46,11 @@ public class SWExporter extends AbstractMultiClientExporter<PanelSWSingleClientI
 						.getSoftwareAuditOnClients(Collections.singletonList(client));
 		return PersistenceControllerFactory.getPersistenceController().getDataServices().software
 				.getLastSoftwareAuditModification(swAuditClientEntries, client);
+	}
+
+	@Override
+	protected Set<String> getClients() {
+		return PersistenceControllerFactory.getPersistenceController().getDataServices().software
+				.getSoftwareAuditOnClients(configedMain.getSelectedClients()).keySet();
 	}
 }
