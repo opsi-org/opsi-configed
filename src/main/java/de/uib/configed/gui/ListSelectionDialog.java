@@ -90,9 +90,10 @@ public class ListSelectionDialog {
 		searchPane.setNarrow(true);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]", "[]0"));
+		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]",
+				"[pref!]" + Globals.GAP_SIZE + "[grow]" + Globals.GAP_SIZE + "[pref!]"));
 		panel.add(searchPane, "growx");
-		panel.add(listScrollPane, "grow, gapy " + Globals.GAP_SIZE);
+		panel.add(listScrollPane, "grow");
 
 		if (editable) {
 			createEditableOptions();
