@@ -23,7 +23,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.SavedSearches;
-import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
@@ -147,7 +146,6 @@ public class SavedSearchesDialog extends ListSelectionDialog {
 
 	protected void reloadAction() {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
-		persistenceController.reloadData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString());
 		resetModel();
 	}
 

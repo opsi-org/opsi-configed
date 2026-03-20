@@ -220,8 +220,6 @@ public class OpsiServiceNOMPersistenceController {
 
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler(dataServices);
 		reloadDispatcher.registerHandler(CacheIdentifier.LICENSE_USAGE.toString(), defaultDataReloadHandler);
-		reloadDispatcher.registerHandler(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString(),
-				defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.HOST_GROUPS.toString(), defaultDataReloadHandler);
 		reloadDispatcher.registerHandler(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString(), defaultDataReloadHandler);

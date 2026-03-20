@@ -51,7 +51,7 @@ public abstract class AbstractExportTable {
 		askForOverwrite = b;
 	}
 
-	protected abstract void execute(String fileName, boolean onlySelectedRows);
+	protected abstract boolean execute(String fileName, boolean onlySelectedRows);
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
@@ -148,15 +148,15 @@ public abstract class AbstractExportTable {
 				if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
 					filename = filename + ".csv";
 				}
-
-				Logging.debug(this, "filename ", filename);
-
-				if (askForOverwrite) {
-					filename = askForOverride(filename);
-				}
 			}
 		} else {
 			exportDirectory = new File(filename).getParentFile();
+		}
+
+		Logging.debug(this, "filename ", filename);
+
+		if (askForOverwrite) {
+			filename = askForOverride(filename);
 		}
 
 		Logging.debug(this, "export to ", filename);

@@ -19,7 +19,6 @@ import java.util.TreeMap;
 
 import javax.swing.Icon;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -34,23 +33,23 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
-import de.uib.configed.gui.AbstractConfigurationTab;
-import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
 import de.uib.configed.gui.features.tree.IconNode;
 import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.icons.Icons;
+import de.uib.configed.gui.share.infopage.AbstractSingleClientInfoPanel;
+import de.uib.configed.gui.share.infopage.SingleClientExporter;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelectionListener {
+public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
@@ -98,16 +97,13 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 	private boolean withPopup;
 
 	private ConfigedMain configedMain;
-	private ClientConfiguration clientConfiguration;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
-		super(false, true);
+	public PanelHWSingleClientInfo(ConfigedMain configedMain, boolean withPopup) {
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
-		this.clientConfiguration = clientConfiguration;
 
 		buildContentPanel();
 	}
@@ -139,17 +135,16 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT,
 				INITIAL_DIVIDER_LOCATION);
 
-		JPanel contentPanel = new JPanel();
-		setComponent(contentPanel);
-
-		contentPanel
-				.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
-		contentPanel.add(panelByAuditInfo);
-		contentPanel.add(splitPane, "grow");
+		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, wrap 1", "[grow]", "[][grow]"));
+		this.add(panelByAuditInfo);
+		this.add(splitPane, "grow");
 
 		if (withPopup) {
-			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_PDF,
-					this::exportPDF, PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal);
+			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
+					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal, PopupMenuTrait.POPUP_PDF,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build().export(),
+					PopupMenuTrait.POPUP_EXPORT_CSV,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV).build().export());
 
 			// We want to add the menu to all three components, 
 			// since we want it to be available, no matter where the user right clicks
@@ -161,37 +156,27 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 	}
 
 	@Override
-	protected void updateContent() {
+	protected void updateContent(String clientId) {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
-		setHardwareInfo(persistenceController.getDataServices().hardware
-				.getHardwareInfo(configedMain.getSelectedClients().get(0)));
+		setHardwareInfo(persistenceController.getDataServices().hardware.getHardwareInfo(clientId));
 	}
 
-	private void exportPDF() {
-		Logging.info(this, "create report");
-		Map<String, String> metaData = new HashMap<>();
-		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
-
-		metaData.put("title", treeRootTitle);
-		metaData.put("keywords", "hardware infos");
-
-		ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4Landscape();
-		// create pdf // no filename, onlyselectedRows=false
-		pdfExportTable.execute(null, false);
+	@Override
+	public SingleClientExporter getSingleClientExporter() {
+		return SingleClientExporter.builder().table(createHWInfoTableModelComplete()).filename(exportFilename)
+				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport)
+				.metaData(Map.of("title", treeRootTitle, "header", "Hardware report")).build();
 	}
 
 	/** overwrite in subclasses */
 	protected void reload() {
 		Logging.debug(this, "reload hardware info");
-		updateContent();
+		updateContent(configedMain.getSelectedClients().get(0));
 	}
 
 	private void floatExternal() {
-		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain, clientConfiguration);
+		PanelHWSingleClientInfo copyOfMe = new PanelHWSingleClientInfo(configedMain, true);
 		copyOfMe.setHardwareInfo(hwInfo);
-		copyOfMe.updateTab(configedMain.getSelectedClients().size());
 
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
@@ -564,7 +549,7 @@ public class PanelHWInfo extends AbstractConfigurationTab implements TreeSelecti
 		}
 	}
 
-	private JTable createHWInfoTableModelComplete() {
+	protected JTable createHWInfoTableModelComplete() {
 		getLocalizedHashMap();
 
 		DefaultTableModel tableModelComplete = new DefaultTableModel();

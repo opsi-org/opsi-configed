@@ -38,21 +38,23 @@ public class ExporterToCSV extends AbstractExportTable {
 	}
 
 	@Override
-	public void execute(String fileName, boolean onlySelectedRows) {
+	public boolean execute(String fileName, boolean onlySelectedRows) {
 		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep ", "\"", fileName, "\", ", onlySelectedRows,
 				"\", ", "\"", CSV_SEPARATOR, "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null) {
-			return;
+			return false;
 		}
 
 		if ((fileName = checkFile(fileName, extensionFilter)) != null) {
-			writeToCSVFile(fileName, selectedOnly);
+			return writeToCSVFile(fileName, selectedOnly);
 		}
+
+		return true;
 	}
 
-	private void writeToCSVFile(String fileName, boolean selectedOnly) {
+	private boolean writeToCSVFile(String fileName, boolean selectedOnly) {
 		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setQuote(STRING_DELIMITER).setQuoteMode(QuoteMode.ALL)
 				.setDelimiter(CSV_SEPARATOR).get();
 		try (BufferedWriter writer = Files.newBufferedWriter(new File(fileName).toPath(), StandardCharsets.UTF_8);
@@ -61,7 +63,10 @@ public class ExporterToCSV extends AbstractExportTable {
 			writeRows(printer, selectedOnly);
 		} catch (IOException ex) {
 			Logging.error(ex, "error exporting to csv file ", fileName);
+			return false;
 		}
+
+		return true;
 	}
 
 	protected void writeHeader(CSVPrinter printer) throws IOException {
