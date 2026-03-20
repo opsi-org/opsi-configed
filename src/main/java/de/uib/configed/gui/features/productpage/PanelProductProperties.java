@@ -48,8 +48,6 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 	private ConfigedMain configedMain;
 	private DepotsList depotsList;
 
-	private JSplitPane splitPane;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -86,7 +84,7 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		infoPane = new ProductInfoPane(panelEditProperties, null);
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneProducts, infoPane);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paneProducts, infoPane);
 		splitPane.setResizeWeight(1.0);
 
 		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.PRODUCT_PROPERTIES_SPLIT, 0.8F);
