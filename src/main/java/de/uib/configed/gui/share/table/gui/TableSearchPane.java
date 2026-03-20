@@ -305,8 +305,8 @@ public class TableSearchPane extends JPanel implements KeyListener {
 		this.add(navPane, "hidemode 2, split 3");
 		this.add(flatTextFieldSearch, "growx");
 		this.add(buttonShowHideExtraOptions, "wrap");
-		this.add(labelSearch, "gapleft " + Globals.GAP_SIZE + ", gapy " + Globals.GAP_SIZE + ", split 2, hidemode 2");
-		this.add(comboSearchFields, "growx, hidemode 2, wrap");
+		this.add(labelSearch, "gapleft " + Globals.GAP_SIZE + ", gapy " + Globals.GAP_SIZE + ", split 2, hidemode 3");
+		this.add(comboSearchFields, "growx, hidemode 3, gapy " + Globals.GAP_SIZE + ", wrap");
 	}
 
 	private void setupLayout() {
