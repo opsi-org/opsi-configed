@@ -21,7 +21,7 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -50,9 +50,9 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelURL = Utils.createBoldLabel("PMInstallCurlPanel.jLabelCurlUrl");
+		jLabelURL = SwingUtils.createBoldLabel("PMInstallCurlPanel.jLabelCurlUrl");
 
-		jLabelDir = Utils.createBoldLabel("PMInstallCurlPanel.jLabelCurlDir");
+		jLabelDir = SwingUtils.createBoldLabel("PMInstallCurlPanel.jLabelCurlDir");
 		CompletionComboButton autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.addItem(workbench);

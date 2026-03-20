@@ -15,14 +15,12 @@ import javax.swing.JTabbedPane;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class TabbedLogPane extends AbstractConfigurationTab {
-	// This is the index of "instlog" in Utils.getLogTypes()
+	// This is the index of "instlog" in LogTabComponent.LOG_TYPES
 	private static final int DEFAULT_SELECTED_INDEX = 2;
 	private LogTabComponent[] textPanes;
-	private String[] logTypes = Utils.getLogTypes();
 	private final List<String> logTypesList;
 
 	private ConfigedMain configedMain;
@@ -45,11 +43,11 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 		// We want a small gap on top, between the client tabs and the log tabs
 		tabbedPane.setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE, 0, 0, 0));
 
-		logTypesList = List.of(logTypes);
+		logTypesList = List.of(LogTabComponent.LOG_TYPES);
 
-		textPanes = new LogTabComponent[logTypes.length];
+		textPanes = new LogTabComponent[LogTabComponent.LOG_TYPES.length];
 
-		for (int i = 0; i < logTypes.length; i++) {
+		for (int i = 0; i < LogTabComponent.LOG_TYPES.length; i++) {
 			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
 		}
 
@@ -67,25 +65,25 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 	@Override
 	protected void updateContent() {
 		Logging.debug(this, "setLogPage");
-		setDocument(logTypes[tabbedPane.getSelectedIndex()], false);
+		setDocument(LogTabComponent.LOG_TYPES[tabbedPane.getSelectedIndex()], false);
 	}
 
 	private void initLogTabComponent(int i, String defaultText) {
 		LogTabComponent logTabComponent = new LogTabComponent(defaultText, getFocusTraversalKeysEnabled(),
 				configedMain);
-		logTabComponent.setLogFileType(logTypes[i]);
+		logTabComponent.setLogFileType(LogTabComponent.LOG_TYPES[i]);
 		textPanes[i] = logTabComponent;
-		tabbedPane.addTab(logTypes[i], textPanes[i].initUI());
+		tabbedPane.addTab(LogTabComponent.LOG_TYPES[i], textPanes[i].initUI());
 	}
 
 	public void setDocument(String logtype, final boolean resetCaret) {
 		String document = persistenceController.getDataServices().log
 				.getLogfile(configedMain.getSelectedClients().get(0), logtype);
-		Logging.info(this, "logTypes.length ", logTypes.length);
+		Logging.info(this, "logTypes.length ", LogTabComponent.LOG_TYPES.length);
 
 		int index = logTypesList.indexOf(logtype);
 		Logging.info(this, "setDocument ", index, " document == null ", (document == null));
-		if (index < 0 || index >= logTypes.length) {
+		if (index < 0 || index >= LogTabComponent.LOG_TYPES.length) {
 			return;
 		}
 
@@ -98,7 +96,7 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
 				: "";
 
-		textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(logTypes[index] + " " + selectedClient));
+		textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(LogTabComponent.LOG_TYPES[index] + " " + selectedClient));
 		textPanes[index].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
 		textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document));
 	}

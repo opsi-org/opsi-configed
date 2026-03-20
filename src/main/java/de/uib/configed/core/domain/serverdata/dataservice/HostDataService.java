@@ -32,7 +32,8 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.gui.type.Object2GroupEntry;
 import de.uib.configed.gui.type.OpsiPackage;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
+import de.uib.configed.share.TimeUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.logging.TimeCheck;
 import de.uib.configed.share.userprefs.UserPreferences;
@@ -140,7 +141,7 @@ public class HostDataService extends DataService {
 	private void addNetbootProductToList(String netbootProduct, String newClientId,
 			List<Map<String, Object>> productsNetbootJsonObject) {
 		Logging.info(this, "createClient productNetboot ", netbootProduct);
-		Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
+		Map<String, Object> itemProducts = ConfigUtils.createNOMitem("ProductOnClient");
 		itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, netbootProduct);
 		itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 		itemProducts.put("clientId", newClientId);
@@ -151,7 +152,7 @@ public class HostDataService extends DataService {
 	private void addGroupsToList(List<String> groups, String newClientId, List<Map<String, Object>> groupsJsonObject) {
 		Logging.info(this, "createClient", " group ", groups);
 		for (String group : groups) {
-			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+			Map<String, Object> itemGroup = ConfigUtils.createNOMitem(Object2GroupEntry.TYPE_NAME);
 			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
 			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
@@ -255,8 +256,8 @@ public class HostDataService extends DataService {
 
 	private static void transformTimestampsToLocal(List<Map<String, Object>> hostList) {
 		for (Map<String, Object> host : hostList) {
-			Utils.formatDateTimeStringForMap(host, HostInfo.LAST_SEEN_KEY);
-			Utils.formatDateTimeStringForMap(host, HostInfo.CREATED_KEY);
+			TimeUtils.formatDateTimeStringForMap(host, HostInfo.LAST_SEEN_KEY);
+			TimeUtils.formatDateTimeStringForMap(host, HostInfo.CREATED_KEY);
 		}
 	}
 
@@ -435,7 +436,7 @@ public class HostDataService extends DataService {
 			result.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
 
 			// create config for service
-			Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
+			Map<String, Object> item = ConfigUtils.createNOMitem("UnicodeConfig");
 			item.put("ident", KEY_HOST_DISPLAYFIELDS);
 			item.put("description", "");
 			item.put("defaultValues", result);

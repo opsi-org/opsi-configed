@@ -20,12 +20,12 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
-import de.uib.configed.share.Utils;
-import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.logging.Logging;
 
 public class CompletionComboButton {
@@ -182,7 +182,7 @@ public class CompletionComboButton {
 	}
 
 	private void getDirectoriesIn(final String curdir) {
-		Utils.runSwingWorker(() -> new WebDAVClient().getDirectoriesIn(curdir), (Set<String> result) -> {
+		SwingUtils.runSwingWorker(() -> new WebDAVClient().getDirectoriesIn(curdir), (Set<String> result) -> {
 			setItems(result, curdir);
 			enableComponents(true);
 		}, e -> Logging.warning(this,
@@ -190,7 +190,7 @@ public class CompletionComboButton {
 	}
 
 	private void getDirectoriesAndFilesIn(final String curdir) {
-		Utils.runSwingWorker(() -> new WebDAVClient().getDirectoriesAndFilesIn(curdir, fileExtension),
+		SwingUtils.runSwingWorker(() -> new WebDAVClient().getDirectoriesAndFilesIn(curdir, fileExtension),
 				(Set<String> result) -> {
 					setItems(result, curdir);
 					enableComponents(true);

@@ -32,7 +32,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.Utilities;
 
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -107,7 +107,7 @@ public final class TextLineNumber extends JPanel implements CaretListener, Prope
 		//  the DocumentEvent is fired. A document change may affect the number of displayed lines of text.
 		// Therefore the lines numbers will also change.
 		component.getDocument().addDocumentListener(
-				Utils.onDocumentChange(() -> SwingUtilities.invokeLater(this::handleResizeIfNeeded)));
+				SwingUtils.onDocumentChange(() -> SwingUtilities.invokeLater(this::handleResizeIfNeeded)));
 		component.addCaretListener(this);
 		component.addPropertyChangeListener("font", this);
 	}

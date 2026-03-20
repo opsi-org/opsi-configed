@@ -41,9 +41,9 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.logviewer.logpane.view.AdaptingSlider;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 import de.uib.configed.gui.features.logviewer.logpane.view.TextLineNumber;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -222,35 +222,36 @@ public class LogPaneComponent extends AbstractTeaComponent<LogPaneModel, LogPane
 	}
 
 	private void addKeyBindings() {
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
+		SwingUtils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
 				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
 				JComponent.WHEN_FOCUSED);
 
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+		SwingUtils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
 				JComponent.WHEN_FOCUSED);
 
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_N, 0),
+		SwingUtils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_N, 0),
 				() -> dispatch(new LogPaneMsg.Search((String) jComboBoxSearch.getEditor().getItem())),
 				JComponent.WHEN_FOCUSED);
 
 		// The Binding with KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, 0) does not work on some systems (e.g. German keyboard)
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke('/'), jComboBoxSearch::requestFocus,
+		SwingUtils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke('/'), jComboBoxSearch::requestFocus,
 				JComponent.WHEN_FOCUSED);
 
-		Utils.addKeyBindingToJComponent(logTextPane,
+		SwingUtils.addKeyBindingToJComponent(logTextPane,
 				KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK),
 				() -> dispatch(LogPaneMsg.SimpleMsg.INCREASE_FONT_SIZE), JComponent.WHEN_FOCUSED);
 
-		Utils.addKeyBindingToJComponent(logTextPane,
+		SwingUtils.addKeyBindingToJComponent(logTextPane,
 				KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK),
 				() -> dispatch(LogPaneMsg.SimpleMsg.DECREASE_FONT_SIZE), JComponent.WHEN_FOCUSED);
 
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
+		SwingUtils.addKeyBindingToJComponent(logTextPane,
+				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK),
 				() -> dispatch(LogPaneMsg.SimpleMsg.COPY_CONTENTS), JComponent.WHEN_FOCUSED);
 
-		Utils.addKeyBindingToJComponent(logTextPane, KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK),
-				() -> {
+		SwingUtils.addKeyBindingToJComponent(logTextPane,
+				KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), () -> {
 					String selected = logTextPane.getSelectedText();
 
 					if (selected != null && !selected.isEmpty()) {

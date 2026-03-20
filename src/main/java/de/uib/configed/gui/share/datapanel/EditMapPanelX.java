@@ -29,14 +29,14 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.productpage.TextMarkdownPane;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ListModelProducer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -279,8 +279,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
-		jComponent
-				.setToolTipText(Utils.createTooltipForPropertyName(names.get(row), defaultsMap, descriptionsMap, null));
+		jComponent.setToolTipText(createTooltipForPropertyName(names.get(row), defaultsMap, descriptionsMap, null));
 
 		// check equals with default
 		Object defaultValue;
@@ -305,9 +304,44 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 
 		if (col == 1 && jComponent instanceof JLabel jLabel
-				&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
+				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
+	}
+
+	protected static String createTooltipForPropertyName(String propertyName, Map<String, Object> defaultsMap,
+			Map<String, String> descriptionsMap, String additionalTooltipText) {
+		if (propertyName == null) {
+			return "";
+		}
+
+		StringBuilder tooltip = new StringBuilder();
+
+		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
+			if (additionalTooltipText != null && !additionalTooltipText.isEmpty()) {
+				tooltip.append("default (" + additionalTooltipText + "): ");
+			} else {
+				tooltip.append("default: ");
+			}
+
+			if (PropertiesCellEditorAndRenderer.isKeyForSecretValue(propertyName)) {
+				tooltip.append(Globals.STARRED_STRING);
+			} else {
+				tooltip.append(defaultsMap.get(propertyName));
+			}
+		}
+
+		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
+			tooltip.append(TextMarkdownPane.parseMarkdown(descriptionsMap.get(propertyName)));
+		}
+
+		if (tooltip.length() > 200) {
+			Logging.debug("tooltip length is ", tooltip.length());
+			tooltip.insert(0, "<div style='width: 500px'>");
+			tooltip.append("</div>");
+		}
+
+		return "<html>" + tooltip + "</html>";
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public class GroupTreePopupMenu extends JPopupMenu {

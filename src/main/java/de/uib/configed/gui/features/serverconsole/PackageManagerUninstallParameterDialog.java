@@ -28,8 +28,8 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -182,8 +182,8 @@ public class PackageManagerUninstallParameterDialog {
 	}
 
 	private void init() {
-		jLabelUninstall = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
-		jLabelLoglevel = Utils.createBoldLabel("loglevel");
+		jLabelUninstall = SwingUtils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelUninstall");
+		jLabelLoglevel = SwingUtils.createBoldLabel("loglevel");
 
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -205,7 +205,7 @@ public class PackageManagerUninstallParameterDialog {
 
 		jComboBoxOpsiProducts.addItemListener(itemEvent -> textFieldSelectedDepots.setText(""));
 
-		jLabelOn = Utils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelOn");
+		jLabelOn = SwingUtils.createBoldLabel("PackageManagerUninstallParameterDialog.jLabelOn");
 
 		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {

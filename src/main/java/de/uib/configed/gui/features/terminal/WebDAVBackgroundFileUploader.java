@@ -13,7 +13,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.uib.configed.share.WebDAVClient;
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.share.logging.Logging;
 
 public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader {

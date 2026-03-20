@@ -28,8 +28,10 @@ import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiMakeProductFile;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -98,7 +100,7 @@ public class MakeProductFileDialog {
 
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION,
 				null, new Object[] { buttonExecute, buttonPackageManager, Configed.getResourceValue("buttonCancel") });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MakeProductFileDialog.title"));
@@ -111,7 +113,7 @@ public class MakeProductFileDialog {
 	}
 
 	private void initComponents() {
-		jLabelDir = Utils.createBoldLabel("MakeProductFileDialog.serverDir");
+		jLabelDir = SwingUtils.createBoldLabel("MakeProductFileDialog.serverDir");
 
 		autocompletion.setCombobox(new AutoCompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
@@ -128,10 +130,10 @@ public class MakeProductFileDialog {
 		jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
 		jButtonSearchDir.addActionListener(actionEvent -> search());
 
-		jLabelPackageVersion = Utils.createBoldLabel("MakeProductFileDialog.packageVersion");
-		jLabelProductVersion = Utils.createBoldLabel("MakeProductFileDialog.productVersion");
-		jLabelVersionsControlFile = Utils.createBoldLabel("MakeProductFileDialog.versions_controlfile");
-		jLabelVersions = Utils.createBoldLabel("MakeProductFileDialog.versions");
+		jLabelPackageVersion = SwingUtils.createBoldLabel("MakeProductFileDialog.packageVersion");
+		jLabelProductVersion = SwingUtils.createBoldLabel("MakeProductFileDialog.productVersion");
+		jLabelVersionsControlFile = SwingUtils.createBoldLabel("MakeProductFileDialog.versions_controlfile");
+		jLabelVersions = SwingUtils.createBoldLabel("MakeProductFileDialog.versions");
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
@@ -202,7 +204,7 @@ public class MakeProductFileDialog {
 	}
 
 	private String doActionGetVersions(String dir) {
-		String serverPath = Utils.getServerPathFromWebDAVPath(dir) + "OPSI/control";
+		String serverPath = FileUtils.getServerPathFromWebDAVPath(dir) + "OPSI/control";
 		Logging.info(this, "doActionGetVersions, serverPath ", serverPath);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
 				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, serverPath));
@@ -230,7 +232,7 @@ public class MakeProductFileDialog {
 
 	private final void doSetActionGetVersions() {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
-		Utils.runSwingWorker(() -> doActionGetVersions(dir), this::setVersions, null);
+		SwingUtils.runSwingWorker(() -> doActionGetVersions(dir), this::setVersions, null);
 	}
 
 	private void setVersions(String versions) {
@@ -279,7 +281,7 @@ public class MakeProductFileDialog {
 		boolean overwrite = jCheckBoxOverwrite.isSelected();
 		boolean setRights = advancedOptionsPanel.setRights();
 
-		Utils.runSwingWorker(() -> getCommands(dir, prodVersion, packVersion, overwrite, setRights),
+		SwingUtils.runSwingWorker(() -> getCommands(dir, prodVersion, packVersion, overwrite, setRights),
 				(MultiCommandTemplate commands) -> {
 					Logging.info(this, "Start Commands ", commands);
 					CommandExecutor executor = new CommandExecutor(configedMain, commands);
@@ -290,7 +292,7 @@ public class MakeProductFileDialog {
 
 	private MultiCommandTemplate getCommands(String dir, String prodVersion, String packVersion, boolean overwrite,
 			boolean setRights) {
-		String dirLocationInServer = Utils.getServerPathFromWebDAVPath(dir);
+		String dirLocationInServer = FileUtils.getServerPathFromWebDAVPath(dir);
 
 		SingleCommandOpsiMakeProductFile opsiMakeProductFileCommand = new SingleCommandOpsiMakeProductFile(
 				dirLocationInServer, packVersion, prodVersion, advancedOptionsPanel.useMD5Sum(),

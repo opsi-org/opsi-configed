@@ -17,8 +17,8 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.UIManager;
 
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
-import de.uib.configed.share.Icons;
 
 public class ListSelectionList extends JList<String> {
 	private Set<Integer> nonDeselectableIndices = new HashSet<>();

@@ -35,9 +35,10 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -64,7 +65,7 @@ public class TableSearchPane extends JPanel implements KeyListener {
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
 
-	private DocumentListener searchFieldDocumentListener = Utils.onDocumentChange(this::documentChanged);
+	private DocumentListener searchFieldDocumentListener = SwingUtils.onDocumentChange(this::documentChanged);
 
 	private boolean selectMode = true;
 

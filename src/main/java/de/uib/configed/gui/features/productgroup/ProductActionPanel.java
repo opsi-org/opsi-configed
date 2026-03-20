@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.productgroup;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,13 +24,13 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ServerActionManager;
 import de.uib.configed.gui.data.InstallationStateTableModel;
-import de.uib.configed.gui.data.SearchTargetModelFromInstallationStateTable;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
-import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -185,4 +186,42 @@ public class ProductActionPanel extends JPanel {
 	public void setFilterMark(boolean selected) {
 		searchPane.setFilterMark(selected);
 	}
+
+	@SuppressWarnings("java:S2972")
+	private static class SearchTargetModelFromInstallationStateTable extends SearchTargetModelFromTable {
+		private PanelProductSettings panelProductSettings;
+
+		public SearchTargetModelFromInstallationStateTable(PanelProductSettings panelProductSettings) {
+			super(panelProductSettings.getProductTable());
+			Logging.info(this, "table null? ", table == null);
+
+			this.panelProductSettings = panelProductSettings;
+		}
+
+		@Override
+		public void setCursorRow(int row) {
+			Logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
+		}
+
+		@Override
+		public void setFiltered(boolean filtered) {
+			if (filtered) {
+				selectedRows = table.getSelectedRows();
+
+				int[] modelRowFilter = new int[selectedRows.length];
+				for (int i = 0; i < selectedRows.length; i++) {
+					modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
+				}
+
+				Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
+
+				if (selectedRows.length != 0) {
+					panelProductSettings.getProductTable().reduceToSelected();
+				}
+			} else {
+				panelProductSettings.valueChanged(false);
+			}
+		}
+	}
+
 }

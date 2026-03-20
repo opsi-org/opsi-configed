@@ -21,9 +21,9 @@ import javax.swing.KeyStroke;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public final class PopupMenuTrait extends JPopupMenu {
@@ -116,7 +116,7 @@ public final class PopupMenuTrait extends JPopupMenu {
 		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(item, "refresh");
 
-		Utils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+		SwingUtils.addKeyBindingToJComponent(component, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
 				() -> actions.get(POPUP_RELOAD).run());
 
 		return item;

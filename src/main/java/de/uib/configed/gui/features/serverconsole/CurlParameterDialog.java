@@ -24,7 +24,8 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandHelp;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -83,7 +84,7 @@ public class CurlParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION,
 				null, new Object[] { buttonExecute, buttonParameterInfo, Configed.getResourceValue("buttonCancel") });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("CurlParameterDialog.title"));
 		dialog.setModal(false);
@@ -95,16 +96,16 @@ public class CurlParameterDialog {
 	}
 
 	private void init() {
-		jLabelURL = Utils.createBoldLabel("CurlParameterDialog.jLabelUrl");
+		jLabelURL = SwingUtils.createBoldLabel("CurlParameterDialog.jLabelUrl");
 
 		jTextFieldURL = new JTextField();
 
-		jLabelDir = Utils.createBoldLabel("CurlParameterDialog.jLabelDirectory");
+		jLabelDir = SwingUtils.createBoldLabel("CurlParameterDialog.jLabelDirectory");
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelLoglevel = Utils.createBoldLabel("loglevel");
+		jLabelLoglevel = SwingUtils.createBoldLabel("loglevel");
 
 		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
@@ -115,11 +116,11 @@ public class CurlParameterDialog {
 		jComboBoxLoglevel
 				.addItemListener(itemEvent -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
 
-		jLabelFreeInput = Utils.createBoldLabel("CurlParameterDialog.jLabelFreeInput");
+		jLabelFreeInput = SwingUtils.createBoldLabel("CurlParameterDialog.jLabelFreeInput");
 
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));
-		jTextFieldFreeInput.getDocument().addDocumentListener(Utils.onDocumentChange(this::changeFreeInput));
+		jTextFieldFreeInput.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::changeFreeInput));
 
 		curlAuthPanel = new CurlAuthenticationPanel();
 		curlAuthPanel.getCheckBox().setSelected(false);

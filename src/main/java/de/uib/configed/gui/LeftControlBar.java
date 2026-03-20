@@ -13,7 +13,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 
 public class LeftControlBar extends JToolBar {

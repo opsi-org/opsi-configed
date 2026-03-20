@@ -30,8 +30,8 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.type.OpsiPackage;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -62,7 +62,7 @@ public class GroupActionsDialog {
 		buttonReload.addActionListener(actionEvent -> reload());
 
 		JPanel panel = defineImageActionPanel();
-		Utils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
+		SwingUtils.addKeyBindingToJComponent(panel, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reload);
 
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
 				new Object[] { buttonSetup, buttonReload, Configed.getResourceValue("buttonCancel") });
@@ -143,7 +143,7 @@ public class GroupActionsDialog {
 		groupNameLabel = new JLabel();
 		clientsCountLabel = new JLabel();
 
-		JLabel labelCombo = Utils.createBoldLabel("FGroupAction.existingImages");
+		JLabel labelCombo = SwingUtils.createBoldLabel("FGroupAction.existingImages");
 
 		comboSelectImage = new JComboBox<>();
 

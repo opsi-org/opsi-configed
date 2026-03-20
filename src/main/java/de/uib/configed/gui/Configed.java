@@ -29,12 +29,14 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.features.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.features.swinfopage.SwPdfExporter;
 import de.uib.configed.gui.messages.Messages;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.CLIUtils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.savedstates.SavedStates;
 
@@ -156,17 +158,17 @@ public final class Configed {
 
 	private static void addMissingArgs() {
 		if (hostData.getHost() == null) {
-			hostData.setHost(Utils.getCLIParam("Host: "));
+			hostData.setHost(CLIUtils.getCLIParam("Host: "));
 		}
 		if (hostData.getUser() == null) {
-			hostData.setUser(Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT));
+			hostData.setUser(CLIUtils.getCLIParam("User: ").toLowerCase(Locale.ROOT));
 		}
 		if (hostData.getPassword() == null) {
-			hostData.setPassword(Utils.getCLIPasswordParam("Password: "));
+			hostData.setPassword(CLIUtils.getCLIPasswordParam("Password: "));
 		}
 		if (hostData.getOtp() == null) {
-			hostData.setOtp(
-					Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): "));
+			hostData.setOtp(CLIUtils
+					.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): "));
 		}
 	}
 
@@ -262,7 +264,7 @@ public final class Configed {
 		}
 
 		if (cmd.hasOption("disable-certificate-verification")) {
-			Utils.setDisableCertificateVerification(true);
+			CertificateValidatorFactory.setDisableCertificateVerification(true);
 		}
 	}
 
@@ -417,7 +419,7 @@ public final class Configed {
 			return savedStatesLocationName;
 		}
 
-		String defaultLocation = Utils.getSavedStatesDefaultLocation();
+		String defaultLocation = FileUtils.getSavedStatesDefaultLocation();
 		Logging.info("Writing saved states to default location", defaultLocation);
 		return defaultLocation;
 	}

@@ -16,7 +16,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 public class DeployClientAgentAuthPanel extends JPanel {
@@ -34,15 +34,15 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void init() {
-		labelUser = Utils.createBoldLabel("username");
+		labelUser = SwingUtils.createBoldLabel("username");
 
 		textFieldUser = new FlatTextField();
-		textFieldUser.getDocument().addDocumentListener(Utils.onDocumentChange(this::changeUser));
+		textFieldUser.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::changeUser));
 
-		labelPassword = Utils.createBoldLabel("password");
+		labelPassword = SwingUtils.createBoldLabel("password");
 		passwordField = new FlatPasswordField();
 
-		passwordField.getDocument().addDocumentListener(Utils.onDocumentChange(this::changePassw));
+		passwordField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::changePassw));
 
 		initLayout();
 	}

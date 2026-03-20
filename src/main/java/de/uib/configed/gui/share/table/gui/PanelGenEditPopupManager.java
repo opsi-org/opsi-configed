@@ -20,12 +20,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelGenEditPopupManager {
@@ -164,7 +164,8 @@ public class PanelGenEditPopupManager {
 		menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		Icons.addIntellijIconToMenuItem(menuItemReload, "refresh");
 
-		Utils.addKeyBindingToJComponent(panelGenEdit, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), panelGenEdit::reload);
+		SwingUtils.addKeyBindingToJComponent(panelGenEdit, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+				panelGenEdit::reload);
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> panelGenEdit.reload());
 		if (popupIndex > 1) {

@@ -41,6 +41,7 @@ import de.uib.configed.gui.type.licenses.LicenseStatisticsRow;
 import de.uib.configed.gui.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.gui.type.licenses.LicenseUsageEntry;
 import de.uib.configed.gui.type.licenses.LicensepoolEntry;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.ExtendedInteger;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.datastructure.StringValuedRelationElement;
@@ -140,7 +141,7 @@ public class SoftwareDataService extends DataService {
 			return;
 		}
 
-		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicensePools) {
+		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicensePools.getRelations()) {
 			SWAuditEntry entry = new SWAuditEntry(retrieved);
 			String licensePoolKEY = retrieved.get(LicensepoolEntry.ID_SERVICE_KEY);
 			String swKEY = entry.getIdent();
@@ -472,7 +473,7 @@ public class SoftwareDataService extends DataService {
 			return "";
 		}
 
-		return Utils.pseudokey(new String[] { softwareLicenseId, licensePoolId });
+		return ConfigUtils.pseudokey(new String[] { softwareLicenseId, licensePoolId });
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
@@ -689,7 +690,7 @@ public class SoftwareDataService extends DataService {
 			Map<String, String> swMap = AuditSoftwareXLicensePool.produceMapFromSWident(softwareID);
 			swMap.put(LicensepoolEntry.ID_SERVICE_KEY, licensePoolIDNew);
 
-			item = Utils.createNOMitem("AuditSoftwareToLicensePool");
+			item = ConfigUtils.createNOMitem("AuditSoftwareToLicensePool");
 			item.putAll(swMap);
 			// create the edited entry
 
@@ -804,7 +805,7 @@ public class SoftwareDataService extends DataService {
 
 		if (listOfUsingClients != null) {
 			for (String client : listOfUsingClients) {
-				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
+				String pseudokey = ConfigUtils.pseudokey(new String[] { client, licensePoolId });
 
 				if (rowsLicensesReconciliation.get(pseudokey) == null) {
 					Logging.warning("client ", client, " or license pool ID ", licensePoolId, " do not exist");
@@ -840,7 +841,7 @@ public class SoftwareDataService extends DataService {
 				rowMap.put("licensePoolId", pool);
 				rowMap.put("used_by_opsi", false);
 				rowMap.put("SWinventory_used", false);
-				String pseudokey = Utils.pseudokey(new String[] { clientEntry.getKey(), pool });
+				String pseudokey = ConfigUtils.pseudokey(new String[] { clientEntry.getKey(), pool });
 				rowsLicensesReconciliation.put(pseudokey, rowMap);
 			}
 		}
@@ -860,7 +861,7 @@ public class SoftwareDataService extends DataService {
 			}
 
 			for (String client : swId2clients.get(softwareIdent)) {
-				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
+				String pseudokey = ConfigUtils.pseudokey(new String[] { client, licensePoolId });
 
 				if (rowsLicensesReconciliation.get(pseudokey) == null) {
 					Logging.warning("client ", client, " or license pool ID ", licensePoolId, " do not exist");
@@ -909,7 +910,7 @@ public class SoftwareDataService extends DataService {
 		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
 		// we take Set since we count only one usage per client
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = getAuditSoftwareXLicensePoolPD();
-		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool) {
+		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool.getRelations()) {
 			Logging.debug(this, " retrieveStatistics1 relationElement  ", swXpool);
 			String pool = swXpool.get(LicensepoolEntry.ID_SERVICE_KEY);
 

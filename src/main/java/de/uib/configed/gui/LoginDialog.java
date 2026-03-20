@@ -29,10 +29,11 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.WindowsPositionManager;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
-import de.uib.configed.share.WindowsPositionManager;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 import net.miginfocom.swing.MigLayout;
@@ -133,7 +134,7 @@ public class LoginDialog extends JFrame {
 	}
 
 	private void setServers() {
-		List<String> savedServers = Utils.readLocallySavedServerNames();
+		List<String> savedServers = FileUtils.readLocallySavedServerNames();
 
 		if (savedServers.isEmpty()) {
 			savedServers.add("localhost");
@@ -180,12 +181,12 @@ public class LoginDialog extends JFrame {
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
 
-		jLabelHost = Utils.createBoldLabel("LoginDialog.placeholderHost");
+		jLabelHost = SwingUtils.createBoldLabel("LoginDialog.placeholderHost");
 
-		jLabelUser = Utils.createBoldLabel("username");
-		jLabelPassword = Utils.createBoldLabel("password");
+		jLabelUser = SwingUtils.createBoldLabel("username");
+		jLabelPassword = SwingUtils.createBoldLabel("password");
 
-		jLabelOTP = Utils.createBoldLabel("LoginDialog.placeholderOTP");
+		jLabelOTP = SwingUtils.createBoldLabel("LoginDialog.placeholderOTP");
 		jLabelOTP.setVisible(false);
 
 		fieldHost.setEditable(true);

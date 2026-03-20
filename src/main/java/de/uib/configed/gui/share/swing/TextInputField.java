@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.uib.configed.gui.ClientSelectionDialog;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 
 public class TextInputField extends JPanel {
 	private JTextField textfield;
@@ -75,7 +75,7 @@ public class TextInputField extends JPanel {
 
 	public void setClientSelectionDialog(ClientSelectionDialog dialog) {
 		combo.addActionListener(e -> dialog.buildParentheses());
-		textfield.getDocument().addDocumentListener(Utils.onDocumentChange(dialog::buildParentheses));
+		textfield.getDocument().addDocumentListener(SwingUtils.onDocumentChange(dialog::buildParentheses));
 	}
 
 	public void setEditable(boolean b) {

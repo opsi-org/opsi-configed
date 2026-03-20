@@ -21,6 +21,7 @@ import de.uib.configed.core.domain.serverdata.ParallelTaskExecutor;
 import de.uib.configed.core.domain.serverdata.RPCMethodName;
 import de.uib.configed.gui.features.hwinfopage.PanelHWSingleClientInfo;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.share.TimeUtils;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -88,7 +89,7 @@ public class HardwareDataService extends DataService {
 
 		// Every "lastseen" is the same for a client, so we take the first one
 		String scanTime = hardwareInfos.isEmpty() ? ""
-				: Utils.formatDateTimeStringToLocal((String) hardwareInfos.get(0).get("lastseen"));
+				: TimeUtils.formatDateTimeStringToLocal((String) hardwareInfos.get(0).get("lastseen"));
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
 			hardwareInfo.values().removeIf(Objects::isNull);

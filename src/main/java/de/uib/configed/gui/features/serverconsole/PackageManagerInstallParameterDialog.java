@@ -22,7 +22,9 @@ import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -62,7 +64,7 @@ public class PackageManagerInstallParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(mainPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
@@ -152,7 +154,8 @@ public class PackageManagerInstallParameterDialog {
 
 	private void initLayout() {
 		downloadPanel.setBorder(BorderFactory.createTitledBorder(""));
-		JLabel jLabelInstall = Utils.createBoldLabel("PackageManagerInstallParameterDialog.jLabelInstallationMethod");
+		JLabel jLabelInstall = SwingUtils
+				.createBoldLabel("PackageManagerInstallParameterDialog.jLabelInstallationMethod");
 
 		downloadPanel.setLayout(
 				new MigLayout("insets " + Globals.GAP_SIZE + ", fillx, gapy " + Globals.GAP_SIZE + ", wrap 1",
@@ -209,7 +212,7 @@ public class PackageManagerInstallParameterDialog {
 		}
 		commands.addCommand(fileUploadCommand);
 		pmInstallCom = PMInstallServerPanel
-				.getCommand(Utils.getServerPathFromWebDAVPath(fileUploadCommand.getFullTargetPath()));
+				.getCommand(FileUtils.getServerPathFromWebDAVPath(fileUploadCommand.getFullTargetPath()));
 		if (pmInstallCom == null) {
 			Logging.warning(this, "No url given. 2");
 			Logging.warning(this, "ERROR 0 command = null");

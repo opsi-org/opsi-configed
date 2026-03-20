@@ -30,15 +30,15 @@ import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.DepotsList;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.GenTableModel;
-import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.type.OpsiPackage;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 

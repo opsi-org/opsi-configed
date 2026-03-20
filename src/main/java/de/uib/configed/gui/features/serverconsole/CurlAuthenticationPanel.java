@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 public class CurlAuthenticationPanel extends PMInstallPanel {
@@ -44,10 +44,10 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			}
 		});
 
-		labelUser = Utils.createBoldLabel("username");
+		labelUser = SwingUtils.createBoldLabel("username");
 		jTextFieldUser = new JTextField();
 
-		labelPassword = Utils.createBoldLabel("password");
+		labelPassword = SwingUtils.createBoldLabel("password");
 		jPasswordField = new JPasswordField();
 	}
 

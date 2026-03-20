@@ -34,19 +34,19 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.infopage.AbstractSingleClientInfoPanel;
 import de.uib.configed.gui.share.infopage.SingleClientExporter;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilter;
 import de.uib.configed.gui.share.table.TableModelFilterCondition;
-import de.uib.configed.gui.share.table.gui.BooleanIconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.gui.type.SWAuditEntry;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -216,8 +216,8 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 		panelTable.getGenEditTable().getColumnModel().getColumn(0).setPreferredWidth(400);
 		panelTable.getGenEditTable().getColumnModel().getColumn(1).setPreferredWidth(200);
 		panelTable.getGenEditTable().getColumnModel().getColumn(2).setPreferredWidth(100);
-		panelTable.getGenEditTable().getColumnModel().getColumn(7)
-				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
+		panelTable.getGenEditTable().getColumnModel().getColumn(7).setCellRenderer(new IconTableCellRenderer<Boolean>(
+				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark")), false));
 	}
 
 	private void buildPanel() {

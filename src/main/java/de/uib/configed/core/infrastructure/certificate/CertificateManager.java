@@ -40,7 +40,7 @@ import de.uib.configed.core.infrastructure.ConnectionErrorReporter;
 import de.uib.configed.core.infrastructure.ConnectionErrorType;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 
 public final class CertificateManager {
@@ -95,7 +95,7 @@ public final class CertificateManager {
 		try {
 			tmpCertFile = Files.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION)
 					.toFile();
-			Utils.restrictAccessToFile(tmpCertFile);
+			FileUtils.restrictAccessToFile(tmpCertFile);
 		} catch (IOException e) {
 			Logging.error(e, "unable to create tmp certificate file");
 		}
@@ -238,7 +238,7 @@ public final class CertificateManager {
 		try {
 			certificateFile = Files
 					.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION).toFile();
-			Utils.restrictAccessToFile(certificateFile);
+			FileUtils.restrictAccessToFile(certificateFile);
 			writeToCertificate(certificateFile, certificateContent);
 		} catch (IOException e) {
 			Logging.warning(e, "error on getting certificateFile");

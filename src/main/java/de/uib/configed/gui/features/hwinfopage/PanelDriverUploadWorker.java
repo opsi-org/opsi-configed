@@ -16,10 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.WebDAVClient;
-import de.uib.configed.share.WinProductUtils;
+import de.uib.configed.gui.share.WinProductUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class PanelDriverUploadWorker extends SwingWorker<Void, Void> {

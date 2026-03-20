@@ -21,12 +21,11 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ConnectionState;
 import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.ErrorCode;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
 import de.uib.configed.gui.type.SWAuditClientEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.CLIUtils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -67,7 +66,7 @@ public abstract class AbstractSWExporter {
 
 	private void addMissingLoginData() {
 		if (hostData.getHost() == null) {
-			hostData.setHost(Utils.getCLIParam("Host (default: localhost): "));
+			hostData.setHost(CLIUtils.getCLIParam("Host (default: localhost): "));
 		}
 
 		if (hostData.getHost().isEmpty()) {
@@ -75,7 +74,7 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (hostData.getUser() == null) {
-			hostData.setUser(Utils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : "));
+			hostData.setUser(CLIUtils.getCLIParam("User (default: " + System.getProperty("user.name") + ") : "));
 		}
 
 		if (hostData.getUser().isEmpty()) {
@@ -83,18 +82,18 @@ public abstract class AbstractSWExporter {
 		}
 
 		if (hostData.getPassword() == null) {
-			hostData.setPassword(Utils.getCLIPasswordParam("Password: "));
+			hostData.setPassword(CLIUtils.getCLIPasswordParam("Password: "));
 		}
 
 		if (hostData.getOtp() == null) {
-			hostData.setOtp(
-					Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): "));
+			hostData.setOtp(CLIUtils
+					.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): "));
 		}
 	}
 
 	private void addMissingExporterArgs() {
 		if (clientsFile == null) {
-			clientsFile = Utils.getCLIParam("File with client names: ");
+			clientsFile = CLIUtils.getCLIParam("File with client names: ");
 		}
 
 		if (clientsFile.isEmpty()) {
@@ -105,7 +104,7 @@ public abstract class AbstractSWExporter {
 		String userHomeS = userHome.toString();
 
 		if (outDir == null) {
-			outDir = Utils.getCLIParam("Export directory (default: " + userHomeS + "): ");
+			outDir = CLIUtils.getCLIParam("Export directory (default: " + userHomeS + "): ");
 		}
 
 		if (outDir.isEmpty()) {
@@ -218,5 +217,30 @@ public abstract class AbstractSWExporter {
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
+	}
+
+	private static final class ErrorCode {
+		public static final int NO_ERROR = 0;
+		public static final int INITIALIZATION_ERROR = 1;
+		public static final int CONNECTION_ERROR = 2;
+		public static final int CLIENTNAMES_FILENAME_MISSING = 11;
+
+		private ErrorCode() {
+		}
+
+		public static String tell(int n) {
+			String result = "";
+			if (n > 0) {
+				result = "problem type " + n + ": ";
+			}
+
+			return switch (n) {
+			case NO_ERROR -> result + "no error occured";
+			case INITIALIZATION_ERROR -> result + "inititalization error";
+			case CONNECTION_ERROR -> result + "connection error";
+			case CLIENTNAMES_FILENAME_MISSING -> result + "REQUIRED: name of file with clientnames";
+			default -> result + "_";
+			};
+		}
 	}
 }

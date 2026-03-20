@@ -27,8 +27,9 @@ import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.SplitPaneStateManager;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -65,7 +66,7 @@ public class RemoteControlDialog {
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.CLOSED_OPTION, null,
 				new Object[] { buttonExecute, Configed.getResourceValue("buttonClose") });
 
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
@@ -116,7 +117,7 @@ public class RemoteControlDialog {
 
 		extraField = new JTextField();
 		extraField.addActionListener(event -> commit());
-		extraField.getDocument().addDocumentListener(Utils.onDocumentChange(this::saveEditedText));
+		extraField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::saveEditedText));
 
 		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);

@@ -20,8 +20,8 @@ import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandFileUpload;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import net.miginfocom.swing.MigLayout;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
@@ -42,8 +42,8 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelUploadFrom = Utils.createBoldLabel("PMInstallLocalPanel.jLabelLocalFrom");
-		jLabelUploadTo = Utils.createBoldLabel("PMInstallLocalPanel.jLabelLocalTo");
+		jLabelUploadFrom = SwingUtils.createBoldLabel("PMInstallLocalPanel.jLabelLocalFrom");
+		jLabelUploadTo = SwingUtils.createBoldLabel("PMInstallLocalPanel.jLabelLocalTo");
 
 		jTextFieldPath = new JTextField();
 

@@ -34,6 +34,9 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.terminal.TerminalController;
+import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
 import de.uib.configed.gui.share.table.AbstractExportTable;
 import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
@@ -41,9 +44,6 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.PopupMouseListener;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class ClientMenuManager implements MenuListener {
@@ -113,7 +113,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		// Space should only be active on the client table, but not on other where you 
 		// could accidently start remote control by pressing space in a text field etc.
-		Utils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
+		SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
 				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
 				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
@@ -217,7 +217,7 @@ public final class ClientMenuManager implements MenuListener {
 		if (config.keyStroke() != null) {
 			item = new JMenuItemBlockedKeyBinding(Configed.getResourceValue(config.resourceKey()));
 			item.setAccelerator(config.keyStroke());
-			Utils.addKeyBindingToJComponent(
+			SwingUtils.addKeyBindingToJComponent(
 					mainFrame.getMainPanelManager().getClientConfiguration().getPanelClientSelection(),
 					config.keyStroke(), config.action());
 		} else {
@@ -462,7 +462,7 @@ public final class ClientMenuManager implements MenuListener {
 
 	private static JPopupMenu clonePopupMenu(JMenu jMenuToClone, Runnable beforeCloneAction) {
 		JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> {
+		popupMenu.addPopupMenuListener(SwingUtils.createPopupMenuListenerOnVisible(() -> {
 			if (beforeCloneAction != null) {
 				beforeCloneAction.run();
 			}

@@ -20,7 +20,7 @@ import de.uib.configed.gui.AbstractControlMultiTablePanel;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 import net.miginfocom.swing.MigLayout;

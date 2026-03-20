@@ -27,8 +27,8 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandDeployClientAgent.FinalActionType;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -99,7 +99,7 @@ public class DeployClientAgentParameterDialog {
 				!commandDeployClientAgent.isPingRequired());
 		jCheckBoxIgnorePing.addItemListener(itemEvent -> commandDeployClientAgent.togglePingIsRequired());
 
-		jLabelLoglevel = Utils.createBoldLabel("loglevel");
+		jLabelLoglevel = SwingUtils.createBoldLabel("loglevel");
 		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
 			jComboBoxLoglevel.addItem(i);
@@ -108,15 +108,15 @@ public class DeployClientAgentParameterDialog {
 		jComboBoxLoglevel.setSelectedItem(4);
 		jComboBoxLoglevel.addItemListener(itemEvent -> updateLoglevel());
 
-		jLabelClient = Utils.createBoldLabel("DeployClientAgentParameterDialog.jLabelClient");
+		jLabelClient = SwingUtils.createBoldLabel("DeployClientAgentParameterDialog.jLabelClient");
 		jTextFieldClient = new JTextField();
 		jTextFieldClient
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.tooltip.tf_client"));
-		jTextFieldClient.getDocument().addDocumentListener(Utils.onDocumentChange(this::changeClient));
+		jTextFieldClient.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::changeClient));
 
-		jLabelUserData = Utils.createBoldLabel("DeployClientAgentParameterDialog.targetclient_authentication");
+		jLabelUserData = SwingUtils.createBoldLabel("DeployClientAgentParameterDialog.targetclient_authentication");
 
-		jLabelFinalize = Utils.createBoldLabel("DeployClientAgentParameterDialog.lbl_finalize");
+		jLabelFinalize = SwingUtils.createBoldLabel("DeployClientAgentParameterDialog.lbl_finalize");
 
 		panelFinalAction = new PanelStateSwitch<>(null, FinalActionType.START_OCD, FinalActionType.values(),
 				new String[] { Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.START_OCD"),
@@ -127,7 +127,7 @@ public class DeployClientAgentParameterDialog {
 					finalAction = (FinalActionType) val;
 				}));
 
-		jLabelOperatingSystem = Utils.createBoldLabel("DeployClientAgentParameterDialog.opsiClientAgent.label");
+		jLabelOperatingSystem = SwingUtils.createBoldLabel("DeployClientAgentParameterDialog.opsiClientAgent.label");
 
 		jComboBoxOperatingSystem = new JComboBox<>(OS.values());
 		jComboBoxOperatingSystem

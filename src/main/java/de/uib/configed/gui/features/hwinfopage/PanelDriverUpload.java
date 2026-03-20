@@ -24,17 +24,17 @@ import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandTemplate;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
-import de.uib.configed.share.WebDAVClient;
-import de.uib.configed.share.WinProductUtils;
-import de.uib.configed.share.WinProductsRetriever;
-import de.uib.configed.share.WinProductsRetriever.Context;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.WinProductUtils;
+import de.uib.configed.gui.share.WinProductsRetriever;
+import de.uib.configed.gui.share.WinProductsRetriever.Context;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -194,13 +194,13 @@ public class PanelDriverUpload extends JPanel {
 		fieldByAuditPath = new JTextField();
 		fieldByAuditPath.setEditable(false);
 
-		JLabel jLabelTopic = Utils.createBoldLabel("PanelDriverUpload.topic");
+		JLabel jLabelTopic = SwingUtils.createBoldLabel("PanelDriverUpload.topic");
 
 		labelClientName = new JLabel();
 
-		JLabel jLabelDepotServer = Utils.createBoldLabel("PanelDriverUpload.DepotServer");
+		JLabel jLabelDepotServer = SwingUtils.createBoldLabel("PanelDriverUpload.DepotServer");
 
-		JLabel jLabelWinProduct = Utils.createBoldLabel("PanelDriverUpload.labelWinProduct");
+		JLabel jLabelWinProduct = SwingUtils.createBoldLabel("PanelDriverUpload.labelWinProduct");
 
 		JButton buttonCallSelectDriverFiles = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallSelectDriverFiles
@@ -221,20 +221,20 @@ public class PanelDriverUpload extends JPanel {
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> executeDriverAction(DriverAction.CREATE_DRIVERS));
 
-		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
+		JLabel labelTargetPath = SwingUtils.createBoldLabel("CompleteWinProducts.labelTargetPath");
 
 		fieldServerPath = new JTextField();
 		fieldServerPath.setEditable(true);
-		fieldServerPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkFiles));
+		fieldServerPath.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::checkFiles));
 
-		JLabel labelDriverToIntegrate = Utils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
+		JLabel labelDriverToIntegrate = SwingUtils.createBoldLabel("PanelDriverUpload.labelDriverToIntegrate");
 
 		fieldDriverPath = new JTextField();
 		fieldDriverPath.setEditable(true);
-		fieldDriverPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkFiles));
+		fieldDriverPath.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::checkFiles));
 		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
-		JLabel labelDriverLocationType = Utils.createBoldLabel("PanelDriverUpload.type");
+		JLabel labelDriverLocationType = SwingUtils.createBoldLabel("PanelDriverUpload.type");
 
 		JPanel panelButtonGroup = createPanelButtonGroup();
 

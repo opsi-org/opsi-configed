@@ -26,7 +26,9 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandOpsiSetRights;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -63,7 +65,7 @@ public class OpsiSetRightsParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { jButtonExecute, Configed.getResourceValue("buttonCancel") });
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("SingleCommandOpsiSetRights.title"));
 		dialog.setModal(false);
@@ -78,7 +80,7 @@ public class OpsiSetRightsParameterDialog {
 		additionalDefaultPaths.add(CommandFactory.WEBDAV_OPSI_PATH_VAR_DEPOT);
 		completion = new CompletionComboButton(additionalDefaultPaths);
 
-		jLabelInfo = Utils.createBoldLabel("SingleCommandOpsiSetRights.additionalPath");
+		jLabelInfo = SwingUtils.createBoldLabel("SingleCommandOpsiSetRights.additionalPath");
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();
@@ -91,9 +93,9 @@ public class OpsiSetRightsParameterDialog {
 	}
 
 	private void execute() {
-		commandOpsiSetRights.setDir(Utils.getServerPathFromWebDAVPath(completion.comboBoxGetStringItem()));
+		commandOpsiSetRights.setDir(FileUtils.getServerPathFromWebDAVPath(completion.comboBoxGetStringItem()));
 		Logging.info(this, "doAction2 opsi-set-rights with path: ",
-				Utils.getServerPathFromWebDAVPath(commandOpsiSetRights.getDir()));
+				FileUtils.getServerPathFromWebDAVPath(commandOpsiSetRights.getDir()));
 		CommandExecutor executor = new CommandExecutor(configedMain, commandOpsiSetRights);
 		executor.executeAsync();
 	}

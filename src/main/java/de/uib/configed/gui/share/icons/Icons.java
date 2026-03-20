@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.share;
+package de.uib.configed.gui.share.icons;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -25,6 +25,8 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.healthcheck.HealthDataProcessor;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public final class Icons {
@@ -245,7 +247,7 @@ public final class Icons {
 	}
 
 	private static void setHealthCheckIcon(AbstractButton button, int size, Color selectedColor) {
-		Utils.runSwingWorker(() -> {
+		SwingUtils.runSwingWorker(() -> {
 			Icon normal = getHealthCheckIcon(size);
 			Icon selected = getHealthCheckIcon(size, selectedColor);
 			return new Icon[] { normal, selected };

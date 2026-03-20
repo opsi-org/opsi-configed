@@ -26,7 +26,7 @@ import de.uib.configed.core.domain.permission.UserConfig;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.AbstractDataChangedKeeper;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.TimeUtils;
 import de.uib.configed.share.logging.Logging;
 
 public class MapTableModel extends AbstractTableModel {
@@ -417,7 +417,7 @@ public class MapTableModel extends AbstractTableModel {
 
 				if (rowModiTime > -1 && row != rowModiTime) {
 					List<Object> nowTimeListValue = new ArrayList<>();
-					nowTimeListValue.add(LocalDateTime.now().format(Utils.DATE_TIME_FORMATTER));
+					nowTimeListValue.add(LocalDateTime.now().format(TimeUtils.DATE_TIME_FORMATTER));
 					setValueAt(nowTimeListValue, rowModiTime, 1);
 				}
 			}

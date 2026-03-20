@@ -29,12 +29,13 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.data.ListMerger;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.type.ConfigOption;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class EditMapPanelForHostConfigs extends EditMapPanelX {
@@ -73,7 +74,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 								actor::saveData, PopupMenuTrait.POPUP_PDF, this::createPDF),
 						event -> updatePopupMenu());
 
-		jPopupMenu.addPopupMenuListener(Utils.createPopupMenuListenerOnVisible(() -> {
+		jPopupMenu.addPopupMenuListener(SwingUtils.createPopupMenuListenerOnVisible(() -> {
 			UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
 					.getPersistenceController().getDataServices().userRoles;
 			boolean canSave = !userRolesConfigDataService.isGlobalReadOnly()
@@ -112,7 +113,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
-		jc.setToolTipText(Utils.createTooltipForPropertyName(propertyName, defaultsMap, descriptionsMap,
+		jc.setToolTipText(createTooltipForPropertyName(propertyName, defaultsMap, descriptionsMap,
 				includeAdditionalTooltipText ? getPropertyOrigin(propertyName) : null));
 
 		// check equals with default
@@ -140,7 +141,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private static void setText(JComponent jComponent, JTable table, int vColIndex, int rowIndex) {
-		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))
+		if (vColIndex == 1
+				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))
 				&& jComponent instanceof JLabel jLabel) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}

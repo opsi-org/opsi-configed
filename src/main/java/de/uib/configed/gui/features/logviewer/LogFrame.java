@@ -41,10 +41,10 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.MenuBarController;
 import de.uib.configed.gui.features.logviewer.logpane.LogPaneMsg;
 import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.share.WindowsPositionManager;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.ExtractorUtil;
-import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;
-import de.uib.configed.share.WindowsPositionManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

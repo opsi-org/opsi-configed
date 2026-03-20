@@ -27,9 +27,9 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.features.csv.CSVImportDataModifier;
+import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.HostInfo;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientTableExporterToCSV extends ExporterToCSV {
@@ -159,7 +159,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private static void removeHostTypeKeyIfNeeded(Set<String> columns) {
-		if (columns.contains(HostInfo.HOST_TYPE_KEY) && !Utils.includeOpsiHostKey()) {
+		if (columns.contains(HostInfo.HOST_TYPE_KEY) && !DialogUtils.includeOpsiHostKey()) {
 			columns.remove(HostInfo.HOST_TYPE_KEY);
 		}
 	}

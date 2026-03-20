@@ -24,45 +24,37 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		colorize(cell, isSelected, row % 2 == 0, column % 2 == 0);
+		colorize(cell, isSelected, row, column);
 		return cell;
 	}
 
-	public static void colorize(Component cell, boolean isSelected, boolean isRowEven) {
+	public static void colorize(Component cell, boolean isSelected, int row) {
 		cell.setForeground(Globals.getForegroundColor());
 
-		colorizeTableCell(cell, isSelected, isRowEven);
+		colorizeTableCell(cell, isSelected, row % 2 == 0);
 	}
 
-	public static void colorize(Component cell, boolean isSelected, boolean rowEven, boolean colEven) {
-		ColorTableCellRenderer.colorize(cell, isSelected, rowEven);
-		makeCellDarker(cell, colEven);
-	}
-
-	private static void makeCellDarker(Component cell, boolean shouldMakeDarker) {
-		if (shouldMakeDarker) {
-			Color backgroudColor = cell.getBackground();
-
-			Color newBackgroundColor = new Color(backgroudColor.getRed() - 8, backgroudColor.getGreen() - 8,
-					backgroudColor.getBlue() - 8);
-
-			cell.setBackground(newBackgroundColor);
+	public static void colorize(Component cell, boolean isSelected, int row, int column) {
+		colorize(cell, isSelected, row);
+		if (column % 2 == 0) {
+			makeCellDarker(cell);
 		}
+	}
+
+	private static void makeCellDarker(Component cell) {
+		Color backgroudColor = cell.getBackground();
+
+		Color newBackgroundColor = new Color(backgroudColor.getRed() - 8, backgroudColor.getGreen() - 8,
+				backgroudColor.getBlue() - 8);
+
+		cell.setBackground(newBackgroundColor);
 	}
 
 	private static void colorizeTableCell(Component component, boolean isSelected, boolean isRowEven) {
 		if (!isSelected) {
-			if (isRowEven) {
-				component.setBackground(Globals.getGreyCell2());
-			} else {
-				component.setBackground(Globals.getGreyCell1());
-			}
+			component.setBackground(isRowEven ? Globals.getGreyCell2() : Globals.getGreyCell1());
 		} else {
-			if (isRowEven) {
-				component.setBackground(Globals.getMagentaCell2());
-			} else {
-				component.setBackground(Globals.getMagentaCell1());
-			}
+			component.setBackground(isRowEven ? Globals.getMagentaCell2() : Globals.getMagentaCell1());
 		}
 	}
 }

@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.share;
+package de.uib.configed.gui.share;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

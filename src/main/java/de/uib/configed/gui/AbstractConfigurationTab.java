@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 public abstract class AbstractConfigurationTab extends JPanel {
@@ -46,7 +46,7 @@ public abstract class AbstractConfigurationTab extends JPanel {
 	}
 
 	private JPanel generateInfoPanel() {
-		JLabel labelPrimary = Utils.createBoldLabel(getLabel(true));
+		JLabel labelPrimary = SwingUtils.createBoldLabel(getLabel(true));
 		JLabel labelSecondary = new JLabel(Configed.getResourceValue(getLabel(false)));
 
 		JPanel innerPanel = new JPanel(new MigLayout("wrap 1, aligny center, alignx center", "[center]", "[]10[]"));

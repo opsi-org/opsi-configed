@@ -27,10 +27,10 @@ import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo;
 import de.uib.configed.gui.features.swinfopage.SWExporter;
 import de.uib.configed.gui.features.swinfopage.SWMultiClientReportPanel;
 import de.uib.configed.gui.features.tree.ProductTree;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.infopage.GenericAuditPanelInfo;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.share.SplitPaneStateManager;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
@@ -140,7 +140,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			setComponentAt(getSelectedIndex(), panelSWInfo);
 		}
 
-		Utils.runSwingWorker(
+		SwingUtils.runSwingWorker(
 				() -> PersistenceControllerFactory.getPersistenceController().getDataServices().software
 						.getSoftwareAuditOnClients(configedMain.getSelectedClients()),
 				(Map<String, List<SWAuditClientEntry>> data) -> panelSWInfo.getMultiPanel().updateTitle1Label(
@@ -160,7 +160,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			setComponentAt(getSelectedIndex(), panelHWInfo);
 		}
 
-		Utils.runSwingWorker(
+		SwingUtils.runSwingWorker(
 				() -> PersistenceControllerFactory.getPersistenceController().getDataServices().hardware
 						.getHardwareAuditOnClients(configedMain.getSelectedClients()),
 				(Map<String, List<Map<String, Object>>> data) -> panelHWInfo.getMultiPanel().updateTitle1Label(

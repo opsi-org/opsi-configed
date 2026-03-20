@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -34,13 +35,16 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.table.DefaultListModelProducer;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
-import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
 public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
+	private static final Set<String> BLACKLISTED_KEYWORDS_PASSWORD = Set.of("netboot.linux-bootimage.cmdline.pwh");
+	private static final Set<String> WHITELISTED_KEYWORDS_PASSWORD = Set.of("netboot.use_host_onetime_password");
+
 	private static final int BOOLEAN = 0;
 	private static final int SINGLE_SELECTION_SINGLE_LINE = 1;
 	private static final int SINGLE_SELECTION_MULTI_LINE = 2;
@@ -111,7 +115,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		String key = (String) table.getValueAt(row, 0);
 
-		if (Utils.isKeyForSecretValue(key)) {
+		if (isKeyForSecretValue(key)) {
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"), JOptionPane.YES_NO_OPTION);
@@ -140,7 +144,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 				result = getSingleValueEditor(value, row);
 			}
 
-			ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
+			ColorTableCellRenderer.colorize(result, isSelected, row, column);
 		}
 
 		return result;
@@ -174,7 +178,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		JOptionPane optionPane = new JOptionPane(multiLineScrollPane, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION);
-		Utils.enableDialogResizing(optionPane);
+		DialogUtils.enableDialogResizing(optionPane);
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), title);
 		dialog.pack();
 		dialog.setVisible(true);
@@ -288,7 +292,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			result = rendererCheckBox;
 		}
 
-		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
+		ColorTableCellRenderer.colorize(result, isSelected, row, column);
 
 		return result;
 	}
@@ -359,5 +363,17 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			result.append(str);
 		}
 		return result.toString();
+	}
+
+	public static boolean isKeyForSecretValue(String key) {
+		String keyLowerCase = key.toLowerCase(Locale.ROOT);
+
+		if (BLACKLISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
+			return true;
+		} else if (WHITELISTED_KEYWORDS_PASSWORD.contains(keyLowerCase)) {
+			return false;
+		} else {
+			return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
+		}
 	}
 }

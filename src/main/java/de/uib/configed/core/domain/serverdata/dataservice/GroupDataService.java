@@ -22,7 +22,7 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.type.Object2GroupEntry;
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.ConfigUtils;
 import de.uib.configed.share.logging.Logging;
 
 /**
@@ -274,7 +274,7 @@ public class GroupDataService extends DataService {
 		List<Map<String, Object>> data = new ArrayList<>();
 
 		for (String ob : objectIds) {
-			Map<String, Object> item = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+			Map<String, Object> item = ConfigUtils.createNOMitem(Object2GroupEntry.TYPE_NAME);
 			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			item.put(Object2GroupEntry.MEMBER_KEY, ob);
 			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
@@ -295,7 +295,7 @@ public class GroupDataService extends DataService {
 
 		for (String groupId : groupIds) {
 			String persistentGroupId = ClientTree.translateToPersistentName(groupId);
-			Map<String, Object> item = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+			Map<String, Object> item = ConfigUtils.createNOMitem(Object2GroupEntry.TYPE_NAME);
 			item.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			item.put(Object2GroupEntry.MEMBER_KEY, objectId);
 			item.put(Object2GroupEntry.GROUP_ID_KEY, persistentGroupId);
@@ -330,7 +330,7 @@ public class GroupDataService extends DataService {
 
 		List<Map<String, Object>> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
-			Map<String, Object> deleteItem = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+			Map<String, Object> deleteItem = ConfigUtils.createNOMitem(Object2GroupEntry.TYPE_NAME);
 			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, groupType);
 			deleteItem.put(Object2GroupEntry.GROUP_ID_KEY, entry.getGroupId());
 			deleteItem.put(Object2GroupEntry.MEMBER_KEY, entry.getMember());

@@ -12,12 +12,14 @@ import de.uib.configed.core.domain.serverdata.dataservice.UserDataService;
 import de.uib.configed.core.infrastructure.ConnectionState;
 import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.certificate.CertificateManager;
-import de.uib.configed.share.Utils;
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.share.logging.Logging;
 
 public final class PersistenceControllerFactory {
 	private static final Pattern OTP_PATTERN = Pattern.compile("^[\\d]{6}$");
 	private static OpsiServiceNOMPersistenceController staticPersistControl;
+
+	private static boolean isMFAEnabled;
 
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
@@ -61,7 +63,7 @@ public final class PersistenceControllerFactory {
 					userDataService);
 
 			if (!hostData.useSSO()) {
-				hostData.useMFA(userDataService.usesMultiFactorAuthentication());
+				hostData.useMFA(userDataService.usesMFA());
 				Logging.debug(
 						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
 						hostData.useMFA());
@@ -69,7 +71,7 @@ public final class PersistenceControllerFactory {
 
 			ParallelTaskExecutor executor = new ParallelTaskExecutor();
 			executor.runInParallel(() -> persistenceController.getDataServices().userRoles.checkConfigurationPD());
-			if (!Utils.isCertificateVerificationDisabled()) {
+			if (!CertificateValidatorFactory.isCertificateVerificationDisabled()) {
 				executor.runInParallel(CertificateManager::updateCertificate);
 			}
 			executor.waitForCompletion();
@@ -92,5 +94,9 @@ public final class PersistenceControllerFactory {
 		ConnectionState result = staticPersistControl.getConnectionState();
 		Logging.info("PersistenceControllerFactory getConnectionState ", result);
 		return result;
+	}
+
+	public static boolean isMFAEnabled() {
+		return isMFAEnabled;
 	}
 }

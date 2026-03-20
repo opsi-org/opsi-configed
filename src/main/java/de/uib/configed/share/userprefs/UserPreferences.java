@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import de.uib.configed.share.Utils;
+import de.uib.configed.share.FileUtils;
 import de.uib.configed.share.logging.Logging;
 
 public final class UserPreferences {
@@ -32,7 +32,7 @@ public final class UserPreferences {
 
 	private static Properties properties = new Properties();
 	private static File propertiesFile = new File(
-			Utils.getSavedStatesDefaultLocation() + File.separator + "userprefs.properties");
+			FileUtils.getSavedStatesDefaultLocation() + File.separator + "userprefs.properties");
 
 	static {
 		if (!propertiesFile.exists()) {

@@ -32,7 +32,7 @@ public class HWInfoCellRenderer extends DefaultTableCellRenderer {
 			cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		}
 
-		ColorTableCellRenderer.colorize(cellComponent, isSelected, row % 2 == 0, column % 2 == 0);
+		ColorTableCellRenderer.colorize(cellComponent, isSelected, row, column);
 		return cellComponent;
 	}
 }

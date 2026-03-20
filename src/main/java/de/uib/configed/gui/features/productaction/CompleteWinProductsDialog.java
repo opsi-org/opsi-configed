@@ -20,13 +20,13 @@ import com.formdev.flatlaf.util.SystemFileChooser;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.webdav.WebDAVClient;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Icons;
-import de.uib.configed.share.Utils;
-import de.uib.configed.share.WebDAVClient;
-import de.uib.configed.share.WinProductsRetriever;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.WinProductsRetriever;
+import de.uib.configed.gui.share.icons.Icons;
 import net.miginfocom.swing.MigLayout;
 
 public class CompleteWinProductsDialog {
@@ -141,7 +141,7 @@ public class CompleteWinProductsDialog {
 
 	private void initComponentsForNameProducer() {
 		fieldTargetPath = new JTextField();
-		fieldTargetPath.getDocument().addDocumentListener(Utils.onDocumentChange(this::checkButtonCallExecute));
+		fieldTargetPath.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::checkButtonCallExecute));
 
 		fieldPathWinPE = new JTextField();
 	}
@@ -200,13 +200,13 @@ public class CompleteWinProductsDialog {
 	}
 
 	private JPanel initLayout() {
-		JLabel topicLabel = Utils.createBoldLabel("CompleteWinProducts.topic");
-		JLabel labelServer = Utils.createBoldLabel("CompleteWinProducts.labelServer");
-		JLabel labelWinProduct = Utils.createBoldLabel("CompleteWinProducts.labelWinProduct");
-		JLabel labelFolderWinPE = Utils.createBoldLabel("CompleteWinProducts.labelFolderWinPE");
-		JLabel labelFolderInstallFiles = Utils.createBoldLabel("CompleteWinProducts.labelFolderInstallFiles");
-		JLabel labelTargetPath = Utils.createBoldLabel("CompleteWinProducts.labelTargetPath");
-		JLabel labelProductKey = Utils.createBoldLabel("CompleteWinProducts.labelProductKey");
+		JLabel topicLabel = SwingUtils.createBoldLabel("CompleteWinProducts.topic");
+		JLabel labelServer = SwingUtils.createBoldLabel("CompleteWinProducts.labelServer");
+		JLabel labelWinProduct = SwingUtils.createBoldLabel("CompleteWinProducts.labelWinProduct");
+		JLabel labelFolderWinPE = SwingUtils.createBoldLabel("CompleteWinProducts.labelFolderWinPE");
+		JLabel labelFolderInstallFiles = SwingUtils.createBoldLabel("CompleteWinProducts.labelFolderInstallFiles");
+		JLabel labelTargetPath = SwingUtils.createBoldLabel("CompleteWinProducts.labelTargetPath");
+		JLabel labelProductKey = SwingUtils.createBoldLabel("CompleteWinProducts.labelProductKey");
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));

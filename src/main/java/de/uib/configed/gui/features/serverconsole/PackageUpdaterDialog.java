@@ -24,7 +24,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
 import de.uib.configed.gui.features.serverconsole.command.SingleCommandPackageUpdater;
-import de.uib.configed.share.Utils;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -118,7 +118,7 @@ public class PackageUpdaterDialog {
 		JLabel jLabelRetrievingRepos = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.retrievingRepos"));
 		jLabelRetrievingRepos.setVisible(true);
 
-		Utils.runSwingWorker(() -> {
+		SwingUtils.runSwingWorker(() -> {
 			retrieveRepos();
 			return null;
 		}, (Void _) -> {
@@ -132,8 +132,8 @@ public class PackageUpdaterDialog {
 			SwingUtilities.getWindowAncestor(jComboBoxRepos).pack();
 		}, null);
 
-		JLabel jLabelInfo = Utils.createBoldLabel("PackageUpdaterDialog.info");
-		JLabel jLabelRepos = Utils.createBoldLabel("PackageUpdaterDialog.repos");
+		JLabel jLabelInfo = SwingUtils.createBoldLabel("PackageUpdaterDialog.info");
+		JLabel jLabelRepos = SwingUtils.createBoldLabel("PackageUpdaterDialog.repos");
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("insets 0, fillx, gapy " + Globals.GAP_SIZE + ", wrap 1", "[grow, fill]", "[]0"));

@@ -21,7 +21,7 @@ import com.formdev.flatlaf.util.SystemFileChooser.FileNameExtensionFilter;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.share.Icons;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
