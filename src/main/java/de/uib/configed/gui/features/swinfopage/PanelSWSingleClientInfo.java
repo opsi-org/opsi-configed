@@ -34,9 +34,9 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.infopage.AbstractSingleClientInfoPanel;
+import de.uib.configed.gui.share.infopage.SingleClientExporter;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.table.ExporterToCSV;
-import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.TableModelFilter;
 import de.uib.configed.gui.share.table.TableModelFilterCondition;
@@ -50,12 +50,11 @@ import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelSWSingleClientInfo extends JPanel {
+public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 	private static final String FILTER_MS_UPDATES = "withMsUpdates";
 	private static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
 	private PanelGenEdit panelTable;
-	private ExporterToCSV csvExportTable;
 
 	private JPanel subPanelTitle;
 
@@ -72,8 +71,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 	private String scanInfo = "";
 
-	private boolean askForOverwrite = true;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -81,11 +78,8 @@ public class PanelSWSingleClientInfo extends JPanel {
 		PDF, CSV
 	}
 
-	private KindOfExport kindOfExport;
-
 	private boolean withMsUpdates;
 	private boolean withMsUpdates2 = true;
-	private String exportFilename;
 
 	private JCheckBox checkWithMsUpdates;
 
@@ -224,8 +218,6 @@ public class PanelSWSingleClientInfo extends JPanel {
 		panelTable.getGenEditTable().getColumnModel().getColumn(2).setPreferredWidth(100);
 		panelTable.getGenEditTable().getColumnModel().getColumn(7)
 				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
-
-		csvExportTable = new ExporterToCSV(panelTable.getGenEditTable());
 	}
 
 	private void buildPanel() {
@@ -236,9 +228,12 @@ public class PanelSWSingleClientInfo extends JPanel {
 
 		if (withPopup) {
 			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
-					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternalX, PopupMenuTrait.POPUP_PDF, this::sendToPDF,
-					PopupMenuTrait.POPUP_EXPORT_CSV, this::sendToCSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-					this::sendToCSVonlySelected);
+					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternalX, PopupMenuTrait.POPUP_PDF,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build().export(),
+					PopupMenuTrait.POPUP_EXPORT_CSV,
+					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV).build().export(),
+					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+					() -> getSingleClientExporter().toBuilder().onlySelectedRows(true).build().export());
 
 			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(), actions);
 		}
@@ -296,14 +291,17 @@ public class PanelSWSingleClientInfo extends JPanel {
 		return tableData;
 	}
 
+	@Override
 	public void setWriteToFile(String path) {
 		exportFilename = path;
 	}
 
+	@Override
 	public void setAskForOverwrite(boolean b) {
 		askForOverwrite = b;
 	}
 
+	@Override
 	public void setKindOfExport(KindOfExport k) {
 		kindOfExport = k;
 	}
@@ -322,62 +320,31 @@ public class PanelSWSingleClientInfo extends JPanel {
 		withMsUpdates = b;
 
 		// setting filter true means that the specified values are not included
-
-		if (panelTable != null && modelSWInfo != null) {
-			boolean saveDataChanged = panelTable.isDataChanged();
-			modelSWInfo.setUsingFilter(FILTER_MS_UPDATES, !b);
-			panelTable.setDataChanged(saveDataChanged);
-		}
+		setMSUpdatesFilter(FILTER_MS_UPDATES, !b);
 	}
 
 	private void setWithMsUpdatesValue2(boolean b) {
 		withMsUpdates2 = b;
 
 		// setting filter true means that the specified values are not included
+		setMSUpdatesFilter(FILTER_MS_UPDATES2, !b);
+	}
 
+	private void setMSUpdatesFilter(String filterKey, boolean filter) {
 		if (panelTable != null && modelSWInfo != null) {
 			boolean saveDataChanged = panelTable.isDataChanged();
-			modelSWInfo.setUsingFilter(FILTER_MS_UPDATES2, !b);
+			modelSWInfo.setUsingFilter(filterKey, filter);
 			panelTable.setDataChanged(saveDataChanged);
 		}
 	}
 
-	public void export() {
-		csvExportTable.setAskForOverwrite(askForOverwrite);
-		String exportPath = exportFilename;
-		if (kindOfExport == KindOfExport.CSV) {
-			Logging.info(this, "export to ", exportPath);
-			csvExportTable.execute(exportPath, false);
-		} else if (kindOfExport == KindOfExport.PDF) {
-			sendToPDF();
-		} else {
-			Logging.warning(this, "unexpected kindOfExport ", kindOfExport);
-		}
-	}
-
-	private void sendToCSV() {
-		csvExportTable.execute(null, false);
-	}
-
-	private void sendToCSVonlySelected() {
-		csvExportTable.execute(null, true);
-	}
-
-	private void sendToPDF() {
-		Logging.info(this, "create report swaudit for ", hostId, " check");
-
-		Map<String, String> metaData = new HashMap<>();
-
-		metaData.put("title", "Client " + hostId);
-		metaData.put("subtitle", scanInfo);
-		metaData.put("subject", "report of table");
-		metaData.put("keywords", "software inventory");
-
-		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getGenEditTable());
-		pdfExportTable.setClient(hostId);
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4Landscape();
-		pdfExportTable.execute(exportFilename, false);
+	@Override
+	public SingleClientExporter getSingleClientExporter() {
+		return SingleClientExporter.builder().table(panelTable.getGenEditTable()).filename(exportFilename)
+				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport)
+				.metaData(Map.of("title", "Client " + hostId, "subtitle", scanInfo, "subject", "Software report",
+						"keywords", "software inventory"))
+				.build();
 	}
 
 	private void setSuperTitle(String s) {

@@ -63,7 +63,7 @@ public class ExporterToPDF extends AbstractExportTable {
 	}
 
 	@Override
-	public void execute(String fileName, boolean onlySelectedRows) {
+	public boolean execute(String fileName, boolean onlySelectedRows) {
 		setPageSizeA4Landscape();
 
 		int result = 0;
@@ -80,10 +80,12 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 
 		if (result == JOptionPane.DEFAULT_OPTION) {
-			return;
+			return false;
 		}
 
 		String filePath = null;
+
+		boolean exported = false;
 
 		if (result == 0) {
 			// Save file
@@ -106,7 +108,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				Logging.notice(this, "after checkExtension(..), fileName is now: ", fileName);
 				fileName = checkFile(fileName, extensionFilter);
 
-				writeFile(filePath, fileName);
+				exported = writeFile(filePath, fileName);
 			}
 		} else {
 			// Open file
@@ -118,11 +120,14 @@ public class ExporterToPDF extends AbstractExportTable {
 				openFile(temp);
 			} catch (IOException e) {
 				Logging.error(e, "Failed to create temp file");
+				return exported;
 			}
 		}
+
+		return exported;
 	}
 
-	private void writeFile(String filePath, String fileName) {
+	private boolean writeFile(String filePath, String fileName) {
 		// Write file now
 		try {
 			PdfWriter writer;
@@ -153,9 +158,13 @@ public class ExporterToPDF extends AbstractExportTable {
 			document.close();
 		} catch (FileNotFoundException ex) {
 			Logging.error(ex, "file not found: ", fileName);
+			return false;
 		} catch (DocumentException dex) {
 			Logging.error(dex, "document exception, cannot get instance for ", document);
+			return false;
 		}
+
+		return true;
 	}
 
 	private void addMetaData(Map<String, String> metaData) {
