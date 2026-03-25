@@ -30,7 +30,6 @@ import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.infopage.GenericAuditPanelInfo;
 import de.uib.configed.gui.type.SWAuditClientEntry;
-import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
@@ -97,9 +96,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
 				clientInfoScrollPane);
 		panelClientSelection.setResizeWeight(1.0);
-
-		SplitPaneStateManager.registerSplitPane(panelClientSelection, SplitPaneStateManager.CLIENT_INFO_SPLIT,
-				DIVIDER_LOCATION);
 
 		panelLocalbootProductSettings = new PanelProductSettings(configedMain, productTree,
 				ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
