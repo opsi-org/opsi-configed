@@ -36,6 +36,8 @@ public final class ThemeManager {
 	 * match the loaded font.
 	 */
 	private static final String FONT_PATH = "/fonts/OpenSans.ttf";
+	private static final String FONT_PATH_APRIL = "/fonts/Fraktur.ttf";
+
 	private static final String BOLD_FONT_PATH = "/fonts/OpenSans-Bold.ttf";
 	private static final float UI_FONT_SIZE = 13F;
 	private static final int JAVAFX_FONT_SIZE = 13;
@@ -99,14 +101,16 @@ public final class ThemeManager {
 		Globals.setTableColors();
 	}
 
-	private static void registerOpenSansFonts() {
-		registerSwingFont();
-		registerJavaFxFont(FONT_PATH);
+	public static void registerOpenSansFonts() {
+		boolean isAprilFools = UserPreferences.getBoolean("aprilFools", true);
+		registerSwingFont(isAprilFools);
+		registerJavaFxFont(isAprilFools ? FONT_PATH_APRIL : FONT_PATH);
 		registerJavaFxFont(BOLD_FONT_PATH);
 	}
 
-	private static void registerSwingFont() {
-		try (InputStream fontStream = Main.class.getResourceAsStream(FONT_PATH)) {
+	private static void registerSwingFont(boolean isAprilFools) {
+		String fontPath = isAprilFools ? FONT_PATH_APRIL : FONT_PATH;
+		try (InputStream fontStream = Main.class.getResourceAsStream(fontPath)) {
 			if (fontStream == null) {
 				Logging.error("OpenSans font resource not found for Swing!");
 				return;

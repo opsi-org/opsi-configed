@@ -115,6 +115,10 @@ public final class UserPreferences {
 		return Boolean.parseBoolean(properties.getProperty(key, Boolean.FALSE.toString()));
 	}
 
+	public static Boolean getBoolean(String key, Boolean defaultValue) {
+		return Boolean.parseBoolean(properties.getProperty(key, Boolean.toString(defaultValue)));
+	}
+
 	public static void remove(String key) {
 		properties.remove(key);
 	}

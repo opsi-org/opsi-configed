@@ -324,7 +324,24 @@ public class MenuBarController {
 		jMenuBar.add(jMenuExtras());
 		jMenuBar.add(createJMenuHelp(mainFrame));
 
+		jMenuBar.add(aprilFoolsTheme());
+
 		return jMenuBar;
+	}
+
+	private static JMenuItem aprilFoolsTheme() {
+		// Setting "april" will deactivate april fools
+		boolean isAprilFools = UserPreferences.getBoolean("aprilFools", true);
+
+		JMenuItem jMenuItemAprilFools = new JMenuItem("April April " + (isAprilFools ? "deaktivieren" : "aktivieren"));
+		jMenuItemAprilFools.addActionListener(actionEvent -> toggleAprilFool(isAprilFools));
+		return jMenuItemAprilFools;
+	}
+
+	private static void toggleAprilFool(boolean isAprilFools) {
+		UserPreferences.setBoolean("aprilFools", !isAprilFools);
+		ThemeManager.registerOpenSansFonts();
+		MainFrame.restartConfiged();
 	}
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
