@@ -98,7 +98,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private void setupPanel() {
 		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + ", wrap 1", "", "[]0"));
 
-		labelSwauditMultiClientReport1 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.title"));
+		labelSwauditMultiClientReport1 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.title1"));
 		JLabel labelSwauditMultiClientReport2 = new JLabel(title);
 
 		this.add(labelSwauditMultiClientReport1);
