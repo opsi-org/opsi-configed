@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
 
 public abstract class AbstractSingleClientInfoPanel extends JPanel {
-	protected KindOfExport kindOfExport;
+	protected KindOfExport kindOfExport = KindOfExport.CSV;
 	protected String exportFilename;
 	protected boolean askForOverwrite;
 

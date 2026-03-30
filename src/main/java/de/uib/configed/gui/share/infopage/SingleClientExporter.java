@@ -24,7 +24,6 @@ public class SingleClientExporter {
 	@NonNull
 	private final JTable table;
 
-	@NonNull
 	private final String filename;
 
 	private final boolean askForOverwrite;
