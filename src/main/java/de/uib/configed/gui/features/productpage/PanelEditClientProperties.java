@@ -34,7 +34,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 		jLabelProductProperties.setMinimumSize(new Dimension());
 
-		buttonSetValuesFromServerDefaults = new JButton(Icons.getIntellijIcon("locked"));
+		buttonSetValuesFromServerDefaults = new JButton(Icons.getIntellijIcon("pin"));
 		buttonSetValuesFromServerDefaults
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"));
 		buttonSetValuesFromServerDefaults.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());

@@ -160,7 +160,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
 
 			setDefaultValue = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
-			Icons.addIntellijIconToMenuItem(setDefaultValue, "locked");
+			Icons.addIntellijIconToMenuItem(setDefaultValue, "pin");
 			setDefaultValue.addActionListener(actionEvent -> setPropertyHandler(settingDefaultValuesPropertyHandler));
 
 			popupMenu.add(setDefaultValue);
