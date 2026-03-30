@@ -52,7 +52,6 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.SwingUtils;
-import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -195,7 +194,6 @@ public class CSVTemplateCreatorDialog {
 		JCheckBox headerCheckBox = new JCheckBox(header, isImportantHeader(header));
 		if (isImportantHeader(header)) {
 			headerCheckBox.setEnabled(false);
-			headerCheckBox.setIcon(Icons.getIntellijIcon("locked"));
 		}
 		headerCheckBox.setActionCommand(header);
 

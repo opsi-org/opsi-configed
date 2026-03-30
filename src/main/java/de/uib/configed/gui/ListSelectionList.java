@@ -17,7 +17,6 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.UIManager;
 
-import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 
 public class ListSelectionList extends JList<String> {
@@ -87,7 +86,7 @@ public class ListSelectionList extends JList<String> {
 		if (nonDeselectableIndices.contains(index)) {
 			label.setForeground(UIManager.getColor("List.selectionInactiveForeground"));
 			label.setBackground(UIManager.getColor("List.selectionInactiveBackground"));
-			label.setIcon(Icons.getIntellijIcon("locked"));
+			label.setEnabled(false);
 		} else {
 			label.setForeground(isSelected ? UIManager.getColor("List.selectionForeground")
 					: UIManager.getColor("List.foreground"));
