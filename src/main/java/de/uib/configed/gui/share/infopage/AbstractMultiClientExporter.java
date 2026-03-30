@@ -53,7 +53,14 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 
 		Set<String> clients = getClients();
 
+		ConfigedMain.getMainFrame()
+				.activateLoadingPane(Configed.getResourceValue("AbstractMultiClientExporter.export.loading.message"));
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+
 		int failedCount = exportClients(filePathPrefix, extension, clients);
+
+		ConfigedMain.getMainFrame().deactivateLoadingPane();
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 
 		showResultMessage(failedCount, clients);
 	}
