@@ -6,15 +6,18 @@
 
 package de.uib.configed.gui.share.infopage;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.JTable;
 
 import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
+import de.uib.configed.gui.share.table.AbstractExportTable.OverwriteDecision;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.logging.Logging;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -35,10 +38,18 @@ public class SingleClientExporter {
 
 	private final Map<String, String> metaData;
 
+	@Default
+	private final OverwriteDecision overwriteDecision = OverwriteDecision.CONTINUE;
+
 	/**
 	 * Exports the data according to kindOfExport
 	 */
 	public boolean export() {
+		if (overwriteDecision == OverwriteDecision.SKIP_ALL && new File(filename).exists()) {
+			Logging.info(this, "Skipping file (user chose Skip All): ", filename);
+			return true;
+		}
+
 		if (!hasData(onlySelectedRows)) {
 			Logging.info(SingleClientExporter.class, "No data to export for file: ", filename, ", skipping export");
 			return false;
@@ -81,7 +92,7 @@ public class SingleClientExporter {
 
 	private boolean exportToCSV() {
 		ExporterToCSV exporter = new ExporterToCSV(table);
-		exporter.setAskForOverwrite(askForOverwrite);
+		exporter.setAskForOverwrite(askForOverwrite && overwriteDecision != OverwriteDecision.OVERWRITE_ALL);
 		return exporter.execute(filename, onlySelectedRows);
 	}
 
@@ -91,7 +102,7 @@ public class SingleClientExporter {
 			pdfExporter.setMetaData(metaData);
 		}
 		pdfExporter.setPageSizeA4Landscape();
-		pdfExporter.setAskForOverwrite(askForOverwrite);
+		pdfExporter.setAskForOverwrite(askForOverwrite && overwriteDecision != OverwriteDecision.OVERWRITE_ALL);
 		return pdfExporter.execute(filename, onlySelectedRows);
 	}
 }

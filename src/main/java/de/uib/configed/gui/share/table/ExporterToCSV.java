@@ -47,7 +47,7 @@ public class ExporterToCSV extends AbstractExportTable {
 			return false;
 		}
 
-		if ((fileName = checkFile(fileName, extensionFilter)) != null) {
+		if ((fileName = checkFile(fileName, extensionFilter, OverwriteDecision.CONTINUE)) != null) {
 			return writeToCSVFile(fileName, selectedOnly);
 		}
 

@@ -229,11 +229,13 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 		if (withPopup) {
 			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
 					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternalX, PopupMenuTrait.POPUP_PDF,
-					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build().export(),
+					() -> getSingleClientExporter()
+							.toBuilder().filename(null).kindOfExport(KindOfExport.PDF).build().export(),
 					PopupMenuTrait.POPUP_EXPORT_CSV,
-					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV).build().export(),
+					() -> getSingleClientExporter().toBuilder().filename(null).kindOfExport(KindOfExport.CSV).build()
+							.export(),
 					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-					() -> getSingleClientExporter().toBuilder().onlySelectedRows(true).build().export());
+					() -> getSingleClientExporter().toBuilder().filename(null).onlySelectedRows(true).build().export());
 
 			PopupMenuTrait.createAndBindJPopupMenu(panelTable.getGenEditTable(), actions);
 		}
@@ -341,7 +343,7 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 	@Override
 	public SingleClientExporter getSingleClientExporter() {
 		return SingleClientExporter.builder().table(panelTable.getGenEditTable()).filename(exportFilename)
-				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport)
+				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport).overwriteDecision(decision)
 				.metaData(Map.of("title", "Client " + hostId, "subtitle", scanInfo, "subject", "Software report",
 						"keywords", "software inventory"))
 				.build();
