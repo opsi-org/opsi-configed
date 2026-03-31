@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.share;
 
+import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Window;
@@ -15,12 +16,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
@@ -129,5 +137,62 @@ public final class DialogUtils {
 			}
 		};
 		optionPane.addHierarchyListener(listener);
+	}
+
+	public static int showJListConfirmationDialog(String outerDialogTitle, String innerDialogTitle, String message,
+			int maxDisplayLimit, Collection<String> items, Object[] options) {
+		return JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+				createJListDialogContent(innerDialogTitle, message, maxDisplayLimit, items), outerDialogTitle,
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+	}
+
+	private static JPanel createJListDialogContent(String title, String message, int maxItems,
+			Collection<String> items) {
+		JPanel content = new JPanel(new BorderLayout(10, 10));
+		content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		JPanel topPanel = new JPanel();
+		topPanel.add(new JLabel(message));
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(createItemListPanel(items, maxItems, title), BorderLayout.CENTER);
+
+		content.add(topPanel, BorderLayout.NORTH);
+		content.add(centerPanel, BorderLayout.CENTER);
+
+		return content;
+	}
+
+	private static JScrollPane createItemListPanel(Collection<String> items, int maxDisplayLimit,
+			String innerDialogTitle) {
+		DefaultListModel<String> model = new DefaultListModel<>();
+		int count = 0;
+		int displayLimit = Math.min(items.size(), maxDisplayLimit);
+
+		for (String item : items) {
+			model.addElement(item);
+			count++;
+			if (count >= displayLimit) {
+				break;
+			}
+		}
+
+		if (items.size() > displayLimit) {
+			String moreMsg = Configed.getResourceValue("DialogUtils.jListDialog.more");
+			model.addElement(String.format(moreMsg, items.size() - displayLimit));
+		}
+
+		JList<String> itemList = new JList<>(model);
+		itemList.setEnabled(false);
+		itemList.setVisibleRowCount(10);
+
+		JScrollPane scrollPane = new JScrollPane(itemList);
+		scrollPane.setPreferredSize(new Dimension(400, 200));
+
+		Border titledBorder = BorderFactory.createTitledBorder(innerDialogTitle);
+		Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+		scrollPane.setBorder(BorderFactory.createCompoundBorder(titledBorder, emptyBorder));
+
+		return scrollPane;
 	}
 }

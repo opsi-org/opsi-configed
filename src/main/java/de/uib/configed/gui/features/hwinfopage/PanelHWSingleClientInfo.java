@@ -142,9 +142,10 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		if (withPopup) {
 			Map<Integer, Runnable> actions = Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload,
 					PopupMenuTrait.POPUP_FLOATING_COPY, this::floatExternal, PopupMenuTrait.POPUP_PDF,
-					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.PDF).build().export(),
-					PopupMenuTrait.POPUP_EXPORT_CSV,
-					() -> getSingleClientExporter().toBuilder().kindOfExport(KindOfExport.CSV).build().export());
+					() -> getSingleClientExporter().toBuilder().filename(null).kindOfExport(KindOfExport.PDF).build()
+							.export(),
+					PopupMenuTrait.POPUP_EXPORT_CSV, () -> getSingleClientExporter().toBuilder().filename(null)
+							.kindOfExport(KindOfExport.CSV).build().export());
 
 			// We want to add the menu to all three components, 
 			// since we want it to be available, no matter where the user right clicks
@@ -164,7 +165,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 	@Override
 	public SingleClientExporter getSingleClientExporter() {
 		return SingleClientExporter.builder().table(createHWInfoTableModelComplete()).filename(exportFilename)
-				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport)
+				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport).overwriteDecision(decision)
 				.metaData(Map.of("title", treeRootTitle, "header", "Hardware report")).build();
 	}
 
