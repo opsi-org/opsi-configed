@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -141,9 +142,33 @@ public final class DialogUtils {
 
 	public static int showJListConfirmationDialog(String outerDialogTitle, String innerDialogTitle, String message,
 			int maxDisplayLimit, Collection<String> items, Object[] options) {
-		return JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-				createJListDialogContent(innerDialogTitle, message, maxDisplayLimit, items), outerDialogTitle,
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		JOptionPane optionPane = new JOptionPane(
+				createJListDialogContent(innerDialogTitle, message, maxDisplayLimit, items),
+				JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
+
+		enableDialogResizing(optionPane);
+
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), outerDialogTitle);
+		dialog.setMinimumSize(new Dimension());
+		dialog.pack();
+		dialog.setVisible(true);
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+
+		return getUserResponse(optionPane.getValue(), options);
+	}
+
+	private static int getUserResponse(Object selectedValue, Object[] options) {
+		if (selectedValue == JOptionPane.UNINITIALIZED_VALUE) {
+			return -1;
+		}
+
+		for (int i = 0; i < options.length; i++) {
+			if (options[i].equals(selectedValue)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	private static JPanel createJListDialogContent(String title, String message, int maxItems,
