@@ -150,7 +150,7 @@ public class HealthCheckComponent extends
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"));
+		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData"));
 		Icons.addIntellijIconToMenuItem(popupSaveAsZip, "download");
 
 		popupSaveAsZip.addActionListener(actionEvent -> dispatch(HealthCheckMsg.SimpleMsg.DOWNLOAD_DIAGNOSTIC_DATA));

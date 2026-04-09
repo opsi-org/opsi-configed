@@ -80,7 +80,7 @@ public class TopToolBarManager {
 
 	public List<JButton> getHealthCheckButtons(HealthCheckComponent healthCheck) {
 		JButton downloadButton = new JButton(Icons.getIntellijIcon("download", 24));
-		downloadButton.setToolTipText(Configed.getResourceValue("download"));
+		downloadButton.setToolTipText(Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData"));
 		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
 
 		JButton healthCheckSettingsButton = new JButton(Icons.getIntellijIcon("settings", 24));
