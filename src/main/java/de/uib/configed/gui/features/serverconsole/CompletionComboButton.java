@@ -112,7 +112,6 @@ public class CompletionComboButton {
 	public final void initCombobox() {
 		combobox.setEnabled(false);
 		combobox.setRenderer(new ItemElementListener(this));
-		combobox.setToolTipText(Configed.getResourceValue("CompletionComboButton.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
 		combobox.setPreferredSize(new Dimension(200, combobox.getPreferredSize().height));
 		if (comboboxDefaultPath != null) {
