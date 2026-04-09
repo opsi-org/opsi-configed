@@ -132,24 +132,22 @@ public final class Utils {
 
 	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
 		return switch (platform) {
-		case null -> Icons.getThemeIntellijIcon("questionMark", size);
 		case "macos" -> Icons.getThemeSVGRepoIcon("macos", size);
 		case "windows" -> Icons.getThemeSVGRepoIcon("windows", size);
 		case "linux" -> Icons.getThemeSVGRepoIcon("linux", size);
-		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		case null, default -> Icons.getThemeIntellijIcon("questionMark", size);
 		};
 	}
 
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String device, int size) {
 		return switch (device) {
-		case null -> Icons.getThemeIntellijIcon("questionMark", size);
 		case "server" -> Icons.getThemeSVGRepoIcon("server", size);
 		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
 		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
 		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
 		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
 		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
-		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		case null, default -> Icons.getThemeIntellijIcon("questionMark", size);
 		};
 	}
 }
