@@ -135,12 +135,8 @@ public class LoginDialog extends JFrame {
 
 	private void setServers() {
 		List<String> savedServers = FileUtils.readLocallySavedServerNames();
-
-		if (savedServers.isEmpty()) {
-			savedServers.add("localhost");
-		}
-
-		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
+		fieldHost.setModel(new DefaultComboBoxModel<>(
+				savedServers.isEmpty() ? new String[] { "localhost" } : savedServers.toArray(new String[0])));
 	}
 
 	public void setActivated(boolean active) {
