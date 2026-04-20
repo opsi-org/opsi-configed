@@ -31,6 +31,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
+import de.uib.configed.gui.share.swing.CheckedDocument;
 import de.uib.configed.gui.share.swing.SeparatedDocument;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
@@ -178,7 +179,9 @@ public class ClientInfoPanel extends JPanel {
 
 		updateClientCheckboxText();
 
-		jTextFieldOneTimePassword = new JTextField();
+		jTextFieldOneTimePassword = new JTextField(new CheckedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 32), "",
+				32);
 		jTextFieldOneTimePassword.getDocument().addDocumentListener(SwingUtils
 				.onDocumentChange(() -> dataChange(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY)));
 
