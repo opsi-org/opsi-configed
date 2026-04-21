@@ -6,16 +6,13 @@
 
 package de.uib.configed.gui.features.productpage;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -37,6 +34,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.DepotListCellRenderer;
+import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.UpdateCollectionManager;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
@@ -46,12 +44,10 @@ import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class PanelEditDepotProperties extends AbstractPanelEditProperties
-		implements ListSelectionListener, MouseListener, KeyListener {
+public class PanelEditDepotProperties extends AbstractPanelEditProperties implements ListSelectionListener {
 	private JLabel jLabelEditDepotProductProperties;
 
 	private JList<String> listDepots;
-	private List<String> listSelectedDepots;
 
 	private JPanel titlePanel;
 
@@ -60,8 +56,14 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
+	private DepotsList depotsList;
+
+	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel,
+			DepotsList depotsList) {
 		super(productPropertiesPanel);
+
+		this.depotsList = depotsList;
+
 		initComponents(configedMain);
 		initTitlePanel();
 	}
@@ -70,8 +72,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
-		listDepots.addMouseListener(this);
-		listDepots.addKeyListener(this);
 
 		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer(configedMain);
 		myListCellRenderer.setInfo(persistenceController.getDataServices().hostInfoCollections.getDepots());
@@ -147,7 +147,24 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		this.productEdited = productEdited;
 		listDepots.setListData(depots.toArray(new String[0]));
 
-		resetSelectedDepots(depots);
+		selectMatchingItems(listDepots, depotsList.getSelectedValuesList());
+	}
+
+	private static void selectMatchingItems(JList<String> jlist, List<String> matchingList) {
+		Set<String> matchSet = new HashSet<>(matchingList);
+
+		List<Integer> indicesToSelect = new ArrayList<>();
+
+		for (int i = 0; i < jlist.getModel().getSize(); i++) {
+			String item = jlist.getModel().getElementAt(i);
+			if (matchSet.contains(item)) {
+				indicesToSelect.add(i);
+			}
+		}
+
+		int[] selectedIndices = indicesToSelect.stream().mapToInt(Integer::intValue).toArray();
+
+		jlist.setSelectedIndices(selectedIndices);
 	}
 
 	// Interface ListSelectionListener
@@ -218,85 +235,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		return new HashMap<>();
 	}
 
-	private void saveSelectedDepots() {
-		Logging.debug(this, "saveSelectedDepots");
-		listSelectedDepots = listDepots.getSelectedValuesList();
-	}
-
-	private void resetSelectedDepots(List<String> baseList) {
-		Logging.debug(this, "resetSelectedDepots");
-
-		listDepots.setValueIsAdjusting(true);
-
-		if (listSelectedDepots == null || listSelectedDepots.isEmpty()) {
-			// mark all
-			listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
-		} else {
-			int[] selection = new int[listSelectedDepots.size()];
-			int n = 0;
-			for (int j = 0; j < baseList.size(); j++) {
-				String depot = baseList.get(j);
-				if (listSelectedDepots.indexOf(depot) > -1) {
-					selection[n] = j;
-					n++;
-				}
-			}
-			Logging.debug(this, "resetSelectedDepots, n, selection is ", n, ", -- ", Arrays.toString(selection));
-
-			for (int i = 0; i < n; i++) {
-				listDepots.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
-			}
-		}
-		listDepots.setValueIsAdjusting(false);
-	}
-
-	// KeyListener
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == listDepots) {
-			saveSelectedDepots();
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// Do nothing because KeyListener demands implementation
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// Do nothing because KeyListener demands implementation
-	}
-
-	// MouseListener
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		Logging.info(this, "mouseClicked ", e);
-		if (e.getSource() == listDepots) {
-			saveSelectedDepots();
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// Do nothing because MouseListener demands implementation
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// Do nothing because MouseListener demands implementation
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// Do nothing because MouseListener demands implementation
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// Do nothing because MouseListener demands implementation
-	}
-
 	private void selectDepotsWithEqualProperties() {
 		String selectedDepot0 = listDepots.getSelectedValue();
 
@@ -325,12 +263,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				listDepots.addSelectionInterval(i, i);
 			}
 		}
-
-		saveSelectedDepots();
 	}
 
 	private void selectAllDepots() {
 		listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
-		saveSelectedDepots();
 	}
 }
