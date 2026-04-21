@@ -7,7 +7,7 @@ project:
   maintainer: UIB GmbH info@uib.de
   licenses:
     - license: AGPL-3.0
-  version: "4.3.20.3"
+  version: "4.3.21.0"
   version_files:
     pom.xml: '/project/version' # will update the version in pom.xml
   changelog_filename: CHANGELOG.md # will be used as default changelog file. This file is prioritized over the public commit messages.
