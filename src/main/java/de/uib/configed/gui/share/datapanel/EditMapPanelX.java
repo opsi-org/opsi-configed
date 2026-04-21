@@ -35,6 +35,8 @@ import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ListModelProducer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
+import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.logging.Logging;
@@ -99,6 +101,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable) {
+		this(keylistExtendible, entryRemovable, false);
+	}
+
+	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable, boolean includeSearchPane) {
 		super();
 
 		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable);
@@ -108,7 +114,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		ttm.setDismissDelay(Globals.TOOLTIP_DISMISS_DELAY_MS);
 		ttm.setReshowDelay(Globals.TOOLTIP_RESHOW_DELAY_MS);
 
-		buildPanel();
+		buildPanel(includeSearchPane);
 		buildPopupMenu(keylistExtendible, entryRemovable);
 
 		propertyHandler.setMapTableModel(mapTableModel);
@@ -234,7 +240,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(), event -> updatePopupMenu());
 	}
 
-	private void buildPanel() {
+	private void buildPanel(boolean includeSearchPane) {
 		table = new JTable(mapTableModel) {
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
@@ -272,9 +278,14 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
 		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
 
-		jScrollPane = new JScrollPane(table);
+		setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]"));
 
-		setLayout(new MigLayout("insets 0, fill", "", "[]0"));
+		if (includeSearchPane) {
+			TableSearchPane searchPane = new TableSearchPane(new SearchTargetModelFromTable(table));
+			add(searchPane, "growx, hmin 0");
+		}
+
+		jScrollPane = new JScrollPane(table);
 		add(jScrollPane, "grow, hmin 0");
 	}
 
