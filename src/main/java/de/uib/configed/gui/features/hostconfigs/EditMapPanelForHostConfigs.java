@@ -43,7 +43,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	private JTree tree;
 
 	public EditMapPanelForHostConfigs(JTree tree, boolean isServerConfig, boolean includeAdditionalTooltipText) {
-		super(isServerConfig, !isServerConfig);
+		super(isServerConfig, !isServerConfig, true);
 
 		this.tree = tree;
 		this.includeAdditionalTooltipText = includeAdditionalTooltipText;
