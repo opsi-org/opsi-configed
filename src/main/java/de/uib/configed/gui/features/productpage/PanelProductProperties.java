@@ -68,7 +68,8 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.updateData(null, null);
 
-		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
+		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel,
+				depotsList);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
 		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
