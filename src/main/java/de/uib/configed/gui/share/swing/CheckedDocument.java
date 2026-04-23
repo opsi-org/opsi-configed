@@ -29,7 +29,7 @@ public class CheckedDocument extends PlainDocument {
 
 	public boolean appendCharIfAllowed(Appendable s, char c) {
 		if (allowedChars == null) {
-			return false;
+			return true;
 		}
 
 		boolean result = false;
@@ -91,13 +91,18 @@ public class CheckedDocument extends PlainDocument {
 			return;
 		}
 
-		String corrected = giveAllowedCharacters(s, offs);
+		if (allowedChars != null) {
+			String corrected = giveAllowedCharacters(s, offs);
 
-		if (size > -1 && offs + corrected.length() > size) {
-			corrected = corrected.substring(0, size - offs);
+			if (size > -1 && offs + corrected.length() > size) {
+				corrected = corrected.substring(0, size - offs);
+			}
+
+			insertStringPlain(offs, corrected, a);
+		} else {
+			insertStringPlain(offs, s, a);
 		}
 
-		insertStringPlain(offs, corrected, a);
 		if (checkMask) {
 			applyMask(a);
 		}
