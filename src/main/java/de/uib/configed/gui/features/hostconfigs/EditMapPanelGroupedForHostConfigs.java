@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
@@ -32,6 +33,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.core.domain.datachanges.UpdateCollection;
 import de.uib.configed.core.domain.permission.UserConfig;
@@ -45,7 +47,6 @@ import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.gui.share.datapanel.EditMapPanelX;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
@@ -66,7 +67,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean isClientConfig;
 
 	private JSplitPane splitPane;
-	protected XTree tree;
+	protected JTree tree;
 	private JPanel emptyRightPane;
 	private HostConfigTreeModel treemodel;
 	private HostConfigNodeRenderer cellRenderer;
@@ -128,13 +129,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private void setupLayout() {
 
-		tree = new XTree();
+		tree = new JTree();
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		ToolTipManager.sharedInstance().registerComponent(tree);
 
 		cellRenderer = new HostConfigNodeRenderer();
 		tree.setCellRenderer(cellRenderer);
-		tree.expandAll();
+		expandAll();
 
 		tree.addTreeSelectionListener(this);
 
@@ -174,7 +176,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		if (visualdata != null) {
 			treemodel = new HostConfigTreeModel(givenClasses.keySet());
 			tree.setModel(treemodel);
-			tree.expandAll();
+			expandAll();
 
 			keyclasses = treemodel.getGeneratedKeys();
 
@@ -186,6 +188,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
 				partialPanels.get(key).getMapTableModel().setKeepers(this.mapTableModel.getKeepers());
 			}
+		}
+	}
+
+	private void expandAll() {
+		for (int row = 0; row < tree.getRowCount(); row++) {
+			tree.expandRow(row);
 		}
 	}
 

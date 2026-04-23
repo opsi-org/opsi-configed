@@ -6,9 +6,14 @@
 
 package de.uib.configed.gui.features.hwinfopage;
 
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +27,7 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -29,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -44,7 +51,6 @@ import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.infopage.AbstractSingleClientInfoPanel;
 import de.uib.configed.gui.share.infopage.SingleClientExporter;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
-import de.uib.configed.gui.share.tree.XTree;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -80,7 +86,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
 
-	private XTree tree;
+	private JTree tree;
 	private IconNode root;
 	private TreePath rootPath;
 	private DefaultTreeModel treeModel;
@@ -111,7 +117,25 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 	private void buildContentPanel() {
 		panelByAuditInfo = new PanelHWByAuditDriver(configedMain);
 
-		tree = new XTree();
+		tree = new JTree();
+		MouseMotionListener ml = new MouseAdapter() {
+			Cursor infoCursor = new Cursor(Cursor.HAND_CURSOR);
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				TreePath currentPath = tree.getPathForLocation(e.getX(), e.getY());
+				if (currentPath != null && tree.getModel() != null
+						&& tree.getModel().isLeaf(currentPath.getLastPathComponent())) {
+					tree.setCursor(infoCursor);
+					tree.setSelectionPath(currentPath);
+				} else {
+					tree.setCursor(null);
+				}
+			}
+		};
+
+		tree.addMouseMotionListener(ml);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
 		tree.setCellRenderer(new IconNodeRenderer());
 
@@ -176,10 +200,13 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 	}
 
 	private void floatExternal() {
-		PanelHWSingleClientInfo copyOfMe = new PanelHWSingleClientInfo(configedMain, true);
+		PanelHWSingleClientInfo copyOfMe = new PanelHWSingleClientInfo(configedMain, false);
 		copyOfMe.setHardwareInfo(hwInfo);
+		copyOfMe.tree.setModel(tree.getModel());
 
-		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
+		Enumeration<TreePath> paths = tree.getExpandedDescendants(rootPath);
+		paths.asIterator().forEachRemaining(copyOfMe.tree::expandPath);
+
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
 
 		JDialog dialog = new JDialog();
