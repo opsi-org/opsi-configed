@@ -205,7 +205,9 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		copyOfMe.tree.setModel(tree.getModel());
 
 		Enumeration<TreePath> paths = tree.getExpandedDescendants(rootPath);
-		paths.asIterator().forEachRemaining(copyOfMe.tree::expandPath);
+		if (paths != null) {
+			paths.asIterator().forEachRemaining(copyOfMe.tree::expandPath);
+		}
 
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
 
