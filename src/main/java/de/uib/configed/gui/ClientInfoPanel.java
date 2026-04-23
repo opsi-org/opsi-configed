@@ -59,7 +59,7 @@ public class ClientInfoPanel extends JPanel {
 	private JTextField systemUUIDField;
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
-	private JTextField jTextFieldOneTimePassword;
+	private FlatPasswordField jTextFieldOneTimePassword;
 	private FlatPasswordField hostKeyField;
 
 	private JButton openHealthCheckSettingsDialogButton;
@@ -179,11 +179,16 @@ public class ClientInfoPanel extends JPanel {
 
 		updateClientCheckboxText();
 
-		jTextFieldOneTimePassword = new JTextField(new CheckedDocument(
-				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 32), "",
-				32);
+		jTextFieldOneTimePassword = new FlatPasswordField();
+		jTextFieldOneTimePassword.setDocument(new CheckedDocument(null, 32));
 		jTextFieldOneTimePassword.getDocument().addDocumentListener(SwingUtils
 				.onDocumentChange(() -> dataChange(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY)));
+
+		JButton jButtonCopyOneTimePassword = new JButton(Icons.getIntellijIcon("copy"));
+		jButtonCopyOneTimePassword.setToolTipText(Configed.getResourceValue("MainFrame.copyOneTimePassword"));
+		jButtonCopyOneTimePassword.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
+				.setContents(new StringSelection(new String(jTextFieldOneTimePassword.getPassword())), null));
+		jTextFieldOneTimePassword.setTrailingComponent(jButtonCopyOneTimePassword);
 
 		hostKeyField = new FlatPasswordField();
 		hostKeyField.setEditable(false);
