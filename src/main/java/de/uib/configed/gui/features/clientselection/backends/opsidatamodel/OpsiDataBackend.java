@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import de.uib.configed.core.domain.productstate.ProductState;
@@ -398,30 +399,29 @@ public final class OpsiDataBackend {
 			client.setConnectedByMessagebus(clientsConnectedByMessagebus);
 			client.setInfoMap(clientEntry.getValue().getMap());
 
-			if (hasHardware) {
-				client.setHardwareInfo(clientToHardware.get(clientEntry.getKey()));
-			}
+			String hostname = clientEntry.getKey();
 
-			if (groups.containsKey(clientEntry.getKey())) {
-				client.setGroups(groups.get(clientEntry.getKey()));
-			}
-
-			if (superGroups.containsKey(clientEntry.getKey())) {
-				client.setSuperGroups(superGroups.get(clientEntry.getKey()));
-			}
-
-			if (hasSoftware && softwareMap.containsKey(clientEntry.getKey())
-					&& softwareMap.get(clientEntry.getKey()) instanceof List) {
-				client.setOpsiProductList(softwareMap.get(clientEntry.getKey()));
-			}
-
-			if (swauditMap != null && swauditMap.containsKey(clientEntry.getKey())) {
-				client.setSwAuditList(swauditMap.get(clientEntry.getKey()));
-			}
+			populateFromMap(clientToHardware, hostname, client::setHardwareInfo, hasHardware);
+			populateFromMap(groups, hostname, client::setGroups, groups != null && !groups.isEmpty());
+			populateFromMap(superGroups, hostname, client::setSuperGroups,
+					superGroups != null && !superGroups.isEmpty());
+			populateFromMap(softwareMap, hostname, client::setOpsiProductList, hasSoftware);
+			populateFromMap(swauditMap, hostname, client::setSwAuditList, hasSwAudit);
 
 			clients.add(client);
 		}
 		return clients;
+	}
+
+	private static <T> void populateFromMap(Map<String, T> map, String key, Consumer<T> setter, boolean hasData) {
+		if (!hasData || map == null || !map.containsKey(key)) {
+			return;
+		}
+
+		T value = map.get(key);
+		if (value != null) {
+			setter.accept(value);
+		}
 	}
 
 	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
