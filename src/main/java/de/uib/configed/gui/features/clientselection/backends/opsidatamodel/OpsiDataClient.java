@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.clientselection.backends.opsidatamodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.type.SWAuditClientEntry;
@@ -182,19 +184,19 @@ public class OpsiDataClient {
 		if (hardwareIterator == null) {
 			Logging.debug(this, "getHardwareMap key ", key);
 			Logging.debug(this, "getHardwareMap hardwareInfo ", hardwareInfo);
-			Set<Map<String, Object>> values = new HashSet<>();
-			for (Map<String, Object> map : hardwareInfo) {
-				if (key.equals(map.get("hardwareClass"))) {
-					values.add(map);
-				}
-			}
-
-			Logging.debug(this, "", values);
-
 			hardwareValue = null;
-			hardwareIterator = values.iterator();
+			hardwareIterator = getHardwareClasses(key, hardwareInfo).iterator();
 			hardwareIteratorNext();
 		}
+
 		return hardwareValue != null ? hardwareValue : new HashMap<>();
+	}
+
+	private static Set<Map<String, Object>> getHardwareClasses(String key, List<Map<String, Object>> hardwareInfo) {
+		if (hardwareInfo == null || key == null) {
+			return Collections.emptySet();
+		}
+
+		return hardwareInfo.stream().filter(map -> key.equals(map.get("hardwareClass"))).collect(Collectors.toSet());
 	}
 }
