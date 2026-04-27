@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 
 public final class LogPaneUpdate {
 
@@ -18,12 +19,12 @@ public final class LogPaneUpdate {
 
 	}
 
-	@SuppressWarnings("java:S1541")
+	@SuppressWarnings({ "java:S1541", "java:S103" })
 	public static UpdateResult<LogPaneModel, LogPaneEffect> update(LogPaneMsg msg, LogPaneModel model) {
 		return switch (msg) {
 		case LogPaneMsg.SimpleMsg m -> handleSimpleMsg(m, model);
-		case LogPaneMsg.ParseLogRequested(String text, boolean resetCaret) -> handlePraseLogRequestedMsg(model, text,
-				resetCaret);
+		case LogPaneMsg.ParseLogRequested(String text, boolean resetCaret, boolean resetEventType) -> handlePraseLogRequestedMsg(
+				model, text, resetCaret, resetEventType);
 		case LogPaneMsg.LogParsed(LogParsedData data, int level) -> UpdateResult
 				.noEffect(model.toBuilder().typesList(data.getTypesList()).minLevel(data.getMinExistingLevel())
 						.maxExistingLevel(data.getMaxExistingLevel()).showLevel(level).needsRebuild(true).build());
@@ -60,9 +61,11 @@ public final class LogPaneUpdate {
 	}
 
 	private static UpdateResult<LogPaneModel, LogPaneEffect> handlePraseLogRequestedMsg(LogPaneModel model, String text,
-			boolean resetCaret) {
+			boolean resetCaret, boolean resetEventType) {
 		int caretPos = resetCaret ? model.getCaretPosition() : 0;
-		return UpdateResult.withEffect(model.toBuilder().logText(text).caretPosition(caretPos).build(),
+		String selectedType = resetEventType ? model.getSelectedType() : LogTextPane.DEFAULT_TYPE;
+		return UpdateResult.withEffect(
+				model.toBuilder().logText(text).caretPosition(caretPos).selectedType(selectedType).build(),
 				LogPaneEffect.SimpleEffect.PARSE_LOG);
 
 	}

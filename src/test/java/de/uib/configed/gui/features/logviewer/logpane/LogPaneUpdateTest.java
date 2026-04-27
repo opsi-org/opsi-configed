@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.logviewer.logpane.view.LogFileParser.LogParsedData;
+import de.uib.configed.gui.features.logviewer.logpane.view.LogTextPane;
 
 class LogPaneUpdateTest {
 
@@ -46,12 +47,58 @@ class LogPaneUpdateTest {
 	void shouldResetCaretAndTriggerParseLogEffect_whenParseLogRequested() {
 		LogPaneModel model = baseModel().withCaretPosition(50);
 		String newText = "new log text";
-		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText, true);
+		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText, true, false);
 
 		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
 
 		assertEquals(newText, result.model().getLogText());
 		assertEquals(model.getCaretPosition(), result.model().getCaretPosition());
+		assertEquals(LogTextPane.DEFAULT_TYPE, result.model().getSelectedType());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
+	}
+
+	@Test
+	void shouldResetEventTypeAndTriggerParseLogEffect_whenParseLogRequested() {
+		LogPaneModel model = baseModel().withSelectedType("WARN");
+		String newText = "new log text";
+		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText, false, true);
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertEquals(newText, result.model().getLogText());
+		assertEquals(0, result.model().getCaretPosition());
+		assertEquals(model.getSelectedType(), result.model().getSelectedType());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
+	}
+
+	@Test
+	void shouldNotResetCaretAndEventTypeAndTriggerParseLogEffect_whenParseLogRequested() {
+		LogPaneModel model = baseModel().withSelectedType("WARN");
+		String newText = "new log text";
+		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText, false, false);
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertEquals(newText, result.model().getLogText());
+		assertEquals(0, result.model().getCaretPosition());
+		assertEquals(LogTextPane.DEFAULT_TYPE, result.model().getSelectedType());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
+	}
+
+	@Test
+	void shouldResetCaretAndEventTypeAndTriggerParseLogEffect_whenParseLogRequested() {
+		LogPaneModel model = baseModel().withSelectedType("WARN");
+		String newText = "new log text";
+		LogPaneMsg msg = new LogPaneMsg.ParseLogRequested(newText, true, true);
+
+		UpdateResult<LogPaneModel, LogPaneEffect> result = LogPaneUpdate.update(msg, model);
+
+		assertEquals(newText, result.model().getLogText());
+		assertEquals(model.getCaretPosition(), result.model().getCaretPosition());
+		assertEquals(model.getSelectedType(), result.model().getSelectedType());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertSame(LogPaneEffect.SimpleEffect.PARSE_LOG, result.effect().get()));
 	}

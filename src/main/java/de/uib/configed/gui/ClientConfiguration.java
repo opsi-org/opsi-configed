@@ -184,9 +184,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		panelClientHostConfig.updateTab(configedMain.getSelectedClients().size());
 	}
 
-	public void setLogFileTab(String logtype, final boolean resetCaret) {
+	public void setLogFileTab(String logtype, final boolean resetCaret, final boolean resetEventType) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
-		tabbedLogPane.setDocument(logtype, resetCaret);
+		tabbedLogPane.setDocument(logtype, resetCaret, resetEventType);
 	}
 
 	public void updateProductTab() {

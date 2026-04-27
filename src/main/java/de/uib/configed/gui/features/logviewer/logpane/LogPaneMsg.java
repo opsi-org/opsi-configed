@@ -20,9 +20,9 @@ public sealed interface LogPaneMsg permits LogPaneMsg.SimpleMsg, LogPaneMsg.Sear
 	record Search(String query) implements LogPaneMsg {
 	}
 
-	record ParseLogRequested(String text, boolean resetCaret) implements LogPaneMsg {
+	record ParseLogRequested(String text, boolean resetCaret, boolean resetEventType) implements LogPaneMsg {
 		public ParseLogRequested(String text) {
-			this(text, false);
+			this(text, false, false);
 		}
 	}
 

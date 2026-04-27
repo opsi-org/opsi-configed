@@ -65,7 +65,7 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 	@Override
 	protected void updateContent() {
 		Logging.debug(this, "setLogPage");
-		setDocument(LogTabComponent.LOG_TYPES[tabbedPane.getSelectedIndex()], false);
+		setDocument(LogTabComponent.LOG_TYPES[tabbedPane.getSelectedIndex()], false, false);
 	}
 
 	private void initLogTabComponent(int i, String defaultText) {
@@ -76,7 +76,7 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 		tabbedPane.addTab(LogTabComponent.LOG_TYPES[i], textPanes[i].initUI());
 	}
 
-	public void setDocument(String logtype, final boolean resetCaret) {
+	public void setDocument(String logtype, final boolean resetCaret, final boolean resetEventType) {
 		String document = persistenceController.getDataServices().log
 				.getLogfile(configedMain.getSelectedClients().get(0), logtype);
 		Logging.info(this, "logTypes.length ", LogTabComponent.LOG_TYPES.length);
@@ -88,7 +88,7 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 		}
 
 		if (document == null) {
-			textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret));
+			textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret, resetEventType));
 			textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(""));
 			return;
 		}
@@ -98,6 +98,6 @@ public class TabbedLogPane extends AbstractConfigurationTab {
 
 		textPanes[index].dispatch(new LogPaneMsg.ChangeTitle(LogTabComponent.LOG_TYPES[index] + " " + selectedClient));
 		textPanes[index].dispatch(new LogPaneMsg.ChangeInfo(selectedClient));
-		textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document));
+		textPanes[index].dispatch(new LogPaneMsg.ParseLogRequested(document, resetCaret, resetEventType));
 	}
 }
