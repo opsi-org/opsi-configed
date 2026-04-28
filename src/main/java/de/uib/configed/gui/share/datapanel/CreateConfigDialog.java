@@ -27,6 +27,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -122,7 +123,11 @@ public class CreateConfigDialog {
 		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
 
 		JLabel defaultValuesLabel = SwingUtils.createBoldLabel("CreateConfigDialog.defaultValues");
+		addInfoTooltipToLabel(defaultValuesLabel,
+				Configed.getResourceValue("CreateConfigDialog.defaultValues.tooltip"));
 		JLabel possibleValuesLabel = SwingUtils.createBoldLabel("CreateConfigDialog.possibleValues");
+		addInfoTooltipToLabel(possibleValuesLabel,
+				Configed.getResourceValue("CreateConfigDialog.possibleValues.tooltip"));
 
 		unicodeDetailsPanel = new JPanel();
 		unicodeDetailsPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
@@ -150,6 +155,11 @@ public class CreateConfigDialog {
 		JTextField jTextField = new JTextField();
 		jTextField.setEnabled(false);
 		return jTextField;
+	}
+
+	private static void addInfoTooltipToLabel(JLabel jLabel, String tooltip) {
+		jLabel.setIcon(Icons.getIntellijIcon("info"));
+		jLabel.setToolTipText(tooltip);
 	}
 
 	private void activateSelection(ListSelectionDialog listSelectionDialog, JTextField defaultValuesTextField,
