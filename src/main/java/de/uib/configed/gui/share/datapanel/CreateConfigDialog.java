@@ -16,8 +16,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -107,6 +109,8 @@ public class CreateConfigDialog {
 		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
 
 		valuesSelectionDialog = createSelectionDialog(Configed.getResourceValue("CreateConfigDialog.values"));
+
+		valuesSelectionDialog.addPopupMenu(createPopupMenu());
 		updateSelectionModeForDefaultValuesSelectionDialog();
 
 		JTextField defaultValuesTextField = createDisabledTextField();
@@ -141,6 +145,18 @@ public class CreateConfigDialog {
 
 		unicodeDetailsPanel.add(possibleValuesLabel);
 		unicodeDetailsPanel.add(possibleValuesTextField, "grow");
+	}
+
+	private JPopupMenu createPopupMenu() {
+		JMenuItem remove = new JMenuItem(Configed.getResourceValue("CreateConfigDialog.removeValues"));
+		Icons.addIntellijIconToMenuItem(remove, "remove");
+		remove.addActionListener(
+				actionEvent -> valuesSelectionDialog.removeItems(valuesSelectionDialog.getSelectedValues()));
+
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		jPopupMenu.add(remove);
+
+		return jPopupMenu;
 	}
 
 	private void updateSelectionModeForDefaultValuesSelectionDialog() {
