@@ -69,9 +69,9 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	protected JPopupMenu createBasicPopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 		JPopupMenu jPopupMenu = PopupMenuTrait
-				.createAndBindJPopupMenu(
-						table, Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_SAVE,
-								actor::saveData, PopupMenuTrait.POPUP_PDF, this::createPDF),
+				.createAndBindJPopupMenu(table,
+						Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_SAVE,
+								() -> actor.saveData(), PopupMenuTrait.POPUP_PDF, this::createPDF),
 						event -> updatePopupMenu());
 
 		jPopupMenu.addPopupMenuListener(SwingUtils.createPopupMenuListenerOnVisible(() -> {
