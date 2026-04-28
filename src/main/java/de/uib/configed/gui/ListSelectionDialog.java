@@ -207,6 +207,16 @@ public class ListSelectionDialog {
 		return listSelectionList.getSelectedValuesList();
 	}
 
+	public List<String> getValues() {
+		List<String> values = new ArrayList<>();
+
+		for (int i = 0; i < listSelectionList.getModel().getSize(); i++) {
+			values.add(listSelectionList.getModel().getElementAt(i));
+		}
+
+		return values;
+	}
+
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
 		listSelectionList.setPreviousSelectionValues(previouslySelectedValues);
 	}

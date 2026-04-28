@@ -39,8 +39,7 @@ public class CreateConfigDialog {
 
 	private JRadioButton isBooleanTrue;
 
-	private ListSelectionDialog defaultValuesSelectionDialog;
-	private ListSelectionDialog possibleValuesSelectionDialog;
+	private ListSelectionDialog valuesSelectionDialog;
 
 	JRadioButton booleanButton;
 	JRadioButton unicodeButton;
@@ -106,16 +105,19 @@ public class CreateConfigDialog {
 		isEditable = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.editable"), true);
 		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
 
-		// These dialogs are there to 
-		defaultValuesSelectionDialog = createSelectionDialog(
-				Configed.getResourceValue("CreateConfigDialog.defaultValues"));
+		valuesSelectionDialog = createSelectionDialog(Configed.getResourceValue("CreateConfigDialog.values"));
 		updateSelectionModeForDefaultValuesSelectionDialog();
-		possibleValuesSelectionDialog = createSelectionDialog(
-				Configed.getResourceValue("CreateConfigDialog.possibleValues"));
 
-		// These textfields will show currently selected values in the dialog.
-		JTextField defaultValuesTextField = createTextFieldAssociated(defaultValuesSelectionDialog);
-		JTextField possibleValuesTextField = createTextFieldAssociated(possibleValuesSelectionDialog);
+		JTextField defaultValuesTextField = createDisabledTextField();
+		JTextField possibleValuesTextField = createDisabledTextField();
+		MouseAdapter selectionMouseHandler = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				activateSelection(valuesSelectionDialog, defaultValuesTextField, possibleValuesTextField);
+			}
+		};
+		defaultValuesTextField.addMouseListener(selectionMouseHandler);
+		possibleValuesTextField.addMouseListener(selectionMouseHandler);
 
 		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
 
@@ -138,33 +140,30 @@ public class CreateConfigDialog {
 
 	private void updateSelectionModeForDefaultValuesSelectionDialog() {
 		if (isMultiValue.isSelected()) {
-			defaultValuesSelectionDialog.setMultiSelection();
+			valuesSelectionDialog.setMultiSelection();
 		} else {
-			defaultValuesSelectionDialog.setSingleSelection();
+			valuesSelectionDialog.setSingleSelection();
 		}
 	}
 
-	private JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
+	private static JTextField createDisabledTextField() {
 		JTextField jTextField = new JTextField();
 		jTextField.setEnabled(false);
-		jTextField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				activateSelection(selectionListDialog, jTextField);
-			}
-		});
-
 		return jTextField;
 	}
 
-	private void activateSelection(ListSelectionDialog listSelectionDialog, JTextField jTextField) {
+	private void activateSelection(ListSelectionDialog listSelectionDialog, JTextField defaultValuesTextField,
+			JTextField possibleValuesTextField) {
 		// We need to call this before setVisible
 		List<String> savedSelectedValues = listSelectionDialog.getSelectedValues();
 
 		listSelectionDialog.show(dialog);
 
 		if (listSelectionDialog.wasAccepted()) {
-			jTextField.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getSelectedValues()));
+			defaultValuesTextField
+					.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getSelectedValues()));
+			possibleValuesTextField
+					.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getValues()));
 		} else {
 			DefaultListModel<String> model = new DefaultListModel<>();
 			model.addAll(savedSelectedValues);
@@ -245,8 +244,8 @@ public class CreateConfigDialog {
 			defaultValues = new ArrayList<>(List.of(isBooleanTrue.isSelected()));
 			possibleValues = new ArrayList<>(defaultValues);
 		} else {
-			defaultValues = new ArrayList<>(defaultValuesSelectionDialog.getSelectedValues());
-			possibleValues = new ArrayList<>(possibleValuesSelectionDialog.getSelectedValues());
+			defaultValues = new ArrayList<>(valuesSelectionDialog.getSelectedValues());
+			possibleValues = new ArrayList<>(valuesSelectionDialog.getValues());
 		}
 
 		if (!editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
