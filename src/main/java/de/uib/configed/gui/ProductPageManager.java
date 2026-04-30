@@ -182,10 +182,6 @@ public class ProductPageManager implements MessagebusListener {
 		} else if (clientConfiguration.getSelectedIndex() == 2
 				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
-			// Remove uneeded attributes
-			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-			attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
-
 			updateManager.updateProductTableForClient(clientId, attributes);
 		} else {
 			Logging.info(this, "in updateProduct nothing to update because Tab for productType ", productType,
