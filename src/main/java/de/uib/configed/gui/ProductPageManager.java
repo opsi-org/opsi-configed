@@ -77,14 +77,17 @@ public class ProductPageManager implements MessagebusListener {
 	}
 
 	public void setLocalbootProductsPage() {
-		setProductsPage(collectChangedLocalbootStates, getLocalbootStateAndActionsAttributes(),
+		setProductsPage(collectChangedLocalbootStates,
+				getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList()),
 				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelLocalbootProductSettings(),
 				getLocalbootProductDisplayFieldsList());
 	}
 
 	public void setNetbootProductsPage() {
-		setProductsPage(collectChangedNetbootStates, List.of(), OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
-				clientConfiguration.getPanelNetbootProductSettings(), getNetbootProductDisplayFieldsList());
+		setProductsPage(collectChangedNetbootStates,
+				getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList()),
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelNetbootProductSettings(),
+				getNetbootProductDisplayFieldsList());
 	}
 
 	private void setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
@@ -159,21 +162,6 @@ public class ProductPageManager implements MessagebusListener {
 		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getProductTable(), columnWidths);
 	}
 
-	private List<String> getLocalbootStateAndActionsAttributes() {
-		List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
-
-		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
-			attributes.add(ProductState.KEY_ACTION_PROGRESS);
-			attributes.add(ProductState.KEY_LAST_ACTION);
-		}
-
-		// Remove uneeded attributes
-		attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-
-		attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
-		return attributes;
-	}
-
 	private List<String> getLocalbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
 		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
@@ -189,7 +177,7 @@ public class ProductPageManager implements MessagebusListener {
 	public void updateProductTableForClient(String clientId, String productType) {
 		if (clientConfiguration.getSelectedIndex() == 1
 				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getLocalbootStateAndActionsAttributes();
+			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
 			updateManager.updateProductTableForClient(clientId, attributes);
 		} else if (clientConfiguration.getSelectedIndex() == 2
 				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
@@ -225,11 +213,18 @@ public class ProductPageManager implements MessagebusListener {
 				attributes.add(ProductState.KEY_PACKAGE_VERSION);
 				attributes.add(ProductState.KEY_PRODUCT_VERSION);
 			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
+				attributes.add(ProductState.KEY_ACTION_PROGRESS);
 				attributes.add(ProductState.KEY_ACTION_RESULT);
+				attributes.add(ProductState.KEY_LAST_ACTION);
 			} else {
 				attributes.add(v);
 			}
 		}
+
+		// Remove uneeded attributes
+		attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
+
+		attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
 
 		return attributes;
 	}
