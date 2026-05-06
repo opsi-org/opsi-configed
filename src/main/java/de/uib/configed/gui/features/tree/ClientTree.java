@@ -372,8 +372,8 @@ public class ClientTree extends AbstractGroupTree {
 		return parentId;
 	}
 
-	private boolean isValidGroupName(String productId) {
-		return productId != null && !"null".equalsIgnoreCase(productId) && groups.containsKey(productId);
+	private boolean isValidGroupName(String groupName) {
+		return groupName != null && !"null".equalsIgnoreCase(groupName) && groups.containsKey(groupName);
 	}
 
 	// Return null means, all clients are allowed
