@@ -39,9 +39,9 @@ class GenericTableViewUpdateTest {
 		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot);
 
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("id", "id", false, 0, null, null));
-		columns.add(new TableColumnConfig("name", "name", false, 0, null, null));
-		columns.add(new TableColumnConfig("lastname", "lastname", false, 0, null, null));
+		columns.add(new TableColumnConfig("data0", "data0", false, 0, null, null));
+		columns.add(new TableColumnConfig("data1", "data1", false, 0, null, null));
+		columns.add(new TableColumnConfig("data2", "data2", false, 0, null, null));
 
 		return GenericTableViewModel.builder().originalSnapshot(originalSnapshot).rows(rows).columns(columns)
 				.diffStrategy((String rowId, String colKey, Object currentValue, Object originalValue) -> {
@@ -52,11 +52,11 @@ class GenericTableViewUpdateTest {
 				}).build();
 	}
 
-	private static Map<String, Object> row(String id, String name, String lastname) {
+	private static Map<String, Object> row(String data0, String data1, String data2) {
 		Map<String, Object> row = new HashMap<>();
-		row.put("id", id);
-		row.put("name", name);
-		row.put("lastname", lastname);
+		row.put("data0", data0);
+		row.put("data1", data1);
+		row.put("data2", data2);
 		return row;
 	}
 
@@ -74,7 +74,7 @@ class GenericTableViewUpdateTest {
 		assertTrue(result.model().isDirty());
 
 		String resultColumnKey = model.getColumns().get(colIdx).getKey();
-		assertEquals("lastname", resultColumnKey);
+		assertEquals("data2", resultColumnKey);
 
 		String resultValue = result.model().getRows().get(rowIdx).getValue(resultColumnKey, String.class);
 		assertEquals("test", resultValue);
@@ -134,8 +134,8 @@ class GenericTableViewUpdateTest {
 
 		assertNotNull(result.model());
 		assertEquals(model.getRows().size(), result.model().getRows().size());
-		assertNotEquals("test6", result.model().getRows().get(3).getValue("name", String.class));
-		assertNotEquals("test2", result.model().getRows().get(2).getValue("lastname", String.class));
+		assertNotEquals("test6", result.model().getRows().get(3).getValue("data1", String.class));
+		assertNotEquals("test2", result.model().getRows().get(2).getValue("data2", String.class));
 		assertFalse(result.model().isDirty());
 	}
 
@@ -157,7 +157,7 @@ class GenericTableViewUpdateTest {
 
 		assertNotNull(result.model());
 		assertSame(model.getRows().size(), result.model().getRows().size());
-		assertEquals("5", result.model().getRows().get(4).getValue("id", String.class));
+		assertEquals("5", result.model().getRows().get(4).getValue("data0", String.class));
 		assertFalse(result.model().isDirty());
 	}
 
@@ -184,7 +184,7 @@ class GenericTableViewUpdateTest {
 
 		assertNotNull(result.model());
 		assertNotSame(model.getRows().size(), result.model().getRows().size());
-		assertNotEquals("3", result.model().getRows().get(rowIdx).getValue("id", String.class));
+		assertNotEquals("3", result.model().getRows().get(rowIdx).getValue("data0", String.class));
 		assertTrue(result.model().isDirty());
 	}
 
