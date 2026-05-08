@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -44,6 +45,11 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.swinfopage.PanelSWSingleClientInfo.KindOfExport;
+import de.uib.configed.gui.features.table.GenericTableViewComponent;
+import de.uib.configed.gui.features.table.GenericTableViewModel;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
+import de.uib.configed.gui.features.table.TableColumnConfig;
+import de.uib.configed.gui.features.table.TableConfig;
 import de.uib.configed.gui.features.tree.IconNode;
 import de.uib.configed.gui.features.tree.IconNodeRenderer;
 import de.uib.configed.gui.messages.Messages;
@@ -90,7 +96,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 	private IconNode root;
 	private TreePath rootPath;
 	private DefaultTreeModel treeModel;
-	private HWInfoTableModel tableModel;
+	private GenericTableViewComponent tableViewComponent;
 	private Map<String, Object> hwClassMapping;
 
 	private String vendorStringComputerSystem;
@@ -142,20 +148,17 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableModel = new HWInfoTableModel();
-		JTable table = new JTable(tableModel, null);
-		table.setFillsViewportHeight(true);
-		table.setDefaultRenderer(Object.class, new HWInfoCellRenderer());
-		table.setTableHeader(null);
-		table.getColumnModel().getColumn(0).setPreferredWidth(80);
-		table.getColumnModel().getColumn(1).setPreferredWidth(300);
+		List<TableColumnConfig> columns = new ArrayList<>();
+		columns.add(TableColumnConfig.builder().key("key").header("").prefferedWidth(80).build());
+		columns.add(TableColumnConfig.builder().key("value").header("").prefferedWidth(300).build());
 
-		table.setDragEnabled(true);
+		TableConfig config = TableConfig.builder().defauTableCellRenderer(new HWInfoCellRenderer())
+				.fillViewportHeight(true).showTableHeader(false).dragEnabled(true).build();
+		tableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder()
+				.originalSnapshot(new ArrayList<>()).columns(columns).tableConfig(config).build());
+		JComponent componet = tableViewComponent.initUI();
 
-		JScrollPane jScrollPaneInfo = new JScrollPane(table);
-		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, componet);
 		SplitPaneStateManager.registerSplitPane(splitPane, SplitPaneStateManager.HARDWARE_SPLIT,
 				INITIAL_DIVIDER_LOCATION);
 
@@ -175,7 +178,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 			// since we want it to be available, no matter where the user right clicks
 			// We cannot add it to the splitPane since the table will consume the event,
 			// it would not arrive at the splitPane
-			PopupMenuTrait.createAndBindJPopupMenu(table, actions);
+			PopupMenuTrait.createAndBindJPopupMenu(componet, actions);
 			PopupMenuTrait.createAndBindJPopupMenu(tree, actions);
 		}
 	}
@@ -299,7 +302,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		return values;
 	}
 
-	private List<Object[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+	private List<Map<String, Object>> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 		if (!hasData(node, reduceScanToByAuditClasses)) {
 			return new ArrayList<>();
 		}
@@ -313,7 +316,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
-		List<Object[]> data = new ArrayList<>();
+		List<Map<String, Object>> data = new ArrayList<>();
 		for (Map<String, Object> value : values) {
 			String opsi = (String) value.get("Opsi");
 			Logging.debug(this, "opsi ", opsi);
@@ -330,9 +333,11 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 				if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
 					Object cv = findCV(reduceScanToByAuditClasses, hwClass, unit, opsi, deviceInfoEntry.getValue());
 
-					Object[] row = { ui, cv };
+					Map<String, Object> row = new HashMap<>();
+					row.put("key", ui);
+					row.put("value", cv);
 					data.add(row);
-					Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
+					Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", row);
 					break;
 				}
 			}
@@ -399,7 +404,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
 		} else {
-			tableModel.setData(getDataForNode(node, false));
+			tableViewComponent.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(getDataForNode(node, false)));
 		}
 	}
 
@@ -407,7 +412,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		if (node != null && node.isLeaf()) {
 			TreeNode[] path = node.getPath();
 			if (path.length < 3) {
-				tableModel.setData(new ArrayList<>());
+				tableViewComponent.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(new ArrayList<>()));
 				return;
 			}
 			String hwClassUI = path[1].toString();
@@ -439,7 +444,7 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
-		tableModel.setData(new ArrayList<>());
+		tableViewComponent.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(new ArrayList<>()));
 
 		this.hwInfo = hwInfo;
 
