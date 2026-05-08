@@ -45,6 +45,10 @@ public class DefaultDataReloadHandler extends AbstractReloadHandler {
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
 			dataServices.group.retrieveHostGroupsPD();
 		});
+		eventHandlers.put(CacheIdentifier.PRODUCT_GROUPS.toString(), (Void v) -> {
+			dataServices.cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
+			dataServices.group.retrieveProductGroupsPD();
+		});
 		eventHandlers.put(CacheIdentifier.HOST_CONFIGS.toString(), (Void v) -> {
 			dataServices.cacheManager.clearCachedData(CacheIdentifier.HOST_CONFIGS);
 			dataServices.config.retrieveHostConfigsPD();
