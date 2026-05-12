@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
@@ -27,6 +29,9 @@ public class GenericTableViewModel {
 	private final Set<Integer> selectedRows;
 	private final boolean isDirty;
 	private final boolean allowMultipleSelection;
+	private final boolean showSearchPane;
+	private final FilterKey filterKey;
 	private final List<Map<String, Object>> originalSnapshot;
 	private final RowDiffStrategy diffStrategy;
+	private final SearchTargetModelFromTable searchTargetModelFromTable;
 }

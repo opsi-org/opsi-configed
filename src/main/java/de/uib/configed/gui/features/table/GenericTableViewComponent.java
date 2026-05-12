@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -21,6 +22,10 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.AbstractTeaComponent;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
+import de.uib.configed.gui.share.table.gui.TableSearchPane;
+import net.miginfocom.swing.MigLayout;
 
 public class GenericTableViewComponent
 		extends AbstractTeaComponent<GenericTableViewModel, GenericTableViewMsg, GenericTableViewEffect> {
@@ -55,7 +60,9 @@ public class GenericTableViewComponent
 		table.setSelectionMode(model.getTableConfig().getSelectionMode());
 		table.setTableHeader(
 				model.getTableConfig().isShowTableHeader() ? new JTableHeader(table.getColumnModel()) : null);
-		table.getTableHeader().setReorderingAllowed(model.getTableConfig().isReorderingAllowed());
+		if (model.getTableConfig().isShowTableHeader()) {
+			table.getTableHeader().setReorderingAllowed(model.getTableConfig().isReorderingAllowed());
+		}
 		table.setColumnSelectionAllowed(model.getTableConfig().isColumnSelectionAllowed());
 		table.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
 			if (e.getValueIsAdjusting() || isUpdatingProgrammatically) {
@@ -84,7 +91,23 @@ public class GenericTableViewComponent
 		JScrollPane jScrollPaneInfo = new JScrollPane(table);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		return jScrollPaneInfo;
+		JPanel panel = new JPanel();
+
+		panel.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
+				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
+
+		if (model.isShowSearchPane()) {
+			TableSearchPane searchPane = new TableSearchPane(
+					model.getSearchTargetModelFromTable() == null ? new SearchTargetModelFromTable(table)
+							: model.getSearchTargetModelFromTable());
+			searchPane.setFilterKey(model.getFilterKey());
+			searchPane.setFiltering();
+			panel.add(searchPane);
+		}
+
+		panel.add(jScrollPaneInfo, "grow, push");
+
+		return panel;
 	}
 
 	private static Set<Integer> retrieveSelectedRows(ListSelectionModel lsm) {
