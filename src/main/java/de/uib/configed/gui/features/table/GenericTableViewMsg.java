@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Set;
 
 public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
-		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
-		GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot {
+		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
+		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
 	}
@@ -22,6 +22,10 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	}
 
 	record CancelChanges() implements GenericTableViewMsg {
+
+	}
+
+	record ToggleColumn(String columnKey) implements GenericTableViewMsg {
 
 	}
 

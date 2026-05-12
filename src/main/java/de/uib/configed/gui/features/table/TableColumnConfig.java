@@ -25,6 +25,8 @@ public class TableColumnConfig {
 	private final String key;
 	private final String header;
 	private final boolean editable;
+	@Builder.Default
+	private final boolean visible = true;
 	private final int prefferedWidth;
 
 	private transient TableCellRenderer renderer;

@@ -7,22 +7,27 @@
 package de.uib.configed.gui.features.table;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import net.miginfocom.swing.MigLayout;
@@ -53,7 +58,7 @@ public class GenericTableViewComponent
 
 	@Override
 	protected JComponent renderView(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch) {
-		table = new JTable(new GenericTableModel(), null);
+		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg)), null);
 		table.setFillsViewportHeight(model.getTableConfig().isFillViewportHeight());
 		table.setAutoCreateRowSorter(model.getTableConfig().isAutoCreateRowSorter());
 		table.setDefaultRenderer(Object.class, model.getTableConfig().getDefauTableCellRenderer());
@@ -62,6 +67,9 @@ public class GenericTableViewComponent
 				model.getTableConfig().isShowTableHeader() ? new JTableHeader(table.getColumnModel()) : null);
 		if (model.getTableConfig().isShowTableHeader()) {
 			table.getTableHeader().setReorderingAllowed(model.getTableConfig().isReorderingAllowed());
+			if (model.getTableConfig().isEnableHeaderContextMenu()) {
+				table.getTableHeader().addMouseListener(new PopupMouseListener(getPopupMenu()));
+			}
 		}
 		table.setColumnSelectionAllowed(model.getTableConfig().isColumnSelectionAllowed());
 		table.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
@@ -110,6 +118,28 @@ public class GenericTableViewComponent
 		return panel;
 	}
 
+	private JPopupMenu getPopupMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+		List<TableColumnConfig> columns = model.getColumns();
+
+		for (TableColumnConfig column : columns) {
+			popupMenu.add(createShowColumnCheckBoxMenuItem(column));
+		}
+
+		return popupMenu;
+	}
+
+	private JCheckBoxMenuItem createShowColumnCheckBoxMenuItem(TableColumnConfig column) {
+		String key = column.getKey();
+		String headerText = column.getHeader();
+		boolean isVisible = column.isVisible();
+
+		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(headerText, isVisible);
+		menuItem.addActionListener(event -> dispatch(new GenericTableViewMsg.ToggleColumn(key)));
+
+		return menuItem;
+	}
+
 	private static Set<Integer> retrieveSelectedRows(ListSelectionModel lsm) {
 		Set<Integer> selectedRows = new HashSet<>();
 
@@ -131,11 +161,38 @@ public class GenericTableViewComponent
 	protected void refreshView() {
 		isUpdatingProgrammatically = true;
 
-		table.setModel(new GenericTableModel());
+		rebuildColumnModel();
+
+		table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
 
 		restoreSelection();
 
 		isUpdatingProgrammatically = false;
+	}
+
+	private void rebuildColumnModel() {
+		DefaultTableColumnModel newColumnModel = new DefaultTableColumnModel();
+
+		List<TableColumnConfig> visibleColumnConfigs = model.getColumns().stream().filter(TableColumnConfig::isVisible)
+				.toList();
+
+		for (TableColumnConfig columnConfig : visibleColumnConfigs) {
+			TableColumn col = new TableColumn();
+			col.setHeaderValue(columnConfig.getHeader());
+			col.setIdentifier(columnConfig.getKey());
+
+			if (columnConfig.getPrefferedWidth() > 0) {
+				col.setPreferredWidth(columnConfig.getPrefferedWidth());
+			}
+
+			if (columnConfig.getRenderer() != null) {
+				col.setCellRenderer(columnConfig.getRenderer());
+			}
+
+			newColumnModel.addColumn(col);
+		}
+
+		table.setColumnModel(newColumnModel);
 	}
 
 	private void restoreSelection() {
@@ -154,35 +211,65 @@ public class GenericTableViewComponent
 	}
 
 	@SuppressWarnings("java:S2972")
-	private class GenericTableModel extends AbstractTableModel {
-		@Override
-		public int getColumnCount() {
-			return model.getColumns().size();
+	public static class GenericTableModel extends AbstractTableModel {
+		private final GenericTableViewModel tableModel;
+		private final Consumer<GenericTableViewMsg> dispatcher;
+
+		public GenericTableModel(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatcher) {
+			this.tableModel = model;
+			this.dispatcher = dispatcher;
 		}
 
 		@Override
-		public String getColumnName(int col) {
-			return model.getColumns().get(col).getHeader();
+		public int getColumnCount() {
+			return (int) tableModel.getColumns().stream().filter(TableColumnConfig::isVisible).count();
+		}
+
+		@Override
+		public String getColumnName(int column) {
+			List<TableColumnConfig> visibleColumns = tableModel.getColumns().stream()
+					.filter(TableColumnConfig::isVisible).toList();
+
+			if (column >= 0 && column < visibleColumns.size()) {
+				return visibleColumns.get(column).getHeader();
+			}
+			return "";
 		}
 
 		@Override
 		public int getRowCount() {
-			return model.getRows().size();
+			return tableModel.getRows().size();
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return model.getRows().get(rowIndex).getValue(model.getColumns().get(columnIndex).getKey(), Object.class);
+			if (rowIndex < 0 || rowIndex >= tableModel.getRows().size()) {
+				return null;
+			}
+
+			List<TableColumnConfig> visibleColumns = tableModel.getColumns().stream()
+					.filter(TableColumnConfig::isVisible).toList();
+
+			if (columnIndex < 0 || columnIndex >= visibleColumns.size()) {
+				return null;
+			}
+
+			TableColumnConfig config = visibleColumns.get(columnIndex);
+			String logicalKey = config.getKey();
+
+			RowData rowData = tableModel.getRows().get(rowIndex);
+
+			return rowData.getValue(logicalKey, Object.class);
 		}
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			return model.getColumns().get(col).isEditable();
+			return tableModel.getColumns().get(col).isEditable();
 		}
 
 		@Override
 		public void setValueAt(Object newValue, int row, int col) {
-			dispatch(new GenericTableViewMsg.CellEdited(row, col, newValue));
+			dispatcher.accept(new GenericTableViewMsg.CellEdited(row, col, newValue));
 		}
 	}
 }

@@ -22,6 +22,7 @@ public class TableConfig {
 	private final boolean autoCreateRowSorter;
 	private final boolean reorderingAllowed;
 	private final boolean columnSelectionAllowed;
+	private final boolean enableHeaderContextMenu;
 	private final int selectionMode;
 	private final TableCellRenderer defauTableCellRenderer;
 }

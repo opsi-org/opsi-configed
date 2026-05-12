@@ -25,6 +25,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.features.table.GenericTableViewComponent.GenericTableModel;
 import de.uib.configed.gui.features.table.RowData.RowState;
 
 class GenericTableViewUpdateTest {
@@ -39,9 +40,9 @@ class GenericTableViewUpdateTest {
 		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot);
 
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "data0", false, 0, null, null));
-		columns.add(new TableColumnConfig("data1", "data1", false, 0, null, null));
-		columns.add(new TableColumnConfig("data2", "data2", false, 0, null, null));
+		columns.add(new TableColumnConfig("data0", "data0", false, true, 0, null, null));
+		columns.add(new TableColumnConfig("data1", "data1", false, true, 0, null, null));
+		columns.add(new TableColumnConfig("data2", "data2", false, true, 0, null, null));
 
 		return GenericTableViewModel.builder().originalSnapshot(originalSnapshot).rows(rows).columns(columns)
 				.diffStrategy((String rowId, String colKey, Object currentValue, Object originalValue) -> {
@@ -217,5 +218,126 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertEquals(selectedRows.size(), result.model().getSelectedRows().size());
 		assertEquals(selectedRows, result.model().getSelectedRows());
+	}
+
+	@Test
+	void shouldToggleBetweenBooleanValues_whenToggleColumn() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.ToggleColumn("data1");
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+
+		assertNotNull(result.model());
+		assertTrue(result.model().getColumns().get(0).isVisible());
+		assertFalse(result.model().getColumns().get(1).isVisible());
+		assertTrue(result.model().getColumns().get(2).isVisible());
+		assertFalse(result.effect().isPresent());
+
+		GenericTableViewMsg msg2 = new GenericTableViewMsg.ToggleColumn("data1");
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result2 = GenericTableViewUpdate.update(msg2,
+				result.model());
+
+		assertNotNull(result2.model());
+		assertTrue(result2.model().getColumns().get(0).isVisible());
+		assertTrue(result2.model().getColumns().get(1).isVisible());
+		assertTrue(result2.model().getColumns().get(2).isVisible());
+		assertFalse(result2.effect().isPresent());
+	}
+
+	@Test
+	void shouldReportCorrectColumnCount_whenSomeColumnsAreHidden() {
+		List<TableColumnConfig> columns = new ArrayList<>();
+		columns.add(new TableColumnConfig("data0", "Col 0", false, true, 100, null, null));
+		columns.add(new TableColumnConfig("data1", "Col 1", false, false, 100, null, null));
+		columns.add(new TableColumnConfig("data2", "Col 2", false, true, 100, null, null));
+
+		List<Map<String, Object>> snapshot = new ArrayList<>();
+		snapshot.add(row("val0", "val1", "val2"));
+
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+
+		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
+				.originalSnapshot(snapshot).build();
+
+		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
+		});
+
+		assertEquals(2, tableModel.getColumnCount(), "Should only count visible columns");
+	}
+
+	@Test
+	void shouldReturnCorrectColumnNames_whenSomeColumnsAreHidden() {
+		List<TableColumnConfig> columns = new ArrayList<>();
+		columns.add(new TableColumnConfig("data0", "A", false, true, 100, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, 100, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, 100, null, null));
+
+		List<Map<String, Object>> snapshot = new ArrayList<>();
+		snapshot.add(row("val0", "val1", "val2"));
+
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+
+		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
+				.originalSnapshot(snapshot).build();
+
+		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
+		});
+
+		assertEquals("A", tableModel.getColumnName(0), "First visible column name");
+		assertEquals("C", tableModel.getColumnName(1), "Second visible column name (skipped hidden one)");
+	}
+
+	@Test
+	void shouldReturnCorrectDataValues_whenSomeColumnsAreHidden() {
+		List<TableColumnConfig> columns = new ArrayList<>();
+		columns.add(new TableColumnConfig("data0", "A", false, true, 100, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, 100, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, 100, null, null));
+
+		List<Map<String, Object>> snapshot = new ArrayList<>();
+		snapshot.add(row("A", "B", "C"));
+
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+
+		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
+				.originalSnapshot(snapshot).build();
+
+		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
+		});
+
+		assertEquals("A", tableModel.getValueAt(0, 0), "Value for first visible column");
+		assertEquals("C", tableModel.getValueAt(0, 1), "Value for second visible column (should skip hidden data1)");
+	}
+
+	@Test
+	void shouldHandleMultipleHiddenColumns() {
+		List<TableColumnConfig> columns = new ArrayList<>();
+		columns.add(new TableColumnConfig("data0", "A", false, true, 100, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, 100, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, 100, null, null));
+
+		List<Map<String, Object>> snapshot = new ArrayList<>();
+		snapshot.add(row("1", "2", "3"));
+
+		Map<String, Object> rowData = new HashMap<>();
+		rowData.put("data0", "1");
+		rowData.put("data1", "2");
+		rowData.put("data2", "3");
+		snapshot.add(rowData);
+
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+
+		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
+				.originalSnapshot(snapshot).build();
+
+		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
+		});
+
+		assertEquals(2, tableModel.getColumnCount());
+		assertEquals("A", tableModel.getColumnName(0));
+		assertEquals("C", tableModel.getColumnName(1));
+		assertEquals("1", tableModel.getValueAt(0, 0));
+		assertEquals("3", tableModel.getValueAt(0, 1));
 	}
 }

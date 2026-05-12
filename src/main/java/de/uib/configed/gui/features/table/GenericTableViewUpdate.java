@@ -21,6 +21,7 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeOriginalSnap
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRow;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
 import de.uib.configed.gui.features.table.RowData.RowState;
 
 /**
@@ -36,6 +37,7 @@ public final class GenericTableViewUpdate {
 		case CellEdited(int rowIdx, int colIdx, Object newValue) -> handleCellEdit(rowIdx, colIdx, newValue, model);
 		case CommitChanges() -> handleCommit(model);
 		case CancelChanges() -> handleCancel(model);
+		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
 		case ChangeSelection(Set<Integer> selectedRows) -> UpdateResult.noEffect(model.withSelectedRows(selectedRows));
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
@@ -70,6 +72,17 @@ public final class GenericTableViewUpdate {
 		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
 
 		return UpdateResult.noEffect(model.withRows(newRows).withDirty(isDirty));
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleToggleColumn(String columnKey,
+			GenericTableViewModel model) {
+		List<TableColumnConfig> newColumns = model.getColumns().stream()
+				.map((TableColumnConfig column) -> column.getKey().equals(columnKey)
+						? column.withVisible(!column.isVisible())
+						: column)
+				.toList();
+
+		return UpdateResult.noEffect(model.withColumns(newColumns));
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCommit(
