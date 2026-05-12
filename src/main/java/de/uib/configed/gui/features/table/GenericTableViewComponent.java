@@ -50,9 +50,13 @@ public class GenericTableViewComponent
 	protected JComponent renderView(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch) {
 		table = new JTable(new GenericTableModel(), null);
 		table.setFillsViewportHeight(model.getTableConfig().isFillViewportHeight());
+		table.setAutoCreateRowSorter(model.getTableConfig().isAutoCreateRowSorter());
 		table.setDefaultRenderer(Object.class, model.getTableConfig().getDefauTableCellRenderer());
+		table.setSelectionMode(model.getTableConfig().getSelectionMode());
 		table.setTableHeader(
 				model.getTableConfig().isShowTableHeader() ? new JTableHeader(table.getColumnModel()) : null);
+		table.getTableHeader().setReorderingAllowed(model.getTableConfig().isReorderingAllowed());
+		table.setColumnSelectionAllowed(model.getTableConfig().isColumnSelectionAllowed());
 		table.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
 			if (e.getValueIsAdjusting() || isUpdatingProgrammatically) {
 				return;

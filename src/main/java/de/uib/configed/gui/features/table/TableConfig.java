@@ -19,5 +19,9 @@ public class TableConfig {
 	private final boolean fillViewportHeight;
 	private final boolean showTableHeader;
 	private final boolean dragEnabled;
+	private final boolean autoCreateRowSorter;
+	private final boolean reorderingAllowed;
+	private final boolean columnSelectionAllowed;
+	private final int selectionMode;
 	private final TableCellRenderer defauTableCellRenderer;
 }

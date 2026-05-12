@@ -12,12 +12,14 @@ import javax.swing.table.TableCellRenderer;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 
 /**
  * Configuration for a single column. This replaces the imperative logic in
  * initRenderer().
  */
 @Value
+@With
 @Builder
 public class TableColumnConfig {
 	private final String key;
