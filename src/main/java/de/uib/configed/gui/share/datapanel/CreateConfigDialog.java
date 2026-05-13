@@ -6,20 +6,15 @@
 
 package de.uib.configed.gui.share.datapanel;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -27,10 +22,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.gui.share.SwingUtils;
-import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -41,8 +33,6 @@ public class CreateConfigDialog {
 	private JTextField textFieldDescription;
 
 	private JRadioButton isBooleanTrue;
-
-	private ListSelectionDialog valuesSelectionDialog;
 
 	JRadioButton booleanButton;
 	JRadioButton unicodeButton;
@@ -57,6 +47,8 @@ public class CreateConfigDialog {
 	private JPanel unicodeDetailsPanel;
 
 	private JDialog dialog;
+
+	private ConfigValueEditor valueEditor;
 
 	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
 		this.editMapPanelX = editMapPanelX;
@@ -104,104 +96,23 @@ public class CreateConfigDialog {
 	}
 
 	private void initUnicodeDetailsPanel() {
-		JLabel propertiesLabel = SwingUtils.createBoldLabel("CreateConfigDialog.properties");
 		isEditable = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.editable"), true);
 		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
+		isMultiValue.addActionListener(e -> valueEditor.setMultiValueMode(isMultiValue.isSelected()));
 
-		valuesSelectionDialog = createSelectionDialog(Configed.getResourceValue("CreateConfigDialog.values"));
-
-		valuesSelectionDialog.addPopupMenu(createPopupMenu());
-		updateSelectionModeForDefaultValuesSelectionDialog();
-
-		JTextField defaultValuesTextField = createDisabledTextField();
-		JTextField possibleValuesTextField = createDisabledTextField();
-		MouseAdapter selectionMouseHandler = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				activateSelection(valuesSelectionDialog, defaultValuesTextField, possibleValuesTextField);
-			}
-		};
-		defaultValuesTextField.addMouseListener(selectionMouseHandler);
-		possibleValuesTextField.addMouseListener(selectionMouseHandler);
-
-		isMultiValue.addActionListener(actionEvent -> updateSelectionModeForDefaultValuesSelectionDialog());
-
-		JLabel defaultValuesLabel = SwingUtils.createBoldLabel("CreateConfigDialog.defaultValues");
-		addInfoTooltipToLabel(defaultValuesLabel,
-				Configed.getResourceValue("CreateConfigDialog.defaultValues.tooltip"));
-		JLabel possibleValuesLabel = SwingUtils.createBoldLabel("CreateConfigDialog.possibleValues");
-		addInfoTooltipToLabel(possibleValuesLabel,
-				Configed.getResourceValue("CreateConfigDialog.possibleValues.tooltip"));
+		valueEditor = new ConfigValueEditor();
 
 		unicodeDetailsPanel = new JPanel();
 		unicodeDetailsPanel.setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
 
-		unicodeDetailsPanel.add(propertiesLabel);
+		unicodeDetailsPanel.add(SwingUtils.createBoldLabel("CreateConfigDialog.properties"));
 		unicodeDetailsPanel.add(isEditable);
 		unicodeDetailsPanel.add(isMultiValue, "gapbottom " + Globals.GAP_SIZE);
 
-		unicodeDetailsPanel.add(defaultValuesLabel);
-		unicodeDetailsPanel.add(defaultValuesTextField, "grow, gapbottom " + Globals.GAP_SIZE);
+		unicodeDetailsPanel.add(SwingUtils.createBoldLabel("CreateConfigDialog.values"),
+				"gapbottom " + Globals.GAP_SIZE);
 
-		unicodeDetailsPanel.add(possibleValuesLabel);
-		unicodeDetailsPanel.add(possibleValuesTextField, "grow");
-	}
-
-	private JPopupMenu createPopupMenu() {
-		JMenuItem remove = new JMenuItem(Configed.getResourceValue("CreateConfigDialog.removeValues"));
-		Icons.addIntellijIconToMenuItem(remove, "remove");
-		remove.addActionListener(
-				actionEvent -> valuesSelectionDialog.removeItems(valuesSelectionDialog.getSelectedValues()));
-
-		JPopupMenu jPopupMenu = new JPopupMenu();
-		jPopupMenu.add(remove);
-
-		return jPopupMenu;
-	}
-
-	private void updateSelectionModeForDefaultValuesSelectionDialog() {
-		if (isMultiValue.isSelected()) {
-			valuesSelectionDialog.setMultiSelection();
-		} else {
-			valuesSelectionDialog.setSingleSelection();
-		}
-	}
-
-	private static JTextField createDisabledTextField() {
-		JTextField jTextField = new JTextField();
-		jTextField.setEnabled(false);
-		return jTextField;
-	}
-
-	private static void addInfoTooltipToLabel(JLabel jLabel, String tooltip) {
-		jLabel.setIcon(Icons.getIntellijIcon("info"));
-		jLabel.setToolTipText(tooltip);
-	}
-
-	private void activateSelection(ListSelectionDialog listSelectionDialog, JTextField defaultValuesTextField,
-			JTextField possibleValuesTextField) {
-		// We need to call this before setVisible
-		List<String> savedSelectedValues = listSelectionDialog.getSelectedValues();
-
-		listSelectionDialog.show(dialog);
-
-		if (listSelectionDialog.wasAccepted()) {
-			defaultValuesTextField
-					.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getSelectedValues()));
-			possibleValuesTextField
-					.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getValues()));
-		} else {
-			DefaultListModel<String> model = new DefaultListModel<>();
-			model.addAll(savedSelectedValues);
-			listSelectionDialog.setModel(model);
-			listSelectionDialog.setPreviousSelectionValues(savedSelectedValues);
-		}
-	}
-
-	private ListSelectionDialog createSelectionDialog(String title) {
-		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(dialog, title, true);
-		listSelectionDialog.setModel(new DefaultListModel<>());
-		return listSelectionDialog;
+		unicodeDetailsPanel.add(valueEditor, "grow");
 	}
 
 	private void initGeneralPanel() {
@@ -270,8 +181,8 @@ public class CreateConfigDialog {
 			defaultValues = new ArrayList<>(List.of(isBooleanTrue.isSelected()));
 			possibleValues = new ArrayList<>(defaultValues);
 		} else {
-			defaultValues = new ArrayList<>(valuesSelectionDialog.getSelectedValues());
-			possibleValues = new ArrayList<>(valuesSelectionDialog.getValues());
+			defaultValues = new ArrayList<>(valueEditor.getDefaults());
+			possibleValues = new ArrayList<>(valueEditor.getAllValues());
 		}
 
 		if (!editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
