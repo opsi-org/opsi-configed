@@ -338,8 +338,6 @@ public class ConfigDataService extends DataService {
 
 			config.put("description", configOptions.get(setting.getKey()).get("description"));
 
-			Logging.devel(configOptions.get(setting.getKey()).toString());
-
 			config.put("defaultValues", setting.getValue());
 
 			List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
