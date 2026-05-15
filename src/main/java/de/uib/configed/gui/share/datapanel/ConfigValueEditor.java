@@ -8,24 +8,28 @@ package de.uib.configed.gui.share.datapanel;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultCellEditor;
+import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -39,10 +43,12 @@ import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import net.miginfocom.swing.MigLayout;
 
+@SuppressWarnings("java:S1200")
 public class ConfigValueEditor extends JPanel {
 	private DefaultTableModel valuesTableModel;
 	private JTable valuesTable;
 	private FlatTextField addValueField;
+	private TableColumn defaultColumn;
 
 	private boolean isMultiValueMode;
 
@@ -50,20 +56,29 @@ public class ConfigValueEditor extends JPanel {
 		init();
 	}
 
-	/**
-	 * Sets whether multiple defaults are allowed. If false, only one checkbox
-	 * can be checked at a time.
-	 */
 	public void setMultiValueMode(boolean multi) {
+		if (this.isMultiValueMode == multi) {
+			return;
+		}
+
 		this.isMultiValueMode = multi;
+
+		defaultColumn.setHeaderValue(getDefaultColumnHeader());
+		defaultColumn.setCellEditor(new DefaultToggleEditor(valuesTable, valuesTableModel, isMultiValueMode));
+
 		if (!multi) {
 			enforceSingleSelection();
-			valuesTableModel.addTableModelListener(valuesTable);
 		}
+
+		valuesTable.getTableHeader().repaint();
+
+		valuesTable.revalidate();
+		valuesTable.repaint();
 	}
 
 	private void init() {
-		valuesTableModel = new DefaultTableModel(new String[] { "Value", "Default" }, 0) {
+		valuesTableModel = new DefaultTableModel(new String[] {
+				Configed.getResourceValue("ConfigValueEditor.table.valueColumn"), getDefaultColumnHeader() }, 0) {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				return columnIndex == 1 ? Boolean.class : String.class;
@@ -85,30 +100,27 @@ public class ConfigValueEditor extends JPanel {
 				String displayText = PropertiesCellEditorAndRenderer.formatValue(value);
 				JLabel label = new JLabel(displayText);
 				label.setOpaque(true);
+				label.setToolTipText(displayText);
 				ColorTableCellRenderer.colorize(label, isSelected, row, col);
 				return label;
 			}
 		});
 
-		valuesTable.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
+		defaultColumn = valuesTable.getColumnModel().getColumn(1);
+		defaultColumn.setCellRenderer(new DefaultTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int col) {
-				JCheckBox cb = new JCheckBox();
-				cb.setSelected(value != null && (Boolean) value);
-				ColorTableCellRenderer.colorize(cb, isSelected, row, col);
-				return cb;
+				JToggleButton tb = isMultiValueMode ? new JCheckBox() : new JRadioButton();
+				tb.setSelected(value != null && (Boolean) value);
+				if (!isMultiValueMode) {
+					tb.setToolTipText(Configed.getResourceValue("ConfigValueEditor.table.defaultColumn.tooltip"));
+				}
+				ColorTableCellRenderer.colorize(tb, isSelected, row, col);
+				return tb;
 			}
 		});
-
-		valuesTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JCheckBox()));
-
-		valuesTableModel.addTableModelListener((TableModelEvent e) -> {
-			if (e.getType() == TableModelEvent.UPDATE && e.getColumn() == 1 && !isMultiValueMode) {
-				int row = e.getFirstRow();
-				allowOnlySingleSelection(row);
-			}
-		});
+		defaultColumn.setCellEditor(new DefaultToggleEditor(valuesTable, valuesTableModel, isMultiValueMode));
 
 		SearchTargetModelFromTable searchTargetModel = new SearchTargetModelFromTable(valuesTable);
 		TableSearchPane searchPane = new TableSearchPane(searchTargetModel);
@@ -145,16 +157,9 @@ public class ConfigValueEditor extends JPanel {
 		add(controlsPanel, "growx");
 	}
 
-	private void allowOnlySingleSelection(int changedRow) {
-		boolean isChecked = (Boolean) valuesTableModel.getValueAt(changedRow, 1);
-
-		if (isChecked) {
-			for (int i = 0; i < valuesTableModel.getRowCount(); i++) {
-				if (i != changedRow) {
-					valuesTableModel.setValueAt(false, i, 1);
-				}
-			}
-		}
+	private String getDefaultColumnHeader() {
+		return isMultiValueMode ? Configed.getResourceValue("ConfigValueEditor.table.defaultColumn")
+				: Configed.getResourceValue("ConfigValueEditor.table.defaultColumn.selectOnlyOne");
 	}
 
 	private void enforceSingleSelection() {
@@ -167,12 +172,8 @@ public class ConfigValueEditor extends JPanel {
 
 		if (lastChecked != -1) {
 			for (int i = 0; i < valuesTableModel.getRowCount(); i++) {
-				if (i == lastChecked) {
-					valuesTableModel.setValueAt(true, i, 1);
-				} else if (Boolean.TRUE.equals(valuesTableModel.getValueAt(i, 1))) {
+				if (i != lastChecked) {
 					valuesTableModel.setValueAt(false, i, 1);
-				} else {
-					// Do nothing.
 				}
 			}
 		}
@@ -235,5 +236,50 @@ public class ConfigValueEditor extends JPanel {
 			all.add((String) valuesTableModel.getValueAt(i, 0));
 		}
 		return all;
+	}
+
+	@SuppressWarnings("java:S2972")
+	private static class DefaultToggleEditor extends AbstractCellEditor implements TableCellEditor {
+		private final JToggleButton toggleButton;
+		private final DefaultTableModel model;
+
+		public DefaultToggleEditor(JTable table, DefaultTableModel model, boolean isMultiValueMode) {
+			this.model = model;
+			this.toggleButton = isMultiValueMode ? new JCheckBox() : new JRadioButton();
+
+			toggleButton.addActionListener((ActionEvent e) -> {
+				int row = table.convertRowIndexToModel(table.getEditingRow());
+				if (row == -1) {
+					return;
+				}
+
+				if (!isMultiValueMode && toggleButton.isSelected()) {
+					uncheckAllExcept(row);
+				}
+
+				fireEditingStopped();
+			});
+		}
+
+		private void uncheckAllExcept(int row) {
+			for (int i = 0; i < model.getRowCount(); i++) {
+				if (i != row) {
+					model.setValueAt(false, i, 1);
+				}
+			}
+		}
+
+		@Override
+		public Object getCellEditorValue() {
+			return toggleButton.isSelected();
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+				int column) {
+			toggleButton.setSelected(value != null && (Boolean) value);
+			toggleButton.setEnabled(true);
+			return toggleButton;
+		}
 	}
 }
