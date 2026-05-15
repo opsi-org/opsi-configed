@@ -142,7 +142,7 @@ public class ConfigValueEditor extends JPanel {
 
 		JButton removeButton = new JButton(Icons.getIntellijIcon("remove"));
 		removeButton.setToolTipText(Configed.getResourceValue("CreateConfigDialog.removeValues"));
-		removeButton.addActionListener(e -> removeSelectedRow());
+		removeButton.addActionListener(e -> removeSelectedRows());
 
 		controlsPanel.add(addValueField, "growx");
 		controlsPanel.add(addMultiLineButton, "gapright " + Globals.GAP_SIZE);
@@ -183,11 +183,13 @@ public class ConfigValueEditor extends JPanel {
 		if (value == null || value.isBlank()) {
 			return;
 		}
+
 		for (int i = 0; i < valuesTableModel.getRowCount(); i++) {
 			if (value.equals(valuesTableModel.getValueAt(i, 0))) {
 				return;
 			}
 		}
+
 		valuesTableModel.addRow(new Object[] { value, false });
 		addValueField.setText("");
 		valuesTable.scrollRectToVisible(valuesTable.getCellRect(valuesTableModel.getRowCount() - 1, 0, true));
@@ -213,10 +215,10 @@ public class ConfigValueEditor extends JPanel {
 		}
 	}
 
-	private void removeSelectedRow() {
-		int row = valuesTable.getSelectedRow();
-		if (row != -1) {
-			valuesTableModel.removeRow(row);
+	private void removeSelectedRows() {
+		int[] rows = valuesTable.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {
+			valuesTableModel.removeRow(rows[i]);
 		}
 	}
 
