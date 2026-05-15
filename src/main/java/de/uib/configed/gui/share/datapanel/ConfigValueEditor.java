@@ -127,7 +127,8 @@ public class ConfigValueEditor extends JPanel {
 		searchPane.setNarrow(true);
 
 		JPanel controlsPanel = new JPanel();
-		controlsPanel.setLayout(new MigLayout("insets 0, fill", "[grow][pref!]", "[]"));
+		controlsPanel.setLayout(new MigLayout("insets 0, fill",
+				"[grow]" + Globals.MIN_GAP_SIZE + "[pref!]" + Globals.MIN_GAP_SIZE + "[pref!]", "[]"));
 
 		addValueField = new FlatTextField();
 		addValueField.setShowClearButton(true);
@@ -145,7 +146,7 @@ public class ConfigValueEditor extends JPanel {
 		removeButton.addActionListener(e -> removeSelectedRows());
 
 		controlsPanel.add(addValueField, "growx");
-		controlsPanel.add(addMultiLineButton, "gapright " + Globals.GAP_SIZE);
+		controlsPanel.add(addMultiLineButton);
 		controlsPanel.add(removeButton);
 
 		setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
