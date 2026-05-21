@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.AbstractTeaComponent;
@@ -35,6 +36,7 @@ import net.miginfocom.swing.MigLayout;
 public class GenericTableViewComponent
 		extends AbstractTeaComponent<GenericTableViewModel, GenericTableViewMsg, GenericTableViewEffect> {
 	private JTable table;
+	private TableSearchPane searchPane;
 	private boolean isUpdatingProgrammatically;
 
 	public GenericTableViewComponent() {
@@ -58,11 +60,32 @@ public class GenericTableViewComponent
 
 	@Override
 	protected JComponent renderView(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch) {
-		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg)), null);
+		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg)), null) {
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				List<TableColumnConfig> visibleColumns = model.getColumns().stream()
+						.filter(TableColumnConfig::isVisible).toList();
+
+				if (column < 0 || column >= visibleColumns.size()) {
+					return super.getCellRenderer(row, column);
+				}
+
+				TableColumnConfig config = visibleColumns.get(column);
+
+				if (config.getRenderer() != null) {
+					return config.getRenderer();
+				}
+
+				return super.getCellRenderer(row, column);
+			}
+		};
 		table.setFillsViewportHeight(model.getTableConfig().isFillViewportHeight());
 		table.setAutoCreateRowSorter(model.getTableConfig().isAutoCreateRowSorter());
-		table.setDefaultRenderer(Object.class, model.getTableConfig().getDefauTableCellRenderer());
+		if (model.getTableConfig().getDefauTableCellRenderer() != null) {
+			table.setDefaultRenderer(Object.class, model.getTableConfig().getDefauTableCellRenderer());
+		}
 		table.setSelectionMode(model.getTableConfig().getSelectionMode());
+		buildColumnModel();
 		table.setTableHeader(
 				model.getTableConfig().isShowTableHeader() ? new JTableHeader(table.getColumnModel()) : null);
 		if (model.getTableConfig().isShowTableHeader()) {
@@ -83,17 +106,6 @@ public class GenericTableViewComponent
 			dispatch(new GenericTableViewMsg.ChangeSelection(selectedRows));
 		});
 
-		for (int i = 0; i < model.getColumns().size(); i++) {
-			TableColumn tableColumn = table.getColumnModel().getColumn(i);
-			TableColumnConfig config = model.getColumns().get(i);
-
-			tableColumn.setPreferredWidth(config.getPrefferedWidth());
-
-			if (config.getRenderer() != null) {
-				tableColumn.setCellRenderer(config.getRenderer());
-			}
-		}
-
 		table.setDragEnabled(model.getTableConfig().isDragEnabled());
 
 		JScrollPane jScrollPaneInfo = new JScrollPane(table);
@@ -105,7 +117,7 @@ public class GenericTableViewComponent
 				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
 
 		if (model.isShowSearchPane()) {
-			TableSearchPane searchPane = new TableSearchPane(
+			searchPane = new TableSearchPane(
 					model.getSearchTargetModelFromTable() == null ? new SearchTargetModelFromTable(table)
 							: model.getSearchTargetModelFromTable());
 			searchPane.setFilterKey(model.getFilterKey());
@@ -116,6 +128,16 @@ public class GenericTableViewComponent
 		panel.add(jScrollPaneInfo, "grow, push");
 
 		return panel;
+	}
+
+	// TODO: remove later (exists only for compatibility with old code)
+	public JTable getTable() {
+		return table;
+	}
+
+	// TODO: remove later (exists only for compatibility with old code)
+	public TableSearchPane getSearchPane() {
+		return searchPane;
 	}
 
 	private JPopupMenu getPopupMenu() {
@@ -161,7 +183,7 @@ public class GenericTableViewComponent
 	protected void refreshView() {
 		isUpdatingProgrammatically = true;
 
-		rebuildColumnModel();
+		buildColumnModel();
 
 		table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
 
@@ -170,7 +192,7 @@ public class GenericTableViewComponent
 		isUpdatingProgrammatically = false;
 	}
 
-	private void rebuildColumnModel() {
+	private void buildColumnModel() {
 		DefaultTableColumnModel newColumnModel = new DefaultTableColumnModel();
 
 		List<TableColumnConfig> visibleColumnConfigs = model.getColumns().stream().filter(TableColumnConfig::isVisible)
@@ -183,6 +205,10 @@ public class GenericTableViewComponent
 
 			if (columnConfig.getPrefferedWidth() > 0) {
 				col.setPreferredWidth(columnConfig.getPrefferedWidth());
+			}
+
+			if (columnConfig.getMaxWidth() > 0) {
+				col.setMaxWidth(columnConfig.getMaxWidth());
 			}
 
 			if (columnConfig.getRenderer() != null) {

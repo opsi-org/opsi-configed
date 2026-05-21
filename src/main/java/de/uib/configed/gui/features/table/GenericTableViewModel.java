@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.features.table;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,15 +25,19 @@ import lombok.With;
 @With
 @Builder(toBuilder = true)
 public class GenericTableViewModel {
-	private final List<RowData> rows;
-	private final List<TableColumnConfig> columns;
+	@Builder.Default
+	private final List<RowData> rows = new ArrayList<>();
+	@Builder.Default
+	private final List<TableColumnConfig> columns = new ArrayList<>();
 	private final TableConfig tableConfig;
-	private final Set<Integer> selectedRows;
+	@Builder.Default
+	private final Set<Integer> selectedRows = new HashSet<>();
 	private final boolean isDirty;
 	private final boolean allowMultipleSelection;
 	private final boolean showSearchPane;
 	private final FilterKey filterKey;
-	private final List<Map<String, Object>> originalSnapshot;
+	@Builder.Default
+	private final List<Map<String, Object>> originalSnapshot = new ArrayList<>();
 	private final RowDiffStrategy diffStrategy;
 	private final SearchTargetModelFromTable searchTargetModelFromTable;
 }

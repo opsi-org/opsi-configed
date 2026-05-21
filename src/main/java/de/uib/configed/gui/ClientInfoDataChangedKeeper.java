@@ -65,7 +65,6 @@ public class ClientInfoDataChangedKeeper extends AbstractDataChangedKeeper {
 			for (String client : configedMain.getSelectedClients()) {
 				hostInfo.showAndSaveInternally(client, (Map<?, ?>) source.get(client));
 			}
-			Logging.devel(this, "source", source);
 			// configedMain.getClientTablePanel().getClientTable().getComponent().dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(null));
 			persistenceController.getDataServices().host.updateHosts();
 

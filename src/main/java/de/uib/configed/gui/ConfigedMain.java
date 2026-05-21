@@ -38,6 +38,7 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.features.tree.AbstractGroupTree;
@@ -301,7 +302,7 @@ public class ConfigedMain {
 		Logging.checkErrorList();
 
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
-				clientTablePanel.getClientTable().getTable().model.getSelectedRows().size());
+				clientTablePanel.getClientTable().getSelectedRowCount());
 
 		Set<String> clientsSelectedInTable = getSelectedSet();
 		Logging.info(this, "setSelectedClients clientNames size ", clientsSelectedInTable.size());
@@ -334,10 +335,10 @@ public class ConfigedMain {
 		hostInfo.resetGui();
 
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
-				" as well as ", clientTablePanel.getClientTable().getTable().model.getSelectedRows().size());
+				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
-				clientTablePanel.getClientTable().getTable().model.getRows().size(), selectedClients, hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel()
+				.updateValues(clientTablePanel.getClientTable().getSelectedRowCount(), selectedClients, hostInfo);
 
 		clientTree.updateSelectedObjectsInTable();
 	}
@@ -463,6 +464,9 @@ public class ConfigedMain {
 			clientsForDepots.retainAll(selectedClients);
 		}
 
+		clientTablePanel.getTableComponent()
+				.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(getOriginalSnapshot(clientsForDepots)));
+
 		// building table model
 		return buildTableModel(clientsForDepots);
 	}
@@ -517,6 +521,30 @@ public class ConfigedMain {
 					clientIds.size());
 		}
 		return model;
+	}
+
+	private List<Map<String, Object>> getOriginalSnapshot(Set<String> clientIds) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		Map<String, HostInfo> pcinfos = persistenceController.getDataServices().hostInfoCollections
+				.getMapOfPCInfoMaps();
+
+		Map<String, Boolean> setOfDisplayFields = persistenceController.getDataServices().host.getHostDisplayFields();
+		for (String clientId : clientIds) {
+			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
+
+			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
+			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL,
+					persistenceController.getDataServices().host.getSessionInfo().getOrDefault(clientId, ""));
+			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
+
+			Map<String, Object> filteredMap = rowmap.entrySet().stream()
+					.filter(entry -> setOfDisplayFields.get(entry.getKey()).equals(Boolean.TRUE))
+					.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+
+			result.add(filteredMap);
+		}
+
+		return result;
 	}
 
 	private void rebuildTree() {
@@ -636,11 +664,11 @@ public class ConfigedMain {
 		// List<Pair<String, SortOrder>> sortKeyNames = clientTablePanel.getClientTable().getSortedNames();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
-				clientTablePanel.getClientTable().getTable().model.getSelectedRows().size());
+				clientTablePanel.getClientTable().getSelectedRows());
 
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
-				clientTablePanel.getClientTable().getTable().model.getSelectedRows().size());
+				clientTablePanel.getClientTable().getSelectedRows());
 
 		// int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
@@ -660,21 +688,21 @@ public class ConfigedMain {
 
 		// setSelectionPanelCols();
 
-		if (restoreSortKeys) {
-			// clientTablePanel.getClientTable().setSortedByNames(sortKeyNames);
-		}
+		// if (restoreSortKeys) {
+		// 	clientTablePanel.getClientTable().setSortedByNames(sortKeyNames);
+		// }
 
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",
 				Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
-				clientTablePanel.getClientTable().getTable().model.getSelectedRows().size());
+				clientTablePanel.getClientTable().getSelectedRows());
 
-		clientTablePanel.restoreFilter();
+		// clientTablePanel.restoreFilter();
 		// did lose the selection since last setting
-		clientTablePanel.setSelectedValues(selectValues);
+		// clientTablePanel.setSelectedValues(selectValues);
 
 		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
-				clientTablePanel.getClientTable().getTable().model.getRows().size(),
+				clientTablePanel.getClientTable().getRowCount(),
 				selectValues != null ? new ArrayList<>(selectValues) : new ArrayList<>(), hostInfo);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel ",
@@ -1051,8 +1079,8 @@ public class ConfigedMain {
 		hostInfo.resetGui();
 		// clientTablePanel.restoreFilter();
 		this.selectedClients = clientsLeft;
-		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
-				clientTablePanel.getClientTable().getTable().model.getRows().size(), this.selectedClients, hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel()
+				.updateValues(clientTablePanel.getClientTable().getRowCount(), this.selectedClients, hostInfo);
 		clientTablePanel.setSelectedValues(this.selectedClients);
 
 		mainFrame.deactivateLoadingCursor();
@@ -1060,8 +1088,8 @@ public class ConfigedMain {
 
 	public Set<String> getSelectedSet() {
 		Set<String> result = new HashSet<>();
-		List<RowData> rows = clientTablePanel.getClientTable().getTable().model.getRows();
-		Set<Integer> selectedRows = clientTablePanel.getClientTable().getTable().model.getSelectedRows();
+		List<RowData> rows = clientTablePanel.getTableComponent().model.getRows();
+		Set<Integer> selectedRows = clientTablePanel.getTableComponent().model.getSelectedRows();
 		for (int i = 0; i < rows.size(); i++) {
 			if (selectedRows.contains(i)) {
 				RowData row = rows.get(i);
@@ -1070,6 +1098,7 @@ public class ConfigedMain {
 			}
 		}
 		return result;
+		// return clientTablePanel.getClientTable().getSelectedSet();
 	}
 
 	private List<String> getClientSelectionBasedOnDepotSelection(Set<String> selValuesList) {

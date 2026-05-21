@@ -20,7 +20,7 @@ import lombok.With;
  */
 @Value
 @With
-@Builder
+@Builder(toBuilder = true)
 public class TableColumnConfig {
 	private final String key;
 	private final String header;
@@ -28,6 +28,7 @@ public class TableColumnConfig {
 	@Builder.Default
 	private final boolean visible = true;
 	private final int prefferedWidth;
+	private final int maxWidth;
 
 	private transient TableCellRenderer renderer;
 	private transient Comparator<Object> comparator;

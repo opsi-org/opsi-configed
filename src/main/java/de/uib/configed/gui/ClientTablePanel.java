@@ -7,24 +7,38 @@
 package de.uib.configed.gui;
 
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewModel;
+import de.uib.configed.gui.features.table.TableColumnConfig;
+import de.uib.configed.gui.features.table.TableConfig;
 import de.uib.configed.gui.share.icons.Icons;
+import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
+import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
+import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -38,11 +52,18 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 	// we put a JTable on a standard JScrollPane
 	private ClientTable clientTable;
+	private GenericTableViewComponent clientTableViewComponent;
+	private JComponent component;
 
 	private Set<Integer> lastSelectedRows = new HashSet<>();
 
+	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
-	private JComponent component;
+
+	private Set<String> checkmarks = Set.of(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
+			HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
+			HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL,
+			HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL);
 
 	public ClientTablePanel(ConfigedMain configedMain) {
 		super();
@@ -53,7 +74,31 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 	private void initComponents() {
 		clientTable = new ClientTable(configedMain);
-		component = clientTable.getTable().initUI();
+
+		List<TableColumnConfig> columns = new ArrayList<>();
+		for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
+				.entrySet()) {
+			TableColumnConfig column = TableColumnConfig.builder().key(entry.getKey())
+					.header(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey())).build();
+
+			if (checkmarks.contains(entry.getKey())) {
+				column = column.toBuilder().renderer(getTableCellRendererBasedOnIconType(entry.getKey())).maxWidth(100)
+						.build();
+			}
+
+			columns.add(column.withVisible(entry.getValue()));
+		}
+
+		TableConfig config = TableConfig.builder().defauTableCellRenderer(new ColorTableCellRenderer())
+				.fillViewportHeight(true).showTableHeader(true).dragEnabled(true).autoCreateRowSorter(true)
+				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION).reorderingAllowed(true)
+				.enableHeaderContextMenu(true).build();
+		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
+				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)
+				// .searchTargetModelFromTable(new SearchTargetModelFromClientTable(configedMain))
+				.filterKey(FilterKey.CLIENT_TABLE).build());
+		component = clientTableViewComponent.initUI();
+		selectionModel = (DefaultListSelectionModel) clientTableViewComponent.getTable().getSelectionModel();
 
 		// Ask to be notified of selection changes.
 		// selectionModel = (DefaultListSelectionModel) clientTable.getSelectionModel();
@@ -61,50 +106,73 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 		// activateListSelectionListener();
 
-		// searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, component));
+		searchPane = clientTableViewComponent.getSearchPane();
+		// searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
 		// searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
 		// searchPane.setFiltering();
 
-		component.addKeyListener(searchPane);
+		// clientTable.addKeyListener(searchPane);
 
-		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
-				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
+		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill, wrap 1", "[grow, fill]", "[grow, fill]"));
 
 		// add(searchPane);
 		add(component, "grow, push");
 	}
 
+	public GenericTableViewComponent getTableComponent() {
+		return clientTableViewComponent;
+	}
+
+	private static TableCellRenderer getTableCellRendererBasedOnIconType(String iconType) {
+		TableCellRenderer cellRenderer = new IconTableCellRenderer<>(
+				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark", null)), false);
+		if (HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL.equals(iconType)) {
+			cellRenderer = new IconTableCellRenderer<>(
+					IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark", Globals.OPSI_OK)), false);
+		} else if (HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL.equals(iconType)) {
+			cellRenderer = new IconTableCellRenderer<>(IconTableCellRenderer.PLATFORM_ICONS);
+		} else if (HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL.equals(iconType)) {
+			cellRenderer = new IconTableCellRenderer<>(IconTableCellRenderer.DEVICE_ICONS);
+		} else {
+			// Do nothing.
+		}
+		return cellRenderer;
+	}
+
 	public void updateTable() {
-		// if (scrollpane.getViewport().getView() == clientTable) {
-		// 	// Do nothing if we already set the table as view
-		// 	return;
-		// }
+		if (getComponent(0) == component) {
+			// Do nothing if we already set the table as view
+			return;
+		}
 
 		if (persistenceController.getDataServices().hostInfoCollections.getCountClients() == 0) {
 			setMissingDataPanel();
 		} else {
-			// scrollpane.getViewport().setView(clientTable);
+			if (getComponent(0) != null) {
+				remove(0);
+			}
+			add(component);
 		}
 	}
 
-	// public void activateListSelectionListener() {
-	// 	// We want to prevent, that the listSelectionListener is added more than once
-	// 	if (!List.of(selectionModel.getListSelectionListeners()).contains(this)) {
-	// 		selectionModel.addListSelectionListener(this);
-	// 	}
-	// }
+	public void activateListSelectionListener() {
+		// We want to prevent, that the listSelectionListener is added more than once
+		if (!List.of(selectionModel.getListSelectionListeners()).contains(this)) {
+			selectionModel.addListSelectionListener(this);
+		}
+	}
 
 	// This returns if the selectionListener was actually deactivated
 	// if the list only contains one listener, it's only the JTable itself
 	// that is listening, but not our other listener
-	// public boolean deactivateListSelectionListener() {
-	// if (selectionModel.getListSelectionListeners().length == 1) {
-	// 	return false;
-	// } else {
-	// 	selectionModel.removeListSelectionListener(this);
-	// 	return true;
-	// }
-	// }
+	public boolean deactivateListSelectionListener() {
+		if (selectionModel.getListSelectionListeners().length == 1) {
+			return false;
+		} else {
+			selectionModel.removeListSelectionListener(this);
+			return true;
+		}
+	}
 
 	public boolean isFilteredMode() {
 		return searchPane.isFilteredMode();
@@ -125,16 +193,16 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private void actOnListSelection() {
 		if (ChangedDataManager.checkSaveAll(true)) {
 			configedMain.actOnListSelection();
-			lastSelectedRows = clientTable.getTable().model.getSelectedRows();
+			lastSelectedRows = clientTableViewComponent.model.getSelectedRows();
 		} else {
-			// deactivateListSelectionListener();
-			// selectionModel.setValueIsAdjusting(true);
-			// selectionModel.clearSelection();
-			// for (int row : lastSelectedRows) {
-			// 	selectionModel.addSelectionInterval(row, row);
-			// }
-			// selectionModel.setValueIsAdjusting(false);
-			// activateListSelectionListener();
+			deactivateListSelectionListener();
+			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
+			for (int row : lastSelectedRows) {
+				selectionModel.addSelectionInterval(row, row);
+			}
+			selectionModel.setValueIsAdjusting(false);
+			activateListSelectionListener();
 		}
 	}
 
@@ -153,12 +221,16 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 		mdPanel.add(panel, "grow, center");
 
-		scrollpane.getViewport().setView(mdPanel);
+		if (getComponent(0) != null) {
+			remove(0);
+		}
+		add(mdPanel);
 	}
 
 	@Override
 	public synchronized void addMouseListener(MouseListener l) {
 		scrollpane.addMouseListener(l);
+		// clientTable.addMouseListener(l);
 		component.addMouseListener(l);
 	}
 
@@ -183,70 +255,71 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 		Logging.info(this, "setSelectedValues ", valuesListS);
 
-		// if (clientsToSelect == null) {
-		// 	// Clear selection when empty
-		// 	selectionModel.clearSelection();
-		// } else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
-		// 	// Also act on list selection when there is no client to select.
-		// 	// For example when the last client is unselected in the client list,
-		// 	// this method is not called automatically by the selection listener,
-		// 	// so we do it manually
-		// 	actOnListSelection();
-		// } else {
-		// 	// because of ordering , we create a TreeSet view of the list
-		// 	selectionModel.setValueIsAdjusting(true);
-		// 	selectionModel.clearSelection();
-		// 	for (int i = 0; i < clientTable.getRowCount(); i++) {
-		// 		Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", clientTable.getValueAt(i, 0));
+		if (clientsToSelect == null) {
+			// Clear selection when empty
+			selectionModel.clearSelection();
+		} else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
+			// Also act on list selection when there is no client to select.
+			// For example when the last client is unselected in the client list,
+			// this method is not called automatically by the selection listener,
+			// so we do it manually
+			actOnListSelection();
+		} else {
+			// because of ordering , we create a TreeSet view of the list
+			selectionModel.setValueIsAdjusting(true);
+			selectionModel.clearSelection();
+			for (int i = 0; i < clientTable.getRowCount(); i++) {
+				Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", clientTable.getValueAt(i, 0));
 
-		// 		if (clientsToSelect.contains(clientTable.getClientName(i))) {
-		// 			selectionModel.addSelectionInterval(i, i);
-		// 			Logging.debug(this, "setSelectedValues add interval ", i);
-		// 		}
-		// 	}
+				if (clientsToSelect.contains(clientTable.getClientName(i))) {
+					selectionModel.addSelectionInterval(i, i);
+					Logging.debug(this, "setSelectedValues add interval ", i);
+				}
+			}
 
-		// 	selectionModel.setValueIsAdjusting(false);
+			selectionModel.setValueIsAdjusting(false);
 
-		// 	clientTable.moveToFirstSelected();
+			clientTable.moveToFirstSelected();
 
-		// 	Logging.info(this, "setSelectedValues  produced ", clientTable.getSelectedRowCount());
-		// }
+			Logging.info(this, "setSelectedValues  produced ", clientTable.getSelectedRowCount());
+		}
 	}
 
-	public GenericTableViewModel getTableModel() {
-		return clientTable.getTable().model;
+	public DefaultTableModel getTableModel() {
+		return (DefaultTableModel) clientTableViewComponent.getTable().getModel();
 	}
 
-	// public int findModelRowFromClientName(String clientName) {
-	// 	int result = -1;
+	public int findModelRowFromClientName(String clientName) {
+		int result = -1;
 
-	// 	if (clientName == null) {
-	// 		return result;
-	// 	}
+		if (clientName == null) {
+			return result;
+		}
 
-	// 	boolean found = false;
-	// 	int row = 0;
+		boolean found = false;
+		int row = 0;
 
-	// 	while (!found && row < getTableModel().getRowCount()) {
-	// 		String compareName = clientTable.getClientName(row);
+		while (!found && row < getTableModel().getRowCount()) {
+			String compareName = clientTable.getClientName(row);
 
-	// 		if (clientName.equals(compareName)) {
-	// 			found = true;
-	// 			result = row;
-	// 		}
+			if (clientName.equals(compareName)) {
+				found = true;
+				result = row;
+			}
 
-	// 		if (!found) {
-	// 			row++;
-	// 		}
-	// 	}
+			if (!found) {
+				row++;
+			}
+		}
 
-	// 	return result;
-	// }
+		return result;
+	}
 
-	private static class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
+	private class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
 		private ConfigedMain configedMain;
 
-		public SearchTargetModelFromClientTable(ConfigedMain configedMain, JTable table) {
+		public SearchTargetModelFromClientTable(ConfigedMain configedMain) {
+			JTable table = clientTableViewComponent.getTable();
 			super(table);
 
 			this.configedMain = configedMain;

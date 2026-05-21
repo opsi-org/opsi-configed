@@ -356,6 +356,12 @@ public class HostInfo {
 		if (sourceOfChanges.get(key) != null) {
 			data.put(key, sourceOfChanges.get(key));
 
+			// int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
+			// if (col > -1) {
+			// 	int row = clientTablePanel.findModelRowFromClientName(client);
+			// 	clientTablePanel.getClientTable().setValueAt(data.get(key), row, col);
+			// }
+
 			// restoring old value
 			setTextMethod.accept((String) data.get(key));
 
@@ -402,6 +408,14 @@ public class HostInfo {
 	private static void setClientBoolean(String client, Map<?, ?> sourceOfChanges, String key) {
 		if (sourceOfChanges.get(key) != null) {
 			boolean value = "true".equals(sourceOfChanges.get(key));
+
+			// int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
+
+			// if (col > -1) {
+			// 	int row = clientTablePanel.findModelRowFromClientName(client);
+			// 	// write it into the visible table
+			// 	clientTablePanel.getClientTable().setValueAt(value, row, col);
+			// }
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
