@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
@@ -29,6 +30,7 @@ import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.gui.share.DialogUtils;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList.FilterContext;
@@ -207,6 +209,16 @@ public class ListSelectionDialog {
 		return listSelectionList.getSelectedValuesList();
 	}
 
+	public List<String> getValues() {
+		List<String> values = new ArrayList<>();
+
+		for (int i = 0; i < listSelectionList.getModel().getSize(); i++) {
+			values.add(listSelectionList.getModel().getElementAt(i));
+		}
+
+		return values;
+	}
+
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
 		listSelectionList.setPreviousSelectionValues(previouslySelectedValues);
 	}
@@ -227,6 +239,10 @@ public class ListSelectionDialog {
 		listSelectionList.setNonDeselectableValues(nonDeselectableValues);
 	}
 
+	public void addPopupMenu(JPopupMenu popupMenu) {
+		listSelectionList.addMouseListener(new PopupMouseListener(popupMenu));
+	}
+
 	private void addItem(String element) {
 		listSelectionList.addItem(element);
 
@@ -235,10 +251,14 @@ public class ListSelectionDialog {
 		listSelectionList.updateSelection();
 	}
 
-	private void removeItem(String element) {
-		listSelectionList.removeItem(element);
+	public void removeItems(Iterable<String> elements) {
+		elements.forEach(element -> listSelectionList.removeItem(element));
 
 		// Without this the search won't work
 		updateSearchTargetModel(listSelectionList.getOriginalModel());
+	}
+
+	private void removeItem(String element) {
+		removeItems(List.of(element));
 	}
 }
