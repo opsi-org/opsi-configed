@@ -274,6 +274,30 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		}
 	}
 
+	public int findModelRowFromClientName(String clientName) {
+		for (int i = 0; i < clientTableViewComponent.model.getRows().size(); i++) {
+			if (!clientTableViewComponent.model.getSelectedRows().contains(i)) {
+				continue;
+			}
+
+			RowData data = clientTableViewComponent.model.getRows().get(i);
+			return clientName.equals(data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class)) ? i : -1;
+		}
+
+		return -1;
+	}
+
+	public int findColumnIndex(String columnKey) {
+		int columnIndex = -1;
+		for (int i = 0; i < clientTableViewComponent.model.getColumns().size(); i++) {
+			TableColumnConfig columnConfig = clientTableViewComponent.model.getColumns().get(i);
+			if (columnKey.equals(columnConfig.getKey())) {
+				columnIndex = i;
+			}
+		}
+		return columnIndex;
+	}
+
 	public DefaultTableModel getTableModel() {
 		return (DefaultTableModel) clientTableViewComponent.getTable().getModel();
 	}

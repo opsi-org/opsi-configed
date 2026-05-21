@@ -13,7 +13,6 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
-import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 
@@ -44,14 +43,8 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		}
 
 		GenericTableViewComponent component = configedMain.getClientTablePanel().getTableComponent();
-		int sessionColumnIndex = -1;
-
-		for (int i = 0; i < component.model.getColumns().size(); i++) {
-			TableColumnConfig columnConfig = component.model.getColumns().get(i);
-			if (HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL.equals(columnConfig.getKey())) {
-				sessionColumnIndex = i;
-			}
-		}
+		int sessionColumnIndex = configedMain.getClientTablePanel()
+				.findColumnIndex(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 
 		if (sessionColumnIndex != -1) {
 			for (int i = 0; i < component.model.getRows().size(); i++) {

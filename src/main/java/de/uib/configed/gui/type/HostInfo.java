@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ClientInfoPanel;
+import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.share.logging.Logging;
 
 public class HostInfo {
@@ -352,15 +354,12 @@ public class HostInfo {
 		clientInfoPanel.setOpsiHostKey((String) data.get(HOST_KEY_KEY));
 	}
 
-	private void setClientValue(String client, Map<?, ?> sourceOfChanges, String key, Consumer<String> setTextMethod) {
+	private void setClientValue(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges, String key,
+			String displayFieldLabel, Consumer<String> setTextMethod) {
 		if (sourceOfChanges.get(key) != null) {
 			data.put(key, sourceOfChanges.get(key));
 
-			// int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
-			// if (col > -1) {
-			// 	int row = clientTablePanel.findModelRowFromClientName(client);
-			// 	clientTablePanel.getClientTable().setValueAt(data.get(key), row, col);
-			// }
+			updateClientTable(clientTablePanel, displayFieldLabel, client, data.get(key));
 
 			// restoring old value
 			setTextMethod.accept((String) data.get(key));
@@ -405,17 +404,12 @@ public class HostInfo {
 		}
 	}
 
-	private static void setClientBoolean(String client, Map<?, ?> sourceOfChanges, String key) {
+	private static void setClientBoolean(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
+			String key, String displayFieldLabel) {
 		if (sourceOfChanges.get(key) != null) {
 			boolean value = "true".equals(sourceOfChanges.get(key));
 
-			// int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
-
-			// if (col > -1) {
-			// 	int row = clientTablePanel.findModelRowFromClientName(client);
-			// 	// write it into the visible table
-			// 	clientTablePanel.getClientTable().setValueAt(value, row, col);
-			// }
+			updateClientTable(clientTablePanel, displayFieldLabel, client, value);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
@@ -424,7 +418,18 @@ public class HostInfo {
 		}
 	}
 
-	public void showAndSaveInternally(String client, Map<?, ?> sourceOfChanges) {
+	private static void updateClientTable(ClientTablePanel clientTablePanel, String displayFieldLabel, String client,
+			Object value) {
+		int col = clientTablePanel.findColumnIndex(displayFieldLabel);
+		if (col > -1) {
+			int row = clientTablePanel.findModelRowFromClientName(client);
+			clientTablePanel.deactivateListSelectionListener();
+			clientTablePanel.getTableComponent().dispatch(new GenericTableViewMsg.CellEdited(row, col, value));
+			clientTablePanel.activateListSelectionListener();
+		}
+	}
+
+	public void showAndSaveInternally(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: ", sourceOfChanges);
 			return;
@@ -439,24 +444,30 @@ public class HostInfo {
 		ClientInfoPanel clientInfoPanel = ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
 				.getClientInfoPanel();
 
-		setClientValue(client, sourceOfChanges, CLIENT_DESCRIPTION_KEY, clientInfoPanel::setClientDescriptionText);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_DESCRIPTION_KEY,
+				CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientDescriptionText);
 
-		setClientValue(client, sourceOfChanges, CLIENT_INVENTORY_NUMBER_KEY,
-				clientInfoPanel::setClientInventoryNumberText);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_INVENTORY_NUMBER_KEY,
+				CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientInventoryNumberText);
 
 		setOneTimePassword(client, sourceOfChanges);
 
 		setClientNotes(client, sourceOfChanges);
 
-		setClientValue(client, sourceOfChanges, CLIENT_SYSTEM_UUID_KEY, clientInfoPanel::setClientSystemUUID);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_SYSTEM_UUID_KEY,
+				CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientSystemUUID);
 
-		setClientValue(client, sourceOfChanges, CLIENT_MAC_ADDRESS_KEY, clientInfoPanel::setClientMacAddress);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_MAC_ADDRESS_KEY,
+				CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientMacAddress);
 
-		setClientValue(client, sourceOfChanges, CLIENT_IP_ADDRESS_KEY, clientInfoPanel::setClientIpAddress);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_IP_ADDRESS_KEY,
+				CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientIpAddress);
 
-		setClientBoolean(client, sourceOfChanges, CLIENT_SHUTDOWN_INSTALL_KEY);
+		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_SHUTDOWN_INSTALL_KEY,
+				CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 
-		setClientBoolean(client, sourceOfChanges, CLIENT_WAN_CONFIG_KEY);
+		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_WAN_CONFIG_KEY,
+				CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 	}
 
 	@Override
