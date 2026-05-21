@@ -24,7 +24,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -47,9 +46,7 @@ import de.uib.configed.gui.features.tree.GroupNode;
 import de.uib.configed.gui.features.tree.GroupTreeTransferHandler;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.WindowsPositionManager;
-import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
-import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -134,8 +131,6 @@ public class ConfigedMain {
 		// clientTablePanel.getClientTable().updateModel(buildClientListTableModel(true));
 		clientTablePanel.initColumnNames();
 
-		setSelectionPanelCols();
-
 		// clientTablePanel.getClientTable().initSortKeys();
 
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
@@ -200,7 +195,7 @@ public class ConfigedMain {
 	public void registerMessagebusListeners() {
 		Messagebus.getInstance().getWebSocket().registerListener(connectedHostsManager);
 		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getMainPanelManager().getHostsStatusPanel());
-		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
+		// Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
 		Messagebus.getInstance().getWebSocket()
 				.registerListener(mainFrame.getMainPanelManager().getClientConfiguration().getProductPageManager());
 	}
@@ -302,7 +297,7 @@ public class ConfigedMain {
 		Logging.checkErrorList();
 
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
-				clientTablePanel.getClientTable().getSelectedRowCount());
+				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
 		Set<String> clientsSelectedInTable = getSelectedSet();
 		Logging.info(this, "setSelectedClients clientNames size ", clientsSelectedInTable.size());
@@ -335,10 +330,10 @@ public class ConfigedMain {
 		hostInfo.resetGui();
 
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
-				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
+				" as well as ", clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
-		mainFrame.getMainPanelManager().getHostsStatusPanel()
-				.updateValues(clientTablePanel.getClientTable().getSelectedRowCount(), selectedClients, hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
+				clientTablePanel.getTableComponent().model.getSelectedRows().size(), selectedClients, hostInfo);
 
 		clientTree.updateSelectedObjectsInTable();
 	}
@@ -611,43 +606,6 @@ public class ConfigedMain {
 		return selectedClients;
 	}
 
-	private void setSelectionPanelCols() {
-		IconTableCellRenderer<Boolean> defaultCheckMarkCellRenderer = new IconTableCellRenderer<>(
-				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark", null)), false);
-		IconTableCellRenderer<Boolean> opsiCheckMarkCellRenderer = new IconTableCellRenderer<>(
-				IconTableCellRenderer.booleanMap(Icons.getIntellijIcon("checkmark", Globals.OPSI_OK)), false);
-		IconTableCellRenderer<String> platformIconTableCellRenderer = new IconTableCellRenderer<>(
-				IconTableCellRenderer.PLATFORM_ICONS);
-		IconTableCellRenderer<String> deviceTypeIconTableCellRenderer = new IconTableCellRenderer<>(
-				IconTableCellRenderer.DEVICE_ICONS);
-
-		configureColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, opsiCheckMarkCellRenderer);
-		configureColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
-		configureColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
-		configureColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
-		configureColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, platformIconTableCellRenderer);
-		configureColumn(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, deviceTypeIconTableCellRenderer);
-	}
-
-	private void configureColumn(String fieldLabel, TableCellRenderer renderer) {
-		// if (Boolean.FALSE.equals(persistenceController.getDataServices().host.getHostDisplayFields().get(fieldLabel))) {
-		// 	Logging.info(this, "configureColumn, column is hidden " + fieldLabel);
-		// 	return;
-		// }
-
-		// String colPropertyName = Configed.getResourceValue("ConfigedMain.pclistTableModel." + fieldLabel);
-		// int col = clientTablePanel.getTableModel().findColumn(colPropertyName);
-		// if (col == -1) {
-		// 	Logging.info(this, "configureColumn, column not found " + colPropertyName);
-		// 	return;
-		// }
-
-		// TableColumn column = clientTablePanel.getClientTable().getColumnModel().getColumn(col);
-		// column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-		// column.setCellRenderer(renderer);
-		// Logging.info(this, "configureColumn, found column ", col);
-	}
-
 	public void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree) {
 		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : ", getSelectedSet());
 
@@ -664,11 +622,11 @@ public class ConfigedMain {
 		// List<Pair<String, SortOrder>> sortKeyNames = clientTablePanel.getClientTable().getSortedNames();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
-				clientTablePanel.getClientTable().getSelectedRows());
+				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
-				clientTablePanel.getClientTable().getSelectedRows());
+				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
 		// int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
@@ -695,14 +653,14 @@ public class ConfigedMain {
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",
 				Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
-				clientTablePanel.getClientTable().getSelectedRows());
+				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
 		// clientTablePanel.restoreFilter();
 		// did lose the selection since last setting
 		// clientTablePanel.setSelectedValues(selectValues);
 
 		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
-				clientTablePanel.getClientTable().getRowCount(),
+				clientTablePanel.getTableComponent().model.getRows().size(),
 				selectValues != null ? new ArrayList<>(selectValues) : new ArrayList<>(), hostInfo);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel ",
@@ -977,7 +935,7 @@ public class ConfigedMain {
 				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
 				.getPanelNetbootProductSettings().getProductTable().getSelectedIDs();
-		// clientTablePanel.deactivateListSelectionListener();
+		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotListSelectionListener);
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -1005,7 +963,7 @@ public class ConfigedMain {
 
 		Logging.debug(this, " reset the values, particularly in list ");
 
-		// clientTablePanel.activateListSelectionListener();
+		clientTablePanel.activateListSelectionListener();
 		clientTablePanel.restoreFilter();
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTree.produceActiveParents();
@@ -1079,8 +1037,8 @@ public class ConfigedMain {
 		hostInfo.resetGui();
 		// clientTablePanel.restoreFilter();
 		this.selectedClients = clientsLeft;
-		mainFrame.getMainPanelManager().getHostsStatusPanel()
-				.updateValues(clientTablePanel.getClientTable().getRowCount(), this.selectedClients, hostInfo);
+		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
+				clientTablePanel.getTableComponent().model.getRows().size(), this.selectedClients, hostInfo);
 		clientTablePanel.setSelectedValues(this.selectedClients);
 
 		mainFrame.deactivateLoadingCursor();

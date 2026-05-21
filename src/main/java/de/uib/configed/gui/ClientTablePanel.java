@@ -30,6 +30,8 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewModel;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
+import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.features.table.TableConfig;
 import de.uib.configed.gui.share.icons.Icons;
@@ -51,7 +53,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 			.getPersistenceController();
 
 	// we put a JTable on a standard JScrollPane
-	private ClientTable clientTable;
 	private GenericTableViewComponent clientTableViewComponent;
 	private JComponent component;
 
@@ -73,8 +74,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	}
 
 	private void initComponents() {
-		clientTable = new ClientTable(configedMain);
-
 		List<TableColumnConfig> columns = new ArrayList<>();
 		for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
 				.entrySet()) {
@@ -178,10 +177,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		return searchPane.isFilteredMode();
 	}
 
-	public ClientTable getClientTable() {
-		return clientTable;
-	}
-
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
@@ -265,54 +260,22 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 			// so we do it manually
 			actOnListSelection();
 		} else {
-			// because of ordering , we create a TreeSet view of the list
-			selectionModel.setValueIsAdjusting(true);
-			selectionModel.clearSelection();
-			for (int i = 0; i < clientTable.getRowCount(); i++) {
-				Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", clientTable.getValueAt(i, 0));
-
-				if (clientsToSelect.contains(clientTable.getClientName(i))) {
-					selectionModel.addSelectionInterval(i, i);
-					Logging.debug(this, "setSelectedValues add interval ", i);
+			Set<Integer> rowsToSelect = new HashSet<>();
+			for (int i = 0; i < clientTableViewComponent.model.getRows().size(); i++) {
+				RowData data = clientTableViewComponent.model.getRows().get(i);
+				String clientName = data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
+				if (clientsToSelect.contains(clientName)) {
+					rowsToSelect.add(i);
 				}
 			}
+			clientTableViewComponent.dispatch(new GenericTableViewMsg.ChangeSelection(rowsToSelect));
 
-			selectionModel.setValueIsAdjusting(false);
-
-			clientTable.moveToFirstSelected();
-
-			Logging.info(this, "setSelectedValues  produced ", clientTable.getSelectedRowCount());
+			Logging.info(this, "setSelectedValues  produced ", rowsToSelect.size());
 		}
 	}
 
 	public DefaultTableModel getTableModel() {
 		return (DefaultTableModel) clientTableViewComponent.getTable().getModel();
-	}
-
-	public int findModelRowFromClientName(String clientName) {
-		int result = -1;
-
-		if (clientName == null) {
-			return result;
-		}
-
-		boolean found = false;
-		int row = 0;
-
-		while (!found && row < getTableModel().getRowCount()) {
-			String compareName = clientTable.getClientName(row);
-
-			if (clientName.equals(compareName)) {
-				found = true;
-				result = row;
-			}
-
-			if (!found) {
-				row++;
-			}
-		}
-
-		return result;
 	}
 
 	private class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {

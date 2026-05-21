@@ -60,9 +60,6 @@ public final class ClientMenuManager implements MenuListener {
 		this.mainFrame = mainFrame;
 
 		initJMenu();
-
-		// mainFrame.getClientTablePanel().getClientTable().getTableHeader().addMouseListener(
-		// 		new PopupMouseListener(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns"))));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
