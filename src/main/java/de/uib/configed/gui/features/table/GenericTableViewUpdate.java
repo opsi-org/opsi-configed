@@ -58,8 +58,9 @@ public final class GenericTableViewUpdate {
 		RowData oldRow = model.getRows().get(rowIdx);
 		String colKey = model.getColumns().get(colIdx).getKey();
 
-		RowState newRowStyle = strategy.getRowStyle(oldRow.getId(), colKey, newValue,
-				oldRow.getValue(colKey, Object.class));
+		RowState newRowStyle = strategy != null
+				? strategy.getRowStyle(oldRow.getId(), colKey, newValue, oldRow.getValue(colKey, Object.class))
+				: RowState.NORMAL;
 
 		Map<String, Object> newValues = new HashMap<>(oldRow.getValues());
 		newValues.put(colKey, newValue);

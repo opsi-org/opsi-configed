@@ -10,6 +10,10 @@ import javax.swing.SwingWorker;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.table.GenericTableViewComponent;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
+import de.uib.configed.gui.features.table.RowData;
+import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 
@@ -33,24 +37,37 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 	protected void done() {
 		Logging.info(this, "Session information retrieved");
 
-		// update column
-		if (Boolean.TRUE.equals(persistenceController.getDataServices().host.getHostDisplayFields()
+		if (Boolean.FALSE.equals(persistenceController.getDataServices().host.getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
-			// ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
-			// DefaultTableModel model = configedMain.getClientTablePanel().getTableModel();
-
-			// int col = model.findColumn(Configed.getResourceValue("sessionInfo"));
-
-			// for (int row = 0; row < clientTable.getRowCount(); row++) {
-			// 	String clientId = clientTable.getClientName(row);
-			// 	clientTable.setValueAt(persistenceController.getDataServices().host.getSessionInfo().get(clientId), row,
-			// 			col);
-			// }
-
-			// model.fireTableDataChanged();
-			configedMain.getClientTablePanel()
-					.setSelectedValues(persistenceController.getDataServices().host.getSessionInfo().keySet());
+			ConfigedMain.getMainFrame().setCursor(null);
+			return;
 		}
+
+		GenericTableViewComponent component = configedMain.getClientTablePanel().getTableComponent();
+		int sessionColumnIndex = -1;
+
+		for (int i = 0; i < component.model.getColumns().size(); i++) {
+			TableColumnConfig columnConfig = component.model.getColumns().get(i);
+			if (HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL.equals(columnConfig.getKey())) {
+				sessionColumnIndex = i;
+			}
+		}
+
+		if (sessionColumnIndex != -1) {
+			for (int i = 0; i < component.model.getRows().size(); i++) {
+				if (!component.model.getSelectedRows().contains(i)) {
+					continue;
+				}
+
+				RowData data = component.model.getRows().get(i);
+				String clientName = data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
+				String result = persistenceController.getDataServices().host.getSessionInfo().get(clientName);
+				component.dispatch(new GenericTableViewMsg.CellEdited(i, sessionColumnIndex, result));
+			}
+		}
+
+		configedMain.getClientTablePanel()
+				.setSelectedValues(persistenceController.getDataServices().host.getSessionInfo().keySet());
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
 
