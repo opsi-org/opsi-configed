@@ -34,14 +34,9 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.terminal.TerminalController;
-import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
-import de.uib.configed.gui.share.table.AbstractExportTable;
-import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
-import de.uib.configed.gui.share.table.ExporterToCSV;
-import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.logging.Logging;
@@ -66,8 +61,8 @@ public final class ClientMenuManager implements MenuListener {
 
 		initJMenu();
 
-		mainFrame.getClientTablePanel().getClientTable().getTableHeader().addMouseListener(
-				new PopupMouseListener(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns"))));
+		// mainFrame.getClientTablePanel().getClientTable().getTableHeader().addMouseListener(
+		// 		new PopupMouseListener(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns"))));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
@@ -113,9 +108,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		// Space should only be active on the client table, but not on other where you 
 		// could accidently start remote control by pressing space in a text field etc.
-		SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
-				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
+		// SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable().getTable(),
+		// 		KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+		// 		() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
 		// We want to add the acceserator manually so that it will be active always, not only
 		// when the client table has focus.
@@ -177,12 +172,12 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
-		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
-		exportTable.addMenuItemsTo(jMenuClients);
+		// AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
+		// exportTable.addMenuItemsTo(jMenuClients);
 
-		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
-				mainFrame.getClientTablePanel().getClientTable());
-		clientTableExporter.addMenuItemsTo(jMenuClients);
+		// ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
+		// 		mainFrame.getClientTablePanel().getClientTable());
+		// clientTableExporter.addMenuItemsTo(jMenuClients);
 	}
 
 	private void initJMenu() {
@@ -371,18 +366,18 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void createPdf() {
-		Map<String, String> metaData = new HashMap<>();
-		String title = Configed.getResourceValue("MainFrame.ClientList");
+		// Map<String, String> metaData = new HashMap<>();
+		// String title = Configed.getResourceValue("MainFrame.ClientList");
 
-		metaData.put("header", title);
-		metaData.put("title", title);
-		metaData.put("subject", "report of table");
+		// metaData.put("header", title);
+		// metaData.put("title", title);
+		// metaData.put("subject", "report of table");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
+		// ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
 
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4Landscape();
-		pdfExportTable.execute(null, false);
+		// pdfExportTable.setMetaData(metaData);
+		// pdfExportTable.setPageSizeA4Landscape();
+		// pdfExportTable.execute(null, false);
 	}
 
 	private void showPopupOnClientsAction() {

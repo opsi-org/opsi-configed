@@ -114,8 +114,7 @@ public class ProductPageManager implements MessagebusListener {
 		// listener is triggered
 		// which loads the productProperties for each client separately
 
-		persistenceController.getDataServices().product
-				.retrieveProductPropertiesPD(configedMain.getClientTablePanel().getClientTable().getSelectedSet());
+		persistenceController.getDataServices().product.retrieveProductPropertiesPD(configedMain.getSelectedSet());
 
 		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
 

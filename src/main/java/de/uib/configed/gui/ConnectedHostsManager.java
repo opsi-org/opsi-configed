@@ -8,8 +8,6 @@ package de.uib.configed.gui;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -57,19 +55,19 @@ public class ConnectedHostsManager implements MessagebusListener {
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
-		AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
+		// AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
 
-		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-		ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
+		// int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+		// ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
 
-		for (int row = 0; row < clientTable.getRowCount(); row++) {
-			if (clientTable.getClientName(row).equals(clientName)) {
-				clientTable.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
-				model.fireTableCellUpdated(row, col);
-				Logging.info(this, "connectionStatus for client ", clientName, " updated in table");
-				return;
-			}
-		}
+		// for (int row = 0; row < clientTable.getRowCount(); row++) {
+		// 	if (clientTable.getClientName(row).equals(clientName)) {
+		// 		clientTable.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
+		// 		model.fireTableCellUpdated(row, col);
+		// 		Logging.info(this, "connectionStatus for client ", clientName, " updated in table");
+		// 		return;
+		// 	}
+		// }
 		Logging.info(this, "could not update connectionStatus for client ", clientName, ": not in list of shown table");
 	}
 

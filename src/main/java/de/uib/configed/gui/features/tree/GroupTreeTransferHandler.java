@@ -24,7 +24,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.features.productpage.ProductTable;
@@ -68,7 +67,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean canImportToThisGroupNode(GroupNode targetNode) {
-		if (source instanceof ClientTable || source instanceof ProductTable) {
+		if (source instanceof ProductTable) {
 			// Objects in Table are selected
 			return isNormalGroup(targetNode);
 		} else {
@@ -131,7 +130,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	private boolean canImportToThisComponent(Component target) {
 		return switch (target) {
-		case ClientTree _ -> source instanceof ClientTable || source instanceof ClientTree;
+		// case ClientTree _ -> source instanceof ClientTable || source instanceof ClientTree;
 		case ProductTree _ -> source instanceof ProductTable || source instanceof ProductTree;
 		default -> {
 			Logging.debug(this, "The target is not a Client or product tree, but ", target.getClass().getName());
@@ -216,7 +215,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public boolean importData(TransferSupport support) {
-		if (source instanceof ProductTable || source instanceof ClientTable) {
+		if (source instanceof ProductTable) {
 			return importFromTable(support);
 		} else {
 			return importFromTree(support);
@@ -234,11 +233,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	private boolean importFromTable(TransferSupport support) {
 		Set<String> selectedObjects;
-		if (source instanceof ClientTable clientTable) {
-			selectedObjects = clientTable.getSelectedSet();
-		} else {
-			selectedObjects = ((ProductTable) source).getSelectedIDs();
-		}
+		// if (source instanceof ClientTable clientTable) {
+		// 	selectedObjects = clientTable.getSelectedSet();
+		// } else {
+		selectedObjects = ((ProductTable) source).getSelectedIDs();
+		// }
 
 		return importObjects(selectedObjects, support);
 	}
@@ -267,7 +266,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			Logging.debug(this, "active source tree path for selectedObject ", selectedObject);
 
-			if (source instanceof ClientTable || source instanceof ProductTable) {
+			if (source instanceof ProductTable) {
 				// object is selected in table
 				tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
 			} else {

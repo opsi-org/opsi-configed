@@ -23,7 +23,6 @@ import de.uib.configed.gui.ConfigedMain.EditingTarget;
 import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
 import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.features.tree.ProductTree;
-import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.WindowsPositionManager;
 import de.uib.configed.gui.share.icons.Icons;
@@ -106,8 +105,8 @@ public class MainFrame extends JFrame {
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
 
-		clientTablePanel.getClientTable()
-				.addMouseListener(new PopupMouseListener(menuBarController.getPopupMenuClone()));
+		// clientTablePanel.getClientTable()
+		// 		.addMouseListener(new PopupMouseListener(menuBarController.getPopupMenuClone()));
 	}
 
 	public ClientTablePanel getClientTablePanel() {

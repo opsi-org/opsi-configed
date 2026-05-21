@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import javax.swing.SwingWorker;
-import javax.swing.table.DefaultTableModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -38,17 +37,17 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		if (Boolean.TRUE.equals(persistenceController.getDataServices().host.getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
 			ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
-			DefaultTableModel model = configedMain.getClientTablePanel().getTableModel();
+			// DefaultTableModel model = configedMain.getClientTablePanel().getTableModel();
 
-			int col = model.findColumn(Configed.getResourceValue("sessionInfo"));
+			// int col = model.findColumn(Configed.getResourceValue("sessionInfo"));
 
-			for (int row = 0; row < clientTable.getRowCount(); row++) {
-				String clientId = clientTable.getClientName(row);
-				clientTable.setValueAt(persistenceController.getDataServices().host.getSessionInfo().get(clientId), row,
-						col);
-			}
+			// for (int row = 0; row < clientTable.getRowCount(); row++) {
+			// 	String clientId = clientTable.getClientName(row);
+			// 	clientTable.setValueAt(persistenceController.getDataServices().host.getSessionInfo().get(clientId), row,
+			// 			col);
+			// }
 
-			model.fireTableDataChanged();
+			// model.fireTableDataChanged();
 			configedMain.getClientTablePanel()
 					.setSelectedValues(persistenceController.getDataServices().host.getSessionInfo().keySet());
 		}

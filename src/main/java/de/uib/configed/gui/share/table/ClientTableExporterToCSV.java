@@ -57,14 +57,14 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				continue;
 			}
 
-			HostInfo clientInfo = clientInfos
-					.get(ConfigedMain.getMainFrame().getClientTablePanel().getClientTable().getClientName(rowI));
-			List<String> row = new ArrayList<>();
-			for (String columnName : columnNames) {
-				row.add(getRowValue(columnName, clientInfo));
-			}
+			// HostInfo clientInfo = clientInfos
+			// 		.get(ConfigedMain.getMainFrame().getClientTablePanel().getClientTable().getClientName(rowI));
+			// List<String> row = new ArrayList<>();
+			// for (String columnName : columnNames) {
+			// 	row.add(getRowValue(columnName, clientInfo));
+			// }
 
-			printer.printRecord(row);
+			// printer.printRecord(row);
 		}
 	}
 
