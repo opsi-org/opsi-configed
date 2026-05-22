@@ -23,8 +23,6 @@ import java.util.stream.Stream;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -50,12 +48,9 @@ import de.uib.configed.gui.share.swing.ButtonTabComponent;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
-import de.uib.configed.share.userprefs.UserPreferences;
 
 public class ConfigedMain {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
-
-	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
@@ -128,10 +123,8 @@ public class ConfigedMain {
 		clientTablePanel = new ClientTablePanel(this);
 
 		// set table model and update the column selection in search accordingly
-		// clientTablePanel.getClientTable().updateModel(buildClientListTableModel(true));
+		buildClientListTableModel(true);
 		clientTablePanel.initColumnNames();
-
-		// clientTablePanel.getClientTable().initSortKeys();
 
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
@@ -424,7 +417,7 @@ public class ConfigedMain {
 		return dependenciesModel;
 	}
 
-	private TableModel buildClientListTableModel(boolean rebuildTree) {
+	private void buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, "buildPclistTableModel rebuildTree ", rebuildTree);
 
 		Logging.info(this, " producePcListForDepots ", depotsList.getSelectedValuesList(),
@@ -462,60 +455,13 @@ public class ConfigedMain {
 		clientTablePanel.getTableComponent()
 				.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(getOriginalSnapshot(clientsForDepots)));
 
-		// building table model
-		return buildTableModel(clientsForDepots);
-	}
-
-	private TableModel buildTableModel(Set<String> clientIds) {
-		DefaultTableModel model = new DefaultTableModel() {
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		};
-
-		Map<String, HostInfo> pcinfos = persistenceController.getDataServices().hostInfoCollections
-				.getMapOfPCInfoMaps();
-
-		List<String> displayFields = new ArrayList<>();
-		for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
-				.entrySet()) {
-			if (Boolean.TRUE.equals(entry.getValue())) {
-				model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
-				displayFields.add(entry.getKey());
-			}
-		}
-
-		UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
-
-		Logging.info(this, "buildPclistTableModel host_displayFields ",
-				persistenceController.getDataServices().host.getHostDisplayFields());
-
-		for (String clientId : clientIds) {
-			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
-
-			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
-			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL,
-					persistenceController.getDataServices().host.getSessionInfo().getOrDefault(clientId, ""));
-			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
-
-			List<Object> rowItems = persistenceController.getDataServices().host.getHostDisplayFields().entrySet()
-					.stream().filter(entry -> Boolean.TRUE.equals(entry.getValue()))
-					.map(entry -> rowmap.get(entry.getKey())).toList();
-
-			model.addRow(rowItems.toArray());
-		}
-
-		Logging.info(this, "buildPclistTableModel, model column count ", model.getColumnCount());
-
 		// Clear the selected clients because we have a new model with no selected clients
 		selectedClients.clear();
 		if (mainFrame != null) {
 			// Update the info on the bottom with new data
 			mainFrame.getMainPanelManager().getHostsStatusPanel().updateSelectedClientsCount(selectedClients.size(),
-					clientIds.size());
+					clientsForDepots.size());
 		}
-		return model;
 	}
 
 	private List<Map<String, Object>> getOriginalSnapshot(Set<String> clientIds) {
@@ -624,21 +570,11 @@ public class ConfigedMain {
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
-		TableModel tm = buildClientListTableModel(rebuildTree);
+		buildClientListTableModel(rebuildTree);
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
 		// int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
-
-		// We want to deactivate the listener here, since we want it to react only later
-		// when
-		// the values are selected. We only reactivate the listener if it was active
-		// before.
-		// boolean listenerDeactivated = clientTablePanel.deactivateListSelectionListener();
-		// clientTablePanel.getClientTable().updateModel(tm);
-		// if (listenerDeactivated) {
-		// clientTablePanel.activateListSelectionListener();
-		// }
 
 		// ConfigedUtilityMethods.setTableColumnWidths(clientTablePanel.getClientTable(), columnWidths);
 
