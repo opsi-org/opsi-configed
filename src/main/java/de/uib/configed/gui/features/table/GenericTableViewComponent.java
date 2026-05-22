@@ -63,8 +63,7 @@ public class GenericTableViewComponent
 		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg)), null) {
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
-				List<TableColumnConfig> visibleColumns = model.getColumns().stream()
-						.filter(TableColumnConfig::isVisible).toList();
+				List<TableColumnConfig> visibleColumns = getVisibleColumns();
 
 				if (column < 0 || column >= visibleColumns.size()) {
 					return super.getCellRenderer(row, column);
@@ -128,6 +127,10 @@ public class GenericTableViewComponent
 		panel.add(jScrollPaneInfo, "grow, push");
 
 		return panel;
+	}
+
+	private List<TableColumnConfig> getVisibleColumns() {
+		return model.getColumns().stream().filter(TableColumnConfig::isVisible).toList();
 	}
 
 	// TODO: remove later (exists only for compatibility with old code)
