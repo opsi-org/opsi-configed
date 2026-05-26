@@ -29,7 +29,7 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 
 	}
 
-	record ChangeSelection(Set<Integer> selectedRows) implements GenericTableViewMsg {
+	record ChangeSelection(Set<String> selectedRows) implements GenericTableViewMsg {
 
 	}
 

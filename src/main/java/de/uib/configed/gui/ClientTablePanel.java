@@ -56,8 +56,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private GenericTableViewComponent clientTableViewComponent;
 	private JComponent component;
 
-	private Set<Integer> lastSelectedRows = new HashSet<>();
-
 	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
 
@@ -111,6 +109,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		// searchPane.setFiltering();
 
 		// clientTable.addKeyListener(searchPane);
+
+		activateListSelectionListener();
 
 		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill, wrap 1", "[grow, fill]", "[grow, fill]"));
 
@@ -188,16 +188,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private void actOnListSelection() {
 		if (ChangedDataManager.checkSaveAll(true)) {
 			configedMain.actOnListSelection();
-			lastSelectedRows = clientTableViewComponent.model.getSelectedRows();
-		} else {
-			deactivateListSelectionListener();
-			selectionModel.setValueIsAdjusting(true);
-			selectionModel.clearSelection();
-			for (int row : lastSelectedRows) {
-				selectionModel.addSelectionInterval(row, row);
-			}
-			selectionModel.setValueIsAdjusting(false);
-			activateListSelectionListener();
 		}
 	}
 
@@ -260,12 +250,12 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 			// so we do it manually
 			actOnListSelection();
 		} else {
-			Set<Integer> rowsToSelect = new HashSet<>();
+			Set<String> rowsToSelect = new HashSet<>();
 			for (int i = 0; i < clientTableViewComponent.model.getRows().size(); i++) {
 				RowData data = clientTableViewComponent.model.getRows().get(i);
 				String clientName = data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
 				if (clientsToSelect.contains(clientName)) {
-					rowsToSelect.add(i);
+					rowsToSelect.add(data.getId());
 				}
 			}
 			clientTableViewComponent.dispatch(new GenericTableViewMsg.ChangeSelection(rowsToSelect));
@@ -275,13 +265,17 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	}
 
 	public int findModelRowFromClientName(String clientName) {
-		for (int i = 0; i < clientTableViewComponent.model.getRows().size(); i++) {
-			if (!clientTableViewComponent.model.getSelectedRows().contains(i)) {
-				continue;
-			}
+		Set<String> selectedIds = clientTableViewComponent.model.getSelectedRows();
 
-			RowData data = clientTableViewComponent.model.getRows().get(i);
-			return clientName.equals(data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class)) ? i : -1;
+		for (String id : selectedIds) {
+			RowData data = clientTableViewComponent.getRowById(id);
+
+			if (data != null) {
+				String name = data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
+				if (clientName != null && clientName.equals(name)) {
+					return clientTableViewComponent.model.getRows().indexOf(data);
+				}
+			}
 		}
 
 		return -1;

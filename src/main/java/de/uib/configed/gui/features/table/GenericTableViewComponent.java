@@ -100,7 +100,7 @@ public class GenericTableViewComponent
 			}
 
 			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-			Set<Integer> selectedRows = retrieveSelectedRows(lsm);
+			Set<String> selectedRows = retrieveSelectedRows(lsm);
 
 			dispatch(new GenericTableViewMsg.ChangeSelection(selectedRows));
 		});
@@ -127,6 +127,31 @@ public class GenericTableViewComponent
 		panel.add(jScrollPaneInfo, "grow, push");
 
 		return panel;
+	}
+
+	/**
+	 * Finds the row index in the CURRENT VIEW (sorted/filtered) for a given ID.
+	 * Returns -1 if not found or filtered out.
+	 */
+	public int findRowIndexById(String id) {
+		for (int i = 0; i < model.getRows().size(); i++) {
+			if (model.getRows().get(i).getId().equals(id)) {
+				return getTable().convertRowIndexToView(i);
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Gets the RowData object directly by ID.
+	 */
+	public RowData getRowById(String id) {
+		for (RowData row : model.getRows()) {
+			if (row.getId().equals(id)) {
+				return row;
+			}
+		}
+		return null;
 	}
 
 	private List<TableColumnConfig> getVisibleColumns() {
@@ -165,17 +190,15 @@ public class GenericTableViewComponent
 		return menuItem;
 	}
 
-	private static Set<Integer> retrieveSelectedRows(ListSelectionModel lsm) {
-		Set<Integer> selectedRows = new HashSet<>();
+	private Set<String> retrieveSelectedRows(ListSelectionModel lsm) {
+		Set<String> selectedRows = new HashSet<>();
 
-		if (!lsm.isSelectionEmpty()) {
-			int minIndex = lsm.getMinSelectionIndex();
-			int maxIndex = lsm.getMaxSelectionIndex();
+		int[] viewIndices = lsm.getSelectedIndices();
 
-			for (int i = minIndex; i <= maxIndex; i++) {
-				if (lsm.isSelectedIndex(i)) {
-					selectedRows.add(i);
-				}
+		for (int viewIndex : viewIndices) {
+			int modelIndex = table.convertRowIndexToModel(viewIndex);
+			if (modelIndex >= 0 && modelIndex < model.getRows().size()) {
+				selectedRows.add(model.getRows().get(modelIndex).getId());
 			}
 		}
 
@@ -186,9 +209,11 @@ public class GenericTableViewComponent
 	protected void refreshView() {
 		isUpdatingProgrammatically = true;
 
-		buildColumnModel();
+		if (model.isRebuildTableModel()) {
+			buildColumnModel();
 
-		table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
+			table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
+		}
 
 		restoreSelection();
 
@@ -225,13 +250,14 @@ public class GenericTableViewComponent
 	}
 
 	private void restoreSelection() {
-		Set<Integer> selectedRows = model.getSelectedRows();
+		Set<String> selectedRows = model.getSelectedRows();
 		ListSelectionModel lsm = table.getSelectionModel();
 
 		lsm.clearSelection();
 
 		if (selectedRows != null) {
-			for (Integer index : selectedRows) {
+			for (String id : selectedRows) {
+				int index = findRowIndexById(id);
 				if (index >= 0 && index < table.getRowCount()) {
 					lsm.addSelectionInterval(index, index);
 				}

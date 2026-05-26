@@ -38,11 +38,13 @@ public final class GenericTableViewUpdate {
 		case CommitChanges() -> handleCommit(model);
 		case CancelChanges() -> handleCancel(model);
 		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
-		case ChangeSelection(Set<Integer> selectedRows) -> UpdateResult.noEffect(model.withSelectedRows(selectedRows));
+		case ChangeSelection(Set<String> selectedRows) -> UpdateResult
+				.noEffect(model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build());
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
-		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult.noEffect(
-				model.withOriginalSnapshot(originalSnapshot).withRows(RowData.fromOriginalSnapshot(originalSnapshot)));
+		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult
+				.noEffect(model.toBuilder().originalSnapshot(originalSnapshot)
+						.rows(RowData.fromOriginalSnapshot(originalSnapshot)).rebuildTableModel(true).build());
 		default -> UpdateResult.noEffect(model);
 		};
 	}
@@ -72,7 +74,7 @@ public final class GenericTableViewUpdate {
 
 		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
 
-		return UpdateResult.noEffect(model.withRows(newRows).withDirty(isDirty));
+		return UpdateResult.noEffect(model.toBuilder().rows(newRows).isDirty(isDirty).rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleToggleColumn(String columnKey,
@@ -83,7 +85,7 @@ public final class GenericTableViewUpdate {
 						: column)
 				.toList();
 
-		return UpdateResult.noEffect(model.withColumns(newColumns));
+		return UpdateResult.noEffect(model.toBuilder().columns(newColumns).rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCommit(
@@ -95,7 +97,7 @@ public final class GenericTableViewUpdate {
 		List<RowData> newRows = model.getRows().stream().filter((RowData row) -> row.getState() != RowState.DELETED)
 				.toList();
 
-		return UpdateResult.withEffect(model.withRows(newRows).withDirty(false),
+		return UpdateResult.withEffect(model.toBuilder().rows(newRows).isDirty(false).rebuildTableModel(false).build(),
 				new GenericTableViewEffect.SaveChanges(newRows));
 	}
 
@@ -107,7 +109,8 @@ public final class GenericTableViewUpdate {
 
 		List<RowData> restoredRows = RowData.fromOriginalSnapshot(model.getOriginalSnapshot());
 
-		return UpdateResult.noEffect(model.withRows(restoredRows).withDirty(false));
+		return UpdateResult
+				.noEffect(model.toBuilder().rows(restoredRows).isDirty(false).rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowAdd(Map<String, Object> data,
@@ -118,7 +121,7 @@ public final class GenericTableViewUpdate {
 		List<RowData> newRows = new ArrayList<>(model.getRows());
 		newRows.add(newRow);
 
-		return UpdateResult.noEffect(model.withRows(newRows).withDirty(true));
+		return UpdateResult.noEffect(model.toBuilder().rows(newRows).isDirty(true).rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowDelete(int rowIdx,
@@ -130,6 +133,6 @@ public final class GenericTableViewUpdate {
 		List<RowData> rows = new ArrayList<>(model.getRows());
 		rows.remove(rowIdx);
 
-		return UpdateResult.noEffect(model.withRows(rows).withDirty(true));
+		return UpdateResult.noEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build());
 	}
 }

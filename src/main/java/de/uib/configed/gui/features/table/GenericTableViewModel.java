@@ -31,10 +31,12 @@ public class GenericTableViewModel {
 	private final List<TableColumnConfig> columns = new ArrayList<>();
 	private final TableConfig tableConfig;
 	@Builder.Default
-	private final Set<Integer> selectedRows = new HashSet<>();
+	private final Set<String> selectedRows = new HashSet<>();
 	private final boolean isDirty;
 	private final boolean allowMultipleSelection;
 	private final boolean showSearchPane;
+	@Builder.Default
+	private final boolean rebuildTableModel = true;
 	private final FilterKey filterKey;
 	@Builder.Default
 	private final List<Map<String, Object>> originalSnapshot = new ArrayList<>();

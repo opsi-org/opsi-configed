@@ -9,6 +9,7 @@ package de.uib.configed.gui.features.table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -41,9 +42,19 @@ public class RowData {
 	}
 
 	public static List<RowData> fromOriginalSnapshot(Iterable<Map<String, Object>> original) {
+		return fromOriginalSnapshot(original, null);
+	}
+
+	public static List<RowData> fromOriginalSnapshot(Iterable<Map<String, Object>> original, List<RowData> oldRows) {
 		List<RowData> result = new ArrayList<>();
 		original.forEach((Map<String, Object> map) -> {
-			RowData rowData = new RowData(UUID.randomUUID().toString(), map, RowState.NORMAL);
+			Optional<RowData> opOldData = Optional.empty();
+			if (oldRows != null) {
+				opOldData = oldRows.stream().filter(rowData -> rowData.getValues().equals(map)).findFirst();
+			}
+			RowData rowData = new RowData(
+					opOldData.isPresent() ? opOldData.get().getId() : UUID.randomUUID().toString(), map,
+					RowState.NORMAL);
 			result.add(rowData);
 		});
 		return result;

@@ -73,6 +73,7 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertNotSame(model, result.model());
 		assertTrue(result.model().isDirty());
+		assertTrue(result.model().isRebuildTableModel());
 
 		String resultColumnKey = model.getColumns().get(colIdx).getKey();
 		assertEquals("data2", resultColumnKey);
@@ -93,6 +94,7 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertNotSame(model, result.model());
 		assertTrue(result.model().isDirty());
+		assertTrue(result.model().isRebuildTableModel());
 
 		RowData resultLastRow = result.model().getRows().get(result.model().getRows().size() - 1);
 		RowData lastRow = model.getRows().get(model.getRows().size() - 1);
@@ -111,6 +113,7 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertNotSame(model, result.model());
 		assertFalse(result.model().isDirty());
+		assertFalse(result.model().isRebuildTableModel());
 
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertInstanceOf(GenericTableViewEffect.SaveChanges.class, result.effect().get()));
@@ -138,6 +141,7 @@ class GenericTableViewUpdateTest {
 		assertNotEquals("test6", result.model().getRows().get(3).getValue("data1", String.class));
 		assertNotEquals("test2", result.model().getRows().get(2).getValue("data2", String.class));
 		assertFalse(result.model().isDirty());
+		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test
@@ -160,6 +164,7 @@ class GenericTableViewUpdateTest {
 		assertSame(model.getRows().size(), result.model().getRows().size());
 		assertEquals("5", result.model().getRows().get(4).getValue("data0", String.class));
 		assertFalse(result.model().isDirty());
+		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test
@@ -173,6 +178,7 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertSame(model.getRows(), result.model().getRows());
 		assertFalse(result.model().isDirty());
+		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test
@@ -187,6 +193,7 @@ class GenericTableViewUpdateTest {
 		assertNotSame(model.getRows().size(), result.model().getRows().size());
 		assertNotEquals("3", result.model().getRows().get(rowIdx).getValue("data0", String.class));
 		assertTrue(result.model().isDirty());
+		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test
@@ -205,12 +212,13 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertNotSame(model.getOriginalSnapshot().size(), result.model().getOriginalSnapshot().size());
 		assertNotSame(model.getRows().size(), result.model().getRows().size());
+		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test
 	void shouldUpdateSelectedIndex_whenChangeSelection() {
 		GenericTableViewModel model = baseModel();
-		Set<Integer> selectedRows = Set.of(1, 2);
+		Set<String> selectedRows = Set.of(model.getRows().get(1).getId(), model.getRows().get(2).getId());
 		GenericTableViewMsg msg = new GenericTableViewMsg.ChangeSelection(selectedRows);
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
@@ -218,6 +226,7 @@ class GenericTableViewUpdateTest {
 		assertNotNull(result.model());
 		assertEquals(selectedRows.size(), result.model().getSelectedRows().size());
 		assertEquals(selectedRows, result.model().getSelectedRows());
+		assertFalse(result.model().isRebuildTableModel());
 	}
 
 	@Test
@@ -232,6 +241,7 @@ class GenericTableViewUpdateTest {
 		assertFalse(result.model().getColumns().get(1).isVisible());
 		assertTrue(result.model().getColumns().get(2).isVisible());
 		assertFalse(result.effect().isPresent());
+		assertTrue(result.model().isRebuildTableModel());
 
 		GenericTableViewMsg msg2 = new GenericTableViewMsg.ToggleColumn("data1");
 
@@ -243,6 +253,7 @@ class GenericTableViewUpdateTest {
 		assertTrue(result2.model().getColumns().get(1).isVisible());
 		assertTrue(result2.model().getColumns().get(2).isVisible());
 		assertFalse(result2.effect().isPresent());
+		assertTrue(result2.model().isRebuildTableModel());
 	}
 
 	@Test
