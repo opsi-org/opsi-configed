@@ -56,7 +56,7 @@ public class ClientTablePanel extends JPanel {
 
 	private ConfigedMain configedMain;
 
-	private Set<String> checkmarks = Set.of(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
+	private Set<String> iconColumnKeys = Set.of(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
 			HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
 			HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL,
 			HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL);
@@ -75,7 +75,7 @@ public class ClientTablePanel extends JPanel {
 			TableColumnConfig column = TableColumnConfig.builder().key(entry.getKey())
 					.header(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey())).build();
 
-			if (checkmarks.contains(entry.getKey())) {
+			if (iconColumnKeys.contains(entry.getKey())) {
 				column = column.toBuilder().renderer(getTableCellRendererBasedOnIconType(entry.getKey())).maxWidth(100)
 						.build();
 			}
