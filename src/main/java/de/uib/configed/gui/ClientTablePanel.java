@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -267,10 +266,6 @@ public class ClientTablePanel extends JPanel {
 			}
 		}
 		return columnIndex;
-	}
-
-	public DefaultTableModel getTableModel() {
-		return (DefaultTableModel) clientTableViewComponent.getTable().getModel();
 	}
 
 	private class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
