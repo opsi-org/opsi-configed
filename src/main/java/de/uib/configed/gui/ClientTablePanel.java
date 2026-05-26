@@ -87,7 +87,6 @@ public class ClientTablePanel extends JPanel {
 			if (effect instanceof GenericTableViewEffect.Selection) {
 				return this::actOnListSelection;
 			}
-			// No side effect for other messages
 			return null;
 		};
 
