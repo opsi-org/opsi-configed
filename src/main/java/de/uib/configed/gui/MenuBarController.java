@@ -418,7 +418,7 @@ public class MenuBarController {
 		}
 	}
 
-	public JPopupMenu getPopupMenuClone() {
+	public JPopupMenu getClientPopupMenuClone() {
 		return clientMenu.getPopupMenuClone();
 	}
 

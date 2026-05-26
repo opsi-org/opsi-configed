@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -104,13 +105,14 @@ public class MainFrame extends JFrame {
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
-
-		// clientTablePanel.getClientTable()
-		// 		.addMouseListener(new PopupMouseListener(menuBarController.getPopupMenuClone()));
 	}
 
 	public ClientTablePanel getClientTablePanel() {
 		return clientTablePanel;
+	}
+
+	public JPopupMenu getClientPopupMenu() {
+		return menuBarController.getClientPopupMenuClone();
 	}
 
 	// ------------------------------------------------------------------------------------------

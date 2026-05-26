@@ -98,7 +98,12 @@ public class ClientTablePanel extends JPanel {
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
 				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)
 				// .searchTargetModelFromTable(new SearchTargetModelFromClientTable(configedMain))
-				.filterKey(FilterKey.CLIENT_TABLE).build(), clientSideEffectStrategy);
+				.filterKey(FilterKey.CLIENT_TABLE).build(), clientSideEffectStrategy, () -> {
+					if (ConfigedMain.getMainFrame() != null) {
+						return ConfigedMain.getMainFrame().getClientPopupMenu();
+					}
+					return null;
+				});
 		component = clientTableViewComponent.initUI();
 
 		// Ask to be notified of selection changes.

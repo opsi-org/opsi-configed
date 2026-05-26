@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -39,6 +40,8 @@ public class GenericTableViewComponent
 	private TableSearchPane searchPane;
 	private boolean isUpdatingProgrammatically;
 	private TableSideEffectStrategy sideEffectStrategy;
+	private Supplier<JPopupMenu> popupMenuSupplier;
+	private PopupMouseListener popupMouseListener;
 
 	public interface TableSideEffectStrategy {
 		/**
@@ -53,12 +56,18 @@ public class GenericTableViewComponent
 	}
 
 	public GenericTableViewComponent(GenericTableViewModel model) {
-		this(model, null);
+		this(model, null, null);
 	}
 
-	public GenericTableViewComponent(GenericTableViewModel model, TableSideEffectStrategy sideEffectStrategy) {
+	public GenericTableViewComponent(GenericTableViewModel model, TableSideEffectStrategy sideEffectStrategy,
+			Supplier<JPopupMenu> popupMenuSupplier) {
 		super(model);
 		this.sideEffectStrategy = sideEffectStrategy;
+		this.popupMenuSupplier = popupMenuSupplier;
+	}
+
+	public void setPopupMenuSupplier(Supplier<JPopupMenu> supplier) {
+		this.popupMenuSupplier = supplier;
 	}
 
 	@Override
@@ -242,6 +251,15 @@ public class GenericTableViewComponent
 		}
 
 		restoreSelection();
+
+		if (popupMouseListener != null) {
+			table.removeMouseListener(popupMouseListener);
+		}
+
+		if (popupMenuSupplier != null) {
+			popupMouseListener = new PopupMouseListener(popupMenuSupplier.get());
+			table.addMouseListener(popupMouseListener);
+		}
 
 		isUpdatingProgrammatically = false;
 	}
