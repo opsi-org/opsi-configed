@@ -14,21 +14,20 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
+import de.uib.configed.gui.features.table.GenericTableViewComponent.TableSideEffectStrategy;
+import de.uib.configed.gui.features.table.GenericTableViewEffect;
 import de.uib.configed.gui.features.table.GenericTableViewModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
@@ -44,7 +43,7 @@ import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class ClientTablePanel extends JPanel implements ListSelectionListener {
+public class ClientTablePanel extends JPanel {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -56,7 +55,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private GenericTableViewComponent clientTableViewComponent;
 	private JComponent component;
 
-	private DefaultListSelectionModel selectionModel;
 	private ConfigedMain configedMain;
 
 	private Set<String> checkmarks = Set.of(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
@@ -86,16 +84,24 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 			columns.add(column.withVisible(entry.getValue()));
 		}
 
+		TableSideEffectStrategy clientSideEffectStrategy = (GenericTableViewEffect effect) -> {
+			if (effect instanceof GenericTableViewEffect.Selection) {
+				return this::actOnListSelection;
+			}
+			// No side effect for other messages
+			return null;
+		};
+
 		TableConfig config = TableConfig.builder().defauTableCellRenderer(new ColorTableCellRenderer())
 				.fillViewportHeight(true).showTableHeader(true).dragEnabled(true).autoCreateRowSorter(true)
 				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION).reorderingAllowed(true)
 				.enableHeaderContextMenu(true).build();
+
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
 				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)
 				// .searchTargetModelFromTable(new SearchTargetModelFromClientTable(configedMain))
-				.filterKey(FilterKey.CLIENT_TABLE).build());
+				.filterKey(FilterKey.CLIENT_TABLE).build(), clientSideEffectStrategy);
 		component = clientTableViewComponent.initUI();
-		selectionModel = (DefaultListSelectionModel) clientTableViewComponent.getTable().getSelectionModel();
 
 		// Ask to be notified of selection changes.
 		// selectionModel = (DefaultListSelectionModel) clientTable.getSelectionModel();
@@ -109,8 +115,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		// searchPane.setFiltering();
 
 		// clientTable.addKeyListener(searchPane);
-
-		activateListSelectionListener();
 
 		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill, wrap 1", "[grow, fill]", "[grow, fill]"));
 
@@ -154,35 +158,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		}
 	}
 
-	public void activateListSelectionListener() {
-		// We want to prevent, that the listSelectionListener is added more than once
-		if (!List.of(selectionModel.getListSelectionListeners()).contains(this)) {
-			selectionModel.addListSelectionListener(this);
-		}
-	}
-
-	// This returns if the selectionListener was actually deactivated
-	// if the list only contains one listener, it's only the JTable itself
-	// that is listening, but not our other listener
-	public boolean deactivateListSelectionListener() {
-		if (selectionModel.getListSelectionListeners().length == 1) {
-			return false;
-		} else {
-			selectionModel.removeListSelectionListener(this);
-			return true;
-		}
-	}
-
 	public boolean isFilteredMode() {
 		return searchPane.isFilteredMode();
-	}
-
-	// ListSelectionListener for client list
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-			actOnListSelection();
-		}
 	}
 
 	private void actOnListSelection() {
@@ -242,8 +219,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 		if (clientsToSelect == null) {
 			// Clear selection when empty
-			selectionModel.clearSelection();
-		} else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
+			clientTableViewComponent.dispatch(new GenericTableViewMsg.ChangeSelection(new HashSet<>()));
+		} else if (clientsToSelect.isEmpty()) {
 			// Also act on list selection when there is no client to select.
 			// For example when the last client is unselected in the client list,
 			// this method is not called automatically by the selection listener,

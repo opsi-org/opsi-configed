@@ -38,8 +38,9 @@ public final class GenericTableViewUpdate {
 		case CommitChanges() -> handleCommit(model);
 		case CancelChanges() -> handleCancel(model);
 		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
-		case ChangeSelection(Set<String> selectedRows) -> UpdateResult
-				.noEffect(model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build());
+		case ChangeSelection(Set<String> selectedRows) -> UpdateResult.withEffect(
+				model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build(),
+				new GenericTableViewEffect.Selection(selectedRows));
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult

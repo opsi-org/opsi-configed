@@ -227,6 +227,8 @@ class GenericTableViewUpdateTest {
 		assertEquals(selectedRows.size(), result.model().getSelectedRows().size());
 		assertEquals(selectedRows, result.model().getSelectedRows());
 		assertFalse(result.model().isRebuildTableModel());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.Selection.class, result.effect().get()));
 	}
 
 	@Test

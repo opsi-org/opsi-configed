@@ -38,13 +38,27 @@ public class GenericTableViewComponent
 	private JTable table;
 	private TableSearchPane searchPane;
 	private boolean isUpdatingProgrammatically;
+	private TableSideEffectStrategy sideEffectStrategy;
+
+	public interface TableSideEffectStrategy {
+		/**
+		 * Given an effect, return the side effect's action to execute. Return
+		 * null if no side effect's action is needed.
+		 */
+		Runnable getActionFor(GenericTableViewEffect effect);
+	}
 
 	public GenericTableViewComponent() {
 		super();
 	}
 
 	public GenericTableViewComponent(GenericTableViewModel model) {
+		this(model, null);
+	}
+
+	public GenericTableViewComponent(GenericTableViewModel model, TableSideEffectStrategy sideEffectStrategy) {
 		super(model);
+		this.sideEffectStrategy = sideEffectStrategy;
 	}
 
 	@Override
@@ -127,6 +141,18 @@ public class GenericTableViewComponent
 		panel.add(jScrollPaneInfo, "grow, push");
 
 		return panel;
+	}
+
+	@Override
+	protected void handleEffect(GenericTableViewEffect effect) {
+		super.handleEffect(effect);
+
+		if (sideEffectStrategy != null) {
+			Runnable action = sideEffectStrategy.getActionFor(effect);
+			if (action != null) {
+				action.run();
+			}
+		}
 	}
 
 	/**

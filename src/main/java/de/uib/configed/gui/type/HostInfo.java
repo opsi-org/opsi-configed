@@ -423,9 +423,7 @@ public class HostInfo {
 		int col = clientTablePanel.findColumnIndex(displayFieldLabel);
 		if (col > -1) {
 			int row = clientTablePanel.findModelRowFromClientName(client);
-			clientTablePanel.deactivateListSelectionListener();
 			clientTablePanel.getTableComponent().dispatch(new GenericTableViewMsg.CellEdited(row, col, value));
-			clientTablePanel.activateListSelectionListener();
 		}
 	}
 

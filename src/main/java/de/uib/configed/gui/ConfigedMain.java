@@ -871,7 +871,6 @@ public class ConfigedMain {
 				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs();
 		Set<String> selectedNetbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
 				.getPanelNetbootProductSettings().getProductTable().getSelectedIDs();
-		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotListSelectionListener);
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -899,7 +898,6 @@ public class ConfigedMain {
 
 		Logging.debug(this, " reset the values, particularly in list ");
 
-		clientTablePanel.activateListSelectionListener();
 		clientTablePanel.restoreFilter();
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTree.produceActiveParents();
