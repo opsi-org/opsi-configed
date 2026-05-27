@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
-		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
-		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot {
+import javax.swing.SortOrder;
+
+public sealed interface GenericTableViewMsg
+		permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
+		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
+		GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
 	}
@@ -38,6 +41,10 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	}
 
 	record DeleteRow(int rowIdx) implements GenericTableViewMsg {
+
+	}
+
+	record ChangeSortOrder(String columnKey, SortOrder sortOrder) implements GenericTableViewMsg {
 
 	}
 

@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
 import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -93,7 +94,10 @@ public class ClientTablePanel extends JPanel {
 		TableConfig config = TableConfig.builder().defauTableCellRenderer(new ColorTableCellRenderer())
 				.fillViewportHeight(true).showTableHeader(true).dragEnabled(true).autoCreateRowSorter(true)
 				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION).reorderingAllowed(false)
-				.enableHeaderContextMenu(true).columnSelectionAllowed(false).build();
+				.enableHeaderContextMenu(true).columnSelectionAllowed(false)
+				.sortColumnKey(Configed
+						.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL))
+				.sortOrder(SortOrder.ASCENDING).build();
 
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
 				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)

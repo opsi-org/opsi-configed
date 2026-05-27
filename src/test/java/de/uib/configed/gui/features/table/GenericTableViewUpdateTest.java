@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.SortOrder;
+
 import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -45,6 +47,7 @@ class GenericTableViewUpdateTest {
 		columns.add(new TableColumnConfig("data2", "data2", false, true, 0, 0, null, null));
 
 		return GenericTableViewModel.builder().originalSnapshot(originalSnapshot).rows(rows).columns(columns)
+				.tableConfig(TableConfig.builder().build())
 				.diffStrategy((String rowId, String colKey, Object currentValue, Object originalValue) -> {
 					if (!currentValue.equals(originalValue)) {
 						return RowState.MODIFIED;
@@ -256,6 +259,21 @@ class GenericTableViewUpdateTest {
 		assertTrue(result2.model().getColumns().get(2).isVisible());
 		assertFalse(result2.effect().isPresent());
 		assertTrue(result2.model().isRebuildTableModel());
+	}
+
+	@Test
+	void shouldUpdateSorterValues_whenChangeSortOrder() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.ChangeSortOrder("data1", SortOrder.ASCENDING);
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+
+		assertNotNull(result.model());
+		assertEquals("data1", result.model().getTableConfig().getSortColumnKey());
+		assertEquals(SortOrder.ASCENDING, result.model().getTableConfig().getSortOrder());
+		assertFalse(result.model().isRebuildTableModel());
+		assertFalse(result.model().isDirty());
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test

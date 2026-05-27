@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.table;
 
+import javax.swing.SortOrder;
 import javax.swing.table.TableCellRenderer;
 
 import lombok.Builder;
@@ -25,4 +26,6 @@ public class TableConfig {
 	private final boolean enableHeaderContextMenu;
 	private final int selectionMode;
 	private final TableCellRenderer defauTableCellRenderer;
+	private final String sortColumnKey;
+	private final SortOrder sortOrder;
 }

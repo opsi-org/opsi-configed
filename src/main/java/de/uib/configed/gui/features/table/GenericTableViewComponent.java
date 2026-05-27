@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.table;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,13 +20,19 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.RowSorterListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Globals;
@@ -42,6 +49,13 @@ public class GenericTableViewComponent
 	private TableSideEffectStrategy sideEffectStrategy;
 	private Supplier<JPopupMenu> popupMenuSupplier;
 	private PopupMouseListener popupMouseListener;
+	private RowSorterListener rowSorterListener = (RowSorterEvent e) -> {
+		if (isUpdatingProgrammatically) {
+			return;
+		}
+
+		notifyRowSorterChange();
+	};
 
 	public interface TableSideEffectStrategy {
 		/**
@@ -103,6 +117,7 @@ public class GenericTableViewComponent
 		};
 		table.setFillsViewportHeight(model.getTableConfig().isFillViewportHeight());
 		table.setAutoCreateRowSorter(model.getTableConfig().isAutoCreateRowSorter());
+
 		if (model.getTableConfig().getDefauTableCellRenderer() != null) {
 			table.setDefaultRenderer(Object.class, model.getTableConfig().getDefauTableCellRenderer());
 		}
@@ -150,6 +165,19 @@ public class GenericTableViewComponent
 		panel.add(jScrollPaneInfo, "grow, push");
 
 		return panel;
+	}
+
+	private void notifyRowSorterChange() {
+		List<? extends RowSorter.SortKey> sortKeys = table.getRowSorter().getSortKeys();
+
+		if (sortKeys.isEmpty()) {
+			dispatch(new GenericTableViewMsg.ChangeSortOrder(null, SortOrder.UNSORTED));
+		} else {
+			RowSorter.SortKey key = sortKeys.get(0);
+			String columnKey = (String) table.getColumnModel().getColumn(key.getColumn()).getIdentifier();
+
+			dispatch(new GenericTableViewMsg.ChangeSortOrder(columnKey, key.getSortOrder()));
+		}
 	}
 
 	@Override
@@ -244,10 +272,16 @@ public class GenericTableViewComponent
 	protected void refreshView() {
 		isUpdatingProgrammatically = true;
 
+		RowSorter<? extends TableModel> sorter = table.getRowSorter();
+		sorter.removeRowSorterListener(rowSorterListener);
+		sorter.addRowSorterListener(rowSorterListener);
+
 		if (model.isRebuildTableModel()) {
 			buildColumnModel();
 
 			table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
+
+			restoreSortState();
 		}
 
 		restoreSelection();
@@ -291,6 +325,30 @@ public class GenericTableViewComponent
 		}
 
 		table.setColumnModel(newColumnModel);
+	}
+
+	private void restoreSortState() {
+		String key = model.getTableConfig().getSortColumnKey();
+		SortOrder order = model.getTableConfig().getSortOrder();
+
+		if (key == null || order == SortOrder.UNSORTED) {
+			table.setRowSorter(null);
+			table.setRowSorter(new TableRowSorter<>(table.getModel()));
+			return;
+		}
+
+		TableColumn col = table.getColumn(key);
+		if (col != null) {
+			int modelColIndex = table.convertColumnIndexToModel(table.getColumnModel().getColumnIndex(key));
+
+			List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+			sortKeys.add(new RowSorter.SortKey(modelColIndex, order));
+
+			RowSorter<? extends TableModel> sorter = table.getRowSorter();
+			if (sorter instanceof TableRowSorter<? extends TableModel> tableRowSorter) {
+				tableRowSorter.setSortKeys(sortKeys);
+			}
+		}
 	}
 
 	private void restoreSelection() {

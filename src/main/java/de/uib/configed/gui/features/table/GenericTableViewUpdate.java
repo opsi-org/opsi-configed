@@ -13,12 +13,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.swing.SortOrder;
+
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.AddRow;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CancelChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CellEdited;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeOriginalSnapshot;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRow;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
@@ -43,6 +46,9 @@ public final class GenericTableViewUpdate {
 				new GenericTableViewEffect.Selection(selectedRows));
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
+		case ChangeSortOrder(String columnKey, SortOrder sortOrder) -> UpdateResult.noEffect(model.toBuilder()
+				.tableConfig(model.getTableConfig().toBuilder().sortColumnKey(columnKey).sortOrder(sortOrder).build())
+				.rebuildTableModel(false).build());
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult
 				.noEffect(model.toBuilder().originalSnapshot(originalSnapshot)
 						.rows(RowData.fromOriginalSnapshot(originalSnapshot)).rebuildTableModel(true).build());
