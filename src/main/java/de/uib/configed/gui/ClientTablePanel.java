@@ -92,8 +92,8 @@ public class ClientTablePanel extends JPanel {
 
 		TableConfig config = TableConfig.builder().defauTableCellRenderer(new ColorTableCellRenderer())
 				.fillViewportHeight(true).showTableHeader(true).dragEnabled(true).autoCreateRowSorter(true)
-				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION).reorderingAllowed(true)
-				.enableHeaderContextMenu(true).build();
+				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION).reorderingAllowed(false)
+				.enableHeaderContextMenu(true).columnSelectionAllowed(false).build();
 
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
 				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)
