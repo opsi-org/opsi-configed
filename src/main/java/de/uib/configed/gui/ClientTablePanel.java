@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -99,9 +100,11 @@ public class ClientTablePanel extends JPanel {
 				.fillViewportHeight(true).showTableHeader(true).dragEnabled(true).autoCreateRowSorter(true)
 				.selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION).reorderingAllowed(false)
 				.enableHeaderContextMenu(true).columnSelectionAllowed(false)
-				.sortColumnKey(Configed
-						.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL))
-				.sortOrder(SortOrder.ASCENDING).build();
+				.sortKeys(Map.of(
+						Configed.getResourceValue(
+								"ConfigedMain.pclistTableModel." + HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL),
+						SortOrder.ASCENDING))
+				.build();
 
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
 				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)
@@ -154,7 +157,9 @@ public class ClientTablePanel extends JPanel {
 	}
 
 	private int compareInvalids(boolean isO1Invalid) {
-		boolean isAscending = clientTableViewComponent.model.getTableConfig().getSortOrder() == SortOrder.ASCENDING;
+		boolean isAscending = clientTableViewComponent.model.getTableConfig().getSortKeys()
+				.get(Configed.getResourceValue("ConfigedMain.pclistTableModel."
+						+ HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL)) == SortOrder.ASCENDING;
 
 		if (isO1Invalid) {
 			return isAscending ? 1 : -1;

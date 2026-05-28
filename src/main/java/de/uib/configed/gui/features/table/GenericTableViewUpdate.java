@@ -47,9 +47,8 @@ public final class GenericTableViewUpdate {
 				new GenericTableViewEffect.Selection(selectedRows));
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
-		case ChangeSortOrder(String columnKey, SortOrder sortOrder) -> UpdateResult.noEffect(model.toBuilder()
-				.tableConfig(model.getTableConfig().toBuilder().sortColumnKey(columnKey).sortOrder(sortOrder).build())
-				.rebuildTableModel(false).build());
+		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
+				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult
 				.noEffect(model.toBuilder().originalSnapshot(originalSnapshot)

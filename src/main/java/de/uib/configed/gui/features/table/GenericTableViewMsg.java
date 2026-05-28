@@ -44,7 +44,7 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 
 	}
 
-	record ChangeSortOrder(String columnKey, SortOrder sortOrder) implements GenericTableViewMsg {
+	record ChangeSortOrder(Map<String, SortOrder> sortKeys) implements GenericTableViewMsg {
 	}
 
 	record ResizeColumns(Map<String, Integer> columnWidths) implements GenericTableViewMsg {

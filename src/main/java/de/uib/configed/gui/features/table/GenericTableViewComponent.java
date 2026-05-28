@@ -208,12 +208,15 @@ public class GenericTableViewComponent
 		List<? extends RowSorter.SortKey> sortKeys = table.getRowSorter().getSortKeys();
 
 		if (sortKeys.isEmpty()) {
-			dispatch(new GenericTableViewMsg.ChangeSortOrder(null, SortOrder.UNSORTED));
+			dispatch(new GenericTableViewMsg.ChangeSortOrder(Map.of(null, SortOrder.UNSORTED)));
 		} else {
-			RowSorter.SortKey key = sortKeys.get(0);
-			String columnKey = (String) table.getColumnModel().getColumn(key.getColumn()).getIdentifier();
+			Map<String, SortOrder> rowSortKeys = new HashMap<>();
+			for (RowSorter.SortKey key : sortKeys) {
+				String columnKey = (String) table.getColumnModel().getColumn(key.getColumn()).getIdentifier();
+				rowSortKeys.put(columnKey, key.getSortOrder());
+			}
 
-			dispatch(new GenericTableViewMsg.ChangeSortOrder(columnKey, key.getSortOrder()));
+			dispatch(new GenericTableViewMsg.ChangeSortOrder(rowSortKeys));
 		}
 	}
 
@@ -379,26 +382,32 @@ public class GenericTableViewComponent
 	}
 
 	private void restoreSortState() {
-		String key = model.getTableConfig().getSortColumnKey();
-		SortOrder order = model.getTableConfig().getSortOrder();
+		Map<String, SortOrder> rowSortKeys = model.getTableConfig().getSortKeys();
 
-		if (key == null || order == SortOrder.UNSORTED) {
-			table.setRowSorter(null);
+		if (rowSortKeys == null) {
 			table.setRowSorter(new TableRowSorter<>(table.getModel()));
 			return;
 		}
 
-		TableColumn col = table.getColumn(key);
-		if (col != null) {
-			int modelColIndex = table.convertColumnIndexToModel(table.getColumnModel().getColumnIndex(key));
+		List<String> visibleColumnKeys = model.getColumns().stream().filter(TableColumnConfig::isVisible)
+				.map(TableColumnConfig::getHeader).toList();
 
-			List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-			sortKeys.add(new RowSorter.SortKey(modelColIndex, order));
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
-			RowSorter<? extends TableModel> sorter = table.getRowSorter();
-			if (sorter instanceof TableRowSorter<? extends TableModel> tableRowSorter) {
-				tableRowSorter.setSortKeys(sortKeys);
+		for (Map.Entry<String, SortOrder> entry : rowSortKeys.entrySet()) {
+			if (entry.getKey() == null || !visibleColumnKeys.contains(entry.getKey())) {
+				continue;
 			}
+
+			TableColumn col = table.getColumn(entry.getKey());
+			if (col != null) {
+				sortKeys.add(new RowSorter.SortKey(col.getModelIndex(), entry.getValue()));
+			}
+		}
+
+		RowSorter<? extends TableModel> sorter = table.getRowSorter();
+		if (sorter instanceof TableRowSorter<? extends TableModel> tableRowSorter) {
+			tableRowSorter.setSortKeys(sortKeys);
 		}
 	}
 

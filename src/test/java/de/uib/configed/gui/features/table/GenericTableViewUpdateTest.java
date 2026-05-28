@@ -264,13 +264,12 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldUpdateSorterValues_whenChangeSortOrder() {
 		GenericTableViewModel model = baseModel();
-		GenericTableViewMsg msg = new GenericTableViewMsg.ChangeSortOrder("data1", SortOrder.ASCENDING);
+		GenericTableViewMsg msg = new GenericTableViewMsg.ChangeSortOrder(Map.of("data1", SortOrder.ASCENDING));
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
 
 		assertNotNull(result.model());
-		assertEquals("data1", result.model().getTableConfig().getSortColumnKey());
-		assertEquals(SortOrder.ASCENDING, result.model().getTableConfig().getSortOrder());
+		assertEquals(SortOrder.ASCENDING, result.model().getTableConfig().getSortKeys().get("data1"));
 		assertFalse(result.model().isRebuildTableModel());
 		assertFalse(result.model().isDirty());
 		assertFalse(result.effect().isPresent());

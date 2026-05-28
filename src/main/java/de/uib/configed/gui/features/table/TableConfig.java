@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.features.table;
 
+import java.util.Map;
+
 import javax.swing.SortOrder;
 import javax.swing.table.TableCellRenderer;
 
@@ -26,6 +28,5 @@ public class TableConfig {
 	private final boolean enableHeaderContextMenu;
 	private final int selectionMode;
 	private final TableCellRenderer defauTableCellRenderer;
-	private final String sortColumnKey;
-	private final SortOrder sortOrder;
+	private final Map<String, SortOrder> sortKeys;
 }
