@@ -81,6 +81,10 @@ public class ClientTablePanel extends JPanel {
 						.build();
 			}
 
+			if (HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL.equals(entry.getKey())) {
+				column = column.withComparator(this::compareStringIgnoringNull);
+			}
+
 			columns.add(column.withVisible(entry.getValue()));
 		}
 
@@ -127,6 +131,36 @@ public class ClientTablePanel extends JPanel {
 
 		// add(searchPane);
 		add(component, "grow, push");
+	}
+
+	/**
+	 * Returns a comparator that sorts string values while always placing null
+	 * or empty strings at the bottom regardless of sort direction.
+	 *
+	 * @param ascending if true, sorts in natural order; if false, in reverse
+	 *                  order.
+	 */
+	private int compareStringIgnoringNull(Object o1, Object o2) {
+		boolean isO1Invalid = (o1 == null || o1.toString().isBlank());
+		boolean isO2Invalid = (o2 == null || o2.toString().isBlank());
+
+		if (isO1Invalid && isO2Invalid) {
+			return 0;
+		} else if (isO1Invalid || isO2Invalid) {
+			return compareInvalids(isO1Invalid);
+		} else {
+			return ((Comparable<Object>) o1).compareTo(o2);
+		}
+	}
+
+	private int compareInvalids(boolean isO1Invalid) {
+		boolean isAscending = clientTableViewComponent.model.getTableConfig().getSortOrder() == SortOrder.ASCENDING;
+
+		if (isO1Invalid) {
+			return isAscending ? 1 : -1;
+		} else {
+			return isAscending ? -1 : 1;
+		}
 	}
 
 	public GenericTableViewComponent getTableComponent() {

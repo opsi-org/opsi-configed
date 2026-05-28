@@ -334,7 +334,7 @@ public class GenericTableViewComponent
 
 			restoreSortState();
 
-			restoreColumnWidths();
+			rebuildColumns();
 		}
 
 		table.getColumnModel().addColumnModelListener(columnModelListener);
@@ -402,7 +402,7 @@ public class GenericTableViewComponent
 		}
 	}
 
-	private void restoreColumnWidths() {
+	private void rebuildColumns() {
 		List<TableColumnConfig> visibleList = model.getColumns().stream().filter(TableColumnConfig::isVisible).toList();
 
 		for (TableColumnConfig config : visibleList) {
@@ -414,6 +414,11 @@ public class GenericTableViewComponent
 			if (col != null && config.getPrefferedWidth() > 0) {
 				col.setPreferredWidth(config.getPrefferedWidth());
 				col.setWidth(config.getPrefferedWidth());
+			}
+
+			if (config.getComparator() != null) {
+				TableRowSorter<?> rowSorter = (TableRowSorter<?>) table.getRowSorter();
+				rowSorter.setComparator(table.getColumn(config.getHeader()).getModelIndex(), config.getComparator());
 			}
 		}
 	}
