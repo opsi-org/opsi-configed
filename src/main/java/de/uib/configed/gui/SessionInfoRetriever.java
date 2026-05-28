@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui;
 
+import java.util.List;
+
 import javax.swing.SwingWorker;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -47,12 +49,13 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 				.findColumnIndex(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 
 		if (sessionColumnIndex != -1) {
-			for (int i = 0; i < component.model.getRows().size(); i++) {
-				if (!component.model.getSelectedRows().contains(i)) {
+			List<RowData> rows = component.model.getRows();
+			for (int i = 0; i < rows.size(); i++) {
+				if (!component.model.getSelectedRows().contains(rows.get(i).getId())) {
 					continue;
 				}
 
-				RowData data = component.model.getRows().get(i);
+				RowData data = rows.get(i);
 				String clientName = data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
 				String result = persistenceController.getDataServices().host.getSessionInfo().get(clientName);
 				component.dispatch(new GenericTableViewMsg.CellEdited(i, sessionColumnIndex, result));
