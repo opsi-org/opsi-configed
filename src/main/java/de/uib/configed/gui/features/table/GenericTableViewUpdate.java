@@ -24,6 +24,7 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRow;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
 import de.uib.configed.gui.features.table.RowData.RowState;
 
@@ -49,6 +50,7 @@ public final class GenericTableViewUpdate {
 		case ChangeSortOrder(String columnKey, SortOrder sortOrder) -> UpdateResult.noEffect(model.toBuilder()
 				.tableConfig(model.getTableConfig().toBuilder().sortColumnKey(columnKey).sortOrder(sortOrder).build())
 				.rebuildTableModel(false).build());
+		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult
 				.noEffect(model.toBuilder().originalSnapshot(originalSnapshot)
 						.rows(RowData.fromOriginalSnapshot(originalSnapshot)).rebuildTableModel(true).build());
@@ -141,5 +143,16 @@ public final class GenericTableViewUpdate {
 		rows.remove(rowIdx);
 
 		return UpdateResult.noEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build());
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(
+			Map<String, Integer> columnsWidths, GenericTableViewModel model) {
+		Set<String> columnKeys = columnsWidths.keySet();
+		List<TableColumnConfig> configs = model.getColumns().stream()
+				.map((TableColumnConfig config) -> config.isVisible() && columnKeys.contains(config.getHeader())
+						? config.withPrefferedWidth(columnsWidths.get(config.getHeader()))
+						: config)
+				.toList();
+		return UpdateResult.noEffect(model.toBuilder().columns(configs).rebuildTableModel(false).build());
 	}
 }

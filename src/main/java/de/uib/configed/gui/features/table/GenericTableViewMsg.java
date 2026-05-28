@@ -12,10 +12,10 @@ import java.util.Set;
 
 import javax.swing.SortOrder;
 
-public sealed interface GenericTableViewMsg
-		permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
-		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
-		GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder {
+public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
+		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
+		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot,
+		GenericTableViewMsg.ChangeSortOrder, GenericTableViewMsg.ResizeColumns {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
 	}
@@ -45,7 +45,9 @@ public sealed interface GenericTableViewMsg
 	}
 
 	record ChangeSortOrder(String columnKey, SortOrder sortOrder) implements GenericTableViewMsg {
+	}
 
+	record ResizeColumns(Map<String, Integer> columnWidths) implements GenericTableViewMsg {
 	}
 
 	record ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) implements GenericTableViewMsg {

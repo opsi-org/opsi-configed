@@ -277,6 +277,22 @@ class GenericTableViewUpdateTest {
 	}
 
 	@Test
+	void shouldUpdateColumnsWidths_whenResizeColumns() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.ResizeColumns(Map.of("data0", 25, "data1", 23, "data2", 25));
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+
+		assertNotNull(result.model());
+		assertEquals(25, result.model().getColumns().get(0).getPrefferedWidth());
+		assertEquals(23, result.model().getColumns().get(1).getPrefferedWidth());
+		assertEquals(25, result.model().getColumns().get(2).getPrefferedWidth());
+		assertFalse(result.model().isRebuildTableModel());
+		assertFalse(result.model().isDirty());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
 	void shouldReportCorrectColumnCount_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
 		columns.add(new TableColumnConfig("data0", "Col 0", false, true, 100, 100, null, null));

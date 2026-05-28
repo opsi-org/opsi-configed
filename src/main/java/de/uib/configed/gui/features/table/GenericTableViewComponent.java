@@ -7,8 +7,10 @@
 package de.uib.configed.gui.features.table;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -23,14 +25,19 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -55,6 +62,34 @@ public class GenericTableViewComponent
 		}
 
 		notifyRowSorterChange();
+	};
+	private Timer columnResizeNotifier = new Timer(500, e -> notifyColumnResize());
+	private TableColumnModelListener columnModelListener = new TableColumnModelListener() {
+
+		@Override
+		public void columnAdded(TableColumnModelEvent e) {
+			// Nothing to do.
+		}
+
+		@Override
+		public void columnMarginChanged(ChangeEvent e) {
+			columnResizeNotifier.restart();
+		}
+
+		@Override
+		public void columnMoved(TableColumnModelEvent e) {
+			// Nothing to do.
+		}
+
+		@Override
+		public void columnRemoved(TableColumnModelEvent e) {
+			// Nothing to do.
+		}
+
+		@Override
+		public void columnSelectionChanged(ListSelectionEvent e) {
+			// Nothing to do.
+		}
 	};
 
 	public interface TableSideEffectStrategy {
@@ -145,6 +180,8 @@ public class GenericTableViewComponent
 
 		table.setDragEnabled(model.getTableConfig().isDragEnabled());
 
+		columnResizeNotifier.setRepeats(false);
+
 		JScrollPane jScrollPaneInfo = new JScrollPane(table);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -178,6 +215,18 @@ public class GenericTableViewComponent
 
 			dispatch(new GenericTableViewMsg.ChangeSortOrder(columnKey, key.getSortOrder()));
 		}
+	}
+
+	private void notifyColumnResize() {
+		TableColumnModel columnModel = table.getColumnModel();
+		Map<String, Integer> columnWidths = new HashMap<>();
+
+		for (int i = 0; i < columnModel.getColumnCount(); i++) {
+			TableColumn col = columnModel.getColumn(i);
+			columnWidths.put(col.getIdentifier().toString(), col.getWidth());
+		}
+
+		dispatch(new GenericTableViewMsg.ResizeColumns(columnWidths));
 	}
 
 	@Override
@@ -276,13 +325,19 @@ public class GenericTableViewComponent
 		sorter.removeRowSorterListener(rowSorterListener);
 		sorter.addRowSorterListener(rowSorterListener);
 
+		table.getColumnModel().removeColumnModelListener(columnModelListener);
+
 		if (model.isRebuildTableModel()) {
 			buildColumnModel();
 
 			table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
 
 			restoreSortState();
+
+			restoreColumnWidths();
 		}
+
+		table.getColumnModel().addColumnModelListener(columnModelListener);
 
 		restoreSelection();
 
@@ -308,10 +363,6 @@ public class GenericTableViewComponent
 			TableColumn col = new TableColumn();
 			col.setHeaderValue(columnConfig.getHeader());
 			col.setIdentifier(columnConfig.getKey());
-
-			if (columnConfig.getPrefferedWidth() > 0) {
-				col.setPreferredWidth(columnConfig.getPrefferedWidth());
-			}
 
 			if (columnConfig.getMaxWidth() > 0) {
 				col.setMaxWidth(columnConfig.getMaxWidth());
@@ -347,6 +398,22 @@ public class GenericTableViewComponent
 			RowSorter<? extends TableModel> sorter = table.getRowSorter();
 			if (sorter instanceof TableRowSorter<? extends TableModel> tableRowSorter) {
 				tableRowSorter.setSortKeys(sortKeys);
+			}
+		}
+	}
+
+	private void restoreColumnWidths() {
+		List<TableColumnConfig> visibleList = model.getColumns().stream().filter(TableColumnConfig::isVisible).toList();
+
+		for (TableColumnConfig config : visibleList) {
+			TableColumn col = table.getColumn(config.getHeader());
+			if (col == null) {
+				col = table.getColumn(config.getKey());
+			}
+
+			if (col != null && config.getPrefferedWidth() > 0) {
+				col.setPreferredWidth(config.getPrefferedWidth());
+				col.setWidth(config.getPrefferedWidth());
 			}
 		}
 	}
