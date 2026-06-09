@@ -1,0 +1,390 @@
+/**
+ * Copyright (c) UIB GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of OPSI - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.features.searchpane;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+
+import com.formdev.flatlaf.extras.components.FlatTextField;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
+
+import de.uib.configed.gui.AbstractTeaComponent;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.icons.Icons;
+import de.uib.configed.gui.share.table.gui.FilterStateManager;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.gui.SearchTargetModel;
+import de.uib.configed.gui.share.table.gui.TableFilterState;
+import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
+
+public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, SearchPaneMsg, SearchPaneEffect> {
+	private SearchTargetModel targetModel;
+	private FilterKey filterKey;
+	private PanelGenEdit associatedPanel;
+	private boolean isNarrow;
+	private boolean showNavPanel;
+
+	private FlatTextField searchField;
+	private JComboBox<String> searchColumnCombo;
+	private JToggleButton respectCaseBtn;
+	private JToggleButton regexBtn;
+	private JToggleButton filterMarkBtn;
+	private JPanel navPane;
+	private JPanel mainPanel;
+
+	private ItemListener searchColumnItemListener = (ItemEvent e) -> {
+		if (e.getStateChange() == 1) {
+			dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(searchColumnCombo.getSelectedIndex()));
+		}
+	};
+
+	public SearchPaneComponent(SearchTargetModel targetModel) {
+		this(null, targetModel, null, false, false);
+	}
+
+	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey) {
+		this(null, targetModel, filterKey, false, false);
+	}
+
+	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow,
+			boolean isNavPane) {
+		this(null, targetModel, filterKey, isNarrow, isNavPane);
+	}
+
+	public SearchPaneComponent(PanelGenEdit panel, SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow,
+			boolean isNavPane) {
+		super();
+		this.targetModel = targetModel;
+		this.associatedPanel = panel;
+		this.filterKey = filterKey;
+		this.isNarrow = isNarrow;
+		this.showNavPanel = isNavPane;
+	}
+
+	@Override
+	protected SearchPaneModel initModel() {
+		return SearchPaneModel.builder().filterKey(filterKey).isNarrow(isNarrow).showNavPanel(showNavPanel).build();
+	}
+
+	@Override
+	protected UpdateResult<SearchPaneModel, SearchPaneEffect> updateModel(SearchPaneMsg msg, SearchPaneModel model) {
+		return TableSearchPaneUpdate.update(msg, model);
+	}
+
+	@Override
+	protected JComponent renderView(SearchPaneModel model, Consumer<SearchPaneMsg> dispatch) {
+		Logging.info(this, "Rendering TableSearchPane for model: " + model);
+
+		if (mainPanel == null) {
+			initComponents(dispatch);
+		}
+
+		updateViewFromModel(model);
+
+		return mainPanel;
+	}
+
+	@Override
+	protected void refreshView() {
+		updateViewFromModel(model);
+		if (mainPanel != null) {
+			mainPanel.revalidate();
+			mainPanel.repaint();
+		}
+	}
+
+	@Override
+	protected void handleEffect(SearchPaneEffect effect) {
+		switch (effect) {
+		case SearchPaneEffect.UIEffect e -> handleUIEffect(e);
+		case SearchPaneEffect.ServiceEffect s -> handleServiceEffect(s);
+		}
+	}
+
+	private void handleUIEffect(SearchPaneEffect.UIEffect effect) {
+		switch (effect) {
+		case SearchPaneEffect.UIEffect.NavigateToRow(int row) -> onNavigateToRow(row);
+		}
+	}
+
+	private void onNavigateToRow(int row) {
+		if (targetModel != null && row <= targetModel.getRowCount()) {
+			targetModel.setSelectedRow(row);
+			targetModel.setCursorRow(row);
+			targetModel.ensureRowIsVisible(row);
+		}
+	}
+
+	private void handleServiceEffect(SearchPaneEffect.ServiceEffect effect) {
+		if (targetModel == null) {
+			return;
+		}
+
+		switch (effect) {
+		case SearchPaneEffect.ServiceEffect.ApplyFilter(String query, int col, boolean regex, boolean caseSensitive) -> {
+			int found = findNextRow(query, col, regex, caseSensitive, model.getFoundRow() + 1);
+			dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(found));
+			targetModel.applyFilter(query, col, regex, caseSensitive);
+		}
+		case SearchPaneEffect.ServiceEffect.MarkAllAndFilter(boolean isFiltered) -> onMarkAndFilter(isFiltered);
+		case SearchPaneEffect.ServiceEffect.SearchNextRow() -> onSearchNextRow();
+		}
+
+	}
+
+	private void onMarkAndFilter(boolean isFiltered) {
+		if (isFiltered) {
+			targetModel.setFiltered(isFiltered);
+		} else {
+			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
+
+			targetModel.setFiltered(false);
+
+			if (unfilteredSelection.length != 0) {
+				targetModel.setSelection(unfilteredSelection);
+			}
+		}
+	}
+
+	private void onSearchNextRow() {
+		int foundRow = findNextRow(model.getSearchText(), model.getSearchColumnIndex(), model.isRegexActive(),
+				model.isRespectCase(), model.getFoundRow() + 1);
+		foundRow = foundRow == -1 ? 0 : foundRow;
+		dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(foundRow));
+		if (foundRow <= targetModel.getRowCount()) {
+			targetModel.setSelectedRow(foundRow);
+			targetModel.setCursorRow(foundRow);
+		}
+	}
+
+	private int findNextRow(String query, int col, boolean regex, boolean caseSensitive, int startRow) {
+		if (query == null || targetModel == null) {
+			return -1;
+		}
+
+		int rowCount = targetModel.getRowCount();
+		if (rowCount == 0) {
+			return -1;
+		}
+
+		int foundRow = -1;
+
+		for (int i = startRow; i < rowCount; i++) {
+			if (matches(targetModel, i, col, query, regex, caseSensitive)) {
+				foundRow = i;
+				break;
+			}
+		}
+		return foundRow;
+	}
+
+	private static boolean matches(SearchTargetModel model, int row, int col, String query, boolean regex,
+			boolean caseSensitive) {
+		Object val = model.getValueAt(model.getRowForVisualRow(row), model.getColForVisualCol(col));
+		if (val == null) {
+			return false;
+		}
+		String str = val.toString();
+
+		if (regex) {
+			Pattern p = Pattern.compile(".*" + query + ".*", caseSensitive ? 0 : Pattern.CASE_INSENSITIVE);
+			return p.matcher(str).matches();
+		} else {
+			String q = caseSensitive ? query : query.toLowerCase(Locale.ROOT);
+			String s = caseSensitive ? str : str.toLowerCase(Locale.ROOT);
+			return s.contains(q);
+		}
+	}
+
+	private void initComponents(Consumer<SearchPaneMsg> dispatch) {
+		mainPanel = new JPanel(new MigLayout("insets 0, fillx", "[grow][pref!]", "[]0"));
+
+		initNavPane(dispatch);
+
+		searchField = new FlatTextField();
+		searchField.setLeadingIcon(new FlatSearchIcon());
+		searchField.setShowClearButton(true);
+		searchField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> {
+			if (searchField.getText() == null || searchField.getText().isBlank()) {
+				FilterStateManager.removeFilterState(filterKey);
+			} else {
+				FilterStateManager.saveFilterState(filterKey, new TableFilterState(searchField.getText(),
+						model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+			}
+			dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchField.getText()));
+		}));
+		searchField.addActionListener(actionEvent -> dispatch.accept(new SearchPaneMsg.ActionMsg.SearchNext()));
+
+		JLabel searchColumnLabel = new JLabel(Configed.getResourceValue("SearchPane.search"));
+		searchColumnCombo = new JComboBox<>();
+		searchColumnCombo.addItemListener(searchColumnItemListener);
+		searchColumnCombo.setVisible(!model.isNarrow());
+		searchColumnLabel.setVisible(!model.isNarrow());
+
+		JToggleButton extraOptionsBtn = new JToggleButton(Icons.getIntellijIcon("arrowLeft"));
+		extraOptionsBtn.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
+		extraOptionsBtn.setFocusable(false);
+		extraOptionsBtn.setVisible(model.isNarrow());
+		extraOptionsBtn.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
+		extraOptionsBtn.addActionListener((ActionEvent e) -> {
+			searchColumnCombo.setVisible(extraOptionsBtn.isSelected());
+			searchColumnLabel.setVisible(extraOptionsBtn.isSelected());
+		});
+
+		JToolBar toolbar = new JToolBar();
+		toolbar.setFloatable(false);
+
+		respectCaseBtn = new JToggleButton(Icons.getIntellijIcon("matchCase"));
+		respectCaseBtn.addActionListener(
+				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(respectCaseBtn.isSelected())));
+
+		regexBtn = new JToggleButton(Icons.getIntellijIcon("regex"));
+		regexBtn.addActionListener(
+				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleRegex(regexBtn.isSelected())));
+
+		filterMarkBtn = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
+		filterMarkBtn.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
+		filterMarkBtn.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
+		filterMarkBtn.setVisible(filterKey != null);
+		filterMarkBtn.addItemListener(
+				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(filterMarkBtn.isSelected())));
+
+		toolbar.add(respectCaseBtn);
+		toolbar.add(regexBtn);
+		toolbar.addSeparator();
+		toolbar.add(filterMarkBtn);
+
+		searchField.setTrailingComponent(toolbar);
+
+		mainPanel.add(navPane, "split 3, hidemode 2");
+		mainPanel.add(searchField, "growx");
+
+		mainPanel.add(extraOptionsBtn, "wrap, hidemode 3");
+
+		mainPanel.add(searchColumnLabel,
+				"gapleft " + Globals.GAP_SIZE + ", gapy " + Globals.GAP_SIZE + ", split 2, hidemode 3");
+		mainPanel.add(searchColumnCombo, "growx, hidemode 3, gapy " + Globals.GAP_SIZE + ", wrap");
+	}
+
+	private void initNavPane(Consumer<SearchPaneMsg> dispatch) {
+		navPane = new JPanel(new MigLayout("insets 0", "[][][][]", "[]"));
+		navPane.setVisible(model.isShowNavPanel());
+
+		JButton firstButton = createNavigationButton("playFirst", "NavigationPanel.firstEntryTooltip",
+				(ActionEvent event) -> {
+					if (associatedPanel != null) {
+						associatedPanel.setCursorToFirstRow();
+					} else {
+						dispatch.accept(new SearchPaneMsg.ActionMsg.NavigateToRow(0));
+					}
+				});
+
+		JButton previousButton = createNavigationButton("playBack", "NavigationPanel.previousEntryTooltip",
+				(ActionEvent event) -> {
+					if (associatedPanel != null) {
+						associatedPanel.advanceCursor(-1);
+					} else {
+						dispatch.accept(new SearchPaneMsg.ActionMsg.NavigateToRow(advanceRow(-1)));
+					}
+				});
+
+		JButton nextButton = createNavigationButton("playForward", "NavigationPanel.nextEntryTooltip",
+				(ActionEvent event) -> {
+					if (associatedPanel != null) {
+						associatedPanel.advanceCursor(+1);
+					} else {
+						dispatch.accept(new SearchPaneMsg.ActionMsg.NavigateToRow(advanceRow(+1)));
+					}
+				});
+
+		JButton lastButton = createNavigationButton("playLast", "NavigationPanel.lastEntryTooltip",
+				(ActionEvent event) -> {
+					if (associatedPanel != null) {
+						associatedPanel.setCursorToLastRow();
+					} else {
+						dispatch.accept(new SearchPaneMsg.ActionMsg.NavigateToRow(targetModel.getRowCount() - 1));
+					}
+				});
+
+		navPane.add(firstButton);
+		navPane.add(previousButton);
+		navPane.add(nextButton);
+		navPane.add(lastButton);
+	}
+
+	private static JButton createNavigationButton(String iconName, String tooltipResourceKey, ActionListener action) {
+		JButton navigationButton = new JButton(Icons.getIntellijIcon(iconName));
+		navigationButton.setToolTipText(Configed.getResourceValue(tooltipResourceKey));
+		navigationButton.setPreferredSize(new Dimension(30, 19));
+		navigationButton.addActionListener(action);
+		return navigationButton;
+	}
+
+	private int advanceRow(int n) {
+		int newRow = model.getFoundRow() + n;
+		if (newRow >= targetModel.getRowCount()) {
+			newRow = model.getFoundRow();
+		}
+		return newRow;
+	}
+
+	private void updateViewFromModel(SearchPaneModel model) {
+		if (!searchField.getText().equals(model.getSearchText())) {
+			searchField.setText(model.getSearchText());
+		}
+
+		if (targetModel != null) {
+			computateSearchColumnCombo();
+
+			if (model.getSearchColumnIndex() >= 0 && model.getSearchColumnIndex() < searchColumnCombo.getItemCount()) {
+				searchColumnCombo.setSelectedIndex(model.getSearchColumnIndex());
+			}
+		}
+
+		respectCaseBtn.setSelected(model.isRespectCase());
+
+		regexBtn.setSelected(model.isRegexActive());
+
+		filterMarkBtn.setSelected(model.isFiltered());
+
+		navPane.setVisible(model.isShowNavPanel());
+	}
+
+	private void computateSearchColumnCombo() {
+		if (searchColumnCombo.getItemCount() <= 1) {
+			searchColumnCombo.removeItemListener(searchColumnItemListener);
+			searchColumnCombo.removeAllItems();
+			searchColumnCombo.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
+			for (int i = 0; i < targetModel.getColumnCount(); i++) {
+				searchColumnCombo.addItem(targetModel.getColumnName(i));
+			}
+			searchColumnCombo.addItemListener(searchColumnItemListener);
+		}
+	}
+
+	public boolean isFilterMode() {
+		return model.isFiltered();
+	}
+}
