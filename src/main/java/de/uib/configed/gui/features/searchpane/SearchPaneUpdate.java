@@ -6,8 +6,11 @@
 
 package de.uib.configed.gui.features.searchpane;
 
+import java.util.List;
+
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.TableFilterState;
 
 final class TableSearchPaneUpdate {
@@ -31,6 +34,14 @@ final class TableSearchPaneUpdate {
 						model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(int index) -> UpdateResult
 				.noEffect(model.withSearchColumnIndex(index));
+		case SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(FilterKey filterKey) -> UpdateResult
+				.noEffect(model.toBuilder().filterKey(filterKey).showFilterMark(filterKey != null).build());
+		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumns(List<Integer> searchColumns) -> UpdateResult
+				.noEffect(model.withSearchColumns(searchColumns));
+		case SearchPaneMsg.FieldChangeMsg.ChangeShowNavPanel(boolean value) -> UpdateResult
+				.noEffect(model.withShowNavPanel(value));
+		case SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(boolean value) -> UpdateResult
+				.noEffect(model.withShowFilterMark(value));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean val) -> UpdateResult
 				.noEffect(model.withRespectCase(val));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean val) -> UpdateResult.noEffect(model.withRegexActive(val));

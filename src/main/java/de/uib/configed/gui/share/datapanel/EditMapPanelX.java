@@ -30,13 +30,13 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ListModelProducer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.logging.Logging;
@@ -281,8 +281,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]"));
 
 		if (includeSearchPane) {
-			TableSearchPane searchPane = new TableSearchPane(new SearchTargetModelFromTable(table));
-			add(searchPane, "growx, hmin 0");
+			SearchPaneComponent searchPane = new SearchPaneComponent(new SearchTargetModelFromTable(table));
+			add(searchPane.initUI(), "growx, hmin 0");
 		}
 
 		jScrollPane = new JScrollPane(table);

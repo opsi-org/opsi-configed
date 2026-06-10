@@ -6,6 +6,10 @@
 
 package de.uib.configed.gui.features.searchpane;
 
+import java.util.List;
+
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
+
 public sealed interface SearchPaneMsg
 		permits SearchPaneMsg.FieldChangeMsg, SearchPaneMsg.ActionMsg, SearchPaneMsg.EffectResultMsg {
 
@@ -17,6 +21,18 @@ public sealed interface SearchPaneMsg
 		}
 
 		record ChangeSearchColumn(int columnIndex) implements FieldChangeMsg {
+		}
+
+		record ChangeFilterKey(FilterKey filterKey) implements FieldChangeMsg {
+		}
+
+		record ChangeSearchColumns(List<Integer> searchColumns) implements FieldChangeMsg {
+		}
+
+		record ChangeShowNavPanel(boolean value) implements FieldChangeMsg {
+		}
+
+		record ChangeShowFilterMark(boolean value) implements FieldChangeMsg {
 		}
 
 		record ToggleRespectCase(boolean value) implements FieldChangeMsg {

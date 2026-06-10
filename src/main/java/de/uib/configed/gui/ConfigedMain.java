@@ -711,7 +711,7 @@ public class ConfigedMain {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
-		clientTablePanel.setFilterMark(false);
+		// clientTablePanel.setFilterMark(false);
 
 		clientsFilteredByTree.clear();
 

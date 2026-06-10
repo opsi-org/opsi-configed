@@ -20,12 +20,12 @@ import javax.swing.ScrollPaneConstants;
 import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.SearchTargetModel;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -34,7 +34,7 @@ public class DepotListPresenter extends JPanel {
 	private JScrollPane scrollpaneDepotslist;
 	// this will not be shown in this panel but exported for use in other panels
 
-	private TableSearchPane searchPane;
+	private SearchPaneComponent searchPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -60,9 +60,7 @@ public class DepotListPresenter extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
-		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setFiltering();
-		searchPane.setNarrow(true);
+		searchPane = new SearchPaneComponent(searchTargetModel, null, true, false, true);
 
 		initComponents();
 		layouting();
@@ -176,7 +174,7 @@ public class DepotListPresenter extends JPanel {
 		this.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
 				"[]" + Globals.MIN_GAP_SIZE + "[grow, fill]"));
 
-		add(searchPane);
+		add(searchPane.initUI());
 		add(scrollpaneDepotslist, "grow, push");
 	}
 

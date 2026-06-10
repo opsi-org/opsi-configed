@@ -45,6 +45,8 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private PanelGenEdit associatedPanel;
 	private boolean isNarrow;
 	private boolean showNavPanel;
+	private boolean showFilterMark;
+	private boolean selectionMode = true;
 
 	private FlatTextField searchField;
 	private JComboBox<String> searchColumnCombo;
@@ -61,31 +63,37 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	};
 
 	public SearchPaneComponent(SearchTargetModel targetModel) {
-		this(null, targetModel, null, false, false);
+		this(null, targetModel, null, false, false, false);
 	}
 
 	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey) {
-		this(null, targetModel, filterKey, false, false);
+		this(null, targetModel, filterKey, false, false, false);
 	}
 
-	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow,
-			boolean isNavPane) {
-		this(null, targetModel, filterKey, isNarrow, isNavPane);
+	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow, boolean isNavPane,
+			boolean showFilterMark) {
+		this(null, targetModel, filterKey, isNarrow, isNavPane, showFilterMark);
+	}
+
+	public SearchPaneComponent(PanelGenEdit associatedPanel, SearchTargetModel targetModel) {
+		this(associatedPanel, targetModel, null, false, false, false);
 	}
 
 	public SearchPaneComponent(PanelGenEdit panel, SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow,
-			boolean isNavPane) {
+			boolean isNavPane, boolean showFilterMark) {
 		super();
 		this.targetModel = targetModel;
 		this.associatedPanel = panel;
 		this.filterKey = filterKey;
 		this.isNarrow = isNarrow;
 		this.showNavPanel = isNavPane;
+		this.showFilterMark = showFilterMark;
 	}
 
 	@Override
 	protected SearchPaneModel initModel() {
-		return SearchPaneModel.builder().filterKey(filterKey).isNarrow(isNarrow).showNavPanel(showNavPanel).build();
+		return SearchPaneModel.builder().filterKey(filterKey).isNarrow(isNarrow).showNavPanel(showNavPanel)
+				.showFilterMark(showFilterMark).build();
 	}
 
 	@Override
@@ -131,7 +139,9 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	private void onNavigateToRow(int row) {
 		if (targetModel != null && row <= targetModel.getRowCount()) {
-			targetModel.setSelectedRow(row);
+			if (selectionMode) {
+				targetModel.setSelectedRow(row);
+			}
 			targetModel.setCursorRow(row);
 			targetModel.ensureRowIsVisible(row);
 		}
@@ -174,7 +184,9 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		foundRow = foundRow == -1 ? 0 : foundRow;
 		dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(foundRow));
 		if (foundRow <= targetModel.getRowCount()) {
-			targetModel.setSelectedRow(foundRow);
+			if (selectionMode) {
+				targetModel.setSelectedRow(foundRow);
+			}
 			targetModel.setCursorRow(foundRow);
 		}
 	}
@@ -267,7 +279,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		filterMarkBtn = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filterMarkBtn.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filterMarkBtn.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filterMarkBtn.setVisible(filterKey != null);
+		filterMarkBtn.setVisible(filterKey != null || model.isShowFilterMark());
 		filterMarkBtn.addItemListener(
 				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(filterMarkBtn.isSelected())));
 
@@ -367,6 +379,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 		regexBtn.setSelected(model.isRegexActive());
 
+		filterMarkBtn.setVisible(model.getFilterKey() != null || model.isShowFilterMark());
 		filterMarkBtn.setSelected(model.isFiltered());
 
 		navPane.setVisible(model.isShowNavPanel());
@@ -378,7 +391,9 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 			searchColumnCombo.removeAllItems();
 			searchColumnCombo.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
 			for (int i = 0; i < targetModel.getColumnCount(); i++) {
-				searchColumnCombo.addItem(targetModel.getColumnName(i));
+				if (model.getSearchColumns() == null || model.getSearchColumns().contains(i)) {
+					searchColumnCombo.addItem(targetModel.getColumnName(i));
+				}
 			}
 			searchColumnCombo.addItemListener(searchColumnItemListener);
 		}
@@ -386,5 +401,26 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	public boolean isFilterMode() {
 		return model.isFiltered();
+	}
+
+	public boolean isFiltering() {
+		return model.getFilterKey() != null;
+	}
+
+	public void setTargetModel(SearchTargetModel targetModel) {
+		this.targetModel = targetModel;
+	}
+
+	/**
+	 * sets an alternative ActionListener for the filtermark
+	 * 
+	 * @parameter ActionListener
+	 */
+	public void setFiltermarkActionListener(ActionListener li) {
+		filterMarkBtn.addActionListener(li);
+	}
+
+	public void setSelectMode(boolean value) {
+		this.selectionMode = value;
 	}
 }

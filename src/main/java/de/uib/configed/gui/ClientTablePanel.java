@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,17 +22,18 @@ import javax.swing.table.DefaultTableModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	private JScrollPane scrollpane;
 
-	private TableSearchPane searchPane;
+	private SearchPaneComponent searchPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -61,16 +63,16 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
-		searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
-		searchPane.setFiltering();
+		searchPane = new SearchPaneComponent(new SearchTargetModelFromClientTable(configedMain, clientTable),
+				FilterKey.CLIENT_TABLE, false, false, true);
+		JComponent component = searchPane.initUI();
 
-		clientTable.addKeyListener(searchPane);
+		// clientTable.addKeyListener(component);
 
 		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
 				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
 
-		add(searchPane);
+		add(component);
 		add(scrollpane, "grow, push");
 	}
 
@@ -107,7 +109,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 	}
 
 	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
+		return searchPane.isFilterMode();
 	}
 
 	public ClientTable getClientTable() {
@@ -162,17 +164,18 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		clientTable.addMouseListener(l);
 	}
 
-	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
-	}
+	// public void setFilterMark(boolean selected) {
+	// 	searchPane.setFilterMark(selected);
+	// 	searchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(selected));
+	// }
 
 	public final void initColumnNames() {
 		// New code
-		searchPane.setSearchFieldsAll();
+		// searchPane.setSearchFieldsAll();
 	}
 
 	public void restoreFilter() {
-		searchPane.restoreFilter();
+		searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}
 
 	public void setSelectedValues(Collection<String> clientsToSelect) {

@@ -35,12 +35,12 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
 import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("java:S1200")
@@ -123,8 +123,7 @@ public class ConfigValueEditor extends JPanel {
 		defaultColumn.setCellEditor(new DefaultToggleEditor(valuesTable, valuesTableModel, isMultiValueMode));
 
 		SearchTargetModelFromTable searchTargetModel = new SearchTargetModelFromTable(valuesTable);
-		TableSearchPane searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setNarrow(true);
+		SearchPaneComponent searchPane = new SearchPaneComponent(searchTargetModel, null, true, false, false);
 
 		JPanel controlsPanel = new JPanel();
 		controlsPanel.setLayout(new MigLayout("insets 0, fill",
@@ -150,7 +149,7 @@ public class ConfigValueEditor extends JPanel {
 		controlsPanel.add(removeButton);
 
 		setLayout(new MigLayout("insets 0, fill, wrap 1", "", "[]0"));
-		add(searchPane, "growx, gapbottom " + Globals.GAP_SIZE);
+		add(searchPane.initUI(), "growx, gapbottom " + Globals.GAP_SIZE);
 
 		JScrollPane scrollPane = new JScrollPane(valuesTable);
 		scrollPane.setPreferredSize(new Dimension(300, 110));

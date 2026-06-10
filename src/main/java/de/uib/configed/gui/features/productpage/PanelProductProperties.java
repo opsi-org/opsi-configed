@@ -182,7 +182,6 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 			this.propertiesPanel = propertiesPanel;
 
 			super.setMinimumSize(new Dimension());
-			tableSearchPane.setFiltering();
 		}
 
 		@Override

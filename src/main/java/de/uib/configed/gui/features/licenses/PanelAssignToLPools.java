@@ -203,7 +203,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFilterKey(FilterKey.LICENSE_REGISTERED_SOFTWARE_TABLE);
-		panelRegisteredSoftware.getTableSearchPane().setFiltering();
 	}
 
 	private static JLabel label(String key) {

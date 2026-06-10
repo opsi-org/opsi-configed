@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.features.searchpane;
 
+import java.util.List;
+
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import lombok.Builder;
 import lombok.Value;
@@ -25,6 +27,8 @@ public class SearchPaneModel {
 	boolean isRegexActive;
 	boolean isRespectCase;
 	boolean selectMode;
+	boolean showFilterMark;
+	List<Integer> searchColumns;
 
 	// Navigation State
 	@Builder.Default

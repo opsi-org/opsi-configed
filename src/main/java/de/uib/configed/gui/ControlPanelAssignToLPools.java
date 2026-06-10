@@ -28,6 +28,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.features.licenses.LicenseManagement;
 import de.uib.configed.gui.features.licenses.PanelAssignToLPools;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.DefaultTableModelFilterCondition;
 import de.uib.configed.gui.share.table.GenTableModel;
@@ -130,7 +131,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
 
-		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(false);
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(false));
 
 		thePanel.getFieldSelectedLicensePoolId().setText(poolID);
 		thePanel.getFieldSelectedLicensePoolId().setToolTipText(poolID);
@@ -167,7 +169,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, " to ", wasUsingSelectedFilter);
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				wasUsingSelectedFilter);
-		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(wasUsingSelectedFilter);
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(wasUsingSelectedFilter));
 
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED,
 				softwareShowAllMeans != SoftwareShowAllMeans.ALL);
@@ -538,9 +541,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		modelWindowsSoftwareIds.setEditableColumns(new int[] {});
 
-		Integer[] searchCols = new Integer[columnNames.size()];
+		List<Integer> searchCols = new ArrayList<>();
 		for (int j = 0; j < columnNames.size(); j++) {
-			searchCols[j] = j;
+			searchCols.add(j);
 		}
 
 		softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
@@ -562,7 +565,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				new TableModelFilter(windowsSoftwareFilterConditionDontShowAssociatedToOtherPool));
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
 
-		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(false);
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(false));
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 
 		initializePanelRegisteredSoftwareMenuItems(columnNames);
@@ -825,7 +829,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				usingShowSelectedFilter);
 
-		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(usingShowSelectedFilter);
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(usingShowSelectedFilter));;
 		setVisualSelection(selectedKeys);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
@@ -859,7 +864,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (oldDirection != direction) {
 			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-				thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFiltering();
+				thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+						.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(true));
 			} else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
 				resetCounters(null);
 				thePanel.getFieldCountAssignedInEditing().setText("");
