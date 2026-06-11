@@ -62,6 +62,8 @@ final class TableSearchPaneUpdate {
 			yield UpdateResult.withEffect(model.withFoundRow(row), new SearchPaneEffect.UIEffect.NavigateToRow(row));
 		}
 		case SearchPaneMsg.ActionMsg.RestoreFilter() -> onRestoreFilter(model);
+		case SearchPaneMsg.ActionMsg.SelectAll() -> UpdateResult.withEffect(model,
+				new SearchPaneEffect.UIEffect.SelectAll());
 		};
 	}
 

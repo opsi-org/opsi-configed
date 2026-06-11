@@ -60,6 +60,9 @@ public sealed interface SearchPaneMsg
 
 		record RestoreFilter() implements ActionMsg {
 		}
+
+		record SelectAll() implements ActionMsg {
+		}
 	}
 
 	/**

@@ -67,7 +67,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 				FilterKey.CLIENT_TABLE, false, false, true);
 		JComponent component = searchPane.initUI();
 
-		// clientTable.addKeyListener(component);
+		clientTable.addKeyListener(searchPane);
 
 		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
 				"[]" + Globals.GAP_SIZE + "[grow, fill]"));

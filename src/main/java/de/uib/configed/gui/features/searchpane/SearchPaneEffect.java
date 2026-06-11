@@ -13,6 +13,9 @@ public sealed interface SearchPaneEffect permits SearchPaneEffect.UIEffect, Sear
 	sealed interface UIEffect extends SearchPaneEffect {
 		record NavigateToRow(int row) implements UIEffect {
 		}
+
+		record SelectAll() implements UIEffect {
+		}
 	}
 
 	/**

@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -39,7 +41,8 @@ import de.uib.configed.gui.share.table.gui.TableFilterState;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
-public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, SearchPaneMsg, SearchPaneEffect> {
+public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, SearchPaneMsg, SearchPaneEffect>
+		implements KeyListener {
 	private SearchTargetModel targetModel;
 	private FilterKey filterKey;
 	private PanelGenEdit associatedPanel;
@@ -134,6 +137,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private void handleUIEffect(SearchPaneEffect.UIEffect effect) {
 		switch (effect) {
 		case SearchPaneEffect.UIEffect.NavigateToRow(int row) -> onNavigateToRow(row);
+		case SearchPaneEffect.UIEffect.SelectAll() -> onSelectAll();
 		}
 	}
 
@@ -145,6 +149,17 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 			targetModel.setCursorRow(row);
 			targetModel.ensureRowIsVisible(row);
 		}
+	}
+
+	private void onSelectAll() {
+		targetModel.setValueIsAdjusting(true);
+		targetModel.clearSelection();
+
+		for (int i = 0; i < targetModel.getRowCount(); i++) {
+			targetModel.addSelectedRow(i);
+		}
+
+		targetModel.setValueIsAdjusting(false);
 	}
 
 	@SuppressWarnings("java:S103")
@@ -254,6 +269,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 			dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchField.getText()));
 		}));
 		searchField.addActionListener(actionEvent -> dispatch.accept(new SearchPaneMsg.ActionMsg.SearchNext()));
+		searchField.addKeyListener(this);
 
 		JLabel searchColumnLabel = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		searchColumnCombo = new JComboBox<>();
@@ -408,7 +424,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	}
 
 	public boolean isFiltering() {
-		return model.getFilterKey() != null;
+		return model.getFilterKey() != null || model.isShowFilterMark();
 	}
 
 	public void setTargetModel(SearchTargetModel targetModel) {
@@ -426,5 +442,32 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	public void setSelectMode(boolean value) {
 		this.selectionMode = value;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (model.getSearchText().isBlank()) {
+			return;
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_F8) {
+			if (isFiltering() && !filterMarkBtn.isSelected()) {
+				dispatch(new SearchPaneMsg.ActionMsg.SelectAll());
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
+			dispatch(new SearchPaneMsg.ActionMsg.SearchNext());
+		} else {
+			// We want to do nothing on other keys
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Not needed
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// Not needed
 	}
 }
