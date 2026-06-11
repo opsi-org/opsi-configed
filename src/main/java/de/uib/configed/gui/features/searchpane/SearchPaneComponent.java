@@ -223,6 +223,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 		int foundRow = -1;
 		int modelColumnIndex = targetModel.findColumn(searchColumnCombo.getItemAt(col));
+		modelColumnIndex = modelColumnIndex == -1 ? model.getSearchColumnIndex() : modelColumnIndex;
 
 		for (int i = startRow; i < rowCount; i++) {
 			if (matches(targetModel, i, modelColumnIndex, query, regex, caseSensitive)) {
