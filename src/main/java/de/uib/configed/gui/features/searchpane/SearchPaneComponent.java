@@ -147,21 +147,26 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 	}
 
+	@SuppressWarnings("java:S103")
 	private void handleServiceEffect(SearchPaneEffect.ServiceEffect effect) {
 		if (targetModel == null) {
 			return;
 		}
 
 		switch (effect) {
-		case SearchPaneEffect.ServiceEffect.ApplyFilter(String query, int col, boolean regex, boolean caseSensitive) -> {
-			int found = findNextRow(query, col, regex, caseSensitive, model.getFoundRow() + 1);
-			dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(found));
-			targetModel.applyFilter(query, col, regex, caseSensitive);
-		}
+		case SearchPaneEffect.ServiceEffect.ApplyFilter(String query, int col, boolean regex, boolean caseSensitive) -> onApplyFilter(
+				query, col, regex, caseSensitive);
 		case SearchPaneEffect.ServiceEffect.MarkAllAndFilter(boolean isFiltered) -> onMarkAndFilter(isFiltered);
 		case SearchPaneEffect.ServiceEffect.SearchNextRow() -> onSearchNextRow();
 		}
 
+	}
+
+	private void onApplyFilter(String query, int col, boolean regex, boolean caseSensitive) {
+		int found = findNextRow(query, col, regex, caseSensitive, model.getFoundRow() + 1);
+		dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(found));
+		int modelColumnIndex = targetModel.findColumn(searchColumnCombo.getItemAt(col));
+		targetModel.applyFilter(query, modelColumnIndex, regex, caseSensitive);
 	}
 
 	private void onMarkAndFilter(boolean isFiltered) {
@@ -202,9 +207,10 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 
 		int foundRow = -1;
+		int modelColumnIndex = targetModel.findColumn(searchColumnCombo.getItemAt(col));
 
 		for (int i = startRow; i < rowCount; i++) {
-			if (matches(targetModel, i, col, query, regex, caseSensitive)) {
+			if (matches(targetModel, i, modelColumnIndex, query, regex, caseSensitive)) {
 				foundRow = i;
 				break;
 			}
