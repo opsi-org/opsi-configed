@@ -374,11 +374,13 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 
 		if (targetModel != null) {
+			searchColumnCombo.removeItemListener(searchColumnItemListener);
 			computateSearchColumnCombo();
 
 			if (model.getSearchColumnIndex() >= 0 && model.getSearchColumnIndex() < searchColumnCombo.getItemCount()) {
 				searchColumnCombo.setSelectedIndex(model.getSearchColumnIndex());
 			}
+			searchColumnCombo.addItemListener(searchColumnItemListener);
 		}
 
 		respectCaseBtn.setSelected(model.isRespectCase());
@@ -392,16 +394,12 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	}
 
 	private void computateSearchColumnCombo() {
-		if (searchColumnCombo.getItemCount() <= 1) {
-			searchColumnCombo.removeItemListener(searchColumnItemListener);
-			searchColumnCombo.removeAllItems();
-			searchColumnCombo.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
-			for (int i = 0; i < targetModel.getColumnCount(); i++) {
-				if (model.getSearchColumns() == null || model.getSearchColumns().contains(i)) {
-					searchColumnCombo.addItem(targetModel.getColumnName(i));
-				}
+		searchColumnCombo.removeAllItems();
+		searchColumnCombo.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
+		for (int i = 0; i < targetModel.getColumnCount(); i++) {
+			if (model.getSearchColumns() == null || model.getSearchColumns().contains(i)) {
+				searchColumnCombo.addItem(targetModel.getColumnName(i));
 			}
-			searchColumnCombo.addItemListener(searchColumnItemListener);
 		}
 	}
 
