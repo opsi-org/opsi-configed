@@ -261,11 +261,13 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		searchField.setLeadingIcon(new FlatSearchIcon());
 		searchField.setShowClearButton(true);
 		searchField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> {
-			if (searchField.getText() == null || searchField.getText().isBlank()) {
-				FilterStateManager.removeFilterState(filterKey);
-			} else {
-				FilterStateManager.saveFilterState(filterKey, new TableFilterState(searchField.getText(),
-						model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+			if (filterKey != null) {
+				if (searchField.getText() == null || searchField.getText().isBlank()) {
+					FilterStateManager.removeFilterState(filterKey);
+				} else {
+					FilterStateManager.saveFilterState(filterKey, new TableFilterState(searchField.getText(),
+							model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+				}
 			}
 			dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchField.getText()));
 		}));
