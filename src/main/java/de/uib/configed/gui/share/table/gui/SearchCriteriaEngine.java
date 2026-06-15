@@ -14,24 +14,6 @@ import java.util.regex.PatternSyntaxException;
 import de.uib.configed.share.logging.Logging;
 
 public class SearchCriteriaEngine {
-	public static class MatchResult {
-		public final boolean matches;
-		public final String errorMessage;
-
-		public MatchResult(boolean matches, String errorMessage) {
-			this.matches = matches;
-			this.errorMessage = errorMessage;
-		}
-
-		public static MatchResult ok(boolean matches) {
-			return new MatchResult(matches, null);
-		}
-
-		public static MatchResult error(String message) {
-			return new MatchResult(false, message);
-		}
-	}
-
 	public Pattern getPattern(boolean useRegex, boolean caseSensitive, String query) {
 		if (!useRegex) {
 			return null;
