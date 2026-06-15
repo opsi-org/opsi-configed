@@ -7,8 +7,10 @@
 package de.uib.configed.gui.share.table.gui;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -232,8 +234,20 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		if (query == null || query.isEmpty()) {
 			sorter.setRowFilter(null);
 		} else {
-			FlexibleRowFilter filter = new FlexibleRowFilter(query, columnIndex, useRegex, caseSensitive);
-			sorter.setRowFilter(filter);
+			SearchCriteriaEngine searchCriteriaEngine = new SearchCriteriaEngine();
+			sorter.setRowFilter(new RowFilter<TableModel, Integer>() {
+				@Override
+				public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+					Pattern pattern = searchCriteriaEngine.getPattern(useRegex, caseSensitive, query);
+
+					int columnCount = entry.getValueCount();
+					int start = (columnIndex == -1) ? 0 : columnIndex;
+					int end = (columnIndex == -1) ? columnCount : (columnIndex + 1);
+
+					return searchCriteriaEngine.matchAcrossColumns(entry::getStringValue, start, end, query, pattern,
+							useRegex, caseSensitive);
+				}
+			});
 		}
 
 		if (table.getRowCount() != 0) {
