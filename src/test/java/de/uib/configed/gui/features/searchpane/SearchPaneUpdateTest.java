@@ -232,4 +232,15 @@ class SearchPaneUpdateTest {
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertInstanceOf(SearchPaneEffect.UIEffect.FilterMarkTriggered.class, result.effect().get()));
 	}
+
+	@Test
+	void shouldChangeSelectMode_whenChangeSelectMode() {
+		SearchPaneModel model = baseModel();
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(false), model);
+
+		assertFalse(result.model().isSelectMode());
+		assertFalse(result.effect().isPresent());
+	}
 }

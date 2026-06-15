@@ -26,7 +26,8 @@ public class SearchPaneModel {
 	int searchColumnIndex;
 	boolean isRegexActive;
 	boolean isRespectCase;
-	boolean selectMode;
+	@Builder.Default
+	boolean selectMode = true;
 	boolean showFilterMark;
 	List<Integer> searchColumns;
 

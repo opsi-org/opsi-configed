@@ -552,7 +552,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE);
 
 		thePanel.getPanelRegisteredSoftware().setSearchColumns(searchCols);
-		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setSelectMode(false);
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(false));
 
 		windowsSoftwareFilterConditonShowOnlySelected = new DefaultTableModelFilterCondition(
 				WINDOWS_SOFTWARE_ID_KEY_COL);

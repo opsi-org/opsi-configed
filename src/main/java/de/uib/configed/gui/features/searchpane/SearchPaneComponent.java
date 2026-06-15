@@ -49,7 +49,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private boolean isNarrow;
 	private boolean showNavPanel;
 	private boolean showFilterMark;
-	private boolean selectionMode = true;
 
 	private FlatTextField searchField;
 	private JComboBox<String> searchColumnCombo;
@@ -158,7 +157,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	private void onNavigateToRow(int row) {
 		if (targetModel != null && row <= targetModel.getRowCount()) {
-			if (selectionMode) {
+			if (model.isSelectMode()) {
 				targetModel.setSelectedRow(row);
 			}
 			targetModel.setCursorRow(row);
@@ -229,7 +228,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		foundRow = foundRow == -1 ? 0 : foundRow;
 		dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(foundRow));
 		if (foundRow <= targetModel.getRowCount()) {
-			if (selectionMode) {
+			if (model.isSelectMode()) {
 				targetModel.setSelectedRow(foundRow);
 			}
 			targetModel.setCursorRow(foundRow);
@@ -458,10 +457,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	public void setTargetModel(SearchTargetModel targetModel) {
 		this.targetModel = targetModel;
-	}
-
-	public void setSelectMode(boolean value) {
-		this.selectionMode = value;
 	}
 
 	@Override

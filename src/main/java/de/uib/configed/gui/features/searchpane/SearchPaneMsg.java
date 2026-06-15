@@ -35,6 +35,9 @@ public sealed interface SearchPaneMsg
 		record ChangeShowFilterMark(boolean value) implements FieldChangeMsg {
 		}
 
+		record ChangeSelectMode(boolean value) implements FieldChangeMsg {
+		}
+
 		record ToggleRespectCase(boolean value) implements FieldChangeMsg {
 		}
 

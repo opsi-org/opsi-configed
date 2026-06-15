@@ -42,6 +42,8 @@ final class TableSearchPaneUpdate {
 				.noEffect(model.withShowNavPanel(value));
 		case SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(boolean value) -> UpdateResult
 				.noEffect(model.withShowFilterMark(value));
+		case SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(boolean value) -> UpdateResult
+				.noEffect(model.withSelectMode(value));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean val) -> UpdateResult
 				.noEffect(model.withRespectCase(val));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean val) -> UpdateResult.noEffect(model.withRegexActive(val));
