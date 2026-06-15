@@ -4,7 +4,7 @@
  * This file is part of OPSI - https://www.opsi.org
  */
 
-package de.uib.configed.gui.share.table.gui;
+package de.uib.configed.gui.features.searchpane.view;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -15,8 +15,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.configed.gui.features.searchpane.SearchCriteriaEngine;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.RowNoTableModelFilterCondition;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.share.logging.Logging;
 
 public class SearchTargetModelFromTable implements SearchTargetModel {

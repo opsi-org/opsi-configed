@@ -4,7 +4,7 @@
  * This file is part of OPSI - https://www.opsi.org
  */
 
-package de.uib.configed.gui.share.table.gui;
+package de.uib.configed.gui.features.searchpane.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import javax.swing.table.AbstractTableModel;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ListSelectionList;
+import de.uib.configed.gui.features.searchpane.SearchCriteriaEngine;
 import de.uib.configed.share.logging.Logging;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -261,7 +262,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		updateUI();
 	}
 
-	private static class JListItemWrapper implements FilterableItem {
+	private static class JListItemWrapper {
 		private final String val;
 		private final String desc;
 
@@ -270,7 +271,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			this.desc = d;
 		}
 
-		@Override
 		public Object getValue(int col) {
 			return col == 0 ? val : desc;
 		}
@@ -284,8 +284,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		}
 	}
 
-	public <T extends FilterableItem> List<T> filter(List<T> allItems, String query, int columnIndex, boolean useRegex,
-			boolean caseSensitive) {
+	public <T extends JListItemWrapper> List<T> filter(List<T> allItems, String query, int columnIndex,
+			boolean useRegex, boolean caseSensitive) {
 		if (query == null || query.isEmpty() || allItems.isEmpty()) {
 			return new ArrayList<>(allItems);
 		}

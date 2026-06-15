@@ -36,11 +36,11 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("java:S1200")

@@ -30,6 +30,7 @@ import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
 import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.CursorrowObserver;
 import de.uib.configed.gui.share.table.GenTableModel;

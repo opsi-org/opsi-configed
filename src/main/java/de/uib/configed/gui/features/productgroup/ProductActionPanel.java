@@ -29,10 +29,10 @@ import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
 import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

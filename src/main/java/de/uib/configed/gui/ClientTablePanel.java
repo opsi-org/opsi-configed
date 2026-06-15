@@ -24,9 +24,9 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
 import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

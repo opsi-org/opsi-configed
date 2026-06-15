@@ -21,11 +21,11 @@ import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModel;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromJList;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.gui.share.table.gui.SearchTargetModel;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 

@@ -4,7 +4,7 @@
  * This file is part of OPSI - https://www.opsi.org
  */
 
-package de.uib.configed.gui.share.table.gui;
+package de.uib.configed.gui.features.searchpane;
 
 import java.util.Locale;
 import java.util.function.IntFunction;
