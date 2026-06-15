@@ -16,6 +16,9 @@ public sealed interface SearchPaneEffect permits SearchPaneEffect.UIEffect, Sear
 
 		record SelectAll() implements UIEffect {
 		}
+
+		record FilterMarkTriggered() implements UIEffect {
+		}
 	}
 
 	/**

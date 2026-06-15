@@ -220,4 +220,16 @@ class SearchPaneUpdateTest {
 		assertEquals(-1, result.model().getFoundRow());
 		assertFalse(result.effect().isPresent());
 	}
+
+	@Test
+	void shouldTriggerFilterMarkTriggered_whenTriggerFilterMark() {
+		SearchPaneModel model = baseModel();
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.TriggerFilterMark(), model);
+
+		assertEquals(model, result.model());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(SearchPaneEffect.UIEffect.FilterMarkTriggered.class, result.effect().get()));
+	}
 }

@@ -59,6 +59,16 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private JPanel navPane;
 	private JPanel mainPanel;
 
+	private SideEffectStrategy sideEffectStrategy;
+
+	public interface SideEffectStrategy {
+		/**
+		 * Given an effect, return the side effect's action to execute. Return
+		 * null if no side effect's action is needed.
+		 */
+		Runnable getActionFor(SearchPaneEffect effect);
+	}
+
 	private ItemListener searchColumnItemListener = (ItemEvent e) -> {
 		if (e.getStateChange() == 1) {
 			dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(searchColumnCombo.getSelectedIndex()));
@@ -91,6 +101,10 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		this.isNarrow = isNarrow;
 		this.showNavPanel = isNavPane;
 		this.showFilterMark = showFilterMark;
+	}
+
+	public void setSideEffectStrategy(SideEffectStrategy sideEffectStrategy) {
+		this.sideEffectStrategy = sideEffectStrategy;
 	}
 
 	@Override
@@ -138,6 +152,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		switch (effect) {
 		case SearchPaneEffect.UIEffect.NavigateToRow(int row) -> onNavigateToRow(row);
 		case SearchPaneEffect.UIEffect.SelectAll() -> onSelectAll();
+		case SearchPaneEffect.UIEffect.FilterMarkTriggered() -> onFilterMarkTriggered(effect);
 		}
 	}
 
@@ -160,6 +175,16 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 
 		targetModel.setValueIsAdjusting(false);
+	}
+
+	private void onFilterMarkTriggered(SearchPaneEffect effect) {
+		if (sideEffectStrategy == null) {
+			return;
+		}
+		Runnable action = sideEffectStrategy.getActionFor(effect);
+		if (action != null) {
+			action.run();
+		}
 	}
 
 	@SuppressWarnings("java:S103")
@@ -307,6 +332,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		filterMarkBtn.setVisible(filterKey != null || model.isShowFilterMark());
 		filterMarkBtn.addItemListener(
 				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(filterMarkBtn.isSelected())));
+		filterMarkBtn.addActionListener(event -> dispatch.accept(new SearchPaneMsg.ActionMsg.TriggerFilterMark()));
 
 		toolbar.add(respectCaseBtn);
 		toolbar.add(regexBtn);
@@ -432,15 +458,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	public void setTargetModel(SearchTargetModel targetModel) {
 		this.targetModel = targetModel;
-	}
-
-	/**
-	 * sets an alternative ActionListener for the filtermark
-	 * 
-	 * @parameter ActionListener
-	 */
-	public void setFiltermarkActionListener(ActionListener li) {
-		filterMarkBtn.addActionListener(li);
 	}
 
 	public void setSelectMode(boolean value) {

@@ -63,6 +63,9 @@ public sealed interface SearchPaneMsg
 
 		record SelectAll() implements ActionMsg {
 		}
+
+		record TriggerFilterMark() implements ActionMsg {
+		}
 	}
 
 	/**

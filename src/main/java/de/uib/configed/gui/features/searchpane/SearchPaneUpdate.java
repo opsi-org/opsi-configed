@@ -64,6 +64,8 @@ final class TableSearchPaneUpdate {
 		case SearchPaneMsg.ActionMsg.RestoreFilter() -> onRestoreFilter(model);
 		case SearchPaneMsg.ActionMsg.SelectAll() -> UpdateResult.withEffect(model,
 				new SearchPaneEffect.UIEffect.SelectAll());
+		case SearchPaneMsg.ActionMsg.TriggerFilterMark() -> UpdateResult.withEffect(model,
+				new SearchPaneEffect.UIEffect.FilterMarkTriggered());
 		};
 	}
 
