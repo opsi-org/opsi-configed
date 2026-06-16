@@ -278,15 +278,17 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
 		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
 
-		setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]"));
+		setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[grow]0"));
 
 		if (includeSearchPane) {
+			setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]0"));
+
 			TableSearchPane searchPane = new TableSearchPane(new SearchTargetModelFromTable(table));
 			add(searchPane, "growx, hmin 0");
 		}
 
 		jScrollPane = new JScrollPane(table);
-		add(jScrollPane, "grow, hmin 0");
+		add(jScrollPane, "grow, push, hmin 0");
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
