@@ -520,9 +520,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_F8) {
-			if (isFilteringBySelectionEnabled() && !filterMarkBtn.isSelected()) {
-				dispatch(new SearchPaneMsg.ActionMsg.SelectAll());
-			}
+			dispatch(new SearchPaneMsg.ActionMsg.MarkAllAndFilter());
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			dispatch(new SearchPaneMsg.ActionMsg.SearchNext());
 		} else {

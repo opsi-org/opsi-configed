@@ -131,41 +131,62 @@ class SearchPaneUpdateTest {
 
 	@Test
 	void shouldTriggerMarkAllAndFilterAndActivateFiltered_whenMarkAllAndFilter() {
-		SearchPaneModel model = baseModel().toBuilder().isFilteredBySelection(false).searchText("test").build();
+		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(true).isFilteredBySelection(false)
+				.searchText("test").build();
 
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertNotEquals(model, result.model());
 		assertTrue(result.effect().isPresent());
+		assertTrue(result.model().isEnableFilterBySelection());
 		assertTrue(result.model().isFilteredBySelection());
 		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkAllAndFilter.class, result.effect().get());
 	}
 
 	@Test
 	void shouldReturnUnchangedModelAndTriggerNoEffect_whenMarkAllAndFilterWithActiveFilter() {
-		SearchPaneModel model = baseModel().toBuilder().isFilteredBySelection(true).searchText("test").build();
+		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(true).isFilteredBySelection(true)
+				.searchText("test").build();
 
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertEquals(model, result.model());
 		assertFalse(result.effect().isPresent());
+		assertTrue(result.model().isEnableFilterBySelection());
 		assertTrue(result.model().isFilteredBySelection());
 		assertEquals("test", result.model().getSearchText());
 	}
 
 	@Test
 	void shouldReturnUnchangedModelAndTriggerNoEffect_whenMarkAllAndFilterWithEmptySearchText() {
-		SearchPaneModel model = baseModel().toBuilder().isFilteredBySelection(false).searchText("").build();
+		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(true).isFilteredBySelection(false)
+				.searchText("").build();
 
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertEquals(model, result.model());
 		assertFalse(result.effect().isPresent());
+		assertTrue(result.model().isEnableFilterBySelection());
 		assertFalse(result.model().isFilteredBySelection());
 		assertEquals("", result.model().getSearchText());
+	}
+
+	@Test
+	void shouldReturnUnchangedModelAndTriggerNoEffect_whenMarkAllAndFilterWithNotEnabledFilterBySelection() {
+		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(false).isFilteredBySelection(false)
+				.searchText("test").build();
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
+
+		assertEquals(model, result.model());
+		assertFalse(result.effect().isPresent());
+		assertFalse(result.model().isEnableFilterBySelection());
+		assertFalse(result.model().isFilteredBySelection());
+		assertEquals("test", result.model().getSearchText());
 	}
 
 	@Test

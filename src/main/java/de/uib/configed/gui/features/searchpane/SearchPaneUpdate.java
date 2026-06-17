@@ -64,8 +64,6 @@ final class TableSearchPaneUpdate {
 			yield UpdateResult.withEffect(model.withFoundRow(row), new SearchPaneEffect.UIEffect.NavigateToRow(row));
 		}
 		case SearchPaneMsg.ActionMsg.RestoreFilter() -> onRestoreFilter(model);
-		case SearchPaneMsg.ActionMsg.SelectAll() -> UpdateResult.withEffect(model,
-				new SearchPaneEffect.UIEffect.SelectAll());
 		case SearchPaneMsg.ActionMsg.TriggerFilterMark() -> UpdateResult.withEffect(model,
 				new SearchPaneEffect.UIEffect.FilterMarkTriggered());
 		case SearchPaneMsg.ActionMsg.ResetSearch() -> onResetSearch(model);
@@ -73,7 +71,7 @@ final class TableSearchPaneUpdate {
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onMarkAllAndFilter(SearchPaneModel model) {
-		if (model.isFilteredBySelection() || model.getSearchText().isEmpty()) {
+		if (!model.isEnableFilterBySelection() || model.isFilteredBySelection() || model.getSearchText().isEmpty()) {
 			return UpdateResult.noEffect(model);
 		}
 
