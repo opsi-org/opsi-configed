@@ -29,9 +29,9 @@ final class TableSearchPaneUpdate {
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> handleFieldChange(SearchPaneMsg.FieldChangeMsg msg,
 			SearchPaneModel model) {
 		return switch (msg) {
-		case SearchPaneMsg.FieldChangeMsg.ChangeSearchText(String text) -> UpdateResult
-				.withEffect(model.withSearchText(text), new SearchPaneEffect.ServiceEffect.ApplyFilter(text,
-						model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+		case SearchPaneMsg.FieldChangeMsg.ChangeSearchText(String text) -> UpdateResult.withEffect(
+				model.toBuilder().searchText(text).foundRow(0).build(), new SearchPaneEffect.ServiceEffect.ApplyFilter(
+						text, model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(int index) -> UpdateResult
 				.noEffect(model.withSearchColumnIndex(index));
 		case SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(FilterKey filterKey) -> UpdateResult

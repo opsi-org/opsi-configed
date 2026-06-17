@@ -39,6 +39,7 @@ class SearchPaneUpdateTest {
 				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchText), model);
 
 		assertEquals(searchText, result.model().getSearchText());
+		assertEquals(0, result.model().getFoundRow());
 		assertTrue(result.effect().isPresent());
 		assertInstanceOf(SearchPaneEffect.ServiceEffect.ApplyFilter.class, result.effect().get());
 

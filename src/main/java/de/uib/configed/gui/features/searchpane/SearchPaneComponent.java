@@ -217,8 +217,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	}
 
 	private void onApplyFilter(String query, int col, boolean regex, boolean caseSensitive) {
-		int found = findNextRow(query, col, regex, caseSensitive, model.getFoundRow() + 1);
-		dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(found));
 		int modelColumnIndex = targetModel.findColumn(searchColumnCombo.getItemAt(col));
 		targetModel.applyFilter(query, modelColumnIndex, regex, caseSensitive);
 	}
