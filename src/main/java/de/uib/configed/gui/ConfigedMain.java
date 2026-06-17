@@ -455,9 +455,9 @@ public class ConfigedMain {
 
 		clientsForDepots.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredMode());
+		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredBySelection());
 
-		if (clientTablePanel.isFilteredMode()) {
+		if (clientTablePanel.isFilteredBySelection()) {
 			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs ",
 					selectedClients.size());
 
@@ -786,8 +786,8 @@ public class ConfigedMain {
 	}
 
 	public void deactivateFilter() {
-		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredMode());
-		if (clientTablePanel.isFilteredMode()) {
+		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredBySelection());
+		if (clientTablePanel.isFilteredBySelection()) {
 			setRebuiltClientListTableModel(true, false);
 		}
 	}

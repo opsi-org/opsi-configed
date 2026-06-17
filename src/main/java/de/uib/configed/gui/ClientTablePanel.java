@@ -108,8 +108,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		}
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilterMode();
+	public boolean isFilteredBySelection() {
+		return searchPane.isFilteredBySelection();
 	}
 
 	public ClientTable getClientTable() {

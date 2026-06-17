@@ -66,8 +66,8 @@ public class ProductActionPanel extends JPanel {
 		searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilterMode();
+	public boolean isFilteredBySelection() {
+		return searchPane.isFilteredBySelection();
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
@@ -92,7 +92,7 @@ public class ProductActionPanel extends JPanel {
 				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
 				: FilterKey.NETBOOT_PRODUCTS_TABLE;
 		searchPane = new SearchPaneComponent(new SearchTargetModelFromInstallationStateTable(panelProductSettings),
-				filterKey);
+				filterKey, false, false, true);
 		component = searchPane.initUI();
 	}
 

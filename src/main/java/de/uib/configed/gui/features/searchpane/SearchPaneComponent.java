@@ -52,7 +52,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private PanelGenEdit associatedPanel;
 	private boolean isNarrow;
 	private boolean showNavPanel;
-	private boolean showFilterMark;
+	private boolean enableFilterBySelection;
 
 	private FlatTextField searchField;
 	private JComboBox<String> searchColumnCombo;
@@ -87,13 +87,9 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		this(null, targetModel, null, false, false, false);
 	}
 
-	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey) {
-		this(null, targetModel, filterKey, false, false, false);
-	}
-
 	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow, boolean isNavPane,
-			boolean showFilterMark) {
-		this(null, targetModel, filterKey, isNarrow, isNavPane, showFilterMark);
+			boolean enableFilterBySelection) {
+		this(null, targetModel, filterKey, isNarrow, isNavPane, enableFilterBySelection);
 	}
 
 	public SearchPaneComponent(PanelGenEdit associatedPanel, SearchTargetModel targetModel) {
@@ -101,14 +97,14 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	}
 
 	public SearchPaneComponent(PanelGenEdit panel, SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow,
-			boolean isNavPane, boolean showFilterMark) {
+			boolean isNavPane, boolean enableFilterBySelection) {
 		super();
 		this.targetModel = targetModel;
 		this.associatedPanel = panel;
 		this.filterKey = filterKey;
 		this.isNarrow = isNarrow;
 		this.showNavPanel = isNavPane;
-		this.showFilterMark = showFilterMark;
+		this.enableFilterBySelection = enableFilterBySelection;
 	}
 
 	public void setSideEffectStrategy(SideEffectStrategy sideEffectStrategy) {
@@ -118,7 +114,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	@Override
 	protected SearchPaneModel initModel() {
 		return SearchPaneModel.builder().filterKey(filterKey).isNarrow(isNarrow).showNavPanel(showNavPanel)
-				.showFilterMark(showFilterMark).build();
+				.enableFilterBySelection(enableFilterBySelection).build();
 	}
 
 	@Override
@@ -349,7 +345,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		filterMarkBtn = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filterMarkBtn.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filterMarkBtn.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filterMarkBtn.setVisible(filterKey != null || model.isShowFilterMark());
+		filterMarkBtn.setVisible(filterKey != null || model.isEnableFilterBySelection());
 		filterMarkBtn.addItemListener(
 				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(filterMarkBtn.isSelected())));
 		filterMarkBtn.addActionListener(event -> dispatch.accept(new SearchPaneMsg.ActionMsg.TriggerFilterMark()));
@@ -483,12 +479,12 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 		regexBtn.setSelected(model.isRegexActive());
 
-		filterMarkBtn.setVisible(model.getFilterKey() != null || model.isShowFilterMark());
-		filterMarkBtn.setSelected(model.isFiltered());
+		filterMarkBtn.setVisible(model.isEnableFilterBySelection());
+		filterMarkBtn.setSelected(model.isFilteredBySelection());
 
-		popupMarkAllAndFilter.setVisible(model.getFilterKey() != null || model.isShowFilterMark());
+		popupMarkAllAndFilter.setVisible(model.isEnableFilterBySelection());
 		popupMarkAllAndFilter.setEnabled(!model.getSearchText().isEmpty());
-		popupNewSearch.setEnabled(model.isFiltered());
+		popupNewSearch.setEnabled(model.isFilteredBySelection());
 		popupEmptySearchfield.setEnabled(!model.getSearchText().isEmpty());
 		popupSearchNext.setEnabled(!model.getSearchText().isEmpty());
 
@@ -505,12 +501,12 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 	}
 
-	public boolean isFilterMode() {
-		return model.isFiltered();
+	public boolean isFilteredBySelection() {
+		return model.isFilteredBySelection();
 	}
 
-	public boolean isFiltering() {
-		return model.getFilterKey() != null || model.isShowFilterMark();
+	public boolean isFilteringBySelectionEnabled() {
+		return model.isEnableFilterBySelection();
 	}
 
 	public void setTargetModel(SearchTargetModel targetModel) {
@@ -524,7 +520,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_F8) {
-			if (isFiltering() && !filterMarkBtn.isSelected()) {
+			if (isFilteringBySelectionEnabled() && !filterMarkBtn.isSelected()) {
 				dispatch(new SearchPaneMsg.ActionMsg.SelectAll());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {

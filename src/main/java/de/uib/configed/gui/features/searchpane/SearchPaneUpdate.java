@@ -35,20 +35,20 @@ final class TableSearchPaneUpdate {
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(int index) -> UpdateResult
 				.noEffect(model.withSearchColumnIndex(index));
 		case SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(FilterKey filterKey) -> UpdateResult
-				.noEffect(model.toBuilder().filterKey(filterKey).showFilterMark(filterKey != null).build());
+				.noEffect(model.toBuilder().filterKey(filterKey).enableFilterBySelection(filterKey != null).build());
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumns(List<Integer> searchColumns) -> UpdateResult
 				.noEffect(model.withSearchColumns(searchColumns));
 		case SearchPaneMsg.FieldChangeMsg.ChangeShowNavPanel(boolean value) -> UpdateResult
 				.noEffect(model.withShowNavPanel(value));
-		case SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(boolean value) -> UpdateResult
-				.noEffect(model.withShowFilterMark(value));
+		case SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(boolean value) -> UpdateResult
+				.noEffect(model.withEnableFilterBySelection(value));
 		case SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(boolean value) -> UpdateResult
 				.noEffect(model.withSelectMode(value));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean val) -> UpdateResult
 				.noEffect(model.withRespectCase(val));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean val) -> UpdateResult.noEffect(model.withRegexActive(val));
-		case SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(boolean val) -> UpdateResult
-				.withEffect(model.withFiltered(val), new SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(val));
+		case SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(boolean val) -> UpdateResult.withEffect(
+				model.withFilteredBySelection(val), new SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(val));
 		};
 
 	}
@@ -73,19 +73,21 @@ final class TableSearchPaneUpdate {
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onMarkAllAndFilter(SearchPaneModel model) {
-		if (model.isFiltered() || model.getSearchText().isEmpty()) {
+		if (model.isFilteredBySelection() || model.getSearchText().isEmpty()) {
 			return UpdateResult.noEffect(model);
 		}
 
-		return UpdateResult.withEffect(model.withFiltered(true), new SearchPaneEffect.ServiceEffect.MarkAllAndFilter());
+		return UpdateResult.withEffect(model.withFilteredBySelection(true),
+				new SearchPaneEffect.ServiceEffect.MarkAllAndFilter());
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onResetSearch(SearchPaneModel model) {
-		if (!model.isFiltered()) {
+		if (!model.isFilteredBySelection()) {
 			return UpdateResult.noEffect(model);
 		}
 
-		return UpdateResult.withEffect(model.withFiltered(false), new SearchPaneEffect.ServiceEffect.ResetSearch());
+		return UpdateResult.withEffect(model.withFilteredBySelection(false),
+				new SearchPaneEffect.ServiceEffect.ResetSearch());
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onRestoreFilter(SearchPaneModel model) {

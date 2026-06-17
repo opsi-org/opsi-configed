@@ -28,7 +28,7 @@ public class SearchPaneModel {
 	boolean isRespectCase;
 	@Builder.Default
 	boolean selectMode = true;
-	boolean showFilterMark;
+	boolean enableFilterBySelection;
 	List<Integer> searchColumns;
 
 	// Navigation State
@@ -39,7 +39,7 @@ public class SearchPaneModel {
 	boolean isNarrow;
 
 	// Filter State
-	boolean isFiltered;
+	boolean isFilteredBySelection;
 	FilterKey filterKey;
 
 	// UI State (derived or transient)

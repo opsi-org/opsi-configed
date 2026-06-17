@@ -32,7 +32,7 @@ public sealed interface SearchPaneMsg
 		record ChangeShowNavPanel(boolean value) implements FieldChangeMsg {
 		}
 
-		record ChangeShowFilterMark(boolean value) implements FieldChangeMsg {
+		record ChangeEnableFilterBySelection(boolean value) implements FieldChangeMsg {
 		}
 
 		record ChangeSelectMode(boolean value) implements FieldChangeMsg {

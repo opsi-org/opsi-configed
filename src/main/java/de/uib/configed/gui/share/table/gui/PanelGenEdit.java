@@ -251,7 +251,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	private void setModelFilteringBySelection() {
-		if (tableSearchPane.isFiltering() && genEditTable.getModel() != null
+		if (tableSearchPane.isFilteringBySelectionEnabled() && genEditTable.getModel() != null
 				&& genEditTable.getGenTableModel().getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
