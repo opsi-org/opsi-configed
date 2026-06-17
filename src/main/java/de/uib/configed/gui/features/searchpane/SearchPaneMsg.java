@@ -69,6 +69,9 @@ public sealed interface SearchPaneMsg
 
 		record TriggerFilterMark() implements ActionMsg {
 		}
+
+		record ResetSearch() implements ActionMsg {
+		}
 	}
 
 	/**

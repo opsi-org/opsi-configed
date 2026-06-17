@@ -31,7 +31,13 @@ public sealed interface SearchPaneEffect permits SearchPaneEffect.UIEffect, Sear
 		record SearchNextRow() implements ServiceEffect {
 		}
 
-		record MarkAllAndFilter(boolean value) implements ServiceEffect {
+		record MarkSelectedAndFilter(boolean value) implements ServiceEffect {
+		}
+
+		record MarkAllAndFilter() implements ServiceEffect {
+		}
+
+		record ResetSearch() implements ServiceEffect {
 		}
 	}
 }

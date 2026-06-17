@@ -21,9 +21,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -32,6 +35,7 @@ import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.searchpane.view.SearchTargetModel;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
@@ -57,6 +61,11 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private JToggleButton filterMarkBtn;
 	private JPanel navPane;
 	private JPanel mainPanel;
+
+	private JMenuItem popupNewSearch;
+	private JMenuItem popupSearchNext;
+	private JMenuItem popupMarkAllAndFilter;
+	private JMenuItem popupEmptySearchfield;
 
 	private SideEffectStrategy sideEffectStrategy;
 
@@ -123,6 +132,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 		if (mainPanel == null) {
 			initComponents(dispatch);
+			initPopup();
 		}
 
 		updateViewFromModel(model);
@@ -195,10 +205,15 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		switch (effect) {
 		case SearchPaneEffect.ServiceEffect.ApplyFilter(String query, int col, boolean regex, boolean caseSensitive) -> onApplyFilter(
 				query, col, regex, caseSensitive);
-		case SearchPaneEffect.ServiceEffect.MarkAllAndFilter(boolean isFiltered) -> onMarkAndFilter(isFiltered);
+		case SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(boolean isFiltered) -> onMarkSelectedAndFilter(
+				isFiltered);
+		case SearchPaneEffect.ServiceEffect.MarkAllAndFilter() -> onMarkAllAndFilter();
 		case SearchPaneEffect.ServiceEffect.SearchNextRow() -> onSearchNextRow();
+		case SearchPaneEffect.ServiceEffect.ResetSearch() -> {
+			targetModel.setSelectedRow(0);
+			targetModel.setCursorRow(0);
 		}
-
+		}
 	}
 
 	private void onApplyFilter(String query, int col, boolean regex, boolean caseSensitive) {
@@ -208,18 +223,26 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		targetModel.applyFilter(query, modelColumnIndex, regex, caseSensitive);
 	}
 
-	private void onMarkAndFilter(boolean isFiltered) {
+	private void onMarkSelectedAndFilter(boolean isFiltered) {
 		if (isFiltered) {
 			targetModel.setFiltered(isFiltered);
+			popupMarkAllAndFilter.setEnabled(!isFiltered);
 		} else {
 			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 
 			targetModel.setFiltered(false);
+			popupMarkAllAndFilter.setEnabled(true);
 
 			if (unfilteredSelection.length != 0) {
 				targetModel.setSelection(unfilteredSelection);
 			}
 		}
+	}
+
+	private void onMarkAllAndFilter() {
+		filterMarkBtn.setSelected(false);
+		onSelectAll();
+		filterMarkBtn.setSelected(true);
 	}
 
 	private void onSearchNextRow() {
@@ -350,6 +373,37 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		mainPanel.add(searchColumnCombo, "growx, hidemode 3, gapy " + Globals.GAP_SIZE + ", wrap");
 	}
 
+	private void initPopup() {
+		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
+		popupSearchNext.addActionListener(actionEvent -> dispatch(new SearchPaneMsg.ActionMsg.SearchNext()));
+		popupSearchNext.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+
+		popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
+		popupNewSearch
+				.addActionListener((ActionEvent actionEvent) -> dispatch(new SearchPaneMsg.ActionMsg.ResetSearch()));
+
+		popupMarkAllAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
+		popupMarkAllAndFilter.addActionListener(
+				(ActionEvent actionEvent) -> dispatch(new SearchPaneMsg.ActionMsg.MarkAllAndFilter()));
+		popupMarkAllAndFilter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+
+		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
+		popupEmptySearchfield
+				.addActionListener(actionEvent -> dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText("")));
+		popupEmptySearchfield.setEnabled(false);
+
+		popupMarkAllAndFilter.setVisible(false);
+
+		Logging.info(this, "buildMenuSearchfield");
+		JPopupMenu searchMenu = new JPopupMenu();
+		searchMenu.add(popupSearchNext);
+		searchMenu.add(popupNewSearch);
+		searchMenu.add(popupMarkAllAndFilter);
+		searchMenu.add(popupEmptySearchfield);
+
+		searchField.addMouseListener(new PopupMouseListener(searchMenu));
+	}
+
 	private void initNavPane(Consumer<SearchPaneMsg> dispatch) {
 		navPane = new JPanel(new MigLayout("insets 0", "[][][][]", "[]"));
 		navPane.setVisible(model.isShowNavPanel());
@@ -433,6 +487,12 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 		filterMarkBtn.setVisible(model.getFilterKey() != null || model.isShowFilterMark());
 		filterMarkBtn.setSelected(model.isFiltered());
+
+		popupMarkAllAndFilter.setVisible(model.getFilterKey() != null || model.isShowFilterMark());
+		popupMarkAllAndFilter.setEnabled(!model.getSearchText().isEmpty());
+		popupNewSearch.setEnabled(model.isFiltered());
+		popupEmptySearchfield.setEnabled(!model.getSearchText().isEmpty());
+		popupSearchNext.setEnabled(!model.getSearchText().isEmpty());
 
 		navPane.setVisible(model.isShowNavPanel());
 	}

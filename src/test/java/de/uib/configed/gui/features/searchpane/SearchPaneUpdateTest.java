@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -92,9 +93,9 @@ class SearchPaneUpdateTest {
 
 		assertTrue(result.model().isFiltered());
 		assertTrue(result.effect().isPresent());
-		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkAllAndFilter.class, result.effect().get());
+		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter.class, result.effect().get());
 
-		SearchPaneEffect.ServiceEffect.MarkAllAndFilter effect = (SearchPaneEffect.ServiceEffect.MarkAllAndFilter) result
+		SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter effect = (SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter) result
 				.effect().get();
 		assertTrue(effect.value());
 	}
@@ -108,9 +109,9 @@ class SearchPaneUpdateTest {
 
 		assertFalse(result.model().isFiltered());
 		assertTrue(result.effect().isPresent());
-		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkAllAndFilter.class, result.effect().get());
+		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter.class, result.effect().get());
 
-		SearchPaneEffect.ServiceEffect.MarkAllAndFilter effect = (SearchPaneEffect.ServiceEffect.MarkAllAndFilter) result
+		SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter effect = (SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter) result
 				.effect().get();
 		assertFalse(effect.value());
 	}
@@ -128,19 +129,67 @@ class SearchPaneUpdateTest {
 	}
 
 	@Test
-	void shouldTriggerMarkAllAndFilter_whenMarkAllAndFilter() {
-		SearchPaneModel model = baseModel().withFiltered(true);
+	void shouldTriggerMarkAllAndFilterAndActivateFiltered_whenMarkAllAndFilter() {
+		SearchPaneModel model = baseModel().toBuilder().isFiltered(false).searchText("test").build();
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
+
+		assertNotEquals(model, result.model());
+		assertTrue(result.effect().isPresent());
+		assertTrue(result.model().isFiltered());
+		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkAllAndFilter.class, result.effect().get());
+	}
+
+	@Test
+	void shouldReturnUnchangedModelAndTriggerNoEffect_whenMarkAllAndFilterWithActiveFilter() {
+		SearchPaneModel model = baseModel().toBuilder().isFiltered(true).searchText("test").build();
 
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertEquals(model, result.model());
-		assertTrue(result.effect().isPresent());
-		assertInstanceOf(SearchPaneEffect.ServiceEffect.MarkAllAndFilter.class, result.effect().get());
+		assertFalse(result.effect().isPresent());
+		assertTrue(result.model().isFiltered());
+		assertEquals("test", result.model().getSearchText());
+	}
 
-		SearchPaneEffect.ServiceEffect.MarkAllAndFilter effect = (SearchPaneEffect.ServiceEffect.MarkAllAndFilter) result
-				.effect().get();
-		assertTrue(effect.value());
+	@Test
+	void shouldReturnUnchangedModelAndTriggerNoEffect_whenMarkAllAndFilterWithEmptySearchText() {
+		SearchPaneModel model = baseModel().toBuilder().isFiltered(false).searchText("").build();
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
+
+		assertEquals(model, result.model());
+		assertFalse(result.effect().isPresent());
+		assertFalse(result.model().isFiltered());
+		assertEquals("", result.model().getSearchText());
+	}
+
+	@Test
+	void shouldTriggerResetSearchAndDeactivateFiltered_whenResetSearch() {
+		SearchPaneModel model = baseModel().withFiltered(true);
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.ResetSearch(), model);
+
+		assertNotEquals(model, result.model());
+		assertTrue(result.effect().isPresent());
+		assertFalse(result.model().isFiltered());
+		assertInstanceOf(SearchPaneEffect.ServiceEffect.ResetSearch.class, result.effect().get());
+	}
+
+	@Test
+	void shouldReturnUnchangedModelAndTriggerNoEffect_whenResetSearchWithNoFilterActivated() {
+		SearchPaneModel model = baseModel().withFiltered(false);
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.ResetSearch(), model);
+
+		assertEquals(model, result.model());
+		assertFalse(result.effect().isPresent());
+		assertFalse(result.model().isFiltered());
 	}
 
 	@Test

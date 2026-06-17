@@ -48,8 +48,9 @@ final class TableSearchPaneUpdate {
 				.noEffect(model.withRespectCase(val));
 		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean val) -> UpdateResult.noEffect(model.withRegexActive(val));
 		case SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(boolean val) -> UpdateResult
-				.withEffect(model.withFiltered(val), new SearchPaneEffect.ServiceEffect.MarkAllAndFilter(val));
+				.withEffect(model.withFiltered(val), new SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(val));
 		};
+
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> handleAction(SearchPaneMsg.ActionMsg msg,
@@ -57,8 +58,7 @@ final class TableSearchPaneUpdate {
 		return switch (msg) {
 		case SearchPaneMsg.ActionMsg.SearchNext() -> UpdateResult.withEffect(model,
 				new SearchPaneEffect.ServiceEffect.SearchNextRow());
-		case SearchPaneMsg.ActionMsg.MarkAllAndFilter() -> UpdateResult.withEffect(model,
-				new SearchPaneEffect.ServiceEffect.MarkAllAndFilter(model.isFiltered()));
+		case SearchPaneMsg.ActionMsg.MarkAllAndFilter() -> onMarkAllAndFilter(model);
 		case SearchPaneMsg.ActionMsg.NavigateToRow(int row) -> {
 			row = row < -1 ? -1 : row;
 			yield UpdateResult.withEffect(model.withFoundRow(row), new SearchPaneEffect.UIEffect.NavigateToRow(row));
@@ -68,7 +68,24 @@ final class TableSearchPaneUpdate {
 				new SearchPaneEffect.UIEffect.SelectAll());
 		case SearchPaneMsg.ActionMsg.TriggerFilterMark() -> UpdateResult.withEffect(model,
 				new SearchPaneEffect.UIEffect.FilterMarkTriggered());
+		case SearchPaneMsg.ActionMsg.ResetSearch() -> onResetSearch(model);
 		};
+	}
+
+	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onMarkAllAndFilter(SearchPaneModel model) {
+		if (model.isFiltered() || model.getSearchText().isEmpty()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		return UpdateResult.withEffect(model.withFiltered(true), new SearchPaneEffect.ServiceEffect.MarkAllAndFilter());
+	}
+
+	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onResetSearch(SearchPaneModel model) {
+		if (!model.isFiltered()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		return UpdateResult.withEffect(model.withFiltered(false), new SearchPaneEffect.ServiceEffect.ResetSearch());
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onRestoreFilter(SearchPaneModel model) {
