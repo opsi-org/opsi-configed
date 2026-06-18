@@ -112,12 +112,15 @@ class SearchCriteriaEngineTest {
 	@Test
 	void shouldMatchAcrossColumns_whenAnyColumnMatches() {
 		IntFunction<Object> provider = col -> {
-			if (col == 0)
+			if (col == 0) {
 				return "first";
-			if (col == 1)
+			}
+			if (col == 1) {
 				return "second";
-			if (col == 2)
+			}
+			if (col == 2) {
 				return "third";
+			}
 			return null;
 		};
 
@@ -139,10 +142,12 @@ class SearchCriteriaEngineTest {
 	@Test
 	void shouldSkipNullValuesAcrossColumns() {
 		IntFunction<Object> provider = col -> {
-			if (col == 0)
+			if (col == 0) {
 				return "value1";
-			if (col == 1)
+			}
+			if (col == 1) {
 				return null;
+			}
 			return "value2";
 		};
 
