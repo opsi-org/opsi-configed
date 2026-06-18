@@ -130,8 +130,8 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	 * Generates the Swing UI component tree representing the current model
 	 * state. This method should be pure and free of side-effects.
 	 *
-	 * @param model      The current UI state.
-	 * @param dispatcher A callback function to dispatch messages/events.
+	 * @param model    The current UI state.
+	 * @param dispatch A callback function to dispatch messages/events.
 	 * @return The root Swing component for this view.
 	 */
 	protected abstract JComponent renderView(M model, Consumer<E> dispatch);
