@@ -13,9 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Locale;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -268,31 +266,16 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		int modelColumnIndex = targetModel.findColumn(searchColumnCombo.getItemAt(col));
 		modelColumnIndex = modelColumnIndex == -1 ? model.getSearchColumnIndex() : modelColumnIndex;
 
+		SearchCriteriaEngine engine = new SearchCriteriaEngine();
 		for (int i = startRow; i < rowCount; i++) {
-			if (matches(targetModel, i, modelColumnIndex, query, regex, caseSensitive)) {
+			Object val = targetModel.getValueAt(targetModel.getRowForVisualRow(i),
+					targetModel.getColForVisualCol(modelColumnIndex));
+			if (engine.matchCell(val, query, engine.getPattern(regex, caseSensitive, query), regex, caseSensitive)) {
 				foundRow = i;
 				break;
 			}
 		}
 		return foundRow;
-	}
-
-	private static boolean matches(SearchTargetModel model, int row, int col, String query, boolean regex,
-			boolean caseSensitive) {
-		Object val = model.getValueAt(model.getRowForVisualRow(row), model.getColForVisualCol(col));
-		if (val == null) {
-			return false;
-		}
-		String str = val.toString();
-
-		if (regex) {
-			Pattern p = Pattern.compile(".*" + query + ".*", caseSensitive ? 0 : Pattern.CASE_INSENSITIVE);
-			return p.matcher(str).matches();
-		} else {
-			String q = caseSensitive ? query : query.toLowerCase(Locale.ROOT);
-			String s = caseSensitive ? str : str.toLowerCase(Locale.ROOT);
-			return s.contains(q);
-		}
 	}
 
 	private void initComponents(Consumer<SearchPaneMsg> dispatch) {
