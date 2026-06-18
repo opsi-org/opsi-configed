@@ -30,10 +30,12 @@ public class SearchPaneModel {
 	boolean selectMode = true;
 	boolean enableFilterBySelection;
 	List<Integer> searchColumns;
+	@Builder.Default
+	int foundRow = -1;
 
 	// Navigation State
 	@Builder.Default
-	int foundRow = -1;
+	int navigatedToRow = -1;
 	boolean showNavPanel;
 	boolean extraOptionsVisible;
 	boolean isNarrow;

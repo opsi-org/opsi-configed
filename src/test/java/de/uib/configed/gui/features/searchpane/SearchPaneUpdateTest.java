@@ -222,7 +222,7 @@ class SearchPaneUpdateTest {
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.NavigateToRow(targetRow), model);
 
-		assertEquals(targetRow, result.model().getFoundRow());
+		assertEquals(targetRow, result.model().getNavigatedToRow());
 		assertTrue(result.effect().isPresent());
 		assertInstanceOf(SearchPaneEffect.UIEffect.NavigateToRow.class, result.effect().get());
 
@@ -239,7 +239,7 @@ class SearchPaneUpdateTest {
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.NavigateToRow(invalidRow), model);
 
-		assertEquals(-1, result.model().getFoundRow());
+		assertEquals(-1, result.model().getNavigatedToRow());
 		assertTrue(result.effect().isPresent());
 		assertInstanceOf(SearchPaneEffect.UIEffect.NavigateToRow.class, result.effect().get());
 

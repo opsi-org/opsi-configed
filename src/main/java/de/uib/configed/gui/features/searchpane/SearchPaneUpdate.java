@@ -61,7 +61,8 @@ final class TableSearchPaneUpdate {
 		case SearchPaneMsg.ActionMsg.MarkAllAndFilter() -> onMarkAllAndFilter(model);
 		case SearchPaneMsg.ActionMsg.NavigateToRow(int row) -> {
 			row = row < -1 ? -1 : row;
-			yield UpdateResult.withEffect(model.withFoundRow(row), new SearchPaneEffect.UIEffect.NavigateToRow(row));
+			yield UpdateResult.withEffect(model.withNavigatedToRow(row),
+					new SearchPaneEffect.UIEffect.NavigateToRow(row));
 		}
 		case SearchPaneMsg.ActionMsg.RestoreFilter() -> onRestoreFilter(model);
 		case SearchPaneMsg.ActionMsg.TriggerFilterMark() -> UpdateResult.withEffect(model,
