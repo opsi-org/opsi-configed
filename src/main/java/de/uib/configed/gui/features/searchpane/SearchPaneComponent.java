@@ -305,12 +305,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		searchField.setShowClearButton(true);
 		searchField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> {
 			if (filterKey != null) {
-				if (searchField.getText() == null || searchField.getText().isBlank()) {
-					FilterStateManager.removeFilterState(filterKey);
-				} else {
-					FilterStateManager.saveFilterState(filterKey, new TableFilterState(searchField.getText(),
-							model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
-				}
+				handleFilterState();
 			}
 			dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchField.getText()));
 		}));
@@ -367,6 +362,15 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		mainPanel.add(searchColumnLabel,
 				"gapleft " + Globals.GAP_SIZE + ", gapy " + Globals.GAP_SIZE + ", split 2, hidemode 3");
 		mainPanel.add(searchColumnCombo, "growx, hidemode 3, gapy " + Globals.GAP_SIZE + ", wrap");
+	}
+
+	private void handleFilterState() {
+		if (searchField.getText() == null || searchField.getText().isBlank()) {
+			FilterStateManager.removeFilterState(filterKey);
+		} else {
+			FilterStateManager.saveFilterState(filterKey, new TableFilterState(searchField.getText(),
+					model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+		}
 	}
 
 	private void initPopup() {
