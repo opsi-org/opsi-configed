@@ -14,6 +14,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -267,10 +268,11 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		modelColumnIndex = modelColumnIndex == -1 ? model.getSearchColumnIndex() : modelColumnIndex;
 
 		SearchCriteriaEngine engine = new SearchCriteriaEngine();
+		Pattern pattern = engine.getPattern(regex, caseSensitive, query);
 		for (int i = startRow; i < rowCount; i++) {
 			Object val = targetModel.getValueAt(targetModel.getRowForVisualRow(i),
 					targetModel.getColForVisualCol(modelColumnIndex));
-			if (engine.matchCell(val, query, engine.getPattern(regex, caseSensitive, query), regex, caseSensitive)) {
+			if (engine.matchCell(val, query, pattern, regex, caseSensitive)) {
 				foundRow = i;
 				break;
 			}
