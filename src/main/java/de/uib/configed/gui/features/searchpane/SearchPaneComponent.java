@@ -455,9 +455,9 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	}
 
 	private int advanceRow(int n) {
-		int newRow = model.getFoundRow() + n;
+		int newRow = model.getNavigatedToRow() + n;
 		if (newRow >= targetModel.getRowCount()) {
-			newRow = model.getFoundRow();
+			newRow = model.getNavigatedToRow();
 		}
 		return newRow;
 	}
