@@ -240,8 +240,10 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	}
 
 	private void onSearchNextRow() {
+		int currentRow = model.getFoundRow() != targetModel.getSelectedRow() ? targetModel.getSelectedRow()
+				: model.getFoundRow();
 		int foundRow = findNextRow(model.getSearchText(), model.getSearchColumnIndex(), model.isRegexActive(),
-				model.isRespectCase(), model.getFoundRow() + 1);
+				model.isRespectCase(), currentRow + 1);
 		foundRow = foundRow == -1 ? 0 : foundRow;
 		dispatch(new SearchPaneMsg.EffectResultMsg.SearchCompleted(foundRow));
 		if (foundRow <= targetModel.getRowCount()) {
