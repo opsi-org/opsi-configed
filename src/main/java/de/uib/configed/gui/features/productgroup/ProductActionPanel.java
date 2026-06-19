@@ -58,10 +58,6 @@ public class ProductActionPanel extends JPanel {
 		initComponents(type);
 	}
 
-	public void updateSearchFields() {
-		// searchPane.setSearchFieldsAll();
-	}
-
 	public void restoreFilter() {
 		searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}

@@ -139,10 +139,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		SwingUtils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
 
-	public void updateSearchFields() {
-		groupPanel.updateSearchFields();
-	}
-
 	public void restoreFilter() {
 		groupPanel.restoreFilter();
 	}
