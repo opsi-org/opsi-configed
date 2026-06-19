@@ -20,7 +20,7 @@ public sealed interface SearchPaneMsg
 		record ChangeSearchText(String text) implements FieldChangeMsg {
 		}
 
-		record ChangeSearchColumn(int columnIndex) implements FieldChangeMsg {
+		record ChangeSearchColumnIndex(int columnIndex) implements FieldChangeMsg {
 		}
 
 		record ChangeFilterKey(FilterKey filterKey) implements FieldChangeMsg {
@@ -76,9 +76,6 @@ public sealed interface SearchPaneMsg
 	 */
 	sealed interface EffectResultMsg extends SearchPaneMsg {
 		record SearchCompleted(int foundRow) implements EffectResultMsg {
-		}
-
-		record SearchNotFound() implements EffectResultMsg {
 		}
 	}
 }

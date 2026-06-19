@@ -26,13 +26,14 @@ final class TableSearchPaneUpdate {
 		};
 	}
 
+	@SuppressWarnings("java:S1541")
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> handleFieldChange(SearchPaneMsg.FieldChangeMsg msg,
 			SearchPaneModel model) {
 		return switch (msg) {
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchText(String text) -> UpdateResult.withEffect(
 				model.toBuilder().searchText(text).foundRow(0).build(), new SearchPaneEffect.ServiceEffect.ApplyFilter(
 						text, model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
-		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(int index) -> UpdateResult
+		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(int index) -> UpdateResult
 				.noEffect(model.withSearchColumnIndex(index));
 		case SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(FilterKey filterKey) -> UpdateResult
 				.noEffect(model.toBuilder().filterKey(filterKey).enableFilterBySelection(filterKey != null).build());
@@ -104,7 +105,6 @@ final class TableSearchPaneUpdate {
 			SearchPaneModel model) {
 		return switch (msg) {
 		case SearchPaneMsg.EffectResultMsg.SearchCompleted(int row) -> UpdateResult.noEffect(model.withFoundRow(row));
-		case SearchPaneMsg.EffectResultMsg.SearchNotFound() -> UpdateResult.noEffect(model.withFoundRow(-1));
 		};
 	}
 }

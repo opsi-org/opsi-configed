@@ -101,7 +101,7 @@ public class SearchPaneView {
 		searchColumnItemListener = (ItemEvent e) -> {
 			if (e.getStateChange() == 1) {
 				dispatch.accept(
-						new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(searchColumnCombo.getSelectedIndex()));
+						new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(searchColumnCombo.getSelectedIndex()));
 			}
 		};
 

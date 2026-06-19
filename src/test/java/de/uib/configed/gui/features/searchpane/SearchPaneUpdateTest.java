@@ -52,12 +52,12 @@ class SearchPaneUpdateTest {
 	}
 
 	@Test
-	void shouldUpdateSearchColumnIndex_whenChangeSearchColumn() {
+	void shouldUpdateSearchColumnIndex_whenChangeSearchColumnIndex() {
 		SearchPaneModel model = baseModel();
 		int newColumnIndex = 5;
 
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
-				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumn(newColumnIndex), model);
+				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(newColumnIndex), model);
 
 		assertEquals(newColumnIndex, result.model().getSearchColumnIndex());
 		assertFalse(result.effect().isPresent());
@@ -278,17 +278,6 @@ class SearchPaneUpdateTest {
 				.update(new SearchPaneMsg.EffectResultMsg.SearchCompleted(foundRow), model);
 
 		assertEquals(foundRow, result.model().getFoundRow());
-		assertFalse(result.effect().isPresent());
-	}
-
-	@Test
-	void shouldSetFoundRowToMinusOne_whenSearchNotFound() {
-		SearchPaneModel model = baseModel().withFoundRow(5);
-
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
-				.update(new SearchPaneMsg.EffectResultMsg.SearchNotFound(), model);
-
-		assertEquals(-1, result.model().getFoundRow());
 		assertFalse(result.effect().isPresent());
 	}
 
