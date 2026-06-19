@@ -183,7 +183,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	public void setFilterMark(boolean selected) {
-		// searchPane.setFilterMark(selected);
+		searchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeFilterBySelection(selected));
 	}
 
 	@SuppressWarnings("java:S2972")

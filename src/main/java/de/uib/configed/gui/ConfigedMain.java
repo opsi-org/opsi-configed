@@ -133,7 +133,6 @@ public class ConfigedMain {
 
 		// set table model and update the column selection in search accordingly
 		clientTablePanel.getClientTable().updateModel(buildClientListTableModel(true));
-		clientTablePanel.initColumnNames();
 
 		setSelectionPanelCols();
 
@@ -264,8 +263,6 @@ public class ConfigedMain {
 
 		// We need to make first selected visible again after resetting sortKeys
 		clientTablePanel.getClientTable().moveToFirstSelected();
-
-		clientTablePanel.initColumnNames();
 	}
 
 	public void handleGroupActionRequest() {
@@ -711,7 +708,7 @@ public class ConfigedMain {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
-		// clientTablePanel.setFilterMark(false);
+		clientTablePanel.setFilterMark(false);
 
 		clientsFilteredByTree.clear();
 

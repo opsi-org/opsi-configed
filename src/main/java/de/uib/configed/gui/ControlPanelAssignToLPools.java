@@ -133,7 +133,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
 
 		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
-				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(false));
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(false));
 
 		thePanel.getFieldSelectedLicensePoolId().setText(poolID);
 		thePanel.getFieldSelectedLicensePoolId().setToolTipText(poolID);
@@ -171,7 +171,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				wasUsingSelectedFilter);
 		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
-				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(wasUsingSelectedFilter));
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(wasUsingSelectedFilter));
 
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED,
 				softwareShowAllMeans != SoftwareShowAllMeans.ALL);
@@ -836,7 +836,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				usingShowSelectedFilter);
 
 		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
-				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(usingShowSelectedFilter));;
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(usingShowSelectedFilter));;
 		setVisualSelection(selectedKeys);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();

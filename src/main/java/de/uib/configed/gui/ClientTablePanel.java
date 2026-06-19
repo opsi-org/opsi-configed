@@ -164,14 +164,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener {
 		clientTable.addMouseListener(l);
 	}
 
-	// public void setFilterMark(boolean selected) {
-	// 	searchPane.setFilterMark(selected);
-	// 	searchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowFilterMark(selected));
-	// }
-
-	public final void initColumnNames() {
-		// New code
-		// searchPane.setSearchFieldsAll();
+	public void setFilterMark(boolean selected) {
+		searchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeFilterBySelection(selected));
 	}
 
 	public void restoreFilter() {

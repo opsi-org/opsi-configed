@@ -42,15 +42,17 @@ public final class SearchPaneUpdate {
 				.noEffect(model.withShowNavPanel(value));
 		case SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(boolean value) -> UpdateResult
 				.noEffect(model.withEnableFilterBySelection(value));
+		case SearchPaneMsg.FieldChangeMsg.ChangeFilterBySelection(boolean value) -> UpdateResult
+				.noEffect(model.withFilteredBySelection(value));
 		case SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(boolean value) -> UpdateResult
 				.noEffect(model.withSelectMode(value));
-		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean val) -> UpdateResult
-				.noEffect(model.withRespectCase(val));
-		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean val) -> UpdateResult.noEffect(model.withRegexActive(val));
-		case SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(boolean val) -> UpdateResult.withEffect(
-				model.withFilteredBySelection(val), new SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(val));
+		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean value) -> UpdateResult
+				.noEffect(model.withRespectCase(value));
+		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean value) -> UpdateResult
+				.noEffect(model.withRegexActive(value));
+		case SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(boolean value) -> UpdateResult.withEffect(
+				model.withFilteredBySelection(value), new SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(value));
 		};
-
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> handleAction(SearchPaneMsg.ActionMsg msg,

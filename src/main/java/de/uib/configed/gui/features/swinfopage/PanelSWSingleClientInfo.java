@@ -198,7 +198,6 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 		subPanelTitle.add(checkWithMsUpdates2, "cell 2 1, aligny center");
 
 		panelTable.setTableModel(modelSWInfo);
-		panelTable.setSearchColumnsAll();
 
 		if (panelTable.getGenEditTable().getRowSorter() instanceof TableRowSorter) {
 			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable

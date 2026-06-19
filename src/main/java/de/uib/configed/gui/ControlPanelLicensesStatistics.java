@@ -69,6 +69,7 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 
 		modelStatistics.reset();
 		thePanel.getPanelStatistics().setTableModel(modelStatistics);
+		thePanel.getPanelStatistics().setSearchColumns(List.of());
 
 		thePanel.getPanelStatistics().getGenEditTable()
 				.setRowSorter(new StringIntegerRowSorter(modelStatistics, Set.of(1, 2, 3, 4, 5)));

@@ -303,4 +303,16 @@ class SearchPaneUpdateTest {
 		assertFalse(result.model().isSelectMode());
 		assertFalse(result.effect().isPresent());
 	}
+
+	@Test
+	void shouldChangeFilterBySelection_whenChangeFilterBySelection() {
+		SearchPaneModel model = baseModel().withFilteredBySelection(false);
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
+				.update(new SearchPaneMsg.FieldChangeMsg.ChangeFilterBySelection(true), model);
+
+		assertNotEquals(model, result.model());
+		assertTrue(result.model().isFilteredBySelection());
+		assertFalse(result.effect().isPresent());
+	}
 }

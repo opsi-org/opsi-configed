@@ -237,19 +237,6 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		tableSearchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumns(cols));
 	}
 
-	/**
-	 * set all columns for column selection in search pane; requires the correct
-	 * model is initialized
-	 */
-	public void setSearchColumnsAll() {
-		if (!withTablesearchPane) {
-			Logging.debug(this, "setSearchColumns: no search panel");
-			return;
-		}
-
-		// tableSearchPane.setSearchFieldsAll();
-	}
-
 	private void setModelFilteringBySelection() {
 		if (tableSearchPane.isFilteringBySelectionEnabled() && genEditTable.getModel() != null
 				&& genEditTable.getGenTableModel().getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
