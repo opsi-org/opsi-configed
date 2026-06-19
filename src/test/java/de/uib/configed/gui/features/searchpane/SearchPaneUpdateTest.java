@@ -35,7 +35,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel().withSearchColumnIndex(2).withRegexActive(true).withRespectCase(false);
 		String searchText = "test query";
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchText), model);
 
 		assertEquals(searchText, result.model().getSearchText());
@@ -56,7 +56,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel();
 		int newColumnIndex = 5;
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(newColumnIndex), model);
 
 		assertEquals(newColumnIndex, result.model().getSearchColumnIndex());
@@ -67,7 +67,7 @@ class SearchPaneUpdateTest {
 	void shouldToggleRespectCase_whenToggleRespectCase() {
 		SearchPaneModel model = baseModel().withRespectCase(false);
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(true), model);
 
 		assertTrue(result.model().isRespectCase());
@@ -78,7 +78,7 @@ class SearchPaneUpdateTest {
 	void shouldToggleRegex_whenToggleRegex() {
 		SearchPaneModel model = baseModel().withRegexActive(false);
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ToggleRegex(true), model);
 
 		assertTrue(result.model().isRegexActive());
@@ -89,7 +89,7 @@ class SearchPaneUpdateTest {
 	void shouldMarkAndFilter_whenToggleFilterMarkToTrue() {
 		SearchPaneModel model = baseModel().withFilteredBySelection(false);
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(true), model);
 
 		assertTrue(result.model().isFilteredBySelection());
@@ -105,7 +105,7 @@ class SearchPaneUpdateTest {
 	void shouldUnmarkAndFilter_whenToggleFilterMarkToFalse() {
 		SearchPaneModel model = baseModel().withFilteredBySelection(true);
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(false), model);
 
 		assertFalse(result.model().isFilteredBySelection());
@@ -121,7 +121,7 @@ class SearchPaneUpdateTest {
 	void shouldTriggerSearchNextRow_whenSearchNextRequested() {
 		SearchPaneModel model = baseModel();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.SearchNext(), model);
 
 		assertEquals(model, result.model());
@@ -134,7 +134,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(true).isFilteredBySelection(false)
 				.searchText("test").build();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertNotEquals(model, result.model());
@@ -149,7 +149,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(true).isFilteredBySelection(true)
 				.searchText("test").build();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertEquals(model, result.model());
@@ -164,7 +164,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(true).isFilteredBySelection(false)
 				.searchText("").build();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertEquals(model, result.model());
@@ -179,7 +179,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel().toBuilder().enableFilterBySelection(false).isFilteredBySelection(false)
 				.searchText("test").build();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.MarkAllAndFilter(), model);
 
 		assertEquals(model, result.model());
@@ -193,7 +193,7 @@ class SearchPaneUpdateTest {
 	void shouldTriggerResetSearchAndDeactivateFiltered_whenResetSearch() {
 		SearchPaneModel model = baseModel().withFilteredBySelection(true);
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.ResetSearch(), model);
 
 		assertNotEquals(model, result.model());
@@ -206,7 +206,7 @@ class SearchPaneUpdateTest {
 	void shouldReturnUnchangedModelAndTriggerNoEffect_whenResetSearchWithNoFilterActivated() {
 		SearchPaneModel model = baseModel().withFilteredBySelection(false);
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.ResetSearch(), model);
 
 		assertEquals(model, result.model());
@@ -219,7 +219,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel();
 		int targetRow = 42;
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.NavigateToRow(targetRow), model);
 
 		assertEquals(targetRow, result.model().getNavigatedToRow());
@@ -236,7 +236,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel();
 		int invalidRow = -50;
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.NavigateToRow(invalidRow), model);
 
 		assertEquals(-1, result.model().getNavigatedToRow());
@@ -254,7 +254,7 @@ class SearchPaneUpdateTest {
 
 		FilterStateManager.saveFilterState(TEST_FILTER_KEY, new TableFilterState("test", 2, true, false));
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.RestoreFilter(), model);
 
 		if (result.effect().isEmpty()) {
@@ -274,7 +274,7 @@ class SearchPaneUpdateTest {
 		SearchPaneModel model = baseModel();
 		int foundRow = 10;
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.EffectResultMsg.SearchCompleted(foundRow), model);
 
 		assertEquals(foundRow, result.model().getFoundRow());
@@ -285,7 +285,7 @@ class SearchPaneUpdateTest {
 	void shouldTriggerFilterMarkTriggered_whenTriggerFilterMark() {
 		SearchPaneModel model = baseModel();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.TriggerFilterMark(), model);
 
 		assertEquals(model, result.model());
@@ -297,7 +297,7 @@ class SearchPaneUpdateTest {
 	void shouldChangeSelectMode_whenChangeSelectMode() {
 		SearchPaneModel model = baseModel();
 
-		UpdateResult<SearchPaneModel, SearchPaneEffect> result = TableSearchPaneUpdate
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(false), model);
 
 		assertFalse(result.model().isSelectMode());

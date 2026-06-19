@@ -78,7 +78,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	@Override
 	protected UpdateResult<SearchPaneModel, SearchPaneEffect> updateModel(SearchPaneMsg msg, SearchPaneModel model) {
-		return TableSearchPaneUpdate.update(msg, model);
+		return SearchPaneUpdate.update(msg, model);
 	}
 
 	@Override

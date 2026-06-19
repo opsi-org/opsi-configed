@@ -13,9 +13,8 @@ import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.TableFilterState;
 
-final class TableSearchPaneUpdate {
-
-	private TableSearchPaneUpdate() {
+public final class SearchPaneUpdate {
+	private SearchPaneUpdate() {
 	}
 
 	static UpdateResult<SearchPaneModel, SearchPaneEffect> update(SearchPaneMsg msg, SearchPaneModel model) {
