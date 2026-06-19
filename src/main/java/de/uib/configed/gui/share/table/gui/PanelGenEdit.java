@@ -515,10 +515,6 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public void restoreFilter() {
-		if (filterKey == null) {
-			Logging.warning(this, "Filter key is null");
-			return;
-		}
 		tableSearchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}
 

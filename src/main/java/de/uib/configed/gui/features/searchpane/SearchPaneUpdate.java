@@ -92,6 +92,10 @@ public final class SearchPaneUpdate {
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onRestoreFilter(SearchPaneModel model) {
+		if (model.getFilterKey() == null) {
+			return UpdateResult.noEffect(model);
+		}
+
 		TableFilterState filterState = FilterStateManager.getFilterState(model.getFilterKey());
 		return filterState != null ? UpdateResult.withEffect(
 				model.toBuilder().searchText(filterState.getSearchText())

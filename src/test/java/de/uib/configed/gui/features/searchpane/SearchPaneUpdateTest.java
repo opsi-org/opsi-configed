@@ -257,16 +257,36 @@ class SearchPaneUpdateTest {
 		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
 				.update(new SearchPaneMsg.ActionMsg.RestoreFilter(), model);
 
-		if (result.effect().isEmpty()) {
-			assertEquals(model, result.model());
-		} else {
-			assertEquals("test", result.model().getSearchText());
-			assertEquals(2, result.model().getSearchColumnIndex());
-			assertTrue(result.model().isRegexActive());
-			assertFalse(result.model().isRespectCase());
-			assertAll(() -> assertTrue(result.effect().isPresent()),
-					() -> assertInstanceOf(SearchPaneEffect.ServiceEffect.ApplyFilter.class, result.effect().get()));
-		}
+		assertEquals("test", result.model().getSearchText());
+		assertEquals(2, result.model().getSearchColumnIndex());
+		assertTrue(result.model().isRegexActive());
+		assertFalse(result.model().isRespectCase());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(SearchPaneEffect.ServiceEffect.ApplyFilter.class, result.effect().get()));
+
+		FilterStateManager.removeFilterState(TEST_FILTER_KEY);
+	}
+
+	@Test
+	void shouldNotRestoreFilterState_whenRestoreFilterActionWithNoSavedFilterState() {
+		SearchPaneModel model = baseModel();
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.RestoreFilter(), model);
+
+		assertEquals(model, result.model());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldNotRestoreFilterState_whenRestoreFilterActionWithNullFilterKey() {
+		SearchPaneModel model = baseModel().withFilterKey(null);
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
+				.update(new SearchPaneMsg.ActionMsg.RestoreFilter(), model);
+
+		assertEquals(model, result.model());
+		assertFalse(result.effect().isPresent());
 	}
 
 	@Test
