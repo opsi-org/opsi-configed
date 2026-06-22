@@ -107,9 +107,8 @@ public class ClientTablePanel extends JPanel {
 				.build();
 
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
-				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).showSearchPane(true)
-				// .searchTargetModelFromTable(new SearchTargetModelFromClientTable(configedMain))
-				.filterKey(FilterKey.CLIENT_TABLE).build(), clientSideEffectStrategy, () -> {
+				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).build(),
+				clientSideEffectStrategy, () -> {
 					if (ConfigedMain.getMainFrame() != null) {
 						return ConfigedMain.getMainFrame().getClientPopupMenu();
 					}
@@ -117,22 +116,17 @@ public class ClientTablePanel extends JPanel {
 				});
 		component = clientTableViewComponent.initUI();
 
-		// Ask to be notified of selection changes.
-		// selectionModel = (DefaultListSelectionModel) clientTable.getSelectionModel();
-		// the default implementation in JTable yields this type
+		searchPane = new TableSearchPane(
+				new SearchTargetModelFromClientTable(configedMain, clientTableViewComponent.getTable()));
+		searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
+		searchPane.setFiltering();
 
-		// activateListSelectionListener();
+		component.addKeyListener(searchPane);
 
-		searchPane = clientTableViewComponent.getSearchPane();
-		// searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
-		// searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
-		// searchPane.setFiltering();
+		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
+				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
 
-		// clientTable.addKeyListener(searchPane);
-
-		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fill, wrap 1", "[grow, fill]", "[grow, fill]"));
-
-		// add(searchPane);
+		add(searchPane);
 		add(component, "grow, push");
 	}
 
@@ -238,7 +232,6 @@ public class ClientTablePanel extends JPanel {
 	@Override
 	public synchronized void addMouseListener(MouseListener l) {
 		scrollpane.addMouseListener(l);
-		// clientTable.addMouseListener(l);
 		component.addMouseListener(l);
 	}
 
@@ -315,11 +308,10 @@ public class ClientTablePanel extends JPanel {
 		return columnIndex;
 	}
 
-	private class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
+	private static class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
 		private ConfigedMain configedMain;
 
-		public SearchTargetModelFromClientTable(ConfigedMain configedMain) {
-			JTable table = clientTableViewComponent.getTable();
+		public SearchTargetModelFromClientTable(ConfigedMain configedMain, JTable table) {
 			super(table);
 
 			this.configedMain = configedMain;

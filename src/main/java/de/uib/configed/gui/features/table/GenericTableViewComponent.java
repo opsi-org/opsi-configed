@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -42,16 +41,11 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.gui.AbstractTeaComponent;
-import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.PopupMouseListener;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
-import net.miginfocom.swing.MigLayout;
 
 public class GenericTableViewComponent
 		extends AbstractTeaComponent<GenericTableViewModel, GenericTableViewMsg, GenericTableViewEffect> {
 	private JTable table;
-	private TableSearchPane searchPane;
 	private boolean isUpdatingProgrammatically;
 	private TableSideEffectStrategy sideEffectStrategy;
 	private Supplier<JPopupMenu> popupMenuSupplier;
@@ -182,26 +176,10 @@ public class GenericTableViewComponent
 
 		columnResizeNotifier.setRepeats(false);
 
-		JScrollPane jScrollPaneInfo = new JScrollPane(table);
-		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		JPanel panel = new JPanel();
-
-		panel.setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
-				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
-
-		if (model.isShowSearchPane()) {
-			searchPane = new TableSearchPane(
-					model.getSearchTargetModelFromTable() == null ? new SearchTargetModelFromTable(table)
-							: model.getSearchTargetModelFromTable());
-			searchPane.setFilterKey(model.getFilterKey());
-			searchPane.setFiltering();
-			panel.add(searchPane);
-		}
-
-		panel.add(jScrollPaneInfo, "grow, push");
-
-		return panel;
+		return scrollPane;
 	}
 
 	private void notifyRowSorterChange() {
@@ -276,11 +254,6 @@ public class GenericTableViewComponent
 	// TODO: remove later (exists only for compatibility with old code)
 	public JTable getTable() {
 		return table;
-	}
-
-	// TODO: remove later (exists only for compatibility with old code)
-	public TableSearchPane getSearchPane() {
-		return searchPane;
 	}
 
 	private JPopupMenu getPopupMenu() {
