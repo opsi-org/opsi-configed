@@ -559,7 +559,6 @@ public class ConfigedMain {
 				restoreSortKeys, ", ", rebuildTree, ",  selectValues.size() ", Logging.getSize(selectValues));
 
 		Logging.info(this, "setRebuiltClientListTableModel save sort keys ");
-		// List<Pair<String, SortOrder>> sortKeyNames = clientTablePanel.getClientTable().getSortedNames();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
@@ -568,26 +567,12 @@ public class ConfigedMain {
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
-		// int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
-
-		// ConfigedUtilityMethods.setTableColumnWidths(clientTablePanel.getClientTable(), columnWidths);
-
 		Logging.debug(this, " --- model set  ");
-
-		// setSelectionPanelCols();
-
-		// if (restoreSortKeys) {
-		// 	clientTablePanel.getClientTable().setSortedByNames(sortKeyNames);
-		// }
 
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",
 				Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
-
-		// clientTablePanel.restoreFilter();
-		// did lose the selection since last setting
-		// clientTablePanel.setSelectedValues(selectValues);
 
 		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
 				clientTablePanel.getTableComponent().model.getRows().size(),
@@ -859,7 +844,6 @@ public class ConfigedMain {
 		}
 
 		Set<String> selValuesList = getSelectedSet();
-		// Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
 		Set<String> selectedLocalbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
 				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs();
@@ -963,7 +947,6 @@ public class ConfigedMain {
 		updateHostInfo();
 
 		hostInfo.resetGui();
-		// clientTablePanel.restoreFilter();
 		this.selectedClients = clientsLeft;
 		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
 				clientTablePanel.getTableComponent().model.getRows().size(), this.selectedClients, hostInfo);
