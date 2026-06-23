@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
@@ -469,7 +468,6 @@ public class ConfigedMain {
 		Map<String, HostInfo> pcinfos = persistenceController.getDataServices().hostInfoCollections
 				.getMapOfPCInfoMaps();
 
-		Map<String, Boolean> setOfDisplayFields = persistenceController.getDataServices().host.getHostDisplayFields();
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
@@ -478,11 +476,7 @@ public class ConfigedMain {
 					persistenceController.getDataServices().host.getSessionInfo().getOrDefault(clientId, ""));
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
 
-			Map<String, Object> filteredMap = rowmap.entrySet().stream()
-					.filter(entry -> setOfDisplayFields.get(entry.getKey()).equals(Boolean.TRUE))
-					.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-
-			result.add(filteredMap);
+			result.add(rowmap);
 		}
 
 		return result;
