@@ -93,7 +93,9 @@ public final class GenericTableViewUpdate {
 						: column)
 				.toList();
 
-		return UpdateResult.noEffect(model.toBuilder().columns(newColumns).rebuildTableModel(true).build());
+		return UpdateResult.withEffect(model.toBuilder().columns(newColumns).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.StoreVisibleColulmns(newColumns.stream().filter(TableColumnConfig::isVisible)
+						.map(TableColumnConfig::getKey).toList()));
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCommit(

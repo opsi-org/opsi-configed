@@ -42,6 +42,7 @@ import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;
+import de.uib.configed.share.userprefs.UserPreferences;
 import net.miginfocom.swing.MigLayout;
 
 public class ClientTablePanel extends JPanel {
@@ -92,6 +93,11 @@ public class ClientTablePanel extends JPanel {
 		TableSideEffectStrategy clientSideEffectStrategy = (GenericTableViewEffect effect) -> {
 			if (effect instanceof GenericTableViewEffect.Selection) {
 				return this::actOnListSelection;
+			} else if (effect instanceof GenericTableViewEffect.StoreVisibleColulmns storeVisibleColulmns) {
+				return () -> UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS,
+						String.join(",", storeVisibleColulmns.visibleColumns()));
+			} else {
+				// Nothing
 			}
 			return null;
 		};

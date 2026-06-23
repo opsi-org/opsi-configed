@@ -245,7 +245,13 @@ class GenericTableViewUpdateTest {
 		assertTrue(result.model().getColumns().get(0).isVisible());
 		assertFalse(result.model().getColumns().get(1).isVisible());
 		assertTrue(result.model().getColumns().get(2).isVisible());
-		assertFalse(result.effect().isPresent());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.StoreVisibleColulmns.class, result.effect().get()),
+				() -> {
+					GenericTableViewEffect.StoreVisibleColulmns effect = (GenericTableViewEffect.StoreVisibleColulmns) result
+							.effect().get();
+					assertTrue(effect.visibleColumns().containsAll(List.of("data0", "data2")));
+				});
 		assertTrue(result.model().isRebuildTableModel());
 
 		GenericTableViewMsg msg2 = new GenericTableViewMsg.ToggleColumn("data1");
@@ -257,7 +263,13 @@ class GenericTableViewUpdateTest {
 		assertTrue(result2.model().getColumns().get(0).isVisible());
 		assertTrue(result2.model().getColumns().get(1).isVisible());
 		assertTrue(result2.model().getColumns().get(2).isVisible());
-		assertFalse(result2.effect().isPresent());
+		assertAll(() -> assertTrue(result2.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.StoreVisibleColulmns.class, result2.effect().get()),
+				() -> {
+					GenericTableViewEffect.StoreVisibleColulmns effect = (GenericTableViewEffect.StoreVisibleColulmns) result2
+							.effect().get();
+					assertTrue(effect.visibleColumns().containsAll(List.of("data0", "data1", "data2")));
+				});
 		assertTrue(result2.model().isRebuildTableModel());
 	}
 

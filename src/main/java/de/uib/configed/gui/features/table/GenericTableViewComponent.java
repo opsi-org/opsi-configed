@@ -214,11 +214,13 @@ public class GenericTableViewComponent
 	protected void handleEffect(GenericTableViewEffect effect) {
 		super.handleEffect(effect);
 
-		if (sideEffectStrategy != null) {
-			Runnable action = sideEffectStrategy.getActionFor(effect);
-			if (action != null) {
-				action.run();
-			}
+		if (sideEffectStrategy == null) {
+			return;
+		}
+
+		Runnable action = sideEffectStrategy.getActionFor(effect);
+		if (action != null) {
+			action.run();
 		}
 	}
 

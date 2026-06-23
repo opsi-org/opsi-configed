@@ -9,8 +9,8 @@ package de.uib.configed.gui.features.table;
 import java.util.List;
 import java.util.Set;
 
-public sealed interface GenericTableViewEffect
-		permits GenericTableViewEffect.SaveChanges, GenericTableViewEffect.Reload, GenericTableViewEffect.Selection {
+public sealed interface GenericTableViewEffect permits GenericTableViewEffect.SaveChanges,
+		GenericTableViewEffect.Reload, GenericTableViewEffect.Selection, GenericTableViewEffect.StoreVisibleColulmns {
 	record SaveChanges(List<RowData> newRows) implements GenericTableViewEffect {
 	}
 
@@ -18,5 +18,8 @@ public sealed interface GenericTableViewEffect
 	}
 
 	record Reload() implements GenericTableViewEffect {
+	}
+
+	record StoreVisibleColulmns(List<String> visibleColumns) implements GenericTableViewEffect {
 	}
 }
