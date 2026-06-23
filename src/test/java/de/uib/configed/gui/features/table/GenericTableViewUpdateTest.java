@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -315,6 +316,27 @@ class GenericTableViewUpdateTest {
 		assertEquals(3, result.model().getSelectedRows().size());
 		assertTrue(result.model().getSelectedRows().containsAll(Set.of(model.getRows().get(1).getId(),
 				model.getRows().get(3).getId(), model.getRows().get(4).getId())));
+		assertFalse(result.model().isRebuildTableModel());
+		assertFalse(result.model().isDirty());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.Selection.class, result.effect().get()));
+	}
+
+	@Test
+	void shouldSelectionBeEmpty_whenInvertSelectionWithAllSelected() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.InvertSelection();
+
+		Set<String> selectedRows = new HashSet<>();
+		for (RowData data : model.getRows()) {
+			selectedRows.add(data.getId());
+		}
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
+				model.withSelectedRows(selectedRows));
+
+		assertNotNull(result.model());
+		assertEquals(0, result.model().getSelectedRows().size());
 		assertFalse(result.model().isRebuildTableModel());
 		assertFalse(result.model().isDirty());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
