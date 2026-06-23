@@ -187,7 +187,7 @@ public class ConfigedMain {
 	public void registerMessagebusListeners() {
 		Messagebus.getInstance().getWebSocket().registerListener(connectedHostsManager);
 		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getMainPanelManager().getHostsStatusPanel());
-		// Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
+		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel);
 		Messagebus.getInstance().getWebSocket()
 				.registerListener(mainFrame.getMainPanelManager().getClientConfiguration().getProductPageManager());
 	}

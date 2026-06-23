@@ -22,10 +22,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
+
+import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
+import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewComponent.TableSideEffectStrategy;
 import de.uib.configed.gui.features.table.GenericTableViewEffect;
@@ -41,11 +47,12 @@ import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 import net.miginfocom.swing.MigLayout;
 
-public class ClientTablePanel extends JPanel {
+public class ClientTablePanel extends JPanel implements MessagebusListener {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -334,5 +341,45 @@ public class ClientTablePanel extends JPanel {
 		public void setFiltered(boolean b) {
 			configedMain.setRebuiltClientListTableModel(true, false);
 		}
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// Not required to implement.
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		// Sleep for a little because otherwise we cannot get the needed data from the server.
+		Utils.threadSleep(this, 5);
+
+		if ((!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event"))
+				|| ServerActionManager.isLocalChangeInProgress()) {
+			return;
+		}
+
+		String eventType = (String) message.get("event");
+		if (WebSocketEvent.HOST_CREATED.toString().equals(eventType)
+				|| WebSocketEvent.HOST_DELETED.toString().equals(eventType)) {
+			rebuild();
+		} else {
+			// Other events are handled by other listeners.
+		}
+	}
+
+	private void rebuild() {
+		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
+
+		SwingUtilities.invokeLater(configedMain::refreshClientListKeepingGroup);
 	}
 }
