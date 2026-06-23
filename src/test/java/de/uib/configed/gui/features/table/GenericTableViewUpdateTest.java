@@ -304,6 +304,24 @@ class GenericTableViewUpdateTest {
 	}
 
 	@Test
+	void shouldInvertSelection_whenInvertSelection() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.InvertSelection();
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
+				model.withSelectedRows(Set.of(model.getRows().get(0).getId(), model.getRows().get(2).getId())));
+
+		assertNotNull(result.model());
+		assertEquals(3, result.model().getSelectedRows().size());
+		assertTrue(result.model().getSelectedRows().containsAll(Set.of(model.getRows().get(1).getId(),
+				model.getRows().get(3).getId(), model.getRows().get(4).getId())));
+		assertFalse(result.model().isRebuildTableModel());
+		assertFalse(result.model().isDirty());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.Selection.class, result.effect().get()));
+	}
+
+	@Test
 	void shouldReportCorrectColumnCount_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
 		columns.add(new TableColumnConfig("data0", "Col 0", false, true, 100, 100, null, null));

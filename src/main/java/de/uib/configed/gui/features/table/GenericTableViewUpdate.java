@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRow;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
 import de.uib.configed.gui.features.table.RowData.RowState;
@@ -44,7 +46,7 @@ public final class GenericTableViewUpdate {
 		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
 		case ChangeSelection(Set<String> selectedRows) -> UpdateResult.withEffect(
 				model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build(),
-				new GenericTableViewEffect.Selection(selectedRows));
+				new GenericTableViewEffect.Selection());
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
 		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
@@ -53,6 +55,7 @@ public final class GenericTableViewUpdate {
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult
 				.noEffect(model.toBuilder().originalSnapshot(originalSnapshot)
 						.rows(RowData.fromOriginalSnapshot(originalSnapshot)).rebuildTableModel(true).build());
+		case InvertSelection() -> handleInvertSelection(model);
 		default -> UpdateResult.noEffect(model);
 		};
 	}
@@ -155,5 +158,21 @@ public final class GenericTableViewUpdate {
 						: config)
 				.toList();
 		return UpdateResult.noEffect(model.toBuilder().columns(configs).rebuildTableModel(false).build());
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleInvertSelection(
+			GenericTableViewModel model) {
+		Set<String> previouslySelectedRows = model.getSelectedRows();
+		Set<String> invertedSelection = new HashSet<>();
+
+		for (RowData data : model.getRows()) {
+			if (!previouslySelectedRows.contains(data.getId())) {
+				invertedSelection.add(data.getId());
+			}
+		}
+
+		return UpdateResult.withEffect(
+				model.toBuilder().selectedRows(invertedSelection).isDirty(false).rebuildTableModel(false).build(),
+				new GenericTableViewEffect.Selection());
 	}
 }

@@ -976,16 +976,7 @@ public class ConfigedMain {
 	}
 
 	public void invertSelection() {
-		// List<String> previouslySelectedClients = getSelectedClients();
-		// List<String> clientsToSelect = new ArrayList<>();
-		// int rowCount = clientTablePanel.getTableModel().getRowCount();
-		// for (int i = 0; i < rowCount; i++) {
-		// 	String clientName = (String) clientTablePanel.getTableModel().getValueAt(i, 0);
-		// 	if (!previouslySelectedClients.contains(clientName)) {
-		// 		clientsToSelect.add(clientName);
-		// 	}
-		// }
-		// setClients(clientsToSelect);
+		clientTablePanel.getTableComponent().dispatch(new GenericTableViewMsg.InvertSelection());
 	}
 
 	public static boolean closeInstance(boolean checkdirty) {

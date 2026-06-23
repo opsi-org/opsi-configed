@@ -15,7 +15,7 @@ import javax.swing.SortOrder;
 public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
 		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
 		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot,
-		GenericTableViewMsg.ChangeSortOrder, GenericTableViewMsg.ResizeColumns {
+		GenericTableViewMsg.ChangeSortOrder, GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.InvertSelection {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
 	}
@@ -51,6 +51,8 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	}
 
 	record ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) implements GenericTableViewMsg {
+	}
 
+	record InvertSelection() implements GenericTableViewMsg {
 	}
 }
