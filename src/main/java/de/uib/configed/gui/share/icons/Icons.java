@@ -113,7 +113,7 @@ public final class Icons {
 			filter.add(new Color(235, 236, 240), Globals.OPSI_FOREGROUND_LIGHT);
 		}
 
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
+		return icon;
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
