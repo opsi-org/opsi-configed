@@ -190,6 +190,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			}
 		}
 
+		// Always select "general host parameters" node.
 		tree.setSelectionRow(1);
 	}
 
