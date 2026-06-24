@@ -10,7 +10,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -233,18 +232,9 @@ public class LoginDialog extends JFrame {
 		} else {
 			// Not needed.
 		}
-		ssoActiveByServer = true;
 		Logging.info("get auth info for ", host);
 		ServerFacade serverFacade = new ServerFacade(host, false);
-		Map<String, List<String>> headers = serverFacade.getHeaders();
-
-		if (headers != null && headers.containsKey("X-opsi-auth-methods")) {
-			String authMethods = headers.get("X-opsi-auth-methods").toString();
-			ssoActiveByServer = authMethods.contains("saml");
-			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
-		} else {
-			ssoActiveByServer = false;
-		}
+		ssoActiveByServer = serverFacade.isSSOActiveByServer();
 
 		jButtonSSO.setVisible(ssoActiveByServer);
 		pack();

@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
@@ -147,11 +148,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return useSAML;
 	}
 
-	public Map<String, List<String>> getHeaders() {
+	public boolean isSSOActiveByServer() {
 		if (getConnectionState() != null && getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
-			return Map.of();
+			return false;
 		}
-		Logging.info("getHeaders started");
+		Logging.info("isSSOActiveByServer started");
 		int timeout = 2000;
 		System.setProperty("sun.net.client.defaultConnectTimeout", timeout + "");
 		Map<String, String> requestProperties = new HashMap<>();
@@ -167,12 +168,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.warning("try to get headers, but no connection. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
 			System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
-			return Map.of();
+			return false;
 		}
-		Map<String, List<String>> result = Map.of();
+		boolean result = true;
 		try {
 			handleResponseCode(connection);
-			result = connection.getHeaderFields();
+			String authMethods = connection.getHeaderField("x-opsi-auth-methods");
+			Logging.debug("Authentication methods for host ", hostData.getHost(), ": ", authMethods);
+			result = authMethods.contains("saml");
 		} catch (IOException ex) {
 			Logging.error(this, ex, "Exception while trying to get headers");
 		}
@@ -516,7 +519,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private static void addHeaderFieldsToMap(HttpsURLConnection connection, Map<String, Object> responseHeader) {
 		if (responseHeader != null) {
 			for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
-				responseHeader.put(entry.getKey(), entry.getValue().get(0));
+				if (entry.getKey() != null) {
+					responseHeader.put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue().get(0));
+				}
 			}
 		}
 	}
