@@ -189,6 +189,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				partialPanels.get(key).getMapTableModel().setKeepers(this.mapTableModel.getKeepers());
 			}
 		}
+
+		tree.setSelectionRow(1);
 	}
 
 	private void expandAll() {
