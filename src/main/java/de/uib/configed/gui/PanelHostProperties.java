@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
@@ -24,6 +25,7 @@ import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.logging.Logging;
+import net.miginfocom.swing.MigLayout;
 
 public class PanelHostProperties extends AbstractConfigurationTab {
 	private EditMapPanelX editMapPanel;
@@ -56,7 +58,11 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		editMapPanel.setShowToolTip(false);
 
-		setComponent(editMapPanel);
+		// Keep top spacing consistent with other configuration tabs.
+		JPanel contentPanel = new JPanel(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fill"));
+		contentPanel.add(editMapPanel, "grow, push");
+
+		setComponent(contentPanel);
 	}
 
 	private void reload() {
