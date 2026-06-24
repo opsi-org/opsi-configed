@@ -452,10 +452,6 @@ public class GroupDataService extends DataService {
 			updateInfo.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		}
 
-		if (updateInfo.get("parentGroupId").equals(AbstractGroupTree.ALL_GROUPS_NAME)) {
-			updateInfo.put("parentGroupId", "null");
-		}
-
 		String parentGroupId = updateInfo.get("parentGroupId");
 		parentGroupId = ClientTree.translateToPersistentName(parentGroupId);
 		updateInfo.put("parentGroupId", parentGroupId);

@@ -16,6 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.share.table.gui.ListModelProducer;
@@ -132,8 +133,13 @@ public class ListModelProducerForVisualDatamap implements ListModelProducer {
 
 	@Override
 	public int getSelectionMode(int row) {
-		String key = (String) table.getValueAt(row, 0);
-		return getListCellOptions(key).getSelectionMode();
+		ConfigOption option = getListCellOptions((String) table.getValueAt(row, 0));
+
+		if (Boolean.TRUE.equals(option.get("multiValue"))) {
+			return ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+		} else {
+			return ListSelectionModel.SINGLE_SELECTION;
+		}
 	}
 
 	@Override

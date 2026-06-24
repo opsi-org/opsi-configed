@@ -260,8 +260,6 @@ public class ConfigDataService extends DataService {
 				callsConfigDeleteCollection.add(callConfig);
 				callsConfigUpdateCollection.removeIf(item -> callConfig.get("ident").equals(item.get("ident")));
 			} else if ((!restrictToMissing || usedConfigIds.contains(callConfig.get("ident")))) {
-				callConfig.put("defaultValues", callConfig.get("defaultValues"));
-				callConfig.put("possibleValues", callConfig.get("possibleValues"));
 				callsConfigUpdateCollection.add(callConfig);
 			} else {
 				// Do nothing, config does not need to be deleted or updated
@@ -337,6 +335,8 @@ public class ConfigDataService extends DataService {
 			}
 
 			config.put("type", type);
+
+			config.put("description", configOptions.get(setting.getKey()).get("description"));
 
 			config.put("defaultValues", setting.getValue());
 

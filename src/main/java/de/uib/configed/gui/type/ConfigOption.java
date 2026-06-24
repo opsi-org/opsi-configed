@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ListSelectionModel;
-
 import de.uib.configed.share.logging.Logging;
 
 // has a problem with type of defaultValues
@@ -94,8 +92,6 @@ public class ConfigOption extends RetrievedMap {
 
 		buildType();
 
-		buildSelectionMode();
-
 		if (retrieved == null) {
 			put("editable", true);
 		} else if (retrieved.get("editable") == null) {
@@ -125,18 +121,6 @@ public class ConfigOption extends RetrievedMap {
 		}
 	}
 
-	private void buildSelectionMode() {
-		if (retrieved == null) {
-			put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		} else if (retrieved.get("multiValue") == null) {
-			put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
-		} else if (Boolean.TRUE.equals(retrieved.get("multiValue"))) {
-			put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		} else {
-			put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
-		}
-	}
-
 	public List<Object> getPossibleValues() {
 		return (List<Object>) get("possibleValues");
 	}
@@ -147,10 +131,6 @@ public class ConfigOption extends RetrievedMap {
 
 	public void setDefaultValues(List<Object> values) {
 		put("defaultValues", values);
-	}
-
-	public int getSelectionMode() {
-		return (Integer) get("selectionMode");
 	}
 
 	public boolean isEditable() {
