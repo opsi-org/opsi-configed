@@ -168,8 +168,11 @@ public abstract class AbstractTeaComponent<M, E, F> {
 	 */
 	public final void dispatch(E msg) {
 		UpdateResult<M, F> result = updateModel(msg, model);
-		this.model = result.model();
-		refreshView();
+		M resultModel = result.model();
+		if (this.model != resultModel) {
+			this.model = resultModel;
+			refreshView();
+		}
 		result.effect.ifPresent(this::handleEffect);
 	}
 
