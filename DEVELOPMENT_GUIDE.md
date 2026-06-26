@@ -89,6 +89,24 @@ the Configed project.
 
 (Source: https://stackoverflow.com/a/36190462)
 
+### Alternative: Development with Nix
+
+As an alternative to the recommended container-based development environment, contributors using Nix can enter a reproducible development shell with:
+
+```bash
+nix develop
+```
+
+The shell provides the required JDK, Maven and Git. After entering the shell,
+build the project as usual:
+
+```bash
+mvn package
+```
+
+The Nix development shell is entirely optional and does not replace the
+recommended container-based workflow described above.
+
 ## Conclusion
 
 Following the guidelines and using the recommended tools, such as VSCode with
