@@ -205,11 +205,12 @@ public class KeyValueTable extends JPanel {
 	}
 
 	private void notifyOfChanges() {
-		if (updateCollection.isEmpty()) {
-			notifyChange();
-
-			updateCollection.addMap(changes);
+		Logging.debug(this, "notifyChange, notify observers ", keepers.size());
+		for (int i = 0; i < keepers.size(); i++) {
+			keepers.get(i).dataHaveChanged(this);
 		}
+
+		updateCollection.addMap(changes);
 	}
 
 	private JPopupMenu buildPopupMenu(boolean keylistExtendible, boolean entryRemovable) {
@@ -569,12 +570,5 @@ public class KeyValueTable extends JPanel {
 
 		this.storeData = storeData;
 		changes = new HashMap<>();
-	}
-
-	private void notifyChange() {
-		Logging.debug(this, "notifyChange, notify observers ", keepers.size());
-		for (int i = 0; i < keepers.size(); i++) {
-			keepers.get(i).dataHaveChanged(this);
-		}
 	}
 }
