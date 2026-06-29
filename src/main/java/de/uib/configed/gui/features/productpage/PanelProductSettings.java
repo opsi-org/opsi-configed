@@ -368,14 +368,14 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		propertiesPanel.setOriginalMap(originalMap);
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
+		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);
-		// propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 
 	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
+		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
-		// propertiesPanel.updateData(null, null);
 		infoPane.clearEditing();
 	}
 

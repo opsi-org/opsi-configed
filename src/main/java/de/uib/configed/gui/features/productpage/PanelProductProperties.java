@@ -66,7 +66,7 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		KeyValueTable propertiesPanel = new KeyValueTable(false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
-		// propertiesPanel.updateData(null, null);
+		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel,

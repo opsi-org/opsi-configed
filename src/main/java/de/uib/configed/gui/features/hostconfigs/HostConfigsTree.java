@@ -200,7 +200,7 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 	// apply method of superclass for all partial maps
 	public void updateData(UpdateCollection updateCollection, Collection<Map<String, Object>> data) {
 		for (String key : keyclasses) {
-			// partialPanels.get(key).updateData(updateCollection, data);
+			partialPanels.get(key).setStoreData(data);
 			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}
 	}

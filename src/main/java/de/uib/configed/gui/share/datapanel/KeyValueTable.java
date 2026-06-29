@@ -9,6 +9,7 @@ package de.uib.configed.gui.share.datapanel;
 import java.awt.Font;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -90,6 +91,7 @@ public class KeyValueTable extends JPanel {
 	protected Map<String, ConfigOption> optionsMap;
 	protected Map<String, Object> defaultsMap;
 	protected Map<String, String> descriptionsMap;
+	private Collection<Map<String, Object>> storeData;
 
 	private Set<String> keysOfReadOnlyEntries;
 	private Function<String, Boolean> isEditable;
@@ -153,7 +155,7 @@ public class KeyValueTable extends JPanel {
 		return switch (effect) {
 		case PrepareRenderer(JComponent component, int row, int col) -> () -> handlePrepareRenderer(component, row,
 				col);
-		case CellEdited(_, _, Object newValue) -> () -> handleCellEdited(newValue);
+		case CellEdited(int rowIdx, _, Object newValue) -> () -> handleCellEdited(rowIdx, newValue);
 		case AddRow(Map<String, Object> newRowData) -> () -> handleAddRow(newRowData);
 		case DeleteRows(List<RowData> deletedRows) -> () -> handleDeleteRows(deletedRows);
 		default -> null;
@@ -167,10 +169,20 @@ public class KeyValueTable extends JPanel {
 		prepareRendererForJTable(component, row, col);
 	}
 
-	private void handleCellEdited(Object newValue) {
+	private void handleCellEdited(int row, Object newValue) {
+		RowData rowData = tableView.getRowByModelIndex(row);
+		String key = rowData.getValue("key", String.class);
+
 		if (!pinnedProperty) {
 			Map<String, Object> map = POJOReMapper.remap(newValue);
+
+			key = (String) map.get("key");
+			Object value = map.get("value");
+
 			changes.put((String) map.get("key"), map.get("value"));
+			saveToStore(key, value);
+		} else {
+			saveToStore(key, defaultsMap.get(key));
 		}
 
 		notifyOfChanges();
@@ -427,6 +439,9 @@ public class KeyValueTable extends JPanel {
 		ConfigOption configOption = ConfigOption.createConfigOption(description,
 				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue, defaultValues, possibleValues);
 
+		saveToStore(configName, defaultValues);
+
+		Logging.devel(this, "store data", storeData);
 		optionsMap.put(configName, configOption);
 
 		tableView.dispatch(new GenericTableViewMsg.AddRow(Map.of(configName, defaultValues)));
@@ -486,6 +501,14 @@ public class KeyValueTable extends JPanel {
 		tableView.dispatch(new GenericTableViewMsg.DeleteRows(rowsToDelete));
 	}
 
+	private void saveToStore(String key, Object value) {
+		if (storeData != null) {
+			for (Map<String, Object> storeDataMap : storeData) {
+				storeDataMap.put(key, value);
+			}
+		}
+	}
+
 	public void pinProperties() {
 		for (int i = 0; i < tableView.getRowCount(); i++) {
 			pinProperty(i);
@@ -504,7 +527,6 @@ public class KeyValueTable extends JPanel {
 
 	public void setUpdateCollection(UpdateCollection updateCollection) {
 		this.updateCollection = updateCollection;
-		changes = new HashMap<>();
 	}
 
 	public void registerDataChangedKeeper(AbstractDataChangedKeeper keeper) {
@@ -533,6 +555,15 @@ public class KeyValueTable extends JPanel {
 
 	public void setIsEditable(Function<String, Boolean> isEditable) {
 		this.isEditable = isEditable;
+	}
+
+	public void setStoreData(Collection<Map<String, Object>> storeData) {
+		if (storeData == null) {
+			Logging.debug(this, "setStoreData, data is null ");
+		}
+
+		this.storeData = storeData;
+		changes = new HashMap<>();
 	}
 
 	private void notifyChange() {

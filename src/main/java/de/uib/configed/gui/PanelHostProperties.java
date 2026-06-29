@@ -96,7 +96,7 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 
 		deriveDepotMap(depotMap);
 		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
-		// editMapPanel.updateData(hostUpdateCollection, List.of(depotMap));
+		editMapPanel.setStoreData(List.of(depotMap));
 		editMapPanel.setUpdateCollection(hostUpdateCollection);
 
 		editMapPanel.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
