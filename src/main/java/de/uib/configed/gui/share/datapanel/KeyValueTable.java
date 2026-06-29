@@ -39,7 +39,7 @@ import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewEffect;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.AddRow;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.CellEdited;
-import de.uib.configed.gui.features.table.GenericTableViewEffect.DeleteRow;
+import de.uib.configed.gui.features.table.GenericTableViewEffect.DeleteRows;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
@@ -190,7 +190,7 @@ public class KeyValueTable extends JPanel {
 				col);
 		case CellEdited(_, _, Object newValue) -> () -> handleCellEdited(newValue);
 		case AddRow(Map<String, Object> newRowData) -> () -> handleAddRow(newRowData);
-		case DeleteRow(List<RowData> deletedRows) -> () -> handleDeleteRows(deletedRows);
+		case DeleteRows(List<RowData> deletedRows) -> () -> handleDeleteRows(deletedRows);
 		default -> null;
 		};
 	}
@@ -261,8 +261,9 @@ public class KeyValueTable extends JPanel {
 			JMenuItem popupItemDeleteEntry0 = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-			popupItemDeleteEntry0.addActionListener(actionEvent -> tableView.dispatch(new GenericTableViewMsg.DeleteRow(
-					List.of(tableView.getRowByModelIndex(tableView.getSelectedRow()).getId()))));
+			popupItemDeleteEntry0
+					.addActionListener(actionEvent -> tableView.dispatch(new GenericTableViewMsg.DeleteRows(
+							List.of(tableView.getRowByModelIndex(tableView.getSelectedRow()).getId()))));
 			popupItemDeleteEntry0
 					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 							.isGlobalReadOnly());
@@ -517,7 +518,7 @@ public class KeyValueTable extends JPanel {
 			rowsToDelete.add(tableView.getRowByModelIndex(i).getId());
 		}
 
-		tableView.dispatch(new GenericTableViewMsg.DeleteRow(rowsToDelete));
+		tableView.dispatch(new GenericTableViewMsg.DeleteRows(rowsToDelete));
 	}
 
 	public void pinProperties() {

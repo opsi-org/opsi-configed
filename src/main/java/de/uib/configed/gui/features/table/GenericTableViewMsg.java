@@ -16,7 +16,7 @@ import javax.swing.SortOrder;
 public sealed interface GenericTableViewMsg
 		permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
 		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
-		GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
+		GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
 		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.InvertSelection, GenericTableViewMsg.PrepareRenderer {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
@@ -42,7 +42,7 @@ public sealed interface GenericTableViewMsg
 
 	}
 
-	record DeleteRow(List<String> rowIdx) implements GenericTableViewMsg {
+	record DeleteRows(List<String> rowIdx) implements GenericTableViewMsg {
 
 	}
 

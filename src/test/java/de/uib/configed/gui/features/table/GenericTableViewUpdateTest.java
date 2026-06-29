@@ -191,7 +191,7 @@ class GenericTableViewUpdateTest {
 	void shouldDeleteRowFromRows_whenRowDeleted() {
 		GenericTableViewModel model = baseModel();
 		int rowIdx = 2;
-		GenericTableViewMsg msg = new GenericTableViewMsg.DeleteRow(List.of(model.getRows().get(2).getId()));
+		GenericTableViewMsg msg = new GenericTableViewMsg.DeleteRows(List.of(model.getRows().get(2).getId()));
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
 
@@ -201,7 +201,7 @@ class GenericTableViewUpdateTest {
 		assertTrue(result.model().isDirty());
 		assertTrue(result.model().isRebuildTableModel());
 		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertInstanceOf(GenericTableViewEffect.DeleteRow.class, result.effect().get()));
+				() -> assertInstanceOf(GenericTableViewEffect.DeleteRows.class, result.effect().get()));
 	}
 
 	@Test

@@ -13,7 +13,7 @@ import javax.swing.JComponent;
 
 public sealed interface GenericTableViewEffect permits GenericTableViewEffect.SaveChanges,
 		GenericTableViewEffect.Reload, GenericTableViewEffect.Selection, GenericTableViewEffect.StoreVisibleColulmns,
-		GenericTableViewEffect.PrepareRenderer, GenericTableViewEffect.CellEdited, GenericTableViewEffect.DeleteRow,
+		GenericTableViewEffect.PrepareRenderer, GenericTableViewEffect.CellEdited, GenericTableViewEffect.DeleteRows,
 		GenericTableViewEffect.AddRow, GenericTableViewEffect.CancelChanges {
 	record SaveChanges(List<RowData> newRows) implements GenericTableViewEffect {
 	}
@@ -33,7 +33,7 @@ public sealed interface GenericTableViewEffect permits GenericTableViewEffect.Sa
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewEffect {
 	}
 
-	record DeleteRow(List<RowData> deletedRows) implements GenericTableViewEffect {
+	record DeleteRows(List<RowData> deletedRows) implements GenericTableViewEffect {
 	}
 
 	record AddRow(Map<String, Object> data) implements GenericTableViewEffect {

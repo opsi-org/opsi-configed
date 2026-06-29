@@ -25,7 +25,7 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeOriginalSnap
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
-import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRow;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRows;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
@@ -50,7 +50,7 @@ public final class GenericTableViewUpdate {
 				model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build(),
 				new GenericTableViewEffect.Selection());
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
-		case DeleteRow(List<String> rowIdx) -> handleRowDelete(rowIdx, model);
+		case DeleteRows(List<String> rowIdx) -> handleRowDelete(rowIdx, model);
 		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
 				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
@@ -181,7 +181,7 @@ public final class GenericTableViewUpdate {
 		rows.removeAll(rowsToDelete);
 
 		return UpdateResult.withEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build(),
-				new GenericTableViewEffect.DeleteRow(rowsToDelete));
+				new GenericTableViewEffect.DeleteRows(rowsToDelete));
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(
