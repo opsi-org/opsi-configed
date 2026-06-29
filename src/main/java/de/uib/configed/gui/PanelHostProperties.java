@@ -47,7 +47,7 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 		editMapPanel = new KeyValueTable(false, false) {
 			@Override
 			protected JPopupMenu createBasicPopup() {
-				return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(PopupMenuTrait.POPUP_SAVE,
+				return PopupMenuTrait.createAndBindJPopupMenu(tableView.getTable(), Map.of(PopupMenuTrait.POPUP_SAVE,
 						() -> ChangedDataManager.checkSaveAll(false), PopupMenuTrait.POPUP_RELOAD, () -> reload()),
 						event -> updatePopupMenu());
 			}

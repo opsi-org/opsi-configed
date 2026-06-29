@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 
@@ -63,7 +62,6 @@ import net.miginfocom.swing.MigLayout;
 // works on a map of pairs of type String - List
 public class KeyValueTable extends JPanel {
 	protected JScrollPane jScrollPane;
-	protected JTable table;
 
 	private PropertiesCellEditorAndRenderer propertiesCellEditorAndRenderer;
 
@@ -83,7 +81,7 @@ public class KeyValueTable extends JPanel {
 	private List<AbstractDataChangedKeeper> keepers = new ArrayList<>();
 	private UpdateCollection updateCollection;
 	private Map<String, Object> changes = new HashMap<>();
-	protected List<String> keys;
+	private List<String> keys;
 	private Map<String, Object> data;
 
 	private boolean pinnedProperty;
@@ -289,9 +287,9 @@ public class KeyValueTable extends JPanel {
 	}
 
 	public void startMultiLineEditing() {
-		int row = table.getSelectedRow();
+		int row = tableView.getSelectedRow();
 		if (row != -1) {
-			propertiesCellEditorAndRenderer.editMultiValueSingleLine(table, row);
+			propertiesCellEditorAndRenderer.editMultiValueSingleLine(tableView.getTable(), row);
 		}
 	}
 
