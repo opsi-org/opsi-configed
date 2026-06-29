@@ -45,7 +45,6 @@ import de.uib.configed.gui.features.table.GenericTableViewModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.table.RowData.RowState;
-import de.uib.configed.gui.features.table.RowDiffStrategy;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.features.table.TableConfig;
 import de.uib.configed.gui.share.icons.Icons;
@@ -130,8 +129,8 @@ public class KeyValueTable extends JPanel {
 						.renderer(propertiesCellEditorAndRenderer).editor(propertiesCellEditorAndRenderer).build());
 
 		GenericTableViewModel initialModel = GenericTableViewModel.builder().columns(columns).tableConfig(config)
-				.diffStrategy(new MyRowDiffStrategy()).allowMultipleSelection(false).isDirty(false).keyValueTable(true)
-				.build();
+				.diffStrategy(new KeyValueRowDiffStrategy(defaultsMap, originalMap, pinnedProperty))
+				.allowMultipleSelection(false).isDirty(false).keyValueTable(true).build();
 
 		tableView = new GenericTableViewComponent(initialModel, this::handleEffect,
 				() -> buildPopupMenu(keylistExtendible, entryRemovable));
@@ -150,38 +149,6 @@ public class KeyValueTable extends JPanel {
 		}
 
 		this.add(component, "grow, push, hmin 0");
-	}
-
-	@SuppressWarnings("java:S2972")
-	private class MyRowDiffStrategy implements RowDiffStrategy {
-		@Override
-		public RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue) {
-			if (defaultsMap == null) {
-				Logging.warning(this, "no default values available, defaultsMap is null");
-				return RowState.NORMAL;
-			}
-
-			String key = null;
-			if (rowData != null) {
-				key = rowData.getValue("key", String.class);
-				if (pinnedProperty) {
-					currentValue = rowData.getValue("value", Object.class);
-				}
-			}
-
-			RowState rowState;
-			Object defaultValue;
-			if ((defaultValue = defaultsMap.get(key)) == null) {
-				Logging.warning(this, "no default Value found");
-				rowState = RowState.MISSING_DATA;
-			} else if (!defaultValue.equals(currentValue) || (originalMap != null && originalMap.containsKey(key))) {
-				rowState = RowState.MODIFIED;
-			} else {
-				rowState = RowState.NORMAL;
-			}
-
-			return rowState;
-		}
 	}
 
 	private Runnable handleEffect(GenericTableViewEffect effect) {
