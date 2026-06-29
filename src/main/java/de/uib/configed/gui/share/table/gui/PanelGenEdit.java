@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -27,6 +28,9 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedUtilityMethods;
 import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.CursorrowObserver;
 import de.uib.configed.gui.share.table.GenTableModel;
@@ -57,15 +61,14 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 	private boolean withTablesearchPane;
 
-	protected TableSearchPane tableSearchPane;
+	protected SearchPaneComponent tableSearchPane;
+	private JComponent component;
 
 	private String title = "";
 
 	private PanelGenEditPopupManager popupManager;
 
 	private int oldrowcount = -1;
-
-	private FilterKey filterKey;
 
 	public PanelGenEdit(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
 			boolean withTablesearchPane) {
@@ -97,8 +100,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public void setFilterKey(FilterKey filterKey) {
-		this.filterKey = filterKey;
-		tableSearchPane.setFilterKey(filterKey);
+		tableSearchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(filterKey));
 	}
 
 	@Override
@@ -106,7 +108,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		genEditTable.requestFocus();
 
 		if (withTablesearchPane) {
-			tableSearchPane.requestFocus();
+			component.requestFocus();
 		}
 	}
 
@@ -127,8 +129,9 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		genEditTable = new GenEditTable();
 
-		tableSearchPane = new TableSearchPane(this);
-		tableSearchPane.setVisible(withTablesearchPane);
+		tableSearchPane = new SearchPaneComponent(this, new SearchTargetModelFromTable(this, genEditTable));
+		component = tableSearchPane.initUI();
+		component.setVisible(withTablesearchPane);
 
 		// we prefer the simple behaviour:
 
@@ -142,7 +145,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		setLayout(new MigLayout("insets 0, wrap 1", "[grow,fill]", "[]0"));
 
 		add(jLabelTitle, "gapbottom " + Globals.MIN_GAP_SIZE);
-		add(tableSearchPane, "hidemode 3, gapbottom " + Globals.MIN_GAP_SIZE);
+		add(component, "hidemode 3, gapbottom " + Globals.MIN_GAP_SIZE);
 		add(jScrollPane, "grow, push, hmin 20, h 100");
 		add(controlPanel, "hidemode 3, gaptop " + Globals.MIN_GAP_SIZE);
 
@@ -222,30 +225,17 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	/**
 	 * set columns for which the searchpane shall work
 	 */
-	public void setSearchColumns(Integer[] cols) {
+	public void setSearchColumns(List<Integer> cols) {
 		if (!withTablesearchPane) {
 			Logging.debug(this, "setSearchColumns: no search panel");
 			return;
 		}
 
-		tableSearchPane.setSearchFields(cols);
-	}
-
-	/**
-	 * set all columns for column selection in search pane; requires the correct
-	 * model is initialized
-	 */
-	public void setSearchColumnsAll() {
-		if (!withTablesearchPane) {
-			Logging.debug(this, "setSearchColumns: no search panel");
-			return;
-		}
-
-		tableSearchPane.setSearchFieldsAll();
+		tableSearchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumns(cols));
 	}
 
 	private void setModelFilteringBySelection() {
-		if (tableSearchPane.isFiltering() && genEditTable.getModel() != null
+		if (tableSearchPane.isFilteringBySelectionEnabled() && genEditTable.getModel() != null
 				&& genEditTable.getGenTableModel().getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
@@ -313,7 +303,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		return genEditTable.getGenTableModel();
 	}
 
-	public TableSearchPane getTableSearchPane() {
+	public SearchPaneComponent getTableSearchPane() {
 		return tableSearchPane;
 	}
 
@@ -522,11 +512,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public void restoreFilter() {
-		if (filterKey == null) {
-			Logging.warning(this, "Filter key is null");
-			return;
-		}
-		tableSearchPane.restoreFilter();
+		tableSearchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}
 
 	// TableModelListener

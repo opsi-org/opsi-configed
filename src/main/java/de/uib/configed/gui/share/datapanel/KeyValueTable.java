@@ -35,6 +35,8 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewEffect;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.AddRow;
@@ -53,8 +55,6 @@ import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ListModelProducer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
 import de.uib.configed.share.AbstractDataChangedKeeper;
@@ -148,8 +148,9 @@ public class KeyValueTable extends JPanel {
 		if (includeSearchPane) {
 			this.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]0"));
 
-			TableSearchPane searchPane = new TableSearchPane(new SearchTargetModelFromTable(tableView.getTable()));
-			this.add(searchPane, "growx, hmin 0");
+			SearchPaneComponent searchPane = new SearchPaneComponent(
+					new SearchTargetModelFromTable(tableView.getTable()), null, false, false, false);
+			this.add(searchPane.initUI(), "growx, hmin 0");
 		}
 
 		this.add(component, "grow, push, hmin 0");

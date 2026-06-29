@@ -95,8 +95,6 @@ public class PanelLicensesUsage extends MultiTablePanel {
 		panelUsage.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelUsage.setFilterKey(FilterKey.LICENSE_USAGE_TABLE);
 
-		panelUsage.getTableSearchPane().setFiltering();
-
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + ", fill", "", "[]0"));

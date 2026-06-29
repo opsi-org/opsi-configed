@@ -123,7 +123,6 @@ public class ConfigedMain {
 
 		// set table model and update the column selection in search accordingly
 		buildClientListTableModel(true);
-		clientTablePanel.initColumnNames();
 
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
@@ -247,11 +246,6 @@ public class ConfigedMain {
 		Map<String, Boolean> fields = persistenceController.getDataServices().host.getHostDisplayFields();
 		fields.put(column, !fields.get(column));
 		setRebuiltClientListTableModel(true, false);
-
-		// We need to make first selected visible again after resetting sortKeys
-		// clientTablePanel.getClientTable().moveToFirstSelected();
-
-		clientTablePanel.initColumnNames();
 	}
 
 	public void handleGroupActionRequest() {
@@ -441,9 +435,9 @@ public class ConfigedMain {
 
 		clientsForDepots.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredMode());
+		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredBySelection());
 
-		if (clientTablePanel.isFilteredMode()) {
+		if (clientTablePanel.isFilteredBySelection()) {
 			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs ",
 					selectedClients.size());
 
@@ -683,8 +677,8 @@ public class ConfigedMain {
 	}
 
 	public void deactivateFilter() {
-		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredMode());
-		if (clientTablePanel.isFilteredMode()) {
+		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredBySelection());
+		if (clientTablePanel.isFilteredBySelection()) {
 			setRebuiltClientListTableModel(true, false);
 		}
 	}

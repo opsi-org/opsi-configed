@@ -4,7 +4,7 @@
  * This file is part of OPSI - https://www.opsi.org
  */
 
-package de.uib.configed.gui.share.table.gui;
+package de.uib.configed.gui.features.searchpane.view;
 
 public interface SearchTargetModel {
 	String getColumnName(int col);

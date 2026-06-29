@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -26,16 +27,18 @@ import de.uib.configed.gui.ServerActionManager;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class ProductActionPanel extends JPanel {
-	private TableSearchPane searchPane;
+	private SearchPaneComponent searchPane;
+	private JComponent component;
 
 	private JButton buttonReloadProductStates;
 	private JButton buttonExecuteNow;
@@ -55,16 +58,12 @@ public class ProductActionPanel extends JPanel {
 		initComponents(type);
 	}
 
-	public void updateSearchFields() {
-		searchPane.setSearchFieldsAll();
-	}
-
 	public void restoreFilter() {
-		searchPane.restoreFilter();
+		searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
+	public boolean isFilteredBySelection() {
+		return searchPane.isFilteredBySelection();
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
@@ -85,12 +84,12 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initData() {
-		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings));
 		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
 				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
 				: FilterKey.NETBOOT_PRODUCTS_TABLE;
-		searchPane.setFilterKey(filterKey);
-		searchPane.setFiltering();
+		searchPane = new SearchPaneComponent(new SearchTargetModelFromInstallationStateTable(panelProductSettings),
+				filterKey, false, false, true);
+		component = searchPane.initUI();
 	}
 
 	private void initComponents(ProductSettingsType type) {
@@ -125,7 +124,7 @@ public class ProductActionPanel extends JPanel {
 		toolBarSetValues.add(buttonSetValues);
 
 		this.setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx", "", "[]0"));
-		this.add(searchPane, "span, growx, gapbottom " + Globals.GAP_SIZE + ", wrap");
+		this.add(component, "span, growx, gapbottom " + Globals.GAP_SIZE + ", wrap");
 		this.add(toolBarActions, "aligny center, split 2, gapbottom " + Globals.GAP_SIZE);
 		this.add(toolBarSetValues, "aligny center, pushx, gapbefore push, gapbottom " + Globals.GAP_SIZE + ", wrap");
 	}
@@ -184,7 +183,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
+		searchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeFilterBySelection(selected));
 	}
 
 	@SuppressWarnings("java:S2972")

@@ -74,11 +74,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 					}
 				}, updateCollection));
 
-		Integer[] searchCols = new Integer[2];
-		searchCols[0] = 0;
-		searchCols[1] = 1;
-
-		thePanel.getPanelReconciliation().setSearchColumns(searchCols);
+		thePanel.getPanelReconciliation().setSearchColumns(List.of(0, 1));
 	}
 
 	private void initPanels() {

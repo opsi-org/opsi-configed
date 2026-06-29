@@ -32,6 +32,9 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
 import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewComponent.TableSideEffectStrategy;
 import de.uib.configed.gui.features.table.GenericTableViewEffect;
@@ -45,8 +48,6 @@ import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.IconTableCellRenderer;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
@@ -56,7 +57,7 @@ import net.miginfocom.swing.MigLayout;
 public class ClientTablePanel extends JPanel implements MessagebusListener {
 	private JScrollPane scrollpane;
 
-	private TableSearchPane searchPane;
+	private SearchPaneComponent searchPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -128,18 +129,18 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 						: null);
 		component = clientTableViewComponent.initUI();
 
-		searchPane = new TableSearchPane(
-				new SearchTargetModelFromClientTable(configedMain, clientTableViewComponent.getTable()));
-		searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
-		searchPane.setFiltering();
+		searchPane = new SearchPaneComponent(
+				new SearchTargetModelFromClientTable(configedMain, clientTableViewComponent.getTable()),
+				FilterKey.CLIENT_TABLE, false, false, true);
+		JComponent searchPaneComponent = searchPane.initUI();
 
 		component.addKeyListener(searchPane);
 
-		setLayout(new MigLayout("insets " + Globals.GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
+		setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
 				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
 
-		add(searchPane);
-		add(component, "grow, push");
+		add(searchPaneComponent);
+		add(searchPaneComponent, "grow, push");
 	}
 
 	/**
@@ -210,8 +211,8 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		}
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
+	public boolean isFilteredBySelection() {
+		return searchPane.isFilteredBySelection();
 	}
 
 	private void actOnListSelection() {
@@ -248,16 +249,11 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	}
 
 	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
-	}
-
-	public final void initColumnNames() {
-		// New code
-		searchPane.setSearchFieldsAll();
+		searchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeFilterBySelection(selected));
 	}
 
 	public void restoreFilter() {
-		searchPane.restoreFilter();
+		searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
 	}
 
 	public void setSelectedValues(Collection<String> clientsToSelect) {

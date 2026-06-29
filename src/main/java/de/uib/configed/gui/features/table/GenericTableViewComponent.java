@@ -192,17 +192,17 @@ public class GenericTableViewComponent
 	private void notifyRowSorterChange() {
 		List<? extends RowSorter.SortKey> sortKeys = table.getRowSorter().getSortKeys();
 
+		Map<String, SortOrder> rowSortKeys = new HashMap<>();
 		if (sortKeys.isEmpty()) {
-			dispatch(new GenericTableViewMsg.ChangeSortOrder(Map.of(null, SortOrder.UNSORTED)));
+			rowSortKeys.put(null, SortOrder.UNSORTED);
 		} else {
-			Map<String, SortOrder> rowSortKeys = new HashMap<>();
 			for (RowSorter.SortKey key : sortKeys) {
 				String columnKey = (String) table.getColumnModel().getColumn(key.getColumn()).getIdentifier();
 				rowSortKeys.put(columnKey, key.getSortOrder());
 			}
-
-			dispatch(new GenericTableViewMsg.ChangeSortOrder(rowSortKeys));
 		}
+
+		dispatch(new GenericTableViewMsg.ChangeSortOrder(rowSortKeys));
 	}
 
 	private void notifyColumnResize() {

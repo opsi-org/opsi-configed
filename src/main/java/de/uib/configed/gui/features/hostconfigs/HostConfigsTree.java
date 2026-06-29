@@ -189,6 +189,9 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 				partialPanels.get(key).registerDataChangedKeeper(ChangedDataManager.getHostConfigsDataChangedKeeper());
 			}
 		}
+
+		// Always select "general host parameters" node.
+		tree.setSelectionRow(1);
 	}
 
 	private void expandAll() {
