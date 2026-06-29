@@ -159,7 +159,6 @@ public class KeyValueTable extends JPanel {
 		public RowState getRowStyle(String rowId, String colKey, Object currentValue, Object originalValue) {
 			if (defaultsMap == null) {
 				Logging.warning(this, "no default values available, defaultsMap is null");
-				Logging.devel(this, "no default values available, defaultsMap is null");
 				return RowState.NORMAL;
 			}
 
@@ -184,7 +183,6 @@ public class KeyValueTable extends JPanel {
 
 			return rowState;
 		}
-
 	}
 
 	private Runnable handleEffect(GenericTableViewEffect effect) {
@@ -218,7 +216,6 @@ public class KeyValueTable extends JPanel {
 			changes.put((String) map.get("key"), map.get("value"));
 		}
 
-		Logging.devel(this, "changes", changes);
 		notifyOfChanges();
 	}
 
@@ -491,7 +488,6 @@ public class KeyValueTable extends JPanel {
 		this.pinDefault = !removeDefault;
 
 		String key = keys.get(keyIndex);
-		Logging.devel(this, "key", key, "keys", keys);
 		changes.put(key, null);
 
 		notifyOfChanges();
@@ -527,7 +523,6 @@ public class KeyValueTable extends JPanel {
 			rowsToDelete.add(tableView.getRowByModelIndex(i).getId());
 		}
 
-		Logging.devel(this, "rows to delete", rowsToDelete);
 		tableView.dispatch(new GenericTableViewMsg.DeleteRow(rowsToDelete));
 	}
 
@@ -538,7 +533,6 @@ public class KeyValueTable extends JPanel {
 	}
 
 	public void setVoid() {
-		Logging.devel(this, "original map", originalMap);
 		for (int i = 0; i < tableView.getRowCount(); i++) {
 			removeProperty(i, true);
 		}

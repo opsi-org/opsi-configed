@@ -31,7 +31,6 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
 import de.uib.configed.gui.features.table.RowData.RowState;
-import de.uib.configed.share.logging.Logging;
 
 /**
  * The Pure Logic Layer. Handles messages and updates the Model.
@@ -84,7 +83,6 @@ public final class GenericTableViewUpdate {
 		Map<String, Object> newValues = new HashMap<>(oldRow.getValues());
 		newValues.put(colKey, newValue);
 
-		Logging.devel("row values " + newValues);
 		RowData newRow = oldRow.toBuilder().values(newValues).state(newRowStyle).build();
 
 		List<RowData> newRows = new ArrayList<>(model.getRows());
@@ -164,7 +162,6 @@ public final class GenericTableViewUpdate {
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowDelete(List<String> rowIdx,
 			GenericTableViewModel model) {
 		if (rowIdx.isEmpty() || rowIdx.size() > model.getRows().size()) {
-			Logging.devel("no data " + rowIdx, "size" + rowIdx.size() + " model row size " + model.getRows().size());
 			return UpdateResult.noEffect(model);
 		}
 
@@ -179,7 +176,6 @@ public final class GenericTableViewUpdate {
 		}
 		rows.removeAll(rowsToDelete);
 
-		Logging.devel("rows ", rows, "rows to delete", rowsToDelete);
 		return UpdateResult.withEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.DeleteRow(rowsToDelete));
 	}
