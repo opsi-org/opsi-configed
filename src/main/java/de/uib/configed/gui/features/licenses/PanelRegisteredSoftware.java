@@ -14,6 +14,7 @@ import java.util.List;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.ControlPanelAssignToLPools;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.type.SWAuditEntry;
@@ -27,7 +28,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("", true, 2, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 		this.controller = controller;
-		tableSearchPane.showNavPane();
+		tableSearchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeShowNavPanel(true));
 
 		genEditTable.addMouseListener(this);
 		genEditTable.getTableHeader().addMouseListener(this);

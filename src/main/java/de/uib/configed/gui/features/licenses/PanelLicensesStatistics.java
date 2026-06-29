@@ -41,9 +41,6 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 		panelStatistics.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelStatistics.setFilterKey(FilterKey.LICENSES_STATISTICS_TABLE);
 
-		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelStatistics.getTableSearchPane().setFiltering();
-
 		this.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
 		this.add(panelStatistics, "grow, hmin " + MIN_VSIZE + ", gapbottom " + Globals.MIN_GAP_SIZE);
 	}

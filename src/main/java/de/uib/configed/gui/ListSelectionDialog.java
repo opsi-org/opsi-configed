@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,12 +30,12 @@ import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
+import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromJList;
+import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromJList.FilterContext;
 import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
-import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList.FilterContext;
-import de.uib.configed.gui.share.table.gui.TableSearchPane;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -42,7 +43,8 @@ public class ListSelectionDialog {
 	public static final Dimension DEFAULT_MULTI_LINE_EDITOR_SIZE = new Dimension(400, 200);
 
 	protected ListSelectionList listSelectionList;
-	protected TableSearchPane searchPane;
+	protected SearchPaneComponent searchPane;
+	private JComponent component;
 
 	private FlatTextField editingTextField;
 	private JButton addMultiLineValueButton;
@@ -88,13 +90,13 @@ public class ListSelectionDialog {
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
 		searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(), new ArrayList<>());
-		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setNarrow(true);
+		searchPane = new SearchPaneComponent(searchTargetModel, null, true, false, false);
+		component = searchPane.initUI();
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]",
 				"[pref!]" + Globals.GAP_SIZE + "[grow]" + Globals.GAP_SIZE + "[pref!]"));
-		panel.add(searchPane, "growx");
+		panel.add(component, "growx");
 		panel.add(listScrollPane, "grow");
 
 		if (editable) {
@@ -161,7 +163,7 @@ public class ListSelectionDialog {
 		// This accounts for focus-stealing components (e.g., dialog activation or defualt buttons) that may
 		// override the focus requests. Without this delay, the search field may not receive focus when the
 		// dialog is shown.
-		SwingUtilities.invokeLater(() -> SwingUtilities.invokeLater(() -> searchPane.requestFocus()));
+		SwingUtilities.invokeLater(() -> SwingUtilities.invokeLater(() -> component.requestFocus()));
 		dialog.setVisible(true);
 	}
 

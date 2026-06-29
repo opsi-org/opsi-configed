@@ -25,6 +25,7 @@ import de.uib.configed.gui.GlobalSoftwareInfoDialog;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
 import de.uib.configed.gui.share.swing.PanelStateSwitch;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
@@ -194,16 +195,19 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicensepools.setFilterKey(FilterKey.LICENSE_POOL_POOLS_TABLE);
+		panelLicensepools.getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(false));
 
 		panelProductId2LPool = new PanelGenEdit(text("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
 				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelProductId2LPool.setFilterKey(FilterKey.LICENSE_PRODUCT_ID_TO_LICENSE_POOL_TABLE);
+		panelProductId2LPool.getTableSearchPane()
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeEnableFilterBySelection(false));
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFilterKey(FilterKey.LICENSE_REGISTERED_SOFTWARE_TABLE);
-		panelRegisteredSoftware.getTableSearchPane().setFiltering();
 	}
 
 	private static JLabel label(String key) {

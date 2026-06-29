@@ -40,9 +40,6 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 		panelReconciliation.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelReconciliation.setFilterKey(FilterKey.LICENSE_RECONCILIATION_TABLE);
 
-		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelReconciliation.getTableSearchPane().setFiltering();
-
 		this.setLayout(new MigLayout("insets 0, fill", "", "[]0"));
 		this.add(panelReconciliation, "grow, hmin 50, gapbottom " + Globals.MIN_GAP_SIZE);
 

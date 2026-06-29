@@ -139,10 +139,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		SwingUtils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
 
-	public void updateSearchFields() {
-		groupPanel.updateSearchFields();
-	}
-
 	public void restoreFilter() {
 		groupPanel.restoreFilter();
 	}
@@ -328,8 +324,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		ServerActionManager.processActionRequestsAllProducts(groupPanel.getVisibility());
 	}
 
-	public boolean isFilteredMode() {
-		return groupPanel.isFilteredMode();
+	public boolean isFilteredBySelection() {
+		return groupPanel.isFilteredBySelection();
 	}
 
 	public void valueChanged(boolean doSelection) {
@@ -345,7 +341,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		productSettingsTableModel.setRenderer(istm);
 
 		// We don't want to call setSelection here, since it will be called after this method
-		if (!isFilteredMode()) {
+		if (!isFilteredBySelection()) {
 			valueChanged(false);
 		}
 

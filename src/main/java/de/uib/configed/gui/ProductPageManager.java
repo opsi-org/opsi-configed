@@ -151,11 +151,10 @@ public class ProductPageManager implements MessagebusListener {
 		if (!oldProductSelection.isEmpty()) {
 			panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 		}
-		if (panelProductSettings.isFilteredMode()) {
+		if (panelProductSettings.isFilteredBySelection()) {
 			panelProductSettings.getProductTable().reduceToSelected();
 		}
 
-		panelProductSettings.updateSearchFields();
 		panelProductSettings.restoreFilter();
 		panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 
