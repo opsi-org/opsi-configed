@@ -508,7 +508,7 @@ public class KeyValueTable extends JPanel {
 					" - should be identical with - ", optionsMap.get(key).getDefaultValues());
 		}
 
-		Logging.info(this, "removeProperty names left: ", keys);
+		Logging.info(this, "property names left: ", keys);
 	}
 
 	public void removeProperties() {
