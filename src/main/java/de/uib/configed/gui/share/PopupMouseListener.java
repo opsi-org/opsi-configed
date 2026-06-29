@@ -48,6 +48,10 @@ public class PopupMouseListener extends MouseAdapter {
 		}
 	}
 
+	public boolean initialized() {
+		return popupMenu != null;
+	}
+
 	private static void updateSelection(MouseEvent e) {
 		switch (e.getSource()) {
 		case JTree tree -> updateSelectionInTree(tree, e);

@@ -40,6 +40,7 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.features.table.TableConfig;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
@@ -121,12 +122,10 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 
 		clientTableViewComponent = new GenericTableViewComponent(GenericTableViewModel.builder().tableConfig(config)
 				.columns(columns).originalSnapshot(new ArrayList<>()).rows(new ArrayList<>()).build(),
-				clientSideEffectStrategy, () -> {
-					if (ConfigedMain.getMainFrame() != null) {
-						return ConfigedMain.getMainFrame().getClientPopupMenu();
-					}
-					return null;
-				});
+				clientSideEffectStrategy,
+				() -> ConfigedMain.getMainFrame() != null
+						? new PopupMouseListener(ConfigedMain.getMainFrame().getClientPopupMenu())
+						: null);
 		component = clientTableViewComponent.initUI();
 
 		searchPane = new TableSearchPane(

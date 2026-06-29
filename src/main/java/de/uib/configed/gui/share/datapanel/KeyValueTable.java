@@ -47,6 +47,7 @@ import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.table.RowData.RowState;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.features.table.TableConfig;
+import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
@@ -135,7 +136,8 @@ public class KeyValueTable extends JPanel {
 				.diffStrategy(diffStrategy).allowMultipleSelection(false).isDirty(false).keyValueTable(true).build();
 
 		tableView = new GenericTableViewComponent(initialModel, this::handleEffect,
-				() -> buildPopupMenu(keylistExtendible, entryRemovable));
+				() -> new PopupMouseListener(buildPopupMenu(keylistExtendible, entryRemovable),
+						e -> updatePopupMenu()));
 		tableView.setIsCellEditable(
 				(Integer row) -> (keysOfReadOnlyEntries == null || !keysOfReadOnlyEntries.contains(keys.get(row)))
 						&& (isEditable == null || isEditable.apply(keys.get(row))));
@@ -314,7 +316,7 @@ public class KeyValueTable extends JPanel {
 
 	protected JPopupMenu createBasicPopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
-		return PopupMenuTrait.createAndBindJPopupMenu(tableView.getTable(), Map.of(), event -> updatePopupMenu());
+		return PopupMenuTrait.createJPopupMenu(tableView.getTable(), Map.of());
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, int row, int col) {

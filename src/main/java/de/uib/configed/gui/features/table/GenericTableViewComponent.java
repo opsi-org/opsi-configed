@@ -49,8 +49,9 @@ public class GenericTableViewComponent
 		extends AbstractTeaComponent<GenericTableViewModel, GenericTableViewMsg, GenericTableViewEffect> {
 	private JTable table;
 	private boolean isUpdatingProgrammatically;
+	private boolean addedPopupMouseListener;
 	private TableSideEffectStrategy sideEffectStrategy;
-	private Supplier<JPopupMenu> popupMenuSupplier;
+	private Supplier<PopupMouseListener> popupMouseListenerSupplier;
 	private Function<Integer, Boolean> isCellEditable;
 	private PopupMouseListener popupMouseListener;
 	private RowSorterListener rowSorterListener = (RowSorterEvent e) -> {
@@ -106,14 +107,10 @@ public class GenericTableViewComponent
 	}
 
 	public GenericTableViewComponent(GenericTableViewModel model, TableSideEffectStrategy sideEffectStrategy,
-			Supplier<JPopupMenu> popupMenuSupplier) {
+			Supplier<PopupMouseListener> popupMouseListenerSupplier) {
 		super(model);
 		this.sideEffectStrategy = sideEffectStrategy;
-		this.popupMenuSupplier = popupMenuSupplier;
-	}
-
-	public void setPopupMenuSupplier(Supplier<JPopupMenu> supplier) {
-		this.popupMenuSupplier = supplier;
+		this.popupMouseListenerSupplier = popupMouseListenerSupplier;
 	}
 
 	@Override
@@ -361,13 +358,13 @@ public class GenericTableViewComponent
 
 		restoreSelection();
 
-		if (popupMouseListener != null) {
-			table.removeMouseListener(popupMouseListener);
+		if (popupMouseListenerSupplier != null && (popupMouseListener == null || !popupMouseListener.initialized())) {
+			popupMouseListener = popupMouseListenerSupplier.get();
 		}
 
-		if (popupMenuSupplier != null) {
-			popupMouseListener = new PopupMouseListener(popupMenuSupplier.get());
+		if ((popupMouseListener != null && popupMouseListener.initialized()) && !addedPopupMouseListener) {
 			table.addMouseListener(popupMouseListener);
+			addedPopupMouseListener = true;
 		}
 
 		isUpdatingProgrammatically = false;
