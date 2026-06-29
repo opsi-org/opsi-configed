@@ -99,7 +99,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties implem
 		JButton buttonSetValuesFromPackage = new JButton(Icons.getIntellijIcon("remove"));
 		buttonSetValuesFromPackage
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
-		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
+		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.pinProperties());
 
 		JPanel panelTop = new JPanel();
 		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));

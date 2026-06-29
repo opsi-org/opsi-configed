@@ -87,8 +87,7 @@ public class KeyValueTable extends JPanel {
 	protected List<String> keys;
 	private Map<String, Object> data;
 
-	private boolean pinDefault;
-	private boolean removeDefault;
+	private boolean pinnedProperty;
 	private boolean showToolTip = true;
 
 	protected Map<String, ConfigOption> optionsMap;
@@ -165,7 +164,7 @@ public class KeyValueTable extends JPanel {
 			String key = null;
 			if (rowData != null) {
 				key = rowData.getValue("key", String.class);
-				if (removeDefault || pinDefault) {
+				if (pinnedProperty) {
 					currentValue = rowData.getValue("value", Object.class);
 				}
 			}
@@ -189,7 +188,7 @@ public class KeyValueTable extends JPanel {
 		return switch (effect) {
 		case PrepareRenderer(JComponent component, int row, int col) -> () -> handlePrepareRenderer(component, row,
 				col);
-		case CellEdited(int row, _, Object newValue) -> () -> handleCellEdited(row, newValue);
+		case CellEdited(_, _, Object newValue) -> () -> handleCellEdited(newValue);
 		case AddRow(Map<String, Object> newRowData) -> () -> handleAddRow(newRowData);
 		case DeleteRow(List<RowData> deletedRows) -> () -> handleDeleteRows(deletedRows);
 		default -> null;
@@ -203,15 +202,8 @@ public class KeyValueTable extends JPanel {
 		prepareRendererForJTable(component, row, col);
 	}
 
-	private void handleCellEdited(int row, Object newValue) {
-		RowData rowData = tableView.getRowByModelIndex(row);
-		String key = rowData.getValue("key", String.class);
-
-		if (pinDefault) {
-			changes.put(key, defaultsMap.get(key));
-		} else if (removeDefault) {
-			changes.put(key, null);
-		} else {
+	private void handleCellEdited(Object newValue) {
+		if (!pinnedProperty) {
 			Map<String, Object> map = POJOReMapper.remap(newValue);
 			changes.put((String) map.get("key"), map.get("value"));
 		}
@@ -288,14 +280,14 @@ public class KeyValueTable extends JPanel {
 			setDefaultValue = new JMenuItem(
 					Configed.getResourceValue("EditMapPanelX.PopupMenu.SetSpecificValueToDefault"));
 			Icons.addIntellijIconToMenuItem(setDefaultValue, "pin");
-			setDefaultValue.addActionListener(actionEvent -> removeProperty(tableView.getSelectedRow(), false));
+			setDefaultValue.addActionListener(actionEvent -> pinProperty(tableView.getSelectedRow()));
 
 			popupMenu.add(setDefaultValue);
 
 			popupRemoveSpecificEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanelX.PopupMenu.RemoveSpecificValue"));
 			Icons.addIntellijIconToMenuItem(popupRemoveSpecificEntry, "remove");
-			popupRemoveSpecificEntry.addActionListener(actionEvent -> removeProperty(tableView.getSelectedRow(), true));
+			popupRemoveSpecificEntry.addActionListener(actionEvent -> unpinProperty(tableView.getSelectedRow()));
 
 			popupMenu.add(popupRemoveSpecificEntry);
 		}
@@ -476,34 +468,36 @@ public class KeyValueTable extends JPanel {
 		return true;
 	}
 
-	/**
-	 * deleting an entry
-	 *
-	 * @param String key - the key to delete
-	 */
-	public void removeProperty(int keyIndex, boolean removeDefault) {
-		Logging.info(this, " EditMapPanelX, removeProperty for key ", keyIndex);
+	private void pinProperty(int keyIndex) {
+		this.pinnedProperty = true;
 
-		this.removeDefault = removeDefault;
-		this.pinDefault = !removeDefault;
+		String key = keys.get(keyIndex);
+		changes.put(key, defaultsMap.get(key));
+
+		if (originalMap != null) {
+			originalMap.put(key, defaultsMap.get(key));
+		}
+
+		fireCellEditedEvent(keyIndex, key);
+	}
+
+	private void unpinProperty(int keyIndex) {
+		this.pinnedProperty = true;
 
 		String key = keys.get(keyIndex);
 		changes.put(key, null);
 
-		notifyOfChanges();
-
 		if (originalMap != null) {
-			if (removeDefault) {
-				originalMap.remove(key);
-			} else {
-				originalMap.put(key, defaultsMap.get(key));
-			}
+			originalMap.remove(key);
 		}
 
+		fireCellEditedEvent(keyIndex, key);
+	}
+
+	private void fireCellEditedEvent(int keyIndex, String key) {
 		tableView.dispatch(new GenericTableViewMsg.CellEdited(keyIndex, 0, key));
 
-		this.removeDefault = false;
-		this.pinDefault = false;
+		this.pinnedProperty = false;
 
 		Object defaultValue = defaultsMap.get(key);
 
@@ -526,15 +520,15 @@ public class KeyValueTable extends JPanel {
 		tableView.dispatch(new GenericTableViewMsg.DeleteRow(rowsToDelete));
 	}
 
-	public void resetDefaults() {
+	public void pinProperties() {
 		for (int i = 0; i < tableView.getRowCount(); i++) {
-			removeProperty(i, false);
+			pinProperty(i);
 		}
 	}
 
-	public void setVoid() {
+	public void unpinProperties() {
 		for (int i = 0; i < tableView.getRowCount(); i++) {
-			removeProperty(i, true);
+			unpinProperty(i);
 		}
 	}
 
@@ -581,5 +575,4 @@ public class KeyValueTable extends JPanel {
 			keepers.get(i).dataHaveChanged(this);
 		}
 	}
-
 }
