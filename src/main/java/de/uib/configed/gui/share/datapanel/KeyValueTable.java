@@ -96,6 +96,8 @@ public class KeyValueTable extends JPanel {
 	private Set<String> keysOfReadOnlyEntries;
 	private Function<String, Boolean> isEditable;
 
+	private KeyValueRowDiffStrategy diffStrategy;
+
 	public KeyValueTable(boolean keylistExtendible, boolean entryRemovable) {
 		this(keylistExtendible, entryRemovable, false);
 	}
@@ -128,9 +130,9 @@ public class KeyValueTable extends JPanel {
 						.header(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue")).editable(true)
 						.renderer(propertiesCellEditorAndRenderer).editor(propertiesCellEditorAndRenderer).build());
 
+		diffStrategy = new KeyValueRowDiffStrategy(defaultsMap, originalMap, pinnedProperty);
 		GenericTableViewModel initialModel = GenericTableViewModel.builder().columns(columns).tableConfig(config)
-				.diffStrategy(new KeyValueRowDiffStrategy(defaultsMap, originalMap, pinnedProperty))
-				.allowMultipleSelection(false).isDirty(false).keyValueTable(true).build();
+				.diffStrategy(diffStrategy).allowMultipleSelection(false).isDirty(false).keyValueTable(true).build();
 
 		tableView = new GenericTableViewComponent(initialModel, this::handleEffect,
 				() -> buildPopupMenu(keylistExtendible, entryRemovable));
@@ -401,6 +403,8 @@ public class KeyValueTable extends JPanel {
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 
+		diffStrategy.setDefaultsMap(defaultsMap);
+		diffStrategy.setOriginalMap(originalMap);
 		propertiesCellEditorAndRenderer.setModelProducer(modelProducer);
 
 		visualdata = visualdata != null ? visualdata : new HashMap<>();
@@ -441,7 +445,6 @@ public class KeyValueTable extends JPanel {
 
 		saveToStore(configName, defaultValues);
 
-		Logging.devel(this, "store data", storeData);
 		optionsMap.put(configName, configOption);
 
 		tableView.dispatch(new GenericTableViewMsg.AddRow(Map.of(configName, defaultValues)));
@@ -476,6 +479,8 @@ public class KeyValueTable extends JPanel {
 	}
 
 	private void fireCellEditedEvent(int keyIndex, String key) {
+		diffStrategy.setPinnedProperty(pinnedProperty);
+
 		tableView.dispatch(new GenericTableViewMsg.CellEdited(keyIndex, 0, key));
 
 		this.pinnedProperty = false;

@@ -25,6 +25,18 @@ public class KeyValueRowDiffStrategy implements RowDiffStrategy {
 		this.pinnedProperty = pinnedProperty;
 	}
 
+	public void setDefaultsMap(Map<String, Object> defaultsMap) {
+		this.defaultsMap = defaultsMap;
+	}
+
+	public void setOriginalMap(Map<String, Object> originalMap) {
+		this.originalMap = originalMap;
+	}
+
+	public void setPinnedProperty(boolean pinnedProperty) {
+		this.pinnedProperty = pinnedProperty;
+	}
+
 	@Override
 	public RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue) {
 		if (defaultsMap == null) {
@@ -40,13 +52,10 @@ public class KeyValueRowDiffStrategy implements RowDiffStrategy {
 			}
 		}
 
-		Logging.devel(this, "row data", rowData, "key", key, "current value", currentValue, "defautls map", defaultsMap,
-				"original map", originalMap);
 		RowState rowState;
 		Object defaultValue;
 		if ((defaultValue = defaultsMap.get(key)) == null) {
 			Logging.warning(this, "no default Value found");
-			Logging.devel(this, "no default Value found", key);
 			rowState = RowState.MISSING_DATA;
 		} else if (!defaultValue.equals(currentValue) || (originalMap != null && originalMap.containsKey(key))) {
 			rowState = RowState.MODIFIED;
