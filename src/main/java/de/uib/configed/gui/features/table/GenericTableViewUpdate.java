@@ -55,8 +55,11 @@ public final class GenericTableViewUpdate {
 				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult.noEffect(model
-				.toBuilder().originalSnapshot(originalSnapshot).rows(RowData.fromOriginalSnapshot(originalSnapshot,
-						model.getRows(), model.isKeyValueTable(), model.getDiffStrategy()))
+				.toBuilder().originalSnapshot(originalSnapshot)
+				.rows(model.isKeyValueTable()
+						? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getRows(),
+								model.getDiffStrategy())
+						: RowData.fromOriginalSnapshot(originalSnapshot, model.getRows(), model.getDiffStrategy()))
 				.rebuildTableModel(true).build());
 		case InvertSelection() -> handleInvertSelection(model);
 		case PrepareRenderer(JComponent component, int row, int col) -> UpdateResult.withEffect(model,
@@ -77,7 +80,7 @@ public final class GenericTableViewUpdate {
 		String colKey = model.getColumns().get(colIdx).getKey();
 
 		RowState newRowStyle = strategy != null
-				? strategy.getRowStyle(oldRow.getId(), colKey, newValue, oldRow.getValue(colKey, Object.class))
+				? strategy.getRowStyle(oldRow, colKey, newValue, oldRow.getValue(colKey, Object.class))
 				: RowState.NORMAL;
 
 		Map<String, Object> newValues = new HashMap<>(oldRow.getValues());
@@ -126,8 +129,9 @@ public final class GenericTableViewUpdate {
 			return UpdateResult.noEffect(model);
 		}
 
-		List<RowData> restoredRows = RowData.fromOriginalSnapshot(model.getOriginalSnapshot(), model.isKeyValueTable(),
-				model.getDiffStrategy());
+		List<RowData> restoredRows = model.isKeyValueTable()
+				? RowData.fromOriginalSnapshotKeyValueTable(model.getOriginalSnapshot(), model.getDiffStrategy())
+				: RowData.fromOriginalSnapshot(model.getOriginalSnapshot(), model.getDiffStrategy());
 
 		return UpdateResult
 				.noEffect(model.toBuilder().rows(restoredRows).isDirty(false).rebuildTableModel(true).build());

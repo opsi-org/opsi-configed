@@ -156,15 +156,15 @@ public class KeyValueTable extends JPanel {
 	@SuppressWarnings("java:S2972")
 	private class MyRowDiffStrategy implements RowDiffStrategy {
 		@Override
-		public RowState getRowStyle(String rowId, String colKey, Object currentValue, Object originalValue) {
+		public RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue) {
 			if (defaultsMap == null) {
 				Logging.warning(this, "no default values available, defaultsMap is null");
 				return RowState.NORMAL;
 			}
 
-			RowData rowData = tableView.getRowById(rowId);
+			String key = null;
 			if (rowData != null) {
-				rowId = rowData.getValue("key", String.class);
+				key = rowData.getValue("key", String.class);
 				if (removeDefault || pinDefault) {
 					currentValue = rowData.getValue("value", Object.class);
 				}
@@ -172,10 +172,10 @@ public class KeyValueTable extends JPanel {
 
 			RowState rowState;
 			Object defaultValue;
-			if ((defaultValue = defaultsMap.get(rowId)) == null) {
+			if ((defaultValue = defaultsMap.get(key)) == null) {
 				Logging.warning(this, "no default Value found");
 				rowState = RowState.MISSING_DATA;
-			} else if (!defaultValue.equals(currentValue) || (originalMap != null && originalMap.containsKey(rowId))) {
+			} else if (!defaultValue.equals(currentValue) || (originalMap != null && originalMap.containsKey(key))) {
 				rowState = RowState.MODIFIED;
 			} else {
 				rowState = RowState.NORMAL;
@@ -440,7 +440,7 @@ public class KeyValueTable extends JPanel {
 		data.putAll(visualdata);
 		keys = new ArrayList<>(data.keySet());
 		List<Map<String, Object>> transformedData = data.entrySet().stream()
-				.map(e -> Collections.singletonMap(e.getKey(), e.getValue())).toList();
+				.map(e -> Map.of("key", e.getKey(), "value", e.getValue())).toList();
 		tableView.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(transformedData));
 	}
 

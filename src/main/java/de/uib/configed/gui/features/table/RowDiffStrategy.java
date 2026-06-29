@@ -23,5 +23,5 @@ public interface RowDiffStrategy {
 	 *                      default).
 	 * @return A style token (e.g., "NORMAL", "MODIFIED", "EDIT").
 	 */
-	RowState getRowStyle(String rowId, String colKey, Object currentValue, Object originalValue);
+	RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue);
 }

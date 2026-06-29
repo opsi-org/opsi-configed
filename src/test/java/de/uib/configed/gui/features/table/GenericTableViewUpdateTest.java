@@ -40,7 +40,7 @@ class GenericTableViewUpdateTest {
 		originalSnapshot.add(row("4", "test4", "test4"));
 		originalSnapshot.add(row("5", "test5", "test5"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot, null);
 
 		List<TableColumnConfig> columns = new ArrayList<>();
 		columns.add(new TableColumnConfig("data0", "data0", false, true, 0, 0, null, null, null));
@@ -49,7 +49,7 @@ class GenericTableViewUpdateTest {
 
 		return GenericTableViewModel.builder().originalSnapshot(originalSnapshot).rows(rows).columns(columns)
 				.tableConfig(TableConfig.builder().build())
-				.diffStrategy((String rowId, String colKey, Object currentValue, Object originalValue) -> {
+				.diffStrategy((RowData rowData, String colKey, Object currentValue, Object originalValue) -> {
 					if (!currentValue.equals(originalValue)) {
 						return RowState.MODIFIED;
 					}
@@ -137,7 +137,7 @@ class GenericTableViewUpdateTest {
 		modifiedRows.add(row("4", "test6", "test4"));
 		modifiedRows.add(row("5", "test5", "test4"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, null);
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
 				model.withRows(rows).withDirty(true));
@@ -161,7 +161,7 @@ class GenericTableViewUpdateTest {
 		modifiedRows.add(row("3", "test3", "test3"));
 		modifiedRows.add(row("5", "test5", "test4"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, null);
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
 				model.withRows(rows).withDirty(true));
@@ -357,7 +357,7 @@ class GenericTableViewUpdateTest {
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("val0", "val1", "val2"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
@@ -378,7 +378,7 @@ class GenericTableViewUpdateTest {
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("val0", "val1", "val2"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
@@ -400,7 +400,7 @@ class GenericTableViewUpdateTest {
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("A", "B", "C"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
@@ -428,7 +428,7 @@ class GenericTableViewUpdateTest {
 		rowData.put("data2", "3");
 		snapshot.add(rowData);
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
