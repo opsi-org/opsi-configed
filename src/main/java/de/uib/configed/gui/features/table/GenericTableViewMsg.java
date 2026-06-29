@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
 import javax.swing.SortOrder;
 
-public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
-		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
-		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot,
-		GenericTableViewMsg.ChangeSortOrder, GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.InvertSelection {
+public sealed interface GenericTableViewMsg
+		permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
+		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
+		GenericTableViewMsg.DeleteRow, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
+		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.InvertSelection, GenericTableViewMsg.PrepareRenderer {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
 	}
@@ -40,7 +42,7 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 
 	}
 
-	record DeleteRow(int rowIdx) implements GenericTableViewMsg {
+	record DeleteRow(List<String> rowIdx) implements GenericTableViewMsg {
 
 	}
 
@@ -54,5 +56,8 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	}
 
 	record InvertSelection() implements GenericTableViewMsg {
+	}
+
+	record PrepareRenderer(JComponent component, int row, int col) implements GenericTableViewMsg {
 	}
 }

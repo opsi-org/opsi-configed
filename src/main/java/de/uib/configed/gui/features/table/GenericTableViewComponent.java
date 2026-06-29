@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.table;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -49,6 +51,7 @@ public class GenericTableViewComponent
 	private boolean isUpdatingProgrammatically;
 	private TableSideEffectStrategy sideEffectStrategy;
 	private Supplier<JPopupMenu> popupMenuSupplier;
+	private Function<Integer, Boolean> isCellEditable;
 	private PopupMouseListener popupMouseListener;
 	private RowSorterListener rowSorterListener = (RowSorterEvent e) -> {
 		if (isUpdatingProgrammatically) {
@@ -126,7 +129,14 @@ public class GenericTableViewComponent
 
 	@Override
 	protected JComponent renderView(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch) {
-		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg)), null) {
+		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg), isCellEditable), null) {
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+				Component c = super.prepareRenderer(renderer, row, col);
+				dispatch(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
+				return c;
+			}
+
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
 				List<TableColumnConfig> visibleColumns = getVisibleColumns();
@@ -249,6 +259,36 @@ public class GenericTableViewComponent
 		return null;
 	}
 
+	public RowData getRowByModelIndex(int modelIndex) {
+		if (modelIndex < 0 || modelIndex >= model.getRows().size()) {
+			throw new IndexOutOfBoundsException("Index " + modelIndex + " out of bounds");
+		}
+		return model.getRows().get(modelIndex);
+	}
+
+	public Object getValueAt(int row, int col) {
+		if (row < 0 || row >= model.getRows().size()) {
+			return null;
+		}
+
+		TableColumnConfig columnConfig = getColumnByModelIndex(col);
+		return getRowByModelIndex(row).getValue(columnConfig.getKey(), Object.class);
+	}
+
+	/**
+	 * Gets a ColumnConfig directly by its MODEL INDEX (position in the list).
+	 * This is O(1) access without needing to look up by key first.
+	 * 
+	 * @param modelIndex The index in the underlying columns list (0-based)
+	 * @return The TableColumnConfig, or null if index is out of bounds
+	 */
+	public TableColumnConfig getColumnByModelIndex(int modelIndex) {
+		if (modelIndex < 0 || modelIndex >= model.getColumns().size()) {
+			return null;
+		}
+		return model.getColumns().get(modelIndex);
+	}
+
 	private List<TableColumnConfig> getVisibleColumns() {
 		return model.getColumns().stream().filter(TableColumnConfig::isVisible).toList();
 	}
@@ -300,15 +340,17 @@ public class GenericTableViewComponent
 		isUpdatingProgrammatically = true;
 
 		RowSorter<? extends TableModel> sorter = table.getRowSorter();
-		sorter.removeRowSorterListener(rowSorterListener);
-		sorter.addRowSorterListener(rowSorterListener);
+		if (sorter != null) {
+			sorter.removeRowSorterListener(rowSorterListener);
+			sorter.addRowSorterListener(rowSorterListener);
+		}
 
 		table.getColumnModel().removeColumnModelListener(columnModelListener);
 
 		if (model.isRebuildTableModel()) {
 			buildColumnModel();
 
-			table.setModel(new GenericTableModel(model, msg -> dispatch(msg)));
+			table.setModel(new GenericTableModel(model, msg -> dispatch(msg), isCellEditable));
 
 			restoreSortState();
 
@@ -348,6 +390,10 @@ public class GenericTableViewComponent
 
 			if (columnConfig.getRenderer() != null) {
 				col.setCellRenderer(columnConfig.getRenderer());
+			}
+
+			if (columnConfig.getEditor() != null) {
+				col.setCellEditor(columnConfig.getEditor());
 			}
 
 			newColumnModel.addColumn(col);
@@ -400,6 +446,10 @@ public class GenericTableViewComponent
 				col.setWidth(config.getPrefferedWidth());
 			}
 
+			if (col != null && config.getEditor() != null) {
+				col.setCellEditor(config.getEditor());
+			}
+
 			if (config.getComparator() != null) {
 				TableRowSorter<?> rowSorter = (TableRowSorter<?>) table.getRowSorter();
 				rowSorter.setComparator(table.getColumn(config.getHeader()).getModelIndex(), config.getComparator());
@@ -423,14 +473,34 @@ public class GenericTableViewComponent
 		}
 	}
 
+	// TODO: remove later (exists only for compatibility with old code)
+	public int getSelectedRow() {
+		return table.getSelectedRow();
+	}
+
+	public int getSelectedRowCount() {
+		return model.getSelectedRows().size();
+	}
+
+	public int getRowCount() {
+		return model.getRows().size();
+	}
+
+	public void setIsCellEditable(Function<Integer, Boolean> isCellEditable) {
+		this.isCellEditable = isCellEditable;
+	}
+
 	@SuppressWarnings("java:S2972")
 	public static class GenericTableModel extends AbstractTableModel {
 		private final GenericTableViewModel tableModel;
 		private final Consumer<GenericTableViewMsg> dispatcher;
+		private final Function<Integer, Boolean> isCellEditable;
 
-		public GenericTableModel(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatcher) {
+		public GenericTableModel(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatcher,
+				Function<Integer, Boolean> isCellEditable) {
 			this.tableModel = model;
 			this.dispatcher = dispatcher;
+			this.isCellEditable = isCellEditable;
 		}
 
 		@Override
@@ -477,7 +547,8 @@ public class GenericTableViewComponent
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			return tableModel.getColumns().get(col).isEditable();
+			return tableModel.getColumns().get(col).isEditable()
+					&& (isCellEditable == null || isCellEditable.apply(row));
 		}
 
 		@Override

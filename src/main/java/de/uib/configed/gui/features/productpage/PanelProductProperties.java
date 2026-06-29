@@ -31,7 +31,7 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.share.PopupMouseListener;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.GenTableModel;
@@ -63,10 +63,11 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
-		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false);
+		KeyValueTable propertiesPanel = new KeyValueTable(false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
-		propertiesPanel.updateData(null, null);
+		propertiesPanel.registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
+		// propertiesPanel.updateData(null, null);
+		propertiesPanel.setUpdateCollection(null);
 
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel,
 				depotsList);
@@ -171,10 +172,10 @@ public class PanelProductProperties extends AbstractConfigurationTab {
 		private List<String> columnNames;
 		private List<String> depotsOfPackage;
 		private PanelEditDepotProperties panelEditProperties;
-		private EditMapPanelX propertiesPanel;
+		private KeyValueTable propertiesPanel;
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
-				EditMapPanelX propertiesPanel) {
+				KeyValueTable propertiesPanel) {
 			super("", false, 0, null, true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();

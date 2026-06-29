@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.swing.JComponent;
 import javax.swing.SortOrder;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -26,9 +27,11 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRow;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
 import de.uib.configed.gui.features.table.RowData.RowState;
+import de.uib.configed.share.logging.Logging;
 
 /**
  * The Pure Logic Layer. Handles messages and updates the Model.
@@ -48,14 +51,17 @@ public final class GenericTableViewUpdate {
 				model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build(),
 				new GenericTableViewEffect.Selection());
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
-		case DeleteRow(int rowIdx) -> handleRowDelete(rowIdx, model);
+		case DeleteRow(List<String> rowIdx) -> handleRowDelete(rowIdx, model);
 		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
 				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
-		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult
-				.noEffect(model.toBuilder().originalSnapshot(originalSnapshot)
-						.rows(RowData.fromOriginalSnapshot(originalSnapshot)).rebuildTableModel(true).build());
+		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult.noEffect(model
+				.toBuilder().originalSnapshot(originalSnapshot).rows(RowData.fromOriginalSnapshot(originalSnapshot,
+						model.getRows(), model.isKeyValueTable(), model.getDiffStrategy()))
+				.rebuildTableModel(true).build());
 		case InvertSelection() -> handleInvertSelection(model);
+		case PrepareRenderer(JComponent component, int row, int col) -> UpdateResult.withEffect(model,
+				new GenericTableViewEffect.PrepareRenderer(component, row, col));
 		default -> UpdateResult.noEffect(model);
 		};
 	}
@@ -78,6 +84,7 @@ public final class GenericTableViewUpdate {
 		Map<String, Object> newValues = new HashMap<>(oldRow.getValues());
 		newValues.put(colKey, newValue);
 
+		Logging.devel("row values " + newValues);
 		RowData newRow = oldRow.toBuilder().values(newValues).state(newRowStyle).build();
 
 		List<RowData> newRows = new ArrayList<>(model.getRows());
@@ -85,7 +92,8 @@ public final class GenericTableViewUpdate {
 
 		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
 
-		return UpdateResult.noEffect(model.toBuilder().rows(newRows).isDirty(isDirty).rebuildTableModel(true).build());
+		return UpdateResult.withEffect(model.toBuilder().rows(newRows).isDirty(isDirty).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.CellEdited(rowIdx, colIdx, newValues));
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleToggleColumn(String columnKey,
@@ -120,7 +128,8 @@ public final class GenericTableViewUpdate {
 			return UpdateResult.noEffect(model);
 		}
 
-		List<RowData> restoredRows = RowData.fromOriginalSnapshot(model.getOriginalSnapshot());
+		List<RowData> restoredRows = RowData.fromOriginalSnapshot(model.getOriginalSnapshot(), model.isKeyValueTable(),
+				model.getDiffStrategy());
 
 		return UpdateResult
 				.noEffect(model.toBuilder().rows(restoredRows).isDirty(false).rebuildTableModel(true).build());
@@ -129,24 +138,50 @@ public final class GenericTableViewUpdate {
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowAdd(Map<String, Object> data,
 			GenericTableViewModel model) {
 		String id = UUID.randomUUID().toString();
-		RowData newRow = RowData.builder().id(id).values(data).state(RowState.NEW).build();
+		RowData newRow = computeKeyValueRowData(id, data, RowState.NEW, model);
 
 		List<RowData> newRows = new ArrayList<>(model.getRows());
 		newRows.add(newRow);
 
-		return UpdateResult.noEffect(model.toBuilder().rows(newRows).isDirty(true).rebuildTableModel(true).build());
+		return UpdateResult.withEffect(model.toBuilder().rows(newRows).isDirty(true).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.AddRow(data));
 	}
 
-	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowDelete(int rowIdx,
+	private static RowData computeKeyValueRowData(String id, Map<String, Object> data, RowState state,
 			GenericTableViewModel model) {
-		if (rowIdx < 0 || rowIdx >= model.getRows().size()) {
+		Map<String, Object> newData = new HashMap<>();
+		if (model.isKeyValueTable()) {
+			for (Map.Entry<String, Object> entry : data.entrySet()) {
+				newData.put("key", entry.getKey());
+				newData.put("value", entry.getValue());
+			}
+		} else {
+			newData = data;
+		}
+		return RowData.builder().id(id).values(newData).state(state).build();
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowDelete(List<String> rowIdx,
+			GenericTableViewModel model) {
+		if (rowIdx.isEmpty() || rowIdx.size() > model.getRows().size()) {
+			Logging.devel("no data " + rowIdx, "size" + rowIdx.size() + " model row size " + model.getRows().size());
 			return UpdateResult.noEffect(model);
 		}
 
 		List<RowData> rows = new ArrayList<>(model.getRows());
-		rows.remove(rowIdx);
+		List<RowData> rowsToDelete = new ArrayList<>();
+		for (String rowId : rowIdx) {
+			for (RowData rowData : rows) {
+				if (rowData.getId().equals(rowId)) {
+					rowsToDelete.add(rowData);
+				}
+			}
+		}
+		rows.removeAll(rowsToDelete);
 
-		return UpdateResult.noEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build());
+		Logging.devel("rows ", rows, "rows to delete", rowsToDelete);
+		return UpdateResult.withEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.DeleteRow(rowsToDelete));
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(

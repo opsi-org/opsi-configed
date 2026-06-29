@@ -19,13 +19,12 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ChangedDataManager;
-import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class PanelHostConfig extends JPanel {
 	// delegate
-	private EditMapPanelGroupedForHostConfigs editMapPanel;
+	private HostConfigsTree editMapPanel;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -57,7 +56,7 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void buildPanel(boolean isServerConfig, boolean isClientConfig) {
-		editMapPanel = new EditMapPanelGroupedForHostConfigs(new DefaultEditMapPanel.Actor() {
+		editMapPanel = new HostConfigsTree(new KeyValueTableForHostConfigs.Actor() {
 			@Override
 			public void reloadData() {
 				reloadHostConfig();
@@ -68,8 +67,6 @@ public class PanelHostConfig extends JPanel {
 				saveHostConfig();
 			}
 		}, isServerConfig, isClientConfig);
-
-		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getHostConfigsDataChangedKeeper());
 
 		this.setLayout(new MigLayout("insets 0, fill", "[]", "[]0"));
 		this.add(editMapPanel, "grow");

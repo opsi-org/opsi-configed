@@ -29,8 +29,9 @@ import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.data.ListMerger;
+import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.share.SwingUtils;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.ExporterToPDF;
@@ -38,13 +39,26 @@ import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.logging.Logging;
 
-public class EditMapPanelForHostConfigs extends EditMapPanelX {
+public class KeyValueTableForHostConfigs extends KeyValueTable {
 	private boolean includeAdditionalTooltipText;
 	private JTree tree;
+	private Actor actor;
 
-	public EditMapPanelForHostConfigs(JTree tree, boolean isServerConfig, boolean includeAdditionalTooltipText) {
+	public static class Actor {
+		public void reloadData() {
+			Logging.info(this, "DefaultEditMapPanel: reloadData");
+		}
+
+		public void saveData() {
+			Logging.info(this, "DefaultEditMapPanel: saveData");
+		}
+	}
+
+	public KeyValueTableForHostConfigs(Actor actor, JTree tree, boolean isServerConfig,
+			boolean includeAdditionalTooltipText) {
 		super(isServerConfig, !isServerConfig, true);
 
+		this.actor = actor;
 		this.tree = tree;
 		this.includeAdditionalTooltipText = includeAdditionalTooltipText;
 	}
@@ -65,11 +79,15 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
+	public void setActor(Actor actor) {
+		this.actor = actor;
+	}
+
 	@Override
 	protected JPopupMenu createBasicPopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 		JPopupMenu jPopupMenu = PopupMenuTrait
-				.createAndBindJPopupMenu(table,
+				.createAndBindJPopupMenu(tableView.getTable(),
 						Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_SAVE,
 								() -> actor.saveData(), PopupMenuTrait.POPUP_PDF, this::createPDF),
 						event -> updatePopupMenu());
@@ -93,12 +111,12 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private void copyPropertyToClipboard() {
-		int row = table.getSelectedRow();
+		int row = tableView.getSelectedRow();
 		if (row == -1) {
 			return;
 		}
 
-		String propertyName = (String) table.getValueAt(row, 0);
+		String propertyName = (String) tableView.getValueAt(row, 0);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(propertyName), null);
 	}
 
@@ -107,9 +125,10 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	 * and Text for the cells in the table.
 	 */
 	@Override
-	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
-		addTooltip(jComponent, table, names.get(row), row);
-		setText(jComponent, table, col, row);
+	protected void prepareRendererForJTable(JComponent jComponent, int row, int col) {
+		RowData rowData = tableView.getRowByModelIndex(row);
+		addTooltip(jComponent, tableView.getTable(), rowData.getValue("key", String.class), row);
+		setText(jComponent, tableView.getTable(), col, row);
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
@@ -184,12 +203,12 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderName"));
 		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue"));
 
-		List<String> keys = mapTableModel.getKeys();
+		List<String> keys = getKeys();
 		Logging.info(this, "createJTableForPDF keys ", keys);
 		for (String key : keys) {
 			String property = "";
 
-			List<?> listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
+			List<?> listelem = ListMerger.getMergedList((List<?>) getData().get(key));
 			if (!listelem.isEmpty()) {
 				property = listelem.get(0).toString();
 			}

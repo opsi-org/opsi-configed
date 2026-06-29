@@ -40,12 +40,12 @@ class GenericTableViewUpdateTest {
 		originalSnapshot.add(row("4", "test4", "test4"));
 		originalSnapshot.add(row("5", "test5", "test5"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot);
+		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot, false, null);
 
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "data0", false, true, 0, 0, null, null));
-		columns.add(new TableColumnConfig("data1", "data1", false, true, 0, 0, null, null));
-		columns.add(new TableColumnConfig("data2", "data2", false, true, 0, 0, null, null));
+		columns.add(new TableColumnConfig("data0", "data0", false, true, 0, 0, null, null, null));
+		columns.add(new TableColumnConfig("data1", "data1", false, true, 0, 0, null, null, null));
+		columns.add(new TableColumnConfig("data2", "data2", false, true, 0, 0, null, null, null));
 
 		return GenericTableViewModel.builder().originalSnapshot(originalSnapshot).rows(rows).columns(columns)
 				.tableConfig(TableConfig.builder().build())
@@ -84,7 +84,8 @@ class GenericTableViewUpdateTest {
 
 		String resultValue = result.model().getRows().get(rowIdx).getValue(resultColumnKey, String.class);
 		assertEquals("test", resultValue);
-		assertFalse(result.effect().isPresent());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.CellEdited.class, result.effect().get()));
 	}
 
 	@Test
@@ -103,7 +104,8 @@ class GenericTableViewUpdateTest {
 		RowData resultLastRow = result.model().getRows().get(result.model().getRows().size() - 1);
 		RowData lastRow = model.getRows().get(model.getRows().size() - 1);
 		assertNotSame(lastRow, resultLastRow);
-		assertFalse(result.effect().isPresent());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.AddRow.class, result.effect().get()));
 	}
 
 	@Test
@@ -135,7 +137,7 @@ class GenericTableViewUpdateTest {
 		modifiedRows.add(row("4", "test6", "test4"));
 		modifiedRows.add(row("5", "test5", "test4"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows);
+		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, false, null);
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
 				model.withRows(rows).withDirty(true));
@@ -159,7 +161,7 @@ class GenericTableViewUpdateTest {
 		modifiedRows.add(row("3", "test3", "test3"));
 		modifiedRows.add(row("5", "test5", "test4"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows);
+		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, false, null);
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
 				model.withRows(rows).withDirty(true));
@@ -189,7 +191,7 @@ class GenericTableViewUpdateTest {
 	void shouldDeleteRowFromRows_whenRowDeleted() {
 		GenericTableViewModel model = baseModel();
 		int rowIdx = 2;
-		GenericTableViewMsg msg = new GenericTableViewMsg.DeleteRow(rowIdx);
+		GenericTableViewMsg msg = new GenericTableViewMsg.DeleteRow(List.of(model.getRows().get(2).getId()));
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
 
@@ -198,6 +200,8 @@ class GenericTableViewUpdateTest {
 		assertNotEquals("3", result.model().getRows().get(rowIdx).getValue("data0", String.class));
 		assertTrue(result.model().isDirty());
 		assertTrue(result.model().isRebuildTableModel());
+		assertAll(() -> assertTrue(result.effect().isPresent()),
+				() -> assertInstanceOf(GenericTableViewEffect.DeleteRow.class, result.effect().get()));
 	}
 
 	@Test
@@ -346,20 +350,20 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldReportCorrectColumnCount_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "Col 0", false, true, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data1", "Col 1", false, false, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data2", "Col 2", false, true, 100, 100, null, null));
+		columns.add(new TableColumnConfig("data0", "Col 0", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "Col 1", false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "Col 2", false, true, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("val0", "val1", "val2"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
 
 		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
-		});
+		}, row -> true);
 
 		assertEquals(2, tableModel.getColumnCount(), "Should only count visible columns");
 	}
@@ -367,20 +371,20 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldReturnCorrectColumnNames_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null));
+		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("val0", "val1", "val2"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
 
 		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
-		});
+		}, row -> true);
 
 		assertEquals("A", tableModel.getColumnName(0), "First visible column name");
 		assertEquals("C", tableModel.getColumnName(1), "Second visible column name (skipped hidden one)");
@@ -389,20 +393,20 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldReturnCorrectDataValues_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null));
+		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("A", "B", "C"));
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
 
 		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
-		});
+		}, row -> true);
 
 		assertEquals("A", tableModel.getValueAt(0, 0), "Value for first visible column");
 		assertEquals("C", tableModel.getValueAt(0, 1), "Value for second visible column (should skip hidden data1)");
@@ -411,9 +415,9 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldHandleMultipleHiddenColumns() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null));
-		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null));
+		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("1", "2", "3"));
@@ -424,13 +428,13 @@ class GenericTableViewUpdateTest {
 		rowData.put("data2", "3");
 		snapshot.add(rowData);
 
-		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot);
+		List<RowData> rows = RowData.fromOriginalSnapshot(snapshot, false, null);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().columns(columns).rows(rows)
 				.originalSnapshot(snapshot).build();
 
 		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
-		});
+		}, row -> true);
 
 		assertEquals(2, tableModel.getColumnCount());
 		assertEquals("A", tableModel.getColumnName(0));

@@ -151,7 +151,7 @@ public class ConfigedMain {
 	private void connectTreesWithTables() {
 		GroupTreeTransferHandler clientTransferHandler = new GroupTreeTransferHandler(clientTree);
 		clientTree.setTransferHandler(clientTransferHandler);
-		// clientTablePanel.getClientTable().setTransferHandler(clientTransferHandler);
+		clientTablePanel.getTableComponent().getTable().setTransferHandler(clientTransferHandler);
 
 		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
 		productTree.setTransferHandler(productTransferHandler);

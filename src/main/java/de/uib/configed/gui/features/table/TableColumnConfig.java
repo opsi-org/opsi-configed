@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.table;
 
 import java.util.Comparator;
 
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import lombok.Builder;
@@ -31,5 +32,6 @@ public class TableColumnConfig {
 	private final int maxWidth;
 
 	private transient TableCellRenderer renderer;
+	private transient TableCellEditor editor;
 	private transient Comparator<Object> comparator;
 }

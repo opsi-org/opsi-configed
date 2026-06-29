@@ -43,7 +43,7 @@ import de.uib.configed.gui.features.productgroup.ProductActionPanel;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.gui.share.table.ExporterToPDF;
@@ -64,7 +64,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	private ProductActionPanel groupPanel;
 
 	private ProductInfoPane infoPane;
-	private EditMapPanelX propertiesPanel;
+	private KeyValueTable propertiesPanel;
 
 	private ProductTree productTree;
 
@@ -113,9 +113,9 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		leftPane.add(groupPanel, "growx");
 		leftPane.add(paneProducts, "grow, push, hmin 100");
 
-		propertiesPanel = new EditMapPanelX(false, true);
+		propertiesPanel = new KeyValueTable(false, true);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
+		propertiesPanel.registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties, type);
@@ -365,15 +365,17 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		infoPane.setProductAdvice(persistenceController.getDataServices().product.getProductAdvice(productID));
 
+		propertiesPanel.setOriginalMap(originalMap);
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
-		propertiesPanel.setOriginalMap(originalMap);
-		propertiesPanel.updateData(updateCollection, storableProductProperties);
+		propertiesPanel.setUpdateCollection(updateCollection);
+		// propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 
 	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
-		propertiesPanel.updateData(null, null);
+		propertiesPanel.setUpdateCollection(null);
+		// propertiesPanel.updateData(null, null);
 		infoPane.clearEditing();
 	}
 

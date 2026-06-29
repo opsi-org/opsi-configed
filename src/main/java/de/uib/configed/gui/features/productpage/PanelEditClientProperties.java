@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.gui.Configed;
-import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import net.miginfocom.swing.MigLayout;
 
@@ -24,7 +24,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private JPanel titlePanel;
 
-	public PanelEditClientProperties(DefaultEditMapPanel productPropertiesPanel) {
+	public PanelEditClientProperties(KeyValueTable productPropertiesPanel) {
 		super(productPropertiesPanel);
 		initComponents();
 		initTitlePanel();

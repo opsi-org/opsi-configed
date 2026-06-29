@@ -37,4 +37,5 @@ public class GenericTableViewModel {
 	@Builder.Default
 	private final List<Map<String, Object>> originalSnapshot = new ArrayList<>();
 	private final RowDiffStrategy diffStrategy;
+	private final boolean keyValueTable;
 }

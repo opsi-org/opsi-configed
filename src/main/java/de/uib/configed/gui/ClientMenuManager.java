@@ -37,6 +37,10 @@ import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
+import de.uib.configed.gui.share.table.AbstractExportTable;
+import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
+import de.uib.configed.gui.share.table.ExporterToCSV;
+import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.HostInfo.ColumnDisplayInfo;
 import de.uib.configed.share.logging.Logging;
@@ -169,12 +173,13 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
-		// AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
-		// exportTable.addMenuItemsTo(jMenuClients);
+		AbstractExportTable exportTable = new ExporterToCSV(
+				mainFrame.getClientTablePanel().getTableComponent().getTable());
+		exportTable.addMenuItemsTo(jMenuClients);
 
-		// ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
-		// 		mainFrame.getClientTablePanel().getClientTable());
-		// clientTableExporter.addMenuItemsTo(jMenuClients);
+		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
+				mainFrame.getClientTablePanel().getTableComponent().getTable());
+		clientTableExporter.addMenuItemsTo(jMenuClients);
 	}
 
 	private void initJMenu() {
@@ -363,18 +368,19 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void createPdf() {
-		// Map<String, String> metaData = new HashMap<>();
-		// String title = Configed.getResourceValue("MainFrame.ClientList");
+		Map<String, String> metaData = new HashMap<>();
+		String title = Configed.getResourceValue("MainFrame.ClientList");
 
-		// metaData.put("header", title);
-		// metaData.put("title", title);
-		// metaData.put("subject", "report of table");
+		metaData.put("header", title);
+		metaData.put("title", title);
+		metaData.put("subject", "report of table");
 
-		// ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(
+				mainFrame.getClientTablePanel().getTableComponent().getTable());
 
-		// pdfExportTable.setMetaData(metaData);
-		// pdfExportTable.setPageSizeA4Landscape();
-		// pdfExportTable.execute(null, false);
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+		pdfExportTable.execute(null, false);
 	}
 
 	private void showPopupOnClientsAction() {

@@ -27,7 +27,7 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class CreateConfigDialog {
-	private EditMapPanelX editMapPanelX;
+	private KeyValueTable editMapPanelX;
 
 	private JTextField textFieldConfigEntry;
 	private JTextField textFieldDescription;
@@ -50,7 +50,7 @@ public class CreateConfigDialog {
 
 	private ConfigValueEditor valueEditor;
 
-	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
+	public CreateConfigDialog(KeyValueTable editMapPanelX) {
 		this.editMapPanelX = editMapPanelX;
 
 		initGeneralPanel();
@@ -118,8 +118,8 @@ public class CreateConfigDialog {
 	private void initGeneralPanel() {
 		JLabel labelConfigEntry = SwingUtils.createBoldLabel("EditMapPanelX.configName");
 
-		int selectionIndex = editMapPanelX.table.getSelectionModel().getMinSelectionIndex();
-		String value = selectionIndex >= 0 ? (String) editMapPanelX.table.getValueAt(selectionIndex, 0) : null;
+		int selectionIndex = editMapPanelX.tableView.getSelectedRow();
+		String value = selectionIndex >= 0 ? (String) editMapPanelX.tableView.getValueAt(selectionIndex, 0) : null;
 		textFieldConfigEntry = new JTextField(value);
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());

@@ -7,9 +7,14 @@
 package de.uib.configed.gui.features.table;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.JComponent;
 
 public sealed interface GenericTableViewEffect permits GenericTableViewEffect.SaveChanges,
-		GenericTableViewEffect.Reload, GenericTableViewEffect.Selection, GenericTableViewEffect.StoreVisibleColulmns {
+		GenericTableViewEffect.Reload, GenericTableViewEffect.Selection, GenericTableViewEffect.StoreVisibleColulmns,
+		GenericTableViewEffect.PrepareRenderer, GenericTableViewEffect.CellEdited, GenericTableViewEffect.DeleteRow,
+		GenericTableViewEffect.AddRow, GenericTableViewEffect.CancelChanges {
 	record SaveChanges(List<RowData> newRows) implements GenericTableViewEffect {
 	}
 
@@ -21,4 +26,20 @@ public sealed interface GenericTableViewEffect permits GenericTableViewEffect.Sa
 
 	record StoreVisibleColulmns(List<String> visibleColumns) implements GenericTableViewEffect {
 	}
+
+	record PrepareRenderer(JComponent component, int row, int col) implements GenericTableViewEffect {
+	}
+
+	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewEffect {
+	}
+
+	record DeleteRow(List<RowData> deletedRows) implements GenericTableViewEffect {
+	}
+
+	record AddRow(Map<String, Object> data) implements GenericTableViewEffect {
+	}
+
+	record CancelChanges() implements GenericTableViewEffect {
+	}
+
 }
