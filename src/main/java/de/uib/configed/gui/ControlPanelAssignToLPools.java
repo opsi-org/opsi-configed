@@ -836,7 +836,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				usingShowSelectedFilter);
 
 		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
-				.dispatch(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(usingShowSelectedFilter));;
+				.dispatch(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(usingShowSelectedFilter));
 		setVisualSelection(selectedKeys);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();

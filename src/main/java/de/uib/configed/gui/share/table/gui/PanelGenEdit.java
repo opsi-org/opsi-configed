@@ -70,8 +70,6 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 	private int oldrowcount = -1;
 
-	private FilterKey filterKey;
-
 	public PanelGenEdit(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
 			boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
@@ -102,7 +100,6 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public void setFilterKey(FilterKey filterKey) {
-		this.filterKey = filterKey;
 		tableSearchPane.dispatch(new SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(filterKey));
 	}
 
