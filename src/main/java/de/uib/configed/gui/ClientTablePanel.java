@@ -191,8 +191,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	}
 
 	public void updateTable() {
-		Logging.devel(this, "component count", getComponentCount());
-		if (getComponentCount() > 0 && getComponent(0) == component) {
+		if (getComponentCount() > 0 && getComponent(0) == searchPaneComponent && getComponent(1) == component) {
 			// Do nothing if we already set the table as view
 			return;
 		}
