@@ -58,6 +58,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	private JScrollPane scrollpane;
 
 	private SearchPaneComponent searchPane;
+	private JComponent searchPaneComponent;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -132,15 +133,9 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		searchPane = new SearchPaneComponent(
 				new SearchTargetModelFromClientTable(configedMain, clientTableViewComponent.getTable()),
 				FilterKey.CLIENT_TABLE, false, false, true);
-		JComponent searchPaneComponent = searchPane.initUI();
+		searchPaneComponent = searchPane.initUI();
 
 		component.addKeyListener(searchPane);
-
-		setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
-				"[]" + Globals.GAP_SIZE + "[grow, fill]"));
-
-		add(searchPaneComponent);
-		add(searchPaneComponent, "grow, push");
 	}
 
 	/**
@@ -196,7 +191,8 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	}
 
 	public void updateTable() {
-		if (getComponent(0) == component) {
+		Logging.devel(this, "component count", getComponentCount());
+		if (getComponentCount() > 0 && getComponent(0) == component) {
 			// Do nothing if we already set the table as view
 			return;
 		}
@@ -204,10 +200,15 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		if (persistenceController.getDataServices().hostInfoCollections.getCountClients() == 0) {
 			setMissingDataPanel();
 		} else {
-			if (getComponent(0) != null) {
+			if (getComponentCount() > 0 && getComponent(0) != null) {
 				remove(0);
 			}
-			add(component);
+
+			setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
+					"[]" + Globals.GAP_SIZE + "[grow, fill]"));
+
+			add(searchPaneComponent);
+			add(component, "grow, push");
 		}
 	}
 
