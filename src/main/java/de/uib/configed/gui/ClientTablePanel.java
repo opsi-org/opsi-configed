@@ -145,6 +145,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	 * @param ascending if true, sorts in natural order; if false, in reverse
 	 *                  order.
 	 */
+	@SuppressWarnings("unchecked")
 	private int compareStringIgnoringNull(Object o1, Object o2) {
 		boolean isO1Invalid = (o1 == null || o1.toString().isBlank());
 		boolean isO2Invalid = (o2 == null || o2.toString().isBlank());
