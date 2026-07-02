@@ -90,7 +90,7 @@ public class ListSelectionDialog {
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
 		searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(), new ArrayList<>());
-		searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).narrow(true)
+		searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).isNarrow(true)
 				.component(listSelectionList).build();
 		component = searchPane.initUI();
 

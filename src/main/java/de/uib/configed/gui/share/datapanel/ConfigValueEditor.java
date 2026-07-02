@@ -123,7 +123,7 @@ public class ConfigValueEditor extends JPanel {
 		defaultColumn.setCellEditor(new DefaultToggleEditor(valuesTable, valuesTableModel, isMultiValueMode));
 
 		SearchTargetModelFromTable searchTargetModel = new SearchTargetModelFromTable(valuesTable);
-		SearchPaneComponent searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).narrow(true)
+		SearchPaneComponent searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).isNarrow(true)
 				.component(valuesTable).build();
 
 		JPanel controlsPanel = new JPanel();

@@ -23,8 +23,10 @@ import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.share.logging.Logging;
+import lombok.Builder;
 
 @SuppressWarnings("java:S1200")
+@Builder
 public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, SearchPaneMsg, SearchPaneEffect>
 		implements KeyListener {
 	private SearchTargetModel targetModel;
@@ -33,9 +35,25 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private boolean isNarrow;
 	private boolean showNavPanel;
 	private boolean enableFilterBySelection;
+	private JComponent component;
 
 	private SideEffectStrategy sideEffectStrategy;
 	private SearchPaneView searchPane;
+
+	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, PanelGenEdit associatedPanel,
+			boolean isNarrow, boolean showNavPanel, boolean enableFilterBySelection, JComponent component,
+			SideEffectStrategy sideEffectStrategy, SearchPaneView searchPane) {
+		this.targetModel = targetModel;
+		this.filterKey = filterKey;
+		this.associatedPanel = associatedPanel;
+		this.isNarrow = isNarrow;
+		this.showNavPanel = showNavPanel;
+		this.enableFilterBySelection = enableFilterBySelection;
+		this.component = component;
+		this.sideEffectStrategy = sideEffectStrategy;
+		this.searchPane = searchPane;
+		registerWithComponent();
+	}
 
 	public interface SideEffectStrategy {
 		/**
@@ -43,72 +61,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		 * null if no side effect's action is needed.
 		 */
 		Runnable getActionFor(SearchPaneEffect effect);
-	}
-
-	private SearchPaneComponent(Builder builder) {
-		super();
-		this.targetModel = builder.targetModel;
-		this.associatedPanel = builder.associatedPanel;
-		this.filterKey = builder.filterKey;
-		this.isNarrow = builder.narrow;
-		this.showNavPanel = builder.showNavPanel;
-		this.enableFilterBySelection = builder.enableFilterBySelection;
-		if (builder.component != null) {
-			registerWithComponent(builder.component);
-		}
-	}
-
-	public static Builder builder() {
-		return new Builder();
-	}
-
-	public static class Builder {
-		private SearchTargetModel targetModel;
-		private FilterKey filterKey;
-		private PanelGenEdit associatedPanel;
-		private boolean narrow;
-		private boolean showNavPanel;
-		private boolean enableFilterBySelection;
-		private JComponent component;
-
-		public Builder targetModel(SearchTargetModel targetModel) {
-			this.targetModel = targetModel;
-			return this;
-		}
-
-		public Builder filterKey(FilterKey filterKey) {
-			this.filterKey = filterKey;
-			return this;
-		}
-
-		public Builder associatedPanel(PanelGenEdit associatedPanel) {
-			this.associatedPanel = associatedPanel;
-			return this;
-		}
-
-		public Builder narrow(boolean narrow) {
-			this.narrow = narrow;
-			return this;
-		}
-
-		public Builder showNavPanel(boolean showNavPanel) {
-			this.showNavPanel = showNavPanel;
-			return this;
-		}
-
-		public Builder enableFilterBySelection(boolean enableFilterBySelection) {
-			this.enableFilterBySelection = enableFilterBySelection;
-			return this;
-		}
-
-		public Builder component(JComponent component) {
-			this.component = component;
-			return this;
-		}
-
-		public SearchPaneComponent build() {
-			return new SearchPaneComponent(this);
-		}
 	}
 
 	public void setSideEffectStrategy(SideEffectStrategy sideEffectStrategy) {
@@ -291,7 +243,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		this.targetModel = targetModel;
 	}
 
-	public void registerWithComponent(JComponent component) {
+	public void registerWithComponent() {
 		component.addKeyListener(this);
 		SwingUtils.addKeyBindingToJComponent(component,
 				KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
