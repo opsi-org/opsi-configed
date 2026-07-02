@@ -129,7 +129,8 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		genEditTable = new GenEditTable();
 
-		tableSearchPane = new SearchPaneComponent(this, new SearchTargetModelFromTable(this, genEditTable));
+		tableSearchPane = SearchPaneComponent.builder().associatedPanel(this)
+				.targetModel(new SearchTargetModelFromTable(this, genEditTable)).component(genEditTable).build();
 		component = tableSearchPane.initUI();
 		component.setVisible(withTablesearchPane);
 

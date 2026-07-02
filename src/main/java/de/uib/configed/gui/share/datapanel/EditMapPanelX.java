@@ -283,7 +283,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		if (includeSearchPane) {
 			setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]0"));
 
-			SearchPaneComponent searchPane = new SearchPaneComponent(new SearchTargetModelFromTable(table));
+			SearchPaneComponent searchPane = SearchPaneComponent.builder()
+					.targetModel(new SearchTargetModelFromTable(table)).component(table).build();
 			add(searchPane.initUI(), "growx, hmin 0");
 		}
 

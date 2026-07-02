@@ -60,7 +60,8 @@ public class DepotListPresenter extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
-		searchPane = new SearchPaneComponent(searchTargetModel, null, true, false, true);
+		searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).isNarrow(true)
+				.enableFilterBySelection(true).component(depotsList).build();
 
 		initComponents();
 		layouting();
