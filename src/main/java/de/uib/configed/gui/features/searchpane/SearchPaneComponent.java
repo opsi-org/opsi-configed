@@ -26,7 +26,6 @@ import de.uib.configed.share.logging.Logging;
 import lombok.Builder;
 
 @SuppressWarnings("java:S1200")
-@Builder
 public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, SearchPaneMsg, SearchPaneEffect>
 		implements KeyListener {
 	private SearchTargetModel targetModel;
@@ -40,9 +39,10 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private SideEffectStrategy sideEffectStrategy;
 	private SearchPaneView searchPane;
 
+	@Builder
 	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, PanelGenEdit associatedPanel,
 			boolean isNarrow, boolean showNavPanel, boolean enableFilterBySelection, JComponent component,
-			SideEffectStrategy sideEffectStrategy, SearchPaneView searchPane) {
+			SearchPaneView searchPane) {
 		this.targetModel = targetModel;
 		this.filterKey = filterKey;
 		this.associatedPanel = associatedPanel;
@@ -50,8 +50,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		this.showNavPanel = showNavPanel;
 		this.enableFilterBySelection = enableFilterBySelection;
 		this.component = component;
-		this.sideEffectStrategy = sideEffectStrategy;
-		this.searchPane = searchPane;
 		registerWithComponent();
 	}
 
@@ -243,7 +241,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		this.targetModel = targetModel;
 	}
 
-	public void registerWithComponent() {
+	private void registerWithComponent() {
 		component.addKeyListener(this);
 		SwingUtils.addKeyBindingToJComponent(component,
 				KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
