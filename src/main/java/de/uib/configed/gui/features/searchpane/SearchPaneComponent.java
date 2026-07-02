@@ -34,7 +34,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private boolean isNarrow;
 	private boolean showNavPanel;
 	private boolean enableFilterBySelection;
-	private JComponent component;
 
 	private SideEffectStrategy sideEffectStrategy;
 	private SearchPaneView searchPane;
@@ -49,8 +48,11 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		this.isNarrow = isNarrow;
 		this.showNavPanel = showNavPanel;
 		this.enableFilterBySelection = enableFilterBySelection;
-		this.component = component;
-		registerWithComponent();
+
+		component.addKeyListener(this);
+		SwingUtils.addKeyBindingToJComponent(component,
+				KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
+				this::requestSearchFieldFocus, JComponent.WHEN_FOCUSED);
 	}
 
 	public interface SideEffectStrategy {
@@ -239,13 +241,6 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	public void setTargetModel(SearchTargetModel targetModel) {
 		this.targetModel = targetModel;
-	}
-
-	private void registerWithComponent() {
-		component.addKeyListener(this);
-		SwingUtils.addKeyBindingToJComponent(component,
-				KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
-				this::requestSearchFieldFocus, JComponent.WHEN_FOCUSED);
 	}
 
 	public void requestSearchFieldFocus() {
