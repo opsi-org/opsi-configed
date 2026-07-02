@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.searchpane;
 
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.function.Consumer;
@@ -13,10 +14,12 @@ import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.features.searchpane.view.SearchPaneView;
 import de.uib.configed.gui.features.searchpane.view.SearchTargetModel;
+import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.share.logging.Logging;
@@ -42,28 +45,70 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		Runnable getActionFor(SearchPaneEffect effect);
 	}
 
-	public SearchPaneComponent(SearchTargetModel targetModel) {
-		this(null, targetModel, null, false, false, false);
-	}
-
-	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow, boolean isNavPane,
-			boolean enableFilterBySelection) {
-		this(null, targetModel, filterKey, isNarrow, isNavPane, enableFilterBySelection);
-	}
-
-	public SearchPaneComponent(PanelGenEdit associatedPanel, SearchTargetModel targetModel) {
-		this(associatedPanel, targetModel, null, false, false, false);
-	}
-
-	public SearchPaneComponent(PanelGenEdit panel, SearchTargetModel targetModel, FilterKey filterKey, boolean isNarrow,
-			boolean isNavPane, boolean enableFilterBySelection) {
+	private SearchPaneComponent(Builder builder) {
 		super();
-		this.targetModel = targetModel;
-		this.associatedPanel = panel;
-		this.filterKey = filterKey;
-		this.isNarrow = isNarrow;
-		this.showNavPanel = isNavPane;
-		this.enableFilterBySelection = enableFilterBySelection;
+		this.targetModel = builder.targetModel;
+		this.associatedPanel = builder.associatedPanel;
+		this.filterKey = builder.filterKey;
+		this.isNarrow = builder.narrow;
+		this.showNavPanel = builder.showNavPanel;
+		this.enableFilterBySelection = builder.enableFilterBySelection;
+		if (builder.component != null) {
+			registerWithComponent(builder.component);
+		}
+	}
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		private SearchTargetModel targetModel;
+		private FilterKey filterKey;
+		private PanelGenEdit associatedPanel;
+		private boolean narrow;
+		private boolean showNavPanel;
+		private boolean enableFilterBySelection;
+		private JComponent component;
+
+		public Builder targetModel(SearchTargetModel targetModel) {
+			this.targetModel = targetModel;
+			return this;
+		}
+
+		public Builder filterKey(FilterKey filterKey) {
+			this.filterKey = filterKey;
+			return this;
+		}
+
+		public Builder associatedPanel(PanelGenEdit associatedPanel) {
+			this.associatedPanel = associatedPanel;
+			return this;
+		}
+
+		public Builder narrow(boolean narrow) {
+			this.narrow = narrow;
+			return this;
+		}
+
+		public Builder showNavPanel(boolean showNavPanel) {
+			this.showNavPanel = showNavPanel;
+			return this;
+		}
+
+		public Builder enableFilterBySelection(boolean enableFilterBySelection) {
+			this.enableFilterBySelection = enableFilterBySelection;
+			return this;
+		}
+
+		public Builder component(JComponent component) {
+			this.component = component;
+			return this;
+		}
+
+		public SearchPaneComponent build() {
+			return new SearchPaneComponent(this);
+		}
 	}
 
 	public void setSideEffectStrategy(SideEffectStrategy sideEffectStrategy) {
@@ -244,6 +289,19 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	public void setTargetModel(SearchTargetModel targetModel) {
 		this.targetModel = targetModel;
+	}
+
+	public void registerWithComponent(JComponent component) {
+		component.addKeyListener(this);
+		SwingUtils.addKeyBindingToJComponent(component,
+				KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
+				this::requestSearchFieldFocus, JComponent.WHEN_FOCUSED);
+	}
+
+	public void requestSearchFieldFocus() {
+		if (searchPane != null) {
+			searchPane.requestSearchFieldFocus();
+		}
 	}
 
 	@Override
