@@ -466,46 +466,15 @@ public final class ServerActionManager {
 	}
 
 	public static void callChangeDepotDialog() {
-		if (configedMain.getSelectedClients().isEmpty()) {
-			return;
-		}
-
-		JComboBox<String> depotCombo = new JComboBox<>(configedMain.getDepotArray());
-
-		// We use the StringJoiner to separate these strings of clients with depots with a newline
-		StringJoiner stringJoiner = new StringJoiner("\n");
-		for (String selectedClient : configedMain.getSelectedClients()) {
-			stringJoiner.add(selectedClient + "  (" + persistenceController.getDataServices().hostInfoCollections
-					.getMapPcBelongsToDepot().get(selectedClient) + ")");
-		}
-
-		JTextArea selectedClientsArea = new JTextArea(stringJoiner.toString());
-		selectedClientsArea.setEditable(false);
-
-		// We set the number of rows to be the number of selected clients, but at most 4
-		selectedClientsArea.setRows(Math.min(4, configedMain.getSelectedClients().size()));
-
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				new Object[] { Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving"),
-						new JScrollPane(selectedClientsArea),
-						"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), depotCombo },
-				Configed.getResourceValue("MainFrame.jMenuChangeDepot"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
-
-		if (answer == JOptionPane.OK_OPTION) {
-			Logging.debug(" start moving to another depot");
-			persistenceController.getDataServices().hostInfoCollections
-					.setDepotForClients(configedMain.getSelectedClients(), (String) depotCombo.getSelectedItem());
-			Logging.checkErrorList();
-			configedMain.refreshClientListKeepingGroup();
-		}
+		changeDepotForSelectedClientsWithDialog(null);
 	}
 
 	/**
 	 * Change depot for selected clients with a confirmation dialog. The target
 	 * depot is pre-selected based on where the clients were dropped.
 	 * 
-	 * @param targetDepot the depot to move the selected clients to
+	 * @param targetDepot the depot to pre-select in the dialog, or null for no
+	 *                    pre-selection
 	 */
 	public static void changeDepotForSelectedClientsWithDialog(String targetDepot) {
 		if (configedMain.getSelectedClients().isEmpty()) {
@@ -514,8 +483,10 @@ public final class ServerActionManager {
 
 		JComboBox<String> depotCombo = new JComboBox<>(configedMain.getDepotArray());
 
-		// Pre-select the target depot
-		depotCombo.setSelectedItem(targetDepot);
+		if (targetDepot != null) {
+			// Pre-select the target depot
+			depotCombo.setSelectedItem(targetDepot);
+		}
 
 		// We use the StringJoiner to separate these strings of clients with depots with a newline
 		StringJoiner stringJoiner = new StringJoiner("\n");

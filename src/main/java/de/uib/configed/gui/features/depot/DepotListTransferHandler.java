@@ -7,6 +7,7 @@
 package de.uib.configed.gui.features.depot;
 
 import javax.swing.JList;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -17,7 +18,8 @@ import de.uib.configed.share.logging.Logging;
 /**
  * TransferHandler for DepotsList to enable drag and drop of clients onto
  * depots. Uses DropMode.ON on the DepotsList to prevent selection changes
- * during drag.
+ * during drag. Accepts only drags originating from the ClientTable (marked by
+ * the ClientSelectionTransferable flavor).
  */
 public class DepotListTransferHandler extends TransferHandler {
 	private DepotsList depotsList;
@@ -35,29 +37,41 @@ public class DepotListTransferHandler extends TransferHandler {
 			return false;
 		}
 
-		if (!(support.getComponent() instanceof JList<?>)) {
+		if (!(support.getComponent() instanceof JList<?>) || !support.isDrop()) {
 			return false;
 		}
 
-		return support.isDrop();
+		// Only accept drags originating from the ClientTable
+		if (!support.isDataFlavorSupported(ClientSelectionTransferable.CLIENT_LIST_FLAVOR)) {
+			return false;
+		}
+
+		String targetDepot = getTargetDepot(support);
+		return targetDepot != null
+				&& PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.hasDepotPermission(targetDepot);
+	}
+
+	private String getTargetDepot(TransferSupport support) {
+		JList.DropLocation dropLocation = (JList.DropLocation) support.getDropLocation();
+		if (dropLocation == null || dropLocation.getIndex() < 0) {
+			return null;
+		}
+		return depotsList.getModel().getElementAt(dropLocation.getIndex());
 	}
 
 	@Override
 	public boolean importData(TransferSupport support) {
-		if (!(support.getComponent() instanceof JList<?>)) {
+		if (!canImport(support)) {
 			return false;
 		}
 
-		JList.DropLocation dropLocation = (JList.DropLocation) support.getDropLocation();
-		if (dropLocation == null || dropLocation.getIndex() < 0) {
-			Logging.debug(this, "Invalid drop location");
-			return false;
-		}
-
-		String targetDepot = depotsList.getModel().getElementAt(dropLocation.getIndex());
+		String targetDepot = getTargetDepot(support);
 		Logging.info(this, "Drop on depot: ", targetDepot);
 
-		ServerActionManager.changeDepotForSelectedClientsWithDialog(targetDepot);
+		// Show the dialog after the drop operation has finished, so the DnD
+		// operation is not blocked by the modal dialog
+		SwingUtilities.invokeLater(() -> ServerActionManager.changeDepotForSelectedClientsWithDialog(targetDepot));
 		return true;
 	}
 }
