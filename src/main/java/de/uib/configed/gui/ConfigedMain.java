@@ -172,6 +172,12 @@ public class ConfigedMain {
 				.setTransferHandler(productTransferHandler);
 		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
 				.setTransferHandler(productTransferHandler);
+
+		// Enable drag and drop on DepotsList (drop target only)
+		de.uib.configed.gui.features.depot.DepotListTransferHandler depotTransferHandler = new de.uib.configed.gui.features.depot.DepotListTransferHandler(
+				depotsList);
+		depotsList.setTransferHandler(depotTransferHandler);
+		depotsList.setDropMode(javax.swing.DropMode.ON);
 	}
 
 	public ProductTree getProductTree() {
