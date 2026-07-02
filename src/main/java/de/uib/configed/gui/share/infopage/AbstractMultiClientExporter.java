@@ -185,7 +185,7 @@ public abstract class AbstractMultiClientExporter<T extends AbstractSingleClient
 	}
 
 	private static String buildFilePath(String prefix, String client, String scanDate, String extension) {
-		return prefix + client + "__scan_" + scanDate + extension;
+		return prefix + client + "_" + scanDate + extension;
 	}
 
 	private static void showMissingDirectoryMessage() {

@@ -58,12 +58,12 @@ public abstract class AbstractExportTable {
 		askForOverwrite = b;
 	}
 
-	protected abstract boolean execute(String fileName, boolean onlySelectedRows);
+	protected abstract boolean execute(String defaultPrefix, String fileName, boolean onlySelectedRows);
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
 		Icons.addIntellijIconToMenuItem(menuItem, "export");
-		menuItem.addActionListener(actionEvent -> execute(null, false));
+		menuItem.addActionListener(actionEvent -> execute("report_", null, false));
 		return menuItem;
 	}
 
@@ -75,7 +75,7 @@ public abstract class AbstractExportTable {
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
 		Icons.addIntellijIconToMenuItem(menuItem, "export");
-		menuItem.addActionListener(actionEvent -> execute(null, true));
+		menuItem.addActionListener(actionEvent -> execute("report_", null, true));
 
 		return menuItem;
 	}

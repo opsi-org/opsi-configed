@@ -52,22 +52,20 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	private final Document document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 
-	private String defaultFilename = "report.pdf";
-
 	private boolean isLandscape;
 
 	public ExporterToPDF(JTable table) {
 		super(table);
 		extension = FILE_EXTENSION;
-		writeToFile = defaultFilename;
 	}
 
 	@Override
-	public boolean execute(String fileName, boolean onlySelectedRows) {
+	public boolean execute(String defaultPrefix, String fileName, boolean onlySelectedRows) {
 		setPageSizeA4Landscape();
 
 		int result = 0;
-		defaultFilename = "report_" + client + extension;
+		writeToFile = client != null ? (defaultPrefix + client + extension)
+				: (defaultPrefix.substring(0, defaultPrefix.length() - 1) + extension);
 
 		if (fileName == null) {
 			result = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), null,
@@ -113,8 +111,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		} else {
 			// Open file
 			try {
-				File temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
-						.toFile();
+				File temp = Files.createTempFile(writeToFile.substring(0, writeToFile.indexOf(".")), ".pdf").toFile();
 				FileUtils.restrictAccessToFile(temp);
 				writeFile(temp.getAbsolutePath(), fileName);
 				openFile(temp);
@@ -132,7 +129,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		try {
 			PdfWriter writer;
 			if (filePath == null) {
-				writer = PdfWriter.getInstance(document, new FileOutputStream(defaultFilename));
+				writer = PdfWriter.getInstance(document, new FileOutputStream(writeToFile));
 			} else {
 				writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 			}

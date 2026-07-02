@@ -231,7 +231,7 @@ public class PanelGenEditPopupManager {
 		ExporterToPDF pdfExportTable = new ExporterToPDF(panelGenEdit.getGenEditTable());
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
-		pdfExportTable.execute(null, false);
+		pdfExportTable.execute("report_", null, false);
 	}
 
 	public void addPopupmenuStandardpart() {

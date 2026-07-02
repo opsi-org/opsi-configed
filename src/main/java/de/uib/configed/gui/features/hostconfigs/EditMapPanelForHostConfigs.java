@@ -174,7 +174,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		pdfExportTable.setClient(client);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4();
-		pdfExportTable.execute(null, false);
+		pdfExportTable.execute("host_config_report_", null, false);
 	}
 
 	private JTable createJTableForPDF() {
