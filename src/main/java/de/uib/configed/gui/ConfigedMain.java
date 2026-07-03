@@ -40,6 +40,7 @@ import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
+import de.uib.configed.gui.features.depot.DepotListTransferHandler;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ClientTree;
@@ -172,6 +173,11 @@ public class ConfigedMain {
 				.setTransferHandler(productTransferHandler);
 		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
 				.setTransferHandler(productTransferHandler);
+
+		// Enable drag and drop on DepotsList (drop target only)
+		DepotListTransferHandler depotTransferHandler = new DepotListTransferHandler(depotsList);
+		depotsList.setTransferHandler(depotTransferHandler);
+		depotsList.setDropMode(javax.swing.DropMode.ON);
 	}
 
 	public ProductTree getProductTree() {

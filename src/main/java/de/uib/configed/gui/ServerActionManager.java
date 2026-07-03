@@ -466,11 +466,27 @@ public final class ServerActionManager {
 	}
 
 	public static void callChangeDepotDialog() {
+		changeDepotForSelectedClientsWithDialog(null);
+	}
+
+	/**
+	 * Change depot for selected clients with a confirmation dialog. The target
+	 * depot is pre-selected based on where the clients were dropped.
+	 * 
+	 * @param targetDepot the depot to pre-select in the dialog, or null for no
+	 *                    pre-selection
+	 */
+	public static void changeDepotForSelectedClientsWithDialog(String targetDepot) {
 		if (configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 
 		JComboBox<String> depotCombo = new JComboBox<>(configedMain.getDepotArray());
+
+		if (targetDepot != null) {
+			// Pre-select the target depot
+			depotCombo.setSelectedItem(targetDepot);
+		}
 
 		// We use the StringJoiner to separate these strings of clients with depots with a newline
 		StringJoiner stringJoiner = new StringJoiner("\n");
@@ -496,6 +512,8 @@ public final class ServerActionManager {
 			Logging.debug(" start moving to another depot");
 			persistenceController.getDataServices().hostInfoCollections
 					.setDepotForClients(configedMain.getSelectedClients(), (String) depotCombo.getSelectedItem());
+			persistenceController.getDataServices().hostInfoCollections
+					.updateClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients());
 			Logging.checkErrorList();
 			configedMain.refreshClientListKeepingGroup();
 		}

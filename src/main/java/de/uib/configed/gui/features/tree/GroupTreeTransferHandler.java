@@ -27,6 +27,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.features.depot.ClientSelectionTransferable;
 import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.share.logging.Logging;
 
@@ -173,6 +174,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 					sb.append(value.toString());
 				}
 			}
+		}
+
+		if (tableSource instanceof ClientTable) {
+			// Marker flavor so that the DepotsList accepts only drags from the ClientTable
+			return new ClientSelectionTransferable(sb.toString());
 		}
 		return new StringSelection(sb.toString());
 	}
