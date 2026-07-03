@@ -10,20 +10,19 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.core.domain.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
@@ -40,13 +39,13 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ServerActionManager;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productgroup.ProductActionPanel;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
-import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -57,9 +56,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	}
 
 	private JMenu jMenuVisibleColumns;
-
-	private ProductTable productTable;
-	private ProductSettingsTableModel productSettingsTableModel;
 
 	private ProductActionPanel groupPanel;
 
@@ -75,6 +71,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 	private ProductSettingsType type;
 
+	private ProductTableModified productTableModified;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -88,7 +86,8 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	}
 
 	private void init() {
-		productTable = new ProductTable();
+		productTableModified = new ProductTableModified(configedMain, type, productTree, this,
+				() -> new PopupMouseListener(producePopupMenu()));
 
 		groupPanel = new ProductActionPanel(this, type);
 
@@ -100,18 +99,10 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 		groupPanel.setVisible(true);
 
-		JScrollPane paneProducts = new JScrollPane();
-		paneProducts.getViewport().add(productTable);
-		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-		productTable.getSelectionModel().addListSelectionListener(this::applyChangedValue);
-
-		productSettingsTableModel = new ProductSettingsTableModel(productTable);
-
 		JPanel leftPane = new JPanel();
 		leftPane.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]", "[]0"));
 		leftPane.add(groupPanel, "growx");
-		leftPane.add(paneProducts, "grow, push, hmin 100");
+		leftPane.add(productTableModified.getComponent(), "grow, push, hmin 100");
 
 		propertiesPanel = new KeyValueTable(false, true);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
@@ -130,11 +121,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 						: SplitPaneStateManager.NETBOOT_PRODUCT_SETTINGS_SPLIT,
 				ClientConfiguration.DIVIDER_LOCATION);
 		setComponent(contentPane);
-
-		productTable.addMouseListener(new PopupMouseListener(producePopupMenu()));
-
-		productTable.getTableHeader()
-				.addMouseListener(new PopupMouseListener(ClientMenuManager.getPopupMenuClone(jMenuVisibleColumns)));
 
 		SwingUtils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
@@ -216,7 +202,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		createReport.addActionListener(actionEvent -> createReport());
 		popup.add(createReport);
 
-		ExporterToCSV exportTable = new ExporterToCSV(productTable);
+		ExporterToCSV exportTable = new ExporterToCSV(productTableModified.getTableViewComponent().getTable());
 		exportTable.addMenuItemsTo(popup);
 
 		jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
@@ -273,36 +259,13 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		metaData.put("keywords", "product settings");
 
 		// only relevent rows
-		ExporterToPDF pdfExportTable = new ExporterToPDF(productTable.getStrippedTable());
+		// ExporterToPDF pdfExportTable = new ExporterToPDF(productTable.getStrippedTable());
 
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4Landscape();
+		// pdfExportTable.setMetaData(metaData);
+		// pdfExportTable.setPageSizeA4Landscape();
 
 		// create pdf
-		pdfExportTable.execute(null, false);
-	}
-
-	private void applyChangedValue(ListSelectionEvent listSelectionEvent) {
-		if (listSelectionEvent.getValueIsAdjusting()) {
-			return;
-		}
-
-		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
-		if (lsm.getSelectedItemsCount() != 1) {
-			Logging.debug(this, "no or several rows selected");
-			clearEditing();
-		} else {
-			int selectedRow = lsm.getMinSelectionIndex();
-			Logging.debug(this, "selected ", selectedRow);
-			Logging.debug(this, "selected modelIndex ", selectedRow);
-			Logging.debug(this, "selected  value at ", productTable.getValueAt(selectedRow, 0));
-			ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
-					.setProductEdited((String) productTable.getValueAt(selectedRow, 0), this);
-		}
-
-		productTree.produceActiveParents();
-
-		productTree.updateSelectedObjectsInTable();
+		// pdfExportTable.execute(null, false);
 	}
 
 	private void reloadAction() {
@@ -331,21 +294,19 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
 		groupPanel.setFilterMark(false);
-		productTable.valueChanged(doSelection,
-				productTree.filterMostSpecificNodes(productTree.extractNodes(productTree.getSelectionPaths())));
+		// productTable.valueChanged(doSelection,
+		// 		productTree.filterMostSpecificNodes(productTree.extractNodes(productTree.getSelectionPaths())));
 	}
 
-	public void setTableModel(InstallationStateTableModel istm) {
-		// delete old row sorter before setting new model
-		productTable.setModel(istm);
-		productSettingsTableModel.setRenderer(istm);
-
-		// We don't want to call setSelection here, since it will be called after this method
-		if (!isFilteredBySelection()) {
-			valueChanged(false);
-		}
-
-		Logging.debug(this, " tableProducts columns  count ", productTable.getColumnCount());
+	public void setData(List<String> selectedClients, Set<String> productNames,
+			Map<String, List<Map<String, String>>> statesAndActions,
+			Map<String, Map<String, Object>> globalProductInfos, Map<String, List<String>> possibleActions,
+			Map<String, Map<String, Map<String, String>>> changedProductStates) {
+		List<Map<String, Object>> rowData = productTableModified.computeDisplayRows(selectedClients, productNames,
+				statesAndActions, globalProductInfos);
+		productTableModified.setPossibleActions(possibleActions);
+		productTableModified.setChangedProductStates(changedProductStates);
+		productTableModified.getTableViewComponent().dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(rowData));
 	}
 
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
@@ -375,7 +336,11 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		infoPane.clearEditing();
 	}
 
-	public ProductTable getProductTable() {
-		return productTable;
+	public ProductTableModified getProductTableModified() {
+		return productTableModified;
+	}
+
+	public JTable getTable() {
+		return productTableModified.getTableViewComponent().getTable();
 	}
 }

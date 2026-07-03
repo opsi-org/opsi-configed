@@ -144,7 +144,7 @@ public final class ServerActionManager {
 
 	public static void processActionRequestsSelectedProducts(String visibility) {
 		processActionRequests(ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
-				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs(), visibility);
+				.getPanelLocalbootProductSettings().getProductTableModified().getSelectedIDs(), visibility);
 	}
 
 	private static void processActionRequests(Set<String> products, String visibility) {

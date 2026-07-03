@@ -154,9 +154,11 @@ public class ConfigedMain {
 
 		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
 		productTree.setTransferHandler(productTransferHandler);
-		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings()
+				.getProductTableModified().getTableViewComponent().getTable()
 				.setTransferHandler(productTransferHandler);
-		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings()
+				.getProductTableModified().getTableViewComponent().getTable()
 				.setTransferHandler(productTransferHandler);
 	}
 
@@ -839,12 +841,6 @@ public class ConfigedMain {
 
 		Set<String> selValuesList = getSelectedSet();
 
-		Set<String> selectedLocalbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
-				.getPanelLocalbootProductSettings().getProductTable().getSelectedIDs();
-		Set<String> selectedNetbootProducts = mainFrame.getMainPanelManager().getClientConfiguration()
-				.getPanelNetbootProductSettings().getProductTable().getSelectedIDs();
-		depotsList.removeListSelectionListener(depotListSelectionListener);
-
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 		persistenceController.getDataServices().userRoles.checkConfigurationPD();
 
@@ -875,10 +871,6 @@ public class ConfigedMain {
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
-		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
-				.setPendingSelection(selectedLocalbootProducts);
-		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
-				.setPendingSelection(selectedNetbootProducts);
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
 

@@ -43,9 +43,9 @@ class GenericTableViewUpdateTest {
 		List<RowData> rows = RowData.fromOriginalSnapshot(originalSnapshot, null);
 
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "data0", false, true, 0, 0, null, null, null));
-		columns.add(new TableColumnConfig("data1", "data1", false, true, 0, 0, null, null, null));
-		columns.add(new TableColumnConfig("data2", "data2", false, true, 0, 0, null, null, null));
+		columns.add(new TableColumnConfig("data0", "data0", false, true, false, 0, 0, null, null, null));
+		columns.add(new TableColumnConfig("data1", "data1", false, true, false, 0, 0, null, null, null));
+		columns.add(new TableColumnConfig("data2", "data2", false, true, false, 0, 0, null, null, null));
 
 		return GenericTableViewModel.builder().originalSnapshot(originalSnapshot).rows(rows).columns(columns)
 				.tableConfig(TableConfig.builder().build())
@@ -350,9 +350,9 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldReportCorrectColumnCount_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "Col 0", false, true, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data1", "Col 1", false, false, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data2", "Col 2", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data0", "Col 0", false, true, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "Col 1", false, false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "Col 2", false, true, false, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("val0", "val1", "val2"));
@@ -371,9 +371,9 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldReturnCorrectColumnNames_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data0", "A", false, true, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, false, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("val0", "val1", "val2"));
@@ -393,9 +393,9 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldReturnCorrectDataValues_whenSomeColumnsAreHidden() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data0", "A", false, true, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, false, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("A", "B", "C"));
@@ -415,9 +415,9 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldHandleMultipleHiddenColumns() {
 		List<TableColumnConfig> columns = new ArrayList<>();
-		columns.add(new TableColumnConfig("data0", "A", false, true, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data1", "B", false, false, 100, 100, null, null, null));
-		columns.add(new TableColumnConfig("data2", "C", false, true, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data0", "A", false, true, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data1", "B", false, false, false, 100, 100, null, null, null));
+		columns.add(new TableColumnConfig("data2", "C", false, true, false, 100, 100, null, null, null));
 
 		List<Map<String, Object>> snapshot = new ArrayList<>();
 		snapshot.add(row("1", "2", "3"));

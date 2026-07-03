@@ -24,7 +24,6 @@ import de.uib.configed.core.domain.productstate.ActionRequest;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ServerActionManager;
-import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
@@ -149,37 +148,40 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void handleCollectiveAction(String selected) {
-		Set<String> saveSelectedProducts = panelProductSettings.getProductTable().getSelectedIDs();
+		Set<String> saveSelectedProducts = panelProductSettings.getProductTableModified().getSelectedIDs();
 
-		Logging.info(this, "handleCollectiveAction, selected products ",
-				panelProductSettings.getProductTable().getSelectedRowsInModelTerms());
+		// Logging.info(this, "handleCollectiveAction, selected products ",
+		// 		panelProductSettings.getProductTable().getSelectedRowsInModelTerms());
 		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
 
-		InstallationStateTableModel installationStateTableModel = (InstallationStateTableModel) panelProductSettings
-				.getProductTable().getModel();
+		// InstallationStateTableModel installationStateTableModel = (InstallationStateTableModel) panelProductSettings
+		// 		.getProductTable().getModel();
 
-		if (!installationStateTableModel.infoIfNoClientsSelected()) {
-			installationStateTableModel.initCollectiveChange();
+		// if (!installationStateTableModel.infoIfNoClientsSelected()) {
+		// 	installationStateTableModel.initCollectiveChange();
 
-			int actionType = switch (selected) {
-			case "setup" -> ActionRequest.SETUP;
-			case "uninstall" -> ActionRequest.UNINSTALL;
-			case "none" -> ActionRequest.NONE;
-			default -> ActionRequest.INVALID;
-			};
+		int actionType = switch (selected) {
+		case "setup" -> ActionRequest.SETUP;
+		case "uninstall" -> ActionRequest.UNINSTALL;
+		case "none" -> ActionRequest.NONE;
+		default -> ActionRequest.INVALID;
+		};
 
-			if (actionType != ActionRequest.INVALID) {
-				panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
-					Logging.info(" row id ", x, " product ", installationStateTableModel.getValueAt(x, 0));
-					installationStateTableModel.collectiveChangeActionRequest(
-							(String) installationStateTableModel.getValueAt(x, 0), new ActionRequest(actionType));
-				});
-			}
+		panelProductSettings.getProductTableModified()
+				.setActionRequestForSelectedProducts(new ActionRequest(actionType).toString());
 
-			installationStateTableModel.finishCollectiveChange();
-		}
+		// 	if (actionType != ActionRequest.INVALID) {
+		// 		panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
+		// 			Logging.info(" row id ", x, " product ", installationStateTableModel.getValueAt(x, 0));
+		// 			installationStateTableModel.collectiveChangeActionRequest(
+		// 					(String) installationStateTableModel.getValueAt(x, 0), new ActionRequest(actionType));
+		// 		});
+		// 	}
 
-		panelProductSettings.getProductTable().setPendingSelection(saveSelectedProducts);
+		// 	installationStateTableModel.finishCollectiveChange();
+		// }
+
+		panelProductSettings.getProductTableModified().setPendingSelection(saveSelectedProducts);
 	}
 
 	public void setFilterMark(boolean selected) {
@@ -191,7 +193,7 @@ public class ProductActionPanel extends JPanel {
 		private PanelProductSettings panelProductSettings;
 
 		public SearchTargetModelFromInstallationStateTable(PanelProductSettings panelProductSettings) {
-			super(panelProductSettings.getProductTable());
+			super(panelProductSettings.getTable());
 			Logging.info(this, "table null? ", table == null);
 
 			this.panelProductSettings = panelProductSettings;
@@ -215,7 +217,7 @@ public class ProductActionPanel extends JPanel {
 				Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
 				if (selectedRows.length != 0) {
-					panelProductSettings.getProductTable().reduceToSelected();
+					// panelProductSettings.getProductTable().reduceToSelected();
 				}
 			} else {
 				panelProductSettings.valueChanged(false);

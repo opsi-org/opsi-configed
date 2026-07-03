@@ -38,4 +38,28 @@ public class GenericTableViewModel {
 	private final List<Map<String, Object>> originalSnapshot = new ArrayList<>();
 	private final RowDiffStrategy diffStrategy;
 	private final boolean keyValueTable;
+
+	/**
+	 * Gets a ColumnConfig directly by its MODEL INDEX (position in the list).
+	 * This is O(1) access without needing to look up by key first.
+	 * 
+	 * @param modelIndex The index in the underlying columns list (0-based)
+	 * @return The TableColumnConfig, or null if index is out of bounds
+	 */
+	public TableColumnConfig getColumnByModelIndex(int modelIndex) {
+		if (modelIndex < 0 || modelIndex >= columns.size()) {
+			return null;
+		}
+
+		List<TableColumnConfig> visibleColumns = getVisibleColumns();
+		if (modelIndex >= 0 && modelIndex < visibleColumns.size()) {
+			return visibleColumns.get(modelIndex);
+		}
+
+		return null;
+	}
+
+	public List<TableColumnConfig> getVisibleColumns() {
+		return columns.stream().filter(TableColumnConfig::isVisible).toList();
+	}
 }

@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.productpage;
 
 import java.awt.Component;
 import java.util.Comparator;
+import java.util.Map;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -20,11 +21,14 @@ import de.uib.configed.core.domain.productstate.ActionRequest;
 import de.uib.configed.core.domain.productstate.ActionResult;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
 import de.uib.configed.core.domain.productstate.ProductState;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.data.ColoredTableCellRenderer;
 import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
 import de.uib.configed.gui.data.InstallationStateTableModel;
+import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
@@ -64,7 +68,7 @@ public class ProductSettingsTableModel {
 	}
 
 	private void initRenderer() {
-		productNameTableCellRenderer = new ProductNameTableCellRenderer();
+		productNameTableCellRenderer = new ProductNameTableCellRenderer(null);
 
 		colorTableCellRenderer = new ColorTableCellRenderer();
 
@@ -78,7 +82,7 @@ public class ProductSettingsTableModel {
 		coloredTableCellRenderer = new ColoredTableCellRenderer();
 		productsequenceTableCellRenderer = new ColoredTableCellRenderer();
 
-		versionInfoTableCellRenderer = new ProductVersionCellRenderer();
+		versionInfoTableCellRenderer = new ProductVersionCellRenderer(null);
 
 		installationInfoTableCellRenderer = new ColoredTableCellRenderer() {
 			@Override
@@ -190,21 +194,24 @@ public class ProductSettingsTableModel {
 		tableProducts.setRowSorter(rowSorter);
 	}
 
-	private static int parseIntOrMinusOne(String s) {
-		if (s == null || s.isBlank()) {
+	public static int parseIntOrMinusOne(Object s) {
+		if (s == null || ((String) s).isBlank()) {
 			return -1;
 		}
 		try {
-			return Integer.parseInt(s);
+			return Integer.parseInt((String) s);
 		} catch (NumberFormatException ex) {
 			Logging.debug("not a number ", s);
 			return -1;
 		}
 	}
 
-	private class ProductNameTableCellRenderer extends ColorTableCellRenderer {
-		public ProductNameTableCellRenderer() {
+	public static class ProductNameTableCellRenderer extends ColorTableCellRenderer {
+		GenericTableViewComponent tableViewComponent;
+
+		public ProductNameTableCellRenderer(GenericTableViewComponent tableViewComponent) {
 			super();
+			this.tableViewComponent = tableViewComponent;
 		}
 
 		@Override
@@ -212,9 +219,11 @@ public class ProductSettingsTableModel {
 				int row, int column) {
 			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-			String stateChange = ((InstallationStateTableModel) table.getModel())
-					.getLastStateChange(tableProducts.convertRowIndexToModel(row));
+			// String stateChange = ((InstallationStateTableModel) table.getModel())
+			// 		.getLastStateChange(table.convertRowIndexToModel(row));
 
+			String stateChange = tableViewComponent != null ? tableViewComponent.getRowByModelIndex(row)
+					.getValue(ProductState.KEY_LAST_STATE_CHANGE, String.class) : null;
 			if (stateChange == null) {
 				stateChange = "";
 			}
@@ -227,7 +236,15 @@ public class ProductSettingsTableModel {
 	}
 
 	@SuppressWarnings("java:S2972")
-	private static class ProductVersionCellRenderer extends ColoredTableCellRenderer {
+	public static class ProductVersionCellRenderer extends ColoredTableCellRenderer {
+		private ConfigedMain configedMain;
+
+		public ProductVersionCellRenderer(ConfigedMain configedMain) {
+			super();
+
+			this.configedMain = configedMain;
+		}
+
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
@@ -244,16 +261,20 @@ public class ProductSettingsTableModel {
 					setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 				} else {
 					String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
-					InstallationStateTableModel istm = (InstallationStateTableModel) table.getModel();
 
 					String serverProductVersion = "";
+					if (configedMain != null) {
+						Map<String, Map<String, Object>> globalinfos = PersistenceControllerFactory
+								.getPersistenceController().getDataServices().product
+										.getProductGlobalInfosPD(configedMain.getDepotRepresentative());
 
-					if (istm.getGlobalProductInfos().get(productId) == null) {
-						Logging.warning(this, " istm.getGlobalProductInfos()).get(productId) == null for productId ",
-								productId);
-					} else {
-						serverProductVersion = serverProductVersion
-								+ istm.getGlobalProductInfos().get(productId).get(ProductState.KEY_VERSION_INFO);
+						if (globalinfos.get(productId) == null) {
+							Logging.warning(this,
+									" istm.getGlobalProductInfos()).get(productId) == null for productId ", productId);
+						} else {
+							serverProductVersion = serverProductVersion
+									+ globalinfos.get(productId).get(ProductState.KEY_VERSION_INFO);
+						}
 					}
 
 					if (!stringValue.equals(serverProductVersion)) {

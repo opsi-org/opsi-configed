@@ -28,6 +28,8 @@ public class TableColumnConfig {
 	private final boolean editable;
 	@Builder.Default
 	private final boolean visible = true;
+	@Builder.Default
+	private final boolean toggleable = true;
 	private final int prefferedWidth;
 	private final int maxWidth;
 

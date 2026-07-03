@@ -70,14 +70,15 @@ public final class GenericTableViewUpdate {
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCellEdit(int rowIdx, int colIdx,
 			Object newValue, GenericTableViewModel model) {
-		if (rowIdx < 0 || rowIdx >= model.getRows().size()) {
+		if (rowIdx < 0 || rowIdx >= model.getRows().size() || model.getRows().get(rowIdx)
+				.getValue(model.getColumns().get(colIdx).getKey(), Object.class) == newValue) {
 			return UpdateResult.noEffect(model);
 		}
 
 		RowDiffStrategy strategy = model.getDiffStrategy();
 
 		RowData oldRow = model.getRows().get(rowIdx);
-		String colKey = model.getColumns().get(colIdx).getKey();
+		String colKey = model.getColumnByModelIndex(colIdx).getKey();
 
 		RowState newRowStyle = strategy != null
 				? strategy.getRowStyle(oldRow, colKey, newValue, oldRow.getValue(colKey, Object.class))

@@ -142,7 +142,7 @@ public class ClientSearch {
 		PanelProductSettings localbootProductSettings = ConfigedMain.getMainFrame().getMainPanelManager()
 				.getClientConfiguration().getPanelLocalbootProductSettings();
 		localbootProductSettings.enableFilterMode(false);
-		localbootProductSettings.getProductTable().setPendingSelection(products);
+		localbootProductSettings.getProductTableModified().setPendingSelection(products);
 		localbootProductSettings.enableFilterMode(true);
 	}
 

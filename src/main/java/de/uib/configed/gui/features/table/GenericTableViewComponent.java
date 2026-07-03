@@ -44,6 +44,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.share.logging.Logging;
 
 public class GenericTableViewComponent
 		extends AbstractTeaComponent<GenericTableViewModel, GenericTableViewMsg, GenericTableViewEffect> {
@@ -128,6 +129,11 @@ public class GenericTableViewComponent
 	protected JComponent renderView(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch) {
 		table = new JTable(new GenericTableModel(model, msg -> dispatch(msg), isCellEditable), null) {
 			@Override
+			public int convertColumnIndexToView(int modelColumnIndex) {
+				return convertIndex(modelColumnIndex);
+			}
+
+			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
 				Component c = super.prepareRenderer(renderer, row, col);
 				dispatch(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
@@ -136,19 +142,8 @@ public class GenericTableViewComponent
 
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
-				List<TableColumnConfig> visibleColumns = getVisibleColumns();
-
-				if (column < 0 || column >= visibleColumns.size()) {
-					return super.getCellRenderer(row, column);
-				}
-
-				TableColumnConfig config = visibleColumns.get(column);
-
-				if (config.getRenderer() != null) {
-					return config.getRenderer();
-				}
-
-				return super.getCellRenderer(row, column);
+				TableCellRenderer renderer = getTableCellRenderer(row, column);
+				return renderer != null ? renderer : super.getCellRenderer(row, column);
 			}
 		};
 		table.setFillsViewportHeight(model.getTableConfig().isFillViewportHeight());
@@ -187,6 +182,27 @@ public class GenericTableViewComponent
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		return scrollPane;
+	}
+
+	private int convertIndex(int modelColumnIndex) {
+		List<TableColumnConfig> visibleColumns = model.getColumns().stream().filter(TableColumnConfig::isVisible)
+				.toList();
+
+		if (modelColumnIndex >= 0 && modelColumnIndex < visibleColumns.size()) {
+			TableColumnConfig config = visibleColumns.get(modelColumnIndex);
+			return model.getColumns().indexOf(config);
+		}
+		return -1;
+	}
+
+	private TableCellRenderer getTableCellRenderer(int row, int column) {
+		TableColumnConfig config = model.getColumnByModelIndex(column);
+
+		if (config != null && config.getRenderer() != null) {
+			return config.getRenderer();
+		}
+
+		return null;
 	}
 
 	private void notifyRowSorterChange() {
@@ -280,14 +296,18 @@ public class GenericTableViewComponent
 	 * @return The TableColumnConfig, or null if index is out of bounds
 	 */
 	public TableColumnConfig getColumnByModelIndex(int modelIndex) {
-		if (modelIndex < 0 || modelIndex >= model.getColumns().size()) {
-			return null;
-		}
-		return model.getColumns().get(modelIndex);
+		return model.getColumnByModelIndex(modelIndex);
 	}
 
-	private List<TableColumnConfig> getVisibleColumns() {
-		return model.getColumns().stream().filter(TableColumnConfig::isVisible).toList();
+	public int getColumnIndexByKey(String key) {
+		Logging.devel(this, "getColumnIndexByKey key ", key, "columns", model.getColumns());
+		List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
+		for (int i = 0; i < visibleColumns.size(); i++) {
+			if (visibleColumns.get(i).getKey().equals(key)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	// TODO: remove later (exists only for compatibility with old code)
@@ -300,7 +320,9 @@ public class GenericTableViewComponent
 		List<TableColumnConfig> columns = model.getColumns();
 
 		for (TableColumnConfig column : columns) {
-			popupMenu.add(createShowColumnCheckBoxMenuItem(column));
+			if (column.isToggleable()) {
+				popupMenu.add(createShowColumnCheckBoxMenuItem(column));
+			}
 		}
 
 		return popupMenu;
@@ -373,10 +395,7 @@ public class GenericTableViewComponent
 	private void buildColumnModel() {
 		DefaultTableColumnModel newColumnModel = new DefaultTableColumnModel();
 
-		List<TableColumnConfig> visibleColumnConfigs = model.getColumns().stream().filter(TableColumnConfig::isVisible)
-				.toList();
-
-		for (TableColumnConfig columnConfig : visibleColumnConfigs) {
+		for (TableColumnConfig columnConfig : model.getVisibleColumns()) {
 			TableColumn col = new TableColumn();
 			col.setHeaderValue(columnConfig.getHeader());
 			col.setIdentifier(columnConfig.getKey());
@@ -430,9 +449,7 @@ public class GenericTableViewComponent
 	}
 
 	private void rebuildColumns() {
-		List<TableColumnConfig> visibleList = model.getColumns().stream().filter(TableColumnConfig::isVisible).toList();
-
-		for (TableColumnConfig config : visibleList) {
+		for (TableColumnConfig config : model.getVisibleColumns()) {
 			TableColumn col = table.getColumn(config.getHeader());
 			if (col == null) {
 				col = table.getColumn(config.getKey());
@@ -445,6 +462,10 @@ public class GenericTableViewComponent
 
 			if (col != null && config.getEditor() != null) {
 				col.setCellEditor(config.getEditor());
+			}
+
+			if (col != null && config.getRenderer() != null) {
+				col.setCellRenderer(config.getRenderer());
 			}
 
 			if (config.getComparator() != null) {
@@ -475,12 +496,20 @@ public class GenericTableViewComponent
 		return table.getSelectedRow();
 	}
 
+	public Set<String> getSelectedRows() {
+		return model.getSelectedRows();
+	}
+
 	public int getSelectedRowCount() {
 		return model.getSelectedRows().size();
 	}
 
 	public int getRowCount() {
 		return model.getRows().size();
+	}
+
+	public List<RowData> getRows() {
+		return model.getRows();
 	}
 
 	public void setIsCellEditable(Function<Integer, Boolean> isCellEditable) {
@@ -507,13 +536,8 @@ public class GenericTableViewComponent
 
 		@Override
 		public String getColumnName(int column) {
-			List<TableColumnConfig> visibleColumns = tableModel.getColumns().stream()
-					.filter(TableColumnConfig::isVisible).toList();
-
-			if (column >= 0 && column < visibleColumns.size()) {
-				return visibleColumns.get(column).getHeader();
-			}
-			return "";
+			TableColumnConfig config = tableModel.getColumnByModelIndex(column);
+			return config != null ? config.getHeader() : null;
 		}
 
 		@Override
@@ -527,14 +551,7 @@ public class GenericTableViewComponent
 				return null;
 			}
 
-			List<TableColumnConfig> visibleColumns = tableModel.getColumns().stream()
-					.filter(TableColumnConfig::isVisible).toList();
-
-			if (columnIndex < 0 || columnIndex >= visibleColumns.size()) {
-				return null;
-			}
-
-			TableColumnConfig config = visibleColumns.get(columnIndex);
+			TableColumnConfig config = tableModel.getColumnByModelIndex(columnIndex);
 			String logicalKey = config.getKey();
 
 			RowData rowData = tableModel.getRows().get(rowIndex);
@@ -544,7 +561,7 @@ public class GenericTableViewComponent
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			return tableModel.getColumns().get(col).isEditable()
+			return tableModel.getColumnByModelIndex(col).isEditable()
 					&& (isCellEditable == null || isCellEditable.apply(row));
 		}
 
