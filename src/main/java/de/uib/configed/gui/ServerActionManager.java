@@ -512,6 +512,8 @@ public final class ServerActionManager {
 			Logging.debug(" start moving to another depot");
 			persistenceController.getDataServices().hostInfoCollections
 					.setDepotForClients(configedMain.getSelectedClients(), (String) depotCombo.getSelectedItem());
+			persistenceController.getDataServices().hostInfoCollections
+					.updateClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients());
 			Logging.checkErrorList();
 			configedMain.refreshClientListKeepingGroup();
 		}
