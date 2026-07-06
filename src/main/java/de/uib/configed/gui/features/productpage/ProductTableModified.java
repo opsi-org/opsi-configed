@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 import de.uib.configed.core.domain.productstate.ActionRequest;
 import de.uib.configed.core.domain.productstate.ActionResult;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
+import de.uib.configed.core.domain.productstate.LastAction;
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -68,6 +69,7 @@ import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
 
 public class ProductTableModified {
+	private static final String NONE_STRING = "";
 	private static final String NONE_DISPLAY_STRING = "none";
 	private static final String FAILED_DISPLAY_STRING = "failed";
 	private static final String SUCCESS_DISPLAY_STRING = "success";
@@ -77,6 +79,8 @@ public class ProductTableModified {
 		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);
 		defaultDisplayValues.add(FAILED_DISPLAY_STRING);
 	}
+
+	private static final String MANUALLY = "manually set";
 
 	private Set<String> pendingSelection;
 	private GenericTableViewComponent tableViewComponent;
@@ -165,17 +169,58 @@ public class ProductTableModified {
 
 	private void onCellEdited(int row, int column, Object newValue) {
 		updateProductStates(row, column, newValue);
+		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
+				String.class);
 		if (ProductState.KEY_ACTION_REQUEST.equals(tableViewComponent.getColumnByModelIndex(column).getKey())
 				&& !suppressCollectiveActionPropagation) {
-			String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
-					String.class);
 			String actionRequestValue = extractValueForColumn(newValue, ProductState.KEY_ACTION_REQUEST);
 			if (productId != null && actionRequestValue != null) {
 				collectiveChangeActionRequest(productId,
 						ActionRequest.produceActionRequestFromLabel(actionRequestValue));
 			}
 		}
+		if (ProductState.KEY_INSTALLATION_INFO.equals(tableViewComponent.getColumnByModelIndex(column).getKey())) {
+			String installationInfoValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_INFO);
+			setInstallationInfo(productId, installationInfoValue);
+		}
 		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
+	}
+
+	private void setInstallationInfo(String product, String value) {
+		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
+
+		List<String> selectedClients = configedMain.getSelectedClients();
+		for (String clientId : selectedClients) {
+			setInstallationInfo(clientId, product, value);
+		}
+	}
+
+	private void setInstallationInfo(String clientId, String product, String value) {
+		Logging.debug(this, "setInstallationInfo for product, client, value ", product, ", ", clientId, ", ", value);
+
+		Map<String, Map<String, String>> changedStatesForClient = changedProductStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
+
+		Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(product,
+				arg -> new HashMap<>());
+
+		if (value.equals(NONE_STRING) || value.equals(NONE_DISPLAY_STRING)) {
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, NONE_STRING);
+		} else if (value.equals(FAILED_DISPLAY_STRING)) {
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, MANUALLY);
+		} else if (value.equals(SUCCESS_DISPLAY_STRING)) {
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.SUCCESSFUL));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, MANUALLY);
+		} else {
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, ActionResult.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, value);
+		}
 	}
 
 	private void updateProductStates(int row, int column, Object newValue) {
