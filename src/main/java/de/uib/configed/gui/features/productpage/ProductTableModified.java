@@ -187,6 +187,10 @@ public class ProductTableModified {
 	}
 
 	private void setInstallationInfo(String product, String value) {
+		if (NONE_DISPLAY_STRING.equals(value)) {
+			value = NONE_STRING;
+		}
+
 		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
 
 		List<String> selectedClients = configedMain.getSelectedClients();
