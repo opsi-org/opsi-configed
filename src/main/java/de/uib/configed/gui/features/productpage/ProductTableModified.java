@@ -94,6 +94,7 @@ public class ProductTableModified {
 	private Map<String, Map<String, String>> combinedVisualValues;
 
 	private Map<String, List<String>> possibleActions;
+	private Map<String, Map<String, Object>> globalProductInfos;
 	private Map<String, Map<String, Map<String, String>>> changedProductStates;
 	private Map<String, Map<String, Map<String, String>>> allClientsProductStates = new HashMap<>();
 	private Set<String> availableProductNames = new HashSet<>();
@@ -171,19 +172,51 @@ public class ProductTableModified {
 		updateProductStates(row, column, newValue);
 		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
 				String.class);
-		if (ProductState.KEY_ACTION_REQUEST.equals(tableViewComponent.getColumnByModelIndex(column).getKey())
-				&& !suppressCollectiveActionPropagation) {
+		String columnKey = tableViewComponent.getColumnByModelIndex(column).getKey();
+		if (ProductState.KEY_INSTALLATION_STATUS.equals(columnKey)) {
+			String installationStatusValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_STATUS);
+			setProductVersionBasedOnInstallationStatus(productId, installationStatusValue);
+		}
+		if (ProductState.KEY_ACTION_REQUEST.equals(columnKey) && !suppressCollectiveActionPropagation) {
 			String actionRequestValue = extractValueForColumn(newValue, ProductState.KEY_ACTION_REQUEST);
 			if (productId != null && actionRequestValue != null) {
 				collectiveChangeActionRequest(productId,
 						ActionRequest.produceActionRequestFromLabel(actionRequestValue));
 			}
 		}
-		if (ProductState.KEY_INSTALLATION_INFO.equals(tableViewComponent.getColumnByModelIndex(column).getKey())) {
+		if (ProductState.KEY_INSTALLATION_INFO.equals(columnKey)) {
 			String installationInfoValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_INFO);
 			setInstallationInfo(productId, installationInfoValue);
 		}
 		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
+	}
+
+	private void setProductVersionBasedOnInstallationStatus(String product, String installationStatus) {
+		String version;
+		boolean isEmpty = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(product).isEmpty();
+		if ("installed".equals(installationStatus) && isEmpty) {
+			version = (String) globalProductInfos.get(product).get(ProductState.KEY_VERSION_INFO);
+		} else if ("not_installed".equals(installationStatus) && !isEmpty) {
+			version = "";
+		} else {
+			return;
+		}
+
+		List<String> selectedClients = configedMain.getSelectedClients();
+		for (String clientId : selectedClients) {
+			Map<String, Map<String, String>> changedStatesForClient = changedProductStates.computeIfAbsent(clientId,
+					arg -> new HashMap<>());
+
+			Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(product,
+					arg -> new HashMap<>());
+			combinedVisualValues.get(ProductState.KEY_VERSION_INFO).put(product, version);
+			changedStatesForProduct.put(ProductState.KEY_PRODUCT_VERSION,
+					(String) globalProductInfos.get(product).get(ProductState.KEY_PRODUCT_VERSION));
+			changedStatesForProduct.put(ProductState.KEY_PACKAGE_VERSION,
+					(String) globalProductInfos.get(product).get(ProductState.KEY_PACKAGE_VERSION));
+
+			applyColumnChangeToRow(product, ProductState.KEY_VERSION_INFO, version);
+		}
 	}
 
 	private void setInstallationInfo(String product, String value) {
@@ -326,6 +359,10 @@ public class ProductTableModified {
 
 	public void setPossibleActions(Map<String, List<String>> possibleActions) {
 		this.possibleActions = possibleActions;
+	}
+
+	public void setGlobalProductInfos(Map<String, Map<String, Object>> globalProductInfos) {
+		this.globalProductInfos = globalProductInfos;
 	}
 
 	public void setChangedProductStates(Map<String, Map<String, Map<String, String>>> changedProductStates) {
@@ -619,7 +656,7 @@ public class ProductTableModified {
 		processedProducts.add(processedKey);
 
 		setActionRequest(ar, product, clientId);
-		applyActionRequestToRow(product, ar.toString());
+		applyColumnChangeToRow(product, ProductState.KEY_ACTION_REQUEST, ar.toString());
 
 		if (ar.getVal() == ActionRequest.NONE) {
 			return;
@@ -725,9 +762,9 @@ public class ProductTableModified {
 		refreshCombinedVisualState(productId, ProductState.KEY_ACTION_REQUEST);
 	}
 
-	private void applyActionRequestToRow(String productId, String value) {
+	private void applyColumnChangeToRow(String productId, String columnKey, String value) {
 		int rowIndex = findRowIndexByProductId(productId);
-		int columnIndex = tableViewComponent.getColumnIndexByKey(ProductState.KEY_ACTION_REQUEST);
+		int columnIndex = tableViewComponent.getColumnIndexByKey(columnKey);
 		if (rowIndex >= 0 && columnIndex >= 0) {
 			tableViewComponent.dispatch(new GenericTableViewMsg.CellEdited(rowIndex, columnIndex, value));
 		}
