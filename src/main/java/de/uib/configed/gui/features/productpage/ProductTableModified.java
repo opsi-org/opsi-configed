@@ -26,6 +26,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -38,6 +39,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ChangedDataManager;
+import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ProductPageManager;
@@ -89,6 +91,10 @@ public class ProductTableModified {
 
 	private Map<String, List<String>> possibleActions;
 	private Map<String, Map<String, Map<String, String>>> changedProductStates;
+	private Map<String, Map<String, Map<String, String>>> allClientsProductStates = new HashMap<>();
+	private Set<String> availableProductNames = new HashSet<>();
+	private Set<String> missingProducts = new LinkedHashSet<>();
+	private boolean suppressCollectiveActionPropagation;
 
 	private ProductTree productTree;
 	private PanelProductSettings panelProductSettings;
@@ -138,10 +144,8 @@ public class ProductTableModified {
 			case GenericTableViewEffect.Selection() -> this::applyChangedValue;
 			case GenericTableViewEffect.StoreVisibleColulmns(List<String> visibleColumns) -> () -> storeVisibleColumns(
 					type, visibleColumns);
-			case GenericTableViewEffect.CellEdited(int row, int column, Object newValue) -> () -> {
-				updateProductStates(row, column, newValue);
-				ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
-			};
+			case GenericTableViewEffect.CellEdited(int row, int column, Object newValue) -> () -> onCellEdited(row,
+					column, newValue);
 			default -> null;
 			};
 		};
@@ -159,16 +163,46 @@ public class ProductTableModified {
 		component = tableViewComponent.initUI();
 	}
 
+	private void onCellEdited(int row, int column, Object newValue) {
+		updateProductStates(row, column, newValue);
+		if (ProductState.KEY_ACTION_REQUEST.equals(tableViewComponent.getColumnByModelIndex(column).getKey())
+				&& !suppressCollectiveActionPropagation) {
+			String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
+					String.class);
+			String actionRequestValue = extractValueForColumn(newValue, ProductState.KEY_ACTION_REQUEST);
+			if (productId != null && actionRequestValue != null) {
+				collectiveChangeActionRequest(productId,
+						ActionRequest.produceActionRequestFromLabel(actionRequestValue));
+			}
+		}
+		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
+	}
+
 	private void updateProductStates(int row, int column, Object newValue) {
+		String columnId = tableViewComponent.getColumnByModelIndex(column).getKey();
+		String value = extractValueForColumn(newValue, columnId);
+		if (value == null) {
+			return;
+		}
+
 		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
 				String.class);
-		String columnId = tableViewComponent.getColumnByModelIndex(column).getKey();
-		Map<String, Object> values = POJOReMapper.remap(newValue);
-		String value = (String) values.get(columnId);
 		configedMain.getSelectedClients().forEach((String clientId) -> {
 			changedProductStates.computeIfAbsent(clientId, k -> new HashMap<>())
 					.computeIfAbsent(productId, k -> new HashMap<>()).put(columnId, value);
 		});
+	}
+
+	private static String extractValueForColumn(Object newValue, String columnId) {
+		if (newValue == null) {
+			return null;
+		}
+		if (newValue instanceof String stringValue) {
+			return stringValue;
+		}
+		Map<String, Object> values = POJOReMapper.remap(newValue);
+		Object value = values.get(columnId);
+		return value == null ? null : value.toString();
 	}
 
 	public void setPendingSelection(Set<String> productIds) {
@@ -350,8 +384,11 @@ public class ProductTableModified {
 			Map<String, List<Map<String, String>>> statesAndActions,
 			Map<String, Map<String, Object>> globalProductInfos) {
 
+		this.availableProductNames = new LinkedHashSet<>(productNames);
+		this.missingProducts = new LinkedHashSet<>();
+
 		// 1. Remap client → (productId → stateMap)
-		Map<String, Map<String, Map<String, String>>> allClientsProductStates = new HashMap<>();
+		allClientsProductStates = new HashMap<>();
 		if (statesAndActions != null) {
 			for (Entry<String, List<Map<String, String>>> client : statesAndActions.entrySet()) {
 				Map<String, Map<String, String>> productRows = new LinkedHashMap<>();
@@ -480,7 +517,239 @@ public class ProductTableModified {
 		}
 	}
 
-	public class ProductRowDiffStrategy implements RowDiffStrategy {
+	private void collectiveChangeActionRequest(String productId, ActionRequest ar) {
+		Logging.info(this, "collectiveChangeActionRequest for product ", productId, " to ", ar);
+
+		if (!checkActionIsSupported(productId, ar)) {
+			return;
+		}
+
+		suppressCollectiveActionPropagation = true;
+		try {
+			for (String clientId : configedMain.getSelectedClients()) {
+				setActionRequest(ar, productId, clientId);
+				recursivelyChangeActionRequest(clientId, productId, ar, new LinkedHashSet<>());
+			}
+		} finally {
+			suppressCollectiveActionPropagation = false;
+		}
+
+		tellAndClearMissingProducts(productId);
+	}
+
+	private void tellAndClearMissingProducts(String productId) {
+		if (!missingProducts.isEmpty()) {
+			Logging.info(this, "required by product ", productId, " but missing ", missingProducts);
+
+			StringBuilder lines = new StringBuilder();
+
+			lines.append(Configed.getResourceValue("InstallationStateTableModel.requiredByProduct"));
+			lines.append("\n");
+			lines.append(productId);
+			lines.append("\n\n");
+			lines.append(Configed.getResourceValue("InstallationStateTableModel.missingProducts"));
+			lines.append("\n");
+
+			for (String p : missingProducts) {
+				lines.append("\n   ");
+				lines.append(p);
+			}
+
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), lines,
+					Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
+					JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	private void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar,
+			Set<String> processedProducts) {
+		String processedKey = clientId + ":" + product;
+		if (processedProducts.contains(processedKey)) {
+			return;
+		}
+		processedProducts.add(processedKey);
+
+		setActionRequest(ar, product, clientId);
+		applyActionRequestToRow(product, ar.toString());
+
+		if (ar.getVal() == ActionRequest.NONE) {
+			return;
+		}
+
+		Map<String, String> requirements = ar.getVal() == ActionRequest.UNINSTALL
+				? persistenceController.getDataServices().product.getProductDeinstallRequirements(null, product)
+				: persistenceController.getDataServices().product.getProductPreRequirements(null, product);
+		followRequirements(clientId, requirements, processedProducts);
+
+		if (ar.getVal() != ActionRequest.UNINSTALL) {
+			followRequirements(clientId,
+					persistenceController.getDataServices().product.getProductRequirements(null, product),
+					processedProducts);
+			followRequirements(clientId,
+					persistenceController.getDataServices().product.getProductPostRequirements(null, product),
+					processedProducts);
+		}
+	}
+
+	private void followRequirements(String clientId, Map<String, String> requirements, Set<String> processedProducts) {
+		if (requirements == null) {
+			return;
+		}
+
+		for (Entry<String, String> requirement : requirements.entrySet()) {
+			String requiredAction = ActionRequest.getLabel(ActionRequest.NONE);
+			String requiredState = InstallationStatus.getLabel(InstallationStatus.UNDEFINED);
+
+			int colonPosition = requirement.getValue().indexOf(':');
+			if (colonPosition >= 0) {
+				requiredState = requirement.getValue().substring(0, colonPosition);
+				requiredAction = requirement.getValue().substring(colonPosition + 1);
+			}
+
+			if (!availableProductNames.contains(requirement.getKey())) {
+				missingProducts.add(requirement.getKey());
+				continue;
+			}
+
+			checkRequiredProduct(clientId, requirement, requiredAction, requiredState, processedProducts);
+		}
+	}
+
+	private void checkRequiredProduct(String clientId, Entry<String, String> requirement, String requiredAction,
+			String requiredState, Set<String> processedProducts) {
+		Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
+		if (productStates == null) {
+			return;
+		}
+
+		Map<String, String> stateAndAction = productStates.get(requirement.getKey());
+		if (stateAndAction == null) {
+			stateAndAction = ProductState.createDefaultProductState();
+		}
+
+		String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
+		String installationStatusOfRequiredProduct = stateAndAction.get(InstallationStatus.KEY);
+
+		int requiredAR = ActionRequest.getVal(requiredAction);
+		int requiredIS = InstallationStatus.getVal(requiredState);
+
+		if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
+				&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
+			String requiredStatus = InstallationStatus.getLabel(requiredIS);
+			String neededAction = InstallationStateTableModel.REQUIRED_ACTION_FOR_STATUS.get(requiredStatus);
+			requiredAR = ActionRequest.getVal(neededAction);
+		}
+
+		if (requiredAR > ActionRequest.NONE) {
+			if (ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
+				return;
+			}
+
+			String childKey = clientId + ":" + requirement.getKey();
+			if (processedProducts.contains(childKey)) {
+				return;
+			}
+
+			recursivelyChangeActionRequest(clientId, requirement.getKey(), new ActionRequest(requiredAR),
+					processedProducts);
+		}
+	}
+
+	private boolean checkActionIsSupported(String productId, ActionRequest ar) {
+		if (possibleActions == null || possibleActions.get(productId) == null) {
+			return false;
+		}
+
+		return possibleActions.get(productId).contains(ar.toString());
+	}
+
+	private void setActionRequest(ActionRequest ar, String productId, String clientId) {
+		Map<String, Map<String, String>> productStates = allClientsProductStates.computeIfAbsent(clientId,
+				ignored -> new HashMap<>());
+		productStates.computeIfAbsent(productId, ignored -> new HashMap<>()).put(ProductState.KEY_ACTION_REQUEST,
+				ar.toString());
+		if (changedProductStates != null) {
+			changedProductStates.computeIfAbsent(clientId, ignored -> new HashMap<>())
+					.computeIfAbsent(productId, ignored -> new HashMap<>())
+					.put(ProductState.KEY_ACTION_REQUEST, ar.toString());
+		}
+		refreshCombinedVisualState(productId, ProductState.KEY_ACTION_REQUEST);
+	}
+
+	private void applyActionRequestToRow(String productId, String value) {
+		int rowIndex = findRowIndexByProductId(productId);
+		int columnIndex = tableViewComponent.getColumnIndexByKey(ProductState.KEY_ACTION_REQUEST);
+		if (rowIndex >= 0 && columnIndex >= 0) {
+			tableViewComponent.dispatch(new GenericTableViewMsg.CellEdited(rowIndex, columnIndex, value));
+		}
+	}
+
+	private int findRowIndexByProductId(String productId) {
+		for (int i = 0; i < tableViewComponent.getRows().size(); i++) {
+			RowData rowData = tableViewComponent.getRows().get(i);
+			if (rowData != null && productId.equals(rowData.getValue(ProductState.KEY_PRODUCT_ID, String.class))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private void refreshCombinedVisualState(String productId, String columnKey) {
+		if (combinedVisualValues == null || combinedVisualValues.get(columnKey) == null) {
+			return;
+		}
+		String visualValue = null;
+		for (String clientId : configedMain.getSelectedClients()) {
+			Map<String, Map<String, String>> clientStates = allClientsProductStates.get(clientId);
+			if (clientStates != null && clientStates.get(productId) != null) {
+				String value = clientStates.get(productId).get(columnKey);
+				if (visualValue == null) {
+					visualValue = value;
+				} else if (!Objects.equals(visualValue, value)) {
+					visualValue = Globals.CONFLICT_STATE_STRING;
+					break;
+				} else {
+					// Do nothing.
+				}
+			}
+		}
+		combinedVisualValues.get(columnKey).put(productId, visualValue);
+	}
+
+	static LinkedHashSet<String> collectAffectedProducts(String productId, String actionRequest,
+			Set<String> productNames,
+			java.util.function.BiFunction<String, String, Map<String, String>> requirementsProvider) {
+		LinkedHashSet<String> affectedProducts = new LinkedHashSet<>();
+		affectedProducts.add(productId);
+		collectAffectedProducts(productId, actionRequest, productNames, requirementsProvider, affectedProducts,
+				new LinkedHashSet<>());
+		return affectedProducts;
+	}
+
+	private static void collectAffectedProducts(String productId, String actionRequest, Set<String> productNames,
+			java.util.function.BiFunction<String, String, Map<String, String>> requirementsProvider,
+			Set<String> affectedProducts, Set<String> processedProducts) {
+		String processedKey = productId + ":" + actionRequest;
+		if (!processedProducts.add(processedKey)) {
+			return;
+		}
+
+		Map<String, String> requirements = requirementsProvider.apply(productId, actionRequest);
+		if (requirements == null) {
+			return;
+		}
+
+		for (Entry<String, String> requirement : requirements.entrySet()) {
+			String requiredProduct = requirement.getKey();
+			if (!productNames.contains(requiredProduct) || !affectedProducts.add(requiredProduct)) {
+				continue;
+			}
+			collectAffectedProducts(requiredProduct, actionRequest, productNames, requirementsProvider,
+					affectedProducts, processedProducts);
+		}
+	}
+
+	public static class ProductRowDiffStrategy implements RowDiffStrategy {
 		@Override
 		public RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue) {
 			if (colKey == null) {
