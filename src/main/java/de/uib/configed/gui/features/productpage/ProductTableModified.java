@@ -174,6 +174,7 @@ public class ProductTableModified {
 		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
 				String.class);
 		String columnKey = tableViewComponent.getColumnByModelIndex(column).getKey();
+
 		if (ProductState.KEY_INSTALLATION_STATUS.equals(columnKey)) {
 			String installationStatusValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_STATUS);
 			setProductVersionBasedOnInstallationStatus(productId, installationStatusValue);
@@ -192,6 +193,7 @@ public class ProductTableModified {
 			String installationInfoValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_INFO);
 			setInstallationInfo(productId, installationInfoValue);
 		}
+
 		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
