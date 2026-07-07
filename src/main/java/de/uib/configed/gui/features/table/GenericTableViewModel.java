@@ -26,6 +26,8 @@ public class GenericTableViewModel {
 	@Builder.Default
 	private final List<RowData> rows = new ArrayList<>();
 	@Builder.Default
+	private final List<RowData> allRows = new ArrayList<>();
+	@Builder.Default
 	private final List<TableColumnConfig> columns = new ArrayList<>();
 	private final TableConfig tableConfig;
 	@Builder.Default
@@ -38,6 +40,10 @@ public class GenericTableViewModel {
 	private final List<Map<String, Object>> originalSnapshot = new ArrayList<>();
 	private final RowDiffStrategy diffStrategy;
 	private final boolean keyValueTable;
+	@Builder.Default
+	private final String filterColumnKey = null;
+	@Builder.Default
+	private final Set<String> filterValues = new HashSet<>();
 
 	/**
 	 * Gets a ColumnConfig directly by its MODEL INDEX (position in the list).
@@ -61,5 +67,9 @@ public class GenericTableViewModel {
 
 	public List<TableColumnConfig> getVisibleColumns() {
 		return columns.stream().filter(TableColumnConfig::isVisible).toList();
+	}
+
+	public boolean hasRowFilter() {
+		return filterColumnKey != null && !filterValues.isEmpty();
 	}
 }

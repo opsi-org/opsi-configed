@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import de.uib.configed.core.domain.productstate.ActionRequest;
 import de.uib.configed.core.domain.productstate.ActionResult;
@@ -60,6 +61,7 @@ import de.uib.configed.gui.features.table.RowData.RowState;
 import de.uib.configed.gui.features.table.RowDiffStrategy;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.features.table.TableConfig;
+import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
@@ -293,6 +295,50 @@ public class ProductTableModified {
 		Map<String, Object> values = POJOReMapper.remap(newValue);
 		Object value = values.get(columnId);
 		return value == null ? null : value.toString();
+	}
+
+	public void setFilter(Set<String> productIds) {
+		Set<String> normalizedProductIds = productIds == null ? new HashSet<>() : new HashSet<>(productIds);
+		tableViewComponent
+				.dispatch(new GenericTableViewMsg.ApplyRowFilter(ProductState.KEY_PRODUCT_ID, normalizedProductIds));
+	}
+
+	public void valueChanged(boolean doSelection, List<DefaultMutableTreeNode> filteredNodes) {
+		if (filteredNodes.isEmpty()) {
+			setFilter(null);
+		} else if (filteredNodes.size() == 1) {
+			nodeSelection(filteredNodes.get(0));
+		} else {
+			Set<String> productIds = new HashSet<>();
+			Set<String> selectedValues = new HashSet<>();
+
+			for (DefaultMutableTreeNode node : filteredNodes) {
+				if (node.getAllowsChildren()) {
+					AbstractGroupTree.addAllDescendants(node, productIds);
+				} else {
+					String value = node.getUserObject().toString();
+					productIds.add(value);
+					selectedValues.add(value);
+				}
+			}
+
+			setFilter(productIds);
+
+			if (doSelection) {
+				setPendingSelection(selectedValues);
+			}
+		}
+	}
+
+	public void nodeSelection(DefaultMutableTreeNode node) {
+		if (node.getAllowsChildren()) {
+			Set<String> productIds = AbstractGroupTree.getChildrenRecursively(node);
+			setFilter(productIds);
+		} else {
+			Set<String> productIds = Set.of(node.toString());
+			setFilter(productIds);
+			setPendingSelection(productIds);
+		}
 	}
 
 	public void setPendingSelection(Set<String> productIds) {

@@ -293,6 +293,23 @@ class GenericTableViewUpdateTest {
 	}
 
 	@Test
+	void shouldFilterRows_whenApplyRowFilter() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.ApplyRowFilter("data0", Set.of("2", "4"));
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+
+		assertNotNull(result.model());
+		assertEquals(2, result.model().getRows().size());
+		assertTrue(result.model().getRows().stream()
+				.allMatch(row -> Set.of("2", "4").contains(row.getValue("data0", String.class))));
+		assertEquals(5, result.model().getAllRows().size());
+		assertTrue(result.model().isRebuildTableModel());
+		assertFalse(result.model().isDirty());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
 	void shouldUpdateColumnsWidths_whenResizeColumns() {
 		GenericTableViewModel model = baseModel();
 		GenericTableViewMsg msg = new GenericTableViewMsg.ResizeColumns(Map.of("data0", 25, "data1", 23, "data2", 25));

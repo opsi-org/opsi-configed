@@ -13,11 +13,11 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.SortOrder;
 
-public sealed interface GenericTableViewMsg
-		permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
-		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
-		GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
-		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.InvertSelection, GenericTableViewMsg.PrepareRenderer {
+public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
+		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
+		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot,
+		GenericTableViewMsg.ChangeSortOrder, GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.ApplyRowFilter,
+		GenericTableViewMsg.InvertSelection, GenericTableViewMsg.PrepareRenderer {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 
 	}
@@ -50,6 +50,9 @@ public sealed interface GenericTableViewMsg
 	}
 
 	record ResizeColumns(Map<String, Integer> columnWidths) implements GenericTableViewMsg {
+	}
+
+	record ApplyRowFilter(String columnKey, Set<String> filterValues) implements GenericTableViewMsg {
 	}
 
 	record ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) implements GenericTableViewMsg {

@@ -187,8 +187,8 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	private void setFilter(Set<String> productIds) {
-		// localbootPanel.getProductTable().setFilter(productIds);
-		// netbootPanel.getProductTable().setFilter(productIds);
+		localbootPanel.getProductTableModified().setFilter(productIds);
+		netbootPanel.getProductTableModified().setFilter(productIds);
 	}
 
 	@Override

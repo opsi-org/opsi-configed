@@ -54,13 +54,17 @@ public final class GenericTableViewUpdate {
 		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
 				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
-		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> UpdateResult.noEffect(model
-				.toBuilder().originalSnapshot(originalSnapshot)
-				.rows(model.isKeyValueTable()
-						? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getRows(),
-								model.getDiffStrategy())
-						: RowData.fromOriginalSnapshot(originalSnapshot, model.getRows(), model.getDiffStrategy()))
-				.rebuildTableModel(true).build());
+		case GenericTableViewMsg.ApplyRowFilter(String columnKey, Set<String> filterValues) -> handleApplyRowFilter(
+				columnKey, filterValues, model);
+		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> {
+			List<RowData> rebuiltRows = model.isKeyValueTable()
+					? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getAllRows(),
+							model.getDiffStrategy())
+					: RowData.fromOriginalSnapshot(originalSnapshot, model.getAllRows(), model.getDiffStrategy());
+			yield UpdateResult.noEffect(model.toBuilder().originalSnapshot(originalSnapshot).allRows(rebuiltRows)
+					.rows(applyFilterRows(rebuiltRows, model.getFilterColumnKey(), model.getFilterValues()))
+					.rebuildTableModel(true).build());
+		}
 		case InvertSelection() -> handleInvertSelection(model);
 		case PrepareRenderer(JComponent component, int row, int col) -> UpdateResult.withEffect(model,
 				new GenericTableViewEffect.PrepareRenderer(component, row, col));
@@ -89,12 +93,15 @@ public final class GenericTableViewUpdate {
 
 		RowData newRow = oldRow.toBuilder().values(newValues).state(newRowStyle).build();
 
-		List<RowData> newRows = new ArrayList<>(model.getRows());
-		newRows.set(rowIdx, newRow);
+		List<RowData> sourceRows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> newRows = new ArrayList<>(sourceRows);
+		newRows.set(findRowIndexById(sourceRows, oldRow.getId()), newRow);
 
 		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
 
-		return UpdateResult.withEffect(model.toBuilder().rows(newRows).isDirty(isDirty).rebuildTableModel(true).build(),
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(isDirty).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.CellEdited(rowIdx, colIdx, newValues));
 	}
 
@@ -117,10 +124,12 @@ public final class GenericTableViewUpdate {
 			return UpdateResult.noEffect(model);
 		}
 
-		List<RowData> newRows = model.getRows().stream().filter((RowData row) -> row.getState() != RowState.DELETED)
+		List<RowData> newRows = model.getAllRows().stream().filter((RowData row) -> row.getState() != RowState.DELETED)
 				.toList();
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
 
-		return UpdateResult.withEffect(model.toBuilder().rows(newRows).isDirty(false).rebuildTableModel(false).build(),
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(false).rebuildTableModel(false).build(),
 				new GenericTableViewEffect.SaveChanges(newRows));
 	}
 
@@ -133,9 +142,10 @@ public final class GenericTableViewUpdate {
 		List<RowData> restoredRows = model.isKeyValueTable()
 				? RowData.fromOriginalSnapshotKeyValueTable(model.getOriginalSnapshot(), model.getDiffStrategy())
 				: RowData.fromOriginalSnapshot(model.getOriginalSnapshot(), model.getDiffStrategy());
+		List<RowData> visibleRows = applyFilterRows(restoredRows, model.getFilterColumnKey(), model.getFilterValues());
 
-		return UpdateResult
-				.noEffect(model.toBuilder().rows(restoredRows).isDirty(false).rebuildTableModel(true).build());
+		return UpdateResult.noEffect(model.toBuilder().rows(visibleRows).allRows(restoredRows).isDirty(false)
+				.rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowAdd(Map<String, Object> data,
@@ -143,10 +153,13 @@ public final class GenericTableViewUpdate {
 		String id = UUID.randomUUID().toString();
 		RowData newRow = computeKeyValueRowData(id, data, RowState.NEW, model);
 
-		List<RowData> newRows = new ArrayList<>(model.getRows());
+		List<RowData> sourceRows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> newRows = new ArrayList<>(sourceRows);
 		newRows.add(newRow);
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
 
-		return UpdateResult.withEffect(model.toBuilder().rows(newRows).isDirty(true).rebuildTableModel(true).build(),
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(true).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.AddRow(data));
 	}
 
@@ -170,7 +183,7 @@ public final class GenericTableViewUpdate {
 			return UpdateResult.noEffect(model);
 		}
 
-		List<RowData> rows = new ArrayList<>(model.getRows());
+		List<RowData> rows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
 		List<RowData> rowsToDelete = new ArrayList<>();
 		for (String rowId : rowIdx) {
 			for (RowData rowData : rows) {
@@ -180,9 +193,21 @@ public final class GenericTableViewUpdate {
 			}
 		}
 		rows.removeAll(rowsToDelete);
+		List<RowData> visibleRows = applyFilterRows(rows, model.getFilterColumnKey(), model.getFilterValues());
 
-		return UpdateResult.withEffect(model.toBuilder().rows(rows).isDirty(true).rebuildTableModel(true).build(),
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(rows).isDirty(true).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.DeleteRows(rowsToDelete));
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleApplyRowFilter(String columnKey,
+			Set<String> filterValues, GenericTableViewModel model) {
+		Set<String> normalizedFilterValues = filterValues == null ? new HashSet<>() : new HashSet<>(filterValues);
+		List<RowData> sourceRows = model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows();
+		List<RowData> filteredRows = applyFilterRows(sourceRows, columnKey, normalizedFilterValues);
+
+		return UpdateResult.noEffect(model.toBuilder().rows(filteredRows).allRows(sourceRows).filterColumnKey(columnKey)
+				.filterValues(normalizedFilterValues).rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(
@@ -194,6 +219,26 @@ public final class GenericTableViewUpdate {
 						: config)
 				.toList();
 		return UpdateResult.noEffect(model.toBuilder().columns(configs).rebuildTableModel(false).build());
+	}
+
+	private static List<RowData> applyFilterRows(List<RowData> sourceRows, String columnKey, Set<String> filterValues) {
+		if (columnKey == null || filterValues == null || filterValues.isEmpty()) {
+			return new ArrayList<>(sourceRows);
+		}
+
+		return sourceRows.stream().filter((RowData row) -> {
+			Object value = row.getValue(columnKey, Object.class);
+			return value != null && filterValues.contains(String.valueOf(value));
+		}).toList();
+	}
+
+	private static int findRowIndexById(List<RowData> sourceRows, String rowId) {
+		for (int i = 0; i < sourceRows.size(); i++) {
+			if (sourceRows.get(i).getId().equals(rowId)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleInvertSelection(
