@@ -82,7 +82,6 @@ public class ProductTableModified {
 
 	private static final String MANUALLY = "manually set";
 
-	private Set<String> pendingSelection;
 	private GenericTableViewComponent tableViewComponent;
 	private JComponent component;
 
@@ -93,6 +92,7 @@ public class ProductTableModified {
 	private ConfigedMain configedMain;
 	private Map<String, Map<String, String>> combinedVisualValues;
 
+	private Map<String, String> product2request = new HashMap<>();
 	private Map<String, List<String>> possibleActions;
 	private Map<String, Map<String, Object>> globalProductInfos;
 	private Map<String, Map<String, Map<String, String>>> changedProductStates;
@@ -100,6 +100,8 @@ public class ProductTableModified {
 	private Set<String> availableProductNames = new HashSet<>();
 	private Set<String> missingProducts = new LinkedHashSet<>();
 	private boolean suppressCollectiveActionPropagation;
+
+	private String productBeingEdited;
 
 	private ProductTree productTree;
 	private PanelProductSettings panelProductSettings;
@@ -141,8 +143,6 @@ public class ProductTableModified {
 		this.panelProductSettings = panelProductSettings;
 
 		List<TableColumnConfig> columns = buildProductColumnConfigs(type);
-		List<String> order = columns.stream().map(TableColumnConfig::getHeader).toList();
-		Logging.devel(this, "columns", columns, "order", order);
 
 		TableSideEffectStrategy sideEffectStrategy = (GenericTableViewEffect effect) -> {
 			return switch (effect) {
@@ -169,21 +169,26 @@ public class ProductTableModified {
 	}
 
 	private void onCellEdited(int row, int column, Object newValue) {
-		updateProductStates(row, column, newValue);
 		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
 				String.class);
+
+		updateProductStates(row, column, newValue);
+
 		String columnKey = tableViewComponent.getColumnByModelIndex(column).getKey();
 		if (ProductState.KEY_INSTALLATION_STATUS.equals(columnKey)) {
 			String installationStatusValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_STATUS);
 			setProductVersionBasedOnInstallationStatus(productId, installationStatusValue);
 		}
+
 		if (ProductState.KEY_ACTION_REQUEST.equals(columnKey) && !suppressCollectiveActionPropagation) {
+			product2request = new HashMap<>();
 			String actionRequestValue = extractValueForColumn(newValue, ProductState.KEY_ACTION_REQUEST);
 			if (productId != null && actionRequestValue != null) {
 				collectiveChangeActionRequest(productId,
 						ActionRequest.produceActionRequestFromLabel(actionRequestValue));
 			}
 		}
+
 		if (ProductState.KEY_INSTALLATION_INFO.equals(columnKey)) {
 			String installationInfoValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_INFO);
 			setInstallationInfo(productId, installationInfoValue);
@@ -270,6 +275,8 @@ public class ProductTableModified {
 		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
 				String.class);
 		configedMain.getSelectedClients().forEach((String clientId) -> {
+			checkForContradictingAssignments(clientId, productId, columnId, value);
+
 			changedProductStates.computeIfAbsent(clientId, k -> new HashMap<>())
 					.computeIfAbsent(productId, k -> new HashMap<>()).put(columnId, value);
 		});
@@ -727,18 +734,88 @@ public class ProductTableModified {
 		}
 
 		if (requiredAR > ActionRequest.NONE) {
+			checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
+					ActionRequest.getLabel(requiredAR));
+
 			if (ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
+				Logging.info(this, "followRequirements:   no change of action request necessary for ",
+						requirement.getKey());
 				return;
 			}
 
-			String childKey = clientId + ":" + requirement.getKey();
-			if (processedProducts.contains(childKey)) {
+			if (getChangedState(clientId, requirement.getKey(), ActionRequest.KEY) != null) {
+				Logging.info(this, "required product: '", requirement.getKey(), "'  has already been treated");
 				return;
 			}
 
 			recursivelyChangeActionRequest(clientId, requirement.getKey(), new ActionRequest(requiredAR),
 					processedProducts);
 		}
+	}
+
+	private String getChangedState(String clientId, String product, String stateType) {
+		Map<String, Map<String, String>> changedStatesForClient = changedProductStates.get(clientId);
+		if (changedStatesForClient == null) {
+			return null;
+		}
+
+		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
+		if (changedStatesForProduct == null) {
+			return null;
+		}
+
+		return changedStatesForProduct.get(stateType);
+	}
+
+	private void checkForContradictingAssignments(String clientId, String product, String stateType, String state) {
+		Logging.debug(this, "checkForContradictingAssignments === product2request ", product2request);
+
+		String existingRequest = product2request.get(product);
+		String info = " existingRequest " + existingRequest;
+
+		Logging.info(this, "checkForContradictingAssignments ", info, " state ", state);
+
+		if (existingRequest == null || existingRequest.isEmpty()) {
+			product2request.put(product, state);
+			Logging.debug(this, "checkForContradictingAssignments client ", clientId, ", actualproduct ",
+					productBeingEdited, ", product ", product, ", stateType ", stateType, ", state ", state);
+		} else {
+			boolean contradicting = !existingRequest.equals(state);
+			info = info + " contradicting " + contradicting;
+			if (contradicting) {
+				if (productBeingEdited.equals(product)) {
+					Logging.info(this, "checkForContradictingAssignments new setting for product is ", state);
+					product2request.put(product, state);
+
+					final String infoOfChange = String.format(
+							Configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements3"),
+							productBeingEdited, existingRequest, state);
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
+							Configed.getResourceValue(
+									"InstallationStateTableModel.contradictingProductRequirements.title"),
+							JOptionPane.WARNING_MESSAGE);
+				} else {
+					Logging.warning(this, "checkForContradictingAssignments ", info, " client ", clientId,
+							", actualproduct ", productBeingEdited, ", product ", product, ", stateType ", stateType,
+							", state ", state);
+
+					final String errorInfo = String.format(
+							Configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements1"),
+							productBeingEdited, product, state)
+							+ String.format(
+									Configed.getResourceValue(
+											"InstallationStateTableModel.contradictingProductRequirements2"),
+									existingRequest);
+
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
+							Configed.getResourceValue(
+									"InstallationStateTableModel.contradictingProductRequirements.title"),
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		}
+
+		Logging.info(this, "checkForContradictingAssignments === product2request ", ": ", product2request);
 	}
 
 	private boolean checkActionIsSupported(String productId, ActionRequest ar) {
@@ -860,16 +937,16 @@ public class ProductTableModified {
 			String[] possibleOptions;
 
 			String columnKey = tableViewComponent.getColumnByModelIndex(column).getKey();
-			String actualProduct = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
+			productBeingEdited = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
 					String.class);
 
-			Logging.devel(this, "getComboBoxModel: row=", row, ", column=", column, ", columnKey=", columnKey,
-					"actualProduct=", actualProduct);
+			Logging.debug(this, "getComboBoxModel: row=", row, ", column=", column, ", columnKey=", columnKey,
+					"actualProduct=", productBeingEdited);
 			if (ActionRequest.KEY.equals(columnKey)) {
-				possibleOptions = producePossibleActions(actualProduct);
+				possibleOptions = producePossibleActions(productBeingEdited);
 			} else if (InstallationStatus.KEY.equals(columnKey)) {
 				possibleOptions = producePossibleInstallationStatus(InstallationStatus.getDisplayLabelsForChoice(),
-						actualProduct);
+						productBeingEdited);
 			} else if (ProductState.KEY_INSTALLATION_INFO.equals(columnKey)) {
 				possibleOptions = producePossibleInstallationInfos((String) tableViewComponent.getValueAt(row, column));
 			} else {
@@ -881,14 +958,11 @@ public class ProductTableModified {
 			return new DefaultComboBoxModel<>(possibleOptions);
 		}
 
-		private String[] producePossibleActions(String actualProduct) {
-			// selection of actions
-
+		private String[] producePossibleActions(String product) {
 			Logging.debug(this, " possible actions  ", possibleActions);
-			Logging.devel(this, " possible actions  ", possibleActions.size());
 			List<String> actionsForProduct = new ArrayList<>();
 			if (possibleActions != null) {
-				for (String label : possibleActions.get(actualProduct)) {
+				for (String label : possibleActions.get(product)) {
 					actionsForProduct.add(ActionRequest.produceFromLabel(label));
 				}
 
@@ -906,25 +980,21 @@ public class ProductTableModified {
 			return actionsForProduct.toArray(new String[0]);
 		}
 
-		private String[] producePossibleInstallationStatus(String[] defaultValues, String actualProduct) {
-			// selection of status
-
-			// we dont have the product in our depot selection
-			if (possibleActions.get(actualProduct) == null) {
-				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
+		private String[] producePossibleInstallationStatus(String[] defaultValues, String product) {
+			if (possibleActions.get(product) == null) {
+				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(product);
 				if (state == null) {
-					Logging.devel(this, "producePossibleInstallationStatus: no possible actions for product ",
-							actualProduct, " and no state information available");
+					Logging.debug(this, "producePossibleInstallationStatus: no possible actions for product ", product,
+							" and no state information available");
 					return new String[] { "null" };
 				}
 
-				Logging.devel(this, "producePossibleInstallationStatus: no possible actions for product ",
-						actualProduct);
+				Logging.debug(this, "producePossibleInstallationStatus: no possible actions for product ", product);
 				return new String[0];
 			}
 
-			Logging.devel(this, "producePossibleInstallationStatus: defaultValues=", Arrays.toString(defaultValues),
-					", actualProduct=", actualProduct);
+			Logging.debug(this, "producePossibleInstallationStatus: defaultValues=", Arrays.toString(defaultValues),
+					", actualProduct=", product);
 			return defaultValues;
 		}
 
@@ -935,7 +1005,7 @@ public class ProductTableModified {
 
 			Set<String> values = new LinkedHashSet<>();
 
-			Logging.devel("producePossibleInstallationInfos: cellValue=" + cellValue + ", defaultDisplayValues="
+			Logging.debug("producePossibleInstallationInfos: cellValue=" + cellValue + ", defaultDisplayValues="
 					+ defaultDisplayValues);
 			if (!defaultDisplayValues.contains(cellValue)) {
 				values.add(cellValue);
@@ -943,7 +1013,7 @@ public class ProductTableModified {
 
 			values.addAll(defaultDisplayValues);
 
-			Logging.devel("producePossibleInstallationInfos: cellValue=" + cellValue + ", values=" + values);
+			Logging.debug("producePossibleInstallationInfos: cellValue=" + cellValue + ", values=" + values);
 			return values.toArray(new String[0]);
 		}
 
