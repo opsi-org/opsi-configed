@@ -169,11 +169,10 @@ public class ProductTableModified {
 	}
 
 	private void onCellEdited(int row, int column, Object newValue) {
-		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
-				String.class);
-
 		updateProductStates(row, column, newValue);
 
+		String productId = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
+				String.class);
 		String columnKey = tableViewComponent.getColumnByModelIndex(column).getKey();
 		if (ProductState.KEY_INSTALLATION_STATUS.equals(columnKey)) {
 			String installationStatusValue = extractValueForColumn(newValue, ProductState.KEY_INSTALLATION_STATUS);
