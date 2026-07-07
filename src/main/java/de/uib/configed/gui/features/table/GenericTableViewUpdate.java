@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.SortOrder;
@@ -54,8 +55,8 @@ public final class GenericTableViewUpdate {
 		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
 				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
-		case GenericTableViewMsg.ApplyRowFilter(String columnKey, Set<String> filterValues) -> handleApplyRowFilter(
-				columnKey, filterValues, model);
+		case GenericTableViewMsg.ApplyRowFilter(String columnKey, Set<String> filterValues, boolean selectFilteredRows) -> handleApplyRowFilter(
+				columnKey, filterValues, selectFilteredRows, model);
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> {
 			List<RowData> rebuiltRows = model.isKeyValueTable()
 					? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getAllRows(),
@@ -201,13 +202,17 @@ public final class GenericTableViewUpdate {
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleApplyRowFilter(String columnKey,
-			Set<String> filterValues, GenericTableViewModel model) {
+			Set<String> filterValues, boolean selectFilteredRows, GenericTableViewModel model) {
 		Set<String> normalizedFilterValues = filterValues == null ? new HashSet<>() : new HashSet<>(filterValues);
 		List<RowData> sourceRows = model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows();
 		List<RowData> filteredRows = applyFilterRows(sourceRows, columnKey, normalizedFilterValues);
 
+		Set<String> selectedRows = selectFilteredRows
+				? filteredRows.stream().map(RowData::getId).collect(Collectors.toSet())
+				: model.getSelectedRows();
+
 		return UpdateResult.noEffect(model.toBuilder().rows(filteredRows).allRows(sourceRows).filterColumnKey(columnKey)
-				.filterValues(normalizedFilterValues).rebuildTableModel(true).build());
+				.filterValues(normalizedFilterValues).selectedRows(selectedRows).rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(

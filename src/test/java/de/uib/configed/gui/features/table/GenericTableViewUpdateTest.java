@@ -295,7 +295,7 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldFilterRows_whenApplyRowFilter() {
 		GenericTableViewModel model = baseModel();
-		GenericTableViewMsg msg = new GenericTableViewMsg.ApplyRowFilter("data0", Set.of("2", "4"));
+		GenericTableViewMsg msg = new GenericTableViewMsg.ApplyRowFilter("data0", Set.of("2", "4"), false);
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
 
@@ -304,6 +304,27 @@ class GenericTableViewUpdateTest {
 		assertTrue(result.model().getRows().stream()
 				.allMatch(row -> Set.of("2", "4").contains(row.getValue("data0", String.class))));
 		assertEquals(5, result.model().getAllRows().size());
+		assertEquals(0, result.model().getSelectedRows().size());
+		assertTrue(result.model().isRebuildTableModel());
+		assertFalse(result.model().isDirty());
+		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldFilterRowsAndSelect_whenApplyRowFilterWithSelection() {
+		GenericTableViewModel model = baseModel();
+		GenericTableViewMsg msg = new GenericTableViewMsg.ApplyRowFilter("data0", Set.of("2", "4"), true);
+		Set<String> expectedSelectedRows = Set.of(model.getRows().get(1).getId(), model.getRows().get(3).getId());
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+
+		assertNotNull(result.model());
+		assertEquals(2, result.model().getRows().size());
+		assertTrue(result.model().getRows().stream()
+				.allMatch(row -> Set.of("2", "4").contains(row.getValue("data0", String.class))));
+		assertEquals(5, result.model().getAllRows().size());
+		assertEquals(2, result.model().getSelectedRows().size());
+		assertEquals(expectedSelectedRows, result.model().getSelectedRows());
 		assertTrue(result.model().isRebuildTableModel());
 		assertFalse(result.model().isDirty());
 		assertFalse(result.effect().isPresent());

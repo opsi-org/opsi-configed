@@ -52,7 +52,8 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	record ResizeColumns(Map<String, Integer> columnWidths) implements GenericTableViewMsg {
 	}
 
-	record ApplyRowFilter(String columnKey, Set<String> filterValues) implements GenericTableViewMsg {
+	record ApplyRowFilter(String columnKey, Set<String> filterValues, boolean selectFilteredRows)
+			implements GenericTableViewMsg {
 	}
 
 	record ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) implements GenericTableViewMsg {

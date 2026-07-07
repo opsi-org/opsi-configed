@@ -217,7 +217,7 @@ public class ProductActionPanel extends JPanel {
 				Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
 				if (selectedRows.length != 0) {
-					// panelProductSettings.getProductTable().reduceToSelected();
+					panelProductSettings.getProductTableModified().reduceToSelected();
 				}
 			} else {
 				panelProductSettings.valueChanged(false);

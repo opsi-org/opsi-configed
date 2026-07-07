@@ -297,10 +297,20 @@ public class ProductTableModified {
 		return value == null ? null : value.toString();
 	}
 
-	public void setFilter(Set<String> productIds) {
-		Set<String> normalizedProductIds = productIds == null ? new HashSet<>() : new HashSet<>(productIds);
+	public void reduceToSelected() {
+		Set<String> productIds = getSelectedIDs();
 		tableViewComponent
-				.dispatch(new GenericTableViewMsg.ApplyRowFilter(ProductState.KEY_PRODUCT_ID, normalizedProductIds));
+				.dispatch(new GenericTableViewMsg.ApplyRowFilter(ProductState.KEY_PRODUCT_ID, productIds, true));
+	}
+
+	public void setFilter(Set<String> productIds) {
+		setFilter(productIds, false);
+	}
+
+	public void setFilter(Set<String> productIds, boolean selectFilteredRows) {
+		Set<String> normalizedProductIds = productIds == null ? new HashSet<>() : new HashSet<>(productIds);
+		tableViewComponent.dispatch(new GenericTableViewMsg.ApplyRowFilter(ProductState.KEY_PRODUCT_ID,
+				normalizedProductIds, selectFilteredRows));
 	}
 
 	public void valueChanged(boolean doSelection, List<DefaultMutableTreeNode> filteredNodes) {
@@ -322,7 +332,7 @@ public class ProductTableModified {
 				}
 			}
 
-			setFilter(productIds);
+			setFilter(productIds, doSelection);
 
 			if (doSelection) {
 				setPendingSelection(selectedValues);
@@ -336,8 +346,7 @@ public class ProductTableModified {
 			setFilter(productIds);
 		} else {
 			Set<String> productIds = Set.of(node.toString());
-			setFilter(productIds);
-			setPendingSelection(productIds);
+			setFilter(productIds, true);
 		}
 	}
 
