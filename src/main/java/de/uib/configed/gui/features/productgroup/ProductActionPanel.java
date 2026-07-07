@@ -150,15 +150,7 @@ public class ProductActionPanel extends JPanel {
 	private void handleCollectiveAction(String selected) {
 		Set<String> saveSelectedProducts = panelProductSettings.getProductTableModified().getSelectedIDs();
 
-		// Logging.info(this, "handleCollectiveAction, selected products ",
-		// 		panelProductSettings.getProductTable().getSelectedRowsInModelTerms());
 		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
-
-		// InstallationStateTableModel installationStateTableModel = (InstallationStateTableModel) panelProductSettings
-		// 		.getProductTable().getModel();
-
-		// if (!installationStateTableModel.infoIfNoClientsSelected()) {
-		// 	installationStateTableModel.initCollectiveChange();
 
 		int actionType = switch (selected) {
 		case "setup" -> ActionRequest.SETUP;
@@ -169,17 +161,6 @@ public class ProductActionPanel extends JPanel {
 
 		panelProductSettings.getProductTableModified()
 				.setActionRequestForSelectedProducts(new ActionRequest(actionType).toString());
-
-		// 	if (actionType != ActionRequest.INVALID) {
-		// 		panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
-		// 			Logging.info(" row id ", x, " product ", installationStateTableModel.getValueAt(x, 0));
-		// 			installationStateTableModel.collectiveChangeActionRequest(
-		// 					(String) installationStateTableModel.getValueAt(x, 0), new ActionRequest(actionType));
-		// 		});
-		// 	}
-
-		// 	installationStateTableModel.finishCollectiveChange();
-		// }
 
 		panelProductSettings.getProductTableModified().setPendingSelection(saveSelectedProducts);
 	}
