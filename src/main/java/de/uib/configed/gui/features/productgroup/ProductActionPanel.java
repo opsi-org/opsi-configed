@@ -159,6 +159,10 @@ public class ProductActionPanel extends JPanel {
 		default -> ActionRequest.INVALID;
 		};
 
+		if (actionType == ActionRequest.INVALID) {
+			return;
+		}
+
 		panelProductSettings.getProductTableModified()
 				.setActionRequestForSelectedProducts(new ActionRequest(actionType).toString());
 
