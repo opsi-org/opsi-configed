@@ -178,7 +178,6 @@ public class ProductTree extends AbstractGroupTree {
 		}
 		setFilter(productIds);
 		if (anyIsLeaf) {
-			Logging.devel(this, "selectedProductIds ", selectedProductIds);
 			localbootPanel.getProductTableModified().setPendingSelection(selectedProductIds);
 			netbootPanel.getProductTableModified().setPendingSelection(selectedProductIds);
 		}

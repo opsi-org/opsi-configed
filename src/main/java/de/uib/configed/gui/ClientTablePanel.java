@@ -317,6 +317,20 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		return columnIndex;
 	}
 
+	public Set<String> getSelectedSet() {
+		Set<String> result = new HashSet<>();
+		List<RowData> rows = clientTableViewComponent.model.getRows();
+		Set<String> selectedRows = clientTableViewComponent.model.getSelectedRows();
+		for (int i = 0; i < rows.size(); i++) {
+			if (selectedRows.contains(rows.get(i).getId())) {
+				RowData row = rows.get(i);
+				String clientName = row.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
+				result.add(clientName);
+			}
+		}
+		return result;
+	}
+
 	private static class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
 		private ConfigedMain configedMain;
 

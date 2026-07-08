@@ -30,13 +30,18 @@ import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.share.logging.Logging;
 
 public class GroupTreeTransferHandler extends TransferHandler {
+	public static final String CLIENT_TABLE = "clientTable";
+	public static final String PRODUCT_TABLE = "productTable";
+
 	private AbstractGroupTree tree;
 
 	private JComponent source;
+	private String tableType;
 
-	public GroupTreeTransferHandler(AbstractGroupTree tree) {
+	public GroupTreeTransferHandler(AbstractGroupTree tree, String tableType) {
 		super();
 		this.tree = tree;
+		this.tableType = tableType;
 	}
 
 	@Override
@@ -67,7 +72,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean canImportToThisGroupNode(GroupNode targetNode) {
-		if (source instanceof ProductTable) {
+		if (source instanceof JTable) {
 			// Objects in Table are selected
 			return isNormalGroup(targetNode);
 		} else {
@@ -130,8 +135,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	private boolean canImportToThisComponent(Component target) {
 		return switch (target) {
-		// case ClientTree _ -> source instanceof ClientTable || source instanceof ClientTree;
-		case ProductTree _ -> source instanceof ProductTable || source instanceof ProductTree;
+		case ClientTree _ -> CLIENT_TABLE.equals(tableType) || source instanceof ClientTree;
+		case ProductTree _ -> PRODUCT_TABLE.equals(tableType) || source instanceof ProductTree;
 		default -> {
 			Logging.debug(this, "The target is not a Client or product tree, but ", target.getClass().getName());
 			yield false;
@@ -215,7 +220,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public boolean importData(TransferSupport support) {
-		if (source instanceof ProductTable) {
+		if (source instanceof JTable) {
 			return importFromTable(support);
 		} else {
 			return importFromTree(support);
@@ -233,11 +238,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	private boolean importFromTable(TransferSupport support) {
 		Set<String> selectedObjects;
-		// if (source instanceof ClientTable clientTable) {
-		// 	selectedObjects = clientTable.getSelectedSet();
-		// } else {
-		selectedObjects = ((ProductTable) source).getSelectedIDs();
-		// }
+		if (CLIENT_TABLE.equals(tableType)) {
+			selectedObjects = ConfigedMain.getMainFrame().getClientTablePanel().getSelectedSet();
+		} else {
+			selectedObjects = ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
+					.getProductPageManager().getPanelInUse().getProductTableModified().getSelectedIDs();
+		}
 
 		return importObjects(selectedObjects, support);
 	}

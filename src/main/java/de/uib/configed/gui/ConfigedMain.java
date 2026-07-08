@@ -35,7 +35,6 @@ import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.gui.data.DependenciesModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
-import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ClientTree;
@@ -148,11 +147,13 @@ public class ConfigedMain {
 	}
 
 	private void connectTreesWithTables() {
-		GroupTreeTransferHandler clientTransferHandler = new GroupTreeTransferHandler(clientTree);
+		GroupTreeTransferHandler clientTransferHandler = new GroupTreeTransferHandler(clientTree,
+				GroupTreeTransferHandler.CLIENT_TABLE);
 		clientTree.setTransferHandler(clientTransferHandler);
 		clientTablePanel.getTableComponent().getTable().setTransferHandler(clientTransferHandler);
 
-		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree);
+		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree,
+				GroupTreeTransferHandler.PRODUCT_TABLE);
 		productTree.setTransferHandler(productTransferHandler);
 		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTableModified().getTableViewComponent().getTable()
@@ -942,17 +943,7 @@ public class ConfigedMain {
 	}
 
 	public Set<String> getSelectedSet() {
-		Set<String> result = new HashSet<>();
-		List<RowData> rows = clientTablePanel.getTableComponent().model.getRows();
-		Set<String> selectedRows = clientTablePanel.getTableComponent().model.getSelectedRows();
-		for (int i = 0; i < rows.size(); i++) {
-			if (selectedRows.contains(rows.get(i).getId())) {
-				RowData row = rows.get(i);
-				String clientName = row.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class);
-				result.add(clientName);
-			}
-		}
-		return result;
+		return clientTablePanel.getSelectedSet();
 	}
 
 	private List<String> getClientSelectionBasedOnDepotSelection(Set<String> selValuesList) {

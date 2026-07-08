@@ -58,6 +58,8 @@ public class ProductPageManager implements MessagebusListener {
 	private ConfigedMain configedMain;
 	private ClientConfiguration clientConfiguration;
 
+	private PanelProductSettings panelInUse;
+
 	public ProductPageManager(ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
 		this.configedMain = configedMain;
 		this.clientConfiguration = clientConfiguration;
@@ -102,6 +104,8 @@ public class ProductPageManager implements MessagebusListener {
 			clientConfiguration.setSelectedIndex(0);
 			return;
 		}
+
+		panelInUse = panelProductSettings;
 
 		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getDataServices().product
 				.getMapOfProductStatesAndActions(configedMain.getSelectedClients(), attributes, productServerString);
@@ -178,6 +182,10 @@ public class ProductPageManager implements MessagebusListener {
 		}
 
 		return result;
+	}
+
+	public PanelProductSettings getPanelInUse() {
+		return panelInUse;
 	}
 
 	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
