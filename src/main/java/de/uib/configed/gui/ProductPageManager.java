@@ -81,8 +81,7 @@ public class ProductPageManager implements MessagebusListener {
 				persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsLocalbootProducts());
 		setProductsPage(collectChangedLocalbootStates,
 				getAttributesFromProductDisplayFields(localbootProductDisplayFieldsList),
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelLocalbootProductSettings(),
-				localbootProductDisplayFieldsList);
+				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelLocalbootProductSettings());
 	}
 
 	public void setNetbootProductsPage() {
@@ -90,13 +89,11 @@ public class ProductPageManager implements MessagebusListener {
 				persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsNetbootProducts());
 		setProductsPage(collectChangedNetbootStates,
 				getAttributesFromProductDisplayFields(netbootProductDisplayFieldsList),
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelNetbootProductSettings(),
-				netbootProductDisplayFieldsList);
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelNetbootProductSettings());
 	}
 
 	private void setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
-			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
-			List<String> displayFields) {
+			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings) {
 		if (configedMain.checkSynchronous(configedMain.getDepotsOfSelectedClients())) {
 			configedMain.setDepotRepresentative();
 		} else {
