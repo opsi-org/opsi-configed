@@ -346,7 +346,7 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 				.metaData(Map.of("title", "Client " + hostId, "subtitle", scanInfo, "subject", "Software report",
 						"keywords", "software inventory"))
 				.defaultPrefix(Configed.getSavedStates().getProperty("swaudit_export_file_prefix",
-						Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix")))
+						SWcsvExporter.EXPORT_FILE_PREFIX))
 				.exportClientId(configedMain.getSelectedClients().get(0)).build();
 	}
 

@@ -103,7 +103,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
 		String filenamePrefix = Configed.getSavedStates().getProperty("swaudit_export_file_prefix",
-				Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix"));
+				SWcsvExporter.EXPORT_FILE_PREFIX);
 
 		fieldFilenamePrefix = new JTextField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);

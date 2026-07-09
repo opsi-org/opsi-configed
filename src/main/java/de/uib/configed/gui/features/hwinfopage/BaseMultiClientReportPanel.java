@@ -26,6 +26,7 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class BaseMultiClientReportPanel extends JPanel {
+	public static final String EXPORT_FILE_PREFIX = "hardware_report_";
 	private JButton buttonExport;
 	private ActionListener actionListenerForStart;
 
@@ -49,8 +50,7 @@ public class BaseMultiClientReportPanel extends JPanel {
 	private JLabel labelSwauditMultiClientReport1;
 
 	public BaseMultiClientReportPanel() {
-		this(Configed.getResourceValue("PanelHWMultiClientReport.title2"),
-				Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix"), "hwaudit_kind_of_export",
+		this(Configed.getResourceValue("PanelHWMultiClientReport.title2"), EXPORT_FILE_PREFIX, "hwaudit_kind_of_export",
 				"hwaudit_export_dir", "hwaudit_export_file_prefix", "hwaudit_export_allow_overwrite");
 	}
 

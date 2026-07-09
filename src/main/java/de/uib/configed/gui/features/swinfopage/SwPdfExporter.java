@@ -41,7 +41,7 @@ public class SwPdfExporter extends AbstractSWExporter {
 
 		exportTable.setClient(clientName);
 		exportTable.setMetaData(metaData);
-		exportTable.execute("software_report_", exportFilename, false);
+		exportTable.execute(SWcsvExporter.EXPORT_FILE_PREFIX, exportFilename, false);
 	}
 
 	@Override

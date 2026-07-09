@@ -12,9 +12,10 @@ import de.uib.configed.gui.share.table.ExporterToCSV;
 import de.uib.configed.share.logging.Logging;
 
 /**
- * A class to implement pdf export of SWAudit data
+ * A class to implement csv export of SWAudit data
  */
 public class SWcsvExporter extends AbstractSWExporter {
+	public static final String EXPORT_FILE_PREFIX = "software_report_";
 	private JTable theTable;
 	private ExporterToCSV exportTable;
 
@@ -35,7 +36,7 @@ public class SWcsvExporter extends AbstractSWExporter {
 
 		theTable.setModel(modelSWInfo);
 		exportTable.setClient(clientName);
-		exportTable.execute("software_report_", exportFilename, false);
+		exportTable.execute(EXPORT_FILE_PREFIX, exportFilename, false);
 	}
 
 	@Override

@@ -19,9 +19,9 @@ public class SWMultiClientReportPanel extends BaseMultiClientReportPanel {
 	private JCheckBox checkWithMsUpdates2;
 
 	public SWMultiClientReportPanel() {
-		super(Configed.getResourceValue("PanelSWMultiClientReport.title2"),
-				Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix"), "swaudit_kind_of_export",
-				"swaudit_export_dir", "swaudit_export_file_prefix", "swaudit_export_allow_overwrite");
+		super(Configed.getResourceValue("PanelSWMultiClientReport.title2"), SWcsvExporter.EXPORT_FILE_PREFIX,
+				"swaudit_kind_of_export", "swaudit_export_dir", "swaudit_export_file_prefix",
+				"swaudit_export_allow_overwrite");
 	}
 
 	public boolean wantsWithMsUpdates() {

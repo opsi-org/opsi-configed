@@ -13,7 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
+import de.uib.configed.gui.features.swinfopage.SWcsvExporter;
 import de.uib.configed.share.logging.Logging;
 
 public class SavedStates {
@@ -48,22 +49,14 @@ public class SavedStates {
 		String hwAuditExportFilePrefix = getProperty("hwaudit_export_file_prefix");
 		String swAuditExportFilePrefix = getProperty("swaudit_export_file_prefix");
 
-		if ("report_hwaudit_".equals(hwAuditExportFilePrefix)) {
-			String newHWAuditExportFilePrefix = Configed.getResourceValue("PanelHWMultiClientReport.filenamePrefix");
-			Logging.info(this,
-					"hwaudit_export_file_prefix is still using old default value (report_hwaudit_) - changing to",
-					newHWAuditExportFilePrefix);
-			setProperty("hwaudit_export_file_prefix", newHWAuditExportFilePrefix);
+		if (BaseMultiClientReportPanel.EXPORT_FILE_PREFIX.equals(hwAuditExportFilePrefix)) {
+			setProperty("hwaudit_export_file_prefix", BaseMultiClientReportPanel.EXPORT_FILE_PREFIX);
 
 			oldDefaultChanged = true;
 		}
 
 		if ("report_swaudit_".equals(swAuditExportFilePrefix)) {
-			String newSWAuditExportFilePrefix = Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
-			Logging.info(this,
-					"swaudit_export_file_prefix is still using old default value (report_swaudit_) - changing to",
-					newSWAuditExportFilePrefix);
-			setProperty("swaudit_export_file_prefix", newSWAuditExportFilePrefix);
+			setProperty("swaudit_export_file_prefix", SWcsvExporter.EXPORT_FILE_PREFIX);
 
 			oldDefaultChanged = true;
 		}
