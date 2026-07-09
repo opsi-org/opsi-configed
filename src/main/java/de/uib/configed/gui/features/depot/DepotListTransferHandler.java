@@ -33,16 +33,8 @@ public class DepotListTransferHandler extends TransferHandler {
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		Logging.debug(this, "DepotListTransferHandler canImport?");
 
-		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
-			return false;
-		}
-
-		if (!(support.getComponent() instanceof JList<?>) || !support.isDrop()) {
-			return false;
-		}
-
 		// Only accept drags originating from the ClientTable
-		if (!support.isDataFlavorSupported(ClientSelectionTransferable.CLIENT_LIST_FLAVOR)) {
+		if (!isValidClientDrop(support)) {
 			return false;
 		}
 
@@ -50,6 +42,12 @@ public class DepotListTransferHandler extends TransferHandler {
 		return targetDepot != null
 				&& PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 						.hasDepotPermission(targetDepot);
+	}
+
+	private static boolean isValidClientDrop(TransferSupport support) {
+		return !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()
+				&& support.getComponent() instanceof JList<?> && support.isDrop()
+				&& support.isDataFlavorSupported(ClientSelectionTransferable.CLIENT_LIST_FLAVOR);
 	}
 
 	private String getTargetDepot(TransferSupport support) {
