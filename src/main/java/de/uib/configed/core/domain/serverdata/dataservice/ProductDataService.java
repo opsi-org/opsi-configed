@@ -1380,21 +1380,40 @@ public class ProductDataService extends DataService {
 
 		productOnClientsDisplayFields.put(ProductState.KEY_VERSION_INFO, true);
 
-		String userSavedDisplayFieldsString = UserPreferences
-				.get(cacheId == CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS
-						? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
-						: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS);
-
-		// We want an empty Array of options if userSavedDisplayFieldsString is empty
-		// instead of an Array with one empty String
-		String[] userSavedDisplayFields = userSavedDisplayFieldsString.isEmpty() ? new String[0]
-				: userSavedDisplayFieldsString.split(",");
+		String userPreferencesKey = cacheId == CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS
+				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
+				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS;
+		List<String> userSavedDisplayFields = getSanitizedUserSavedProductDisplayFields(userPreferencesKey);
 
 		for (String displayField : userSavedDisplayFields) {
 			productOnClientsDisplayFields.put(displayField, true);
 		}
 
 		dataServices.cacheManager.setCachedData(cacheId, productOnClientsDisplayFields);
+	}
+
+	private static List<String> getSanitizedUserSavedProductDisplayFields(String userPreferencesKey) {
+		String userSavedDisplayFieldsString = UserPreferences.get(userPreferencesKey);
+		if (userSavedDisplayFieldsString.isEmpty()) {
+			return new ArrayList<>();
+		}
+
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
+		List<String> sanitizedDisplayFields = new ArrayList<>();
+		for (String displayField : userSavedDisplayFieldsString.split(",")) {
+			if (possibleValues.contains(displayField)) {
+				sanitizedDisplayFields.add(displayField);
+			} else {
+				Logging.info("ignoring unknown product display field from user preferences: ", displayField);
+			}
+		}
+
+		String sanitizedDisplayFieldsString = String.join(",", sanitizedDisplayFields);
+		if (!userSavedDisplayFieldsString.equals(sanitizedDisplayFieldsString)) {
+			UserPreferences.set(userPreferencesKey, sanitizedDisplayFieldsString);
+		}
+
+		return sanitizedDisplayFields;
 	}
 
 	private List<String> produceProductOnClientDisplayfields(String key) {
