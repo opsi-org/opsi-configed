@@ -22,7 +22,7 @@ import com.formdev.flatlaf.FlatLaf;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2026-05-21";
+	public static final String VERDATE = "2026-07-09";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - " + VERDATE.substring(0, 4) + " (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
