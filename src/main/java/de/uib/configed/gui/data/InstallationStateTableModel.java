@@ -52,8 +52,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private static final String NONE_STRING = "";
 	private static final String NONE_DISPLAY_STRING = "none";
-	private static final String FAILED_DISPLAY_STRING = "failed";
-	private static final String SUCCESS_DISPLAY_STRING = "success";
+	public static final String FAILED_DISPLAY_STRING = "failed";
+	public static final String SUCCESS_DISPLAY_STRING = "success";
 
 	private static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
 	static {
@@ -157,8 +157,12 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
 					Configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
-			columnDict.put(ProductState.KEY_INSTALLATION_INFO,
-					Configed.getResourceValue("InstallationStateTableModel.report"));
+			columnDict.put(ProductState.KEY_LAST_ACTION,
+					Configed.getResourceValue("InstallationStateTableModel.lastAction"));
+			columnDict.put(ProductState.KEY_ACTION_RESULT,
+					Configed.getResourceValue("InstallationStateTableModel.actionResult"));
+			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
+					Configed.getResourceValue("InstallationStateTableModel.actionProgress"));
 
 			columnDict.put(ProductState.KEY_ACTION_REQUEST,
 					Configed.getResourceValue("InstallationStateTableModel.actionRequest"));
@@ -378,13 +382,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		editablePreparedColumns[2] = true;
 
 		preparedColumns.add(3, ProductState.KEY_INSTALLATION_INFO);
-		editablePreparedColumns[3] = true;
+		editablePreparedColumns[3] = false;
 
 		preparedColumns.add(4, ProductState.KEY_ACTION_PROGRESS);
 		editablePreparedColumns[4] = false;
 
 		preparedColumns.add(5, ProductState.KEY_ACTION_RESULT);
-		editablePreparedColumns[5] = false;
+		editablePreparedColumns[5] = true;
 
 		preparedColumns.add(6, ProductState.KEY_LAST_ACTION);
 		editablePreparedColumns[6] = false;
@@ -457,6 +461,26 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private void setInstallationInfo(String product, String value) {
 		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
+
+		// keep the separate visual values in sync with the manual change
+		combinedVisualValues.get(ProductState.KEY_LAST_ACTION).put(product, LastAction.getLabel(LastAction.NONE));
+		if (value.equals(NONE_STRING) || value.equals(NONE_DISPLAY_STRING)) {
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.NONE));
+			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, NONE_STRING);
+		} else if (value.equals(FAILED_DISPLAY_STRING)) {
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.FAILED));
+			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, MANUALLY);
+		} else if (value.equals(SUCCESS_DISPLAY_STRING)) {
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.SUCCESSFUL));
+			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, MANUALLY);
+		} else {
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.NONE));
+			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, value);
+		}
 
 		for (String clientId : selectedClients) {
 			setInstallationInfo(clientId, product, value);
@@ -971,7 +995,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		} else if (column == columnsToDisplay.indexOf(InstallationStatus.KEY)) {
 			// selection of status
 			possibleOptions = producePossibleInstallationStatus(InstallationStatus.getDisplayLabelsForChoice());
-		} else if (column == columnsToDisplay.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
+		} else if (column == columnsToDisplay.indexOf(ProductState.KEY_ACTION_RESULT)) {
 			possibleOptions = producePossibleInstallationInfos((String) getValueAt(row, column));
 		} else {
 			Logging.warning(this, "unexpected column ", column);
@@ -1085,12 +1109,30 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 1 -> globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 		case 2 -> InstallationStatus
 				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
+		case 5 -> getDisplayLabelForActionResult();
+		case 6 -> getDisplayLabelForLastAction();
 		case 7 -> ActionRequest
 				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 		case 9 -> getDisplayLabelForPosition();
 		case 10 -> actualProductVersion();
 		default -> combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
 		};
+	}
+
+	private Object getDisplayLabelForActionResult() {
+		String result = combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
+		if (result == null || ActionResult.getLabel(ActionResult.NONE).equals(result)) {
+			return "";
+		}
+		if (ActionResult.getLabel(ActionResult.SUCCESSFUL).equals(result)) {
+			return SUCCESS_DISPLAY_STRING;
+		}
+		return result;
+	}
+
+	private Object getDisplayLabelForLastAction() {
+		String lastAction = combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
+		return LastAction.getLabel(LastAction.NONE).equals(lastAction) ? "" : lastAction;
 	}
 
 	private Object getDisplayLabelForPosition() {
@@ -1180,7 +1222,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			initCollectiveChange();
 			collectiveChangeActionRequest(actualProduct, ActionRequest.produceActionRequestFromLabel((String) value));
 			finishCollectiveChange();
-		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
+		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_ACTION_RESULT)) {
 			if (value.equals(NONE_DISPLAY_STRING)) {
 				value = NONE_STRING;
 			}

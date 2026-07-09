@@ -72,48 +72,26 @@ public final class ProductState {
 	}
 
 	public static Map<String, String> transform(Map<String, String> productState) {
-		// transformed values
-		StringBuilder installationInfo = new StringBuilder();
-		// the reverse will be found in in setInstallationInfo in
-		// InstallationStateTableModel
+		String installationInfo;
 
-		LastAction lastAction = LastAction.produceFromLabel(productState.get(KEY_LAST_ACTION));
+		String lastAction = ActionRequest
+				.getLabel(LastAction.produceFromLabel(productState.get(KEY_LAST_ACTION)).getVal());
 
-		if (!productState.get(KEY_ACTION_PROGRESS).isEmpty()) {
-			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
-			if (result.getVal() == ActionResult.FAILED) {
-				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
-				installationInfo.append(": ");
-			}
+		lastAction = lastAction.equals(ActionRequest.KEY_NONE) ? "" : lastAction;
 
-			installationInfo.append(productState.get(KEY_ACTION_PROGRESS));
-			installationInfo.append(" ( ");
-			if (lastAction.getVal() > 0) {
-				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
-			}
-
-			installationInfo.append(" ) ");
-
-			if (result.getVal() == ActionResult.FAILED) {
-				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
-				installationInfo.append(" ");
-			}
+		if (!productState.get(KEY_ACTION_PROGRESS).isEmpty()
+				&& !productState.get(KEY_ACTION_PROGRESS).equals(ActionRequest.KEY_NONE)) {
+			installationInfo = productState.get(KEY_ACTION_PROGRESS) + " (" + lastAction + ")";
 		} else {
 			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
-				installationInfo.append("");
-				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
-			}
-			// else
-
-			if (lastAction.getVal() > 0) {
-				installationInfo.append(" (");
-				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
-				installationInfo.append(")");
+				installationInfo = ActionResult.getDisplayLabel(result.getVal()) + " (" + lastAction + ")";
+			} else {
+				installationInfo = "";
 			}
 		}
 
-		productState.put(KEY_INSTALLATION_INFO, installationInfo.toString());
+		productState.put(KEY_INSTALLATION_INFO, installationInfo);
 
 		String versionInfo = "";
 

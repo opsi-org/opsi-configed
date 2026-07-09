@@ -1361,8 +1361,12 @@ public class ProductDataService extends DataService {
 
 		productOnClientsDisplayFields.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
-		productOnClientsDisplayFields.put(ProductState.KEY_INSTALLATION_INFO,
-				configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1);
+		productOnClientsDisplayFields.put(ProductState.KEY_LAST_ACTION,
+				configuredByService.indexOf(ProductState.KEY_LAST_ACTION) > -1);
+		productOnClientsDisplayFields.put(ProductState.KEY_ACTION_RESULT,
+				configuredByService.indexOf(ProductState.KEY_ACTION_RESULT) > -1);
+		productOnClientsDisplayFields.put(ProductState.KEY_ACTION_PROGRESS,
+				configuredByService.indexOf(ProductState.KEY_ACTION_PROGRESS) > -1);
 
 		productOnClientsDisplayFields.put(ProductState.KEY_ACTION_REQUEST, true);
 
@@ -1419,7 +1423,9 @@ public class ProductDataService extends DataService {
 		List<String> result = new ArrayList<>();
 		result.add("productId");
 		result.add(ProductState.KEY_INSTALLATION_STATUS);
-		result.add(ProductState.KEY_INSTALLATION_INFO);
+		result.add(ProductState.KEY_LAST_ACTION);
+		result.add(ProductState.KEY_ACTION_RESULT);
+		result.add(ProductState.KEY_ACTION_PROGRESS);
 		result.add(ProductState.KEY_ACTION_REQUEST);
 		result.add(ProductState.KEY_VERSION_INFO);
 		return result;
@@ -1430,7 +1436,9 @@ public class ProductDataService extends DataService {
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
 		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
-		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
+		possibleValues.add(ProductState.KEY_LAST_ACTION);
+		possibleValues.add(ProductState.KEY_ACTION_RESULT);
+		possibleValues.add(ProductState.KEY_ACTION_PROGRESS);
 		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
 		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
 		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
