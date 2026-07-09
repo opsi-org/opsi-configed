@@ -55,7 +55,7 @@ public class SavedStates {
 			oldDefaultChanged = true;
 		}
 
-		if ("report_swaudit_".equals(swAuditExportFilePrefix)) {
+		if (SWcsvExporter.EXPORT_FILE_PREFIX.equals(swAuditExportFilePrefix)) {
 			setProperty("swaudit_export_file_prefix", SWcsvExporter.EXPORT_FILE_PREFIX);
 
 			oldDefaultChanged = true;
