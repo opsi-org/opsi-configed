@@ -29,17 +29,15 @@ public final class ProductState {
 	public static final String KEY_PRODUCT_PRIORITY = "priority";
 	public static final String KEY_ACTION_SEQUENCE = "actionSequence";
 
-	// transformed values
-	public static final String KEY_INSTALLATION_INFO = "installationInfo";
+	// transformed info
 	public static final String KEY_VERSION_INFO = "versionInfo";
 
 	// additional values
 	public static final String KEY_PRODUCT_NAME = "productName";
 
 	public static final List<String> KEYS = List.of(KEY_PRODUCT_ID, KEY_PRODUCT_NAME, KEY_INSTALLATION_STATUS,
-			KEY_INSTALLATION_INFO, KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION, KEY_PRODUCT_PRIORITY,
-			KEY_ACTION_SEQUENCE, KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION, KEY_PACKAGE_VERSION,
-			KEY_LAST_STATE_CHANGE);
+			KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION, KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE,
+			KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION, KEY_PACKAGE_VERSION, KEY_LAST_STATE_CHANGE);
 
 	// Empty constructor to prevent instantiation
 	private ProductState() {
@@ -50,13 +48,13 @@ public final class ProductState {
 		productState.put(KEY_PRODUCT_ID, "");
 		productState.put(KEY_PRODUCT_NAME, "");
 
-		productState.put(KEY_INSTALLATION_STATUS, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
+		productState.put(KEY_INSTALLATION_STATUS, InstallationStatus.NOT_INSTALLED.getLabel());
 
-		productState.put(KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+		productState.put(KEY_ACTION_RESULT, ActionResult.NONE.getLabel());
 		productState.put(KEY_ACTION_PROGRESS, "");
-		productState.put(KEY_LAST_ACTION, LastAction.getLabel(LastAction.NONE));
+		productState.put(KEY_LAST_ACTION, LastAction.NONE.getLabel());
 
-		productState.put(KEY_ACTION_REQUEST, ActionRequest.getLabel(ActionRequest.NONE));
+		productState.put(KEY_ACTION_REQUEST, ActionRequest.NONE.getLabel());
 
 		productState.put(KEY_PRODUCT_PRIORITY, "");
 		productState.put(KEY_ACTION_SEQUENCE, "");
@@ -66,33 +64,12 @@ public final class ProductState {
 
 		productState.put(KEY_LAST_STATE_CHANGE, "");
 
-		transform(productState);
+		calculateProductVersion(productState);
 
 		return productState;
 	}
 
-	public static Map<String, String> transform(Map<String, String> productState) {
-		String installationInfo;
-
-		String lastAction = ActionRequest
-				.getLabel(LastAction.produceFromLabel(productState.get(KEY_LAST_ACTION)).getVal());
-
-		lastAction = lastAction.equals(ActionRequest.KEY_NONE) ? "" : lastAction;
-
-		if (!productState.get(KEY_ACTION_PROGRESS).isEmpty()
-				&& !productState.get(KEY_ACTION_PROGRESS).equals(ActionRequest.KEY_NONE)) {
-			installationInfo = productState.get(KEY_ACTION_PROGRESS) + " (" + lastAction + ")";
-		} else {
-			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
-			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
-				installationInfo = ActionResult.getDisplayLabel(result.getVal()) + " (" + lastAction + ")";
-			} else {
-				installationInfo = "";
-			}
-		}
-
-		productState.put(KEY_INSTALLATION_INFO, installationInfo);
-
+	public static Map<String, String> calculateProductVersion(Map<String, String> productState) {
 		String versionInfo = "";
 
 		if (!productState.get(KEY_PRODUCT_VERSION).isEmpty()) {

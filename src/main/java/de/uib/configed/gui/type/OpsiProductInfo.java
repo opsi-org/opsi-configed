@@ -34,7 +34,7 @@ public class OpsiProductInfo extends OpsiPackage {
 		super(m);
 
 		possibleActions = new ArrayList<>();
-		possibleActions.add(ActionRequest.getState2Label().get(ActionRequest.NONE));
+		possibleActions.add(ActionRequest.NONE.getLabel());
 		// keys are the possible script types
 		for (String scriptKey : ActionRequest.getScriptKeys()) {
 			if (m.get(scriptKey) != null && !("" + m.get(scriptKey)).isEmpty()) {

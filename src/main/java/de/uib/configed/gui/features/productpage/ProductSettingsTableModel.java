@@ -17,6 +17,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.core.domain.productstate.ActionRequest;
+import de.uib.configed.core.domain.productstate.ActionResult;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.gui.Configed;
@@ -87,9 +88,9 @@ public class ProductSettingsTableModel {
 
 				// Safe since instanceof returns false if null
 				if (value instanceof String stringValue) {
-					if (stringValue.startsWith(InstallationStateTableModel.FAILED_DISPLAY_STRING)) {
+					if (stringValue.startsWith(ActionResult.FAILED.getLabel())) {
 						setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
-					} else if (stringValue.startsWith(InstallationStateTableModel.SUCCESS_DISPLAY_STRING)) {
+					} else if (stringValue.startsWith(ActionResult.SUCCESSFUL.getLabel())) {
 						setForeground(Globals.OK_COLOR);
 					} else {
 						// Don't set foreground if no special result
