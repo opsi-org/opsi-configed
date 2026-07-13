@@ -37,7 +37,6 @@ import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.ServerActionManager;
-import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productgroup.ProductActionPanel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.tree.ProductTree;
@@ -216,21 +215,14 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
+			item.setText(ProductTableModified.getColumnTitle(productDisplayField.getKey()));
 			item.setState(productDisplayField.getValue());
-			item.addItemListener(itemEvent -> toggleDisplayField(productDisplayField));
+			item.addItemListener(itemEvent -> productTableModified.getTableViewComponent()
+					.dispatch(new GenericTableViewMsg.ToggleColumn(productDisplayField.getKey())));
 
 			jMenuVisibleColumns.add(item);
 		}
 		return popup;
-	}
-
-	private void toggleDisplayField(Entry<String, Boolean> productDisplayField) {
-		getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !productDisplayField.getValue());
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTY_STATES.toString());
-
-		// We need to rebuild the shown page in the client configuration to make changes effective
-		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 	}
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {

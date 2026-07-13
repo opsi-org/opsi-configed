@@ -47,7 +47,6 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ProductPageManager;
 import de.uib.configed.gui.data.ColoredTableCellRenderer;
 import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
-import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.productpage.ProductSettingsTableModel.ProductNameTableCellRenderer;
 import de.uib.configed.gui.features.productpage.ProductSettingsTableModel.ProductVersionCellRenderer;
@@ -71,6 +70,11 @@ import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
 
 public class ProductTableModified {
+	private static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
+			Map.entry(InstallationStatus.KEY_INSTALLED, "setup"),
+			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
+	private static final String UNEQUAL_ADD_STRING = "≠ ";
+
 	private static final String NONE_STRING = "";
 	private static final String NONE_DISPLAY_STRING = "none";
 	private static final String FAILED_DISPLAY_STRING = "failed";
@@ -83,6 +87,8 @@ public class ProductTableModified {
 	}
 
 	private static final String MANUALLY = "manually set";
+
+	private static Map<String, String> columnDict;
 
 	private GenericTableViewComponent tableViewComponent;
 	private JComponent component;
@@ -370,6 +376,44 @@ public class ProductTableModified {
 		tableViewComponent.dispatch(new GenericTableViewMsg.ChangeSelection(rowsToSelect));
 	}
 
+	public static synchronized void restartColumnDict() {
+		columnDict = null;
+	}
+
+	public static synchronized String getColumnTitle(String column) {
+		if (columnDict == null) {
+			columnDict = new HashMap<>();
+			columnDict.put("productId", Configed.getResourceValue("InstallationStateTableModel.productId"));
+			columnDict.put(ProductState.KEY_PRODUCT_NAME,
+					Configed.getResourceValue("InstallationStateTableModel.productName"));
+			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
+					Configed.getResourceValue("InstallationStateTableModel.installationStatus"));
+
+			columnDict.put(ProductState.KEY_INSTALLATION_INFO,
+					Configed.getResourceValue("InstallationStateTableModel.report"));
+
+			columnDict.put(ProductState.KEY_ACTION_REQUEST,
+					Configed.getResourceValue("InstallationStateTableModel.actionRequest"));
+			columnDict.put(ProductState.KEY_PRODUCT_PRIORITY,
+					Configed.getResourceValue("InstallationStateTableModel.priority"));
+			columnDict.put(ProductState.KEY_ACTION_SEQUENCE,
+					Configed.getResourceValue("InstallationStateTableModel.position"));
+
+			columnDict.put(ProductState.KEY_VERSION_INFO,
+					Configed.getResourceValue("InstallationStateTableModel.productVersion"));
+
+			columnDict.put(ProductState.KEY_LAST_STATE_CHANGE,
+					Configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
+		}
+
+		Logging.devel(ProductTableModified.class, "titles", columnDict);
+		if (columnDict.get(column) == null) {
+			return "";
+		}
+
+		return columnDict.get(column);
+	}
+
 	private void storeVisibleColumns(ProductSettingsType type, List<String> visibleColumns) {
 		Map<String, Boolean> productDisplayFields = getProductDisplayFieldsBasedOnType(type);
 		for (Entry<String, Boolean> productDisplayField : productDisplayFields.entrySet()) {
@@ -443,57 +487,55 @@ public class ProductTableModified {
 
 		// productId
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_ID)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_ID)).editable(false)
-				.prefferedWidth(170).toggleable(false).renderer(new ProductNameTableCellRenderer(tableViewComponent))
-				.build());
+				.header(getColumnTitle(ProductState.KEY_PRODUCT_ID)).editable(false).prefferedWidth(170)
+				.toggleable(false).renderer(new ProductNameTableCellRenderer(tableViewComponent)).build());
 
 		// productName
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_NAME)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_NAME)).editable(false)
-				.prefferedWidth(170).renderer(new ColorTableCellRenderer()).build());
+				.header(getColumnTitle(ProductState.KEY_PRODUCT_NAME)).editable(false).prefferedWidth(170)
+				.renderer(new ColorTableCellRenderer()).build());
 
 		// installationStatus — editable, combo box editor, custom renderer
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_STATUS)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS)).editable(true)
-				.prefferedWidth(60)
+				.header(getColumnTitle(ProductState.KEY_INSTALLATION_STATUS)).editable(true).prefferedWidth(60)
 				.renderer(new ColoredTableCellRendererByIndex(InstallationStatus.getLabel2TextColor()))
 				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createInstallationStatusComparator()).build());
 
 		// installationInfo — editable, dynamic combo editor, result-colored renderer
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_INFO)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_INFO)).editable(true)
-				.prefferedWidth(60).renderer(installationInfoTableCellRenderer)
+				.header(getColumnTitle(ProductState.KEY_INSTALLATION_INFO)).editable(true).prefferedWidth(60)
+				.renderer(installationInfoTableCellRenderer)
 				.editor(new DynamicCellEditor(new JComboBox<>(), comboBoxModeller)).build());
 
 		// actionRequest — editable, combo box editor, custom sort order
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_REQUEST)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST)).editable(true)
-				.prefferedWidth(60).renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
+				.header(getColumnTitle(ProductState.KEY_ACTION_REQUEST)).editable(true).prefferedWidth(60)
+				.renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
 				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createActionRequestComparator()).build());
 
 		// priority — right-aligned, numeric comparator
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_PRIORITY)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY)).editable(false)
-				.prefferedWidth(40).renderer(priorityclassTableCellRenderer)
+				.header(getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY)).editable(false).prefferedWidth(40)
+				.renderer(priorityclassTableCellRenderer)
 				.comparator(Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne)).build());
 
 		// actionSequence — right-aligned, numeric comparator
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_SEQUENCE)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE)).editable(false)
-				.prefferedWidth(40).renderer(productsequenceTableCellRenderer)
+				.header(getColumnTitle(ProductState.KEY_ACTION_SEQUENCE)).editable(false).prefferedWidth(40)
+				.renderer(productsequenceTableCellRenderer)
 				.comparator(Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne)).build());
 
 		// lastStateChange
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_LAST_STATE_CHANGE)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE)).editable(false)
-				.prefferedWidth(40).renderer(new ColoredTableCellRenderer()).build());
+				.header(getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE)).editable(false).prefferedWidth(40)
+				.renderer(new ColoredTableCellRenderer()).build());
 
 		// versionInfo — custom renderer for conflict detection
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_VERSION_INFO)
-				.header(InstallationStateTableModel.getColumnTitle(ProductState.KEY_VERSION_INFO)).editable(false)
-				.prefferedWidth(60).renderer(new ProductVersionCellRenderer(configedMain)).build());
+				.header(getColumnTitle(ProductState.KEY_VERSION_INFO)).editable(false).prefferedWidth(60)
+				.renderer(new ProductVersionCellRenderer(configedMain)).build());
 
 		Map<String, Boolean> productDisplayFields = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
 				? PersistenceControllerFactory.getPersistenceController().getDataServices().product
@@ -670,7 +712,7 @@ public class ProductTableModified {
 		String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(productId);
 		if (result != null && !result.isEmpty() && serverProductVersion != null
 				&& !serverProductVersion.equals(result)) {
-			return InstallationStateTableModel.UNEQUAL_ADD_STRING + result;
+			return UNEQUAL_ADD_STRING + result;
 		}
 		return result;
 	}
@@ -815,7 +857,7 @@ public class ProductTableModified {
 		if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
 				&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
 			String requiredStatus = InstallationStatus.getLabel(requiredIS);
-			String neededAction = InstallationStateTableModel.REQUIRED_ACTION_FOR_STATUS.get(requiredStatus);
+			String neededAction = REQUIRED_ACTION_FOR_STATUS.get(requiredStatus);
 			requiredAR = ActionRequest.getVal(neededAction);
 		}
 
