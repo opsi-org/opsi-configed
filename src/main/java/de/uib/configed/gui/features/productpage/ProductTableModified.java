@@ -68,6 +68,7 @@ import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
 import de.uib.configed.gui.share.table.gui.ComboBoxModeller;
 import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
+import de.uib.configed.share.userprefs.UserPreferences;
 
 public class ProductTableModified {
 	private static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
@@ -420,6 +421,12 @@ public class ProductTableModified {
 			productDisplayFields.put(productDisplayField.getKey(),
 					visibleColumns.contains(productDisplayField.getKey()));
 		}
+
+		UserPreferences.set(
+				type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
+						: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS,
+				String.join(",",
+						productDisplayFields.entrySet().stream().filter(Entry::getValue).map(Entry::getKey).toList()));
 
 		ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().stateChanged(null);
 	}
