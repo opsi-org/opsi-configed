@@ -45,6 +45,7 @@ import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.ExporterToCSV;
+import de.uib.configed.gui.share.table.ExporterToPDF;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
@@ -251,13 +252,13 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		metaData.put("keywords", "product settings");
 
 		// only relevent rows
-		// ExporterToPDF pdfExportTable = new ExporterToPDF(productTable.getStrippedTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(productTableModified.getStrippedTable());
 
-		// pdfExportTable.setMetaData(metaData);
-		// pdfExportTable.setPageSizeA4Landscape();
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
 
 		// create pdf
-		// pdfExportTable.execute(null, false);
+		pdfExportTable.execute(null, false);
 	}
 
 	private void reloadAction() {

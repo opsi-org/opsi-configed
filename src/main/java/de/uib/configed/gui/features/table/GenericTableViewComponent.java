@@ -310,6 +310,10 @@ public class GenericTableViewComponent
 		return -1;
 	}
 
+	public List<TableColumnConfig> getVisibleColumns() {
+		return model.getVisibleColumns();
+	}
+
 	// TODO: remove later (exists only for compatibility with old code)
 	public JTable getTable() {
 		return table;
