@@ -13,13 +13,16 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.SortOrder;
 
-public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.CommitChanges,
-		GenericTableViewMsg.CancelChanges, GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection,
-		GenericTableViewMsg.AddRow, GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot,
-		GenericTableViewMsg.ChangeSortOrder, GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.ApplyRowFilter,
-		GenericTableViewMsg.InvertSelection, GenericTableViewMsg.PrepareRenderer {
+public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited,
+		GenericTableViewMsg.MultipleCellsEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
+		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
+		GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
+		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.ApplyRowFilter, GenericTableViewMsg.InvertSelection,
+		GenericTableViewMsg.PrepareRenderer {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
+	}
 
+	record MultipleCellsEdited(List<CellEdited> edits) implements GenericTableViewMsg {
 	}
 
 	record CommitChanges() implements GenericTableViewMsg {

@@ -305,7 +305,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		List<Map<String, Object>> rowData = productTableModified.computeDisplayRows(selectedClients, productNames,
 				statesAndActions, globalProductInfos);
 		productTableModified.setPossibleActions(possibleActions);
-		productTableModified.setGlobalProductInfos(globalProductInfos);
 		productTableModified.setChangedProductStates(changedProductStates);
 		productTableModified.getTableViewComponent().dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(rowData));
 	}

@@ -9,8 +9,11 @@ package de.uib.configed.gui.features.table;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,6 +31,7 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRows;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.MultipleCellsEdited;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
@@ -44,6 +48,7 @@ public final class GenericTableViewUpdate {
 			GenericTableViewModel model) {
 		return switch (msg) {
 		case CellEdited(int rowIdx, int colIdx, Object newValue) -> handleCellEdit(rowIdx, colIdx, newValue, model);
+		case MultipleCellsEdited(List<CellEdited> edits) -> handleMultipleCellEdits(edits, model);
 		case CommitChanges() -> handleCommit(model);
 		case CancelChanges() -> handleCancel(model);
 		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
@@ -104,6 +109,91 @@ public final class GenericTableViewUpdate {
 		return UpdateResult.withEffect(
 				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(isDirty).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.CellEdited(rowIdx, colIdx, newValues));
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleMultipleCellEdits(
+			List<CellEdited> edits, GenericTableViewModel model) {
+
+		if (edits.isEmpty()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		// Build map of rowId -> column changes
+		Map<String, Map<String, Object>> rowUpdates = new LinkedHashMap<>();
+		Set<String> affectedRowIds = new LinkedHashSet<>();
+
+		for (CellEdited edit : edits) {
+			int rowIdx = edit.rowIdx();
+			if (rowIdx < 0 || rowIdx >= model.getRows().size()) {
+				continue;
+			}
+
+			RowData oldRow = model.getRows().get(rowIdx);
+			String colKey = model.getColumnByModelIndex(edit.colIdx()).getKey();
+			Object oldValue = oldRow.getValue(colKey, Object.class);
+
+			if (Objects.equals(oldValue, edit.newValue())) {
+				continue;
+			}
+
+			affectedRowIds.add(oldRow.getId());
+			rowUpdates.computeIfAbsent(oldRow.getId(), k -> new HashMap<>()).put(colKey, edit.newValue());
+		}
+
+		if (rowUpdates.isEmpty()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		List<RowData> sourceRows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> newRows = new ArrayList<>(sourceRows);
+		RowDiffStrategy strategy = model.getDiffStrategy();
+
+		for (String rowId : affectedRowIds) {
+			int rowIndex = findRowIndexById(sourceRows, rowId);
+			if (rowIndex == -1) {
+				continue;
+			}
+
+			RowData oldRow = sourceRows.get(rowIndex);
+			Map<String, Object> pendingChanges = rowUpdates.get(rowId);
+
+			// Merge values
+			Map<String, Object> mergedValues = new HashMap<>(oldRow.getValues());
+			mergedValues.putAll(pendingChanges);
+
+			// Calculate state based on changes
+			RowState finalState = calculateRowStateFromChanges(oldRow, pendingChanges, strategy);
+
+			RowData updatedRow = oldRow.toBuilder().values(mergedValues).state(finalState).build();
+
+			newRows.set(rowIndex, updatedRow);
+		}
+
+		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
+
+		return UpdateResult.noEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(isDirty).rebuildTableModel(true).build());
+	}
+
+	private static RowState calculateRowStateFromChanges(RowData oldRow, Map<String, Object> changes,
+			RowDiffStrategy strategy) {
+		if (strategy == null) {
+			return RowState.NORMAL;
+		}
+
+		for (Map.Entry<String, Object> entry : changes.entrySet()) {
+			String colKey = entry.getKey();
+			Object newValue = entry.getValue();
+			Object oldValue = oldRow.getValue(colKey, Object.class);
+
+			RowState derived = strategy.getRowStyle(oldRow, colKey, newValue, oldValue);
+			if (derived != RowState.NORMAL) {
+				return derived;
+			}
+		}
+
+		return RowState.NORMAL;
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleToggleColumn(String columnKey,

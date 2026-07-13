@@ -424,10 +424,6 @@ public class ProductTableModified {
 		this.possibleActions = possibleActions;
 	}
 
-	public void setGlobalProductInfos(Map<String, Map<String, Object>> globalProductInfos) {
-		this.globalProductInfos = globalProductInfos;
-	}
-
 	public void setChangedProductStates(Map<String, Map<String, Map<String, String>>> changedProductStates) {
 		this.changedProductStates = changedProductStates;
 	}
@@ -535,8 +531,8 @@ public class ProductTableModified {
 
 		this.availableProductNames = new LinkedHashSet<>(productNames);
 		this.missingProducts = new LinkedHashSet<>();
+		this.globalProductInfos = globalProductInfos;
 
-		// 1. Remap client → (productId → stateMap)
 		allClientsProductStates = new HashMap<>();
 		if (statesAndActions != null) {
 			for (Entry<String, List<Map<String, String>>> client : statesAndActions.entrySet()) {
@@ -548,7 +544,64 @@ public class ProductTableModified {
 			}
 		}
 
-		// 2. Produce visual states (from produceVisualStatesFromExistingEntries)
+		produceVisualStatesFromExistingEntries();
+
+		completeVisualStatesByDefaults(selectedClients, productNames);
+
+		return buildOriginalSnapshot(productNames);
+	}
+
+	public void updateTable(String clientId, List<String> attributes) {
+
+		List<Map<String, String>> productInfos = persistenceController.getDataServices().product
+				.getProductInfos(clientId, attributes);
+		if (!productInfos.isEmpty()) {
+			for (Map<String, String> productInfo : productInfos) {
+				allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
+			}
+		} else {
+			allClientsProductStates.get(clientId).clear();
+		}
+
+		produceVisualStatesFromExistingEntries();
+
+		// 3. Complete with defaults (from completeVisualStatesByDefaults)
+		completeVisualStatesByDefaults(List.of(clientId), availableProductNames);
+
+		// 4. Build display rows with final transformations (from retrieveValueAt)
+		List<Map<String, Object>> rows = buildOriginalSnapshot(availableProductNames);
+
+		tableViewComponent.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(rows));
+	}
+
+	private void completeVisualStatesByDefaults(List<String> selectedClients, Set<String> productNames) {
+		for (String clientId : selectedClients) {
+			allClientsProductStates.putIfAbsent(clientId, new HashMap<>());
+			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
+			for (String productId : productNames) {
+				if (productStates.get(productId) == null) {
+					completeProductWihtDefaults(productId);
+				}
+			}
+		}
+	}
+
+	private void completeProductWihtDefaults(String productId) {
+		String priority = "";
+		if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
+			priority = "" + globalProductInfos.get(productId).get("priority");
+		}
+		for (String key : ProductState.KEYS) {
+			if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
+				mixToVisualState(combinedVisualValues.get(key), productId, priority);
+			} else {
+				mixToVisualState(combinedVisualValues.get(key), productId,
+						ProductState.getDefaultProductState().get(key));
+			}
+		}
+	}
+
+	private void produceVisualStatesFromExistingEntries() {
 		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
 			combinedVisualValues.put(key, new HashMap<>());
@@ -561,44 +614,20 @@ public class ProductTableModified {
 					continue;
 				}
 
-				// changeValuesForVisualOutput: inject priority
 				String priority = "";
 				if (globalProductInfos != null && globalProductInfos.get(product.getKey()) != null) {
 					priority = "" + globalProductInfos.get(product.getKey()).get("priority");
 				}
 				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
 
-				// mixToVisualState for each key
 				for (String colKey : ProductState.KEYS) {
 					mixToVisualState(combinedVisualValues.get(colKey), product.getKey(), stateAndAction.get(colKey));
 				}
 			}
 		}
+	}
 
-		// 3. Complete with defaults (from completeVisualStatesByDefaults)
-		for (String clientId : selectedClients) {
-			allClientsProductStates.putIfAbsent(clientId, new HashMap<>());
-			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
-			for (String productId : productNames) {
-				if (productStates.get(productId) == null) {
-					// completeProductWithDefaults
-					String priority = "";
-					if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
-						priority = "" + globalProductInfos.get(productId).get("priority");
-					}
-					for (String key : ProductState.KEYS) {
-						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)) {
-							mixToVisualState(combinedVisualValues.get(key), productId, priority);
-						} else {
-							mixToVisualState(combinedVisualValues.get(key), productId,
-									ProductState.getDefaultProductState().get(key));
-						}
-					}
-				}
-			}
-		}
-
-		// 4. Build display rows with final transformations (from retrieveValueAt)
+	private List<Map<String, Object>> buildOriginalSnapshot(Set<String> productNames) {
 		List<Map<String, Object>> rows = new ArrayList<>();
 		for (String productId : productNames) {
 			Map<String, Object> row = new LinkedHashMap<>();
@@ -623,6 +652,7 @@ public class ProductTableModified {
 					combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(productId));
 			rows.add(row);
 		}
+
 		return rows;
 	}
 
@@ -1073,6 +1103,12 @@ public class ProductTableModified {
 			return values.toArray(new String[0]);
 		}
 
+	}
+
+	public void clearProductChangedStates() {
+		if (changedProductStates != null) {
+			changedProductStates.clear();
+		}
 	}
 
 }

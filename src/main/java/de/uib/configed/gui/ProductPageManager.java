@@ -65,10 +65,8 @@ public class ProductPageManager implements MessagebusListener {
 		this.clientConfiguration = clientConfiguration;
 
 		updateManager = new InstallationStateUpdateManager(configedMain,
-				clientConfiguration.getPanelLocalbootProductSettings().getProductTableModified().getTableViewComponent()
-						.getTable(),
-				clientConfiguration.getPanelNetbootProductSettings().getProductTableModified().getTableViewComponent()
-						.getTable());
+				clientConfiguration.getPanelLocalbootProductSettings().getProductTableModified(),
+				clientConfiguration.getPanelNetbootProductSettings().getProductTableModified());
 
 		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
