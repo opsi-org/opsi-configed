@@ -370,7 +370,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	// columns (indexPreparedColumns)
 	private void initColumnNames(List<String> columnsToDisplay) {
 		preparedColumns = new ArrayList<>();
-		editablePreparedColumns = new boolean[11];
+		editablePreparedColumns = new boolean[15];
 
 		preparedColumns.add(0, ProductState.KEY_PRODUCT_ID);
 		editablePreparedColumns[0] = false;
@@ -402,8 +402,22 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		preparedColumns.add(9, ProductState.KEY_VERSION_INFO);
 		editablePreparedColumns[9] = false;
 
-		preparedColumns.add(10, ProductState.KEY_LAST_STATE_CHANGE);
+		preparedColumns.add(10, ProductState.KEY_PRODUCT_VERSION);
 		editablePreparedColumns[10] = false;
+
+		preparedColumns.add(11, ProductState.KEY_PACKAGE_VERSION);
+		editablePreparedColumns[11] = false;
+
+		preparedColumns.add(12, ProductState.KEY_LAST_STATE_CHANGE);
+		editablePreparedColumns[12] = false;
+
+		preparedColumns.add(13, ProductState.KEY_LAST_STATE_CHANGE);
+		editablePreparedColumns[13] = false;
+
+		if (columnsToDisplay == null) {
+			Logging.error(this, "columnsToDisplay are null");
+			return;
+		}
 
 		this.columnsToDisplay = columnsToDisplay;
 
@@ -422,7 +436,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				Logging.debug(this, "indexPreparedColumns of displayColumn ", j, " is ", k);
 				columnTitles.add(getColumnTitle(column));
 			} else {
-				Logging.devel(this, "column ", column, " is not prepared");
+				Logging.info(this, "column ", column, " is not prepared");
 				columnTitles.add(column);
 			}
 		}
