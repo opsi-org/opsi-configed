@@ -291,7 +291,10 @@ public class ProductTable extends JTable {
 		if (Configed.getResourceValue("InstallationStateTableModel.installationStatus").equals(columnName)
 				&& !InstallationStatus.KEY_NOT_INSTALLED.equals(cellValueString)) {
 			strippIt = false;
-		} else if (isActionColumn(columnName) && cellValueString != null && !cellValueString.isEmpty()) {
+		} else if ((Configed.getResourceValue("InstallationStateTableModel.actionResult").equals(columnName)
+				|| Configed.getResourceValue("InstallationStateTableModel.actionProgress").equals(columnName)
+				|| Configed.getResourceValue("InstallationStateTableModel.lastAction").equals(columnName))
+				&& (cellValueString != null && !cellValueString.isEmpty())) {
 			strippIt = false;
 		} else if (Configed.getResourceValue("InstallationStateTableModel.actionRequest").equals(columnName)
 				&& !"none".equals(cellValueString)) {
@@ -301,12 +304,6 @@ public class ProductTable extends JTable {
 		}
 
 		return strippIt;
-	}
-
-	private static boolean isActionColumn(String columnName) {
-		return Configed.getResourceValue("InstallationStateTableModel.actionResult").equals(columnName)
-				|| Configed.getResourceValue("InstallationStateTableModel.actionProgress").equals(columnName)
-				|| Configed.getResourceValue("InstallationStateTableModel.lastAction").equals(columnName);
 	}
 
 	public void valueChanged(boolean doSelection, List<DefaultMutableTreeNode> filteredNodes) {
