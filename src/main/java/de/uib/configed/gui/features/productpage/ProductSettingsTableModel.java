@@ -17,6 +17,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.core.domain.productstate.ActionRequest;
+import de.uib.configed.core.domain.productstate.ActionResult;
 import de.uib.configed.core.domain.productstate.InstallationStatus;
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.gui.Configed;
@@ -48,7 +49,7 @@ public class ProductSettingsTableModel {
 	private ColoredTableCellRenderer productsequenceTableCellRenderer;
 
 	private ColoredTableCellRenderer versionInfoTableCellRenderer;
-	private ColoredTableCellRenderer actionResultTableCellRenderer;
+	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
 	private ColoredTableCellRenderer coloredTableCellRenderer;
 
@@ -79,17 +80,17 @@ public class ProductSettingsTableModel {
 
 		versionInfoTableCellRenderer = new ProductVersionCellRenderer();
 
-		actionResultTableCellRenderer = new ColoredTableCellRenderer() {
+		installationInfoTableCellRenderer = new ColoredTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
 				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-				// Safe since instanceof returns false if null
+				// Safe sind instanceof returns false if null
 				if (value instanceof String stringValue) {
-					if (stringValue.startsWith(InstallationStateTableModel.FAILED_DISPLAY_STRING)) {
+					if (stringValue.startsWith(ActionResult.getLabel(ActionResult.FAILED))) {
 						setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
-					} else if (stringValue.startsWith(InstallationStateTableModel.SUCCESS_DISPLAY_STRING)) {
+					} else if (stringValue.startsWith(ActionResult.getLabel(ActionResult.SUCCESSFUL))) {
 						setForeground(Globals.OK_COLOR);
 					} else {
 						// Don't set foreground if no special result
@@ -170,26 +171,16 @@ public class ProductSettingsTableModel {
 			versionInfoColumn.setCellRenderer(versionInfoTableCellRenderer);
 		}
 
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_LAST_ACTION)) > -1) {
-			TableColumn lastActionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			lastActionColumn.setPreferredWidth(WIDTH_COLUMN_INSTALLATION_INFO);
-			lastActionColumn.setCellRenderer(coloredTableCellRenderer);
-		}
+		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_INFO)) > -1) {
+			TableColumn installationInfoColumn = tableProducts.getColumnModel().getColumn(colIndex);
+			installationInfoColumn.setPreferredWidth(WIDTH_COLUMN_INSTALLATION_INFO);
+			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_RESULT)) > -1) {
-			TableColumn actionResultColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			actionResultColumn.setPreferredWidth(WIDTH_COLUMN_INSTALLATION_INFO);
-			actionResultColumn.setCellRenderer(actionResultTableCellRenderer);
+			JComboBox<String> installationInfoCombo = new JComboBox<>();
 
-			JComboBox<String> actionResultCombo = new JComboBox<>();
-			actionResultColumn.setCellEditor(new DynamicCellEditor(actionResultCombo, istm));
-		}
+			DynamicCellEditor cellEditor = new DynamicCellEditor(installationInfoCombo, istm);
 
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_PROGRESS)) > -1) {
-			TableColumn actionProgressColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			actionProgressColumn.setPreferredWidth(WIDTH_COLUMN_INSTALLATION_INFO);
-			// default (uncolored) rendering for progress
-			actionProgressColumn.setCellRenderer(coloredTableCellRenderer);
+			installationInfoColumn.setCellEditor(cellEditor);
 		}
 	}
 

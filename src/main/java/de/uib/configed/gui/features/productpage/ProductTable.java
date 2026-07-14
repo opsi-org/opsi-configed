@@ -291,9 +291,7 @@ public class ProductTable extends JTable {
 		if (Configed.getResourceValue("InstallationStateTableModel.installationStatus").equals(columnName)
 				&& !InstallationStatus.KEY_NOT_INSTALLED.equals(cellValueString)) {
 			strippIt = false;
-		} else if ((Configed.getResourceValue("InstallationStateTableModel.actionResult").equals(columnName)
-				|| Configed.getResourceValue("InstallationStateTableModel.actionProgress").equals(columnName)
-				|| Configed.getResourceValue("InstallationStateTableModel.lastAction").equals(columnName))
+		} else if (Configed.getResourceValue("InstallationStateTableModel.report").equals(columnName)
 				&& (cellValueString != null && !cellValueString.isEmpty())) {
 			strippIt = false;
 		} else if (Configed.getResourceValue("InstallationStateTableModel.actionRequest").equals(columnName)

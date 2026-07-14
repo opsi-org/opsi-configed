@@ -207,6 +207,10 @@ public class ProductPageManager implements MessagebusListener {
 			if (ProductState.KEY_VERSION_INFO.equals(v)) {
 				attributes.add(ProductState.KEY_PACKAGE_VERSION);
 				attributes.add(ProductState.KEY_PRODUCT_VERSION);
+			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
+				attributes.add(ProductState.KEY_ACTION_PROGRESS);
+				attributes.add(ProductState.KEY_ACTION_RESULT);
+				attributes.add(ProductState.KEY_LAST_ACTION);
 			} else {
 				attributes.add(v);
 			}

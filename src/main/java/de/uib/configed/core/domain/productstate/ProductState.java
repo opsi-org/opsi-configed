@@ -72,26 +72,48 @@ public final class ProductState {
 	}
 
 	public static Map<String, String> transform(Map<String, String> productState) {
-		String installationInfo;
+		// transformed values
+		StringBuilder installationInfo = new StringBuilder();
+		// the reverse will be found in in setInstallationInfo in
+		// InstallationStateTableModel
 
-		String lastAction = ActionRequest
-				.getLabel(LastAction.produceFromLabel(productState.get(KEY_LAST_ACTION)).getVal());
+		LastAction lastAction = LastAction.produceFromLabel(productState.get(KEY_LAST_ACTION));
 
-		lastAction = lastAction.equals(ActionRequest.KEY_NONE) ? "" : lastAction;
+		if (!productState.get(KEY_ACTION_PROGRESS).isEmpty()) {
+			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
+			if (result.getVal() == ActionResult.FAILED) {
+				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
+				installationInfo.append(": ");
+			}
 
-		if (!productState.get(KEY_ACTION_PROGRESS).isEmpty()
-				&& !productState.get(KEY_ACTION_PROGRESS).equals(ActionRequest.KEY_NONE)) {
-			installationInfo = productState.get(KEY_ACTION_PROGRESS) + " (" + lastAction + ")";
+			installationInfo.append(productState.get(KEY_ACTION_PROGRESS));
+			installationInfo.append(" ( ");
+			if (lastAction.getVal() > 0) {
+				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
+			}
+
+			installationInfo.append(" ) ");
+
+			if (result.getVal() == ActionResult.FAILED) {
+				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
+				installationInfo.append(" ");
+			}
 		} else {
 			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
-				installationInfo = ActionResult.getDisplayLabel(result.getVal()) + " (" + lastAction + ")";
-			} else {
-				installationInfo = "";
+				installationInfo.append("");
+				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
+			}
+			// else
+
+			if (lastAction.getVal() > 0) {
+				installationInfo.append(" (");
+				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
+				installationInfo.append(")");
 			}
 		}
 
-		productState.put(KEY_INSTALLATION_INFO, installationInfo);
+		productState.put(KEY_INSTALLATION_INFO, installationInfo.toString());
 
 		String versionInfo = "";
 
