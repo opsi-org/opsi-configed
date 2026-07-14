@@ -276,8 +276,10 @@ public class HostDataService extends DataService {
 			boolean hasWrongProductVersion = (!POJOReMapper.equalsNull(clientProductVersion)
 					&& !productVersion.equals(clientProductVersion))
 					|| (!POJOReMapper.equalsNull(clientPackageVersion) && !packageVersion.equals(clientPackageVersion));
-			if ((includeFailedInstallations && InstallationStatus.UNKNOWN.getLabel().equals(clientProductState))
-					|| (InstallationStatus.INSTALLED.getLabel().equals(clientProductState) && hasWrongProductVersion)) {
+			if ((includeFailedInstallations
+					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState))
+					|| (InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
+							&& hasWrongProductVersion)) {
 				Logging.debug("getClientsWithOtherProductVersion hit ", m);
 				result.add(client);
 			}

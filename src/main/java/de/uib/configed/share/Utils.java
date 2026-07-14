@@ -8,7 +8,6 @@ package de.uib.configed.share;
 
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 
 import javax.swing.JFrame;
 
@@ -55,30 +54,6 @@ public final class Utils {
 
 	public static JFrame getMasterFrame() {
 		return masterFrame;
-	}
-
-	/**
-	 * Resolves an enum constant by its label.
-	 *
-	 * @param values       all enum constants, i.e. {@code MyEnum.values()}
-	 * @param labelGetter  accessor for the label of a constant
-	 * @param label        the label to look up
-	 * @param emptyDefault result for a null or empty label
-	 * @param invalid      result for an unknown label
-	 */
-	public static <T extends Enum<T>> T fromLabel(T[] values, Function<T, String> labelGetter, String label,
-			T emptyDefault, T invalid) {
-		if (label == null || label.isEmpty()) {
-			return emptyDefault;
-		}
-
-		for (T value : values) {
-			if (labelGetter.apply(value).equals(label)) {
-				return value;
-			}
-		}
-
-		return invalid;
 	}
 
 	public static String getListStringRepresentation(List<String> list) {

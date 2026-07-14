@@ -799,7 +799,7 @@ public class ProductDataService extends DataService {
 
 		for (Map<String, Object> m : getProductOnClientsWithAdjustedTime(callAttributes, callFilter,
 				!callAttributes.isEmpty())) {
-			result.add(ProductState.calculateProductVersion(POJOReMapper.giveEmptyForNull(m)));
+			result.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 
 		return result;
@@ -826,7 +826,7 @@ public class ProductDataService extends DataService {
 		for (Map<String, Object> m : productOnClients) {
 			String client = (String) m.get("clientId");
 			List<Map<String, String>> states1Client = result.computeIfAbsent(client, arg -> new ArrayList<>());
-			states1Client.add(ProductState.calculateProductVersion(POJOReMapper.giveEmptyForNull(m)));
+			states1Client.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 
 		return result;
@@ -852,7 +852,7 @@ public class ProductDataService extends DataService {
 			String client = (String) m.get("clientId");
 
 			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(ProductState.calculateProductVersion(POJOReMapper.giveEmptyForNull(m)));
+					.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 		return result;
 	}
@@ -1269,7 +1269,7 @@ public class ProductDataService extends DataService {
 					// we demand information for this type,
 					// this is not specified by type in the dependency map
 					// but only by the action value
-					&& aDependency.get("action").equals(ActionRequest.UNINSTALL.getLabel())) {
+					&& aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.UNINSTALL))) {
 				result.put(aDependency.get("requiredProductId"),
 						aDependency.get("requiredInstallationStatus") + ":" + aDependency.get("requiredAction"));
 			} else {
@@ -1297,10 +1297,10 @@ public class ProductDataService extends DataService {
 	}
 
 	private static boolean hasActionRequest(Map<String, String> aDependency) {
-		return aDependency.get("action").equals(ActionRequest.SETUP.getLabel())
-				|| aDependency.get("action").equals(ActionRequest.ONCE.getLabel())
-				|| aDependency.get("action").equals(ActionRequest.ALWAYS.getLabel())
-				|| aDependency.get("action").equals(ActionRequest.CUSTOM.getLabel());
+		return aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.SETUP))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM));
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {

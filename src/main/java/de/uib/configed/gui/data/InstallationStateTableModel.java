@@ -381,34 +381,34 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		preparedColumns.add(2, ProductState.KEY_INSTALLATION_STATUS);
 		editablePreparedColumns[2] = true;
 
-		preparedColumns.add(3, ProductState.KEY_ACTION_PROGRESS);
+		preparedColumns.add(3, ProductState.KEY_INSTALLATION_INFO);
 		editablePreparedColumns[3] = false;
 
-		preparedColumns.add(4, ProductState.KEY_ACTION_RESULT);
-		editablePreparedColumns[4] = true;
+		preparedColumns.add(4, ProductState.KEY_ACTION_PROGRESS);
+		editablePreparedColumns[4] = false;
 
-		preparedColumns.add(5, ProductState.KEY_LAST_ACTION);
-		editablePreparedColumns[5] = false;
+		preparedColumns.add(5, ProductState.KEY_ACTION_RESULT);
+		editablePreparedColumns[5] = true;
 
-		preparedColumns.add(6, ProductState.KEY_ACTION_REQUEST);
-		editablePreparedColumns[6] = true;
+		preparedColumns.add(6, ProductState.KEY_LAST_ACTION);
+		editablePreparedColumns[6] = false;
 
-		preparedColumns.add(7, ProductState.KEY_PRODUCT_PRIORITY);
-		editablePreparedColumns[7] = false;
+		preparedColumns.add(7, ProductState.KEY_ACTION_REQUEST);
+		editablePreparedColumns[7] = true;
 
-		preparedColumns.add(8, ProductState.KEY_ACTION_SEQUENCE);
+		preparedColumns.add(8, ProductState.KEY_PRODUCT_PRIORITY);
 		editablePreparedColumns[8] = false;
 
-		preparedColumns.add(9, ProductState.KEY_VERSION_INFO);
+		preparedColumns.add(9, ProductState.KEY_ACTION_SEQUENCE);
 		editablePreparedColumns[9] = false;
 
-		preparedColumns.add(10, ProductState.KEY_PRODUCT_VERSION);
+		preparedColumns.add(10, ProductState.KEY_VERSION_INFO);
 		editablePreparedColumns[10] = false;
 
-		preparedColumns.add(11, ProductState.KEY_PACKAGE_VERSION);
+		preparedColumns.add(11, ProductState.KEY_PRODUCT_VERSION);
 		editablePreparedColumns[11] = false;
 
-		preparedColumns.add(12, ProductState.KEY_LAST_STATE_CHANGE);
+		preparedColumns.add(12, ProductState.KEY_PACKAGE_VERSION);
 		editablePreparedColumns[12] = false;
 
 		preparedColumns.add(13, ProductState.KEY_LAST_STATE_CHANGE);
@@ -460,19 +460,25 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private void setInstallationInfo(String product, String value) {
+		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
+
 		// keep the separate visual values in sync with the manual change
-		combinedVisualValues.get(ProductState.KEY_LAST_ACTION).put(product, LastAction.NONE.getLabel());
+		combinedVisualValues.get(ProductState.KEY_LAST_ACTION).put(product, LastAction.getLabel(LastAction.NONE));
 		if (value.equals(NONE_STRING) || value.equals(NONE_DISPLAY_STRING)) {
-			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product, ActionResult.NONE.getLabel());
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.NONE));
 			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, NONE_STRING);
 		} else if (value.equals(FAILED_DISPLAY_STRING)) {
-			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product, ActionResult.FAILED.getLabel());
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.FAILED));
 			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, MANUALLY);
 		} else if (value.equals(SUCCESS_DISPLAY_STRING)) {
-			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product, ActionResult.SUCCESSFUL.getLabel());
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.SUCCESSFUL));
 			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, MANUALLY);
 		} else {
-			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product, ActionResult.NONE.getLabel());
+			combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).put(product,
+					ActionResult.getLabel(ActionResult.NONE));
 			combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).put(product, value);
 		}
 
@@ -494,20 +500,20 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		// `value.equals(NONE_DISPLAY_STRING)` is asked only for formal independence of the method
 		if (value.equals(NONE_STRING) || value.equals(NONE_DISPLAY_STRING)) {
-			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.NONE.getLabel());
-			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.NONE.getLabel());
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, NONE_STRING);
 		} else if (value.equals(FAILED_DISPLAY_STRING)) {
-			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.NONE.getLabel());
-			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.FAILED.getLabel());
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, MANUALLY);
 		} else if (value.equals(SUCCESS_DISPLAY_STRING)) {
-			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.NONE.getLabel());
-			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.SUCCESSFUL.getLabel());
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.SUCCESSFUL));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, MANUALLY);
 		} else {
-			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.NONE.getLabel());
-			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.NONE.getLabel());
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, ActionResult.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, value);
 		}
 	}
@@ -781,9 +787,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 
 		Logging.debug(this, " change action request for client ", clientId, ",  product ", product, " to ", ar);
-		if (ar == ActionRequest.NONE) {
+		if (ar.getVal() == ActionRequest.NONE) {
 			Logging.debug(this, "don't follow");
-		} else if (ar == ActionRequest.UNINSTALL) {
+		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product ", product);
 
 			Map<String, String> requirements = persistenceController.getDataServices().product
@@ -811,8 +817,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		for (Entry<String, String> requirement : requirements.entrySet()) {
 			Logging.debug(this, "requiredProduct: ", requirement.getKey());
-			String requiredAction = ActionRequest.NONE.getLabel();
-			String requiredState = InstallationStatus.UNDEFINED.getLabel();
+			String requiredAction = ActionRequest.getLabel(ActionRequest.NONE);
+			String requiredState = InstallationStatus.getLabel(InstallationStatus.UNDEFINED);
 
 			int colonpos = requirement.getValue().indexOf(":");
 			if (colonpos >= 0) {
@@ -862,35 +868,35 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					installationStatusOfRequiredProduct);
 
 			Logging.debug(this, "requiredAction ", requiredAction);
-			ActionRequest requiredAR = ActionRequest.fromLabel(requiredAction);
-			Logging.debug(this, "ActionRequest.fromLabel(requiredAction) ", requiredAR);
+			Logging.debug(this, "ActionRequest.getVal(requiredAction) ", ActionRequest.getVal(requiredAction));
+			int requiredAR = ActionRequest.getVal(requiredAction);
 
-			InstallationStatus requiredIS = InstallationStatus.fromLabel(requiredState);
+			int requiredIS = InstallationStatus.getVal(requiredState);
 
-			Logging.debug(this, " requiredInstallationsStatus ", requiredIS.getLabel());
+			Logging.debug(this, " requiredInstallationsStatus ", InstallationStatus.getLabel(requiredIS));
 
 			// handle state requests
 			if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
 					// the only relevant states for which we should eventually do something
-					&& InstallationStatus.fromLabel(installationStatusOfRequiredProduct) != requiredIS) {
+					&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
 				// we overwrite the required action request
 
-				String requiredStatusS = requiredIS.getLabel();
+				String requiredStatusS = InstallationStatus.getLabel(requiredIS);
 				Logging.debug(this, " requiredStatusS ", requiredStatusS);
 
 				String neededAction = REQUIRED_ACTION_FOR_STATUS.get(requiredStatusS);
 				Logging.debug(this, " needed action therefore ", neededAction);
 
-				requiredAR = ActionRequest.fromLabel(neededAction);
+				requiredAR = ActionRequest.getVal(neededAction);
 			}
 
 			// handle resulting action requests
-			if (requiredAR.isRealAction()) {
+			if (requiredAR > ActionRequest.NONE) {
 				checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
-						requiredAR.getLabel());
+						ActionRequest.getLabel(requiredAR));
 
 				// an action is required and already set
-				if (ActionRequest.fromLabel(actionRequestForRequiredProduct) == requiredAR) {
+				if (ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
 					Logging.info(this, "followRequirements:   no change of action request necessary for ",
 							requirement.getKey());
 				} else if (getChangedState(clientId, requirement.getKey(), ActionRequest.KEY) != null) {
@@ -899,7 +905,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					// already set for clientId, product "
 				} else {
 					Logging.info(this, "ar:   ===== recursion into ", requirement.getKey());
-					recursivelyChangeActionRequest(clientId, requirement.getKey(), requiredAR);
+					recursivelyChangeActionRequest(clientId, requirement.getKey(), new ActionRequest(requiredAR));
 				}
 			}
 		}
@@ -1103,22 +1109,22 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 1 -> globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 		case 2 -> InstallationStatus
 				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
-		case 4 -> getDisplayLabelForActionResult();
-		case 5 -> getDisplayLabelForLastAction();
-		case 6 -> ActionRequest
+		case 5 -> getDisplayLabelForActionResult();
+		case 6 -> getDisplayLabelForLastAction();
+		case 7 -> ActionRequest
 				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-		case 8 -> getDisplayLabelForPosition();
-		case 9 -> actualProductVersion();
+		case 9 -> getDisplayLabelForPosition();
+		case 10 -> actualProductVersion();
 		default -> combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
 		};
 	}
 
 	private Object getDisplayLabelForActionResult() {
 		String result = combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
-		if (result == null || ActionResult.NONE.getLabel().equals(result)) {
+		if (result == null || ActionResult.getLabel(ActionResult.NONE).equals(result)) {
 			return "";
 		}
-		if (ActionResult.SUCCESSFUL.getLabel().equals(result)) {
+		if (ActionResult.getLabel(ActionResult.SUCCESSFUL).equals(result)) {
 			return SUCCESS_DISPLAY_STRING;
 		}
 		return result;
@@ -1126,7 +1132,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private Object getDisplayLabelForLastAction() {
 		String lastAction = combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
-		return LastAction.NONE.getLabel().equals(lastAction) ? "" : lastAction;
+		return LastAction.getLabel(LastAction.NONE).equals(lastAction) ? "" : lastAction;
 	}
 
 	private Object getDisplayLabelForPosition() {
@@ -1214,7 +1220,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			// change recursively visible action changes and collect the changes for saving
 
 			initCollectiveChange();
-			collectiveChangeActionRequest(actualProduct, ActionRequest.fromLabel((String) value));
+			collectiveChangeActionRequest(actualProduct, ActionRequest.produceActionRequestFromLabel((String) value));
 			finishCollectiveChange();
 		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_ACTION_RESULT)) {
 			if (value.equals(NONE_DISPLAY_STRING)) {

@@ -162,7 +162,7 @@ public class ProductActionPanel extends JPanel {
 		if (!installationStateTableModel.infoIfNoClientsSelected()) {
 			installationStateTableModel.initCollectiveChange();
 
-			ActionRequest actionType = switch (selected) {
+			int actionType = switch (selected) {
 			case "setup" -> ActionRequest.SETUP;
 			case "uninstall" -> ActionRequest.UNINSTALL;
 			case "none" -> ActionRequest.NONE;
@@ -173,7 +173,7 @@ public class ProductActionPanel extends JPanel {
 				panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
 					Logging.info(" row id ", x, " product ", installationStateTableModel.getValueAt(x, 0));
 					installationStateTableModel.collectiveChangeActionRequest(
-							(String) installationStateTableModel.getValueAt(x, 0), actionType);
+							(String) installationStateTableModel.getValueAt(x, 0), new ActionRequest(actionType));
 				});
 			}
 

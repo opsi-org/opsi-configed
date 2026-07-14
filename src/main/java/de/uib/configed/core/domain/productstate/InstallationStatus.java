@@ -7,28 +7,16 @@
 package de.uib.configed.core.domain.productstate;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.Utils;
 
-public enum InstallationStatus {
-	// conflicting entries from several clients
-	CONFLICT(Globals.CONFLICT_STATE_STRING, null),
-
-	// no valid entry from service
-	INVALID(Globals.NO_VALID_STATE_STRING, null),
-
-	// does not matter
-	UNDEFINED(InstallationStatus.KEY_UNDEFINED, null),
-
-	// valid service states since 4.0
-	INSTALLED(InstallationStatus.KEY_INSTALLED, Globals.INSTALLATION_STATUS_INSTALLED_COLOR),
-	NOT_INSTALLED(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR),
-	UNKNOWN(InstallationStatus.KEY_UNKNOWN, Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
-
+public final class InstallationStatus {
 	public static final String KEY = "installationStatus";
 
 	public static final String KEY_NOT_INSTALLED = "not_installed";
@@ -36,48 +24,114 @@ public enum InstallationStatus {
 	public static final String KEY_UNKNOWN = "unknown";
 	public static final String KEY_UNDEFINED = "undefined";
 
-	private final String label;
-	private final Color textColor;
+	// conflicting entries from several clients
+	public static final int CONFLICT = -4;
 
-	InstallationStatus(String label, Color textColor) {
-		this.label = label;
-		this.textColor = textColor;
+	// no valid entry from service
+	public static final int INVALID = -2;
+
+	// does not matter
+	public static final int UNDEFINED = -1;
+
+	// valid service states since 4.0
+	public static final int NOT_INSTALLED = 0;
+	public static final int INSTALLED = 1;
+	public static final int UNKNOWN = 2;
+
+	// compatibility mode for older opsi data, not more necessary
+
+	private static Map<Integer, String> state2label;
+	private static Map<String, Integer> label2state;
+	private static Map<String, Color> label2textColor;
+
+	private static Set<String> labels;
+	private static String[] choiceLabels;
+
+	// Empty constructor to prevent instantiation
+	private InstallationStatus() {
 	}
 
-	public String getLabel() {
-		return label;
-	}
+	private static void checkCollections() {
+		if (labels != null) {
+			return;
+		}
 
-	@Override
-	public String toString() {
-		return label;
-	}
+		labels = new LinkedHashSet<>();
+		labels.add(Globals.CONFLICT_STATE_STRING);
+		labels.add(Globals.NO_VALID_STATE_STRING);
+		labels.add(InstallationStatus.KEY_UNDEFINED);
+		labels.add(InstallationStatus.KEY_INSTALLED);
+		labels.add(InstallationStatus.KEY_NOT_INSTALLED);
 
-	public static InstallationStatus fromLabel(String label) {
-		// empty label may occur for pure action requests
-		return Utils.fromLabel(values(), InstallationStatus::getLabel, label, UNKNOWN, INVALID);
-	}
+		labels.add(InstallationStatus.KEY_UNKNOWN);
 
-	public static String produceFromLabel(String label) {
-		return label != null && !label.isEmpty() && fromLabel(label) != INVALID ? label : INVALID.getLabel();
+		state2label = new HashMap<>();
+		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
+		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
+		state2label.put(UNDEFINED, InstallationStatus.KEY_UNDEFINED);
+		state2label.put(INSTALLED, InstallationStatus.KEY_INSTALLED);
+		state2label.put(NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
+		state2label.put(UNKNOWN, InstallationStatus.KEY_UNKNOWN);
+
+		label2state = new HashMap<>();
+		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
+		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
+		label2state.put(InstallationStatus.KEY_UNDEFINED, UNDEFINED);
+		label2state.put(InstallationStatus.KEY_INSTALLED, INSTALLED);
+		label2state.put(InstallationStatus.KEY_NOT_INSTALLED, NOT_INSTALLED);
+		label2state.put(InstallationStatus.KEY_UNKNOWN, UNKNOWN);
+
+		choiceLabels = new String[] { InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_INSTALLED,
+				InstallationStatus.KEY_UNKNOWN };
+
+		label2textColor = new HashMap<>();
+		label2textColor.put(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
+		label2textColor.put(InstallationStatus.KEY_INSTALLED, Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
+		label2textColor.put(InstallationStatus.KEY_UNKNOWN, Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
 	}
 
 	public static Map<String, Color> getLabel2TextColor() {
-		Map<String, Color> label2textColor = new HashMap<>();
-		for (InstallationStatus status : values()) {
-			if (status.textColor != null) {
-				label2textColor.put(status.label, status.textColor);
-			}
-		}
+		checkCollections();
 
 		return label2textColor;
 	}
 
+	public static String getLabel(int state) {
+		checkCollections();
+
+		return state2label.get(state);
+	}
+
 	public static List<String> getLabels() {
-		return List.of(KEY_UNDEFINED, KEY_INSTALLED, KEY_NOT_INSTALLED, KEY_UNKNOWN);
+		checkCollections();
+
+		return new ArrayList<>(labels).subList(2, labels.size());
+	}
+
+	public static Integer getVal(String label) {
+		checkCollections();
+
+		if (label == null || label.isEmpty()) {
+			// action requests
+			return UNKNOWN;
+		}
+
+		return label2state.get(label);
 	}
 
 	public static String[] getDisplayLabelsForChoice() {
-		return new String[] { KEY_NOT_INSTALLED, KEY_INSTALLED, KEY_UNKNOWN };
+		checkCollections();
+
+		return choiceLabels;
+	}
+
+	public static String produceFromLabel(String label) {
+		checkCollections();
+
+		if (label == null || !labels.contains(label)) {
+			return getLabel(INVALID);
+		}
+
+		return label;
 	}
 }
