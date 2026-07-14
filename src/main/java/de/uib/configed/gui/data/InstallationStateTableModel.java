@@ -63,15 +63,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private static final String MANUALLY = "manually set";
-	// Order matters: retrieveValueAt and changeValue rely on these fixed indices
-	private static final List<String> PREPARED_COLUMNS = List.of(ProductState.KEY_PRODUCT_ID,
-			ProductState.KEY_PRODUCT_NAME, ProductState.KEY_INSTALLATION_STATUS, ProductState.KEY_ACTION_PROGRESS,
-			ProductState.KEY_ACTION_RESULT, ProductState.KEY_LAST_ACTION, ProductState.KEY_ACTION_REQUEST,
-			ProductState.KEY_PRODUCT_PRIORITY, ProductState.KEY_ACTION_SEQUENCE, ProductState.KEY_VERSION_INFO,
-			ProductState.KEY_LAST_STATE_CHANGE);
-
-	private static final Set<String> EDITABLE_COLUMNS = Set.of(ProductState.KEY_INSTALLATION_STATUS,
-			ProductState.KEY_ACTION_RESULT, ProductState.KEY_ACTION_REQUEST);
 
 	private static Map<String, String> columnDict;
 
@@ -378,38 +369,65 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	// builds index of the currently displayed columns in terms of the prepared
 	// columns (indexPreparedColumns)
 	private void initColumnNames(List<String> columnsToDisplay) {
-		preparedColumns = new ArrayList<>(PREPARED_COLUMNS);
-		editablePreparedColumns = new boolean[preparedColumns.size()];
-		for (int i = 0; i < preparedColumns.size(); i++) {
-			editablePreparedColumns[i] = EDITABLE_COLUMNS.contains(preparedColumns.get(i));
-		}
+		preparedColumns = new ArrayList<>();
+		editablePreparedColumns = new boolean[11];
 
-		this.columnsToDisplay = new ArrayList<>();
+		preparedColumns.add(0, ProductState.KEY_PRODUCT_ID);
+		editablePreparedColumns[0] = false;
+
+		preparedColumns.add(1, ProductState.KEY_PRODUCT_NAME);
+		editablePreparedColumns[1] = false;
+
+		preparedColumns.add(2, ProductState.KEY_INSTALLATION_STATUS);
+		editablePreparedColumns[2] = true;
+
+		preparedColumns.add(3, ProductState.KEY_ACTION_PROGRESS);
+		editablePreparedColumns[3] = false;
+
+		preparedColumns.add(4, ProductState.KEY_ACTION_RESULT);
+		editablePreparedColumns[4] = true;
+
+		preparedColumns.add(5, ProductState.KEY_LAST_ACTION);
+		editablePreparedColumns[5] = false;
+
+		preparedColumns.add(6, ProductState.KEY_ACTION_REQUEST);
+		editablePreparedColumns[6] = true;
+
+		preparedColumns.add(7, ProductState.KEY_PRODUCT_PRIORITY);
+		editablePreparedColumns[7] = false;
+
+		preparedColumns.add(8, ProductState.KEY_ACTION_SEQUENCE);
+		editablePreparedColumns[8] = false;
+
+		preparedColumns.add(9, ProductState.KEY_VERSION_INFO);
+		editablePreparedColumns[9] = false;
+
+		preparedColumns.add(10, ProductState.KEY_LAST_STATE_CHANGE);
+		editablePreparedColumns[10] = false;
+
+		this.columnsToDisplay = columnsToDisplay;
 
 		Logging.info(this, "preparedColumns:  ", preparedColumns);
 		Logging.info(this, "columnsToDisplay: ", columnsToDisplay);
 
+		indexPreparedColumns = new int[columnsToDisplay.size()];
 		columnTitles = new ArrayList<>();
 
-		for (String column : columnsToDisplay) {
+		for (int j = 0; j < columnsToDisplay.size(); j++) {
+			String column = columnsToDisplay.get(j);
 			Logging.debug(this, " ------- treat column ", column);
 			int k = preparedColumns.indexOf(column);
 			if (k >= 0) {
-				this.columnsToDisplay.add(column);
+				indexPreparedColumns[j] = k;
+				Logging.debug(this, "indexPreparedColumns of displayColumn ", j, " is ", k);
 				columnTitles.add(getColumnTitle(column));
 			} else {
-				Logging.warning(this, "column ", column, " is not prepared");
+				Logging.devel(this, "column ", column, " is not prepared");
+				columnTitles.add(column);
 			}
 		}
 
-		indexPreparedColumns = new int[this.columnsToDisplay.size()];
-		for (int j = 0; j < this.columnsToDisplay.size(); j++) {
-			int k = preparedColumns.indexOf(this.columnsToDisplay.get(j));
-			indexPreparedColumns[j] = k;
-			Logging.debug(this, "indexPreparedColumns of displayColumn ", j, " is ", k);
-		}
-
-		Logging.info(this, " -------- numberOfColumns ", this.columnsToDisplay.size());
+		Logging.info(this, " -------- numberOfColumns ", columnsToDisplay.size());
 	}
 
 	public int getColumnIndex(String columnName) {
