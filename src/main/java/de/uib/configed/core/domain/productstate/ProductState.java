@@ -93,11 +93,6 @@ public final class ProductState {
 			}
 
 			installationInfo.append(" ) ");
-
-			if (result.getVal() == ActionResult.FAILED) {
-				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
-				installationInfo.append(" ");
-			}
 		} else {
 			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
