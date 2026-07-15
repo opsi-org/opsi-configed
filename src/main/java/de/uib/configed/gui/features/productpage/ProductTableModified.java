@@ -62,6 +62,7 @@ import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 
+@SuppressWarnings("java:S1200")
 public class ProductTableModified {
 	private static Map<String, String> columnDict;
 
