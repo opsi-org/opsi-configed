@@ -35,7 +35,7 @@ public class ProductConfigurationEngine {
 	private static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
 			Map.entry(InstallationStatus.KEY_INSTALLED, "setup"),
 			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
-	private static final String UNEQUAL_ADD_STRING = "≠ ";
+	protected static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	private static final String NONE_STRING = "";
 	protected static final String NONE_DISPLAY_STRING = "none";

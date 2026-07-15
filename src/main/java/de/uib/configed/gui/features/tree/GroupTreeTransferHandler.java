@@ -26,7 +26,6 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.share.logging.Logging;
 
 public class GroupTreeTransferHandler extends TransferHandler {
@@ -272,7 +271,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			Logging.debug(this, "active source tree path for selectedObject ", selectedObject);
 
-			if (source instanceof ProductTable) {
+			if (CLIENT_TABLE.equals(tableType) || PRODUCT_TABLE.equals(tableType)) {
 				// object is selected in table
 				tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
 			} else {

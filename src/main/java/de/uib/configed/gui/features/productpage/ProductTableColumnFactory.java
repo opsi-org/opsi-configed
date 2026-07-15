@@ -28,7 +28,6 @@ import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ProductPageManager;
 import de.uib.configed.gui.data.ColoredTableCellRenderer;
 import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
-import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.TableColumnConfig;
@@ -228,7 +227,7 @@ public class ProductTableColumnFactory {
 				}
 
 				if (stringValue.equals(Globals.CONFLICT_STATE_STRING) || stringValue
-						.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
+						.equals(ProductConfigurationEngine.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
 					setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 				} else {
 					String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);

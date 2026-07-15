@@ -59,20 +59,12 @@ public class InstallationStateUpdateManager {
 	}
 
 	private void updateTableForClient(String clientId, List<String> attributes, ProductTableModified tableProducts) {
-		// InstallationStateTableModel istmForSelectedClients = (InstallationStateTableModel) tableProducts.getModel();
-
 		if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING) != null
 				&& productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
-			// istmForSelectedClients.updateTable(clientId,
-			// 		productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING), attributes);
-			Logging.devel(this, "updating less than 20",
-					productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size());
 			applyMultipleCellEdits(clientId,
 					productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING), attributes,
 					tableProducts.getTableViewComponent());
 		} else {
-			// istmForSelectedClients.updateTable(clientId, attributes);
-			Logging.devel(this, "updating whole table", clientId);
 			tableProducts.updateTable(clientId, attributes);
 		}
 	}
