@@ -38,6 +38,14 @@ import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
 
 public class ProductTableColumnFactory {
+	private static final int WIDTH_COLUMN_PRODUCT_NAME = 170;
+	private static final int WIDTH_COLUMN_PRODUCT_COMPLETE_NAME = 170;
+	private static final int WIDTH_COLUMN_PRODUCT_STATE = 60;
+
+	private static final int WIDTH_COLUMN_PRODUCT_SEQUENCE = 40;
+	private static final int WIDTH_COLUMN_VERSION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
+	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
+
 	private ConfigedMain configedMain;
 	private ProductOptionsComboBoxModeller comboBoxModeller;
 	private ProductTableModified productTableModified;
@@ -85,48 +93,50 @@ public class ProductTableColumnFactory {
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_ID)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_PRODUCT_ID)).editable(false)
-				.prefferedWidth(170).toggleable(false)
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_NAME).toggleable(false)
 				.renderer(new ProductNameTableCellRenderer(productTableModified.getTableViewComponent())).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_NAME)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_PRODUCT_NAME)).editable(false)
-				.prefferedWidth(170).renderer(new ColorTableCellRenderer()).build());
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_COMPLETE_NAME).renderer(new ColorTableCellRenderer()).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_STATUS)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS)).editable(true)
-				.prefferedWidth(60)
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_STATE)
 				.renderer(new ColoredTableCellRendererByIndex(InstallationStatus.getLabel2TextColor()))
 				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createInstallationStatusComparator()).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_INFO)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_INSTALLATION_INFO)).editable(true)
-				.prefferedWidth(60).renderer(installationInfoTableCellRenderer)
+				.prefferedWidth(WIDTH_COLUMN_INSTALLATION_INFO).renderer(installationInfoTableCellRenderer)
 				.editor(new DynamicCellEditor(new JComboBox<>(), comboBoxModeller)).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_REQUEST)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_ACTION_REQUEST)).editable(true)
-				.prefferedWidth(60).renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_STATE)
+				.renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
 				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createActionRequestComparator()).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_PRIORITY)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY)).editable(false)
-				.prefferedWidth(40).renderer(priorityclassTableCellRenderer)
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE).renderer(priorityclassTableCellRenderer)
 				.comparator(Comparator.comparingInt(ProductTableColumnFactory::parseIntOrMinusOne)).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_SEQUENCE)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE)).editable(false)
-				.prefferedWidth(40).renderer(productsequenceTableCellRenderer)
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE).renderer(productsequenceTableCellRenderer)
 				.comparator(Comparator.comparingInt(ProductTableColumnFactory::parseIntOrMinusOne)).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_LAST_STATE_CHANGE)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE)).editable(false)
-				.prefferedWidth(40).renderer(new ColoredTableCellRenderer()).build());
+				.prefferedWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE).renderer(new ColoredTableCellRenderer()).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_VERSION_INFO)
 				.header(ProductTableModified.getColumnTitle(ProductState.KEY_VERSION_INFO)).editable(false)
-				.prefferedWidth(60).renderer(new ProductVersionCellRenderer(configedMain)).build());
+				.prefferedWidth(WIDTH_COLUMN_VERSION_INFO).renderer(new ProductVersionCellRenderer(configedMain))
+				.build());
 
 		Map<String, Boolean> productDisplayFields = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
 				? PersistenceControllerFactory.getPersistenceController().getDataServices().product
