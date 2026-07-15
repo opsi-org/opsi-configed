@@ -8,12 +8,10 @@ package de.uib.configed.gui.features.productpage;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,8 +19,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -62,30 +58,11 @@ import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
-import de.uib.configed.gui.share.table.gui.ComboBoxModeller;
 import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 
 public class ProductTableModified {
-	private static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
-			Map.entry(InstallationStatus.KEY_INSTALLED, "setup"),
-			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
-	private static final String UNEQUAL_ADD_STRING = "≠ ";
-
-	private static final String NONE_STRING = "";
-	private static final String NONE_DISPLAY_STRING = "none";
-	private static final String FAILED_DISPLAY_STRING = "failed";
-	private static final String SUCCESS_DISPLAY_STRING = "success";
-	private static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
-	static {
-		defaultDisplayValues.add(NONE_DISPLAY_STRING);
-		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);
-		defaultDisplayValues.add(FAILED_DISPLAY_STRING);
-	}
-
-	private static final String MANUALLY = "manually set";
-
 	private static Map<String, String> columnDict;
 
 	private GenericTableViewComponent tableViewComponent;
@@ -101,7 +78,7 @@ public class ProductTableModified {
 	private PanelProductSettings panelProductSettings;
 	private ProductConfigurationEngine engine;
 
-	private MyComboBoxModller comboBoxModller;
+	private ProductOptionsComboBoxModeller comboBoxModeller;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -164,6 +141,9 @@ public class ProductTableModified {
 
 		tableViewComponent = new GenericTableViewComponent(model, sideEffectStrategy, popupMouseListenerSupplier);
 		component = tableViewComponent.initUI();
+
+		comboBoxModeller.setTableViewComponent(tableViewComponent);
+		comboBoxModeller.setProductConfigurationEngine(engine);
 	}
 
 	private void onCellEdited(int row, int column, Object newValue) {
@@ -393,7 +373,7 @@ public class ProductTableModified {
 	private List<TableColumnConfig> buildProductColumnConfigs(ProductSettingsType type) {
 
 		List<TableColumnConfig> columns = new ArrayList<>();
-		comboBoxModller = new MyComboBoxModller();
+		comboBoxModeller = new ProductOptionsComboBoxModeller();
 
 		// productId
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_ID)
@@ -409,20 +389,20 @@ public class ProductTableModified {
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_STATUS)
 				.header(getColumnTitle(ProductState.KEY_INSTALLATION_STATUS)).editable(true).prefferedWidth(60)
 				.renderer(new ColoredTableCellRendererByIndex(InstallationStatus.getLabel2TextColor()))
-				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModller, true))
+				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createInstallationStatusComparator()).build());
 
 		// installationInfo — editable, dynamic combo editor, result-colored renderer
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_INFO)
 				.header(getColumnTitle(ProductState.KEY_INSTALLATION_INFO)).editable(true).prefferedWidth(60)
 				.renderer(installationInfoTableCellRenderer)
-				.editor(new DynamicCellEditor(new JComboBox<>(), comboBoxModller)).build());
+				.editor(new DynamicCellEditor(new JComboBox<>(), comboBoxModeller)).build());
 
 		// actionRequest — editable, combo box editor, custom sort order
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_REQUEST)
 				.header(getColumnTitle(ProductState.KEY_ACTION_REQUEST)).editable(true).prefferedWidth(60)
 				.renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
-				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModller, true))
+				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createActionRequestComparator()).build());
 
 		// priority — right-aligned, numeric comparator
@@ -484,7 +464,7 @@ public class ProductTableModified {
 			Map<String, List<String>> possibleActions) {
 		engine.initialize(selectedClients, productNames, statesAndActions, globalProductInfos, changedProductStates,
 				possibleActions);
-		comboBoxModller.setPossibleActions(possibleActions);
+		comboBoxModeller.setPossibleActions(possibleActions);
 
 		return engine.buildSnapshot();
 	}
@@ -544,102 +524,6 @@ public class ProductTableModified {
 			}
 			return RowState.NORMAL;
 		}
-	}
-
-	private class MyComboBoxModller implements ComboBoxModeller {
-		private Map<String, List<String>> possibleActions;
-
-		public void setPossibleActions(Map<String, List<String>> possibleActions) {
-			this.possibleActions = possibleActions;
-		}
-
-		@Override
-		public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-			String[] possibleOptions;
-
-			String columnKey = tableViewComponent.getColumnByModelIndex(column).getKey();
-
-			String productBeingEdited = tableViewComponent.getRowByModelIndex(row).getValue(ProductState.KEY_PRODUCT_ID,
-					String.class);
-			engine.setProductBeingEdited(productBeingEdited);
-
-			Logging.debug(this, "getComboBoxModel: row=", row, ", column=", column, ", columnKey=", columnKey,
-					"actualProduct=", productBeingEdited);
-			if (ActionRequest.KEY.equals(columnKey)) {
-				possibleOptions = producePossibleActions(productBeingEdited);
-			} else if (InstallationStatus.KEY.equals(columnKey)) {
-				possibleOptions = producePossibleInstallationStatus(InstallationStatus.getDisplayLabelsForChoice(),
-						productBeingEdited);
-			} else if (ProductState.KEY_INSTALLATION_INFO.equals(columnKey)) {
-				possibleOptions = producePossibleInstallationInfos((String) tableViewComponent.getValueAt(row, column));
-			} else {
-				Logging.warning(this, "unexpected column ", column);
-
-				return null;
-			}
-
-			return new DefaultComboBoxModel<>(possibleOptions);
-		}
-
-		private String[] producePossibleActions(String product) {
-			Logging.debug(this, " possible actions  ", possibleActions);
-			List<String> actionsForProduct = new ArrayList<>();
-			if (possibleActions != null) {
-				for (String label : possibleActions.get(product)) {
-					actionsForProduct.add(ActionRequest.produceFromLabel(label));
-				}
-
-				// Add in values in correct ordering
-				String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
-				actionsForProduct.retainAll(List.of(displayLabels));
-
-				Logging.debug("Possible actions as array  ", actionsForProduct);
-			}
-
-			if (actionsForProduct.isEmpty()) {
-				actionsForProduct.add("null");
-			}
-
-			return actionsForProduct.toArray(new String[0]);
-		}
-
-		private String[] producePossibleInstallationStatus(String[] defaultValues, String product) {
-			if (possibleActions.get(product) == null) {
-				String state = engine.getVisualValue(ProductState.KEY_INSTALLATION_STATUS, product);
-				if (state == null) {
-					Logging.debug(this, "producePossibleInstallationStatus: no possible actions for product ", product,
-							" and no state information available");
-					return new String[] { "null" };
-				}
-
-				Logging.debug(this, "producePossibleInstallationStatus: no possible actions for product ", product);
-				return new String[0];
-			}
-
-			Logging.debug(this, "producePossibleInstallationStatus: defaultValues=", Arrays.toString(defaultValues),
-					", actualProduct=", product);
-			return defaultValues;
-		}
-
-		private static String[] producePossibleInstallationInfos(String cellValue) {
-			if (cellValue == null) {
-				cellValue = "";
-			}
-
-			Set<String> values = new LinkedHashSet<>();
-
-			Logging.debug("producePossibleInstallationInfos: cellValue=" + cellValue + ", defaultDisplayValues="
-					+ defaultDisplayValues);
-			if (!defaultDisplayValues.contains(cellValue)) {
-				values.add(cellValue);
-			}
-
-			values.addAll(defaultDisplayValues);
-
-			Logging.debug("producePossibleInstallationInfos: cellValue=" + cellValue + ", values=" + values);
-			return values.toArray(new String[0]);
-		}
-
 	}
 
 	public void clearProductChangedStates() {

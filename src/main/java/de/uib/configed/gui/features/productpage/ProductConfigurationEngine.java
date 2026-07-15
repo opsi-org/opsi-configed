@@ -38,15 +38,9 @@ public class ProductConfigurationEngine {
 	private static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	private static final String NONE_STRING = "";
-	private static final String NONE_DISPLAY_STRING = "none";
-	private static final String FAILED_DISPLAY_STRING = "failed";
-	private static final String SUCCESS_DISPLAY_STRING = "success";
-	private static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
-	static {
-		defaultDisplayValues.add(NONE_DISPLAY_STRING);
-		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);
-		defaultDisplayValues.add(FAILED_DISPLAY_STRING);
-	}
+	protected static final String NONE_DISPLAY_STRING = "none";
+	protected static final String FAILED_DISPLAY_STRING = "failed";
+	protected static final String SUCCESS_DISPLAY_STRING = "success";
 	private static final String MANUALLY = "manually set";
 
 	private Map<String, String> product2request = new HashMap<>();
