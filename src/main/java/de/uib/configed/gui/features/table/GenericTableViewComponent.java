@@ -495,11 +495,6 @@ public class GenericTableViewComponent
 		}
 	}
 
-	// TODO: remove later (exists only for compatibility with old code)
-	public int getSelectedRow() {
-		return table.getSelectedRow();
-	}
-
 	public Set<String> getSelectedRows() {
 		return model.getSelectedRows();
 	}
