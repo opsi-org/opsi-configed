@@ -79,6 +79,7 @@ public class ProductTableModified {
 	private ProductConfigurationEngine engine;
 
 	private ProductOptionsComboBoxModeller comboBoxModeller;
+	private ProductTableExtractor extractor;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -139,6 +140,8 @@ public class ProductTableModified {
 
 		tableViewComponent = new GenericTableViewComponent(model, sideEffectStrategy, popupMouseListenerSupplier);
 		component = tableViewComponent.initUI();
+
+		this.extractor = new ProductTableExtractor(tableViewComponent);
 
 		comboBoxModeller.setTableViewComponent(tableViewComponent);
 		comboBoxModeller.setProductConfigurationEngine(engine);
@@ -373,54 +376,45 @@ public class ProductTableModified {
 		List<TableColumnConfig> columns = new ArrayList<>();
 		comboBoxModeller = new ProductOptionsComboBoxModeller();
 
-		// productId
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_ID)
 				.header(getColumnTitle(ProductState.KEY_PRODUCT_ID)).editable(false).prefferedWidth(170)
 				.toggleable(false).renderer(new ProductNameTableCellRenderer(tableViewComponent)).build());
 
-		// productName
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_NAME)
 				.header(getColumnTitle(ProductState.KEY_PRODUCT_NAME)).editable(false).prefferedWidth(170)
 				.renderer(new ColorTableCellRenderer()).build());
 
-		// installationStatus — editable, combo box editor, custom renderer
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_STATUS)
 				.header(getColumnTitle(ProductState.KEY_INSTALLATION_STATUS)).editable(true).prefferedWidth(60)
 				.renderer(new ColoredTableCellRendererByIndex(InstallationStatus.getLabel2TextColor()))
 				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createInstallationStatusComparator()).build());
 
-		// installationInfo — editable, dynamic combo editor, result-colored renderer
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_INFO)
 				.header(getColumnTitle(ProductState.KEY_INSTALLATION_INFO)).editable(true).prefferedWidth(60)
 				.renderer(installationInfoTableCellRenderer)
 				.editor(new DynamicCellEditor(new JComboBox<>(), comboBoxModeller)).build());
 
-		// actionRequest — editable, combo box editor, custom sort order
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_REQUEST)
 				.header(getColumnTitle(ProductState.KEY_ACTION_REQUEST)).editable(true).prefferedWidth(60)
 				.renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
 				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
 				.comparator(createActionRequestComparator()).build());
 
-		// priority — right-aligned, numeric comparator
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_PRIORITY)
 				.header(getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY)).editable(false).prefferedWidth(40)
 				.renderer(priorityclassTableCellRenderer)
 				.comparator(Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne)).build());
 
-		// actionSequence — right-aligned, numeric comparator
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_SEQUENCE)
 				.header(getColumnTitle(ProductState.KEY_ACTION_SEQUENCE)).editable(false).prefferedWidth(40)
 				.renderer(productsequenceTableCellRenderer)
 				.comparator(Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne)).build());
 
-		// lastStateChange
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_LAST_STATE_CHANGE)
 				.header(getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE)).editable(false).prefferedWidth(40)
 				.renderer(new ColoredTableCellRenderer()).build());
 
-		// versionInfo — custom renderer for conflict detection
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_VERSION_INFO)
 				.header(getColumnTitle(ProductState.KEY_VERSION_INFO)).editable(false).prefferedWidth(60)
 				.renderer(new ProductVersionCellRenderer(configedMain)).build());
@@ -533,68 +527,6 @@ public class ProductTableModified {
 	}
 
 	public JTable getStrippedTable() {
-		List<String[]> data = new ArrayList<>();
-		List<TableColumnConfig> columns = tableViewComponent.getVisibleColumns();
-		List<RowData> rows = tableViewComponent.getRows();
-
-		for (int j = 0; j < rows.size(); j++) {
-			RowData rowData = rows.get(j);
-			boolean strippIt = true;
-			String[] actCol = new String[columns.size()];
-
-			for (int i = 0; i < columns.size(); i++) {
-				TableColumnConfig columnConfig = columns.get(i);
-				Object cellValue = rowData.getValue(columnConfig.getKey(), Object.class);
-				String cellValueString = cellValue == null ? "" : cellValue.toString();
-				actCol[i] = cellValueString;
-
-				strippIt = shouldStripIt(columnConfig.getHeader(), cellValueString, strippIt);
-			}
-
-			if (!strippIt) {
-				data.add(actCol);
-			}
-		}
-
-		// Create jTable with stripped data
-		int rowCount = data.size();
-		int colCount = columns.size();
-		String[][] strippedData = new String[rowCount][colCount];
-		for (int i = 0; i < data.size(); i++) {
-			strippedData[i] = data.get(i);
-		}
-
-		return new JTable(strippedData, extractHeaders(columns));
-	}
-
-	private static String[] extractHeaders(List<TableColumnConfig> columns) {
-		String[] headers = new String[columns.size()];
-		for (int i = 0; i < columns.size(); i++) {
-			headers[i] = columns.get(i).getHeader();
-		}
-		return headers;
-	}
-
-	private boolean shouldStripIt(String columnName, String cellValueString, boolean previousValue) {
-		String installationStatusLabel = Configed.getResourceValue("InstallationStateTableModel.installationStatus");
-		String reportLabel = Configed.getResourceValue("InstallationStateTableModel.report");
-		String actionRequestLabel = Configed.getResourceValue("InstallationStateTableModel.actionRequest");
-
-		boolean strippIt = previousValue;
-
-		if (installationStatusLabel.equals(columnName)
-				&& !InstallationStatus.KEY_NOT_INSTALLED.equals(cellValueString)) {
-			strippIt = false;
-		} else if (reportLabel.equals(columnName) && cellValueString != null && !cellValueString.isEmpty()) {
-			strippIt = false;
-		} else if (actionRequestLabel.equals(columnName) && !"none".equals(cellValueString)) {
-			strippIt = false;
-		} else {
-			// Keep row if we don't have explicit strip rules for this column
-			// This maintains backward compatibility with the warning log behavior
-			Logging.debug(this, "checking strip condition for columnName: ", columnName);
-		}
-
-		return strippIt;
+		return extractor.getStrippedTable();
 	}
 }
