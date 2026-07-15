@@ -6,12 +6,9 @@
 
 package de.uib.configed.gui.features.productpage;
 
-import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,16 +16,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import de.uib.configed.core.domain.productstate.ActionRequest;
-import de.uib.configed.core.domain.productstate.ActionResult;
-import de.uib.configed.core.domain.productstate.InstallationStatus;
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -36,13 +28,7 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.ProductPageManager;
-import de.uib.configed.gui.data.ColoredTableCellRenderer;
-import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
-import de.uib.configed.gui.features.productpage.ProductSettingsTableModel.ProductNameTableCellRenderer;
-import de.uib.configed.gui.features.productpage.ProductSettingsTableModel.ProductVersionCellRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewComponent.TableSideEffectStrategy;
 import de.uib.configed.gui.features.table.GenericTableViewEffect;
@@ -56,9 +42,6 @@ import de.uib.configed.gui.features.table.TableConfig;
 import de.uib.configed.gui.features.tree.AbstractGroupTree;
 import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.PopupMouseListener;
-import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
-import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
-import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
 import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 
@@ -68,10 +51,6 @@ public class ProductTableModified {
 
 	private GenericTableViewComponent tableViewComponent;
 	private JComponent component;
-
-	private ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
-	private ColoredTableCellRenderer productsequenceTableCellRenderer;
-	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
 	private ConfigedMain configedMain;
 
@@ -87,33 +66,6 @@ public class ProductTableModified {
 
 	public ProductTableModified(ConfigedMain configedMain, ProductSettingsType type, ProductTree productTree,
 			PanelProductSettings panelProductSettings, Supplier<PopupMouseListener> popupMouseListenerSupplier) {
-		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex();
-		priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-
-		productsequenceTableCellRenderer = new ColoredTableCellRenderer();
-		productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-
-		installationInfoTableCellRenderer = new ColoredTableCellRenderer() {
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-				// Safe sind instanceof returns false if null
-				if (value instanceof String stringValue) {
-					if (stringValue.startsWith(ActionResult.getLabel(ActionResult.FAILED))) {
-						setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
-					} else if (stringValue.startsWith(ActionResult.getLabel(ActionResult.SUCCESSFUL))) {
-						setForeground(Globals.OK_COLOR);
-					} else {
-						// Don't set foreground if no special result
-					}
-				}
-
-				return this;
-			}
-		};
-
 		this.configedMain = configedMain;
 		this.productTree = productTree;
 		this.panelProductSettings = panelProductSettings;
@@ -133,7 +85,9 @@ public class ProductTableModified {
 				.enableHeaderContextMenu(true).selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
 				.sortKeys(null).build();
 
-		List<TableColumnConfig> columns = buildProductColumnConfigs(type);
+		comboBoxModeller = new ProductOptionsComboBoxModeller();
+		ProductTableColumnFactory columnFactory = new ProductTableColumnFactory(comboBoxModeller, configedMain, this);
+		List<TableColumnConfig> columns = columnFactory.buildProductColumnConfigs(type);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().rows(new ArrayList<>()).columns(columns)
 				.tableConfig(tableConfig).diffStrategy(new ProductRowDiffStrategy()).keyValueTable(false).isDirty(false)
@@ -370,84 +324,6 @@ public class ProductTableModified {
 
 	public JComponent getComponent() {
 		return component;
-	}
-
-	private List<TableColumnConfig> buildProductColumnConfigs(ProductSettingsType type) {
-
-		List<TableColumnConfig> columns = new ArrayList<>();
-		comboBoxModeller = new ProductOptionsComboBoxModeller();
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_ID)
-				.header(getColumnTitle(ProductState.KEY_PRODUCT_ID)).editable(false).prefferedWidth(170)
-				.toggleable(false).renderer(new ProductNameTableCellRenderer(tableViewComponent)).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_NAME)
-				.header(getColumnTitle(ProductState.KEY_PRODUCT_NAME)).editable(false).prefferedWidth(170)
-				.renderer(new ColorTableCellRenderer()).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_STATUS)
-				.header(getColumnTitle(ProductState.KEY_INSTALLATION_STATUS)).editable(true).prefferedWidth(60)
-				.renderer(new ColoredTableCellRendererByIndex(InstallationStatus.getLabel2TextColor()))
-				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
-				.comparator(createInstallationStatusComparator()).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_INSTALLATION_INFO)
-				.header(getColumnTitle(ProductState.KEY_INSTALLATION_INFO)).editable(true).prefferedWidth(60)
-				.renderer(installationInfoTableCellRenderer)
-				.editor(new DynamicCellEditor(new JComboBox<>(), comboBoxModeller)).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_REQUEST)
-				.header(getColumnTitle(ProductState.KEY_ACTION_REQUEST)).editable(true).prefferedWidth(60)
-				.renderer(new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor()))
-				.editor(new AdaptingCellEditor(new JComboBox<>(), comboBoxModeller, true))
-				.comparator(createActionRequestComparator()).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_PRIORITY)
-				.header(getColumnTitle(ProductState.KEY_PRODUCT_PRIORITY)).editable(false).prefferedWidth(40)
-				.renderer(priorityclassTableCellRenderer)
-				.comparator(Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne)).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_ACTION_SEQUENCE)
-				.header(getColumnTitle(ProductState.KEY_ACTION_SEQUENCE)).editable(false).prefferedWidth(40)
-				.renderer(productsequenceTableCellRenderer)
-				.comparator(Comparator.comparingInt(ProductSettingsTableModel::parseIntOrMinusOne)).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_LAST_STATE_CHANGE)
-				.header(getColumnTitle(ProductState.KEY_LAST_STATE_CHANGE)).editable(false).prefferedWidth(40)
-				.renderer(new ColoredTableCellRenderer()).build());
-
-		columns.add(TableColumnConfig.builder().key(ProductState.KEY_VERSION_INFO)
-				.header(getColumnTitle(ProductState.KEY_VERSION_INFO)).editable(false).prefferedWidth(60)
-				.renderer(new ProductVersionCellRenderer(configedMain)).build());
-
-		Map<String, Boolean> productDisplayFields = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
-				? PersistenceControllerFactory.getPersistenceController().getDataServices().product
-						.getProductOnClientsDisplayFieldsLocalbootProducts()
-				: PersistenceControllerFactory.getPersistenceController().getDataServices().product
-						.getProductOnClientsDisplayFieldsNetbootProducts();
-		List<String> displayFields = ProductPageManager.getDisplayFieldsList(productDisplayFields);
-
-		Iterator<TableColumnConfig> iterator = columns.iterator();
-		while (iterator.hasNext()) {
-			TableColumnConfig column = iterator.next();
-			if (!displayFields.contains(column.getKey())) {
-				columns.set(columns.indexOf(column), column.withVisible(false));
-			}
-		}
-
-		return columns;
-	}
-
-	private static Comparator<Object> createInstallationStatusComparator() {
-		List<String> order = List.of(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_UNKNOWN,
-				InstallationStatus.KEY_NOT_INSTALLED);
-		return (o1, o2) -> Integer.compare(order.indexOf(o1), order.indexOf(o2));
-	}
-
-	private static Comparator<Object> createActionRequestComparator() {
-		List<String> order = List.of(ActionRequest.KEY_SETUP, ActionRequest.KEY_UPDATE, ActionRequest.KEY_UNINSTALL,
-				ActionRequest.KEY_ALWAYS, ActionRequest.KEY_ONCE, ActionRequest.KEY_CUSTOM, ActionRequest.KEY_NONE);
-		return (o1, o2) -> Integer.compare(order.indexOf(o1), order.indexOf(o2));
 	}
 
 	public List<Map<String, Object>> computeDisplayRows(List<String> selectedClients, Set<String> productNames,

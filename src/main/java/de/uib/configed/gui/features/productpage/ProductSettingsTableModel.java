@@ -219,9 +219,6 @@ public class ProductSettingsTableModel {
 				int row, int column) {
 			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-			// String stateChange = ((InstallationStateTableModel) table.getModel())
-			// 		.getLastStateChange(table.convertRowIndexToModel(row));
-
 			String stateChange = tableViewComponent != null ? tableViewComponent.getRowByModelIndex(row)
 					.getValue(ProductState.KEY_LAST_STATE_CHANGE, String.class) : null;
 			if (stateChange == null) {
