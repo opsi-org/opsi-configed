@@ -117,23 +117,21 @@ public class ProductTableModified {
 		this.panelProductSettings = panelProductSettings;
 		this.engine = new ProductConfigurationEngine(this, configedMain);
 
-		List<TableColumnConfig> columns = buildProductColumnConfigs(type);
-
-		TableSideEffectStrategy sideEffectStrategy = (GenericTableViewEffect effect) -> {
-			return switch (effect) {
-			case GenericTableViewEffect.Selection() -> this::applyChangedValue;
-			case GenericTableViewEffect.StoreVisibleColulmns(List<String> visibleColumns) -> () -> storeVisibleColumns(
-					type, visibleColumns);
-			case GenericTableViewEffect.CellEdited(int row, int column, Object newValue) -> () -> onCellEdited(row,
-					column, newValue);
-			default -> null;
-			};
+		TableSideEffectStrategy sideEffectStrategy = (GenericTableViewEffect effect) -> switch (effect) {
+		case GenericTableViewEffect.Selection() -> this::applyChangedValue;
+		case GenericTableViewEffect.StoreVisibleColulmns(List<String> visibleColumns) -> () -> storeVisibleColumns(type,
+				visibleColumns);
+		case GenericTableViewEffect.CellEdited(int row, int column, Object newValue) -> () -> onCellEdited(row, column,
+				newValue);
+		default -> null;
 		};
 
 		TableConfig tableConfig = TableConfig.builder().fillViewportHeight(true).showTableHeader(true).dragEnabled(true)
 				.autoCreateRowSorter(false).reorderingAllowed(false).columnSelectionAllowed(false)
 				.enableHeaderContextMenu(true).selectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION)
 				.sortKeys(null).build();
+
+		List<TableColumnConfig> columns = buildProductColumnConfigs(type);
 
 		GenericTableViewModel model = GenericTableViewModel.builder().rows(new ArrayList<>()).columns(columns)
 				.tableConfig(tableConfig).diffStrategy(new ProductRowDiffStrategy()).keyValueTable(false).isDirty(false)
@@ -513,16 +511,20 @@ public class ProductTableModified {
 			if (colKey == null) {
 				return RowState.NORMAL;
 			}
+
+			RowState rowState = RowState.NORMAL;
 			if (ProductState.KEY_INSTALLATION_STATUS.equals(colKey) || ProductState.KEY_ACTION_REQUEST.equals(colKey)
 					|| ProductState.KEY_INSTALLATION_INFO.equals(colKey)) {
 				if (originalValue == null) {
-					return RowState.MISSING_DATA;
-				}
-				if (!Objects.equals(currentValue, originalValue)) {
-					return RowState.MODIFIED;
+					rowState = RowState.MISSING_DATA;
+				} else {
+					if (!Objects.equals(currentValue, originalValue)) {
+						rowState = RowState.MODIFIED;
+					}
 				}
 			}
-			return RowState.NORMAL;
+
+			return rowState;
 		}
 	}
 
