@@ -13,4 +13,4 @@ wget $DEV_TOOLS_URL
 chmod 750 $SCRIPT_NAME && ./${SCRIPT_NAME}
 rm -f "./${SCRIPT_NAME}"
 rm -f "./${SCRIPT_NAME}*"
-opsi-dev-cli --self-upgrade
+opsi-dev-cli self upgrade
