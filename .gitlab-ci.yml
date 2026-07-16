@@ -73,7 +73,7 @@ signandupload:
     - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
     - curl -sS "${OPSIDEVTOOLS_INSTALLER_URL_LINUX_X64}" | sh
     - opsi-dev-cli --version
-    - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
+    - opsi-dev-cli -l info signserver sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps target/bom.json opsi-configed/
     - mkdir opsi-configed/mac_x64/
@@ -81,8 +81,8 @@ signandupload:
     - git fetch --unshallow
     - opsi-dev-cli -l info changelog from-git output
     - mv output/changelog.md opsi-configed/CHANGELOG.md
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed opsi-configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed opsi-configed all all $CONFIGED_VERSION'
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-cli -l info binary push --product opsi-configed --system all --architecture all --version $CONFIGED_VERSION --prerelease "$CI_JOB_ID" opsi-configed'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-cli -l info binary push --product opsi-configed --system all --architecture all --version $CONFIGED_VERSION opsi-configed'
   needs:
     - set_variables
     - compile_and_package
