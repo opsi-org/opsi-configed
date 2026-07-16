@@ -254,7 +254,6 @@ public class ProductTable {
 					Configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
 		}
 
-		Logging.devel(ProductTable.class, "titles", columnDict);
 		if (columnDict.get(column) == null) {
 			return "";
 		}
