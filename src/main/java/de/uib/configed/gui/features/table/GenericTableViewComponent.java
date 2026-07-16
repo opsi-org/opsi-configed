@@ -141,7 +141,7 @@ public class GenericTableViewComponent
 
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
-				TableCellRenderer renderer = getTableCellRenderer(row, column);
+				TableCellRenderer renderer = getTableCellRenderer(column);
 				return renderer != null ? renderer : super.getCellRenderer(row, column);
 			}
 		};
@@ -194,7 +194,7 @@ public class GenericTableViewComponent
 		return -1;
 	}
 
-	private TableCellRenderer getTableCellRenderer(int row, int column) {
+	private TableCellRenderer getTableCellRenderer(int column) {
 		TableColumnConfig config = model.getColumnByModelIndex(column);
 
 		if (config != null && config.getRenderer() != null) {
