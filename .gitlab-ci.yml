@@ -81,8 +81,8 @@ signandupload:
     - git fetch --unshallow
     - opsi-dev-cli -l info changelog from-git output
     - mv output/changelog.md opsi-configed/CHANGELOG.md
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-cli -l info --binary-push opsi-configed opsi-configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-cli -l info --binary-push opsi-configed opsi-configed all all $CONFIGED_VERSION'
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-cli -l info binary push --product opsi-configed --system all --architecture all --version $CONFIGED_VERSION --prerelease "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-cli -l info binary push --product opsi-configed --system all --architecture all --version $CONFIGED_VERSION'
   needs:
     - set_variables
     - compile_and_package
