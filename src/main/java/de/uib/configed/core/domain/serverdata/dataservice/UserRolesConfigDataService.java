@@ -683,7 +683,7 @@ public class UserRolesConfigDataService extends DataService {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
 				ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
 		// key not yet configured
-		List<Object> defaultValues = List.of();
+		List<Object> defaultValues = List.of(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 		List<Object> possibleValues = List.of(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND,
 				OPSI_CLIENTD_EVENT_SILENT_INSTALL);

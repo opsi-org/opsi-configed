@@ -345,7 +345,9 @@ public class PanelSWSingleClientInfo extends AbstractSingleClientInfoPanel {
 				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport).overwriteDecision(decision)
 				.metaData(Map.of("title", "Client " + hostId, "subtitle", scanInfo, "subject", "Software report",
 						"keywords", "software inventory"))
-				.build();
+				.defaultPrefix(Configed.getSavedStates().getProperty("swaudit_export_file_prefix",
+						SWcsvExporter.EXPORT_FILE_PREFIX))
+				.exportClientId(configedMain.getSelectedClients().get(0)).build();
 	}
 
 	private void setSuperTitle(String s) {

@@ -26,6 +26,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.features.depot.ClientSelectionTransferable;
 import de.uib.configed.share.logging.Logging;
 
 public class GroupTreeTransferHandler extends TransferHandler {
@@ -158,7 +159,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 	}
 
-	private static Transferable createTransferableForJTable(JTable tableSource) {
+	private Transferable createTransferableForJTable(JTable tableSource) {
 		int[] rows = tableSource.getSelectedRows();
 		int cols = tableSource.getColumnCount();
 		StringBuilder sb = new StringBuilder();
@@ -176,6 +177,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 					sb.append(value.toString());
 				}
 			}
+		}
+
+		if (CLIENT_TABLE.equals(tableType)) {
+			// Marker flavor so that the DepotsList accepts only drags from the ClientTable
+			return new ClientSelectionTransferable(sb.toString());
 		}
 		return new StringSelection(sb.toString());
 	}

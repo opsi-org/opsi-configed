@@ -130,9 +130,9 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 						: null);
 		component = clientTableViewComponent.initUI();
 
-		searchPane = new SearchPaneComponent(
-				new SearchTargetModelFromClientTable(configedMain, clientTableViewComponent.getTable()),
-				FilterKey.CLIENT_TABLE, false, false, true);
+		searchPane = SearchPaneComponent.builder()
+				.targetModel(new SearchTargetModelFromClientTable(configedMain, clientTableViewComponent.getTable()))
+				.filterKey(FilterKey.CLIENT_TABLE).enableFilterBySelection(true).component(component).build();
 		searchPaneComponent = searchPane.initUI();
 
 		component.addKeyListener(searchPane);

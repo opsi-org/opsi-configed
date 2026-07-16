@@ -193,7 +193,10 @@ public class PanelHWSingleClientInfo extends AbstractSingleClientInfoPanel imple
 	public SingleClientExporter getSingleClientExporter() {
 		return SingleClientExporter.builder().table(createHWInfoTableModelComplete()).filename(exportFilename)
 				.askForOverwrite(askForOverwrite).kindOfExport(kindOfExport).overwriteDecision(decision)
-				.metaData(Map.of("title", treeRootTitle, "header", "Hardware report")).build();
+				.metaData(Map.of("title", treeRootTitle, "header", "Hardware report"))
+				.defaultPrefix(Configed.getSavedStates().getProperty("hwaudit_export_file_prefix",
+						BaseMultiClientReportPanel.EXPORT_FILE_PREFIX))
+				.exportClientId(configedMain.getSelectedClients().get(0)).build();
 	}
 
 	/** overwrite in subclasses */

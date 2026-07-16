@@ -294,10 +294,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		Pattern pattern = searchCriteriaEngine.getPattern(useRegex, caseSensitive, query);
 
-		if (pattern == null) {
-			return List.of();
-		}
-
 		List<T> result = new ArrayList<>();
 
 		for (T item : allItems) {

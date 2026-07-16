@@ -26,20 +26,18 @@ import lombok.NonNull;
 public class SingleClientExporter {
 	@NonNull
 	private final JTable table;
-
 	private final String filename;
-
 	private final boolean askForOverwrite;
-
 	private final boolean onlySelectedRows;
 
 	@NonNull
 	private final KindOfExport kindOfExport;
-
 	private final Map<String, String> metaData;
 
 	@Default
 	private final OverwriteDecision overwriteDecision = OverwriteDecision.CONTINUE;
+	private final String defaultPrefix;
+	private final String exportClientId;
 
 	/**
 	 * Exports the data according to kindOfExport
@@ -93,7 +91,8 @@ public class SingleClientExporter {
 	private boolean exportToCSV() {
 		ExporterToCSV exporter = new ExporterToCSV(table);
 		exporter.setAskForOverwrite(askForOverwrite && overwriteDecision != OverwriteDecision.OVERWRITE_ALL);
-		return exporter.execute(filename, onlySelectedRows);
+		exporter.setClient(exportClientId);
+		return exporter.execute(defaultPrefix, filename, onlySelectedRows);
 	}
 
 	private boolean exportToPDF() {
@@ -103,6 +102,7 @@ public class SingleClientExporter {
 		}
 		pdfExporter.setPageSizeA4Landscape();
 		pdfExporter.setAskForOverwrite(askForOverwrite && overwriteDecision != OverwriteDecision.OVERWRITE_ALL);
-		return pdfExporter.execute(filename, onlySelectedRows);
+		pdfExporter.setClient(exportClientId);
+		return pdfExporter.execute(defaultPrefix, filename, onlySelectedRows);
 	}
 }

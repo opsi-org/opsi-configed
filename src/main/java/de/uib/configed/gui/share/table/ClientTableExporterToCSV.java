@@ -97,7 +97,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			columnNames = getColumnsToInclude();
 			if (!columnNames.isEmpty()) {
-				execute(null, false);
+				execute("client_report_", null, false);
 			}
 		});
 		return menuItem;
@@ -113,7 +113,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 			Logging.debug(this, "menuItemExportSelectedCSV , only selected");
 			columnNames = getColumnsToInclude();
 			if (!columnNames.isEmpty()) {
-				execute(null, true);
+				execute("client_report_", null, true);
 			}
 		});
 

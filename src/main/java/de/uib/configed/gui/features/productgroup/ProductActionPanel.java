@@ -86,8 +86,9 @@ public class ProductActionPanel extends JPanel {
 		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
 				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
 				: FilterKey.NETBOOT_PRODUCTS_TABLE;
-		searchPane = new SearchPaneComponent(new SearchTargetModelFromInstallationStateTable(panelProductSettings),
-				filterKey, false, false, true);
+		searchPane = SearchPaneComponent.builder()
+				.targetModel(new SearchTargetModelFromInstallationStateTable(panelProductSettings)).filterKey(filterKey)
+				.enableFilterBySelection(true).component(panelProductSettings.getProductTable().getComponent()).build();
 		component = searchPane.initUI();
 	}
 

@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import de.uib.configed.gui.features.hwinfopage.BaseMultiClientReportPanel;
+import de.uib.configed.gui.features.swinfopage.SWcsvExporter;
 import de.uib.configed.share.logging.Logging;
 
 public class SavedStates {
@@ -33,9 +35,36 @@ public class SavedStates {
 
 		try (FileInputStream in = new FileInputStream(propertiesFile)) {
 			properties.load(in);
+
+			replaceHWAndSWAuditExportFilePrefixDefaultValues();
 		} catch (FileNotFoundException e) {
 			Logging.warning(this, e, "saved states file not found");
 		}
+	}
+
+	private void replaceHWAndSWAuditExportFilePrefixDefaultValues() {
+		Logging.info(this,
+				"checking if old default values for hwaudit_export_file_prefix and swaudit_export_file_prefix are still in use");
+		boolean oldDefaultChanged = false;
+		String hwAuditExportFilePrefix = getProperty("hwaudit_export_file_prefix");
+		String swAuditExportFilePrefix = getProperty("swaudit_export_file_prefix");
+
+		if (BaseMultiClientReportPanel.EXPORT_FILE_PREFIX.equals(hwAuditExportFilePrefix)) {
+			setProperty("hwaudit_export_file_prefix", BaseMultiClientReportPanel.EXPORT_FILE_PREFIX);
+
+			oldDefaultChanged = true;
+		}
+
+		if (SWcsvExporter.EXPORT_FILE_PREFIX.equals(swAuditExportFilePrefix)) {
+			setProperty("swaudit_export_file_prefix", SWcsvExporter.EXPORT_FILE_PREFIX);
+
+			oldDefaultChanged = true;
+		}
+
+		Logging.info(this,
+				oldDefaultChanged ? "old defaults replaced with new defaults"
+						: ("no old default values are in use: hwaudit_export_file_prefix=" + hwAuditExportFilePrefix
+								+ "; swaudit_export_file_prefix=" + swAuditExportFilePrefix));
 	}
 
 	public String getProperty(String key) {

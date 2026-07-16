@@ -148,8 +148,8 @@ public class KeyValueTable extends JPanel {
 		if (includeSearchPane) {
 			this.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]0"));
 
-			SearchPaneComponent searchPane = new SearchPaneComponent(
-					new SearchTargetModelFromTable(tableView.getTable()), null, false, false, false);
+			SearchPaneComponent searchPane = SearchPaneComponent.builder
+					().targetModel(new SearchTargetModelFromTable(tableView.getTable())).component(component).build();
 			this.add(searchPane.initUI(), "growx, hmin 0");
 		}
 

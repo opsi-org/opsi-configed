@@ -349,10 +349,14 @@ public class PanelDriverUpload extends JPanel {
 
 	private void executeDriverAction(DriverAction action) {
 		String pythonScript = action == DriverAction.CREATE_DRIVERS ? "create_driver_links.py" : "show_drivers.py";
+		String cmd = "/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/" + pythonScript;
+
+		if (action == DriverAction.SHOW_DRIVERS) {
+			cmd += " " + labelClientName.getText();
+		}
 
 		CommandExecutor executor = new CommandExecutor(configedMain,
-				new SingleCommandTemplate(pythonScript, "/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
-						+ "/" + pythonScript + " " + labelClientName.getText(), pythonScript));
+				new SingleCommandTemplate(pythonScript, cmd, pythonScript));
 		executor.executeAsync();
 	}
 

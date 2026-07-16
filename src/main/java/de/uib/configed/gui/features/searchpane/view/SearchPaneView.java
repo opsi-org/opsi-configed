@@ -318,4 +318,8 @@ public class SearchPaneView {
 	public String getColumnAt(int col) {
 		return searchColumnCombo.getItemAt(col);
 	}
+
+	public void requestSearchFieldFocus() {
+		searchField.requestFocusInWindow();
+	}
 }
