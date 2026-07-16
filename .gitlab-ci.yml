@@ -73,7 +73,7 @@ signandupload:
     - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
     - curl -sS "${OPSIDEVTOOLS_INSTALLER_URL_LINUX_X64}" | sh
     - opsi-dev-cli --version
-    - opsi-dev-cli -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
+    - opsi-dev-cli -l info signserver sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps target/bom.json opsi-configed/
     - mkdir opsi-configed/mac_x64/
