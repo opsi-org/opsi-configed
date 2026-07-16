@@ -55,8 +55,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
 
-	private JMenu jMenuVisibleColumns;
-
 	private ProductActionPanel groupPanel;
 
 	private ProductInfoPane infoPane;
@@ -205,7 +203,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		ExporterToCSV exportTable = new ExporterToCSV(productTable.getTableViewComponent().getTable());
 		exportTable.addMenuItemsTo(popup);
 
-		jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		JMenu jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		popup.addSeparator();
 		popup.add(jMenuVisibleColumns);
 
