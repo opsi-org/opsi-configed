@@ -65,8 +65,8 @@ public class ProductPageManager implements MessagebusListener {
 		this.clientConfiguration = clientConfiguration;
 
 		updateManager = new InstallationStateUpdateManager(configedMain,
-				clientConfiguration.getPanelLocalbootProductSettings().getProductTableModified(),
-				clientConfiguration.getPanelNetbootProductSettings().getProductTableModified());
+				clientConfiguration.getPanelLocalbootProductSettings().getProductTable(),
+				clientConfiguration.getPanelNetbootProductSettings().getProductTable());
 
 		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
@@ -120,7 +120,7 @@ public class ProductPageManager implements MessagebusListener {
 
 		persistenceController.getDataServices().product.retrieveProductPropertiesPD(configedMain.getSelectedSet());
 
-		Set<String> oldProductSelection = panelProductSettings.getProductTableModified().getSelectedIDs();
+		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
 
 		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
@@ -140,14 +140,14 @@ public class ProductPageManager implements MessagebusListener {
 				possibleActions, changedProductStates);
 
 		if (!oldProductSelection.isEmpty()) {
-			panelProductSettings.getProductTableModified().setPendingSelection(oldProductSelection);
+			panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 		}
 		if (panelProductSettings.isFilteredBySelection()) {
-			panelProductSettings.getProductTableModified().reduceToSelected();
+			panelProductSettings.getProductTable().reduceToSelected();
 		}
 
 		panelProductSettings.restoreFilter();
-		panelProductSettings.getProductTableModified().setPendingSelection(oldProductSelection);
+		panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {

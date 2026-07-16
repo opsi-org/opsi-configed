@@ -71,7 +71,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 	private ProductSettingsType type;
 
-	private ProductTableModified productTableModified;
+	private ProductTable productTable;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -86,7 +86,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	}
 
 	private void init() {
-		productTableModified = new ProductTableModified(configedMain, type, productTree, this,
+		productTable = new ProductTable(configedMain, type, productTree, this,
 				() -> new PopupMouseListener(producePopupMenu()));
 
 		groupPanel = new ProductActionPanel(this, type);
@@ -102,7 +102,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		JPanel leftPane = new JPanel();
 		leftPane.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow, fill]", "[]0"));
 		leftPane.add(groupPanel, "growx");
-		leftPane.add(productTableModified.getComponent(), "grow, push, hmin 100");
+		leftPane.add(productTable.getComponent(), "grow, push, hmin 100");
 
 		propertiesPanel = new KeyValueTable(false, true);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
@@ -202,7 +202,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		createReport.addActionListener(actionEvent -> createReport());
 		popup.add(createReport);
 
-		ExporterToCSV exportTable = new ExporterToCSV(productTableModified.getTableViewComponent().getTable());
+		ExporterToCSV exportTable = new ExporterToCSV(productTable.getTableViewComponent().getTable());
 		exportTable.addMenuItemsTo(popup);
 
 		jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
@@ -216,9 +216,9 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(ProductTableModified.getColumnTitle(productDisplayField.getKey()));
+			item.setText(ProductTable.getColumnTitle(productDisplayField.getKey()));
 			item.setState(productDisplayField.getValue());
-			item.addItemListener(itemEvent -> productTableModified.getTableViewComponent()
+			item.addItemListener(itemEvent -> productTable.getTableViewComponent()
 					.dispatch(new GenericTableViewMsg.ToggleColumn(productDisplayField.getKey())));
 
 			jMenuVisibleColumns.add(item);
@@ -252,7 +252,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		metaData.put("keywords", "product settings");
 
 		// only relevent rows
-		ExporterToPDF pdfExportTable = new ExporterToPDF(productTableModified.getStrippedTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(productTable.getStrippedTable());
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
@@ -287,7 +287,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
 		groupPanel.setFilterMark(false);
-		productTableModified.valueChanged(doSelection,
+		productTable.valueChanged(doSelection,
 				productTree.filterMostSpecificNodes(productTree.extractNodes(productTree.getSelectionPaths())));
 	}
 
@@ -295,9 +295,9 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 			Map<String, List<Map<String, String>>> statesAndActions,
 			Map<String, Map<String, Object>> globalProductInfos, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Map<String, String>>> changedProductStates) {
-		List<Map<String, Object>> rowData = productTableModified.computeDisplayRows(selectedClients, productNames,
+		List<Map<String, Object>> rowData = productTable.computeDisplayRows(selectedClients, productNames,
 				statesAndActions, globalProductInfos, changedProductStates, possibleActions);
-		productTableModified.getTableViewComponent().dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(rowData));
+		productTable.getTableViewComponent().dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(rowData));
 	}
 
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
@@ -327,11 +327,11 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		infoPane.clearEditing();
 	}
 
-	public ProductTableModified getProductTableModified() {
-		return productTableModified;
+	public ProductTable getProductTable() {
+		return productTable;
 	}
 
 	public JTable getTable() {
-		return productTableModified.getTableViewComponent().getTable();
+		return productTable.getTableViewComponent().getTable();
 	}
 }

@@ -31,7 +31,7 @@ import de.uib.configed.core.infrastructure.HostData;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.features.clientselection.SavedSearchQuery;
-import de.uib.configed.gui.features.productpage.ProductTableModified;
+import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.gui.features.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.features.swinfopage.SwPdfExporter;
 import de.uib.configed.gui.messages.Messages;
@@ -107,7 +107,7 @@ public final class Configed {
 
 		// we start with a language
 
-		ProductTableModified.restartColumnDict();
+		ProductTable.restartColumnDict();
 
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();

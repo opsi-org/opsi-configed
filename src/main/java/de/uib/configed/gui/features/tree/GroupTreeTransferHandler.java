@@ -241,7 +241,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			selectedObjects = ConfigedMain.getMainFrame().getClientTablePanel().getSelectedSet();
 		} else {
 			selectedObjects = ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
-					.getProductPageManager().getPanelInUse().getProductTableModified().getSelectedIDs();
+					.getProductPageManager().getPanelInUse().getProductTable().getSelectedIDs();
 		}
 
 		return importObjects(selectedObjects, support);

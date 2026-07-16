@@ -21,7 +21,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ConfigedMain;
-import de.uib.configed.gui.features.productpage.ProductTableModified;
+import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
@@ -32,16 +32,16 @@ public class InstallationStateUpdateManager {
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer timer;
 
-	private ProductTableModified tableLocalbootProducts;
-	private ProductTableModified tableNetbootProducts;
+	private ProductTable tableLocalbootProducts;
+	private ProductTable tableNetbootProducts;
 
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public InstallationStateUpdateManager(ConfigedMain configedMain, ProductTableModified tableLocalbootProducts,
-			ProductTableModified tableNetbootProducts) {
+	public InstallationStateUpdateManager(ConfigedMain configedMain, ProductTable tableLocalbootProducts,
+			ProductTable tableNetbootProducts) {
 		this.configedMain = configedMain;
 		this.tableLocalbootProducts = tableLocalbootProducts;
 		this.tableNetbootProducts = tableNetbootProducts;
@@ -58,7 +58,7 @@ public class InstallationStateUpdateManager {
 		}
 	}
 
-	private void updateTableForClient(String clientId, List<String> attributes, ProductTableModified tableProducts) {
+	private void updateTableForClient(String clientId, List<String> attributes, ProductTable tableProducts) {
 		if (productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING) != null
 				&& productsToUpdate.get(clientId).get(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING).size() < 20) {
 			applyMultipleCellEdits(clientId,

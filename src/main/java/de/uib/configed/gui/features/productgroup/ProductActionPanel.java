@@ -148,7 +148,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void handleCollectiveAction(String selected) {
-		Set<String> saveSelectedProducts = panelProductSettings.getProductTableModified().getSelectedIDs();
+		Set<String> saveSelectedProducts = panelProductSettings.getProductTable().getSelectedIDs();
 
 		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
 
@@ -163,10 +163,10 @@ public class ProductActionPanel extends JPanel {
 			return;
 		}
 
-		panelProductSettings.getProductTableModified()
+		panelProductSettings.getProductTable()
 				.setActionRequestForSelectedProducts(new ActionRequest(actionType).toString());
 
-		panelProductSettings.getProductTableModified().setPendingSelection(saveSelectedProducts);
+		panelProductSettings.getProductTable().setPendingSelection(saveSelectedProducts);
 	}
 
 	public void setFilterMark(boolean selected) {
@@ -202,7 +202,7 @@ public class ProductActionPanel extends JPanel {
 				Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
 				if (selectedRows.length != 0) {
-					panelProductSettings.getProductTableModified().reduceToSelected();
+					panelProductSettings.getProductTable().reduceToSelected();
 				}
 			} else {
 				panelProductSettings.valueChanged(false);

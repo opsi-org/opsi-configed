@@ -56,15 +56,15 @@ public class ProductConfigurationEngine {
 
 	private boolean suppressCollectiveActionPropagation;
 
-	private ProductTableModified productTableModified;
+	private ProductTable productTable;
 
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ProductConfigurationEngine(ProductTableModified productTableModified, ConfigedMain configedMain) {
-		this.productTableModified = productTableModified;
+	public ProductConfigurationEngine(ProductTable productTable, ConfigedMain configedMain) {
+		this.productTable = productTable;
 		this.configedMain = configedMain;
 	}
 
@@ -226,7 +226,7 @@ public class ProductConfigurationEngine {
 			changedStatesForProduct.put(ProductState.KEY_PACKAGE_VERSION,
 					(String) globalProductInfos.get(product).get(ProductState.KEY_PACKAGE_VERSION));
 
-			productTableModified.applyColumnChangeToRow(product, ProductState.KEY_VERSION_INFO, version);
+			productTable.applyColumnChangeToRow(product, ProductState.KEY_VERSION_INFO, version);
 		}
 	}
 
@@ -397,7 +397,7 @@ public class ProductConfigurationEngine {
 		processedProducts.add(processedKey);
 
 		setActionRequest(ar, product, clientId);
-		productTableModified.applyColumnChangeToRow(product, ProductState.KEY_ACTION_REQUEST, ar.toString());
+		productTable.applyColumnChangeToRow(product, ProductState.KEY_ACTION_REQUEST, ar.toString());
 
 		if (ar.getVal() == ActionRequest.NONE) {
 			return;

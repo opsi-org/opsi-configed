@@ -139,8 +139,8 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
-		Set<String> selectedProducts = localbootPanel.getProductTableModified().getSelectedIDs();
-		selectedProducts.addAll(netbootPanel.getProductTableModified().getSelectedIDs());
+		Set<String> selectedProducts = localbootPanel.getProductTable().getSelectedIDs();
+		selectedProducts.addAll(netbootPanel.getProductTable().getSelectedIDs());
 		return selectedProducts;
 	}
 
@@ -158,8 +158,8 @@ public class ProductTree extends AbstractGroupTree {
 	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
 		Set<String> productIds = getChildrenRecursively(groupNode);
 		setFilter(productIds);
-		localbootPanel.getProductTableModified().setPendingSelection(productIds);
-		netbootPanel.getProductTableModified().setPendingSelection(productIds);
+		localbootPanel.getProductTable().setPendingSelection(productIds);
+		netbootPanel.getProductTable().setPendingSelection(productIds);
 	}
 
 	@Override
@@ -178,16 +178,16 @@ public class ProductTree extends AbstractGroupTree {
 		}
 		setFilter(productIds);
 		if (anyIsLeaf) {
-			localbootPanel.getProductTableModified().setPendingSelection(selectedProductIds);
-			netbootPanel.getProductTableModified().setPendingSelection(selectedProductIds);
+			localbootPanel.getProductTable().setPendingSelection(selectedProductIds);
+			netbootPanel.getProductTable().setPendingSelection(selectedProductIds);
 		}
 		Logging.debug("ProductTree.setGroupsAndSelect productIds " + productIds);
 		Logging.debug("ProductTree.setGroupsAndSelect selectedProductIds " + selectedProductIds);
 	}
 
 	private void setFilter(Set<String> productIds) {
-		localbootPanel.getProductTableModified().setFilter(productIds);
-		netbootPanel.getProductTableModified().setFilter(productIds);
+		localbootPanel.getProductTable().setFilter(productIds);
+		netbootPanel.getProductTable().setFilter(productIds);
 	}
 
 	@Override

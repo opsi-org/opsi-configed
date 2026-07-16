@@ -155,12 +155,10 @@ public class ConfigedMain {
 		GroupTreeTransferHandler productTransferHandler = new GroupTreeTransferHandler(productTree,
 				GroupTreeTransferHandler.PRODUCT_TABLE);
 		productTree.setTransferHandler(productTransferHandler);
-		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTableModified().getTableViewComponent().getTable()
-				.setTransferHandler(productTransferHandler);
-		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings()
-				.getProductTableModified().getTableViewComponent().getTable()
-				.setTransferHandler(productTransferHandler);
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+				.getTableViewComponent().getTable().setTransferHandler(productTransferHandler);
+		mainFrame.getMainPanelManager().getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+				.getTableViewComponent().getTable().setTransferHandler(productTransferHandler);
 	}
 
 	public ProductTree getProductTree() {

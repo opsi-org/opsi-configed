@@ -46,7 +46,7 @@ import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 
 @SuppressWarnings("java:S1200")
-public class ProductTableModified {
+public class ProductTable {
 	private static Map<String, String> columnDict;
 
 	private GenericTableViewComponent tableViewComponent;
@@ -64,7 +64,7 @@ public class ProductTableModified {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ProductTableModified(ConfigedMain configedMain, ProductSettingsType type, ProductTree productTree,
+	public ProductTable(ConfigedMain configedMain, ProductSettingsType type, ProductTree productTree,
 			PanelProductSettings panelProductSettings, Supplier<PopupMouseListener> popupMouseListenerSupplier) {
 		this.configedMain = configedMain;
 		this.productTree = productTree;
@@ -254,7 +254,7 @@ public class ProductTableModified {
 					Configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
 		}
 
-		Logging.devel(ProductTableModified.class, "titles", columnDict);
+		Logging.devel(ProductTable.class, "titles", columnDict);
 		if (columnDict.get(column) == null) {
 			return "";
 		}
