@@ -16,12 +16,12 @@ public interface RowDiffStrategy {
 	/**
 	 * Calculates the visual style token for a specific cell.
 	 * 
-	 * @param rowId         The row ID.
+	 * @param rowData       The row data.
 	 * @param colKey        The column key.
 	 * @param currentValue  The current value in the UI.
 	 * @param originalValue The value from the last clean state (or server
 	 *                      default).
 	 * @return A style token (e.g., "NORMAL", "MODIFIED", "EDIT").
 	 */
-	RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue);
+	RowState getRowData(RowData rowData, String colKey, Object currentValue, Object originalValue);
 }

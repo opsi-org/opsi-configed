@@ -38,7 +38,7 @@ public class KeyValueRowDiffStrategy implements RowDiffStrategy {
 	}
 
 	@Override
-	public RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue) {
+	public RowState getRowData(RowData rowData, String colKey, Object currentValue, Object originalValue) {
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
 			return RowState.NORMAL;

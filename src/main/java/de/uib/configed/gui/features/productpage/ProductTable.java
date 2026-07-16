@@ -378,7 +378,7 @@ public class ProductTable {
 
 	public static class ProductRowDiffStrategy implements RowDiffStrategy {
 		@Override
-		public RowState getRowStyle(RowData rowData, String colKey, Object currentValue, Object originalValue) {
+		public RowState getRowData(RowData rowData, String colKey, Object currentValue, Object originalValue) {
 			if (colKey == null) {
 				return RowState.NORMAL;
 			}

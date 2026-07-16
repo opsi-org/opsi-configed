@@ -34,7 +34,7 @@ public class KeyValueRowDiffStrategyTest {
 	void shouldReturnNormal_whenDefaultsMapIsNull() {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(null, new HashMap<>(), false);
 
-		RowState result = strategy.getRowStyle(null, "anyCol", "anyValue", null);
+		RowState result = strategy.getRowData(null, "anyCol", "anyValue", null);
 
 		assertEquals(RowState.NORMAL, result);
 	}
@@ -45,7 +45,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 		RowData rowData = rowData("nonExistentKey", null);
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "anyValue", null);
+		RowState result = strategy.getRowData(rowData, "anyCol", "anyValue", null);
 
 		assertEquals(RowState.MISSING_DATA, result);
 	}
@@ -55,7 +55,7 @@ public class KeyValueRowDiffStrategyTest {
 		Map<String, Object> defaults = createMap("someKey", "someValue");
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 
-		RowState result = strategy.getRowStyle(null, "anyCol", null, null);
+		RowState result = strategy.getRowData(null, "anyCol", null, null);
 
 		assertEquals(RowState.MISSING_DATA, result);
 	}
@@ -66,7 +66,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 		RowData rowData = rowData("testKey", null);
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "expectedValue", null);
+		RowState result = strategy.getRowData(rowData, "anyCol", "expectedValue", null);
 
 		assertEquals(RowState.NORMAL, result);
 	}
@@ -77,7 +77,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 		RowData rowData = rowData("testKey", null);
 
-		RowState result = strategy.getRowStyle(rowData, "testKey", "modifiedValue", null);
+		RowState result = strategy.getRowData(rowData, "testKey", "modifiedValue", null);
 
 		assertEquals(RowState.MODIFIED, result);
 	}
@@ -89,7 +89,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, originals, false);
 		RowData rowData = rowData("testKey", null);
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "sameAsDefault", "previousValue");
+		RowState result = strategy.getRowData(rowData, "anyCol", "sameAsDefault", "previousValue");
 
 		assertEquals(RowState.MODIFIED, result);
 	}
@@ -100,7 +100,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, null, false);
 		RowData rowData = rowData("testKey", null);
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "modifiedValue", null);
+		RowState result = strategy.getRowData(rowData, "anyCol", "modifiedValue", null);
 
 		assertEquals(RowState.MODIFIED, result);
 	}
@@ -111,7 +111,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), true);
 		RowData rowData = rowData("testKey", "actualValue");
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "ignoredParam", null);
+		RowState result = strategy.getRowData(rowData, "anyCol", "ignoredParam", null);
 
 		assertEquals(RowState.MODIFIED, result);
 	}
@@ -122,7 +122,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), true);
 		RowData rowData = rowData("testKey", "matchingValue");
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "ignoredParam", null);
+		RowState result = strategy.getRowData(rowData, "anyCol", "ignoredParam", null);
 
 		assertEquals(RowState.NORMAL, result);
 	}
@@ -133,7 +133,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), true);
 		RowData rowData = rowData("missingKey", "someValue");
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", "ignoredParam", null);
+		RowState result = strategy.getRowData(rowData, "anyCol", "ignoredParam", null);
 
 		assertEquals(RowState.MISSING_DATA, result);
 	}
@@ -144,7 +144,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 		RowData rowData = rowData("config", null);
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", Map.of("setting1", false), null);
+		RowState result = strategy.getRowData(rowData, "anyCol", Map.of("setting1", false), null);
 
 		assertEquals(RowState.MODIFIED, result);
 	}
@@ -155,7 +155,7 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 		RowData rowData = rowData("config", null);
 
-		RowState result = strategy.getRowStyle(rowData, "anyCol", Map.of("setting1", true), null);
+		RowState result = strategy.getRowData(rowData, "anyCol", Map.of("setting1", true), null);
 
 		assertEquals(RowState.NORMAL, result);
 	}
@@ -175,9 +175,9 @@ public class KeyValueRowDiffStrategyTest {
 		RowData modifiedViaOriginals = rowData("key3", null);
 		RowData missingRow = rowData("nonExistent", null);
 
-		assertAll(() -> assertEquals(RowState.NORMAL, strategy.getRowStyle(unchangedRow, "col", "value1", null)),
+		assertAll(() -> assertEquals(RowState.NORMAL, strategy.getRowData(unchangedRow, "col", "value1", null)),
 				() -> assertEquals(RowState.MODIFIED,
-						strategy.getRowStyle(modifiedViaOriginals, "col", "newValue", null)),
-				() -> assertEquals(RowState.MISSING_DATA, strategy.getRowStyle(missingRow, "col", "anything", null)));
+						strategy.getRowData(modifiedViaOriginals, "col", "newValue", null)),
+				() -> assertEquals(RowState.MISSING_DATA, strategy.getRowData(missingRow, "col", "anything", null)));
 	}
 }

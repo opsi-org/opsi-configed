@@ -44,6 +44,7 @@ public final class GenericTableViewUpdate {
 	private GenericTableViewUpdate() {
 	}
 
+	@SuppressWarnings("java:S103")
 	public static UpdateResult<GenericTableViewModel, GenericTableViewEffect> update(GenericTableViewMsg msg,
 			GenericTableViewModel model) {
 		return switch (msg) {
@@ -62,15 +63,8 @@ public final class GenericTableViewUpdate {
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
 		case GenericTableViewMsg.ApplyRowFilter(String columnKey, Set<String> filterValues, boolean selectFilteredRows) -> handleApplyRowFilter(
 				columnKey, filterValues, selectFilteredRows, model);
-		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> {
-			List<RowData> rebuiltRows = model.isKeyValueTable()
-					? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getAllRows(),
-							model.getDiffStrategy())
-					: RowData.fromOriginalSnapshot(originalSnapshot, model.getAllRows(), model.getDiffStrategy());
-			yield UpdateResult.noEffect(model.toBuilder().originalSnapshot(originalSnapshot).allRows(rebuiltRows)
-					.rows(applyFilterRows(rebuiltRows, model.getFilterColumnKey(), model.getFilterValues()))
-					.rebuildTableModel(true).build());
-		}
+		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> handleChangeOriginalSnapshot(
+				originalSnapshot, model);
 		case InvertSelection() -> handleInvertSelection(model);
 		case PrepareRenderer(JComponent component, int row, int col) -> UpdateResult.withEffect(model,
 				new GenericTableViewEffect.PrepareRenderer(component, row, col));
@@ -91,7 +85,7 @@ public final class GenericTableViewUpdate {
 		String colKey = model.getColumnByModelIndex(colIdx).getKey();
 
 		RowState newRowStyle = strategy != null
-				? strategy.getRowStyle(oldRow, colKey, newValue, oldRow.getValue(colKey, Object.class))
+				? strategy.getRowData(oldRow, colKey, newValue, oldRow.getValue(colKey, Object.class))
 				: RowState.NORMAL;
 
 		Map<String, Object> newValues = new HashMap<>(oldRow.getValues());
@@ -132,12 +126,10 @@ public final class GenericTableViewUpdate {
 			String colKey = model.getColumnByModelIndex(edit.colIdx()).getKey();
 			Object oldValue = oldRow.getValue(colKey, Object.class);
 
-			if (Objects.equals(oldValue, edit.newValue())) {
-				continue;
+			if (!Objects.equals(oldValue, edit.newValue())) {
+				affectedRowIds.add(oldRow.getId());
+				rowUpdates.computeIfAbsent(oldRow.getId(), k -> new HashMap<>()).put(colKey, edit.newValue());
 			}
-
-			affectedRowIds.add(oldRow.getId());
-			rowUpdates.computeIfAbsent(oldRow.getId(), k -> new HashMap<>()).put(colKey, edit.newValue());
 		}
 
 		if (rowUpdates.isEmpty()) {
@@ -187,7 +179,7 @@ public final class GenericTableViewUpdate {
 			Object newValue = entry.getValue();
 			Object oldValue = oldRow.getValue(colKey, Object.class);
 
-			RowState derived = strategy.getRowStyle(oldRow, colKey, newValue, oldValue);
+			RowState derived = strategy.getRowData(oldRow, colKey, newValue, oldValue);
 			if (derived != RowState.NORMAL) {
 				return derived;
 			}
@@ -303,6 +295,17 @@ public final class GenericTableViewUpdate {
 
 		return UpdateResult.noEffect(model.toBuilder().rows(filteredRows).allRows(sourceRows).filterColumnKey(columnKey)
 				.filterValues(normalizedFilterValues).selectedRows(selectedRows).rebuildTableModel(true).build());
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleChangeOriginalSnapshot(
+			List<Map<String, Object>> originalSnapshot, GenericTableViewModel model) {
+		List<RowData> rebuiltRows = model.isKeyValueTable()
+				? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getAllRows(),
+						model.getDiffStrategy())
+				: RowData.fromOriginalSnapshot(originalSnapshot, model.getAllRows(), model.getDiffStrategy());
+		return UpdateResult.noEffect(model.toBuilder().originalSnapshot(originalSnapshot).allRows(rebuiltRows)
+				.rows(applyFilterRows(rebuiltRows, model.getFilterColumnKey(), model.getFilterValues()))
+				.rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(

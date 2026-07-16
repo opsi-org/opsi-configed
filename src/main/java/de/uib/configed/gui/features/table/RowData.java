@@ -69,7 +69,7 @@ public class RowData {
 
 		RowData rowData = opOldData.isPresent() ? opOldData.get()
 				: new RowData(UUID.randomUUID().toString(), map, RowState.NORMAL);
-		RowState state = diffStrategy != null ? diffStrategy.getRowStyle(rowData, null, map, rowData.getValues())
+		RowState state = diffStrategy != null ? diffStrategy.getRowData(rowData, null, map, rowData.getValues())
 				: RowState.NORMAL;
 
 		return rowData.withState(state);
@@ -91,7 +91,7 @@ public class RowData {
 			}
 			String rowId = opOldData.isPresent() ? opOldData.get().getId() : UUID.randomUUID().toString();
 			RowData rowData = new RowData(rowId, map, RowState.NORMAL);
-			RowState state = diffStrategy.getRowStyle(rowData, "value", map.get("value"),
+			RowState state = diffStrategy.getRowData(rowData, "value", map.get("value"),
 					opOldData.isPresent() ? opOldData.get().getValue("value", Object.class) : map.get("value"));
 			result.add(rowData.withState(state));
 		}
