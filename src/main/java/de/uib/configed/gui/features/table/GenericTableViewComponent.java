@@ -314,7 +314,6 @@ public class GenericTableViewComponent
 		return model.getVisibleColumns();
 	}
 
-	// TODO: remove later (exists only for compatibility with old code)
 	public JTable getTable() {
 		return table;
 	}

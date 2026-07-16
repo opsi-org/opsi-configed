@@ -86,11 +86,9 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 	@Override
 	protected JPopupMenu createBasicPopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-		JPopupMenu jPopupMenu = PopupMenuTrait
-				.createAndBindJPopupMenu(tableView.getTable(),
-						Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_SAVE,
-								() -> actor.saveData(), PopupMenuTrait.POPUP_PDF, this::createPDF),
-						event -> updatePopupMenu());
+		JPopupMenu jPopupMenu = PopupMenuTrait.createJPopupMenu(tableView.getTable(),
+				Map.of(PopupMenuTrait.POPUP_RELOAD, this::reload, PopupMenuTrait.POPUP_SAVE, () -> actor.saveData(),
+						PopupMenuTrait.POPUP_PDF, this::createPDF));
 
 		jPopupMenu.addPopupMenuListener(SwingUtils.createPopupMenuListenerOnVisible(() -> {
 			UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory
@@ -127,11 +125,11 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 	@Override
 	protected void prepareRendererForJTable(JComponent jComponent, int row, int col) {
 		RowData rowData = tableView.getRowByModelIndex(row);
-		addTooltip(jComponent, tableView.getTable(), rowData.getValue("key", String.class), row);
-		setText(jComponent, tableView.getTable(), col, row);
+		addTooltip(jComponent, rowData.getValue("key", String.class), row);
+		setText(jComponent, col, row);
 	}
 
-	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
+	private void addTooltip(JComponent jc, String propertyName, int rowIndex) {
 		jc.setToolTipText(createTooltipForPropertyName(propertyName, defaultsMap, descriptionsMap,
 				includeAdditionalTooltipText ? getPropertyOrigin(propertyName) : null));
 
@@ -143,7 +141,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
-		} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
+		} else if ((defaultValue = defaultsMap.get(tableView.getValueAt(rowIndex, 0))) == null) {
 			Logging.warning(this, "no default Value found");
 
 			jc.setForeground(Globals.OPSI_ERROR);
@@ -151,7 +149,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-		} else if (!defaultValue.equals(table.getValueAt(rowIndex, 1))
+		} else if (!defaultValue.equals(tableView.getValueAt(rowIndex, 1))
 				|| (originalMap != null && originalMap.containsKey(propertyName))) {
 			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 		} else {
@@ -159,9 +157,9 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 		}
 	}
 
-	private static void setText(JComponent jComponent, JTable table, int vColIndex, int rowIndex) {
+	private void setText(JComponent jComponent, int vColIndex, int rowIndex) {
 		if (vColIndex == 1
-				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))
+				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) tableView.getValueAt(rowIndex, 0))
 				&& jComponent instanceof JLabel jLabel) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
