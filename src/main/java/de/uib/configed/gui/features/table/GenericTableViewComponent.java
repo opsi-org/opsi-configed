@@ -44,7 +44,6 @@ import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.share.PopupMouseListener;
-import de.uib.configed.share.logging.Logging;
 
 public class GenericTableViewComponent
 		extends AbstractTeaComponent<GenericTableViewModel, GenericTableViewMsg, GenericTableViewEffect> {
@@ -313,6 +312,7 @@ public class GenericTableViewComponent
 		return model.getVisibleColumns();
 	}
 
+	// Remove later (exists only for compatibility with old code)
 	public JTable getTable() {
 		return table;
 	}
@@ -493,7 +493,7 @@ public class GenericTableViewComponent
 		}
 	}
 
-	// TODO: remove later (exists only for compatibility with old code)
+	// Remove later (exists only for compatibility with old code)
 	public int getSelectedRow() {
 		return table.getSelectedRow();
 	}
