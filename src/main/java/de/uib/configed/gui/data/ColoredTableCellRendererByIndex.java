@@ -39,7 +39,7 @@ public class ColoredTableCellRendererByIndex extends ColorTableCellRenderer {
 			int row, int column) {
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (value.equals(Globals.CONFLICT_STATE_STRING)) {
+		if (Globals.CONFLICT_STATE_STRING.equals(value)) {
 			setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 		} else if (mapOfTextColors != null && value instanceof String) {
 			Color textcolor = mapOfTextColors.get(value);

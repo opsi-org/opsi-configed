@@ -44,6 +44,7 @@ import de.uib.configed.gui.features.table.GenericTableViewModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.share.PopupMouseListener;
+import de.uib.configed.share.logging.Logging;
 
 @SuppressWarnings("java:S1200")
 public class GenericTable extends JTable {
@@ -316,6 +317,39 @@ public class GenericTable extends JTable {
 			return model.getColumns().indexOf(config);
 		}
 		return -1;
+	}
+
+	@Override
+	public int convertRowIndexToModel(int viewRowIndex) {
+		if (viewRowIndex < 0) {
+			return -1;
+		}
+
+		int viewRowCount = getRowCount();
+		if (viewRowIndex >= viewRowCount) {
+			return -1;
+		}
+
+		int modelIndex;
+
+		// Delegate to the RowSorter for the actual conversion
+		// This handles sorted/filter conversions within the filtered model space
+		RowSorter<? extends TableModel> sorter = getRowSorter();
+		if (sorter == null) {
+			// No sorting → view and model indices are identical
+			modelIndex = viewRowIndex;
+		} else {
+			try {
+				modelIndex = sorter.convertRowIndexToModel(viewRowIndex);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				Logging.error(this, "failed to convert view index to model index using default", viewRowIndex, e);
+				// Fallback: If sorter state is inconsistent (e.g., during rebuild),
+				// fall back to direct model index lookup
+				modelIndex = viewRowIndex;
+			}
+		}
+
+		return modelIndex;
 	}
 
 	@Override
