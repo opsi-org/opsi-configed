@@ -337,7 +337,7 @@ public class GenericTable extends JTable {
 		// Delegate to the RowSorter for the actual conversion
 		// This handles sorted/filter conversions within the filtered model space
 		RowSorter<? extends TableModel> sorter = getRowSorter();
-		if (sorter == null) {
+		if (sorter == null || sorter.getModel() == null) {
 			// No sorting → view and model indices are identical
 			modelIndex = viewRowIndex;
 		} else {
@@ -357,7 +357,6 @@ public class GenericTable extends JTable {
 	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
 		Component c = super.prepareRenderer(renderer, row, col);
-		// dispatch.accept(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
 		if (rendererPreparator != null) {
 			rendererPreparator.prepare(c, row, col);
 		}
