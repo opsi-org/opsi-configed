@@ -12,8 +12,8 @@ import java.util.Set;
 
 import javax.swing.SortOrder;
 
-public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited,
-		GenericTableViewMsg.MultipleCellsEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
+public sealed interface GenericTableViewMsg
+		permits GenericTableViewMsg.CellEdited, GenericTableViewMsg.MultipleCellsEdited,
 		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
 		GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
 		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.ApplyRowFilter, GenericTableViewMsg.InvertSelection {
@@ -21,14 +21,6 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	}
 
 	record MultipleCellsEdited(List<CellEdited> edits) implements GenericTableViewMsg {
-	}
-
-	record CommitChanges() implements GenericTableViewMsg {
-
-	}
-
-	record CancelChanges() implements GenericTableViewMsg {
-
 	}
 
 	record ToggleColumn(String columnKey) implements GenericTableViewMsg {

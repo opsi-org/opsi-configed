@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -337,85 +336,6 @@ class GenericTableViewUpdateTest {
 		assertNotSame(lastRow, resultLastRow);
 		assertAll(() -> assertTrue(result.effect().isPresent()),
 				() -> assertInstanceOf(GenericTableViewEffect.AddRow.class, result.effect().get()));
-	}
-
-	@Test
-	void shouldTriggerSaveChanges_whenCommitChanges() {
-		GenericTableViewModel model = baseModel();
-		GenericTableViewMsg msg = new GenericTableViewMsg.CommitChanges();
-
-		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
-				model.withDirty(true));
-
-		assertNotNull(result.model());
-		assertNotSame(model, result.model());
-		assertFalse(result.model().isDirty());
-		assertFalse(result.model().isRebuildTableModel());
-
-		assertAll(() -> assertTrue(result.effect().isPresent()),
-				() -> assertInstanceOf(GenericTableViewEffect.SaveChanges.class, result.effect().get()));
-	}
-
-	@Test
-	void shouldRevertChangesWhenDataEdited_whenCancelChanges() {
-		GenericTableViewModel model = baseModel();
-		GenericTableViewMsg msg = new GenericTableViewMsg.CancelChanges();
-
-		List<Map<String, Object>> modifiedRows = new ArrayList<>();
-		modifiedRows.add(row("1", "test", "test"));
-		modifiedRows.add(row("2", "test2", "test2"));
-		modifiedRows.add(row("3", "test3", "test2"));
-		modifiedRows.add(row("4", "test6", "test4"));
-		modifiedRows.add(row("5", "test5", "test4"));
-
-		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, null);
-
-		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
-				model.withRows(rows).withDirty(true));
-
-		assertNotNull(result.model());
-		assertEquals(model.getRows().size(), result.model().getRows().size());
-		assertNotEquals("test6", result.model().getRows().get(3).getValue("data1", String.class));
-		assertNotEquals("test2", result.model().getRows().get(2).getValue("data2", String.class));
-		assertFalse(result.model().isDirty());
-		assertTrue(result.model().isRebuildTableModel());
-	}
-
-	@Test
-	void shouldRevertChangesWhenRowDeleted_whenCancelChanges() {
-		GenericTableViewModel model = baseModel();
-		GenericTableViewMsg msg = new GenericTableViewMsg.CancelChanges();
-
-		List<Map<String, Object>> modifiedRows = new ArrayList<>();
-		modifiedRows.add(row("1", "test", "test"));
-		modifiedRows.add(row("2", "test2", "test2"));
-		modifiedRows.add(row("3", "test3", "test3"));
-		modifiedRows.add(row("5", "test5", "test4"));
-
-		List<RowData> rows = RowData.fromOriginalSnapshot(modifiedRows, null);
-
-		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
-				model.withRows(rows).withDirty(true));
-
-		assertNotNull(result.model());
-		assertSame(model.getRows().size(), result.model().getRows().size());
-		assertEquals("5", result.model().getRows().get(4).getValue("data0", String.class));
-		assertFalse(result.model().isDirty());
-		assertTrue(result.model().isRebuildTableModel());
-	}
-
-	@Test
-	void shouldDoNothingIfNoChanges_whenCancelChanges() {
-		GenericTableViewModel model = baseModel();
-		GenericTableViewMsg msg = new GenericTableViewMsg.CancelChanges();
-
-		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg,
-				model.withDirty(false));
-
-		assertNotNull(result.model());
-		assertSame(model.getRows(), result.model().getRows());
-		assertFalse(result.model().isDirty());
-		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test

@@ -22,12 +22,10 @@ import javax.swing.SortOrder;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.AddRow;
-import de.uib.configed.gui.features.table.GenericTableViewMsg.CancelChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.CellEdited;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeOriginalSnapshot;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
-import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRows;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.MultipleCellsEdited;
@@ -42,14 +40,12 @@ public final class GenericTableViewUpdate {
 	private GenericTableViewUpdate() {
 	}
 
-	@SuppressWarnings("java:S103")
+	@SuppressWarnings({ "java:S103", "java:S1541" })
 	public static UpdateResult<GenericTableViewModel, GenericTableViewEffect> update(GenericTableViewMsg msg,
 			GenericTableViewModel model) {
 		return switch (msg) {
 		case CellEdited(int rowIdx, int colIdx, Object newValue) -> handleCellEdit(rowIdx, colIdx, newValue, model);
 		case MultipleCellsEdited(List<CellEdited> edits) -> handleMultipleCellEdits(edits, model);
-		case CommitChanges() -> handleCommit(model);
-		case CancelChanges() -> handleCancel(model);
 		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
 		case ChangeSelection(Set<String> selectedRows) -> UpdateResult.withEffect(
 				model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build(),
@@ -195,36 +191,6 @@ public final class GenericTableViewUpdate {
 		return UpdateResult.withEffect(model.toBuilder().columns(newColumns).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.StoreVisibleColulmns(newColumns.stream().filter(TableColumnConfig::isVisible)
 						.map(TableColumnConfig::getKey).toList()));
-	}
-
-	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCommit(
-			GenericTableViewModel model) {
-		if (!model.isDirty()) {
-			return UpdateResult.noEffect(model);
-		}
-
-		List<RowData> newRows = model.getAllRows().stream().filter((RowData row) -> row.getState() != RowState.DELETED)
-				.toList();
-		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
-
-		return UpdateResult.withEffect(
-				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(false).rebuildTableModel(false).build(),
-				new GenericTableViewEffect.SaveChanges(newRows));
-	}
-
-	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCancel(
-			GenericTableViewModel model) {
-		if (!model.isDirty()) {
-			return UpdateResult.noEffect(model);
-		}
-
-		List<RowData> restoredRows = model.isKeyValueTable()
-				? RowData.fromOriginalSnapshotKeyValueTable(model.getOriginalSnapshot(), model.getDiffStrategy())
-				: RowData.fromOriginalSnapshot(model.getOriginalSnapshot(), model.getDiffStrategy());
-		List<RowData> visibleRows = applyFilterRows(restoredRows, model.getFilterColumnKey(), model.getFilterValues());
-
-		return UpdateResult.noEffect(model.toBuilder().rows(visibleRows).allRows(restoredRows).isDirty(false)
-				.rebuildTableModel(true).build());
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowAdd(Map<String, Object> data,
