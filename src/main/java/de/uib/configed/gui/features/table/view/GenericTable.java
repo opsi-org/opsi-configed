@@ -308,17 +308,6 @@ public class GenericTable extends JTable {
 
 	@Override
 	public int convertColumnIndexToView(int modelColumnIndex) {
-		return convertIndex(modelColumnIndex);
-	}
-
-	@Override
-	public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
-		Component c = super.prepareRenderer(renderer, row, col);
-		dispatch.accept(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
-		return c;
-	}
-
-	private int convertIndex(int modelColumnIndex) {
 		List<TableColumnConfig> visibleColumns = model.getColumns().stream().filter(TableColumnConfig::isVisible)
 				.toList();
 
@@ -327,6 +316,13 @@ public class GenericTable extends JTable {
 			return model.getColumns().indexOf(config);
 		}
 		return -1;
+	}
+
+	@Override
+	public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+		Component c = super.prepareRenderer(renderer, row, col);
+		dispatch.accept(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
+		return c;
 	}
 
 	@Override
