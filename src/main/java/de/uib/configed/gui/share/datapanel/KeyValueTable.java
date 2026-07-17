@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.share.datapanel;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ import de.uib.configed.gui.features.table.GenericTableViewEffect;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.AddRow;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.CellEdited;
 import de.uib.configed.gui.features.table.GenericTableViewEffect.DeleteRows;
-import de.uib.configed.gui.features.table.GenericTableViewEffect.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.RowData;
@@ -136,8 +136,13 @@ public class KeyValueTable extends JPanel {
 				.diffStrategy(diffStrategy).allowMultipleSelection(false).isDirty(false).keyValueTable(true).build();
 
 		tableView = new GenericTableViewComponent(initialModel, this::handleEffect,
-				() -> new PopupMouseListener(buildPopupMenu(keylistExtendible, entryRemovable),
-						e -> updatePopupMenu()));
+				() -> new PopupMouseListener(buildPopupMenu(keylistExtendible, entryRemovable), e -> updatePopupMenu()),
+				(Component component, int row, int col) -> {
+					if (!showToolTip) {
+						return;
+					}
+					prepareRendererForJTable((JComponent) component, row, col);
+				});
 		tableView.setIsCellEditable(
 				(Integer row) -> (keysOfReadOnlyEntries == null || !keysOfReadOnlyEntries.contains(keys.get(row)))
 						&& (isEditable == null || isEditable.apply(keys.get(row))));
@@ -148,8 +153,8 @@ public class KeyValueTable extends JPanel {
 		if (includeSearchPane) {
 			this.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]0"));
 
-			SearchPaneComponent searchPane = SearchPaneComponent.builder
-					().targetModel(new SearchTargetModelFromTable(tableView.getTable())).component(component).build();
+			SearchPaneComponent searchPane = SearchPaneComponent.builder()
+					.targetModel(new SearchTargetModelFromTable(tableView.getTable())).component(component).build();
 			this.add(searchPane.initUI(), "growx, hmin 0");
 		}
 
@@ -158,20 +163,11 @@ public class KeyValueTable extends JPanel {
 
 	private Runnable handleEffect(GenericTableViewEffect effect) {
 		return switch (effect) {
-		case PrepareRenderer(JComponent component, int row, int col) -> () -> handlePrepareRenderer(component, row,
-				col);
 		case CellEdited(int rowIdx, _, Object newValue) -> () -> handleCellEdited(rowIdx, newValue);
 		case AddRow(Map<String, Object> newRowData) -> () -> handleAddRow(newRowData);
 		case DeleteRows(List<RowData> deletedRows) -> () -> handleDeleteRows(deletedRows);
 		default -> null;
 		};
-	}
-
-	private void handlePrepareRenderer(JComponent component, int row, int col) {
-		if (!showToolTip) {
-			return;
-		}
-		prepareRendererForJTable(component, row, col);
 	}
 
 	private void handleCellEdited(int row, Object newValue) {

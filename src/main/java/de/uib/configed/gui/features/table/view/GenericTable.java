@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -40,6 +39,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.gui.features.table.GenericTableModel;
+import de.uib.configed.gui.features.table.GenericTableViewComponent.RendererPreparator;
 import de.uib.configed.gui.features.table.GenericTableViewModel;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.gui.features.table.TableColumnConfig;
@@ -52,6 +52,7 @@ public class GenericTable extends JTable {
 	private boolean isUpdatingProgrammatically;
 	private Function<Integer, Boolean> isCellEditable;
 	private Consumer<GenericTableViewMsg> dispatch;
+	private RendererPreparator rendererPreparator;
 
 	private RowSorterListener rowSorterListener = (RowSorterEvent e) -> {
 		if (isUpdatingProgrammatically) {
@@ -101,10 +102,11 @@ public class GenericTable extends JTable {
 	};
 
 	public GenericTable(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch,
-			Function<Integer, Boolean> isCellEditable) {
+			Function<Integer, Boolean> isCellEditable, RendererPreparator rendererPreparator) {
 		this.model = model;
 		this.dispatch = dispatch;
 		this.isCellEditable = isCellEditable;
+		this.rendererPreparator = rendererPreparator;
 
 		super(new GenericTableModel(model, dispatch::accept, isCellEditable), null);
 
@@ -355,7 +357,10 @@ public class GenericTable extends JTable {
 	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
 		Component c = super.prepareRenderer(renderer, row, col);
-		dispatch.accept(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
+		// dispatch.accept(new GenericTableViewMsg.PrepareRenderer((JComponent) c, row, col));
+		if (rendererPreparator != null) {
+			rendererPreparator.prepare(c, row, col);
+		}
 		return c;
 	}
 

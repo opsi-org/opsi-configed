@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.swing.JComponent;
 import javax.swing.SortOrder;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
@@ -32,7 +31,6 @@ import de.uib.configed.gui.features.table.GenericTableViewMsg.CommitChanges;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRows;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.MultipleCellsEdited;
-import de.uib.configed.gui.features.table.GenericTableViewMsg.PrepareRenderer;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
 import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
 import de.uib.configed.gui.features.table.RowData.RowState;
@@ -66,8 +64,6 @@ public final class GenericTableViewUpdate {
 		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> handleChangeOriginalSnapshot(
 				originalSnapshot, model);
 		case InvertSelection() -> handleInvertSelection(model);
-		case PrepareRenderer(JComponent component, int row, int col) -> UpdateResult.withEffect(model,
-				new GenericTableViewEffect.PrepareRenderer(component, row, col));
 		default -> UpdateResult.noEffect(model);
 		};
 	}

@@ -10,15 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JComponent;
 import javax.swing.SortOrder;
 
 public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdited,
 		GenericTableViewMsg.MultipleCellsEdited, GenericTableViewMsg.CommitChanges, GenericTableViewMsg.CancelChanges,
 		GenericTableViewMsg.ToggleColumn, GenericTableViewMsg.ChangeSelection, GenericTableViewMsg.AddRow,
 		GenericTableViewMsg.DeleteRows, GenericTableViewMsg.ChangeOriginalSnapshot, GenericTableViewMsg.ChangeSortOrder,
-		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.ApplyRowFilter, GenericTableViewMsg.InvertSelection,
-		GenericTableViewMsg.PrepareRenderer {
+		GenericTableViewMsg.ResizeColumns, GenericTableViewMsg.ApplyRowFilter, GenericTableViewMsg.InvertSelection {
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewMsg {
 	}
 
@@ -63,8 +61,5 @@ public sealed interface GenericTableViewMsg permits GenericTableViewMsg.CellEdit
 	}
 
 	record InvertSelection() implements GenericTableViewMsg {
-	}
-
-	record PrepareRenderer(JComponent component, int row, int col) implements GenericTableViewMsg {
 	}
 }

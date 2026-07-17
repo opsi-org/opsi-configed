@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.table;
 
+import java.awt.Component;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -29,6 +30,11 @@ public class GenericTableViewComponent
 	private Supplier<PopupMouseListener> popupMouseListenerSupplier;
 	private Function<Integer, Boolean> isCellEditable;
 	private PopupMouseListener popupMouseListener;
+	private RendererPreparator rendererPreparator;
+
+	public interface RendererPreparator {
+		void prepare(Component component, int row, int col);
+	}
 
 	public interface TableSideEffectStrategy {
 		/**
@@ -43,14 +49,20 @@ public class GenericTableViewComponent
 	}
 
 	public GenericTableViewComponent(GenericTableViewModel model) {
-		this(model, null, null);
+		this(model, null, null, null);
 	}
 
 	public GenericTableViewComponent(GenericTableViewModel model, TableSideEffectStrategy sideEffectStrategy,
 			Supplier<PopupMouseListener> popupMouseListenerSupplier) {
+		this(model, sideEffectStrategy, popupMouseListenerSupplier, null);
+	}
+
+	public GenericTableViewComponent(GenericTableViewModel model, TableSideEffectStrategy sideEffectStrategy,
+			Supplier<PopupMouseListener> popupMouseListenerSupplier, RendererPreparator rendererPreparator) {
 		super(model);
 		this.sideEffectStrategy = sideEffectStrategy;
 		this.popupMouseListenerSupplier = popupMouseListenerSupplier;
+		this.rendererPreparator = rendererPreparator;
 	}
 
 	@Override
@@ -66,7 +78,7 @@ public class GenericTableViewComponent
 
 	@Override
 	protected JComponent renderView(GenericTableViewModel model, Consumer<GenericTableViewMsg> dispatch) {
-		table = new GenericTable(model, dispatch, isCellEditable);
+		table = new GenericTable(model, dispatch, isCellEditable, rendererPreparator);
 		table.initialize();
 
 		JScrollPane scrollPane = new JScrollPane(table);
