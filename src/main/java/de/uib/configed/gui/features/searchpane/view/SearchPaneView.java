@@ -36,7 +36,6 @@ import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
-import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.gui.TableFilterState;
 import de.uib.configed.share.logging.Logging;
@@ -45,7 +44,6 @@ import net.miginfocom.swing.MigLayout;
 @SuppressWarnings("java:S1200")
 public class SearchPaneView {
 	private SearchTargetModel targetModel;
-	private FilterKey filterKey;
 	private PanelGenEdit associatedPanel;
 
 	private FlatTextField searchField;
@@ -90,7 +88,7 @@ public class SearchPaneView {
 		searchField.setLeadingIcon(new FlatSearchIcon());
 		searchField.setShowClearButton(true);
 		searchField.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> {
-			if (filterKey != null) {
+			if (model.getFilterKey() != null) {
 				handleFilterState();
 			}
 			dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ChangeSearchText(searchField.getText()));
@@ -135,7 +133,7 @@ public class SearchPaneView {
 		filterMarkBtn = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filterMarkBtn.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filterMarkBtn.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filterMarkBtn.setVisible(filterKey != null || model.isEnableFilterBySelection());
+		filterMarkBtn.setVisible(model.getFilterKey() != null || model.isEnableFilterBySelection());
 		filterMarkBtn.addItemListener(
 				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(filterMarkBtn.isSelected())));
 		filterMarkBtn.addActionListener(event -> dispatch.accept(new SearchPaneMsg.ActionMsg.TriggerFilterMark()));
@@ -159,9 +157,9 @@ public class SearchPaneView {
 
 	private void handleFilterState() {
 		if (searchField.getText() == null || searchField.getText().isBlank()) {
-			FilterStateManager.removeFilterState(filterKey);
+			FilterStateManager.removeFilterState(model.getFilterKey());
 		} else {
-			FilterStateManager.saveFilterState(filterKey, new TableFilterState(searchField.getText(),
+			FilterStateManager.saveFilterState(model.getFilterKey(), new TableFilterState(searchField.getText(),
 					model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
 		}
 	}
