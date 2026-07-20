@@ -15,6 +15,10 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
 import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
+import de.uib.configed.gui.features.table.GenericTableViewComponent;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.CellEdited;
+import de.uib.configed.gui.features.table.RowData;
+import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -55,19 +59,18 @@ public class ConnectedHostsManager implements MessagebusListener {
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
-		// AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
+		GenericTableViewComponent clientTable = configedMain.getClientTablePanel().getTableComponent();
+		int col = clientTable.getColumnIndexByKey(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
 
-		// int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-		// ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
+		for (int row = 0; row < clientTable.getRowCount(); row++) {
+			RowData data = clientTable.getRowByModelIndex(row);
+			if (data.getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, String.class).equals(clientName)) {
+				clientTable.dispatch(new CellEdited(row, col, connectedHostsByMessagebus.contains(clientName)));
+				Logging.info(this, "connectionStatus for client ", clientName, " updated in table");
+				return;
+			}
+		}
 
-		// for (int row = 0; row < clientTable.getRowCount(); row++) {
-		// 	if (clientTable.getClientName(row).equals(clientName)) {
-		// 		clientTable.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
-		// 		model.fireTableCellUpdated(row, col);
-		// 		Logging.info(this, "connectionStatus for client ", clientName, " updated in table");
-		// 		return;
-		// 	}
-		// }
 		Logging.info(this, "could not update connectionStatus for client ", clientName, ": not in list of shown table");
 	}
 

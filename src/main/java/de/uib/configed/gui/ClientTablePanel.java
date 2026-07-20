@@ -331,6 +331,18 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		return result;
 	}
 
+	public Set<String> getClients() {
+		int rowCount = clientTableViewComponent.getRowCount();
+		Set<String> result = HashSet.newHashSet(rowCount);
+
+		for (int i = 0; i < rowCount; i++) {
+			result.add(clientTableViewComponent.getRowByModelIndex(i).getValue(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL,
+					String.class));
+		}
+
+		return result;
+	}
+
 	private static class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
 		private ConfigedMain configedMain;
 

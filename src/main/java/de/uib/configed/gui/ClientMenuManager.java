@@ -109,9 +109,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		// Space should only be active on the client table, but not on other where you 
 		// could accidently start remote control by pressing space in a text field etc.
-		// SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable().getTable(),
-		// 		KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-		// 		() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
+		SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getTableComponent().getTable(),
+				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
 		// We want to add the acceserator manually so that it will be active always, not only
 		// when the client table has focus.
