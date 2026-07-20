@@ -8,10 +8,12 @@ package de.uib.configed.gui.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
@@ -71,43 +73,73 @@ public class InstallationStateUpdateManager {
 
 	private void applyMultipleCellEdits(String clientId, TreeSet<String> productIds, List<String> attributes,
 			GenericTableViewComponent tableComponent) {
+
+		if (productIds.isEmpty() || attributes.isEmpty()) {
+			return;
+		}
+
 		List<Map<String, String>> productInfos = persistenceController.getDataServices().product
 				.getProductInfos(productIds, clientId, attributes);
 
-		// Build mapping from productId to values
-		Map<String, Map<String, Object>> productValueMap = new HashMap<>();
-		for (Map<String, String> info : productInfos) {
-			Map<String, Object> values = POJOReMapper.remap(info);
-			productValueMap.put(info.get("productId"), values);
+		if (productInfos.isEmpty()) {
+			return;
 		}
 
-		// Find affected rows and dispatch CellEdited messages
-		List<GenericTableViewMsg.CellEdited> edits = new ArrayList<>();
+		Map<String, Map<String, Object>> productValueMap = new HashMap<>();
+		Set<String> fetchedProductIds = new HashSet<>(productIds);
+
+		for (Map<String, String> info : productInfos) {
+			String productId = info.get("productId");
+			if (fetchedProductIds.contains(productId)) {
+				productValueMap.put(productId, POJOReMapper.remap(info));
+			}
+		}
+
+		Map<String, Integer> productIdToRowIndex = new HashMap<>();
 		for (int rowIdx = 0; rowIdx < tableComponent.getRowCount(); rowIdx++) {
 			RowData rowData = tableComponent.getRowByModelIndex(rowIdx);
 			String productId = rowData.getValue(ProductState.KEY_PRODUCT_ID, String.class);
+			if (productValueMap.containsKey(productId)) {
+				productIdToRowIndex.put(productId, rowIdx);
+			}
+		}
 
-			if (productIds.contains(productId) && productValueMap.containsKey(productId)) {
-				Map<String, Object> newValues = productValueMap.get(productId);
+		List<GenericTableViewMsg.CellEdited> edits = computeCellEdits(productIdToRowIndex, attributes, productValueMap,
+				tableComponent);
 
-				// Dispatch CellEdited for each changed attribute
-				for (String attr : attributes) {
-					Object currentValue = rowData.getValue(attr, Object.class);
-					Object newValue = newValues.get(attr);
+		if (!edits.isEmpty()) {
+			tableComponent.dispatch(new GenericTableViewMsg.MultipleCellsEdited(edits));
+		}
+	}
 
-					if (!Objects.equals(currentValue, newValue)) {
-						int colIdx = tableComponent.getColumnIndexByKey(attr);
-						if (colIdx >= 0) {
-							GenericTableViewMsg.CellEdited cellEdited = new GenericTableViewMsg.CellEdited(rowIdx,
-									colIdx, newValue);
-							edits.add(cellEdited);
-						}
-					}
+	private static List<GenericTableViewMsg.CellEdited> computeCellEdits(Map<String, Integer> productIdToRowIndex,
+			List<String> attributes, Map<String, Map<String, Object>> productValueMap,
+			GenericTableViewComponent tableComponent) {
+		List<GenericTableViewMsg.CellEdited> edits = new ArrayList<>();
+		for (Map.Entry<String, Map<String, Object>> entry : productValueMap.entrySet()) {
+			String productId = entry.getKey();
+			Map<String, Object> newValues = entry.getValue();
+			Integer rowIdxOpt = productIdToRowIndex.get(productId);
+
+			if (rowIdxOpt == null) {
+				continue;
+			}
+
+			int rowIdx = rowIdxOpt;
+			RowData rowData = tableComponent.getRowByModelIndex(rowIdx);
+
+			for (String attr : attributes) {
+				Object currentValue = rowData.getValue(attr, Object.class);
+				Object newValue = newValues.get(attr);
+
+				int colIdx = tableComponent.getColumnIndexByKey(attr);
+				if (!Objects.equals(currentValue, newValue) && colIdx >= 0) {
+					edits.add(new GenericTableViewMsg.CellEdited(rowIdx, colIdx, newValue));
 				}
 			}
 		}
 
-		tableComponent.dispatch(new GenericTableViewMsg.MultipleCellsEdited(edits));
+		return edits;
 	}
 
 	private boolean isProductsUpdatedForClient(String clientId, String productType) {
