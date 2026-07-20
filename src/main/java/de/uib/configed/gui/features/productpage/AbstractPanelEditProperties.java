@@ -8,14 +8,14 @@ package de.uib.configed.gui.features.productpage;
 
 import javax.swing.JPanel;
 
-import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 
 public abstract class AbstractPanelEditProperties extends JPanel {
-	protected DefaultEditMapPanel productPropertiesPanel;
+	protected KeyValueTable productPropertiesPanel;
 
 	protected String productEdited;
 
-	protected AbstractPanelEditProperties(DefaultEditMapPanel productPropertiesPanel) {
+	protected AbstractPanelEditProperties(KeyValueTable productPropertiesPanel) {
 		super();
 		this.productPropertiesPanel = productPropertiesPanel;
 	}

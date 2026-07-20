@@ -6,22 +6,25 @@
 
 package de.uib.configed.gui.data;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.share.logging.Logging;
 
-public class RequirementsTableModel extends AbstractTableModel {
-	private static final int NO_OF_ROW_TYPES = 3;
+public class RequirementsTableModel {
+	public static final String COL_REQUIRED_PRODUCT = "requiredProduct";
+	public static final String COL_REQUIREMENT_DEFAULT = "requirementDefault";
+	public static final String COL_REQUIREMENT_BEFORE = "requirementBefore";
+	public static final String COL_REQUIREMENT_AFTER = "requirementAfter";
 
-	private Object[] keyArray;
-	private final Object[] zeroArray = new Object[] {};
+	private Set<String> keySet = new TreeSet<>();
 
 	private Map<String, String> requMap;
 	private Map<String, String> requBeforeMap;
@@ -38,12 +41,47 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	private void retrieveRequirements(String depotId, String product) {
-		// if depotId == null the depot representative is used
 		requMap = persistenceController.getDataServices().product.getProductRequirements(depotId, product);
 		requBeforeMap = persistenceController.getDataServices().product.getProductPreRequirements(depotId, product);
 		requAfterMap = persistenceController.getDataServices().product.getProductPostRequirements(depotId, product);
 		requDeinstallMap = persistenceController.getDataServices().product.getProductDeinstallRequirements(depotId,
 				product);
+	}
+
+	public List<Map<String, Object>> buildRequirementRows() {
+		final String IDENT = "     ";
+		String conditionLabel = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition");
+
+		List<Map<String, Object>> rows = new ArrayList<>();
+
+		for (String key : keySet) {
+			// Row type 0 — product name
+			rows.add(buildRow(key, null, null, null));
+
+			// Row type 1 — setup condition
+			rows.add(buildRow(IDENT + conditionLabel + " setup", requMap != null ? requMap.get(key) : null,
+					requBeforeMap != null ? parenthesize(requBeforeMap.get(key)) : null,
+					requAfterMap != null ? parenthesize(requAfterMap.get(key)) : null));
+
+			// Row type 2 — uninstall condition
+			rows.add(buildRow(IDENT + conditionLabel + " uninstall",
+					requDeinstallMap != null ? requDeinstallMap.get(key) : null, null, null));
+		}
+
+		return rows;
+	}
+
+	private static Map<String, Object> buildRow(String col0, String col1, String col2, String col3) {
+		Map<String, Object> row = new LinkedHashMap<>();
+		row.put(COL_REQUIRED_PRODUCT, col0);
+		row.put(COL_REQUIREMENT_DEFAULT, col1);
+		row.put(COL_REQUIREMENT_BEFORE, col2);
+		row.put(COL_REQUIREMENT_AFTER, col3);
+		return row;
+	}
+
+	private static String parenthesize(String value) {
+		return value == null ? null : ("(" + value + ")");
 	}
 
 	private void init() {
@@ -57,12 +95,11 @@ public class RequirementsTableModel extends AbstractTableModel {
 		requBeforeMap = null;
 		requAfterMap = null;
 		requDeinstallMap = null;
-		keyArray = zeroArray;
 
 		if (product != null) {
 			retrieveRequirements(depotId, product);
 
-			Set<String> keySet = new TreeSet<>();
+			keySet = new TreeSet<>();
 			if (requMap != null && requMap.keySet() != null) {
 				keySet.addAll(requMap.keySet());
 			}
@@ -75,97 +112,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 			if (requDeinstallMap != null && requDeinstallMap.keySet() != null) {
 				keySet.addAll(requDeinstallMap.keySet());
 			}
-			keyArray = keySet.toArray();
-		}
-
-		fireTableDataChanged();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return 4;
-	}
-
-	@Override
-	public int getRowCount() {
-		return keyArray.length * NO_OF_ROW_TYPES;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-		return switch (col) {
-		case 0 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
-		case 1 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
-		case 2 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
-		case 3 -> Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
-		default -> {
-			Logging.warning(this, "no case found for col in getColumnName");
-			yield "";
-		}
-		};
-	}
-
-	@Override
-	public Object getValueAt(int row, int col) {
-		String myKey = (String) keyArray[row / NO_OF_ROW_TYPES];
-
-		int rowTypeIndex = row % NO_OF_ROW_TYPES;
-
-		Object result = null;
-
-		if (col == 0) {
-			result = getValueAtFirstColumn(rowTypeIndex, myKey);
-		} else {
-			switch (col) {
-			case 1 -> {
-				return getValueForCol1(myKey, rowTypeIndex);
-			}
-			case 2 -> {
-				// otherwise, result will remain null
-				if (rowTypeIndex == 1 && requBeforeMap != null) {
-					result = requBeforeMap.get(myKey);
-				}
-			}
-			case 3 -> {
-				// otherwise, result will remain null
-				if (rowTypeIndex == 1 && requAfterMap != null) {
-					result = requAfterMap.get(myKey);
-				}
-			}
-			default -> Logging.warning(this, "no case found for col in getValueAt");
-			}
-
-			if (result != null) {
-				result = "(" + result + ")";
-			}
-		}
-
-		return result;
-	}
-
-	private String getValueAtFirstColumn(int rowTypeIndex, String myKey) {
-		final String IDENT = "     ";
-
-		return switch (rowTypeIndex) {
-		case 0 -> myKey;
-		case 1 -> IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-				+ " setup";
-		case 2 -> IDENT + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-				+ " uninstall";
-		default -> {
-			Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
-			yield null;
-		}
-		};
-	}
-
-	private String getValueForCol1(String myKey, int rowTypeIndex) {
-		if (rowTypeIndex == 1 && requMap != null) {
-			return requMap.get(myKey);
-		} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
-			return requDeinstallMap.get(myKey);
-		} else {
-			return null;
 		}
 	}
 }

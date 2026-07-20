@@ -34,7 +34,6 @@ import de.uib.configed.core.domain.serverdata.OpsiModule;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.terminal.TerminalController;
-import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.JMenuItemBlockedKeyBinding;
@@ -65,9 +64,6 @@ public final class ClientMenuManager implements MenuListener {
 		this.mainFrame = mainFrame;
 
 		initJMenu();
-
-		mainFrame.getClientTablePanel().getClientTable().getTableHeader().addMouseListener(
-				new PopupMouseListener(getPopupMenuClone((JMenu) clientMenuItems.get("MainFrame.jMenuShowColumns"))));
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
@@ -113,9 +109,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		// Space should only be active on the client table, but not on other where you 
 		// could accidently start remote control by pressing space in a text field etc.
-		SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable(),
-				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-				() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
+		// SwingUtils.addKeyBindingToJComponent(mainFrame.getClientTablePanel().getClientTable().getTable(),
+		// 		KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+		// 		() -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
 		// We want to add the acceserator manually so that it will be active always, not only
 		// when the client table has focus.
@@ -177,11 +173,12 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(
 				createMenuItem(ClientMenuItemConfig.item("FGeneralDialog.pdf", this::createPdf).withIcon("anyType")));
 
-		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
+		AbstractExportTable exportTable = new ExporterToCSV(
+				mainFrame.getClientTablePanel().getTableComponent().getTable());
 		exportTable.addMenuItemsTo(jMenuClients);
 
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
-				mainFrame.getClientTablePanel().getClientTable());
+				mainFrame.getClientTablePanel().getTableComponent().getTable());
 		clientTableExporter.addMenuItemsTo(jMenuClients);
 	}
 
@@ -378,7 +375,8 @@ public final class ClientMenuManager implements MenuListener {
 		metaData.put("title", title);
 		metaData.put("subject", "report of table");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(
+				mainFrame.getClientTablePanel().getTableComponent().getTable());
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();

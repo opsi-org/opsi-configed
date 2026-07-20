@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.SortOrder;
-
 import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.core.domain.datachanges.ProductpropertiesUpdateCollection;
@@ -25,13 +23,11 @@ import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
 import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
 import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
-import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.data.InstallationStateUpdateManager;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
-import de.uib.configed.share.userprefs.UserPreferences;
 
 public class ProductPageManager implements MessagebusListener {
 	// the properties for one product and all selected clients
@@ -62,6 +58,8 @@ public class ProductPageManager implements MessagebusListener {
 	private ConfigedMain configedMain;
 	private ClientConfiguration clientConfiguration;
 
+	private PanelProductSettings panelInUse;
+
 	public ProductPageManager(ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
 		this.configedMain = configedMain;
 		this.clientConfiguration = clientConfiguration;
@@ -77,22 +75,23 @@ public class ProductPageManager implements MessagebusListener {
 	}
 
 	public void setLocalbootProductsPage() {
+		List<String> localbootProductDisplayFieldsList = getDisplayFieldsList(
+				persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsLocalbootProducts());
 		setProductsPage(collectChangedLocalbootStates,
-				getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList()),
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelLocalbootProductSettings(),
-				getLocalbootProductDisplayFieldsList());
+				getAttributesFromProductDisplayFields(localbootProductDisplayFieldsList),
+				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelLocalbootProductSettings());
 	}
 
 	public void setNetbootProductsPage() {
+		List<String> netbootProductDisplayFieldsList = getDisplayFieldsList(
+				persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsNetbootProducts());
 		setProductsPage(collectChangedNetbootStates,
-				getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList()),
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelNetbootProductSettings(),
-				getNetbootProductDisplayFieldsList());
+				getAttributesFromProductDisplayFields(netbootProductDisplayFieldsList),
+				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING, clientConfiguration.getPanelNetbootProductSettings());
 	}
 
 	private void setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
-			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
-			List<String> displayFields) {
+			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings) {
 		if (configedMain.checkSynchronous(configedMain.getDepotsOfSelectedClients())) {
 			configedMain.setDepotRepresentative();
 		} else {
@@ -100,6 +99,8 @@ public class ProductPageManager implements MessagebusListener {
 			clientConfiguration.setSelectedIndex(0);
 			return;
 		}
+
+		panelInUse = panelProductSettings;
 
 		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getDataServices().product
 				.getMapOfProductStatesAndActions(configedMain.getSelectedClients(), attributes, productServerString);
@@ -117,12 +118,10 @@ public class ProductPageManager implements MessagebusListener {
 		// listener is triggered
 		// which loads the productProperties for each client separately
 
-		persistenceController.getDataServices().product
-				.retrieveProductPropertiesPD(configedMain.getClientTablePanel().getClientTable().getSelectedSet());
+		persistenceController.getDataServices().product.retrieveProductPropertiesPD(configedMain.getSelectedSet());
 
 		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
 
-		Map<String, SortOrder> sortKeyNames = panelProductSettings.getProductTable().getSortedNames();
 		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
@@ -135,18 +134,10 @@ public class ProductPageManager implements MessagebusListener {
 					.getAllNetbootProductNames(configedMain.getDepotRepresentative());
 		}
 
-		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getProductTable());
-		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
-				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
-				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
-		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(
-				configedMain.getSelectedClients(), changedProductStates, productNames, statesAndActions,
-				possibleActions, persistenceController.getDataServices().product
-						.getProductGlobalInfosPD(configedMain.getDepotRepresentative()),
-				displayFields);
-		panelProductSettings.setTableModel(istmForSelectedClients);
-
-		panelProductSettings.getProductTable().setSortedByNames(sortKeyNames);
+		panelProductSettings.setData(configedMain.getSelectedClients(), productNames, statesAndActions,
+				persistenceController.getDataServices().product.getProductGlobalInfosPD(
+						configedMain.getDepotRepresentative()),
+				possibleActions, changedProductStates);
 
 		if (!oldProductSelection.isEmpty()) {
 			panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
@@ -157,30 +148,19 @@ public class ProductPageManager implements MessagebusListener {
 
 		panelProductSettings.restoreFilter();
 		panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
-
-		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getProductTable(), columnWidths);
-	}
-
-	private List<String> getLocalbootProductDisplayFieldsList() {
-		List<String> result = new ArrayList<>();
-		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
-				.getProductOnClientsDisplayFieldsLocalbootProducts().entrySet()) {
-			if (Boolean.TRUE.equals(productDisplay.getValue())) {
-				result.add(productDisplay.getKey());
-			}
-		}
-
-		return result;
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
 		if (clientConfiguration.getSelectedIndex() == 1
 				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
+			List<String> attributes = getAttributesFromProductDisplayFields(
+					getDisplayFieldsList(persistenceController.getDataServices().product
+							.getProductOnClientsDisplayFieldsLocalbootProducts()));
 			updateManager.updateProductTableForClient(clientId, attributes);
 		} else if (clientConfiguration.getSelectedIndex() == 2
 				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
+			List<String> attributes = getAttributesFromProductDisplayFields(getDisplayFieldsList(
+					persistenceController.getDataServices().product.getProductOnClientsDisplayFieldsNetbootProducts()));
 			updateManager.updateProductTableForClient(clientId, attributes);
 		} else {
 			Logging.info(this, "in updateProduct nothing to update because Tab for productType ", productType,
@@ -188,17 +168,19 @@ public class ProductPageManager implements MessagebusListener {
 		}
 	}
 
-	private List<String> getNetbootProductDisplayFieldsList() {
+	public static List<String> getDisplayFieldsList(Map<String, Boolean> productDisplayFields) {
 		List<String> result = new ArrayList<>();
-
-		for (Entry<String, Boolean> productDisplay : persistenceController.getDataServices().product
-				.getProductOnClientsDisplayFieldsNetbootProducts().entrySet()) {
+		for (Entry<String, Boolean> productDisplay : productDisplayFields.entrySet()) {
 			if (Boolean.TRUE.equals(productDisplay.getValue())) {
 				result.add(productDisplay.getKey());
 			}
 		}
 
 		return result;
+	}
+
+	public PanelProductSettings getPanelInUse() {
+		return panelInUse;
 	}
 
 	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
@@ -207,10 +189,12 @@ public class ProductPageManager implements MessagebusListener {
 			if (ProductState.KEY_VERSION_INFO.equals(v)) {
 				attributes.add(ProductState.KEY_PACKAGE_VERSION);
 				attributes.add(ProductState.KEY_PRODUCT_VERSION);
+				attributes.add(ProductState.KEY_VERSION_INFO);
 			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
 				attributes.add(ProductState.KEY_ACTION_PROGRESS);
 				attributes.add(ProductState.KEY_ACTION_RESULT);
 				attributes.add(ProductState.KEY_LAST_ACTION);
+				attributes.add(ProductState.KEY_INSTALLATION_INFO);
 			} else {
 				attributes.add(v);
 			}

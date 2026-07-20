@@ -100,6 +100,10 @@ public final class PopupMenuTrait extends JPopupMenu {
 		return popupMenu;
 	}
 
+	public static JPopupMenu createJPopupMenu(JComponent component, Map<Integer, Runnable> actions) {
+		return new PopupMenuTrait(component, actions, null);
+	}
+
 	private JMenuItem createPopupForAction(final int p) {
 		if (popupCreators.containsKey(p)) {
 			return popupCreators.get(p).get();

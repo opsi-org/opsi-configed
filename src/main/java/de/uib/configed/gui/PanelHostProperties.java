@@ -20,7 +20,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.gui.type.ConfigOption.TYPE;
@@ -28,7 +28,7 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 public class PanelHostProperties extends AbstractConfigurationTab {
-	private EditMapPanelX editMapPanel;
+	private KeyValueTable editMapPanel;
 
 	private HostUpdateCollection hostUpdateCollection;
 
@@ -46,16 +46,15 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelX(false, false) {
+		editMapPanel = new KeyValueTable(false, false) {
 			@Override
 			protected JPopupMenu createBasicPopup() {
-				return PopupMenuTrait.createAndBindJPopupMenu(table, Map.of(PopupMenuTrait.POPUP_SAVE,
-						() -> ChangedDataManager.checkSaveAll(false), PopupMenuTrait.POPUP_RELOAD, () -> reload()),
-						event -> updatePopupMenu());
+				return PopupMenuTrait.createJPopupMenu(tableView.getTable(), Map.of(PopupMenuTrait.POPUP_SAVE,
+						() -> ChangedDataManager.checkSaveAll(false), PopupMenuTrait.POPUP_RELOAD, () -> reload()));
 			}
 
 		};
-		editMapPanel.getMapTableModel().registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
+		editMapPanel.registerDataChangedKeeper(ChangedDataManager.getGeneralDataChangedKeeper());
 		editMapPanel.setShowToolTip(false);
 
 		// Keep top spacing consistent with other configuration tabs.
@@ -96,17 +95,16 @@ public class PanelHostProperties extends AbstractConfigurationTab {
 
 		Logging.debug(this, "initMultipleHosts ", " configs  ", depotMap);
 
-		editMapPanel.getMapTableModel()
-				.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		editMapPanel.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 
 		Logging.debug(this, "derive Map ", depotMap);
 
 		deriveDepotMap(depotMap);
 		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
-		editMapPanel.updateData(hostUpdateCollection, List.of(depotMap));
+		editMapPanel.setStoreData(List.of(depotMap));
+		editMapPanel.setUpdateCollection(hostUpdateCollection);
 
-		editMapPanel.getMapTableModel()
-				.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+		editMapPanel.setReadOnlyEntries(OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 	}
 
 	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> depotMap) {

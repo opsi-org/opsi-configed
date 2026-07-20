@@ -43,8 +43,12 @@ public class IconTableCellRenderer<T> extends ColorTableCellRenderer {
 
 		super.getTableCellRendererComponent(table, null, isSelected, hasFocus, row, column);
 
-		Icon icon = iconMap.get(value);
-		setIcon(icon);
+		if (value != null) {
+			Icon icon = iconMap.get(value);
+			setIcon(icon);
+		} else {
+			setIcon(null);
+		}
 
 		if (tooltipFromValue && value != null) {
 			setToolTipText(value.toString());

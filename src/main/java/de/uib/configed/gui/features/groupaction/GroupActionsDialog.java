@@ -100,9 +100,9 @@ public class GroupActionsDialog {
 			groupName = Configed.getResourceValue("FGroupAction.noGroupSelected");
 		}
 
-		setGroupLabelling(groupName, "" + configedMain.getClientTablePanel().getClientTable().getRowCount());
+		// setGroupLabelling(groupName, "" + configedMain.getClientTablePanel().getClientTable().getTable().model.getRowCount());
 
-		associatedClients = configedMain.getClientTablePanel().getClientTable().getClients();
+		// associatedClients = configedMain.getClientTablePanel().getClientTable().getClients();
 		setImages();
 	}
 

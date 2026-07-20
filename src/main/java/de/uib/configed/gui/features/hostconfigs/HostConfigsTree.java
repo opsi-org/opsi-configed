@@ -40,12 +40,12 @@ import de.uib.configed.core.domain.permission.UserConfig;
 import de.uib.configed.core.domain.permission.UserConfigProducing;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.share.SwingUtils;
-import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
-import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.type.ConfigOption;
 import de.uib.configed.share.SplitPaneStateManager;
@@ -53,7 +53,7 @@ import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
 // works on a map of pairs of type String - List
-public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {
+public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 	private static final int USER_START_INDEX = 1;
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
@@ -74,13 +74,15 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private Map<String, String> givenClasses;
 	private NavigableSet<String> keyclasses;
-	protected Map<String, DefaultEditMapPanel> partialPanels;
+	protected Map<String, KeyValueTable> partialPanels;
 	private Map<String, Map<String, Object>> virtualLines;
 
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean isServerConfig,
+	private KeyValueTableForHostConfigs.Actor actor;
+
+	public HostConfigsTree(final KeyValueTableForHostConfigs.Actor actor, boolean isServerConfig,
 			boolean isClientConfig) {
 		super();
 
@@ -169,9 +171,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
-	@Override
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
-		super.setEditableMap(visualdata, optionsMap);
 		Logging.debug(this, " setEditableMap, visualdata keys ", visualdata);
 		if (visualdata != null) {
 			treemodel = new HostConfigTreeModel(givenClasses.keySet());
@@ -186,7 +186,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 			for (String key : keyclasses) {
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
-				partialPanels.get(key).getMapTableModel().setKeepers(this.mapTableModel.getKeepers());
+				partialPanels.get(key).registerDataChangedKeeper(ChangedDataManager.getHostConfigsDataChangedKeeper());
 			}
 		}
 
@@ -201,12 +201,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	// apply method of superclass for all partial maps
-	@Override
 	public void updateData(UpdateCollection updateCollection, Collection<Map<String, Object>> data) {
-		super.updateData(updateCollection, data);
-
 		for (String key : keyclasses) {
-			partialPanels.get(key).updateData(updateCollection, data);
+			partialPanels.get(key).setStoreData(data);
+			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}
 	}
 
@@ -255,10 +253,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tree, isServerConfig,
+			KeyValueTable editMapPanel = new KeyValueTableForHostConfigs(actor, tree, isServerConfig,
 					includeAdditionalTooltipText);
 
-			editMapPanel.setActor(actor);
+			((KeyValueTableForHostConfigs) editMapPanel).setActor(actor);
 			editMapPanel.setOriginalMap(originalMap);
 
 			partialPanels.put(key, editMapPanel);
@@ -287,13 +285,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		Logging.info(this, "theRoles found ", theRoles);
 		Logging.info(this, "theUsers found ", theUsers);
 
-		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
-			entry.getValue().getMapTableModel().setIsEditable(key -> isEditable(key, entry));
+		for (Entry<String, KeyValueTable> entry : partialPanels.entrySet()) {
+			entry.getValue().setIsEditable(key -> isEditable(key, entry));
 		}
 	}
 
 	// Modification info and some userroles cannot be edited
-	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
+	private boolean isEditable(String key, Entry<String, KeyValueTable> partialPanelEntry) {
 		Logging.info(this, "entry ", partialPanelEntry, " key ", key);
 
 		if (isServerConfig && !persistenceController.getDataServices().userRoles.hasServerFullPermissionPD()) {
@@ -525,11 +523,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			String key = keyB.toString();
 			Logging.info(this, "deleteUser, selected user key ", key);
 
-			List<String> propertyNames = partialPanels.get(key).getMapTableModel().getKeys();
-			Logging.info(this, "deleteUser, property names ", propertyNames);
-			for (String name : propertyNames) {
-				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);
-			}
+			partialPanels.get(key).removeProperties();
 
 			removeSubpanelClass(key);
 

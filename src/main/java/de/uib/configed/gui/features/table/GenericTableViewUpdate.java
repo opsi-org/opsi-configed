@@ -1,0 +1,319 @@
+/**
+ * Copyright (c) UIB GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of OPSI - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.features.table;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.swing.SortOrder;
+
+import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.AddRow;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.CellEdited;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeOriginalSnapshot;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSelection;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ChangeSortOrder;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.DeleteRows;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.InvertSelection;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.MultipleCellsEdited;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ResizeColumns;
+import de.uib.configed.gui.features.table.GenericTableViewMsg.ToggleColumn;
+import de.uib.configed.gui.features.table.RowData.RowState;
+
+/**
+ * The Pure Logic Layer. Handles messages and updates the Model.
+ */
+public final class GenericTableViewUpdate {
+	private GenericTableViewUpdate() {
+	}
+
+	@SuppressWarnings({ "java:S103", "java:S1541" })
+	public static UpdateResult<GenericTableViewModel, GenericTableViewEffect> update(GenericTableViewMsg msg,
+			GenericTableViewModel model) {
+		return switch (msg) {
+		case CellEdited(int rowIdx, int colIdx, Object newValue) -> handleCellEdit(rowIdx, colIdx, newValue, model);
+		case MultipleCellsEdited(List<CellEdited> edits) -> handleMultipleCellEdits(edits, model);
+		case ToggleColumn(String columnKey) -> handleToggleColumn(columnKey, model);
+		case ChangeSelection(Set<String> selectedRows) -> UpdateResult.withEffect(
+				model.toBuilder().selectedRows(selectedRows).rebuildTableModel(false).build(),
+				new GenericTableViewEffect.Selection());
+		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
+		case DeleteRows(List<String> rowIdx) -> handleRowDelete(rowIdx, model);
+		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
+				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
+		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
+		case GenericTableViewMsg.ApplyRowFilter(String columnKey, Set<String> filterValues, boolean selectFilteredRows) -> handleApplyRowFilter(
+				columnKey, filterValues, selectFilteredRows, model);
+		case ChangeOriginalSnapshot(List<Map<String, Object>> originalSnapshot) -> handleChangeOriginalSnapshot(
+				originalSnapshot, model);
+		case InvertSelection() -> handleInvertSelection(model);
+		default -> UpdateResult.noEffect(model);
+		};
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCellEdit(int rowIdx, int colIdx,
+			Object newValue, GenericTableViewModel model) {
+		if (rowIdx < 0 || rowIdx >= model.getRows().size() || model.getRows().get(rowIdx)
+				.getValue(model.getColumns().get(colIdx).getKey(), Object.class) == newValue) {
+			return UpdateResult.noEffect(model);
+		}
+
+		RowDiffStrategy strategy = model.getDiffStrategy();
+
+		RowData oldRow = model.getRows().get(rowIdx);
+		String colKey = model.getColumnByModelIndex(colIdx).getKey();
+
+		RowState newRowStyle = strategy != null
+				? strategy.getRowData(oldRow, colKey, newValue, oldRow.getValue(colKey, Object.class))
+				: RowState.NORMAL;
+
+		Map<String, Object> newValues = new HashMap<>(oldRow.getValues());
+		newValues.put(colKey, newValue);
+
+		RowData newRow = oldRow.toBuilder().values(newValues).state(newRowStyle).build();
+
+		List<RowData> sourceRows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> newRows = new ArrayList<>(sourceRows);
+		newRows.set(findRowIndexById(sourceRows, oldRow.getId()), newRow);
+
+		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
+
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(isDirty).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.CellEdited(rowIdx, colIdx, newValues));
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleMultipleCellEdits(
+			List<CellEdited> edits, GenericTableViewModel model) {
+
+		if (edits.isEmpty()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		// Build map of rowId -> column changes
+		Map<String, Map<String, Object>> rowUpdates = new LinkedHashMap<>();
+		Set<String> affectedRowIds = new LinkedHashSet<>();
+
+		for (CellEdited edit : edits) {
+			int rowIdx = edit.rowIdx();
+			if (rowIdx < 0 || rowIdx >= model.getRows().size()) {
+				continue;
+			}
+
+			RowData oldRow = model.getRows().get(rowIdx);
+			String colKey = model.getColumnByModelIndex(edit.colIdx()).getKey();
+			Object oldValue = oldRow.getValue(colKey, Object.class);
+
+			if (!Objects.equals(oldValue, edit.newValue())) {
+				affectedRowIds.add(oldRow.getId());
+				rowUpdates.computeIfAbsent(oldRow.getId(), k -> new HashMap<>()).put(colKey, edit.newValue());
+			}
+		}
+
+		if (rowUpdates.isEmpty()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		List<RowData> sourceRows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> newRows = new ArrayList<>(sourceRows);
+		RowDiffStrategy strategy = model.getDiffStrategy();
+
+		for (String rowId : affectedRowIds) {
+			int rowIndex = findRowIndexById(sourceRows, rowId);
+			if (rowIndex == -1) {
+				continue;
+			}
+
+			RowData oldRow = sourceRows.get(rowIndex);
+			Map<String, Object> pendingChanges = rowUpdates.get(rowId);
+
+			// Merge values
+			Map<String, Object> mergedValues = new HashMap<>(oldRow.getValues());
+			mergedValues.putAll(pendingChanges);
+
+			// Calculate state based on changes
+			RowState finalState = calculateRowStateFromChanges(oldRow, pendingChanges, strategy);
+
+			RowData updatedRow = oldRow.toBuilder().values(mergedValues).state(finalState).build();
+
+			newRows.set(rowIndex, updatedRow);
+		}
+
+		boolean isDirty = newRows.stream().anyMatch(r -> r.getState() != RowState.NORMAL);
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
+
+		return UpdateResult.noEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(isDirty).rebuildTableModel(true).build());
+	}
+
+	private static RowState calculateRowStateFromChanges(RowData oldRow, Map<String, Object> changes,
+			RowDiffStrategy strategy) {
+		if (strategy == null) {
+			return RowState.NORMAL;
+		}
+
+		for (Map.Entry<String, Object> entry : changes.entrySet()) {
+			String colKey = entry.getKey();
+			Object newValue = entry.getValue();
+			Object oldValue = oldRow.getValue(colKey, Object.class);
+
+			RowState derived = strategy.getRowData(oldRow, colKey, newValue, oldValue);
+			if (derived != RowState.NORMAL) {
+				return derived;
+			}
+		}
+
+		return RowState.NORMAL;
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleToggleColumn(String columnKey,
+			GenericTableViewModel model) {
+		List<TableColumnConfig> newColumns = model.getColumns().stream()
+				.map((TableColumnConfig column) -> column.getKey().equals(columnKey)
+						? column.withVisible(!column.isVisible())
+						: column)
+				.toList();
+
+		return UpdateResult.withEffect(model.toBuilder().columns(newColumns).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.StoreVisibleColulmns(newColumns.stream().filter(TableColumnConfig::isVisible)
+						.map(TableColumnConfig::getKey).toList()));
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowAdd(Map<String, Object> data,
+			GenericTableViewModel model) {
+		String id = UUID.randomUUID().toString();
+		RowData newRow = computeKeyValueRowData(id, data, RowState.NEW, model);
+
+		List<RowData> sourceRows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> newRows = new ArrayList<>(sourceRows);
+		newRows.add(newRow);
+		List<RowData> visibleRows = applyFilterRows(newRows, model.getFilterColumnKey(), model.getFilterValues());
+
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(newRows).isDirty(true).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.AddRow(data));
+	}
+
+	private static RowData computeKeyValueRowData(String id, Map<String, Object> data, RowState state,
+			GenericTableViewModel model) {
+		Map<String, Object> newData = new HashMap<>();
+		if (model.isKeyValueTable()) {
+			for (Map.Entry<String, Object> entry : data.entrySet()) {
+				newData.put("key", entry.getKey());
+				newData.put("value", entry.getValue());
+			}
+		} else {
+			newData = data;
+		}
+		return RowData.builder().id(id).values(newData).state(state).build();
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowDelete(List<String> rowIdx,
+			GenericTableViewModel model) {
+		if (rowIdx.isEmpty() || rowIdx.size() > model.getRows().size()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		List<RowData> rows = new ArrayList<>(model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows());
+		List<RowData> rowsToDelete = new ArrayList<>();
+		for (String rowId : rowIdx) {
+			for (RowData rowData : rows) {
+				if (rowData.getId().equals(rowId)) {
+					rowsToDelete.add(rowData);
+				}
+			}
+		}
+		rows.removeAll(rowsToDelete);
+		List<RowData> visibleRows = applyFilterRows(rows, model.getFilterColumnKey(), model.getFilterValues());
+
+		return UpdateResult.withEffect(
+				model.toBuilder().rows(visibleRows).allRows(rows).isDirty(true).rebuildTableModel(true).build(),
+				new GenericTableViewEffect.DeleteRows(rowsToDelete));
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleApplyRowFilter(String columnKey,
+			Set<String> filterValues, boolean selectFilteredRows, GenericTableViewModel model) {
+		Set<String> normalizedFilterValues = filterValues == null ? new HashSet<>() : new HashSet<>(filterValues);
+		List<RowData> sourceRows = model.getAllRows().isEmpty() ? model.getRows() : model.getAllRows();
+		List<RowData> filteredRows = applyFilterRows(sourceRows, columnKey, normalizedFilterValues);
+
+		Set<String> selectedRows = selectFilteredRows
+				? filteredRows.stream().map(RowData::getId).collect(Collectors.toSet())
+				: model.getSelectedRows();
+
+		return UpdateResult.noEffect(model.toBuilder().rows(filteredRows).allRows(sourceRows).filterColumnKey(columnKey)
+				.filterValues(normalizedFilterValues).selectedRows(selectedRows).rebuildTableModel(true).build());
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleChangeOriginalSnapshot(
+			List<Map<String, Object>> originalSnapshot, GenericTableViewModel model) {
+		List<RowData> rebuiltRows = model.isKeyValueTable()
+				? RowData.fromOriginalSnapshotKeyValueTable(originalSnapshot, model.getAllRows(),
+						model.getDiffStrategy())
+				: RowData.fromOriginalSnapshot(originalSnapshot, model.getAllRows(), model.getDiffStrategy());
+		return UpdateResult.noEffect(model.toBuilder().originalSnapshot(originalSnapshot).allRows(rebuiltRows)
+				.rows(applyFilterRows(rebuiltRows, model.getFilterColumnKey(), model.getFilterValues()))
+				.rebuildTableModel(true).build());
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleResizeColumns(
+			Map<String, Integer> columnsWidths, GenericTableViewModel model) {
+		Set<String> columnKeys = columnsWidths.keySet();
+		List<TableColumnConfig> configs = model.getColumns().stream()
+				.map((TableColumnConfig config) -> config.isVisible() && columnKeys.contains(config.getHeader())
+						? config.withPrefferedWidth(columnsWidths.get(config.getHeader()))
+						: config)
+				.toList();
+		return UpdateResult.noEffect(model.toBuilder().columns(configs).rebuildTableModel(false).build());
+	}
+
+	private static List<RowData> applyFilterRows(List<RowData> sourceRows, String columnKey, Set<String> filterValues) {
+		if (columnKey == null || filterValues == null || filterValues.isEmpty()) {
+			return new ArrayList<>(sourceRows);
+		}
+
+		return sourceRows.stream().filter((RowData row) -> {
+			Object value = row.getValue(columnKey, Object.class);
+			return value != null && filterValues.contains(String.valueOf(value));
+		}).toList();
+	}
+
+	private static int findRowIndexById(List<RowData> sourceRows, String rowId) {
+		for (int i = 0; i < sourceRows.size(); i++) {
+			if (sourceRows.get(i).getId().equals(rowId)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleInvertSelection(
+			GenericTableViewModel model) {
+		Set<String> previouslySelectedRows = model.getSelectedRows();
+		Set<String> invertedSelection = new HashSet<>();
+
+		for (RowData data : model.getRows()) {
+			if (!previouslySelectedRows.contains(data.getId())) {
+				invertedSelection.add(data.getId());
+			}
+		}
+
+		return UpdateResult.withEffect(
+				model.toBuilder().selectedRows(invertedSelection).isDirty(false).rebuildTableModel(false).build(),
+				new GenericTableViewEffect.Selection());
+	}
+}

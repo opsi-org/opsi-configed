@@ -340,6 +340,9 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	public static String formatList(Object value) {
 		StringBuilder result = new StringBuilder();
+		if (value == null) {
+			return result.toString();
+		}
 		for (Object element : ((List<?>) value)) {
 			result.append(formatValue(element));
 			result.append(" • ");

@@ -24,7 +24,6 @@ import de.uib.configed.core.domain.productstate.ActionRequest;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.ServerActionManager;
-import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
@@ -89,7 +88,7 @@ public class ProductActionPanel extends JPanel {
 				: FilterKey.NETBOOT_PRODUCTS_TABLE;
 		searchPane = SearchPaneComponent.builder()
 				.targetModel(new SearchTargetModelFromInstallationStateTable(panelProductSettings)).filterKey(filterKey)
-				.enableFilterBySelection(true).component(panelProductSettings.getProductTable()).build();
+				.enableFilterBySelection(true).component(panelProductSettings.getProductTable().getComponent()).build();
 		component = searchPane.initUI();
 	}
 
@@ -152,33 +151,21 @@ public class ProductActionPanel extends JPanel {
 	private void handleCollectiveAction(String selected) {
 		Set<String> saveSelectedProducts = panelProductSettings.getProductTable().getSelectedIDs();
 
-		Logging.info(this, "handleCollectiveAction, selected products ",
-				panelProductSettings.getProductTable().getSelectedRowsInModelTerms());
 		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
 
-		InstallationStateTableModel installationStateTableModel = (InstallationStateTableModel) panelProductSettings
-				.getProductTable().getModel();
+		int actionType = switch (selected) {
+		case "setup" -> ActionRequest.SETUP;
+		case "uninstall" -> ActionRequest.UNINSTALL;
+		case "none" -> ActionRequest.NONE;
+		default -> ActionRequest.INVALID;
+		};
 
-		if (!installationStateTableModel.infoIfNoClientsSelected()) {
-			installationStateTableModel.initCollectiveChange();
-
-			int actionType = switch (selected) {
-			case "setup" -> ActionRequest.SETUP;
-			case "uninstall" -> ActionRequest.UNINSTALL;
-			case "none" -> ActionRequest.NONE;
-			default -> ActionRequest.INVALID;
-			};
-
-			if (actionType != ActionRequest.INVALID) {
-				panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
-					Logging.info(" row id ", x, " product ", installationStateTableModel.getValueAt(x, 0));
-					installationStateTableModel.collectiveChangeActionRequest(
-							(String) installationStateTableModel.getValueAt(x, 0), new ActionRequest(actionType));
-				});
-			}
-
-			installationStateTableModel.finishCollectiveChange();
+		if (actionType == ActionRequest.INVALID) {
+			return;
 		}
+
+		panelProductSettings.getProductTable()
+				.setActionRequestForSelectedProducts(new ActionRequest(actionType).toString());
 
 		panelProductSettings.getProductTable().setPendingSelection(saveSelectedProducts);
 	}
@@ -192,7 +179,7 @@ public class ProductActionPanel extends JPanel {
 		private PanelProductSettings panelProductSettings;
 
 		public SearchTargetModelFromInstallationStateTable(PanelProductSettings panelProductSettings) {
-			super(panelProductSettings.getProductTable());
+			super(panelProductSettings.getTable());
 			Logging.info(this, "table null? ", table == null);
 
 			this.panelProductSettings = panelProductSettings;

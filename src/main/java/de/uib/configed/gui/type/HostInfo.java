@@ -19,8 +19,8 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.ClientInfoPanel;
 import de.uib.configed.gui.ClientTablePanel;
-import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.features.table.GenericTableViewMsg;
 import de.uib.configed.share.logging.Logging;
 
 public class HostInfo {
@@ -359,11 +359,7 @@ public class HostInfo {
 		if (sourceOfChanges.get(key) != null) {
 			data.put(key, sourceOfChanges.get(key));
 
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
-			if (col > -1) {
-				int row = clientTablePanel.findModelRowFromClientName(client);
-				clientTablePanel.getClientTable().setValueAt(data.get(key), row, col);
-			}
+			updateClientTable(clientTablePanel, displayFieldLabel, client, data.get(key));
 
 			// restoring old value
 			setTextMethod.accept((String) data.get(key));
@@ -413,18 +409,21 @@ public class HostInfo {
 		if (sourceOfChanges.get(key) != null) {
 			boolean value = "true".equals(sourceOfChanges.get(key));
 
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(displayFieldLabel));
-
-			if (col > -1) {
-				int row = clientTablePanel.findModelRowFromClientName(client);
-				// write it into the visible table
-				clientTablePanel.getClientTable().setValueAt(value, row, col);
-			}
+			updateClientTable(clientTablePanel, displayFieldLabel, client, value);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
 			persistenceController.getDataServices().host.updateHost(client, key, value);
 			persistenceController.getDataServices().hostInfoCollections.updateLocalHostInfo(client, key, value);
+		}
+	}
+
+	private static void updateClientTable(ClientTablePanel clientTablePanel, String displayFieldLabel, String client,
+			Object value) {
+		int col = clientTablePanel.findColumnIndex(displayFieldLabel);
+		if (col > -1) {
+			int row = clientTablePanel.findModelRowFromClientName(client);
+			clientTablePanel.getTableComponent().dispatch(new GenericTableViewMsg.CellEdited(row, col, value));
 		}
 	}
 
@@ -443,30 +442,30 @@ public class HostInfo {
 		ClientInfoPanel clientInfoPanel = ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration()
 				.getClientInfoPanel();
 
-		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_DESCRIPTION_KEY, "description",
-				clientInfoPanel::setClientDescriptionText);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_DESCRIPTION_KEY,
+				CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientDescriptionText);
 
 		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_INVENTORY_NUMBER_KEY,
-				"ConfigedMain.pclistTableModel.clientInventoryNumber", clientInfoPanel::setClientInventoryNumberText);
+				CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientInventoryNumberText);
 
 		setOneTimePassword(client, sourceOfChanges);
 
 		setClientNotes(client, sourceOfChanges);
 
 		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_SYSTEM_UUID_KEY,
-				"ConfigedMain.pclistTableModel.clientSystemUUID", clientInfoPanel::setClientSystemUUID);
+				CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientSystemUUID);
 
 		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_MAC_ADDRESS_KEY,
-				"ConfigedMain.pclistTableModel.clientHardwareAddress", clientInfoPanel::setClientMacAddress);
+				CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientMacAddress);
 
-		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_IP_ADDRESS_KEY, "ipAddress",
-				clientInfoPanel::setClientIpAddress);
+		setClientValue(clientTablePanel, client, sourceOfChanges, CLIENT_IP_ADDRESS_KEY,
+				CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientInfoPanel::setClientIpAddress);
 
 		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_SHUTDOWN_INSTALL_KEY,
-				"ConfigedMain.pclistTableModel." + CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+				CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 
 		setClientBoolean(clientTablePanel, client, sourceOfChanges, CLIENT_WAN_CONFIG_KEY,
-				"ConfigedMain.pclistTableModel." + CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+				CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 	}
 
 	@Override

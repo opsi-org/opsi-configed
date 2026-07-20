@@ -37,7 +37,7 @@ import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.UpdateCollectionManager;
 import de.uib.configed.gui.share.PopupMouseListener;
-import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.share.datapanel.KeyValueTable;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.share.SplitPaneStateManager;
@@ -58,7 +58,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties implem
 
 	private DepotsList depotsList;
 
-	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel,
+	public PanelEditDepotProperties(ConfigedMain configedMain, KeyValueTable productPropertiesPanel,
 			DepotsList depotsList) {
 		super(productPropertiesPanel);
 
@@ -99,7 +99,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties implem
 		JButton buttonSetValuesFromPackage = new JButton(Icons.getIntellijIcon("remove"));
 		buttonSetValuesFromPackage
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
-		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
+		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.pinProperties());
 
 		JPanel panelTop = new JPanel();
 		panelTop.setLayout(new MigLayout("insets 0, fill, wrap 2, hidemode 3", "[grow,fill][pref!]", "[]0"));
@@ -206,7 +206,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties implem
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
-			productPropertiesPanel.updateData(depotProductpropertiesUpdateCollection, storableProperties);
+			productPropertiesPanel.setStoreData(storableProperties);
+			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
 			UpdateCollectionManager.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}
