@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -386,8 +387,12 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 		}
 		List<String> currentSelection = groupsSelectionDialog.getSelectedValues();
 
-		groupsSelectionDialog.setListData(
-				PersistenceControllerFactory.getPersistenceController().getDataServices().group.getHostGroupIds());
+		List<String> groupIds = PersistenceControllerFactory.getPersistenceController().getDataServices().group
+				.getHostGroupIds();
+		Set<String> permittedGroupIds = PersistenceControllerFactory.getPersistenceController()
+				.getDataServices().userRoles.getHostGroupsPermitted();
+		groupIds.retainAll(permittedGroupIds);
+		groupsSelectionDialog.setListData(groupIds);
 		groupsSelectionDialog.setPreviousSelectionValues(currentSelection);
 		groupsSelectionDialog.show();
 
@@ -424,7 +429,8 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 
 	private void loadInitialData() {
 		List<String> domains = persistenceController.getDataServices().config.getDomains();
-		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getDepotNamesList();
+		List<String> depots = persistenceController.getDataServices().hostInfoCollections.getDepotNamesList().stream()
+				.filter(depot -> persistenceController.getDataServices().userRoles.hasDepotPermission(depot)).toList();
 		List<String> netboots = new ArrayList<>();
 		netboots.add(null);
 		netboots.addAll(persistenceController.getDataServices().product.getAllNetbootProductNames());
