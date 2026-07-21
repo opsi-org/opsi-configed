@@ -218,42 +218,46 @@ public class ProductTableColumnFactory {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-			// Safe since instanceof returns false if null
-			if (value instanceof String stringValue) {
-				if (stringValue.isEmpty()) {
-					return this;
-				}
+			if (!(value instanceof String stringValue) || stringValue.isEmpty()) {
+				return component;
+			}
 
-				if (stringValue.equals(Globals.CONFLICT_STATE_STRING) || stringValue
-						.equals(ProductConfigurationEngine.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
-					setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
-				} else {
-					String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
-
-					String serverProductVersion = "";
-					if (configedMain != null) {
-						Map<String, Map<String, Object>> globalinfos = PersistenceControllerFactory
-								.getPersistenceController().getDataServices().product
-										.getProductGlobalInfosPD(configedMain.getDepotRepresentative());
-
-						if (globalinfos.get(productId) == null) {
-							Logging.warning(this,
-									" istm.getGlobalProductInfos()).get(productId) == null for productId ", productId);
-						} else {
-							serverProductVersion = serverProductVersion
-									+ globalinfos.get(productId).get(ProductState.KEY_VERSION_INFO);
-						}
-					}
-
-					if (!stringValue.equals(serverProductVersion)) {
-						setForeground(Globals.FAILED_COLOR);
-					}
+			if (isConflictState(stringValue)) {
+				component.setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
+			} else {
+				String serverProductVersion = fetchServerProductVersion(table, row);
+				if (!stringValue.equals(serverProductVersion)) {
+					component.setForeground(Globals.FAILED_COLOR);
 				}
 			}
 
-			return this;
+			return component;
+		}
+
+		private static boolean isConflictState(String stringValue) {
+			return stringValue.equals(Globals.CONFLICT_STATE_STRING) || stringValue
+					.equals(ProductConfigurationEngine.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING);
+		}
+
+		private String fetchServerProductVersion(JTable table, int row) {
+			if (configedMain == null) {
+				return "";
+			}
+
+			String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
+
+			Map<String, Map<String, Object>> globalinfos = PersistenceControllerFactory.getPersistenceController()
+					.getDataServices().product.getProductGlobalInfosPD(configedMain.getDepotRepresentative());
+
+			if (globalinfos.get(productId) == null) {
+				Logging.warning(this, "istm.getGlobalProductInfos()).get(productId) == null for productId ", productId);
+				return "";
+			}
+
+			Object versionObj = globalinfos.get(productId).get(ProductState.KEY_VERSION_INFO);
+			return versionObj != null ? versionObj.toString() : "";
 		}
 	}
 }

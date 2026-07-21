@@ -418,6 +418,7 @@ public class KeyValueTable extends JPanel {
 		tableView.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(transformedData));
 	}
 
+	@SuppressWarnings("java:S2250")
 	private boolean checkKey(String s) {
 		if (s == null || s.isEmpty()) {
 			return false;
@@ -426,6 +427,7 @@ public class KeyValueTable extends JPanel {
 		if (!keys.contains(s)) {
 			return true;
 		}
+
 		return JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("EditMapPanelX.entryAlreadyExists"),
 				Configed.getResourceValue("EditMapPanelX.titleEntryAlreadyExists"), JOptionPane.OK_CANCEL_OPTION);
