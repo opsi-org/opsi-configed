@@ -60,8 +60,6 @@ public class DepotListSelectionListener implements ListSelectionListener {
 		if (initialDataLoader.isDataLoaded()) {
 			PersistenceControllerFactory.getPersistenceController().getDataServices().hostInfoCollections
 					.updateClientsForDepots(depotsList.getSelectedValuesList(), configedMain.getAllowedClients());
-			configedMain.initialTreeActivation();
-
 			configedMain.getProductTree().reInitTree();
 			configedMain.refreshClientListKeepingGroup();
 
