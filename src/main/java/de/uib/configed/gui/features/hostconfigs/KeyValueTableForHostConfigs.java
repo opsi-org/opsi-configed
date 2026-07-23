@@ -124,7 +124,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 	 */
 	@Override
 	protected void prepareRendererForJTable(JComponent jComponent, int row, int col) {
-		RowData rowData = tableView.getRowByModelIndex(row);
+		RowData rowData = tableView.getRowByViewIndex(row);
 		addTooltip(jComponent, rowData.getValue("key", String.class), row);
 		setText(jComponent, col, row);
 	}

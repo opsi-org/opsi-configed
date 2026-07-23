@@ -121,6 +121,10 @@ public class GenericTableViewComponent
 		return null;
 	}
 
+	public RowData getRowByViewIndex(int viewIndex) {
+		return getRowByModelIndex(table.convertRowIndexToModel(viewIndex));
+	}
+
 	public RowData getRowByModelIndex(int modelIndex) {
 		if (modelIndex < 0 || modelIndex >= model.getRows().size()) {
 			throw new IndexOutOfBoundsException("Index " + modelIndex + " out of bounds");
