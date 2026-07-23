@@ -93,7 +93,7 @@ public class ProductTableColumnFactory {
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_ID)
 				.header(ProductTable.getColumnTitle(ProductState.KEY_PRODUCT_ID)).editable(false)
 				.prefferedWidth(WIDTH_COLUMN_PRODUCT_NAME).toggleable(false)
-				.renderer(new ProductNameTableCellRenderer(productTable.getTableViewComponent())).build());
+				.renderer(new ProductNameTableCellRenderer()).build());
 
 		columns.add(TableColumnConfig.builder().key(ProductState.KEY_PRODUCT_NAME)
 				.header(ProductTable.getColumnTitle(ProductState.KEY_PRODUCT_NAME)).editable(false)
@@ -179,12 +179,9 @@ public class ProductTableColumnFactory {
 		return (o1, o2) -> Integer.compare(order.indexOf(o1), order.indexOf(o2));
 	}
 
-	private static class ProductNameTableCellRenderer extends ColorTableCellRenderer {
-		GenericTableViewComponent tableViewComponent;
-
-		public ProductNameTableCellRenderer(GenericTableViewComponent tableViewComponent) {
+	private class ProductNameTableCellRenderer extends ColorTableCellRenderer {
+		public ProductNameTableCellRenderer() {
 			super();
-			this.tableViewComponent = tableViewComponent;
 		}
 
 		@Override
@@ -192,7 +189,9 @@ public class ProductTableColumnFactory {
 				int row, int column) {
 			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-			String stateChange = tableViewComponent != null ? tableViewComponent.getRowByModelIndex(row)
+			GenericTableViewComponent tableViewComponent = productTable.getTableViewComponent();
+
+			String stateChange = tableViewComponent != null ? tableViewComponent.getRowByViewIndex(row)
 					.getValue(ProductState.KEY_LAST_STATE_CHANGE, String.class) : null;
 			if (stateChange == null) {
 				stateChange = "";
