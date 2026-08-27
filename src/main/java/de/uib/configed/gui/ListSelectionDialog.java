@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -44,7 +43,6 @@ public class ListSelectionDialog {
 
 	protected ListSelectionList listSelectionList;
 	protected SearchPaneComponent searchPane;
-	private JComponent component;
 
 	private FlatTextField editingTextField;
 	private JButton addMultiLineValueButton;
@@ -92,12 +90,11 @@ public class ListSelectionDialog {
 		searchTargetModel = new SearchTargetModelFromJList(listSelectionList, new ArrayList<>(), new ArrayList<>());
 		searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).isNarrow(true)
 				.component(listSelectionList).build();
-		component = searchPane.initUI();
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("insets 0, fill, wrap 1", "[grow]",
 				"[pref!]" + Globals.GAP_SIZE + "[grow]" + Globals.GAP_SIZE + "[pref!]"));
-		panel.add(component, "growx");
+		panel.add(searchPane.initUI(), "growx");
 		panel.add(listScrollPane, "grow");
 
 		if (editable) {
@@ -164,7 +161,7 @@ public class ListSelectionDialog {
 		// This accounts for focus-stealing components (e.g., dialog activation or defualt buttons) that may
 		// override the focus requests. Without this delay, the search field may not receive focus when the
 		// dialog is shown.
-		SwingUtilities.invokeLater(() -> SwingUtilities.invokeLater(() -> component.requestFocus()));
+		SwingUtilities.invokeLater(() -> SwingUtilities.invokeLater(() -> searchPane.requestSearchFieldFocus()));
 		dialog.setVisible(true);
 	}
 
