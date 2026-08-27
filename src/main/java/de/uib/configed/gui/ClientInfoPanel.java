@@ -247,7 +247,7 @@ public class ClientInfoPanel extends JPanel {
 		add(checkBoxWANConfig);
 
 		add(checkBoxHealthCheckActive, "split 2, gapright " + GAP);
-		add(openHealthCheckSettingsDialogButton);
+		add(openHealthCheckSettingsDialogButton, "width pref!, wrap");
 
 		add(SwingUtils.createBoldLabel("ConfigedMain.pclistTableModel.oneTimePassword"), "gaptop " + GAP);
 		add(jTextFieldOneTimePassword, "growx");
