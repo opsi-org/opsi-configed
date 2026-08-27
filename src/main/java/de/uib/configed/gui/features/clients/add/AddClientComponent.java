@@ -391,7 +391,9 @@ public final class AddClientComponent extends AbstractTeaComponent<AddClientMode
 				.getHostGroupIds();
 		Set<String> permittedGroupIds = PersistenceControllerFactory.getPersistenceController()
 				.getDataServices().userRoles.getHostGroupsPermitted();
-		groupIds.retainAll(permittedGroupIds);
+		if (permittedGroupIds != null) {
+			groupIds.retainAll(permittedGroupIds);
+		}
 		groupsSelectionDialog.setListData(groupIds);
 		groupsSelectionDialog.setPreviousSelectionValues(currentSelection);
 		groupsSelectionDialog.show();
