@@ -150,15 +150,16 @@ public final class Logging {
 
 	public static synchronized void updateLogfile() {
 		final ServerFacade executioner = PersistenceControllerFactory.getPersistenceController().getExecutioner();
+		String sanitizedHost = sanitizeHostForPath(executioner.getHostData().getHost());
+		String user = executioner.getHostData().getUser();
 
 		File logDirectory = getDirectory();
 		File currentLogfile = new File(getCurrentLogfilePath());
 		File updatedLogFile = new File(logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_"
-				+ executioner.getHostData().getHost() + "_" + executioner.getHostData().getUser() + extension);
+				+ sanitizedHost + "_" + user + extension);
 
 		if (NUMBER_OF_LOG_FILES > 0) {
-			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, executioner.getHostData().getHost(),
-					executioner.getHostData().getUser());
+			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, sanitizedHost, user);
 		}
 
 		closeLogWriter();
@@ -208,6 +209,14 @@ public final class Logging {
 		return logDirectory;
 	}
 
+	/**
+	 * Replaces characters that are invalid in file system paths (e.g. {@code :}
+	 * on Windows) with {@code _}.
+	 */
+	private static String sanitizeHostForPath(String host) {
+		return host.replace(":", "_");
+	}
+
 	private static File getBaseLogDirectoryBasedOnOS() {
 		File baseLogDirectory;
 
@@ -224,8 +233,8 @@ public final class Logging {
 
 	private static File changeLogDirectory(File logDirectory) {
 		final ServerFacade executioner = PersistenceControllerFactory.getPersistenceController().getExecutioner();
-		String newDirPath = logDirectory.getAbsolutePath() + File.separator + executioner.getHostData().getHost()
-				+ File.separator + LOGS_DIR;
+		String newDirPath = logDirectory.getAbsolutePath() + File.separator
+				+ sanitizeHostForPath(executioner.getHostData().getHost()) + File.separator + LOGS_DIR;
 		File newLogDirectory = new File(newDirPath);
 
 		if (!newLogDirectory.exists()) {
