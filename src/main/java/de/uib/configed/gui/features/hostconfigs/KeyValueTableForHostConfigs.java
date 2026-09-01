@@ -125,11 +125,11 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 	@Override
 	protected void prepareRendererForJTable(JComponent jComponent, int row, int col) {
 		RowData rowData = tableView.getRowByViewIndex(row);
-		addTooltip(jComponent, rowData.getValue("key", String.class), row);
+		addTooltip(jComponent, rowData.getValue("key", String.class), rowData.getValue("value", Object.class));
 		setText(jComponent, col, row);
 	}
 
-	private void addTooltip(JComponent jc, String propertyName, int rowIndex) {
+	private void addTooltip(JComponent jc, String propertyName, Object value) {
 		jc.setToolTipText(createTooltipForPropertyName(propertyName, defaultsMap, descriptionsMap,
 				includeAdditionalTooltipText ? getPropertyOrigin(propertyName) : null));
 
@@ -141,7 +141,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
-		} else if ((defaultValue = defaultsMap.get(tableView.getValueAt(rowIndex, 0))) == null) {
+		} else if ((defaultValue = defaultsMap.get(propertyName)) == null) {
 			Logging.warning(this, "no default Value found");
 
 			jc.setForeground(Globals.OPSI_ERROR);
@@ -149,8 +149,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-		} else if (!defaultValue.equals(tableView.getValueAt(rowIndex, 1))
-				|| (originalMap != null && originalMap.containsKey(propertyName))) {
+		} else if (!defaultValue.equals(value) || (originalMap != null && originalMap.containsKey(propertyName))) {
 			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
 		} else {
 			// Do nothing, since it's defaultvalue

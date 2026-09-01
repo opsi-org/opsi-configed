@@ -190,6 +190,10 @@ public class GenericTableViewComponent
 		return table.getSelectedRow();
 	}
 
+	public int convertRowIndexToModel(int viewIndex) {
+		return table.convertRowIndexToModel(viewIndex);
+	}
+
 	public Set<String> getSelectedRows() {
 		return model.getSelectedRows();
 	}
