@@ -388,21 +388,8 @@ public final class Configed {
 
 	private static void createSavedStatesDir() {
 		savedStatesLocationName = resolveLocation();
-		File dir = new File(savedStatesLocationName);
-		if (dir.exists()) {
-			Logging.info("Saved states location exists", savedStatesLocationName);
-			return;
-		}
 
-		if (dir.mkdirs()) {
-			Logging.info("Successfully created the saved states location", savedStatesLocationName);
-		} else {
-			Logging.warning("Failed to create saved states location", savedStatesLocationName);
-		}
-
-		if (!dir.setWritable(true, true)) {
-			Logging.warning("Setting savedStatesDir writable failed");
-		}
+		checkValidity(new File(savedStatesLocationName));
 	}
 
 	public static void initSavedStates(String host) {
@@ -428,15 +415,22 @@ public final class Configed {
 		String directoryName = getSavedStatesDirectoryName(location, host);
 		File dir = new File(directoryName);
 
+		checkValidity(dir);
+
+		return dir;
+	}
+
+	private static void checkValidity(File dir) {
 		if (!dir.exists() && !dir.mkdirs()) {
 			Logging.warning("mkdirs for saved states failed for", dir);
 		}
 
-		if (!dir.setWritable(true, true)) {
-			Logging.warning("Setting savedStatesDir writable failed");
+		if (!dir.canWrite()) {
+			dir.setWritable(true, true);
+			if (!dir.canWrite()) {
+				Logging.warning("Setting savedStatesDir writable failed");
+			}
 		}
-
-		return dir;
 	}
 
 	private static String getSavedStatesDirectoryName(String locationName, String host) {
