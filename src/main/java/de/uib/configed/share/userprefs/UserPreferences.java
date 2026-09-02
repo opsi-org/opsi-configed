@@ -37,14 +37,18 @@ public final class UserPreferences {
 	static {
 		if (!propertiesFile.exists()) {
 			try {
-				if (!propertiesFile.createNewFile()) {
+				File parent = propertiesFile.getParentFile();
+
+				if (!parent.exists() && !parent.mkdirs()) {
+					Logging.warning("error creating saved states directory");
+				} else if (!propertiesFile.exists() && !propertiesFile.createNewFile()) {
 					Logging.warning("error creating saved states file");
 				} else {
 					Logging.info("migrating user preferences");
 					migrateUserPreferences();
 				}
 			} catch (IOException e) {
-				Logging.warning(e, "error creating saved states file");
+				Logging.warning(e, "error creating saved states file, exception thrown");
 			}
 		}
 
