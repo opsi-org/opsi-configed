@@ -260,14 +260,16 @@ public class KeyValueTable extends JPanel {
 			setDefaultValue = new JMenuItem(
 					Configed.getResourceValue("EditMapPanelX.PopupMenu.SetSpecificValueToDefault"));
 			Icons.addIntellijIconToMenuItem(setDefaultValue, "pin");
-			setDefaultValue.addActionListener(actionEvent -> pinProperty(tableView.getSelectedRow()));
+			setDefaultValue.addActionListener(
+					actionEvent -> pinProperty(tableView.convertRowIndexToModel(tableView.getSelectedRow())));
 
 			popupMenu.add(setDefaultValue);
 
 			popupRemoveSpecificEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanelX.PopupMenu.RemoveSpecificValue"));
 			Icons.addIntellijIconToMenuItem(popupRemoveSpecificEntry, "remove");
-			popupRemoveSpecificEntry.addActionListener(actionEvent -> unpinProperty(tableView.getSelectedRow()));
+			popupRemoveSpecificEntry.addActionListener(
+					actionEvent -> unpinProperty(tableView.convertRowIndexToModel(tableView.getSelectedRow())));
 
 			popupMenu.add(popupRemoveSpecificEntry);
 		}
@@ -465,6 +467,8 @@ public class KeyValueTable extends JPanel {
 		}
 
 		fireCellEditedEvent(keyIndex, key);
+
+		notifyOfChanges();
 	}
 
 	private void unpinProperty(int keyIndex) {
@@ -478,6 +482,8 @@ public class KeyValueTable extends JPanel {
 		}
 
 		fireCellEditedEvent(keyIndex, key);
+
+		notifyOfChanges();
 	}
 
 	private void fireCellEditedEvent(int keyIndex, String key) {

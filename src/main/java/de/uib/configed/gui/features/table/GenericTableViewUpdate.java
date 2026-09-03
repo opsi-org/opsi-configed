@@ -66,8 +66,12 @@ public final class GenericTableViewUpdate {
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCellEdit(int rowIdx, int colIdx,
 			Object newValue, GenericTableViewModel model) {
-		if (rowIdx < 0 || rowIdx >= model.getRows().size() || model.getRows().get(rowIdx)
-				.getValue(model.getColumns().get(colIdx).getKey(), Object.class) == newValue) {
+		boolean isInBounds = rowIdx >= 0 && rowIdx < model.getRows().size();
+		boolean isValueChanged = !Objects.equals(
+				model.getRows().get(rowIdx).getValue(model.getColumns().get(colIdx).getKey(), Object.class), newValue);
+		boolean isKeyColumnFromKeyValueTable = model.isKeyValueTable() && colIdx == 0;
+
+		if (!isInBounds || (!isValueChanged && !isKeyColumnFromKeyValueTable)) {
 			return UpdateResult.noEffect(model);
 		}
 
