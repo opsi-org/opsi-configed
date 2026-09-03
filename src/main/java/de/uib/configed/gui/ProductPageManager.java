@@ -243,7 +243,7 @@ public class ProductPageManager implements MessagebusListener {
 				.get(productName);
 
 		sourcePanel.initEditing(productName, productProperties, POJOReMapper.remap(mergedProductProperties),
-				clientProductpropertiesUpdateCollection, originalMap);
+				clientProductpropertiesUpdateCollection, originalMap != null ? originalMap : new HashMap<>());
 	}
 
 	private void collectTheProductProperties(String productEdited) {
