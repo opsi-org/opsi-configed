@@ -256,9 +256,7 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		pdfExportTable.setPageSizeA4Landscape();
 
 		// create pdf
-		pdfExportTable.execute(
-				type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? "localboot_report_" : "netboot_report_", null,
-				false);
+		pdfExportTable.execute(null, false);
 	}
 
 	private void reloadAction() {

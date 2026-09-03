@@ -36,7 +36,7 @@ public class SWcsvExporter extends AbstractSWExporter {
 
 		theTable.setModel(modelSWInfo);
 		exportTable.setClient(clientName);
-		exportTable.execute(EXPORT_FILE_PREFIX, exportFilename, false);
+		exportTable.execute(exportFilename, false);
 	}
 
 	@Override
