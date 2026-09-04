@@ -178,10 +178,9 @@ public class PanelEnterLicense extends MultiTablePanel {
 		jTextFieldLicenseType.setEnabled(true);
 		jTextFieldLicenseType.setText(licenseType);
 		jTextFieldLicenseType.setEditable(false);
-		jTextFieldMaxInstallations.setEnabled(true);
 
 		jTextFieldMaxInstallations.setText(maxInstallations);
-		jTextFieldMaxInstallations.setEditable(false);
+		jTextFieldMaxInstallations.setEnabled("VOLUME".equals(licenseType));
 
 		if (clients == null) {
 			comboClient.setEnabled(false);
