@@ -575,6 +575,8 @@ public class ConfigedMain {
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
+		clientTablePanel.setSelectedValues(selectValues);
+
 		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
 				clientTablePanel.getTableComponent().model.getRows().size(),
 				selectValues != null ? new ArrayList<>(selectValues) : new ArrayList<>(), hostInfo);
