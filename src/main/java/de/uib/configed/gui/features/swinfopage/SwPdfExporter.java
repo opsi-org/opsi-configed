@@ -39,7 +39,6 @@ public class SwPdfExporter extends AbstractSWExporter {
 
 		theTable.setModel(modelSWInfo);
 
-		exportTable.setClient(clientName);
 		exportTable.setMetaData(metaData);
 		exportTable.execute(exportFilename, false);
 	}

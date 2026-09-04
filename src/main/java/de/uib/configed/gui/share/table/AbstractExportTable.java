@@ -39,10 +39,6 @@ public abstract class AbstractExportTable {
 
 	private boolean askForOverwrite;
 
-	protected String writeToFile;
-
-	protected String client;
-
 	protected String extension;
 
 	public enum OverwriteDecision {
@@ -78,10 +74,6 @@ public abstract class AbstractExportTable {
 		menuItem.addActionListener(actionEvent -> execute(null, true));
 
 		return menuItem;
-	}
-
-	public void setClient(String clientID) {
-		client = clientID;
 	}
 
 	public void setMetaData(Map<String, String> tableMetaData) {
