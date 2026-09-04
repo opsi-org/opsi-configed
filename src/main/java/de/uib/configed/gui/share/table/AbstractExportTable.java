@@ -192,7 +192,6 @@ public abstract class AbstractExportTable {
 	private static String askForOverride(String filename) {
 		try {
 			File file = new File(filename);
-			Logging.devel("filename " + filename + " exists " + file.exists());
 			if (file.exists()) {
 				int option = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
 						Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),

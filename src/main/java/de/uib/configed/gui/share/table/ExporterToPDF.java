@@ -104,7 +104,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	private boolean writeFile(String filePath) {
 		// Write file now
-		Logging.devel(this, "filePath ", filePath);
 		try {
 			PdfWriter writer;
 			writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
