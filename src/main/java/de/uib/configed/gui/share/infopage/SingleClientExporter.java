@@ -36,8 +36,6 @@ public class SingleClientExporter {
 
 	@Default
 	private final OverwriteDecision overwriteDecision = OverwriteDecision.CONTINUE;
-	private final String defaultPrefix;
-	private final String exportClientId;
 
 	/**
 	 * Exports the data according to kindOfExport
@@ -91,8 +89,7 @@ public class SingleClientExporter {
 	private boolean exportToCSV() {
 		ExporterToCSV exporter = new ExporterToCSV(table);
 		exporter.setAskForOverwrite(askForOverwrite && overwriteDecision != OverwriteDecision.OVERWRITE_ALL);
-		exporter.setClient(exportClientId);
-		return exporter.execute(defaultPrefix, filename, onlySelectedRows);
+		return exporter.execute(filename, onlySelectedRows);
 	}
 
 	private boolean exportToPDF() {
@@ -102,7 +99,6 @@ public class SingleClientExporter {
 		}
 		pdfExporter.setPageSizeA4Landscape();
 		pdfExporter.setAskForOverwrite(askForOverwrite && overwriteDecision != OverwriteDecision.OVERWRITE_ALL);
-		pdfExporter.setClient(exportClientId);
-		return pdfExporter.execute(defaultPrefix, filename, onlySelectedRows);
+		return pdfExporter.execute(filename, onlySelectedRows);
 	}
 }

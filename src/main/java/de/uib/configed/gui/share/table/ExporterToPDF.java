@@ -60,12 +60,10 @@ public class ExporterToPDF extends AbstractExportTable {
 	}
 
 	@Override
-	public boolean execute(String defaultPrefix, String fileName, boolean onlySelectedRows) {
+	public boolean execute(String fileName, boolean onlySelectedRows) {
 		setPageSizeA4Landscape();
 
 		int result = 0;
-		writeToFile = client != null ? (defaultPrefix + client + extension)
-				: (defaultPrefix.substring(0, defaultPrefix.length() - 1) + extension);
 
 		if (fileName == null) {
 			result = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), null,
@@ -81,39 +79,19 @@ public class ExporterToPDF extends AbstractExportTable {
 			return false;
 		}
 
-		String filePath = null;
-
 		boolean exported = false;
 
 		if (result == 0) {
-			// Save file
-			if (fileName == null) {
-				fileName = getFileLocation();
-			}
-
 			// FileName is null if nothing chosen, then we do nothing
-			if (fileName != null) {
+			if ((fileName = checkFile(fileName, extensionFilter, OverwriteDecision.CONTINUE)) != null) {
 				Logging.info(this, "filename for saving PDF: ", fileName);
-				File file = new File(fileName);
-				if (file.isDirectory()) {
-					Logging.error("no valid filename ", fileName);
-				} else {
-					filePath = file.getAbsolutePath();
-				}
-
-				Logging.notice(this, "selected fileName is: ", fileName);
-				fileName = checkExtension(fileName);
-				Logging.notice(this, "after checkExtension(..), fileName is now: ", fileName);
-				fileName = checkFile(fileName, extensionFilter, OverwriteDecision.CONTINUE);
-
-				exported = writeFile(filePath, fileName);
+				exported = writeFile(new File(fileName).getAbsolutePath());
 			}
 		} else {
-			// Open file
 			try {
-				File temp = Files.createTempFile(writeToFile.substring(0, writeToFile.indexOf(".")), ".pdf").toFile();
+				File temp = Files.createTempFile(null, extension).toFile();
 				FileUtils.restrictAccessToFile(temp);
-				writeFile(temp.getAbsolutePath(), fileName);
+				writeFile(temp.getAbsolutePath());
 				openFile(temp);
 			} catch (IOException e) {
 				Logging.error(e, "Failed to create temp file");
@@ -124,15 +102,11 @@ public class ExporterToPDF extends AbstractExportTable {
 		return exported;
 	}
 
-	private boolean writeFile(String filePath, String fileName) {
+	private boolean writeFile(String filePath) {
 		// Write file now
 		try {
 			PdfWriter writer;
-			if (filePath == null) {
-				writer = PdfWriter.getInstance(document, new FileOutputStream(writeToFile));
-			} else {
-				writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
-			}
+			writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 
 			TableHeader event = new TableHeader(isLandscape);
 			if (metaData.containsKey("header")) {
@@ -154,7 +128,7 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			document.close();
 		} catch (FileNotFoundException ex) {
-			Logging.error(ex, "file not found: ", fileName);
+			Logging.error(ex, "file not found: ", filePath);
 			return false;
 		} catch (DocumentException dex) {
 			Logging.error(dex, "document exception, cannot get instance for ", document);

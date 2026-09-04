@@ -380,7 +380,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
-		pdfExportTable.execute("client_report_", null, false);
+		pdfExportTable.execute(null, false);
 	}
 
 	private void showPopupOnClientsAction() {

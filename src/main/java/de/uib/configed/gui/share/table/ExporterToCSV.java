@@ -38,7 +38,7 @@ public class ExporterToCSV extends AbstractExportTable {
 	}
 
 	@Override
-	public boolean execute(String defaultPrefix, String fileName, boolean onlySelectedRows) {
+	public boolean execute(String fileName, boolean onlySelectedRows) {
 		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep ", "\"", fileName, "\", ", onlySelectedRows,
 				"\", ", "\"", CSV_SEPARATOR, "\"");
 
@@ -46,8 +46,6 @@ public class ExporterToCSV extends AbstractExportTable {
 		if (selectedOnly == null) {
 			return false;
 		}
-
-		fileName = defaultPrefix + client + fileName;
 
 		if ((fileName = checkFile(fileName, extensionFilter, OverwriteDecision.CONTINUE)) != null) {
 			return writeToCSVFile(fileName, selectedOnly);

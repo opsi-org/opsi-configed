@@ -187,10 +187,9 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 		metaData.put("keywords", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title") + " " + client);
 
 		ExporterToPDF pdfExportTable = new ExporterToPDF(createJTableForPDF());
-		pdfExportTable.setClient(client);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4();
-		pdfExportTable.execute("host_config_report_", null, false);
+		pdfExportTable.execute(null, false);
 	}
 
 	private JTable createJTableForPDF() {

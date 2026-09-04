@@ -39,10 +39,6 @@ public abstract class AbstractExportTable {
 
 	private boolean askForOverwrite;
 
-	protected String writeToFile;
-
-	protected String client;
-
 	protected String extension;
 
 	public enum OverwriteDecision {
@@ -58,12 +54,12 @@ public abstract class AbstractExportTable {
 		askForOverwrite = b;
 	}
 
-	protected abstract boolean execute(String defaultPrefix, String fileName, boolean onlySelectedRows);
+	protected abstract boolean execute(String fileName, boolean onlySelectedRows);
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
 		Icons.addIntellijIconToMenuItem(menuItem, "export");
-		menuItem.addActionListener(actionEvent -> execute("report_", null, false));
+		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 	}
 
@@ -75,13 +71,9 @@ public abstract class AbstractExportTable {
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
 		Icons.addIntellijIconToMenuItem(menuItem, "export");
-		menuItem.addActionListener(actionEvent -> execute("report_", null, true));
+		menuItem.addActionListener(actionEvent -> execute(null, true));
 
 		return menuItem;
-	}
-
-	public void setClient(String clientID) {
-		client = clientID;
 	}
 
 	public void setMetaData(Map<String, String> tableMetaData) {
@@ -171,25 +163,9 @@ public abstract class AbstractExportTable {
 
 	protected String checkFile(String filename, FileNameExtensionFilter exFilter, OverwriteDecision decision) {
 		if (filename == null) {
-			SystemFileChooser fileChooser = new SystemFileChooser(exportDirectory);
-			fileChooser.setFileHidingEnabled(false);
-			fileChooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
-
-			fileChooser.addChoosableFileFilter(exFilter);
-
-			fileChooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
-			fileChooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
-
-			fileChooser.setApproveButtonText(Configed.getResourceValue("buttonOK"));
-
-			int returnVal = fileChooser.showDialog(ConfigedMain.getMainFrame(), null);
-			if (returnVal == SystemFileChooser.APPROVE_OPTION) {
-				filename = fileChooser.getSelectedFile().getAbsolutePath();
-
-				if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
-					filename = filename + ".csv";
-				}
-			}
+			filename = getFileLocation(exFilter);
+		} else if (new File(filename).isDirectory()) {
+			Logging.error("no valid filename ", filename);
 		} else {
 			exportDirectory = new File(filename).getParentFile();
 		}
@@ -204,7 +180,7 @@ public abstract class AbstractExportTable {
 			// Do nothing.
 		}
 
-		if (askForOverwrite) {
+		if (askForOverwrite && filename != null) {
 			filename = askForOverride(filename);
 		}
 
@@ -232,28 +208,25 @@ public abstract class AbstractExportTable {
 		return filename;
 	}
 
-	protected String getFileLocation() {
+	protected String getFileLocation(FileNameExtensionFilter exFilter) {
 		String fileName = null;
-
-		Logging.info(this, "getFileLocation with writeToFile ", writeToFile);
-
-		File defaultFile = new File(writeToFile);
 
 		SystemFileChooser fileChooser = new SystemFileChooser(exportDirectory);
 		fileChooser.setFileHidingEnabled(false);
 		fileChooser.setFileSelectionMode(SystemFileChooser.FILES_ONLY);
-		fileChooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
+		fileChooser.setFileFilter(exFilter);
 
-		fileChooser.setSelectedFile(defaultFile);
 		fileChooser.setDialogType(SystemFileChooser.SAVE_DIALOG);
 		fileChooser.setDialogTitle(Configed.getResourceValue("DocumentExport.chooser"));
 		int returnVal = fileChooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
 		if (returnVal == SystemFileChooser.APPROVE_OPTION) {
 			fileName = fileChooser.getSelectedFile().getAbsolutePath();
 			Logging.info(this, "clicked ok on JFileChosser, get now fileName: ", fileName);
-		}
 
-		if (fileName != null) {
+			if (!fileName.toLowerCase(Locale.ROOT).endsWith(extension)) {
+				fileName += extension;
+			}
+
 			exportDirectory = new File(fileName).getParentFile();
 		}
 
