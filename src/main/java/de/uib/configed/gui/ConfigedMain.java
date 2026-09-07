@@ -468,7 +468,6 @@ public class ConfigedMain {
 		List<Map<String, Object>> result = new ArrayList<>();
 		Map<String, HostInfo> pcinfos = persistenceController.getDataServices().hostInfoCollections
 				.getMapOfPCInfoMaps();
-
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.getOrDefault(clientId, new HostInfo());
 
@@ -576,6 +575,8 @@ public class ConfigedMain {
 				clientTablePanel.getTableComponent().model.getSelectedRows().size());
 
 		clientTablePanel.setSelectedValues(selectValues);
+
+		clientTablePanel.restoreFilter();
 
 		mainFrame.getMainPanelManager().getHostsStatusPanel().updateValues(
 				clientTablePanel.getTableComponent().model.getRows().size(),
