@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.net.ssl.SSLParameters;
+
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -23,6 +25,7 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.share.logging.Logging;
 
 @SuppressWarnings({ "java:S6411" })
@@ -48,6 +51,16 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	public boolean isListenerRegistered(MessagebusListener listener) {
 		return listeners.contains(listener);
+	}
+
+	@Override
+	protected void onSetSSLParameters(SSLParameters sslParameters) {
+		Logging.info(this, "onSetSSLParameters; certificate verification disabled: ",
+				CertificateValidatorFactory.isCertificateVerificationDisabled());
+		if (!CertificateValidatorFactory.isCertificateVerificationDisabled()) {
+			Logging.debug(this, "set SSLParameters");
+			super.onSetSSLParameters(sslParameters);
+		}
 	}
 
 	@Override
