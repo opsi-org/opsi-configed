@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 /**
  * Abstract base class implementing The Elm Architecture (TEA) pattern for Swing
@@ -171,7 +172,11 @@ public abstract class AbstractTeaComponent<M, E, F> {
 		M resultModel = result.model();
 		if (this.model != resultModel) {
 			this.model = resultModel;
-			refreshView();
+			if (SwingUtilities.isEventDispatchThread()) {
+				refreshView();
+			} else {
+				SwingUtilities.invokeLater(this::refreshView);
+			}
 		}
 		result.effect.ifPresent(this::handleEffect);
 	}
