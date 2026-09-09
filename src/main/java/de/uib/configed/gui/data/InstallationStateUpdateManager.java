@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.data;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,9 +15,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.TreeSet;
+
+import javax.swing.Timer;
 
 import de.uib.configed.core.domain.productstate.ProductState;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
@@ -32,7 +33,7 @@ import de.uib.configed.share.logging.Logging;
 
 public class InstallationStateUpdateManager {
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
-	private Timer timer;
+	private Timer swingTimer;
 
 	private ProductTable tableLocalbootProducts;
 	private ProductTable tableNetbootProducts;
@@ -201,21 +202,18 @@ public class InstallationStateUpdateManager {
 		clientProducts.put(productType, productIds);
 		productsToUpdate.put(clientId, clientProducts);
 
-		if (timer != null) {
-			timer.cancel();
+		if (swingTimer != null) {
+			swingTimer.stop();
 		}
 
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (configedMain.getSelectedClients().size() == 1
-						&& clientId.equals(configedMain.getSelectedClients().get(0))) {
-					ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
-							.updateProductTableForClient(clientId, productType);
-					productsToUpdate.clear();
-				}
+		swingTimer = new Timer(200, (ActionEvent e) -> {
+			if (configedMain.getSelectedClients().size() == 1
+					&& clientId.equals(configedMain.getSelectedClients().get(0))) {
+				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
+						.updateProductTableForClient(clientId, productType);
+				productsToUpdate.clear();
 			}
-		}, 200);
+		});
+		swingTimer.start();
 	}
 }

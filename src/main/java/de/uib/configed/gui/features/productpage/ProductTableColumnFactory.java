@@ -30,6 +30,7 @@ import de.uib.configed.gui.data.ColoredTableCellRenderer;
 import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
 import de.uib.configed.gui.features.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
+import de.uib.configed.gui.features.table.RowData;
 import de.uib.configed.gui.features.table.TableColumnConfig;
 import de.uib.configed.gui.share.table.gui.AdaptingCellEditor;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
@@ -191,11 +192,9 @@ public class ProductTableColumnFactory {
 
 			GenericTableViewComponent tableViewComponent = productTable.getTableViewComponent();
 
-			String stateChange = tableViewComponent != null ? tableViewComponent.getRowByViewIndex(row)
-					.getValue(ProductState.KEY_LAST_STATE_CHANGE, String.class) : null;
-			if (stateChange == null) {
-				stateChange = "";
-			}
+			RowData rowData = tableViewComponent != null ? tableViewComponent.findRowByViewIndex(row) : null;
+			String stateChange = rowData != null ? rowData.getValue(ProductState.KEY_LAST_STATE_CHANGE, String.class)
+					: "";
 
 			setToolTipText(
 					Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange);
