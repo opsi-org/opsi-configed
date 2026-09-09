@@ -121,8 +121,9 @@ public class GenericTableViewComponent
 		return null;
 	}
 
-	public RowData getRowByViewIndex(int viewIndex) {
-		return getRowByModelIndex(table.convertRowIndexToModel(viewIndex));
+	public RowData findRowByViewIndex(int viewIndex) {
+		int modelIndex = table.convertRowIndexToModel(viewIndex);
+		return (modelIndex >= 0 && modelIndex < model.getRows().size()) ? model.getRows().get(modelIndex) : null;
 	}
 
 	public RowData getRowByModelIndex(int modelIndex) {
