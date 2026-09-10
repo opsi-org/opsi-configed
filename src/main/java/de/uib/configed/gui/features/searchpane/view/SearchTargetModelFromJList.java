@@ -297,7 +297,13 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		List<T> result = new ArrayList<>();
 
 		for (T item : allItems) {
-			if (searchCriteriaEngine.matchCell(item.getValue(columnIndex), query, pattern, useRegex, caseSensitive)) {
+			if (columnIndex == -1 && searchCriteriaEngine.matchAcrossColumns(item::getValue, 0, 2, query, pattern,
+					useRegex, caseSensitive)) {
+				result.add(item);
+			}
+
+			if (columnIndex >= 0 && searchCriteriaEngine.matchCell(item.getValue(columnIndex), query, pattern, useRegex,
+					caseSensitive)) {
 				result.add(item);
 			}
 		}
