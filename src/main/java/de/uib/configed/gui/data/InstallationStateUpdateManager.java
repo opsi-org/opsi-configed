@@ -133,7 +133,7 @@ public class InstallationStateUpdateManager {
 				Object currentValue = rowData.getValue(attr, Object.class);
 				Object newValue = newValues.get(attr);
 
-				int colIdx = tableComponent.getColumnIndexByKey(attr);
+				int colIdx = tableComponent.findColumnIndexByKey(attr);
 				if (!Objects.equals(currentValue, newValue) && colIdx >= 0) {
 					edits.add(new GenericTableViewMsg.CellEdited(rowIdx, colIdx, newValue));
 				}

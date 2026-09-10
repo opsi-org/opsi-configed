@@ -60,7 +60,7 @@ public class ConnectedHostsManager implements MessagebusListener {
 
 	private void updateConnectionStatusInTable(String clientName) {
 		GenericTableViewComponent clientTable = configedMain.getClientTablePanel().getTableComponent();
-		int col = clientTable.getColumnIndexByKey(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+		int col = clientTable.findColumnIndexByKey(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
 
 		for (int row = 0; row < clientTable.getRowCount(); row++) {
 			RowData data = clientTable.getRowByModelIndex(row);

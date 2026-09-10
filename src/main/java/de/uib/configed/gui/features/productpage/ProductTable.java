@@ -350,7 +350,7 @@ public class ProductTable {
 	public void setActionRequestForSelectedProducts(String actionRequest) {
 		for (int i = 0; i < tableViewComponent.getRowCount(); i++) {
 			String rowId = tableViewComponent.getRowByModelIndex(i).getId();
-			int columnIndex = tableViewComponent.getColumnIndexByKey(ProductState.KEY_ACTION_REQUEST);
+			int columnIndex = tableViewComponent.findColumnIndexByKey(ProductState.KEY_ACTION_REQUEST);
 			if (tableViewComponent.getSelectedRows().contains(rowId)) {
 				tableViewComponent.dispatch(new GenericTableViewMsg.CellEdited(i, columnIndex, actionRequest));
 			}
@@ -359,7 +359,7 @@ public class ProductTable {
 
 	public void applyColumnChangeToRow(String productId, String columnKey, String value) {
 		int rowIndex = findRowIndexByProductId(productId);
-		int columnIndex = tableViewComponent.getColumnIndexByKey(columnKey);
+		int columnIndex = tableViewComponent.findColumnIndexByKey(columnKey);
 		if (rowIndex >= 0 && columnIndex >= 0) {
 			tableViewComponent.dispatch(new GenericTableViewMsg.CellEdited(rowIndex, columnIndex, value));
 		}

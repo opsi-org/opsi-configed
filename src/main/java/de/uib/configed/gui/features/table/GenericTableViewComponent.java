@@ -153,7 +153,7 @@ public class GenericTableViewComponent
 		return model.getColumnByModelIndex(modelIndex);
 	}
 
-	public int getColumnIndexByKey(String key) {
+	public int findColumnIndexByKey(String key) {
 		List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
 		for (int i = 0; i < visibleColumns.size(); i++) {
 			if (visibleColumns.get(i).getKey().equals(key)) {
