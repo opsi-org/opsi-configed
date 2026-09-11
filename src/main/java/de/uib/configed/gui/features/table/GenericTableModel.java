@@ -30,7 +30,7 @@ public class GenericTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int column) {
-		TableColumnConfig config = tableModel.getColumnByModelIndex(column);
+		TableColumnConfig config = tableModel.getColumnByViewIndex(column);
 		return config != null ? config.getHeader() : null;
 	}
 
@@ -45,7 +45,7 @@ public class GenericTableModel extends AbstractTableModel {
 			return null;
 		}
 
-		TableColumnConfig config = tableModel.getColumnByModelIndex(columnIndex);
+		TableColumnConfig config = tableModel.getColumnByViewIndex(columnIndex);
 		String logicalKey = config.getKey();
 
 		RowData rowData = tableModel.getRows().get(rowIndex);
@@ -55,7 +55,7 @@ public class GenericTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return tableModel.getColumnByModelIndex(col).isEditable()
+		return tableModel.getColumnByViewIndex(col).isEditable()
 				&& (isCellEditable == null || isCellEditable.apply(row));
 	}
 

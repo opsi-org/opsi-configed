@@ -409,7 +409,7 @@ public class GenericTable extends JTable {
 	}
 
 	private TableCellRenderer getTableCellRenderer(int column) {
-		TableColumnConfig config = model.getColumnByModelIndex(column);
+		TableColumnConfig config = model.getColumnByViewIndex(column);
 
 		if (config != null && config.getRenderer() != null) {
 			return config.getRenderer();
