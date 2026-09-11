@@ -307,14 +307,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	}
 
 	public int findColumnIndex(String columnKey) {
-		int columnIndex = -1;
-		for (int i = 0; i < clientTableViewComponent.model.getColumns().size(); i++) {
-			TableColumnConfig columnConfig = clientTableViewComponent.model.getColumns().get(i);
-			if (columnKey.equals(columnConfig.getKey())) {
-				columnIndex = i;
-			}
-		}
-		return columnIndex;
+		return clientTableViewComponent.findColumnIndexByKey(columnKey);
 	}
 
 	public Set<String> getSelectedSet() {
