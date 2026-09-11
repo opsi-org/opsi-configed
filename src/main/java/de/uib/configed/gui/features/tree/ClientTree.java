@@ -175,8 +175,11 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	public void build() {
-		Set<String> allPCs = persistenceController.getDataServices().hostInfoCollections
-				.getClientsForDepots(configedMain.getSelectedDepots(), getAllowedClients());
+		Collator collator = Collator.getInstance();
+		collator.setStrength(Collator.PRIMARY);
+		Set<String> allPCs = new TreeSet<>(collator);
+		allPCs.addAll(persistenceController.getDataServices().hostInfoCollections
+				.getClientsForDepots(configedMain.getSelectedDepots(), getAllowedClients()));
 
 		produceTreeForALL(allPCs);
 
