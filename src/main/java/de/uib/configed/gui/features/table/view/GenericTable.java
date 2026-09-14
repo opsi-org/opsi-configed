@@ -113,15 +113,24 @@ public class GenericTable extends JTable {
 	}
 
 	private void notifyRowSorterChange() {
-		List<? extends RowSorter.SortKey> sortKeys = getRowSorter().getSortKeys();
+		RowSorter<? extends TableModel> sorter = getRowSorter();
+		if (sorter == null) {
+			return;
+		}
+
+		List<? extends RowSorter.SortKey> sortKeys = sorter.getSortKeys();
 
 		Map<String, SortOrder> rowSortKeys = new HashMap<>();
 		if (sortKeys.isEmpty()) {
 			rowSortKeys.put(null, SortOrder.UNSORTED);
 		} else {
+			List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
 			for (RowSorter.SortKey key : sortKeys) {
-				String columnKey = (String) getColumnModel().getColumn(key.getColumn()).getIdentifier();
-				rowSortKeys.put(columnKey, key.getSortOrder());
+				int modelColumn = key.getColumn();
+				if (modelColumn >= 0 && modelColumn < visibleColumns.size()) {
+					String columnKey = visibleColumns.get(modelColumn).getKey();
+					rowSortKeys.put(columnKey, key.getSortOrder());
+				}
 			}
 		}
 
@@ -171,13 +180,18 @@ public class GenericTable extends JTable {
 		RowSorter<? extends TableModel> sorter = getRowSorter();
 		if (sorter != null) {
 			sorter.removeRowSorterListener(rowSorterListener);
-			sorter.addRowSorterListener(rowSorterListener);
 		}
 
 		getColumnModel().removeColumnModelListener(columnModelListener);
 
 		if (model.isRebuildTableModel()) {
 			rebuildTableModel();
+		}
+
+		sorter = getRowSorter();
+		if (sorter != null) {
+			sorter.removeRowSorterListener(rowSorterListener);
+			sorter.addRowSorterListener(rowSorterListener);
 		}
 
 		getColumnModel().addColumnModelListener(columnModelListener);
@@ -198,66 +212,85 @@ public class GenericTable extends JTable {
 	}
 
 	private void restoreSortState() {
-		Map<String, SortOrder> rowSortKeys = model.getTableConfig().getSortKeys();
+		TableRowSorter<TableModel> tableRowSorter = new TableRowSorter<>(getModel());
+		setRowSorter(tableRowSorter);
 
-		if (rowSortKeys == null) {
-			setRowSorter(new TableRowSorter<>(getModel()));
-			return;
+		List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
+		for (int i = 0; i < visibleColumns.size(); i++) {
+			TableColumnConfig config = visibleColumns.get(i);
+			if (config.getComparator() != null) {
+				tableRowSorter.setComparator(i, config.getComparator());
+			}
 		}
 
-		List<String> visibleColumnKeys = model.getColumns().stream().filter(TableColumnConfig::isVisible)
-				.map(TableColumnConfig::getHeader).toList();
+		Map<String, SortOrder> rowSortKeys = model.getTableConfig().getSortKeys();
+		if (rowSortKeys == null || rowSortKeys.isEmpty()) {
+			return;
+		}
 
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
 		for (Map.Entry<String, SortOrder> entry : rowSortKeys.entrySet()) {
-			if (entry.getKey() == null || !visibleColumnKeys.contains(entry.getKey())) {
+			if (entry.getKey() == null || entry.getValue() == SortOrder.UNSORTED) {
 				continue;
 			}
 
-			TableColumn col = getColumn(entry.getKey());
+			TableColumn col = findTableColumn(entry.getKey());
 			if (col != null) {
 				sortKeys.add(new RowSorter.SortKey(col.getModelIndex(), entry.getValue()));
 			}
 		}
 
-		RowSorter<? extends TableModel> sorter = getRowSorter();
-		if (sorter instanceof TableRowSorter<? extends TableModel> tableRowSorter) {
+		if (!sortKeys.isEmpty()) {
 			tableRowSorter.setSortKeys(sortKeys);
 		}
 	}
 
+	private TableColumn findTableColumn(String keyOrHeader) {
+		TableColumnModel colModel = getColumnModel();
+		for (int i = 0; i < colModel.getColumnCount(); i++) {
+			TableColumn c = colModel.getColumn(i);
+			if (keyOrHeader.equals(c.getIdentifier()) || keyOrHeader.equals(c.getHeaderValue())) {
+				return c;
+			}
+		}
+		return null;
+	}
+
 	private void rebuildColumns() {
 		for (TableColumnConfig config : model.getVisibleColumns()) {
-			TableColumn col = getColumn(config.getHeader());
-			if (col == null) {
-				col = getColumn(config.getKey());
+			TableColumn col = findTableColumn(config.getKey());
+			if (col != null) {
+				applyColumnConfig(col, config);
 			}
+		}
+	}
 
-			if (col != null && config.getPrefferedWidth() > 0) {
-				col.setPreferredWidth(config.getPrefferedWidth());
-				col.setWidth(config.getPrefferedWidth());
-			}
+	private void applyColumnConfig(TableColumn col, TableColumnConfig config) {
+		if (config.getPrefferedWidth() > 0) {
+			col.setPreferredWidth(config.getPrefferedWidth());
+			col.setWidth(config.getPrefferedWidth());
+		}
 
-			if (col != null && config.getEditor() != null) {
-				col.setCellEditor(config.getEditor());
-			}
+		if (config.getEditor() != null) {
+			col.setCellEditor(config.getEditor());
+		}
 
-			if (col != null && config.getRenderer() != null) {
-				col.setCellRenderer(config.getRenderer());
-			}
+		if (config.getRenderer() != null) {
+			col.setCellRenderer(config.getRenderer());
+		}
 
-			if (config.getComparator() != null) {
-				TableRowSorter<?> rowSorter = (TableRowSorter<?>) getRowSorter();
-				rowSorter.setComparator(getColumn(config.getHeader()).getModelIndex(), config.getComparator());
-			}
+		if (config.getComparator() != null && getRowSorter() instanceof TableRowSorter<?> tableRowSorter) {
+			tableRowSorter.setComparator(col.getModelIndex(), config.getComparator());
 		}
 	}
 
 	private void buildColumnModel() {
 		DefaultTableColumnModel newColumnModel = new DefaultTableColumnModel();
+		List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
 
-		for (TableColumnConfig columnConfig : model.getVisibleColumns()) {
+		for (int i = 0; i < visibleColumns.size(); i++) {
+			TableColumnConfig columnConfig = visibleColumns.get(i);
 			TableColumn col = new TableColumn();
 			col.setHeaderValue(columnConfig.getHeader());
 			col.setIdentifier(columnConfig.getKey());
@@ -305,18 +338,6 @@ public class GenericTable extends JTable {
 			if (model.getRows().get(i).getId().equals(id)) {
 				return convertRowIndexToView(i);
 			}
-		}
-		return -1;
-	}
-
-	@Override
-	public int convertColumnIndexToView(int modelColumnIndex) {
-		List<TableColumnConfig> visibleColumns = model.getColumns().stream().filter(TableColumnConfig::isVisible)
-				.toList();
-
-		if (modelColumnIndex >= 0 && modelColumnIndex < visibleColumns.size()) {
-			TableColumnConfig config = visibleColumns.get(modelColumnIndex);
-			return model.getColumns().indexOf(config);
 		}
 		return -1;
 	}
