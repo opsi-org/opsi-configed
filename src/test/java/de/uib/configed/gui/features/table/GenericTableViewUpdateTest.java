@@ -89,6 +89,20 @@ class GenericTableViewUpdateTest {
 	}
 
 	@Test
+	void shouldUpdateHiddenColumnByModelIndex() {
+		GenericTableViewModel model = baseModel();
+		List<TableColumnConfig> columns = new ArrayList<>(model.getColumns());
+		columns.set(1, columns.get(1).withVisible(false));
+		model = model.withColumns(columns);
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate
+				.update(new GenericTableViewMsg.CellEdited(0, 1, "updated"), model);
+
+		assertEquals("updated", result.model().getRows().get(0).getValue("data1", String.class));
+		assertEquals("test", result.model().getRows().get(0).getValue("data2", String.class));
+	}
+
+	@Test
 	void shouldUpdateMultipleRows_whenMultipleCellsEdited() {
 		GenericTableViewModel model = baseModel();
 

@@ -67,18 +67,23 @@ public final class GenericTableViewUpdate {
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleCellEdit(int rowIdx, int colIdx,
 			Object newValue, GenericTableViewModel model) {
 		boolean isInBounds = rowIdx >= 0 && rowIdx < model.getRows().size();
-		boolean isValueChanged = !Objects.equals(
-				model.getRows().get(rowIdx).getValue(model.getColumns().get(colIdx).getKey(), Object.class), newValue);
+		TableColumnConfig column = model.getColumnByModelIndex(colIdx);
+		if (!isInBounds || column == null) {
+			return UpdateResult.noEffect(model);
+		}
+
+		boolean isValueChanged = !Objects.equals(model.getRows().get(rowIdx).getValue(column.getKey(), Object.class),
+				newValue);
 		boolean isKeyColumnFromKeyValueTable = model.isKeyValueTable() && colIdx == 0;
 
-		if (!isInBounds || (!isValueChanged && !isKeyColumnFromKeyValueTable)) {
+		if (!isValueChanged && !isKeyColumnFromKeyValueTable) {
 			return UpdateResult.noEffect(model);
 		}
 
 		RowDiffStrategy strategy = model.getDiffStrategy();
 
 		RowData oldRow = model.getRows().get(rowIdx);
-		String colKey = model.getColumnByModelIndex(colIdx).getKey();
+		String colKey = column.getKey();
 
 		RowState newRowStyle = strategy != null
 				? strategy.getRowData(oldRow, colKey, newValue, oldRow.getValue(colKey, Object.class))

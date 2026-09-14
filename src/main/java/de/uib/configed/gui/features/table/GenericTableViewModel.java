@@ -46,26 +46,6 @@ public class GenericTableViewModel {
 	private final Set<String> filterValues = new HashSet<>();
 
 	/**
-	 * Gets a ColumnConfig directly by its VIEW INDEX (position in the list).
-	 * This is O(1) access without needing to look up by key first.
-	 * 
-	 * @param viewIndex The index in the underlying columns list (0-based)
-	 * @return The TableColumnConfig, or null if index is out of bounds
-	 */
-	public TableColumnConfig getColumnByViewIndex(int viewIndex) {
-		if (viewIndex < 0 || viewIndex >= columns.size()) {
-			return null;
-		}
-
-		List<TableColumnConfig> visibleColumns = getVisibleColumns();
-		if (viewIndex >= 0 && viewIndex < visibleColumns.size()) {
-			return visibleColumns.get(viewIndex);
-		}
-
-		return null;
-	}
-
-	/**
 	 * Gets a ColumnConfig directly by its MODEL INDEX (position in the list).
 	 * This is O(1) access without needing to look up by key first.
 	 * 

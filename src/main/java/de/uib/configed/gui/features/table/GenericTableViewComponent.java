@@ -139,6 +139,9 @@ public class GenericTableViewComponent
 		}
 
 		TableColumnConfig columnConfig = getColumnByModelIndex(col);
+		if (columnConfig == null) {
+			return null;
+		}
 		return getRowByModelIndex(row).getValue(columnConfig.getKey(), Object.class);
 	}
 

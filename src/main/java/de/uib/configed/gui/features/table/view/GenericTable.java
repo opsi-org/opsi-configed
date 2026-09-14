@@ -32,6 +32,7 @@ import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -124,11 +125,10 @@ public class GenericTable extends JTable {
 		if (sortKeys.isEmpty()) {
 			rowSortKeys.put(null, SortOrder.UNSORTED);
 		} else {
-			List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
 			for (RowSorter.SortKey key : sortKeys) {
-				int modelColumn = key.getColumn();
-				if (modelColumn >= 0 && modelColumn < visibleColumns.size()) {
-					String columnKey = visibleColumns.get(modelColumn).getKey();
+				TableColumnConfig column = model.getColumnByModelIndex(key.getColumn());
+				if (column != null) {
+					String columnKey = column.getKey();
 					rowSortKeys.put(columnKey, key.getSortOrder());
 				}
 			}
@@ -140,6 +140,7 @@ public class GenericTable extends JTable {
 	public void initialize() {
 		setFillsViewportHeight(model.getTableConfig().isFillViewportHeight());
 		setAutoCreateRowSorter(model.getTableConfig().isAutoCreateRowSorter());
+		setAutoCreateColumnsFromModel(false);
 
 		if (model.getTableConfig().getDefauTableCellRenderer() != null) {
 			setDefaultRenderer(Object.class, model.getTableConfig().getDefauTableCellRenderer());
@@ -202,9 +203,8 @@ public class GenericTable extends JTable {
 	}
 
 	private void rebuildTableModel() {
-		buildColumnModel();
-
 		setModel(new GenericTableModel(model, msg -> dispatch.accept(msg), isCellEditable));
+		buildColumnModel();
 
 		restoreSortState();
 
@@ -215,9 +215,9 @@ public class GenericTable extends JTable {
 		TableRowSorter<TableModel> tableRowSorter = new TableRowSorter<>(getModel());
 		setRowSorter(tableRowSorter);
 
-		List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
-		for (int i = 0; i < visibleColumns.size(); i++) {
-			TableColumnConfig config = visibleColumns.get(i);
+		List<TableColumnConfig> columns = model.getColumns();
+		for (int i = 0; i < columns.size(); i++) {
+			TableColumnConfig config = columns.get(i);
 			if (config.getComparator() != null) {
 				tableRowSorter.setComparator(i, config.getComparator());
 			}
@@ -287,11 +287,15 @@ public class GenericTable extends JTable {
 
 	private void buildColumnModel() {
 		DefaultTableColumnModel newColumnModel = new DefaultTableColumnModel();
-		List<TableColumnConfig> visibleColumns = model.getVisibleColumns();
+		List<TableColumnConfig> columns = model.getColumns();
 
-		for (int i = 0; i < visibleColumns.size(); i++) {
-			TableColumnConfig columnConfig = visibleColumns.get(i);
-			TableColumn col = new TableColumn();
+		for (int i = 0; i < columns.size(); i++) {
+			TableColumnConfig columnConfig = columns.get(i);
+			if (!columnConfig.isVisible()) {
+				continue;
+			}
+
+			TableColumn col = new TableColumn(i);
 			col.setHeaderValue(columnConfig.getHeader());
 			col.setIdentifier(columnConfig.getKey());
 
@@ -390,6 +394,12 @@ public class GenericTable extends JTable {
 		return renderer != null ? renderer : super.getCellRenderer(row, column);
 	}
 
+	@Override
+	public TableCellEditor getCellEditor(int row, int column) {
+		TableCellEditor editor = getTableCellEditor(column);
+		return editor != null ? editor : super.getCellEditor(row, column);
+	}
+
 	private JPopupMenu getPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		List<TableColumnConfig> columns = model.getColumns();
@@ -430,10 +440,20 @@ public class GenericTable extends JTable {
 	}
 
 	private TableCellRenderer getTableCellRenderer(int column) {
-		TableColumnConfig config = model.getColumnByViewIndex(column);
+		TableColumnConfig config = model.getColumnByModelIndex(convertColumnIndexToModel(column));
 
 		if (config != null && config.getRenderer() != null) {
 			return config.getRenderer();
+		}
+
+		return null;
+	}
+
+	private TableCellEditor getTableCellEditor(int column) {
+		TableColumnConfig config = model.getColumnByModelIndex(convertColumnIndexToModel(column));
+
+		if (config != null && config.getEditor() != null) {
+			return config.getEditor();
 		}
 
 		return null;

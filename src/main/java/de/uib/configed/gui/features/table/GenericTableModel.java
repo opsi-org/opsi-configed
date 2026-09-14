@@ -25,12 +25,12 @@ public class GenericTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return (int) tableModel.getColumns().stream().filter(TableColumnConfig::isVisible).count();
+		return tableModel.getColumns().size();
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		TableColumnConfig config = tableModel.getColumnByViewIndex(column);
+		TableColumnConfig config = tableModel.getColumnByModelIndex(column);
 		return config != null ? config.getHeader() : null;
 	}
 
@@ -45,7 +45,10 @@ public class GenericTableModel extends AbstractTableModel {
 			return null;
 		}
 
-		TableColumnConfig config = tableModel.getColumnByViewIndex(columnIndex);
+		TableColumnConfig config = tableModel.getColumnByModelIndex(columnIndex);
+		if (config == null) {
+			return null;
+		}
 		String logicalKey = config.getKey();
 
 		RowData rowData = tableModel.getRows().get(rowIndex);
@@ -55,7 +58,8 @@ public class GenericTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return tableModel.getColumnByViewIndex(col).isEditable()
+		TableColumnConfig config = tableModel.getColumnByModelIndex(col);
+		return config != null && config.isEditable()
 				&& (isCellEditable == null || isCellEditable.apply(row));
 	}
 

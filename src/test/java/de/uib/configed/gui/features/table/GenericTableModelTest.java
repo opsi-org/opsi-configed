@@ -36,7 +36,7 @@ public class GenericTableModelTest {
 		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
 		}, row -> true);
 
-		assertEquals(2, tableModel.getColumnCount(), "Should only count visible columns");
+		assertEquals(3, tableModel.getColumnCount(), "The Swing model should retain hidden columns");
 	}
 
 	@Test
@@ -58,7 +58,8 @@ public class GenericTableModelTest {
 		}, row -> true);
 
 		assertEquals("A", tableModel.getColumnName(0), "First visible column name");
-		assertEquals("C", tableModel.getColumnName(1), "Second visible column name (skipped hidden one)");
+		assertEquals("B", tableModel.getColumnName(1), "Hidden columns remain addressable in the model");
+		assertEquals("C", tableModel.getColumnName(2));
 	}
 
 	@Test
@@ -80,7 +81,8 @@ public class GenericTableModelTest {
 		}, row -> true);
 
 		assertEquals("A", tableModel.getValueAt(0, 0), "Value for first visible column");
-		assertEquals("C", tableModel.getValueAt(0, 1), "Value for second visible column (should skip hidden data1)");
+		assertEquals("B", tableModel.getValueAt(0, 1), "Hidden column value remains addressable");
+		assertEquals("C", tableModel.getValueAt(0, 2));
 	}
 
 	@Test
@@ -107,10 +109,12 @@ public class GenericTableModelTest {
 		GenericTableModel tableModel = new GenericTableModel(model, msg -> {
 		}, row -> true);
 
-		assertEquals(2, tableModel.getColumnCount());
+		assertEquals(3, tableModel.getColumnCount());
 		assertEquals("A", tableModel.getColumnName(0));
-		assertEquals("C", tableModel.getColumnName(1));
+		assertEquals("B", tableModel.getColumnName(1));
+		assertEquals("C", tableModel.getColumnName(2));
 		assertEquals("1", tableModel.getValueAt(0, 0));
-		assertEquals("3", tableModel.getValueAt(0, 1));
+		assertEquals("2", tableModel.getValueAt(0, 1));
+		assertEquals("3", tableModel.getValueAt(0, 2));
 	}
 }
