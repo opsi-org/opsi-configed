@@ -24,6 +24,7 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.features.productpage.ProductTable;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewMsg;
@@ -35,16 +36,16 @@ public class InstallationStateUpdateManager {
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
 	private Timer swingTimer;
 
-	private ProductTable tableLocalbootProducts;
-	private ProductTable tableNetbootProducts;
+	private PanelProductSettings tableLocalbootProducts;
+	private PanelProductSettings tableNetbootProducts;
 
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public InstallationStateUpdateManager(ConfigedMain configedMain, ProductTable tableLocalbootProducts,
-			ProductTable tableNetbootProducts) {
+	public InstallationStateUpdateManager(ConfigedMain configedMain, PanelProductSettings tableLocalbootProducts,
+			PanelProductSettings tableNetbootProducts) {
 		this.configedMain = configedMain;
 		this.tableLocalbootProducts = tableLocalbootProducts;
 		this.tableNetbootProducts = tableNetbootProducts;
@@ -52,9 +53,9 @@ public class InstallationStateUpdateManager {
 
 	public void updateProductTableForClient(String clientId, List<String> attributes) {
 		if (isProductsUpdatedForClient(clientId, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
-			updateTableForClient(clientId, attributes, tableLocalbootProducts);
+			updateTableForClient(clientId, attributes, tableLocalbootProducts.getProductTable());
 		} else if (isProductsUpdatedForClient(clientId, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
-			updateTableForClient(clientId, attributes, tableNetbootProducts);
+			updateTableForClient(clientId, attributes, tableNetbootProducts.getProductTable());
 		} else {
 			Logging.notice(this,
 					"Cannot update table because the Product table with the product to update is not open");
@@ -181,11 +182,11 @@ public class InstallationStateUpdateManager {
 
 	private void clearCollectChangedStates(int productType) {
 		if (OpsiPackage.TYPE_LOCALBOOT == productType) {
-			tableLocalbootProducts.clearProductChangedStates();
+			tableLocalbootProducts.getProductTable().clearProductChangedStates();
 		}
 
 		if (OpsiPackage.TYPE_NETBOOT == productType) {
-			tableNetbootProducts.clearProductChangedStates();
+			tableNetbootProducts.getProductTable().clearProductChangedStates();
 		}
 	}
 
@@ -211,6 +212,11 @@ public class InstallationStateUpdateManager {
 					&& clientId.equals(configedMain.getSelectedClients().get(0))) {
 				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
 						.updateProductTableForClient(clientId, productType);
+				if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
+					tableLocalbootProducts.restoreFilter();
+				} else {
+					tableNetbootProducts.restoreFilter();
+				}
 				productsToUpdate.clear();
 			}
 		});

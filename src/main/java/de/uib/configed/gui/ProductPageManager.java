@@ -65,8 +65,8 @@ public class ProductPageManager implements MessagebusListener {
 		this.clientConfiguration = clientConfiguration;
 
 		updateManager = new InstallationStateUpdateManager(configedMain,
-				clientConfiguration.getPanelLocalbootProductSettings().getProductTable(),
-				clientConfiguration.getPanelNetbootProductSettings().getProductTable());
+				clientConfiguration.getPanelLocalbootProductSettings(),
+				clientConfiguration.getPanelNetbootProductSettings());
 
 		possibleActions = persistenceController.getDataServices().product
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
@@ -120,9 +120,8 @@ public class ProductPageManager implements MessagebusListener {
 
 		persistenceController.getDataServices().product.retrieveProductPropertiesPD(configedMain.getSelectedSet());
 
-		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
-
-		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
+		Logging.info(this, "setProductsPage: oldProductSelection ",
+				panelProductSettings.getProductTable().getSelectedIDs());
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
 		Set<String> productNames;
@@ -139,15 +138,11 @@ public class ProductPageManager implements MessagebusListener {
 						configedMain.getDepotRepresentative()),
 				possibleActions, changedProductStates);
 
-		if (!oldProductSelection.isEmpty()) {
-			panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
-		}
 		if (panelProductSettings.isFilteredBySelection()) {
 			panelProductSettings.getProductTable().reduceToSelected();
 		}
 
 		panelProductSettings.restoreFilter();
-		panelProductSettings.getProductTable().setPendingSelection(oldProductSelection);
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
