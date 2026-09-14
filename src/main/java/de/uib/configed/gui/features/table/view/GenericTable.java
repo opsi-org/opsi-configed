@@ -177,6 +177,9 @@ public class GenericTable extends JTable {
 		this.model = model;
 
 		isUpdatingProgrammatically = true;
+		if (model.isRebuildTableModel() && isEditing()) {
+			removeEditor();
+		}
 
 		RowSorter<? extends TableModel> sorter = getRowSorter();
 		if (sorter != null) {
