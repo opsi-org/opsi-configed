@@ -190,6 +190,7 @@ public class InstallationStateUpdateManager {
 		}
 	}
 
+	@SuppressWarnings("java:S5612")
 	public void updateProduct(Map<String, Object> data) {
 		String productId = (String) data.get("productId");
 		String clientId = (String) data.get("clientId");
@@ -212,14 +213,16 @@ public class InstallationStateUpdateManager {
 					&& clientId.equals(configedMain.getSelectedClients().get(0))) {
 				ConfigedMain.getMainFrame().getMainPanelManager().getClientConfiguration().getProductPageManager()
 						.updateProductTableForClient(clientId, productType);
-				if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-					tableLocalbootProducts.restoreFilter();
-				} else {
-					tableNetbootProducts.restoreFilter();
-				}
 				productsToUpdate.clear();
+
+				if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
+					tableLocalbootProducts.restoreFilterState();
+				} else {
+					tableNetbootProducts.restoreFilterState();
+				}
 			}
 		});
+		swingTimer.setRepeats(false);
 		swingTimer.start();
 	}
 }

@@ -120,8 +120,8 @@ public class ProductPageManager implements MessagebusListener {
 
 		persistenceController.getDataServices().product.retrieveProductPropertiesPD(configedMain.getSelectedSet());
 
-		Logging.info(this, "setProductsPage: oldProductSelection ",
-				panelProductSettings.getProductTable().getSelectedIDs());
+		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
+		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
 		Set<String> productNames;
@@ -137,12 +137,7 @@ public class ProductPageManager implements MessagebusListener {
 				persistenceController.getDataServices().product.getProductGlobalInfosPD(
 						configedMain.getDepotRepresentative()),
 				possibleActions, changedProductStates);
-
-		if (panelProductSettings.isFilteredBySelection()) {
-			panelProductSettings.getProductTable().reduceToSelected();
-		}
-
-		panelProductSettings.restoreFilter();
+		panelProductSettings.restoreFilterState(oldProductSelection);
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {

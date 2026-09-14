@@ -123,10 +123,6 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 		SwingUtils.addKeyBindingToJComponent(this, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), this::reloadAction);
 	}
 
-	public void restoreFilter() {
-		groupPanel.restoreFilter();
-	}
-
 	public void enableFilterMode(boolean enable) {
 		groupPanel.setFilterMark(enable);
 	}
@@ -316,6 +312,29 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 				persistenceController.getDataServices().product.getProductPropertyOptionsMap(productID));
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);
+	}
+
+	public void restoreFilterState() {
+		restoreFilterState(null);
+	}
+
+	public void restoreFilterState(Set<String> oldProductSelection) {
+		if (oldProductSelection == null) {
+			// After we restore filter we want to reapply the previous selection
+			oldProductSelection = productTable.getSelectedIDs();
+		}
+
+		Logging.info(this, "restoreFilterState: oldProductSelection ", oldProductSelection);
+
+		groupPanel.restoreFilter();
+
+		if (oldProductSelection != null && !oldProductSelection.isEmpty()) {
+			productTable.setPendingSelection(oldProductSelection);
+		}
+
+		if (isFilteredBySelection()) {
+			productTable.reduceToSelected();
+		}
 	}
 
 	public void clearEditing() {

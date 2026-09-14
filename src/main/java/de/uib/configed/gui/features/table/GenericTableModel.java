@@ -59,8 +59,7 @@ public class GenericTableModel extends AbstractTableModel {
 	@Override
 	public boolean isCellEditable(int row, int col) {
 		TableColumnConfig config = tableModel.getColumnByModelIndex(col);
-		return config != null && config.isEditable()
-				&& (isCellEditable == null || isCellEditable.apply(row));
+		return config != null && config.isEditable() && (isCellEditable == null || isCellEditable.apply(row));
 	}
 
 	@Override

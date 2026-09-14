@@ -125,6 +125,8 @@ public class ProductTable {
 		}
 
 		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
+
+		panelProductSettings.restoreFilterState();
 	}
 
 	private void updateProductStates(int row, int column, Object newValue) {
