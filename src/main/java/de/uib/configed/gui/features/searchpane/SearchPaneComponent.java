@@ -177,6 +177,10 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 			targetModel.setFiltered(false);
 
+			// restoring unfiltered-by-selection data can reset the row filter, so reapply the search text filter
+			onApplyFilter(model.getSearchText(), model.getSearchColumnIndex(), model.isRegexActive(),
+					model.isRespectCase());
+
 			if (unfilteredSelection.length != 0) {
 				targetModel.setSelection(unfilteredSelection);
 			}
