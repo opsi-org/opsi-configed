@@ -97,6 +97,10 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 				column = column.withComparator(this::compareStringIgnoringNull);
 			}
 
+			if (HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL.equals(entry.getKey())) {
+				column = column.withToggleable(false);
+			}
+
 			columns.add(column.withVisible(entry.getValue()));
 		}
 
