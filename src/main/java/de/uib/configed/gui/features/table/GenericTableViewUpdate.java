@@ -194,7 +194,7 @@ public final class GenericTableViewUpdate {
 
 		return UpdateResult.withEffect(model.toBuilder().columns(newColumns).rebuildTableModel(true).build(),
 				new GenericTableViewEffect.StoreVisibleColulmns(newColumns.stream().filter(TableColumnConfig::isVisible)
-						.map(TableColumnConfig::getKey).toList()));
+						.map(TableColumnConfig::getKey).collect(Collectors.toSet())));
 	}
 
 	private static UpdateResult<GenericTableViewModel, GenericTableViewEffect> handleRowAdd(Map<String, Object> data,

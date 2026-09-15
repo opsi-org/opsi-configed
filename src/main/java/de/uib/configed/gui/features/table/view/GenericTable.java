@@ -26,6 +26,8 @@ import javax.swing.SortOrder;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
@@ -379,6 +381,31 @@ public class GenericTable extends JTable {
 			}
 		}
 
+		popupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				for (Component c : popupMenu.getComponents()) {
+					if (c instanceof JCheckBoxMenuItem item) {
+						String key = item.getActionCommand();
+						TableColumnConfig column = model.getColumnByKey(key);
+						if (column != null) {
+							item.setState(column.isVisible());
+						}
+					}
+				}
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// No action needed when the popup menu becomes invisible
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// No action needed when the popup menu is canceled
+			}
+		});
+
 		return popupMenu;
 	}
 
@@ -388,6 +415,7 @@ public class GenericTable extends JTable {
 		boolean isVisible = column.isVisible();
 
 		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(headerText, isVisible);
+		menuItem.setActionCommand(column.getKey());
 		menuItem.addActionListener(event -> dispatch.accept(new GenericTableViewMsg.ToggleColumn(key)));
 
 		return menuItem;

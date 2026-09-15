@@ -8,6 +8,7 @@ package de.uib.configed.gui.features.table;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public sealed interface GenericTableViewEffect
 		permits GenericTableViewEffect.Selection, GenericTableViewEffect.StoreVisibleColulmns,
@@ -15,7 +16,7 @@ public sealed interface GenericTableViewEffect
 	record Selection() implements GenericTableViewEffect {
 	}
 
-	record StoreVisibleColulmns(List<String> visibleColumns) implements GenericTableViewEffect {
+	record StoreVisibleColulmns(Set<String> visibleColumns) implements GenericTableViewEffect {
 	}
 
 	record CellEdited(int rowIdx, int colIdx, Object newValue) implements GenericTableViewEffect {

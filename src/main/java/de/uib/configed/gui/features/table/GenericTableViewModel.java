@@ -84,6 +84,15 @@ public class GenericTableViewModel {
 		return columns.stream().filter(TableColumnConfig::isVisible).toList();
 	}
 
+	public TableColumnConfig getColumnByKey(String key) {
+		for (TableColumnConfig column : columns) {
+			if (column.getKey().equals(key)) {
+				return column;
+			}
+		}
+		return null;
+	}
+
 	public boolean hasRowFilter() {
 		return filterColumnKey != null && !filterValues.isEmpty();
 	}
