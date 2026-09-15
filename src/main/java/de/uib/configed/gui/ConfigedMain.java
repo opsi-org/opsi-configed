@@ -250,9 +250,7 @@ public class ConfigedMain {
 	}
 
 	public void toggleColumn(String column) {
-		Map<String, Boolean> fields = persistenceController.getDataServices().host.getHostDisplayFields();
-		fields.put(column, !fields.get(column));
-		setRebuiltClientListTableModel(true, false);
+		clientTablePanel.getTableComponent().dispatch(new GenericTableViewMsg.ToggleColumn(column));
 	}
 
 	public void handleGroupActionRequest() {

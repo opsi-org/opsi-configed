@@ -73,7 +73,7 @@ public class ProductTable {
 
 		TableSideEffectStrategy sideEffectStrategy = (GenericTableViewEffect effect) -> switch (effect) {
 		case GenericTableViewEffect.Selection() -> this::applyChangedValue;
-		case GenericTableViewEffect.StoreVisibleColulmns(List<String> visibleColumns) -> () -> storeVisibleColumns(type,
+		case GenericTableViewEffect.StoreVisibleColulmns(Set<String> visibleColumns) -> () -> storeVisibleColumns(type,
 				visibleColumns);
 		case GenericTableViewEffect.CellEdited(int row, int column, Object newValue) -> () -> onCellEdited(row, column,
 				newValue);
@@ -263,7 +263,7 @@ public class ProductTable {
 		return columnDict.get(column);
 	}
 
-	private void storeVisibleColumns(ProductSettingsType type, List<String> visibleColumns) {
+	private void storeVisibleColumns(ProductSettingsType type, Set<String> visibleColumns) {
 		Map<String, Boolean> productDisplayFields = getProductDisplayFieldsBasedOnType(type);
 		for (Entry<String, Boolean> productDisplayField : productDisplayFields.entrySet()) {
 			productDisplayFields.put(productDisplayField.getKey(),

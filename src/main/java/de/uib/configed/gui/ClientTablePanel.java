@@ -97,6 +97,10 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 				column = column.withComparator(this::compareStringIgnoringNull);
 			}
 
+			if (HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL.equals(entry.getKey())) {
+				column = column.withToggleable(false);
+			}
+
 			columns.add(column.withVisible(entry.getValue()));
 		}
 
@@ -104,8 +108,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 			if (effect instanceof GenericTableViewEffect.Selection) {
 				return this::actOnListSelection;
 			} else if (effect instanceof GenericTableViewEffect.StoreVisibleColulmns storeVisibleColulmns) {
-				return () -> UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS,
-						String.join(",", storeVisibleColulmns.visibleColumns()));
+				return () -> onStoreVisibleColumns(storeVisibleColulmns.visibleColumns());
 			} else {
 				// Nothing
 			}
@@ -136,6 +139,14 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		searchPaneComponent = searchPane.initUI();
 
 		component.addKeyListener(searchPane);
+	}
+
+	private void onStoreVisibleColumns(Set<String> visibleColumns) {
+		Map<String, Boolean> fields = persistenceController.getDataServices().host.getHostDisplayFields();
+		for (String fieldKey : fields.keySet()) {
+			fields.put(fieldKey, visibleColumns.contains(fieldKey));
+		}
+		UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS, String.join(",", visibleColumns));
 	}
 
 	/**

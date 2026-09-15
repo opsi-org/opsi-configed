@@ -335,7 +335,44 @@ public final class ClientMenuManager implements MenuListener {
 			}
 		}
 
+		jMenu.addMenuListener(new VisibleColumnsMenuListener(jMenu));
+
 		return jMenu;
+	}
+
+	private class VisibleColumnsMenuListener implements MenuListener {
+		JMenu jMenuVisibleColumns;
+
+		public VisibleColumnsMenuListener(JMenu jMenuVisibleColumns) {
+			this.jMenuVisibleColumns = jMenuVisibleColumns;
+		}
+
+		@Override
+		public void menuSelected(MenuEvent e) {
+			// Build lookup map for current state
+			Map<String, Boolean> currentStates = persistenceController.getDataServices().host.getHostDisplayFields();
+
+			for (Component c : jMenuVisibleColumns.getMenuComponents()) {
+				if (c instanceof JCheckBoxMenuItem item) {
+					String key = item.getActionCommand();
+
+					if (key != null && currentStates.containsKey(key)) {
+						// setState updates visual state immediately
+						item.setSelected(currentStates.get(key));
+					}
+				}
+			}
+		}
+
+		@Override
+		public void menuDeselected(MenuEvent e) {
+			// No action needed when the menu is deselected
+		}
+
+		@Override
+		public void menuCanceled(MenuEvent e) {
+			// No action needed when the menu is canceled
+		}
 	}
 
 	private JCheckBoxMenuItem createShowColumnCheckBoxMenuItem(ColumnDisplayInfo info) {
@@ -350,6 +387,7 @@ public final class ClientMenuManager implements MenuListener {
 				.equals(persistenceController.getDataServices().host.getHostDisplayFields().get(info.label));
 
 		JCheckBoxMenuItem item = new JCheckBoxMenuItem(menuLabel);
+		item.setActionCommand(info.label);
 		item.setSelected(selected);
 
 		if (info.label.equals(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)) {
@@ -450,7 +488,7 @@ public final class ClientMenuManager implements MenuListener {
 		}
 	}
 
-	public static JPopupMenu getPopupMenuClone(JMenu jMenuToClone) {
+	public JPopupMenu getPopupMenuClone(JMenu jMenuToClone) {
 		return clonePopupMenu(jMenuToClone, null);
 	}
 
@@ -458,7 +496,7 @@ public final class ClientMenuManager implements MenuListener {
 		return clonePopupMenu(jMenuClients, this::enableMenuItemsForClients);
 	}
 
-	private static JPopupMenu clonePopupMenu(JMenu jMenuToClone, Runnable beforeCloneAction) {
+	private JPopupMenu clonePopupMenu(JMenu jMenuToClone, Runnable beforeCloneAction) {
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.addPopupMenuListener(SwingUtils.createPopupMenuListenerOnVisible(() -> {
 			if (beforeCloneAction != null) {
@@ -470,7 +508,7 @@ public final class ClientMenuManager implements MenuListener {
 		return popupMenu;
 	}
 
-	private static void cloneMenuItems(JPopupMenu popupMenu, JMenu menuToCopy) {
+	private void cloneMenuItems(JPopupMenu popupMenu, JMenu menuToCopy) {
 		for (int i = 0; i < menuToCopy.getItemCount(); i++) {
 			Component component = menuToCopy.getMenuComponent(i);
 			if (component instanceof JSeparator) {
@@ -483,16 +521,20 @@ public final class ClientMenuManager implements MenuListener {
 		}
 	}
 
-	private static JMenuItem cloneMenuItem(JMenuItem sourceItem) {
+	private JMenuItem cloneMenuItem(JMenuItem sourceItem) {
 		JMenuItem clonedItem;
 		if (sourceItem instanceof JMenu sourceSubMenu) {
 			clonedItem = new JMenu(sourceSubMenu.getText());
 			JMenu targetSubMenu = (JMenu) clonedItem;
 			targetSubMenu.setEnabled(sourceSubMenu.isEnabled());
+			if (targetSubMenu.getText().equals(Configed.getResourceValue("ConfigedMain.columnVisibility"))) {
+				targetSubMenu.addMenuListener(new VisibleColumnsMenuListener(targetSubMenu));
+			}
 			for (int i = 0; i < sourceSubMenu.getItemCount(); i++) {
 				JMenuItem sourceSubItem = sourceSubMenu.getItem(i);
 				if (sourceSubItem != null) {
 					JMenuItem clonedSubItem = cloneMenuItem(sourceSubItem);
+					clonedSubItem.setActionCommand(sourceSubItem.getActionCommand());
 					clonedSubItem.setEnabled(sourceSubItem.isEnabled());
 					targetSubMenu.add(clonedSubItem);
 				}
@@ -500,11 +542,13 @@ public final class ClientMenuManager implements MenuListener {
 		} else if (sourceItem instanceof JCheckBoxMenuItem) {
 			clonedItem = new JCheckBoxMenuItem(sourceItem.getText());
 			clonedItem.setEnabled(sourceItem.isEnabled());
+			clonedItem.setActionCommand(sourceItem.getActionCommand());
 			clonedItem.setSelected(sourceItem.isSelected());
 			clonedItem.addItemListener(event -> sourceItem.setSelected(clonedItem.isSelected()));
 			sourceItem.addItemListener(event -> clonedItem.setSelected(sourceItem.isSelected()));
 		} else {
 			clonedItem = new JMenuItem(sourceItem.getText(), sourceItem.getIcon());
+			clonedItem.setActionCommand(sourceItem.getActionCommand());
 			clonedItem.setSelectedIcon(sourceItem.getSelectedIcon());
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());

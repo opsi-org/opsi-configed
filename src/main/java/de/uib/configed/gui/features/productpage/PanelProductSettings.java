@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.productpage;
 
+import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
@@ -23,6 +24,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import de.uib.configed.core.domain.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
@@ -211,13 +214,52 @@ public class PanelProductSettings extends AbstractConfigurationTab {
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
 			item.setText(ProductTable.getColumnTitle(productDisplayField.getKey()));
+			item.setActionCommand(productDisplayField.getKey());
 			item.setState(productDisplayField.getValue());
 			item.addItemListener(itemEvent -> productTable.getTableViewComponent()
 					.dispatch(new GenericTableViewMsg.ToggleColumn(productDisplayField.getKey())));
 
 			jMenuVisibleColumns.add(item);
 		}
+
+		jMenuVisibleColumns.addMenuListener(new VisibleColumnsMenuListener(jMenuVisibleColumns));
+
 		return popup;
+	}
+
+	private class VisibleColumnsMenuListener implements MenuListener {
+		JMenu jMenuVisibleColumns;
+
+		public VisibleColumnsMenuListener(JMenu jMenuVisibleColumns) {
+			this.jMenuVisibleColumns = jMenuVisibleColumns;
+		}
+
+		@Override
+		public void menuSelected(MenuEvent e) {
+			// Build lookup map for current state
+			Map<String, Boolean> currentStates = getProductDisplayFieldsBasedOnType(type);
+
+			for (Component c : jMenuVisibleColumns.getMenuComponents()) {
+				if (c instanceof JCheckBoxMenuItem item) {
+					String key = item.getActionCommand();
+
+					if (key != null && currentStates.containsKey(key)) {
+						// setState updates visual state immediately
+						item.setSelected(currentStates.get(key));
+					}
+				}
+			}
+		}
+
+		@Override
+		public void menuDeselected(MenuEvent e) {
+			// No action needed when the menu is deselected
+		}
+
+		@Override
+		public void menuCanceled(MenuEvent e) {
+			// No action needed when the menu is canceled
+		}
 	}
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
