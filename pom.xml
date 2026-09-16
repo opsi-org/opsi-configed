@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>configed</groupId>
@@ -16,7 +18,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 
         <javafx.version>25.0.2</javafx.version>
-        <jacoco.version>0.8.14</jacoco.version>
+        <jacoco.version>0.8.15</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
@@ -87,7 +89,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.6.0</version>
             </plugin>
 
             <!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
@@ -117,7 +119,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.21.0</version>
+            <version>2.22.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
@@ -132,7 +134,7 @@
         <dependency>
             <groupId>at.yawk.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-            <version>1.10.3</version>
+            <version>1.11.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
@@ -248,21 +250,21 @@
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-autolink</artifactId>
-            <version>0.27.1</version>
+            <version>0.30.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20251224</version>
+            <version>20260814</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.7</version>
+            <version>3.7.2</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
@@ -276,14 +278,14 @@
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.0.4</version>
+            <version>3.2.2</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-extras -->
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
-            <version>3.7</version>
+            <version>3.7.2</version>
         </dependency>
 
 
@@ -291,14 +293,14 @@
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>msgpack-core</artifactId>
-            <version>0.9.11</version>
+            <version>0.9.12</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.msgpack/jackson-dataformat-msgpack -->
         <dependency>
             <groupId>org.msgpack</groupId>
             <artifactId>jackson-dataformat-msgpack</artifactId>
-            <version>0.9.11</version>
+            <version>0.9.12</version>
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.jetbrains.jediterm/jediterm-core -->
@@ -319,7 +321,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
-            <version>2.3.0</version>
+            <version>2.4.20</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-artifact -->
@@ -384,7 +386,7 @@
         <dependency>
             <groupId>org.tukaani</groupId>
             <artifactId>xz</artifactId>
-            <version>1.11</version>
+            <version>1.12</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.github.lookfirst/sardine -->
@@ -406,7 +408,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.42</version>
+            <version>1.18.48</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.miglayout/miglayout-swing -->
@@ -432,7 +434,7 @@
                     <plugin>
                         <groupId>org.cyclonedx</groupId>
                         <artifactId>cyclonedx-maven-plugin</artifactId>
-                        <version>2.9.1</version>
+                        <version>2.9.3</version>
 
                         <configuration>
                             <outputFormat>json</outputFormat>

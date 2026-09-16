@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
     "sonarlint.testFilePattern": "src/test/java/**",
     "[java]": {
         "editor.detectIndentation": false,
