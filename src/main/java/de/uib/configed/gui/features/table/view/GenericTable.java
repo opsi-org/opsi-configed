@@ -167,7 +167,9 @@ public class GenericTable extends JTable {
 			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 			Set<String> selectedRows = retrieveSelectedRows(lsm);
 
-			dispatch.accept(new GenericTableViewMsg.ChangeSelection(selectedRows));
+			if (!selectedRows.equals(model.getSelectedRows())) {
+				dispatch.accept(new GenericTableViewMsg.ChangeSelection(selectedRows));
+			}
 		});
 
 		setDragEnabled(model.getTableConfig().isDragEnabled());
