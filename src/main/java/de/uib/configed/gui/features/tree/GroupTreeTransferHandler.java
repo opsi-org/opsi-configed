@@ -238,7 +238,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				: Arrays.stream(selectionPaths).map(path -> path.getLastPathComponent().toString())
 						.collect(Collectors.toSet());
 
-		return importObjects(selectedObjects, support);
+		return importObjects(selectedObjects, support, false);
 	}
 
 	private boolean importFromTable(TransferSupport support) {
@@ -250,10 +250,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 					.getProductPageManager().getPanelInUse().getProductTable().getSelectedIDs();
 		}
 
-		return importObjects(selectedObjects, support);
+		return importObjects(selectedObjects, support, true);
 	}
 
-	private boolean importObjects(Set<String> selectedObjects, TransferSupport support) {
+	private boolean importObjects(Set<String> selectedObjects, TransferSupport support, boolean fromTable) {
 		if (selectedObjects.isEmpty()) {
 			return false;
 		}
@@ -277,7 +277,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			Logging.debug(this, "active source tree path for selectedObject ", selectedObject);
 
-			if (CLIENT_TABLE.equals(tableType) || PRODUCT_TABLE.equals(tableType)) {
+			if (fromTable) {
 				// object is selected in table
 				tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
 			} else {
