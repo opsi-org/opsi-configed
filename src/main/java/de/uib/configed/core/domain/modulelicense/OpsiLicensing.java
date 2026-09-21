@@ -135,7 +135,7 @@ public class OpsiLicensing extends JPanel {
 		});
 
 		JCheckBox checkShowOnlyAvailableModules = new JCheckBox(
-				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"), showOnlyAvailableModules);
+				Configed.getResourceValue("LicensingInfo.buttonShowOnlyLicensedModules"), showOnlyAvailableModules);
 
 		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
 			showOnlyAvailableModules(checkShowOnlyAvailableModules.isSelected());

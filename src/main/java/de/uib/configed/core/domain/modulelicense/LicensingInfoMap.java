@@ -103,11 +103,12 @@ public final class LicensingInfoMap {
 		checksum = (String) licensingInfo.get(CHECKSUM_ID);
 		clientNumbersMap = POJOReMapper.remap(licensingInfo.get(CLIENT_NUMBERS_INFO));
 
+		List<LocalDate> datesKeys = produceDatesKeys(licensingInfo);
+		latestDate = findLatestChangeDate(datesKeys);
+
 		availableModules = POJOReMapper.remap(licensingInfo.get(AVAILABLE_MODULES));
 		shownModules = produceShownModules(licensingInfo);
 
-		List<LocalDate> datesKeys = produceDatesKeys(licensingInfo);
-		latestDate = findLatestChangeDate(datesKeys);
 		datesMap = produceDatesMap(licensingInfo, datesKeys);
 		tableMap = produceTableMapFromDatesMap();
 		customerNames = produceCustomerNameSet(licensingInfo);
@@ -179,10 +180,21 @@ public final class LicensingInfoMap {
 		}
 
 		// Create a copy because we will manipulate the list by removing obsolete modules
-		List<String> result = new ArrayList<>(OpsiLicensing.isShowOnlyAvailableModules() ? availableModules
-				: POJOReMapper.remap(licensingInfo.get(KNOWN_MODULES)));
+		List<String> result = new ArrayList<>(POJOReMapper.remap(licensingInfo.get(KNOWN_MODULES)));
 
 		result.removeAll(POJOReMapper.remap(licensingInfo.get(OBSOLETE_MODULES)));
+
+		if (OpsiLicensing.isShowOnlyAvailableModules()) {
+			Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
+
+			for (Map.Entry<String, Object> entry : dates.get(latestDate.toString()).get(MODULES).entrySet()) {
+				String state = ((Map<?, ?>) entry.getValue()).get(STATE).toString();
+
+				if (state.equals(STATE_UNLICENSED)) {
+					result.remove(entry.getKey());
+				}
+			}
+		}
 
 		return result;
 	}
