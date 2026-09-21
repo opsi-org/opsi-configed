@@ -177,6 +177,16 @@ public class GenericTable extends JTable {
 		columnResizeNotifier.setRepeats(false);
 	}
 
+	public void runWithoutSelectionEvents(Runnable runnable) {
+		boolean originalValue = isUpdatingProgrammatically;
+		isUpdatingProgrammatically = true;
+		try {
+			runnable.run();
+		} finally {
+			isUpdatingProgrammatically = originalValue;
+		}
+	}
+
 	public void updateTable(GenericTableViewModel model) {
 		this.model = model;
 
