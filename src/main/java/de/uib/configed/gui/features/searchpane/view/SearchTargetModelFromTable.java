@@ -220,7 +220,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	}
 
 	@Override
-	public void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive) {
+	public void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive,
+			boolean restoringFilter) {
 		if (table == null || table.getModel() == null) {
 			Logging.warning(this, "applyFilter: table or model is null");
 			return;
@@ -243,6 +244,10 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			} else {
 				sorter.setRowFilter(new RowFilterCondition(useRegex, caseSensitive, query, columnIndex));
 			}
+		}
+
+		if (restoringFilter) {
+			return;
 		}
 
 		if (table.getRowCount() != 0) {

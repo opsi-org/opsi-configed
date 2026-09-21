@@ -25,7 +25,8 @@ public sealed interface SearchPaneEffect permits SearchPaneEffect.UIEffect, Sear
 	 * Service-side effects (interacting with SearchTargetModel).
 	 */
 	sealed interface ServiceEffect extends SearchPaneEffect {
-		record ApplyFilter(String query, int col, boolean regex, boolean caseSensitive) implements ServiceEffect {
+		record ApplyFilter(String query, int col, boolean regex, boolean caseSensitive, boolean restoringFilter)
+				implements ServiceEffect {
 		}
 
 		record SearchNextRow() implements ServiceEffect {

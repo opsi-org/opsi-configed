@@ -151,8 +151,8 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 
 		switch (effect) {
-		case SearchPaneEffect.ServiceEffect.ApplyFilter(String query, int col, boolean regex, boolean caseSensitive) -> onApplyFilter(
-				query, col, regex, caseSensitive);
+		case SearchPaneEffect.ServiceEffect.ApplyFilter(String query, int col, boolean regex, boolean caseSensitive, boolean restoringFilter) -> onApplyFilter(
+				query, col, regex, caseSensitive, restoringFilter);
 		case SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(boolean isFiltered) -> onMarkSelectedAndFilter(
 				isFiltered);
 		case SearchPaneEffect.ServiceEffect.MarkAllAndFilter() -> onMarkAllAndFilter();
@@ -164,9 +164,9 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		}
 	}
 
-	private void onApplyFilter(String query, int col, boolean regex, boolean caseSensitive) {
+	private void onApplyFilter(String query, int col, boolean regex, boolean caseSensitive, boolean restoringFilter) {
 		int modelColumnIndex = targetModel.findColumn(searchPane.getColumnAt(col));
-		targetModel.applyFilter(query, modelColumnIndex, regex, caseSensitive);
+		targetModel.applyFilter(query, modelColumnIndex, regex, caseSensitive, restoringFilter);
 	}
 
 	private void onMarkSelectedAndFilter(boolean isFiltered) {
@@ -179,7 +179,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 			// restoring unfiltered-by-selection data can reset the row filter, so reapply the search text filter
 			onApplyFilter(model.getSearchText(), model.getSearchColumnIndex(), model.isRegexActive(),
-					model.isRespectCase());
+					model.isRespectCase(), true);
 
 			if (unfilteredSelection.length != 0) {
 				targetModel.setSelection(unfilteredSelection);
