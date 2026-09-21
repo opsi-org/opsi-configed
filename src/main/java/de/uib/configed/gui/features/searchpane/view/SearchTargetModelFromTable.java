@@ -16,6 +16,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.gui.features.searchpane.SearchCriteriaEngine;
+import de.uib.configed.gui.features.table.view.GenericTable;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.RowNoTableModelFilterCondition;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
@@ -219,7 +220,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	}
 
 	@Override
-	public void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive) {
+	public void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive,
+			boolean restoringFilter) {
 		if (table == null || table.getModel() == null) {
 			Logging.warning(this, "applyFilter: table or model is null");
 			return;
@@ -236,26 +238,49 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		if (query == null || query.isEmpty()) {
 			sorter.setRowFilter(null);
 		} else {
-			SearchCriteriaEngine searchCriteriaEngine = new SearchCriteriaEngine();
-			sorter.setRowFilter(new RowFilter<TableModel, Integer>() {
-				@Override
-				public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
-					Pattern pattern = searchCriteriaEngine.getPattern(useRegex, caseSensitive, query);
+			if (table instanceof GenericTable genTable) {
+				genTable.runWithoutSelectionEvents(
+						() -> sorter.setRowFilter(new RowFilterCondition(useRegex, caseSensitive, query, columnIndex)));
+			} else {
+				sorter.setRowFilter(new RowFilterCondition(useRegex, caseSensitive, query, columnIndex));
+			}
+		}
 
-					int columnCount = entry.getValueCount();
-					int start = (columnIndex == -1) ? 0 : columnIndex;
-					int end = (columnIndex == -1) ? columnCount : (columnIndex + 1);
-
-					return searchCriteriaEngine.matchAcrossColumns(entry::getStringValue, start, end, query, pattern,
-							useRegex, caseSensitive);
-				}
-			});
+		if (restoringFilter) {
+			return;
 		}
 
 		if (table.getRowCount() != 0) {
 			table.setRowSelectionInterval(0, 0);
 		} else {
 			table.clearSelection();
+		}
+	}
+
+	private static class RowFilterCondition extends RowFilter<TableModel, Integer> {
+		private SearchCriteriaEngine searchCriteriaEngine = new SearchCriteriaEngine();
+		private boolean useRegex;
+		private boolean caseSensitive;
+		private String query;
+		private int columnIndex;
+
+		public RowFilterCondition(boolean useRegex, boolean caseSensitive, String query, int columnIndex) {
+			this.useRegex = useRegex;
+			this.caseSensitive = caseSensitive;
+			this.query = query;
+			this.columnIndex = columnIndex;
+		}
+
+		@Override
+		public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+			Pattern pattern = searchCriteriaEngine.getPattern(useRegex, caseSensitive, query);
+
+			int columnCount = entry.getValueCount();
+			int start = (columnIndex == -1) ? 0 : columnIndex;
+			int end = (columnIndex == -1) ? columnCount : (columnIndex + 1);
+
+			return searchCriteriaEngine.matchAcrossColumns(entry::getStringValue, start, end, query, pattern, useRegex,
+					caseSensitive);
 		}
 	}
 

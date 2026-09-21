@@ -81,6 +81,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		initComponents();
 	}
 
+	@SuppressWarnings({ "java:S5612", "java:S1142" })
 	private void initComponents() {
 		List<TableColumnConfig> columns = new ArrayList<>();
 		for (Entry<String, Boolean> entry : persistenceController.getDataServices().host.getHostDisplayFields()
@@ -109,6 +110,8 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 				return this::actOnListSelection;
 			} else if (effect instanceof GenericTableViewEffect.StoreVisibleColulmns storeVisibleColulmns) {
 				return () -> onStoreVisibleColumns(storeVisibleColulmns.visibleColumns());
+			} else if (effect instanceof GenericTableViewEffect.CellEdited) {
+				return this::restoreFilter;
 			} else {
 				// Nothing
 			}

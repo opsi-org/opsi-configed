@@ -31,7 +31,7 @@ public final class SearchPaneUpdate {
 		return switch (msg) {
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchText(String text) -> UpdateResult.withEffect(
 				model.toBuilder().searchText(text).foundRow(0).build(), new SearchPaneEffect.ServiceEffect.ApplyFilter(
-						text, model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+						text, model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase(), false));
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(int index) -> UpdateResult
 				.noEffect(model.withSearchColumnIndex(index));
 		case SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(FilterKey filterKey) -> UpdateResult
@@ -102,7 +102,8 @@ public final class SearchPaneUpdate {
 						.searchColumnIndex(filterState.getSearchColumnIndex())
 						.isRegexActive(filterState.isRegexActive()).isRespectCase(filterState.isRespectCase()).build(),
 				new SearchPaneEffect.ServiceEffect.ApplyFilter(filterState.getSearchText(),
-						filterState.getSearchColumnIndex(), filterState.isRegexActive(), filterState.isRespectCase()))
+						filterState.getSearchColumnIndex(), filterState.isRegexActive(), filterState.isRespectCase(),
+						true))
 				: UpdateResult.noEffect(model);
 	}
 

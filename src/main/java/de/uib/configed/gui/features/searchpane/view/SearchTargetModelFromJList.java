@@ -248,7 +248,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	}
 
 	@Override
-	public void applyFilter(String query, int column, boolean useRegex, boolean caseSensitive) {
+	public void applyFilter(String query, int column, boolean useRegex, boolean caseSensitive,
+			boolean restoringFilter) {
 		List<JListItemWrapper> allItems = new ArrayList<>();
 		for (int i = 0; i < unfilteredV.size(); i++) {
 			allItems.add(new JListItemWrapper(unfilteredV.get(i), unfilteredD.get(i)));
@@ -259,7 +260,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		theValues = filteredItems.stream().map(JListItemWrapper::getValue).collect(Collectors.toList());
 		theDescriptions = filteredItems.stream().map(JListItemWrapper::getDescription).collect(Collectors.toList());
 
-		updateUI();
+		updateUI(restoringFilter);
 	}
 
 	private static class JListItemWrapper {
@@ -313,14 +314,14 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	private void reapplyFilter(FilterContext filterContext) {
 		applyFilter(filterContext.getQuery(), filterContext.getColumn(), filterContext.useRegex(),
-				filterContext.caseSensitive());
+				filterContext.caseSensitive(), true);
 	}
 
 	public FilterContext getFilterContext() {
 		return filterContext;
 	}
 
-	private void updateUI() {
+	private void updateUI(boolean restoringFilter) {
 		tableModel = setupTableModel(theValues, theDescriptions);
 		tableModel.fireTableChanged(new TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
@@ -328,7 +329,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		List<String> selectedValues = jList.getSelectedValuesList();
 		jList.setListData(theValues.toArray(new String[0]));
 		if (!theValues.isEmpty()) {
-			if (!selectedValues.isEmpty()) {
+			if (!selectedValues.isEmpty() && restoringFilter) {
 				switch (jList) {
 				case ListSelectionList s -> s.setPreviousSelectionValues(selectedValues);
 				case DepotsList l -> l.setSelectedValues(selectedValues);
