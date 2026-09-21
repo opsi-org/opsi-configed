@@ -86,6 +86,7 @@ public final class LicensingInfoMap {
 	private List<String> columnNames;
 	private Map<String, Map<String, Object>> tableMap;
 	private LocalDate latestDate;
+	private Map<LocalDate, String> dateToTitleMap;
 	private String checksum;
 	private Map<String, Set<String>> warningModulesList = Map.of(STATE_CLOSE_TO_LIMIT, new HashSet<>(),
 			STATE_OVER_LIMIT, new HashSet<>(), STATE_DAYS_WARNING, new HashSet<>(), STATE_DAYS_OVER, new HashSet<>());
@@ -105,6 +106,7 @@ public final class LicensingInfoMap {
 
 		List<LocalDate> datesKeys = produceDatesKeys(licensingInfo);
 		latestDate = findLatestChangeDate(datesKeys);
+		dateToTitleMap = produceDateToTitleMap(datesKeys);
 
 		availableModules = POJOReMapper.remap(licensingInfo.get(AVAILABLE_MODULES));
 		shownModules = produceShownModules(licensingInfo);
@@ -274,7 +276,6 @@ public final class LicensingInfoMap {
 			List<LocalDate> datesKeys) {
 		Map<String, Map<String, Map<String, Object>>> resultMap = new LinkedHashMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
-		Map<LocalDate, String> dateToTitleMap = produceDateToTitleMap(datesKeys);
 		Map<String, Map<String, Object>> licenses = produceLicenses(licensingInfo);
 		LocalDate nextChangeDate = findNextChangeDate(datesKeys);
 
@@ -458,16 +459,16 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(
 			Map<String, Map<String, Map<String, Object>>> map, LocalDate nextChangeDate) {
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
+		String latestDateTitle = dateToTitleMap.get(latestDate);
+		String nextChangeDateTitle = nextChangeDate != null ? dateToTitleMap.get(nextChangeDate) : null;
 
-		if (resultMap.get(latestDate.toString()) != null) {
-			for (Entry<String, Map<String, Object>> mod : resultMap.get(latestDate.toString()).entrySet()) {
+		if (latestDateTitle != null && resultMap.get(latestDateTitle) != null) {
+			for (Entry<String, Map<String, Object>> mod : resultMap.get(latestDateTitle).entrySet()) {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				String nextChangeDateString = nextChangeDate != null ? nextChangeDate.toString() : "";
-
-				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(nextChangeDateString)
-						.get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
+				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && nextChangeDateTitle != null && resultMap
+						.get(nextChangeDateTitle).get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
 					val.put(STATE, STATE_DAYS_OKAY);
 					warningModulesList.get(STATE_DAYS_WARNING).remove(modKey);
 					warningModulesList.get(STATE_DAYS_OVER).remove(modKey);
@@ -497,6 +498,10 @@ public final class LicensingInfoMap {
 
 	public String getLatestDate() {
 		return latestDate.toString();
+	}
+
+	public String getLatestDateTitle() {
+		return dateToTitleMap.get(latestDate);
 	}
 
 	public Map<String, Object> getClientNumbersMap() {

@@ -39,7 +39,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		String latestChange = licensingInfoMap.getLatestDate();
+		String latestChange = licensingInfoMap.getLatestDateTitle();
 		String columnName = licensingInfoMap.getColumnNames().get(column);
 		String rowName = licensingInfoMap.getModules().get(row);
 

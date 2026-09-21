@@ -33,7 +33,7 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEdit {
 					boolean hasFocus, int row, int column) {
 				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-				if (value != null && value.toString().equals(LicensingInfoMap.getInstance().getLatestDate())) {
+				if (value != null && value.toString().equals(LicensingInfoMap.getInstance().getLatestDateTitle())) {
 					setFont(getFont().deriveFont(Font.BOLD));
 				}
 
