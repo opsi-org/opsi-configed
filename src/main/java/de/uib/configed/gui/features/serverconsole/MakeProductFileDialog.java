@@ -74,6 +74,9 @@ public class MakeProductFileDialog {
 
 	private JDialog dialog;
 
+	// Prevents overlapping CommandExecutor runs from rapid combo box changes or search clicks.
+	private volatile boolean versionLookupInProgress;
+
 	public MakeProductFileDialog(ConfigedMain configedMain) {
 		if (PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
@@ -268,8 +271,23 @@ public class MakeProductFileDialog {
 	}
 
 	private final void doSetActionGetVersions() {
+		if (versionLookupInProgress) {
+			return;
+		}
+		versionLookupInProgress = true;
+		jButtonSearchDir.setEnabled(false);
+		jComboBoxMainDir.setEnabled(false);
+
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
-		SwingUtils.runSwingWorker(() -> doActionGetVersions(dir), this::setVersions, null);
+		SwingUtils.runSwingWorker(() -> doActionGetVersions(dir), this::onVersionLookupDone,
+				exception -> onVersionLookupDone(""));
+	}
+
+	private void onVersionLookupDone(String versions) {
+		setVersions(versions);
+		jButtonSearchDir.setEnabled(true);
+		jComboBoxMainDir.setEnabled(true);
+		versionLookupInProgress = false;
 	}
 
 	private void setVersions(String versions) {
