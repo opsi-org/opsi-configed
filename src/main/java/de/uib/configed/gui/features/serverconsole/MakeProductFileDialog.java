@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.features.serverconsole;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -44,8 +45,13 @@ public class MakeProductFileDialog {
 			+ FILE_REPLACEMENT_PATTERN + " && echo \"File " + FILE_REPLACEMENT_PATTERN + " removed\" || echo \"File "
 			+ FILE_REPLACEMENT_PATTERN + " does not exist\"";
 	private static final String DIRECTORY_REPLACEMENT_PATTERN = "*.dir.*";
-	private static final String GET_VERSIONS_COMMAND = "grep version: " + DIRECTORY_REPLACEMENT_PATTERN
-			+ " --max-count=2  ";
+	// Prefers OPSI/control.toml (version = "x") over the legacy OPSI/control (version: x) format.
+	private static final String GET_VERSIONS_COMMAND = "[ -f " + DIRECTORY_REPLACEMENT_PATTERN
+			+ "OPSI/control.toml ] && grep -oE 'version[[:space:]]*=[[:space:]]*\"[^\"]*\"' "
+			+ DIRECTORY_REPLACEMENT_PATTERN + "OPSI/control.toml --max-count=2 || grep version: "
+			+ DIRECTORY_REPLACEMENT_PATTERN + "OPSI/control --max-count=2";
+	private static final Pattern VERSION_LINE_PATTERN = Pattern
+			.compile("version\\s*[:=]\\s*\"?([^\"\\r\\n]+?)\"?\\s*$", Pattern.UNICODE_CHARACTER_CLASS);
 	private static final String GET_PACKAGE_ID_COMMAND = "grep id: " + DIRECTORY_REPLACEMENT_PATTERN
 			+ "OPSI/control --max-count=1";
 
@@ -244,10 +250,10 @@ public class MakeProductFileDialog {
 	}
 
 	private String doActionGetVersions(String dir) {
-		String serverPath = FileUtils.getServerPathFromWebDAVPath(dir) + "OPSI/control";
-		Logging.info(this, "doActionGetVersions, serverPath ", serverPath);
+		String dirLocationInServer = FileUtils.getServerPathFromWebDAVPath(dir);
+		Logging.info(this, "doActionGetVersions, dir ", dirLocationInServer);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
-				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, serverPath));
+				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, dirLocationInServer));
 		CommandExecutor executor = new CommandExecutor(configedMain, getVersions);
 		executor.setWithGUI(false);
 		Logging.info(this, "doActionGetVersions, command ", getVersions);
@@ -255,19 +261,24 @@ public class MakeProductFileDialog {
 		Logging.info(this, "doActionGetVersions result ", result);
 
 		if (result == null || result.isEmpty()) {
-			Logging.warning(this, "doActionGetVersions, could not find versions in file ", serverPath,
-					".Please check if directory exists and contains the file OPSI/control.\n",
+			Logging.warning(this, "doActionGetVersions, could not find versions in ", dirLocationInServer,
+					".Please check if directory exists and contains the file OPSI/control.toml or OPSI/control.\n",
 					"Please also check the rights of the file/s.");
 		} else {
-			String[] versions = result.replace("version: ", "").split("\n");
+			String[] versions = result.split("\n");
 			Logging.info(this, "doActionGetVersions, getDirectories result versions with length ", versions.length);
 			if (versions.length < 2) {
 				Logging.info(this, "doActionGetVersions, not expected versions array with size < 2");
 				return "";
 			}
-			return versions[0] + ";;;" + versions[1];
+			return extractVersionValue(versions[0]) + ";;;" + extractVersionValue(versions[1]);
 		}
 		return "";
+	}
+
+	private static String extractVersionValue(String line) {
+		Matcher matcher = VERSION_LINE_PATTERN.matcher(line);
+		return matcher.find() ? matcher.group(1).trim() : "";
 	}
 
 	private final void doSetActionGetVersions() {
