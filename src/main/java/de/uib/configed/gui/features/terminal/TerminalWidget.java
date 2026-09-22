@@ -187,6 +187,10 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		this.sessionChannel = produceSessionChannel(session);
 		messagebus.sendTerminalOpenRequest(sessionChannel, DEFAULT_TERMINAL_ROWS, DEFAULT_TERMINAL_COLUMNS);
 		locker.lock(DEFAULT_TIME_TO_BLOCK_IN_MS);
+		if (webSocketInputStream == null) {
+			Logging.warning(this, "Timed out waiting for terminal channel confirmation, aborting session open");
+			return;
+		}
 		connectWebSocketTty();
 	}
 

@@ -66,6 +66,12 @@ public class CommandProcess {
 	}
 
 	public void sendProcessStopRequest() {
+		if (id == null) {
+			// Process start was never confirmed by the server, so there is nothing to stop yet.
+			Logging.info(this, "No process id assigned yet, skipping stop request");
+			return;
+		}
+
 		Logging.info(this, "Sending process stop request");
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
