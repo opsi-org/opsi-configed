@@ -121,7 +121,7 @@ public class KeyValueTable extends JPanel {
 
 		TableConfig config = TableConfig.builder().fillViewportHeight(true)
 				.defauTableCellRenderer(new ColorTableCellRenderer()).selectionMode(ListSelectionModel.SINGLE_SELECTION)
-				.autoCreateRowSorter(false).build();
+				.autoCreateRowSorter(false).showTableHeader(true).build();
 
 		List<TableColumnConfig> columns = List.of(
 				TableColumnConfig.builder().key("key")
