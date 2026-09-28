@@ -188,8 +188,13 @@ public final class LicensingInfoMap {
 
 		if (OpsiLicensing.isShowOnlyAvailableModules()) {
 			Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(licensingInfo.get(DATES));
+			Map<String, Map<String, Object>> latestDateInfo = dates.get(latestDate.toString());
 
-			for (Map.Entry<String, Object> entry : dates.get(latestDate.toString()).get(MODULES).entrySet()) {
+			if (latestDateInfo == null) {
+				return result;
+			}
+
+			for (Map.Entry<String, Object> entry : latestDateInfo.get(MODULES).entrySet()) {
 				String state = ((Map<?, ?>) entry.getValue()).get(STATE).toString();
 
 				if (state.equals(STATE_UNLICENSED)) {
