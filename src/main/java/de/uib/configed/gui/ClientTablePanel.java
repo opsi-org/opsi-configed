@@ -111,7 +111,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 			} else if (effect instanceof GenericTableViewEffect.StoreVisibleColulmns storeVisibleColulmns) {
 				return () -> onStoreVisibleColumns(storeVisibleColulmns.visibleColumns());
 			} else if (effect instanceof GenericTableViewEffect.CellEdited) {
-				return this::restoreFilter;
+				return () -> SwingUtilities.invokeLater(this::restoreFilter);
 			} else {
 				// Nothing
 			}
