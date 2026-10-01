@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -123,7 +124,7 @@ public class GenericTable extends JTable {
 
 		List<? extends RowSorter.SortKey> sortKeys = sorter.getSortKeys();
 
-		Map<String, SortOrder> rowSortKeys = new HashMap<>();
+		Map<String, SortOrder> rowSortKeys = new LinkedHashMap<>();
 		if (sortKeys.isEmpty()) {
 			rowSortKeys.put(null, SortOrder.UNSORTED);
 		} else {
