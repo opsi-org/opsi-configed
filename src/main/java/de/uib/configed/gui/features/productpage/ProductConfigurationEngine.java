@@ -385,6 +385,8 @@ public class ProductConfigurationEngine {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), lines,
 					Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
 					JOptionPane.WARNING_MESSAGE);
+
+			missingProducts.clear();
 		}
 	}
 
