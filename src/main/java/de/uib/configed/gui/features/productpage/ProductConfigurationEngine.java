@@ -139,8 +139,11 @@ public class ProductConfigurationEngine {
 				return;
 			}
 
-			ProductState.KEYS.stream().forEach(key -> mixToVisualState(combinedVisualValues.get(key), productId,
-					ProductState.getDefaultProductState().get(key)));
+			ProductState.KEYS.stream()
+					.forEach(key -> mixToVisualState(combinedVisualValues.get(key), productId,
+							ProductState.KEY_PRODUCT_PRIORITY.equals(key)
+									? ("" + globalProductInfos.get(productId).get(key))
+									: ProductState.getDefaultProductState().get(key)));
 		}));
 	}
 

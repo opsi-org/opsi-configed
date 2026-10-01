@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -452,9 +453,28 @@ class GenericTableViewUpdateTest {
 
 		assertNotNull(result.model());
 		assertEquals(SortOrder.ASCENDING, result.model().getTableConfig().getSortKeys().get("data1"));
+		assertEquals(Map.of("data1", SortOrder.ASCENDING), result.model().getTableConfig().getSortKeys());
 		assertFalse(result.model().isRebuildTableModel());
 		assertFalse(result.model().isDirty());
 		assertFalse(result.effect().isPresent());
+	}
+
+	@Test
+	void shouldRetainSortKeys_whenSnapshotUpdateRebuildsModel() {
+		GenericTableViewModel model = baseModel();
+		Map<String, SortOrder> sortKeys = new LinkedHashMap<>();
+		sortKeys.put("data2", SortOrder.DESCENDING);
+		sortKeys.put("data0", SortOrder.ASCENDING);
+		GenericTableViewModel sortedModel = GenericTableViewUpdate
+				.update(new GenericTableViewMsg.ChangeSortOrder(sortKeys), model).model();
+		List<String> expectedSortPriority = List.of("data2", "data0");
+		assertEquals(expectedSortPriority, sortedModel.getTableConfig().getSortKeys().keySet().stream().toList());
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate
+				.update(new GenericTableViewMsg.ChangeOriginalSnapshot(model.getOriginalSnapshot()), sortedModel);
+
+		assertEquals(expectedSortPriority, result.model().getTableConfig().getSortKeys().keySet().stream().toList());
+		assertTrue(result.model().isRebuildTableModel());
 	}
 
 	@Test
@@ -498,6 +518,8 @@ class GenericTableViewUpdateTest {
 	@Test
 	void shouldUpdateColumnsWidths_whenResizeColumns() {
 		GenericTableViewModel model = baseModel();
+		model = model.withColumns(
+				model.getColumns().stream().map(column -> column.withHeader("Header " + column.getKey())).toList());
 		GenericTableViewMsg msg = new GenericTableViewMsg.ResizeColumns(Map.of("data0", 25, "data1", 23, "data2", 25));
 
 		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
@@ -509,6 +531,12 @@ class GenericTableViewUpdateTest {
 		assertFalse(result.model().isRebuildTableModel());
 		assertFalse(result.model().isDirty());
 		assertFalse(result.effect().isPresent());
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> rebuildResult = GenericTableViewUpdate
+				.update(new GenericTableViewMsg.ApplyRowFilter("data0", Set.of("1"), false), result.model());
+		assertEquals(25, rebuildResult.model().getColumns().get(0).getPrefferedWidth());
+		assertEquals(23, rebuildResult.model().getColumns().get(1).getPrefferedWidth());
+		assertEquals(25, rebuildResult.model().getColumns().get(2).getPrefferedWidth());
 	}
 
 	@Test

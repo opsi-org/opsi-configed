@@ -27,6 +27,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
@@ -408,7 +409,12 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 
 	private void rebuild() {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
+		persistenceController.reloadData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS.toString());
 
-		SwingUtilities.invokeLater(configedMain::refreshClientListKeepingGroup);
+		SwingUtilities.invokeLater(() -> {
+			Set<String> selectedClients = getSelectedSet();
+			configedMain.refreshClientListKeepingGroup();
+			configedMain.setClients(selectedClients);
+		});
 	}
 }

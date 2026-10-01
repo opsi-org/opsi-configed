@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
@@ -30,7 +33,6 @@ import de.uib.configed.core.infrastructure.certificate.CertificateValidator;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.share.ThreadLocker;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -47,13 +49,11 @@ public class Messagebus implements MessagebusListener {
 	private boolean initialSubscriptionReceived;
 	private ConfigedMain configedMain;
 
-	// to check if channel subscription event was received
-	private String channelSessionTerminalId;
-	private ThreadLocker locker;
+	// keyed by requested channel, so concurrent callers don't overwrite each other's confirmation state
+	private final Map<String, CountDownLatch> pendingChannelSubscriptions = new ConcurrentHashMap<>();
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-		locker = new ThreadLocker();
 	}
 
 	public WebSocketClientEndpoint getWebSocket() {
@@ -199,18 +199,28 @@ public class Messagebus implements MessagebusListener {
 
 	public void sendTerminalOpenRequest(String channel, int rows, int cols) {
 		String terminalId = UUID.randomUUID().toString();
-		// to verify server response contains this requested channel
-		channelSessionTerminalId = String.format("session:%s", terminalId);
-		sendChannelSubscriptionRequest(List.of(channelSessionTerminalId));
-		// need to wait for the subscription to be processed
-		locker.lock(5000);
+		String sessionChannel = String.format("session:%s", terminalId);
+		CountDownLatch subscriptionConfirmed = new CountDownLatch(1);
+		pendingChannelSubscriptions.put(sessionChannel, subscriptionConfirmed);
+		try {
+			sendChannelSubscriptionRequest(List.of(sessionChannel));
+			// need to wait for the subscription to be processed
+			if (!subscriptionConfirmed.await(5000, TimeUnit.MILLISECONDS)) {
+				Logging.info(this, "Timed out waiting for channel subscription confirmation: ", sessionChannel);
+			}
+		} catch (InterruptedException ie) {
+			Logging.warning(this, "Interrupted while waiting for channel subscription confirmation");
+			Thread.currentThread().interrupt();
+		} finally {
+			pendingChannelSubscriptions.remove(sessionChannel);
+		}
 
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
 		message.put("sender", CONNECTION_USER_CHANNEL);
 		message.put("channel", channel != null ? channel : "service:config:terminal");
-		message.put("back_channel", String.format("session:%s", terminalId));
+		message.put("back_channel", sessionChannel);
 		message.put("created", System.currentTimeMillis());
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("terminal_id", terminalId);
@@ -328,11 +338,12 @@ public class Messagebus implements MessagebusListener {
 				return;
 			}
 			List<?> channels = (List<?>) message.get("subscribed_channels");
-			if (channels.stream().anyMatch(channel -> channel.toString().equals(channelSessionTerminalId))) {
-				// check if the subscripted_channels in response contains the requested channel
-				// ensures that we send terminalOpenRequest only after we subscribed the correct channel
-				channelSessionTerminalId = null;
-				locker.unlock();
+			// each pending caller only reacts to its own channel, so concurrent open requests don't cross-signal
+			for (Object subscribedChannel : channels) {
+				CountDownLatch latch = pendingChannelSubscriptions.get(subscribedChannel.toString());
+				if (latch != null) {
+					latch.countDown();
+				}
 			}
 		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
 			Logging.error(this, "Error occured on the server ", message.get("error"));

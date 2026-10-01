@@ -11,8 +11,10 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -58,7 +60,7 @@ public class GenericTable extends JTable {
 	private RendererPreparator rendererPreparator;
 
 	private RowSorterListener rowSorterListener = (RowSorterEvent e) -> {
-		if (isUpdatingProgrammatically) {
+		if (isUpdatingProgrammatically || e.getType() != RowSorterEvent.Type.SORTED) {
 			return;
 		}
 
@@ -123,7 +125,7 @@ public class GenericTable extends JTable {
 
 		List<? extends RowSorter.SortKey> sortKeys = sorter.getSortKeys();
 
-		Map<String, SortOrder> rowSortKeys = new HashMap<>();
+		Map<String, SortOrder> rowSortKeys = new LinkedHashMap<>();
 		if (sortKeys.isEmpty()) {
 			rowSortKeys.put(null, SortOrder.UNSORTED);
 		} else {
@@ -188,6 +190,7 @@ public class GenericTable extends JTable {
 	}
 
 	public void updateTable(GenericTableViewModel model) {
+		Set<String> previousSelectedRows = this.model.getSelectedRows();
 		this.model = model;
 
 		isUpdatingProgrammatically = true;
@@ -214,7 +217,9 @@ public class GenericTable extends JTable {
 
 		getColumnModel().addColumnModelListener(columnModelListener);
 
-		restoreSelection();
+		if (model.isRebuildTableModel() || !Objects.equals(previousSelectedRows, model.getSelectedRows())) {
+			restoreSelection();
+		}
 
 		isUpdatingProgrammatically = false;
 	}

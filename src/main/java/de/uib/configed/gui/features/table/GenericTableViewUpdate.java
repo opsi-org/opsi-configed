@@ -52,8 +52,9 @@ public final class GenericTableViewUpdate {
 				new GenericTableViewEffect.Selection());
 		case AddRow(Map<String, Object> data) -> handleRowAdd(data, model);
 		case DeleteRows(List<String> rowIdx) -> handleRowDelete(rowIdx, model);
-		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(model.toBuilder()
-				.tableConfig(model.getTableConfig().withSortKeys(sortKeys)).rebuildTableModel(false).build());
+		case ChangeSortOrder(Map<String, SortOrder> sortKeys) -> UpdateResult.noEffect(
+				model.toBuilder().tableConfig(model.getTableConfig().withSortKeys(new LinkedHashMap<>(sortKeys)))
+						.rebuildTableModel(false).build());
 		case ResizeColumns(Map<String, Integer> widths) -> handleResizeColumns(widths, model);
 		case GenericTableViewMsg.ApplyRowFilter(String columnKey, Set<String> filterValues, boolean selectFilteredRows) -> handleApplyRowFilter(
 				columnKey, filterValues, selectFilteredRows, model);
@@ -283,8 +284,8 @@ public final class GenericTableViewUpdate {
 			Map<String, Integer> columnsWidths, GenericTableViewModel model) {
 		Set<String> columnKeys = columnsWidths.keySet();
 		List<TableColumnConfig> configs = model.getColumns().stream()
-				.map((TableColumnConfig config) -> config.isVisible() && columnKeys.contains(config.getHeader())
-						? config.withPrefferedWidth(columnsWidths.get(config.getHeader()))
+				.map((TableColumnConfig config) -> config.isVisible() && columnKeys.contains(config.getKey())
+						? config.withPrefferedWidth(columnsWidths.get(config.getKey()))
 						: config)
 				.toList();
 		return UpdateResult.noEffect(model.toBuilder().columns(configs).rebuildTableModel(false).build());
