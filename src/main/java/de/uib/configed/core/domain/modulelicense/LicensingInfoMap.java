@@ -472,8 +472,8 @@ public final class LicensingInfoMap {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && nextChangeDateTitle != null && resultMap
-						.get(nextChangeDateTitle).get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
+				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && nextChangeDateTitle != null
+						&& STATE_FUTURE_OKAY.equals(resultMap.get(nextChangeDateTitle).get(modKey).get(FUTURE_STATE))) {
 					val.put(STATE, STATE_DAYS_OKAY);
 					warningModulesList.get(STATE_DAYS_WARNING).remove(modKey);
 					warningModulesList.get(STATE_DAYS_OVER).remove(modKey);
