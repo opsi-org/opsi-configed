@@ -215,15 +215,17 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		removeAll();
 
 		if (persistenceController.getDataServices().hostInfoCollections.getCountClients() == 0) {
-			add(setMissingDataPanel());
+			setLayout(new MigLayout("insets 0, fill", "[grow]", "[grow]"));
+			add(createMissingDataPanel(), "align center center");
 		} else {
-
 			setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
 					"[]" + Globals.GAP_SIZE + "[grow, fill]"));
 
 			add(searchPaneComponent);
 			add(component, "grow, push");
 		}
+		revalidate();
+		repaint();
 	}
 
 	public boolean isFilteredBySelection() {
@@ -236,22 +238,17 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		}
 	}
 
-	public JPanel setMissingDataPanel() {
+	private JPanel createMissingDataPanel() {
 		JLabel missingData0 = new JLabel(Icons.createImageIcon(Globals.ICON_CONFIGED, ""));
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
-		JPanel mdPanel = new JPanel();
 
-		mdPanel.setLayout(new MigLayout("fill"));
-
-		JPanel panel = new JPanel(new MigLayout("wrap 1, aligny center, alignx center, gap 0", "[center]", "[]0"));
+		JPanel panel = new JPanel(new MigLayout("wrap 1, gap 0", "[center]", "[]0"));
 		panel.add(missingData0);
 		panel.add(missingData1, "gapy " + Globals.GAP_SIZE);
 		panel.add(missingData2, "gapy " + Globals.GAP_SIZE);
 
-		mdPanel.add(panel, "grow, center");
-
-		return mdPanel;
+		return panel;
 	}
 
 	@Override
