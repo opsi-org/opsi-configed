@@ -212,12 +212,11 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 			return;
 		}
 
+		removeAll();
+
 		if (persistenceController.getDataServices().hostInfoCollections.getCountClients() == 0) {
-			setMissingDataPanel();
+			add(setMissingDataPanel());
 		} else {
-			if (getComponentCount() > 0 && getComponent(0) != null) {
-				remove(0);
-			}
 
 			setLayout(new MigLayout("insets " + Globals.MIN_GAP_SIZE + " 0 0 0, fillx, wrap 1", "[grow, fill]",
 					"[]" + Globals.GAP_SIZE + "[grow, fill]"));
@@ -237,7 +236,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 		}
 	}
 
-	public void setMissingDataPanel() {
+	public JPanel setMissingDataPanel() {
 		JLabel missingData0 = new JLabel(Icons.createImageIcon(Globals.ICON_CONFIGED, ""));
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
@@ -252,10 +251,7 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 
 		mdPanel.add(panel, "grow, center");
 
-		if (getComponent(0) != null) {
-			remove(0);
-		}
-		add(mdPanel);
+		return mdPanel;
 	}
 
 	@Override
