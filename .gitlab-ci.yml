@@ -38,7 +38,7 @@ compile_and_package:
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS
     - mvn clean package -P bom
     # jdk.crypto.ec is needed for TLS (HTTPS)
-    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --print-module-deps target/$CONFIGED_JAR_NAME | sed 's/,java\.security\.jgss//' | sed 's/$/,jdk.crypto.ec/'> target/module.deps
+    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --print-module-deps target/$CONFIGED_JAR_NAME | sed 's/$/,jdk.crypto.ec/'> target/module.deps
     - cat target/module.deps
   artifacts:
     name: "configed-build"
