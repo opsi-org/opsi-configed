@@ -215,7 +215,7 @@ public class ConfigDataService extends DataService {
 	// send config updates, possibly not updating existing
 
 	private void setConfig(boolean restrictToMissing) {
-		if (dataServices.userRoles.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly() && !dataServices.userRoles.canEditOwnServerRole()) {
 			return;
 		}
 
@@ -563,7 +563,7 @@ public class ConfigDataService extends DataService {
 
 	// send config updates and clear the collection
 	public void updateConfigStates() {
-		if (dataServices.userRoles.isGlobalReadOnly()) {
+		if (dataServices.userRoles.isGlobalReadOnly() && !dataServices.userRoles.canEditOwnServerRole()) {
 			return;
 		}
 
