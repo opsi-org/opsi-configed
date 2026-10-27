@@ -31,7 +31,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.RowSorterEvent;
-import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableColumnModel;
@@ -58,14 +57,6 @@ public class GenericTable extends JTable {
 	private Function<Integer, Boolean> isCellEditable;
 	private Consumer<GenericTableViewMsg> dispatch;
 	private RendererPreparator rendererPreparator;
-
-	private RowSorterListener rowSorterListener = (RowSorterEvent e) -> {
-		if (isUpdatingProgrammatically || e.getType() != RowSorterEvent.Type.SORTED) {
-			return;
-		}
-
-		notifyRowSorterChange();
-	};
 
 	private Timer columnResizeNotifier = new Timer(500, (ActionEvent e) -> {
 		TableColumnModel columnModel = getColumnModel();
@@ -115,6 +106,15 @@ public class GenericTable extends JTable {
 
 		super(new GenericTableModel(model, dispatch::accept, isCellEditable), null);
 
+	}
+
+	@Override
+	public void sorterChanged(RowSorterEvent e) {
+		// Let JTable remap selection before a model refresh can restore it again.
+		runWithoutSelectionEvents(() -> super.sorterChanged(e));
+		if (!isUpdatingProgrammatically && e.getType() == RowSorterEvent.Type.SORTED) {
+			notifyRowSorterChange();
+		}
 	}
 
 	private void notifyRowSorterChange() {
@@ -190,17 +190,11 @@ public class GenericTable extends JTable {
 	}
 
 	public void updateTable(GenericTableViewModel model) {
-		Set<String> previousSelectedRows = this.model.getSelectedRows();
 		this.model = model;
 
 		isUpdatingProgrammatically = true;
 		if (model.isRebuildTableModel() && isEditing()) {
 			removeEditor();
-		}
-
-		RowSorter<? extends TableModel> sorter = getRowSorter();
-		if (sorter != null) {
-			sorter.removeRowSorterListener(rowSorterListener);
 		}
 
 		getColumnModel().removeColumnModelListener(columnModelListener);
@@ -209,15 +203,11 @@ public class GenericTable extends JTable {
 			rebuildTableModel();
 		}
 
-		sorter = getRowSorter();
-		if (sorter != null) {
-			sorter.removeRowSorterListener(rowSorterListener);
-			sorter.addRowSorterListener(rowSorterListener);
-		}
-
 		getColumnModel().addColumnModelListener(columnModelListener);
 
-		if (model.isRebuildTableModel() || !Objects.equals(previousSelectedRows, model.getSelectedRows())) {
+		// Reapplying a user selection would reset Swing's anchor and lead for Shift-click.
+		if (model.isRebuildTableModel()
+				|| !Objects.equals(retrieveSelectedRows(getSelectionModel()), model.getSelectedRows())) {
 			restoreSelection();
 		}
 
