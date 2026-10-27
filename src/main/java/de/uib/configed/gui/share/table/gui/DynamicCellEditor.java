@@ -15,6 +15,11 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.share.logging.Logging;
+
 public class DynamicCellEditor extends DefaultCellEditor {
 	private JComboBox<String> cc;
 	private ComboBoxModeller cbm;
@@ -29,6 +34,13 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		UserRolesConfigDataService userRolesConfigDataService = PersistenceControllerFactory.getPersistenceController()
+				.getDataServices().userRoles;
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
+			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+			return null;
+		}
+
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
 
