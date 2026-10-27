@@ -118,9 +118,7 @@ public class CreateConfigDialog {
 	private void initGeneralPanel() {
 		JLabel labelConfigEntry = SwingUtils.createBoldLabel("EditMapPanelX.configName");
 
-		int selectionIndex = editMapPanelX.tableView.getSelectedRow();
-		String value = selectionIndex >= 0 ? (String) editMapPanelX.tableView.getValueAt(selectionIndex, 0) : null;
-		textFieldConfigEntry = new JTextField(value);
+		textFieldConfigEntry = new JTextField(editMapPanelX.getSelectedConfigKey());
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 

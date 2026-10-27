@@ -122,7 +122,12 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			return;
 		}
 
-		String propertyName = (String) tableView.getValueAt(row, 0);
+		RowData rowData = tableView.findRowByViewIndex(row);
+		if (rowData == null) {
+			return;
+		}
+
+		String propertyName = rowData.getValue("key", String.class);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(propertyName), null);
 	}
 
@@ -137,8 +142,9 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			Logging.debug(this, "prepareRendererForJTable: rowData is null for row ", row, " and col ", col);
 			return;
 		}
-		addTooltip(jComponent, rowData.getValue("key", String.class), rowData.getValue("value", Object.class));
-		setText(jComponent, col, row);
+		String key = rowData.getValue("key", String.class);
+		addTooltip(jComponent, key, rowData.getValue("value", Object.class));
+		setText(jComponent, col, key);
 	}
 
 	private void addTooltip(JComponent jc, String propertyName, Object value) {
@@ -168,9 +174,8 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 		}
 	}
 
-	private void setText(JComponent jComponent, int vColIndex, int rowIndex) {
-		if (vColIndex == 1
-				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) tableView.getValueAt(rowIndex, 0))
+	private void setText(JComponent jComponent, int vColIndex, String key) {
+		if (vColIndex == 1 && PropertiesCellEditorAndRenderer.isKeyForSecretValue(key)
 				&& jComponent instanceof JLabel jLabel) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}

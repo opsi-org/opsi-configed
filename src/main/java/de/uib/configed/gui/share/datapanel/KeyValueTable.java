@@ -280,9 +280,7 @@ public class KeyValueTable extends JPanel {
 			JMenuItem popupItemDeleteEntry0 = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-			popupItemDeleteEntry0
-					.addActionListener(actionEvent -> tableView.dispatch(new GenericTableViewMsg.DeleteRows(
-							List.of(tableView.getRowByModelIndex(tableView.getSelectedRow()).getId()))));
+			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteSelectedRow());
 			popupItemDeleteEntry0
 					.setEnabled(!PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
 							.isGlobalReadOnly());
@@ -349,6 +347,20 @@ public class KeyValueTable extends JPanel {
 		}
 	}
 
+	String getSelectedConfigKey() {
+		int selectedRow = tableView.getSelectedRow();
+		RowData rowData = selectedRow < 0 ? null : tableView.findRowByViewIndex(selectedRow);
+		return rowData == null ? null : rowData.getValue("key", String.class);
+	}
+
+	private void deleteSelectedRow() {
+		int selectedRow = tableView.getSelectedRow();
+		RowData rowData = selectedRow < 0 ? null : tableView.findRowByViewIndex(selectedRow);
+		if (rowData != null) {
+			tableView.dispatch(new GenericTableViewMsg.DeleteRows(List.of(rowData.getId())));
+		}
+	}
+
 	public void setOriginalMap(Map<String, Object> originalMap) {
 		this.originalMap = originalMap;
 	}
@@ -359,10 +371,13 @@ public class KeyValueTable extends JPanel {
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, int row, int col) {
-		jComponent.setToolTipText(createTooltipForPropertyName(keys.get(row), defaultsMap, descriptionsMap, null));
+		RowData rowData = tableView.findRowByViewIndex(row);
+		if (rowData == null) {
+			return;
+		}
+		String key = rowData.getValue("key", String.class);
+		jComponent.setToolTipText(createTooltipForPropertyName(key, defaultsMap, descriptionsMap, null));
 		jComponent.setFont(jComponent.getFont().deriveFont(Font.PLAIN));
-
-		RowData rowData = tableView.getRowByModelIndex(row);
 
 		if (rowData.getState() == RowState.MISSING_DATA) {
 			jComponent.setForeground(Globals.OPSI_ERROR);
@@ -377,7 +392,7 @@ public class KeyValueTable extends JPanel {
 		}
 
 		if (col == 1 && jComponent instanceof JLabel jLabel
-				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue(rowData.getValue("key", String.class))) {
+				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue(key)) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
 	}
@@ -502,7 +517,7 @@ public class KeyValueTable extends JPanel {
 	private void pinProperty(int keyIndex) {
 		this.pinnedProperty = true;
 
-		String key = keys.get(keyIndex);
+		String key = tableView.getRowByModelIndex(keyIndex).getValue("key", String.class);
 		changes.put(key, defaultsMap.get(key));
 
 		if (originalMap != null) {
@@ -517,12 +532,10 @@ public class KeyValueTable extends JPanel {
 	private void unpinProperty(int keyIndex) {
 		this.pinnedProperty = true;
 
-		String key = keys.get(keyIndex);
+		String key = tableView.getRowByModelIndex(keyIndex).getValue("key", String.class);
 		changes.put(key, null);
 
-		if (originalMap != null) {
-			originalMap.remove(key);
-		}
+		originalMap.remove(key);
 
 		fireCellEditedEvent(keyIndex, key);
 
