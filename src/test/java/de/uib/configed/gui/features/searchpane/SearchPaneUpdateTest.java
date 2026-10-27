@@ -86,6 +86,34 @@ class SearchPaneUpdateTest {
 	}
 
 	@Test
+	void shouldSaveUpdatedFilterOptions_whenChangingSearchColumn() {
+		SearchPaneModel model = baseModel().withSearchText("needle").withSearchColumnIndex(1);
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
+				.update(new SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(2), model);
+
+		assertEquals(2, result.model().getSearchColumnIndex());
+		SearchPaneEffect.ServiceEffect.SaveFilterState effect = assertInstanceOf(
+				SearchPaneEffect.ServiceEffect.SaveFilterState.class, result.effect().orElseThrow());
+		assertEquals(TEST_FILTER_KEY, effect.filterKey());
+		assertEquals("needle", effect.filterState().getSearchText());
+		assertEquals(2, effect.filterState().getSearchColumnIndex());
+	}
+
+	@Test
+	void shouldSaveUpdatedFilterOptions_whenTogglingRegex() {
+		SearchPaneModel model = baseModel().withSearchText("needle").withRegexActive(false);
+
+		UpdateResult<SearchPaneModel, SearchPaneEffect> result = SearchPaneUpdate
+				.update(new SearchPaneMsg.FieldChangeMsg.ToggleRegex(true), model);
+
+		assertTrue(result.model().isRegexActive());
+		SearchPaneEffect.ServiceEffect.SaveFilterState effect = assertInstanceOf(
+				SearchPaneEffect.ServiceEffect.SaveFilterState.class, result.effect().orElseThrow());
+		assertTrue(effect.filterState().isRegexActive());
+	}
+
+	@Test
 	void shouldMarkAndFilter_whenToggleFilterMarkToTrue() {
 		SearchPaneModel model = baseModel().withFilteredBySelection(false);
 
@@ -265,6 +293,40 @@ class SearchPaneUpdateTest {
 				() -> assertInstanceOf(SearchPaneEffect.ServiceEffect.ApplyFilter.class, result.effect().get()));
 
 		FilterStateManager.removeFilterState(TEST_FILTER_KEY);
+	}
+
+	@Test
+	void shouldRestoreIndependentFilterStates_forDifferentScopes() {
+		String firstScope = "server:general";
+		String secondScope = "server:clientconfig";
+		FilterStateManager.saveFilterState(TEST_FILTER_KEY, firstScope,
+				new TableFilterState("first", 1, false, false));
+		FilterStateManager.saveFilterState(TEST_FILTER_KEY, secondScope,
+				new TableFilterState("second", 2, true, true));
+
+		try {
+			UpdateResult<SearchPaneModel, SearchPaneEffect> firstResult = SearchPaneUpdate
+					.update(new SearchPaneMsg.ActionMsg.RestoreFilter(), baseModel().withFilterScope(firstScope));
+			UpdateResult<SearchPaneModel, SearchPaneEffect> secondResult = SearchPaneUpdate
+					.update(new SearchPaneMsg.ActionMsg.RestoreFilter(), baseModel().withFilterScope(secondScope));
+
+			assertEquals("first", firstResult.model().getSearchText());
+			assertEquals(1, firstResult.model().getSearchColumnIndex());
+			assertEquals("second", secondResult.model().getSearchText());
+			assertEquals(2, secondResult.model().getSearchColumnIndex());
+			assertTrue(secondResult.model().isRegexActive());
+			assertTrue(secondResult.model().isRespectCase());
+
+			UpdateResult<SearchPaneModel, SearchPaneEffect> saveResult = SearchPaneUpdate.update(
+					new SearchPaneMsg.ActionMsg.SaveFilterState(),
+					baseModel().withSearchText("first").withFilterScope(firstScope));
+			SearchPaneEffect.ServiceEffect.SaveFilterState saveEffect = assertInstanceOf(
+					SearchPaneEffect.ServiceEffect.SaveFilterState.class, saveResult.effect().orElseThrow());
+			assertEquals(firstScope, saveEffect.scope());
+		} finally {
+			FilterStateManager.removeFilterState(TEST_FILTER_KEY, firstScope);
+			FilterStateManager.removeFilterState(TEST_FILTER_KEY, secondScope);
+		}
 	}
 
 	@Test

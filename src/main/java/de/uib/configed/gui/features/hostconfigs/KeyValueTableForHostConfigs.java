@@ -56,7 +56,12 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 
 	public KeyValueTableForHostConfigs(Actor actor, JTree tree, boolean isServerConfig,
 			boolean includeAdditionalTooltipText) {
-		super(isServerConfig, !isServerConfig, true);
+		this(actor, tree, isServerConfig, includeAdditionalTooltipText, null);
+	}
+
+	public KeyValueTableForHostConfigs(Actor actor, JTree tree, boolean isServerConfig,
+			boolean includeAdditionalTooltipText, String filterScope) {
+		super(isServerConfig, !isServerConfig, true, filterScope);
 
 		this.actor = actor;
 		this.tree = tree;
@@ -68,6 +73,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 		TreePath p = tree.getSelectionPath();
 		int row = tree.getRowForPath(p);
 
+		saveFilterState();
 		actor.reloadData();
 		Logging.info(this, "reloaded, return to ", p);
 		if (p != null) {
@@ -75,6 +81,8 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			tree.setSelectionInterval(row, row);
 			tree.scrollRowToVisible(row);
 		}
+
+		restoreFilter();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}

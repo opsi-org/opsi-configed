@@ -12,6 +12,7 @@ import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.TableFilterState;
+import de.uib.configed.share.logging.Logging;
 
 public final class SearchPaneUpdate {
 	private SearchPaneUpdate() {
@@ -32,8 +33,8 @@ public final class SearchPaneUpdate {
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchText(String text) -> UpdateResult.withEffect(
 				model.toBuilder().searchText(text).foundRow(0).build(), new SearchPaneEffect.ServiceEffect.ApplyFilter(
 						text, model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase(), false));
-		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(int index) -> UpdateResult
-				.noEffect(model.withSearchColumnIndex(index));
+		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumnIndex(int index) -> onSaveFilterState(
+				model.withSearchColumnIndex(index));
 		case SearchPaneMsg.FieldChangeMsg.ChangeFilterKey(FilterKey filterKey) -> UpdateResult
 				.noEffect(model.toBuilder().filterKey(filterKey).enableFilterBySelection(filterKey != null).build());
 		case SearchPaneMsg.FieldChangeMsg.ChangeSearchColumns(List<Integer> searchColumns) -> UpdateResult
@@ -46,10 +47,9 @@ public final class SearchPaneUpdate {
 				.noEffect(model.withFilteredBySelection(value));
 		case SearchPaneMsg.FieldChangeMsg.ChangeSelectMode(boolean value) -> UpdateResult
 				.noEffect(model.withSelectMode(value));
-		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean value) -> UpdateResult
-				.noEffect(model.withRespectCase(value));
-		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean value) -> UpdateResult
-				.noEffect(model.withRegexActive(value));
+		case SearchPaneMsg.FieldChangeMsg.ToggleRespectCase(boolean value) -> onSaveFilterState(
+				model.withRespectCase(value));
+		case SearchPaneMsg.FieldChangeMsg.ToggleRegex(boolean value) -> onSaveFilterState(model.withRegexActive(value));
 		case SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(boolean value) -> UpdateResult.withEffect(
 				model.withFilteredBySelection(value), new SearchPaneEffect.ServiceEffect.MarkSelectedAndFilter(value));
 		};
@@ -70,7 +70,20 @@ public final class SearchPaneUpdate {
 		case SearchPaneMsg.ActionMsg.TriggerFilterMark() -> UpdateResult.withEffect(model,
 				new SearchPaneEffect.UIEffect.FilterMarkTriggered());
 		case SearchPaneMsg.ActionMsg.ResetSearch() -> onResetSearch(model);
+		case SearchPaneMsg.ActionMsg.SaveFilterState() -> onSaveFilterState(model);
 		};
+	}
+
+	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onSaveFilterState(SearchPaneModel model) {
+		if (model.getFilterKey() == null || model.getSearchText().isBlank()) {
+			return UpdateResult.noEffect(model);
+		}
+
+		TableFilterState filterState = new TableFilterState(model.getSearchText(), model.getSearchColumnIndex(),
+				model.isRegexActive(), model.isRespectCase());
+		return UpdateResult.withEffect(model,
+				new SearchPaneEffect.ServiceEffect.SaveFilterState(model.getFilterKey(), model.getFilterScope(),
+						filterState));
 	}
 
 	private static UpdateResult<SearchPaneModel, SearchPaneEffect> onMarkAllAndFilter(SearchPaneModel model) {
@@ -96,7 +109,7 @@ public final class SearchPaneUpdate {
 			return UpdateResult.noEffect(model);
 		}
 
-		TableFilterState filterState = FilterStateManager.getFilterState(model.getFilterKey());
+		TableFilterState filterState = FilterStateManager.getFilterState(model.getFilterKey(), model.getFilterScope());
 		return filterState != null ? UpdateResult.withEffect(
 				model.toBuilder().searchText(filterState.getSearchText())
 						.searchColumnIndex(filterState.getSearchColumnIndex())

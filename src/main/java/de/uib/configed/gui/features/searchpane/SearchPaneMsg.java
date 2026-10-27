@@ -72,6 +72,9 @@ public sealed interface SearchPaneMsg
 
 		record ResetSearch() implements ActionMsg {
 		}
+
+		record SaveFilterState() implements ActionMsg {
+		}
 	}
 
 	/**

@@ -43,6 +43,7 @@ public class SearchPaneModel {
 	// Filter State
 	boolean isFilteredBySelection;
 	FilterKey filterKey;
+	String filterScope;
 
 	// UI State (derived or transient)
 	boolean isDirty;

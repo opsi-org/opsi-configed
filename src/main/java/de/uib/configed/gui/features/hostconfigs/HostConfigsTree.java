@@ -254,7 +254,7 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 
 		for (String key : keyclasses) {
 			KeyValueTable editMapPanel = new KeyValueTableForHostConfigs(actor, tree, isServerConfig,
-					includeAdditionalTooltipText);
+					includeAdditionalTooltipText, getFilterStateScope(key));
 
 			((KeyValueTableForHostConfigs) editMapPanel).setActor(actor);
 			editMapPanel.setOriginalMap(originalMap);
@@ -288,6 +288,11 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 		for (Entry<String, KeyValueTable> entry : partialPanels.entrySet()) {
 			entry.getValue().setIsEditable(key -> isEditable(key, entry));
 		}
+	}
+
+	private String getFilterStateScope(String key) {
+		String configType = isServerConfig ? "server" : isClientConfig ? "client" : "depot";
+		return configType + ":" + key;
 	}
 
 	// Modification info and some userroles cannot be edited

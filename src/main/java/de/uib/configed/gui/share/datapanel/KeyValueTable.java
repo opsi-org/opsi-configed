@@ -37,6 +37,7 @@ import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.features.productpage.TextMarkdownPane;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
 import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromTable;
 import de.uib.configed.gui.features.table.GenericTableViewComponent;
 import de.uib.configed.gui.features.table.GenericTableViewEffect;
@@ -53,6 +54,7 @@ import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.PopupMenuTrait;
 import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.gui.share.table.gui.ListModelProducer;
 import de.uib.configed.gui.share.table.gui.PropertiesCellEditorAndRenderer;
 import de.uib.configed.gui.type.ConfigOption;
@@ -99,11 +101,18 @@ public class KeyValueTable extends JPanel {
 
 	private KeyValueRowDiffStrategy diffStrategy;
 
+	private SearchPaneComponent searchPane;
+
 	public KeyValueTable(boolean keylistExtendible, boolean entryRemovable) {
 		this(keylistExtendible, entryRemovable, false);
 	}
 
 	public KeyValueTable(boolean keylistExtendible, boolean entryRemovable, boolean includeSearchPane) {
+		this(keylistExtendible, entryRemovable, includeSearchPane, null);
+	}
+
+	protected KeyValueTable(boolean keylistExtendible, boolean entryRemovable, boolean includeSearchPane,
+			String searchFilterScope) {
 		super();
 
 		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable);
@@ -113,10 +122,11 @@ public class KeyValueTable extends JPanel {
 		ttm.setDismissDelay(Globals.TOOLTIP_DISMISS_DELAY_MS);
 		ttm.setReshowDelay(Globals.TOOLTIP_RESHOW_DELAY_MS);
 
-		buildPanel(keylistExtendible, entryRemovable, includeSearchPane);
+		buildPanel(keylistExtendible, entryRemovable, includeSearchPane, searchFilterScope);
 	}
 
-	private void buildPanel(boolean keylistExtendible, boolean entryRemovable, boolean includeSearchPane) {
+	private void buildPanel(boolean keylistExtendible, boolean entryRemovable, boolean includeSearchPane,
+			String searchFilterScope) {
 		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
 
 		TableConfig config = TableConfig.builder().fillViewportHeight(true)
@@ -153,8 +163,9 @@ public class KeyValueTable extends JPanel {
 		if (includeSearchPane) {
 			this.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[grow]0"));
 
-			SearchPaneComponent searchPane = SearchPaneComponent.builder()
-					.targetModel(new SearchTargetModelFromTable(tableView.getTable())).component(component).build();
+			searchPane = SearchPaneComponent.builder().targetModel(new SearchTargetModelFromTable(tableView.getTable()))
+					.filterKey(FilterStateManager.FilterKey.HOST_PARAMETERS_TABLE).filterScope(searchFilterScope)
+					.component(component).build();
 			this.add(searchPane.initUI(), "growx, hmin 0");
 		}
 
@@ -174,6 +185,8 @@ public class KeyValueTable extends JPanel {
 		RowData rowData = tableView.getRowByModelIndex(row);
 		String key = rowData.getValue("key", String.class);
 
+		saveFilterState();
+
 		if (!pinnedProperty) {
 			Map<String, Object> map = POJOReMapper.remap(newValue);
 
@@ -187,20 +200,38 @@ public class KeyValueTable extends JPanel {
 		}
 
 		notifyOfChanges();
+
+		restoreFilter();
+	}
+
+	protected final void saveFilterState() {
+		if (searchPane != null) {
+			searchPane.dispatch(new SearchPaneMsg.ActionMsg.SaveFilterState());
+		}
+	}
+
+	public void restoreFilter() {
+		if (searchPane != null) {
+			searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
+		}
 	}
 
 	private void handleAddRow(Map<String, Object> data) {
+		saveFilterState();
 		for (Map.Entry<String, Object> entry : data.entrySet()) {
 			changes.put(entry.getKey(), entry.getValue());
 		}
 		notifyOfChanges();
+		restoreFilter();
 	}
 
 	private void handleDeleteRows(List<RowData> deletedRows) {
+		saveFilterState();
 		for (RowData rowData : deletedRows) {
 			changes.put(rowData.getValue("key", String.class), null);
 		}
 		notifyOfChanges();
+		restoreFilter();
 	}
 
 	private void notifyOfChanges() {
@@ -404,6 +435,7 @@ public class KeyValueTable extends JPanel {
 		}
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
+		saveFilterState();
 
 		diffStrategy.setDefaultsMap(defaultsMap);
 		diffStrategy.setOriginalMap(originalMap);
@@ -418,6 +450,8 @@ public class KeyValueTable extends JPanel {
 		List<Map<String, Object>> transformedData = data.entrySet().stream()
 				.map(e -> Map.of("key", e.getKey(), "value", e.getValue())).toList();
 		tableView.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(transformedData));
+
+		restoreFilter();
 	}
 
 	@SuppressWarnings("java:S2250")
