@@ -62,6 +62,7 @@ public class MessageOfTheDayDialog {
 		init();
 
 		JButton buttonSave = new JButton(Configed.getResourceValue("save"));
+		buttonSave.setEnabled(!persistenceController.getDataServices().userRoles.isGlobalReadOnly());
 
 		JOptionPane optionPane = new JOptionPane(scrollpane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { buttonSave, Configed.getResourceValue("buttonCancel") });

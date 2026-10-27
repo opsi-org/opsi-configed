@@ -556,7 +556,9 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 
 		Logging.info(this, "rows selected: ", lsm.getSelectedItemsCount());
 
-		popupManager.enableMenuItemDeleteRelation(!lsm.isSelectionEmpty());
+		popupManager.enableMenuItemDeleteRelation(!lsm.isSelectionEmpty()
+				&& !PersistenceControllerFactory.getPersistenceController().getDataServices().userRoles
+						.isGlobalReadOnly());
 	}
 
 	@Override
