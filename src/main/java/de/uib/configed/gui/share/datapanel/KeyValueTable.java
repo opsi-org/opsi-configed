@@ -153,9 +153,7 @@ public class KeyValueTable extends JPanel {
 					}
 					prepareRendererForJTable((JComponent) component, row, col);
 				});
-		tableView.setIsCellEditable(
-				(Integer row) -> (keysOfReadOnlyEntries == null || !keysOfReadOnlyEntries.contains(keys.get(row)))
-						&& (isEditable == null || isEditable.apply(keys.get(row))));
+		tableView.setIsCellEditable(this::isCellEditable);
 		JComponent component = tableView.initUI();
 
 		this.setLayout(new MigLayout("insets 0, fillx, wrap 1", "[grow]", "[grow]0"));
@@ -170,6 +168,17 @@ public class KeyValueTable extends JPanel {
 		}
 
 		this.add(component, "grow, push, hmin 0");
+	}
+
+	private boolean isCellEditable(int row) {
+		if (row < 0 || row >= tableView.getRowCount()) {
+			return false;
+		}
+
+		String key = tableView.getRowByModelIndex(row).getValue("key", String.class);
+		boolean isReadOnly = keysOfReadOnlyEntries != null && keysOfReadOnlyEntries.contains(key);
+		boolean isEditableRow = (isEditable == null || isEditable.apply(key));
+		return key != null && !isReadOnly && isEditableRow;
 	}
 
 	private Runnable handleEffect(GenericTableViewEffect effect) {

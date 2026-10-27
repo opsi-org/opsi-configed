@@ -77,7 +77,6 @@ public class PanelHostConfig extends JPanel {
 			Map<String, String> classesMap, Map<String, List<Object>> originalMap,
 			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing, label:", labeltext);
-		// FilterStateManager.removeFilterState(FilterStateManager.FilterKey.HOST_PARAMETERS_TABLE);
 		editMapPanel.setSubpanelClasses(classesMap);
 		if (originalMap != null) {
 			editMapPanel.setOriginalMap(POJOReMapper.remap(originalMap));
