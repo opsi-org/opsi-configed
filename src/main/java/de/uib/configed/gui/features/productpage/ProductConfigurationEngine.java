@@ -133,9 +133,11 @@ public class ProductConfigurationEngine {
 		completeWithDefaults(clients, availableProductNames);
 	}
 
+	@SuppressWarnings("java:S5612")
 	public void completeWithDefaults(Iterable<String> clients, Iterable<String> productNames) {
 		clients.forEach(clientId -> productNames.forEach((String productId) -> {
-			if (combinedVisualValues.values().stream().anyMatch(m -> m.containsKey(productId))) {
+			Map<String, Map<String, String>> clientProductStates = allClientsProductStates.get(clientId);
+			if (clientProductStates != null && clientProductStates.get(productId) != null) {
 				return;
 			}
 
@@ -169,14 +171,19 @@ public class ProductConfigurationEngine {
 	}
 
 	private static void mixToVisualState(Map<String, String> visualStates, String productId, String mixinValue) {
-		String oldValue = visualStates.get(productId);
-		if (oldValue == null) {
+		if (!visualStates.containsKey(productId)) {
 			visualStates.put(productId, mixinValue);
-		} else if (!oldValue.equalsIgnoreCase(mixinValue)) {
-			visualStates.put(productId, Globals.CONFLICT_STATE_STRING);
-		} else {
-			// Do nothing.
+			return;
 		}
+
+		String oldValue = visualStates.get(productId);
+		if (!sameVisualValue(oldValue, mixinValue)) {
+			visualStates.put(productId, Globals.CONFLICT_STATE_STRING);
+		}
+	}
+
+	private static boolean sameVisualValue(String first, String second) {
+		return first == null ? (second == null) : first.equalsIgnoreCase(second);
 	}
 
 	private String computeVersionDisplay(String productId, Map<String, Map<String, Object>> globalProductInfos) {
