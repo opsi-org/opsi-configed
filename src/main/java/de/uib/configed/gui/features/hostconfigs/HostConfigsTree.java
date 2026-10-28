@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.features.hostconfigs;
 
+import java.awt.Component;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
@@ -224,15 +227,15 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 		int divLoc = splitPane.getDividerLocation();
 
 		if (selectedPath == null) {
-			splitPane.setRightComponent(emptyRightPane);
-			splitPane.setDividerLocation(divLoc);
+			replaceRightComponent(emptyRightPane, divLoc);
 			return;
 		}
 
 		boolean isRoot = selectedPath.getPathCount() == 1;
 
+		Component rightComponent;
 		if (isRoot) {
-			splitPane.setRightComponent(emptyRightPane);
+			rightComponent = emptyRightPane;
 		} else {
 			// we start at 1 since we eliminate the root node
 			List<String> pathForKey = Arrays.stream(selectedPath.getPath()).map(Object::toString).skip(1).toList();
@@ -240,13 +243,49 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 			String key = String.join(".", pathForKey);
 
 			if (partialPanels.get(key) == null) {
-				splitPane.setRightComponent(emptyRightPane);
+				rightComponent = emptyRightPane;
 			} else {
-				splitPane.setRightComponent(partialPanels.get(key));
+				rightComponent = partialPanels.get(key);
 			}
 		}
 
-		splitPane.setDividerLocation(divLoc);
+		replaceRightComponent(rightComponent, divLoc);
+	}
+
+	/**
+	 * Replaces the detail component and restores the divider after the
+	 * containing window has laid out the nested split pane.
+	 * <p>
+	 * The deferred callback skips restoration if the pane is no longer showing
+	 * the component that triggered it, preventing an outdated tree selection
+	 * from overriding a newer one.
+	 *
+	 * @param rightComponent  the detail component to display
+	 * @param dividerLocation the divider position to restore, or a negative
+	 *                        value if it has not been initialized
+	 */
+	@SuppressWarnings("java:S5612")
+	private void replaceRightComponent(Component rightComponent, int dividerLocation) {
+		splitPane.setRightComponent(rightComponent);
+		splitPane.revalidate();
+		splitPane.repaint();
+
+		if (dividerLocation >= 0) {
+			SwingUtilities.invokeLater(() -> {
+				if (splitPane.isShowing() && splitPane.getRightComponent() == rightComponent) {
+					Window window = SwingUtilities.getWindowAncestor(splitPane);
+					if (window != null) {
+						window.validate();
+					} else {
+						splitPane.validate();
+					}
+
+					splitPane.setDividerLocation(dividerLocation);
+					splitPane.revalidate();
+					splitPane.repaint();
+				}
+			});
+		}
 	}
 
 	private void generateParts() {
