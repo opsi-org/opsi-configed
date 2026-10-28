@@ -77,16 +77,6 @@ public class DepotListPresenter extends JPanel {
 		return new SearchTargetModelFromJList(depotsList, values, descriptions);
 	}
 
-	/**
-	 * exports the scrollpane which is produced in this class but displayed in
-	 * other components
-	 *
-	 * @return a scrollpane which shows the depotslist
-	 */
-	public JScrollPane getScrollpaneDepotslist() {
-		return scrollpaneDepotslist;
-	}
-
 	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		JMenuItem selectWithEqualProperties = new JMenuItem(
