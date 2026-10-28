@@ -253,8 +253,9 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 	}
 
 	/**
-	 * Replaces the detail component and restores the divider after the
-	 * containing window has laid out the nested split pane.
+	 * Replaces the detail component while keeping the current divider position,
+	 * then restores it after the containing window has laid out the nested split
+	 * pane.
 	 * <p>
 	 * The deferred callback skips restoration if the pane is no longer showing
 	 * the component that triggered it, preventing an outdated tree selection
@@ -264,8 +265,11 @@ public class HostConfigsTree extends JPanel implements TreeSelectionListener {
 	 * @param dividerLocation the divider position to restore, or a negative
 	 *                        value if it has not been initialized
 	 */
-	@SuppressWarnings("java:S5612")
 	private void replaceRightComponent(Component rightComponent, int dividerLocation) {
+		if (dividerLocation >= 0) {
+			splitPane.setDividerLocation(dividerLocation);
+		}
+
 		splitPane.setRightComponent(rightComponent);
 		splitPane.revalidate();
 		splitPane.repaint();
