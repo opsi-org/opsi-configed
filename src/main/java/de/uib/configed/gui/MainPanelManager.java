@@ -43,6 +43,7 @@ import de.uib.configed.gui.share.DialogUtils;
 import de.uib.configed.gui.share.SwingUtils;
 import de.uib.configed.gui.share.icons.Icons;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
+import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.share.SplitPaneStateManager;
 import de.uib.configed.share.logging.Logging;
 import javafx.application.Platform;
@@ -59,7 +60,8 @@ public class MainPanelManager {
 	private ServerConfiguration serverConfiguration;
 
 	private DepotConfiguration depotConfiguration;
-	private DepotListPresenter depotListPresenter;
+	private DepotListPresenter depotConfigurationDepotListPresenter;
+	private DepotListPresenter clientConfigurationDepotListPresenter;
 	private DepotsList depotSelectionList;
 
 	private LicenseManagement licenseManagement;
@@ -83,7 +85,9 @@ public class MainPanelManager {
 	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame, ClientTree clientTree,
 			ProductTree productTree) {
 		leftTabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		leftTabs.addTab(null, new DepotListPresenter(depotsList));
+		clientConfigurationDepotListPresenter = new DepotListPresenter(depotsList,
+				FilterStateManager.FilterKey.CLIENT_CONFIGURATION_DEPOT_LIST);
+		leftTabs.addTab(null, clientConfigurationDepotListPresenter);
 		leftTabs.addTab(null, createScrollPaneForTree(clientTree));
 		leftTabs.addTab(null, createScrollPaneForTree(productTree));
 
@@ -143,6 +147,10 @@ public class MainPanelManager {
 		jPanel.add(jSplitPane, "grow");
 		jPanel.add(hostsStatusPanel, "growx");
 
+		if (clientConfigurationDepotListPresenter != null) {
+			clientConfigurationDepotListPresenter.refreshData();
+		}
+
 		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(), "MainFrame.labelClientsConfiguration");
 	}
 
@@ -156,11 +164,12 @@ public class MainPanelManager {
 			depotSelectionList.setListData(depotNames);
 			depotSelectionList.setInfo(depots);
 			depotConfiguration = new DepotConfiguration(configedMain, depotSelectionList);
-			depotListPresenter = new DepotListPresenter(depotSelectionList);
+			depotConfigurationDepotListPresenter = new DepotListPresenter(depotSelectionList,
+					FilterStateManager.FilterKey.DEPOT_CONFIGURATION_DEPOT_LIST);
 		} else {
 			depotSelectionList.setListData(depotNames);
 			depotSelectionList.setInfo(depots);
-			depotConfiguration.refreshData(depotNames, depots, depotListPresenter::refreshData);
+			depotConfiguration.refreshData(depotNames, depots, depotConfigurationDepotListPresenter::refreshData);
 		}
 
 		JLabel depotSelectionLabel = SwingUtils.createBoldLabel(Configed.getResourceValue("depotSelection"));
@@ -169,7 +178,7 @@ public class MainPanelManager {
 		depotsListPanel.setLayout(new MigLayout("insets 0", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[]"));
 
 		depotsListPanel.add(depotSelectionLabel, "align center, wrap");
-		depotsListPanel.add(depotListPresenter, "grow, push");
+		depotsListPanel.add(depotConfigurationDepotListPresenter, "grow, push");
 
 		depotsListPanel.setMinimumSize(new Dimension());
 

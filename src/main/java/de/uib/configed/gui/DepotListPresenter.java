@@ -44,12 +44,11 @@ public class DepotListPresenter extends JPanel {
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList) {
+	public DepotListPresenter(DepotsList depotsList, FilterStateManager.FilterKey filterKey) {
 		this.depotslist = depotsList;
 
 		searchPane = SearchPaneComponent.builder().targetModel(createSearchTargetModel(depotsList)).isNarrow(true)
-				.enableFilterBySelection(true).component(depotsList)
-				.filterKey(FilterStateManager.FilterKey.DEPOT_CONFIGURATION_DEPOT_LIST).build();
+				.enableFilterBySelection(true).component(depotsList).filterKey(filterKey).build();
 
 		initComponents();
 		layouting();
