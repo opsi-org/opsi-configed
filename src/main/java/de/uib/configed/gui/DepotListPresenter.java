@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -64,12 +63,17 @@ public class DepotListPresenter extends JPanel {
 		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
-		for (Entry<String, Map<String, Object>> depotInfoEntry : depotInfo.entrySet()) {
-			values.add(depotInfoEntry.getKey());
-			if (depotInfoEntry.getValue() == null || depotInfoEntry.getValue().get("description") == null) {
+		List<String> sortedDepotNames = new ArrayList<>(depotInfo.keySet());
+		String configServer = PersistenceControllerFactory.getPersistenceController().getDataServices()
+				.hostInfoCollections.getConfigServer();
+		sortedDepotNames.sort(DepotsList.depotNameComparator(configServer));
+		for (String depotName : sortedDepotNames) {
+			values.add(depotName);
+			Map<String, Object> depotDetails = depotInfo.get(depotName);
+			if (depotDetails == null || depotDetails.get("description") == null) {
 				descriptions.add("");
 			} else {
-				descriptions.add((String) depotInfoEntry.getValue().get("description"));
+				descriptions.add((String) depotDetails.get("description"));
 			}
 		}
 
