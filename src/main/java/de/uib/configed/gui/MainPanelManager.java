@@ -167,8 +167,6 @@ public class MainPanelManager {
 			depotConfigurationDepotListPresenter = new DepotListPresenter(depotSelectionList,
 					FilterStateManager.FilterKey.DEPOT_CONFIGURATION_DEPOT_LIST);
 		} else {
-			depotSelectionList.setListData(depotNames);
-			depotSelectionList.setInfo(depots);
 			depotConfiguration.refreshData(depotNames, depots, depotConfigurationDepotListPresenter::refreshData);
 		}
 

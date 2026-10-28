@@ -48,8 +48,8 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	public void setListData(List<String> v) {
 		List<String> sortedDepotNames = new ArrayList<>(v);
-		String configServer = PersistenceControllerFactory.getPersistenceController().getDataServices()
-				.hostInfoCollections.getConfigServer();
+		String configServer = PersistenceControllerFactory.getPersistenceController()
+				.getDataServices().hostInfoCollections.getConfigServer();
 		sortedDepotNames.sort(depotNameComparator(configServer));
 		super.setListData(sortedDepotNames.toArray(new String[0]));
 		saveV = sortedDepotNames;

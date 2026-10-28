@@ -71,10 +71,11 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	void refreshData(List<String> depotNames, Map<String, Map<String, Object>> depotInfo, Runnable refreshPresenter) {
 		depotsList.removeListSelectionListener(this);
 		try {
+			List<String> selectedDepots = depotsList.getSelectedValuesList();
 			depotsList.setListData(depotNames);
 			depotsList.setInfo(depotInfo);
+			depotsList.setSelectedValues(selectedDepots);
 			refreshPresenter.run();
-			depotsList.setSelectedValues(configedMain.getSelectedDepots());
 			lastSelectedDepots = depotsList.getSelectedIndices();
 		} finally {
 			depotsList.addListSelectionListener(this);
