@@ -113,8 +113,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	private void updateTab() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
-		depotsList.requestFocus();
-
 		switch (getSelectedIndex()) {
 		case 0 -> {
 			initHostConfigTab();
