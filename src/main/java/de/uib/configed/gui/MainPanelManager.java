@@ -58,6 +58,10 @@ public class MainPanelManager {
 
 	private ServerConfiguration serverConfiguration;
 
+	private DepotConfiguration depotConfiguration;
+	private DepotListPresenter depotListPresenter;
+	private DepotsList depotSelectionList;
+
 	private LicenseManagement licenseManagement;
 
 	private TopToolBarManager topToolBarManager;
@@ -143,13 +147,23 @@ public class MainPanelManager {
 	}
 
 	private JPanel createDepotConfigurationPanel() {
-		DepotsList depotsList = new DepotsList(configedMain);
-		depotsList.setListData(persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList());
-		depotsList.setInfo(persistenceController.getDataServices().hostInfoCollections.getAllDepots());
-		DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
+		List<String> depotNames = persistenceController.getDataServices().hostInfoCollections.getAllDepotNamesList();
+		Map<String, Map<String, Object>> depots = persistenceController.getDataServices().hostInfoCollections
+				.getAllDepots();
+
+		if (depotConfiguration == null) {
+			depotSelectionList = new DepotsList(configedMain);
+			depotSelectionList.setListData(depotNames);
+			depotSelectionList.setInfo(depots);
+			depotConfiguration = new DepotConfiguration(configedMain, depotSelectionList);
+			depotListPresenter = new DepotListPresenter(depotSelectionList);
+		} else {
+			depotSelectionList.setListData(depotNames);
+			depotSelectionList.setInfo(depots);
+			depotConfiguration.refreshData(depotNames, depots, depotListPresenter::refreshData);
+		}
 
 		JLabel depotSelectionLabel = SwingUtils.createBoldLabel(Configed.getResourceValue("depotSelection"));
-		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 		JPanel depotsListPanel = new JPanel();
 		depotsListPanel.setLayout(new MigLayout("insets 0", "[grow]", "[]" + Globals.MIN_GAP_SIZE + "[]"));

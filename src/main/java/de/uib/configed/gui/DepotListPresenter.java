@@ -45,6 +45,18 @@ public class DepotListPresenter extends JPanel {
 	public DepotListPresenter(DepotsList depotsList) {
 		this.depotslist = depotsList;
 
+		searchPane = SearchPaneComponent.builder().targetModel(createSearchTargetModel(depotsList)).isNarrow(true)
+				.enableFilterBySelection(true).component(depotsList).build();
+
+		initComponents();
+		layouting();
+	}
+
+	public void refreshData() {
+		searchPane.setTargetModel(createSearchTargetModel(depotslist));
+	}
+
+	private static SearchTargetModel createSearchTargetModel(DepotsList depotsList) {
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
@@ -58,13 +70,7 @@ public class DepotListPresenter extends JPanel {
 			}
 		}
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
-
-		searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).isNarrow(true)
-				.enableFilterBySelection(true).component(depotsList).build();
-
-		initComponents();
-		layouting();
+		return new SearchTargetModelFromJList(depotsList, values, descriptions);
 	}
 
 	/**
