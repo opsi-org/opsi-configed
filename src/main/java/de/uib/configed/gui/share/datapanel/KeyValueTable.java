@@ -86,7 +86,7 @@ public class KeyValueTable extends JPanel {
 	private List<String> keys;
 	private Map<String, Object> data;
 
-	private boolean pinnedProperty;
+	private boolean pinProperty;
 	private boolean showToolTip = true;
 
 	protected Map<String, ConfigOption> optionsMap;
@@ -131,7 +131,7 @@ public class KeyValueTable extends JPanel {
 						.header(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue")).editable(true)
 						.renderer(propertiesCellEditorAndRenderer).editor(propertiesCellEditorAndRenderer).build());
 
-		diffStrategy = new KeyValueRowDiffStrategy(defaultsMap, originalMap, pinnedProperty);
+		diffStrategy = new KeyValueRowDiffStrategy(defaultsMap, originalMap, pinProperty);
 		GenericTableViewModel initialModel = GenericTableViewModel.builder().columns(columns).tableConfig(config)
 				.diffStrategy(diffStrategy).allowMultipleSelection(false).isDirty(false).keyValueTable(true).build();
 
@@ -174,7 +174,7 @@ public class KeyValueTable extends JPanel {
 		RowData rowData = tableView.getRowByModelIndex(row);
 		String key = rowData.getValue("key", String.class);
 
-		if (!pinnedProperty) {
+		if (!pinProperty) {
 			Map<String, Object> map = POJOReMapper.remap(newValue);
 
 			key = (String) map.get("key");
@@ -457,7 +457,7 @@ public class KeyValueTable extends JPanel {
 	}
 
 	private void pinProperty(int keyIndex) {
-		this.pinnedProperty = true;
+		this.pinProperty = true;
 
 		String key = keys.get(keyIndex);
 		changes.put(key, defaultsMap.get(key));
@@ -472,7 +472,7 @@ public class KeyValueTable extends JPanel {
 	}
 
 	private void unpinProperty(int keyIndex) {
-		this.pinnedProperty = true;
+		this.pinProperty = false;
 
 		String key = keys.get(keyIndex);
 		changes.put(key, null);
@@ -487,12 +487,18 @@ public class KeyValueTable extends JPanel {
 	}
 
 	private void fireCellEditedEvent(int keyIndex, String key) {
-		diffStrategy.setPinnedProperty(pinnedProperty);
+		diffStrategy.setPinProperty(pinProperty);
 
-		tableView.dispatch(new GenericTableViewMsg.CellEdited(keyIndex, 0, key));
-
-		this.pinnedProperty = false;
-		diffStrategy.setPinnedProperty(false);
+		if (!pinProperty) {
+			saveToStore(key, defaultsMap.get(key));
+			tableView.dispatch(new GenericTableViewMsg.MultipleCellsEdited(
+					List.of(new GenericTableViewMsg.CellEdited(keyIndex, 0, key),
+							new GenericTableViewMsg.CellEdited(keyIndex, 1, defaultsMap.get(key)))));
+		} else {
+			tableView.dispatch(new GenericTableViewMsg.CellEdited(keyIndex, 0, key));
+			this.pinProperty = false;
+			diffStrategy.setPinProperty(pinProperty);
+		}
 
 		Object defaultValue = defaultsMap.get(key);
 

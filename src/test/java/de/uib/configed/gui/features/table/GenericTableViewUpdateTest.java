@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import de.uib.configed.gui.AbstractTeaComponent.UpdateResult;
 import de.uib.configed.gui.features.table.RowData.RowState;
+import de.uib.configed.gui.share.datapanel.KeyValueRowDiffStrategy;
 
 class GenericTableViewUpdateTest {
 	private static GenericTableViewModel baseModel() {
@@ -212,6 +213,52 @@ class GenericTableViewUpdateTest {
 		// Row 3 & 4: Should remain NORMAL (untouched)
 		assertEquals(RowState.NORMAL, result.model().getRows().get(3).getState());
 		assertEquals(RowState.NORMAL, result.model().getRows().get(4).getState());
+	}
+
+	@Test
+	void shouldRestoreDefaultValueAndNormalState_whenUnpinningEditedKeyValueRow() {
+		List<Object> defaultValue = List.of("default");
+		List<Object> editedValue = List.of("edited");
+		RowData row = RowData.builder().id("row-1")
+				.values(Map.of("key", "testKey", "value", editedValue)).state(RowState.MODIFIED).build();
+		KeyValueRowDiffStrategy diffStrategy = new KeyValueRowDiffStrategy(Map.of("testKey", defaultValue),
+				new HashMap<>(), false);
+		GenericTableViewModel model = GenericTableViewModel.builder().rows(List.of(row)).allRows(List.of(row))
+				.columns(List.of(
+						new TableColumnConfig("key", "key", false, true, false, 0, 0, null, null, null),
+						new TableColumnConfig("value", "value", false, true, false, 0, 0, null, null, null)))
+				.diffStrategy(diffStrategy)
+				.keyValueTable(true).build();
+
+		GenericTableViewMsg msg = new GenericTableViewMsg.MultipleCellsEdited(List.of(
+				new GenericTableViewMsg.CellEdited(0, 0, "testKey"),
+				new GenericTableViewMsg.CellEdited(0, 1, defaultValue)));
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+		RowData updatedRow = result.model().getRows().get(0);
+
+		assertAll(() -> assertEquals(defaultValue, updatedRow.getValue("value", Object.class)),
+				() -> assertEquals(RowState.NORMAL, updatedRow.getState()),
+				() -> assertFalse(result.effect().isPresent()));
+	}
+
+	@Test
+	void shouldRecalculateKeyValueRowState_whenBatchedKeyEditHasNoValueChange() {
+		List<Object> defaultValue = List.of("default");
+		RowData row = RowData.builder().id("row-1")
+				.values(Map.of("key", "testKey", "value", defaultValue)).state(RowState.MODIFIED).build();
+		GenericTableViewModel model = GenericTableViewModel.builder().rows(List.of(row)).allRows(List.of(row))
+				.columns(List.of(
+						new TableColumnConfig("key", "key", false, true, false, 0, 0, null, null, null),
+						new TableColumnConfig("value", "value", false, true, false, 0, 0, null, null, null)))
+				.diffStrategy(new KeyValueRowDiffStrategy(Map.of("testKey", defaultValue), new HashMap<>(), false))
+				.keyValueTable(true).build();
+
+		GenericTableViewMsg msg = new GenericTableViewMsg.MultipleCellsEdited(
+				List.of(new GenericTableViewMsg.CellEdited(0, 0, "testKey")));
+
+		UpdateResult<GenericTableViewModel, GenericTableViewEffect> result = GenericTableViewUpdate.update(msg, model);
+
+		assertEquals(RowState.NORMAL, result.model().getRows().get(0).getState());
 	}
 
 	@Test

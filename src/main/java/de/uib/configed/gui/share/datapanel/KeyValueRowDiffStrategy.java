@@ -16,13 +16,13 @@ import de.uib.configed.share.logging.Logging;
 public class KeyValueRowDiffStrategy implements RowDiffStrategy {
 	private Map<String, Object> defaultsMap;
 	private Map<String, Object> originalMap;
-	private boolean pinnedProperty;
+	private boolean pinProperty;
 
 	public KeyValueRowDiffStrategy(Map<String, Object> defaultsMap, Map<String, Object> originalMap,
 			boolean pinnedProperty) {
 		this.defaultsMap = defaultsMap;
 		this.originalMap = originalMap;
-		this.pinnedProperty = pinnedProperty;
+		this.pinProperty = pinnedProperty;
 	}
 
 	public void setDefaultsMap(Map<String, Object> defaultsMap) {
@@ -33,8 +33,8 @@ public class KeyValueRowDiffStrategy implements RowDiffStrategy {
 		this.originalMap = originalMap;
 	}
 
-	public void setPinnedProperty(boolean pinnedProperty) {
-		this.pinnedProperty = pinnedProperty;
+	public void setPinProperty(boolean pinProperty) {
+		this.pinProperty = pinProperty;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class KeyValueRowDiffStrategy implements RowDiffStrategy {
 		String key = null;
 		if (rowData != null) {
 			key = rowData.getValue("key", String.class);
-			if (pinnedProperty) {
+			if (pinProperty) {
 				currentValue = rowData.getValue("value", Object.class);
 			}
 		}

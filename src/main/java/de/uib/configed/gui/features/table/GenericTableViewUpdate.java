@@ -128,7 +128,8 @@ public final class GenericTableViewUpdate {
 			String colKey = model.getColumnByModelIndex(edit.colIdx()).getKey();
 			Object oldValue = oldRow.getValue(colKey, Object.class);
 
-			if (!Objects.equals(oldValue, edit.newValue())) {
+			boolean isKeyValueTableKey = model.isKeyValueTable() && edit.colIdx() == 0;
+			if (!Objects.equals(oldValue, edit.newValue()) || isKeyValueTableKey) {
 				affectedRowIds.add(oldRow.getId());
 				rowUpdates.computeIfAbsent(oldRow.getId(), k -> new HashMap<>()).put(colKey, edit.newValue());
 			}
@@ -156,7 +157,8 @@ public final class GenericTableViewUpdate {
 			mergedValues.putAll(pendingChanges);
 
 			// Calculate state based on changes
-			RowState finalState = calculateRowStateFromChanges(oldRow, pendingChanges, strategy);
+			RowState finalState = calculateRowStateFromChanges(oldRow, pendingChanges, strategy,
+					model.isKeyValueTable());
 
 			RowData updatedRow = oldRow.toBuilder().values(mergedValues).state(finalState).build();
 
@@ -171,9 +173,15 @@ public final class GenericTableViewUpdate {
 	}
 
 	private static RowState calculateRowStateFromChanges(RowData oldRow, Map<String, Object> changes,
-			RowDiffStrategy strategy) {
+			RowDiffStrategy strategy, boolean keyValueTable) {
 		if (strategy == null) {
 			return RowState.NORMAL;
+		}
+
+		if (keyValueTable) {
+			Object currentValue = changes.containsKey("value") ? changes.get("value")
+					: oldRow.getValue("value", Object.class);
+			return strategy.getRowData(oldRow, "value", currentValue, oldRow.getValue("value", Object.class));
 		}
 
 		for (Map.Entry<String, Object> entry : changes.entrySet()) {

@@ -133,12 +133,11 @@ public class KeyValueRowDiffStrategyTest {
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
 		RowData rowData = rowData("testKey", "defaultValue");
 
-		strategy.setPinnedProperty(true);
+		strategy.setPinProperty(true);
 		assertEquals(RowState.NORMAL, strategy.getRowData(rowData, "key", "testKey", "testKey"));
 
-		strategy.setPinnedProperty(false);
-		assertEquals(RowState.MODIFIED,
-				strategy.getRowData(rowData, "value", "changedValue", "defaultValue"));
+		strategy.setPinProperty(false);
+		assertEquals(RowState.MODIFIED, strategy.getRowData(rowData, "value", "changedValue", "defaultValue"));
 	}
 
 	@Test
