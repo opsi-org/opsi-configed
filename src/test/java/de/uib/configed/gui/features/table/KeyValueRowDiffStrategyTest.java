@@ -128,6 +128,20 @@ public class KeyValueRowDiffStrategyTest {
 	}
 
 	@Test
+	void shouldUseEditedValueAfterPinnedPropertyIsReset() {
+		Map<String, Object> defaults = createMap("testKey", "defaultValue");
+		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), false);
+		RowData rowData = rowData("testKey", "defaultValue");
+
+		strategy.setPinnedProperty(true);
+		assertEquals(RowState.NORMAL, strategy.getRowData(rowData, "key", "testKey", "testKey"));
+
+		strategy.setPinnedProperty(false);
+		assertEquals(RowState.MODIFIED,
+				strategy.getRowData(rowData, "value", "changedValue", "defaultValue"));
+	}
+
+	@Test
 	void shouldReturnMissingData_whenPinnedPropertyIsTrueAndKeyNotInDefaults() {
 		Map<String, Object> defaults = createMap("otherKey", "someValue");
 		KeyValueRowDiffStrategy strategy = new KeyValueRowDiffStrategy(defaults, new HashMap<>(), true);

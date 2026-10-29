@@ -492,6 +492,7 @@ public class KeyValueTable extends JPanel {
 		tableView.dispatch(new GenericTableViewMsg.CellEdited(keyIndex, 0, key));
 
 		this.pinnedProperty = false;
+		diffStrategy.setPinnedProperty(false);
 
 		Object defaultValue = defaultsMap.get(key);
 
