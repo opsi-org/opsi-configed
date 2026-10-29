@@ -9,6 +9,7 @@ package de.uib.configed.core.domain.modulelicense;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,14 +238,17 @@ public class OpsiLicensing extends JPanel {
 
 		licensingTable.setTableModel(theModel);
 
-		// With this we can assure that the row sorter is set up correctly
-		// and we have the correct integer columns from 2 to the end of the model
-		// (assuming the first two columns are not integer columns)
-		licensingTable.getGenEditTable().setRowSorter(new StringIntegerRowSorter(theModel,
-				IntStream.range(2, theModel.getColumnCount()).boxed().collect(Collectors.toSet())));
+		licensingTable.getGenEditTable().setRowSorter(createRowSorter(theModel));
 
 		licensingTable.getGenEditTable().setDefaultRenderer(Object.class,
 				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
+	}
+
+	static StringIntegerRowSorter createRowSorter(GenTableModel model) {
+		StringIntegerRowSorter sorter = new StringIntegerRowSorter(model,
+				IntStream.range(2, model.getColumnCount()).boxed().collect(Collectors.toSet()));
+		sorter.setComparator(0, Comparator.comparing(Object::toString));
+		return sorter;
 	}
 
 	public static boolean isExtendedView() {
