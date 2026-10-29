@@ -56,7 +56,12 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 
 	public KeyValueTableForHostConfigs(Actor actor, JTree tree, boolean isServerConfig,
 			boolean includeAdditionalTooltipText) {
-		super(isServerConfig, !isServerConfig, true);
+		this(actor, tree, isServerConfig, includeAdditionalTooltipText, null);
+	}
+
+	public KeyValueTableForHostConfigs(Actor actor, JTree tree, boolean isServerConfig,
+			boolean includeAdditionalTooltipText, String filterScope) {
+		super(isServerConfig, !isServerConfig, true, filterScope);
 
 		this.actor = actor;
 		this.tree = tree;
@@ -68,6 +73,7 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 		TreePath p = tree.getSelectionPath();
 		int row = tree.getRowForPath(p);
 
+		saveFilterState();
 		actor.reloadData();
 		Logging.info(this, "reloaded, return to ", p);
 		if (p != null) {
@@ -75,6 +81,8 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			tree.setSelectionInterval(row, row);
 			tree.scrollRowToVisible(row);
 		}
+
+		restoreFilter();
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
@@ -114,7 +122,12 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			return;
 		}
 
-		String propertyName = (String) tableView.getValueAt(row, 0);
+		RowData rowData = tableView.findRowByViewIndex(row);
+		if (rowData == null) {
+			return;
+		}
+
+		String propertyName = rowData.getValue("key", String.class);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(propertyName), null);
 	}
 
@@ -129,8 +142,9 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 			Logging.debug(this, "prepareRendererForJTable: rowData is null for row ", row, " and col ", col);
 			return;
 		}
-		addTooltip(jComponent, rowData.getValue("key", String.class), rowData.getValue("value", Object.class));
-		setText(jComponent, col, row);
+		String key = rowData.getValue("key", String.class);
+		addTooltip(jComponent, key, rowData.getValue("value", Object.class));
+		setText(jComponent, col, key);
 	}
 
 	private void addTooltip(JComponent jc, String propertyName, Object value) {
@@ -160,9 +174,8 @@ public class KeyValueTableForHostConfigs extends KeyValueTable {
 		}
 	}
 
-	private void setText(JComponent jComponent, int vColIndex, int rowIndex) {
-		if (vColIndex == 1
-				&& PropertiesCellEditorAndRenderer.isKeyForSecretValue((String) tableView.getValueAt(rowIndex, 0))
+	private void setText(JComponent jComponent, int vColIndex, String key) {
+		if (vColIndex == 1 && PropertiesCellEditorAndRenderer.isKeyForSecretValue(key)
 				&& jComponent instanceof JLabel jLabel) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}

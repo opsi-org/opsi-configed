@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -21,11 +20,13 @@ import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.features.searchpane.SearchPaneComponent;
+import de.uib.configed.gui.features.searchpane.SearchPaneMsg;
 import de.uib.configed.gui.features.searchpane.view.SearchTargetModel;
 import de.uib.configed.gui.features.searchpane.view.SearchTargetModelFromJList;
 import de.uib.configed.gui.features.terminal.TerminalController;
 import de.uib.configed.gui.share.PopupMouseListener;
 import de.uib.configed.gui.share.icons.Icons;
+import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.share.logging.Logging;
 import net.miginfocom.swing.MigLayout;
 
@@ -42,39 +43,41 @@ public class DepotListPresenter extends JPanel {
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList) {
+	public DepotListPresenter(DepotsList depotsList, FilterStateManager.FilterKey filterKey) {
 		this.depotslist = depotsList;
 
-		List<String> values = new ArrayList<>();
-		List<String> descriptions = new ArrayList<>();
-		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
-
-		for (Entry<String, Map<String, Object>> depotInfoEntry : depotInfo.entrySet()) {
-			values.add(depotInfoEntry.getKey());
-			if (depotInfoEntry.getValue() == null || depotInfoEntry.getValue().get("description") == null) {
-				descriptions.add("");
-			} else {
-				descriptions.add((String) depotInfoEntry.getValue().get("description"));
-			}
-		}
-
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
-
-		searchPane = SearchPaneComponent.builder().targetModel(searchTargetModel).isNarrow(true)
-				.enableFilterBySelection(true).component(depotsList).build();
+		searchPane = SearchPaneComponent.builder().targetModel(createSearchTargetModel(depotsList)).isNarrow(true)
+				.enableFilterBySelection(true).component(depotsList).filterKey(filterKey).build();
 
 		initComponents();
 		layouting();
 	}
 
-	/**
-	 * exports the scrollpane which is produced in this class but displayed in
-	 * other components
-	 *
-	 * @return a scrollpane which shows the depotslist
-	 */
-	public JScrollPane getScrollpaneDepotslist() {
-		return scrollpaneDepotslist;
+	public void refreshData() {
+		searchPane.setTargetModel(createSearchTargetModel(depotslist));
+		searchPane.dispatch(new SearchPaneMsg.ActionMsg.RestoreFilter());
+	}
+
+	private static SearchTargetModel createSearchTargetModel(DepotsList depotsList) {
+		List<String> values = new ArrayList<>();
+		List<String> descriptions = new ArrayList<>();
+		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
+
+		List<String> sortedDepotNames = new ArrayList<>(depotInfo.keySet());
+		String configServer = PersistenceControllerFactory.getPersistenceController().getDataServices()
+				.hostInfoCollections.getConfigServer();
+		sortedDepotNames.sort(DepotsList.depotNameComparator(configServer));
+		for (String depotName : sortedDepotNames) {
+			values.add(depotName);
+			Map<String, Object> depotDetails = depotInfo.get(depotName);
+			if (depotDetails == null || depotDetails.get("description") == null) {
+				descriptions.add("");
+			} else {
+				descriptions.add((String) depotDetails.get("description"));
+			}
+		}
+
+		return new SearchTargetModelFromJList(depotsList, values, descriptions);
 	}
 
 	private void buildPopup() {

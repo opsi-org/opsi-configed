@@ -9,8 +9,10 @@ package de.uib.configed.gui;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
@@ -22,6 +24,11 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	private DepotListCellRenderer myListCellRenderer;
 	private List<String> saveV;
 	private Map<String, Map<String, Object>> depotInfo;
+
+	static Comparator<String> depotNameComparator(String configServer) {
+		return Comparator.comparing((String depotName) -> !Objects.equals(depotName, configServer))
+				.thenComparing(String.CASE_INSENSITIVE_ORDER).thenComparing(Comparator.naturalOrder());
+	}
 
 	public DepotsList(ConfigedMain configedMain) {
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -40,8 +47,12 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	}
 
 	public void setListData(List<String> v) {
-		super.setListData(v.toArray(new String[0]));
-		saveV = v;
+		List<String> sortedDepotNames = new ArrayList<>(v);
+		String configServer = PersistenceControllerFactory.getPersistenceController()
+				.getDataServices().hostInfoCollections.getConfigServer();
+		sortedDepotNames.sort(depotNameComparator(configServer));
+		super.setListData(sortedDepotNames.toArray(new String[0]));
+		saveV = sortedDepotNames;
 	}
 
 	// interface ComponentListene

@@ -343,7 +343,7 @@ public class ProductTable {
 		engine.updateClientProductStates(clientId,
 				persistenceController.getDataServices().product.getProductInfos(clientId, attributes));
 		engine.produceVisualStatesFromExistingEntries();
-		engine.completeWithDefaults(List.of(clientId));
+		engine.completeWithDefaults(configedMain.getSelectedClients());
 		List<Map<String, Object>> rows = engine.buildSnapshot();
 
 		tableViewComponent.dispatch(new GenericTableViewMsg.ChangeOriginalSnapshot(rows));

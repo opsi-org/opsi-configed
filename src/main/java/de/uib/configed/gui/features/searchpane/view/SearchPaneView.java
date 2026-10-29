@@ -133,7 +133,7 @@ public class SearchPaneView {
 		filterMarkBtn = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filterMarkBtn.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filterMarkBtn.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filterMarkBtn.setVisible(model.getFilterKey() != null || model.isEnableFilterBySelection());
+		filterMarkBtn.setVisible(model.isEnableFilterBySelection());
 		filterMarkBtn.addItemListener(
 				e -> dispatch.accept(new SearchPaneMsg.FieldChangeMsg.ToggleFilterMark(filterMarkBtn.isSelected())));
 		filterMarkBtn.addActionListener(event -> dispatch.accept(new SearchPaneMsg.ActionMsg.TriggerFilterMark()));
@@ -157,10 +157,11 @@ public class SearchPaneView {
 
 	private void handleFilterState() {
 		if (searchField.getText() == null || searchField.getText().isBlank()) {
-			FilterStateManager.removeFilterState(model.getFilterKey());
+			FilterStateManager.removeFilterState(model.getFilterKey(), model.getFilterScope());
 		} else {
-			FilterStateManager.saveFilterState(model.getFilterKey(), new TableFilterState(searchField.getText(),
-					model.getSearchColumnIndex(), model.isRegexActive(), model.isRespectCase()));
+			FilterStateManager.saveFilterState(model.getFilterKey(), model.getFilterScope(),
+					new TableFilterState(searchField.getText(), model.getSearchColumnIndex(), model.isRegexActive(),
+							model.isRespectCase()));
 		}
 	}
 

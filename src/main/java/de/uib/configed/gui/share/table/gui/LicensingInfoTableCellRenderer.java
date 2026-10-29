@@ -39,9 +39,11 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
+		int modelColumn = table.convertColumnIndexToModel(column);
+		int modelRow = table.convertRowIndexToModel(row);
 		String latestChange = licensingInfoMap.getLatestDateTitle();
-		String columnName = licensingInfoMap.getColumnNames().get(column);
-		String rowName = licensingInfoMap.getModules().get(row);
+		String columnName = licensingInfoMap.getColumnNames().get(modelColumn);
+		String rowName = table.getModel().getValueAt(modelRow, 0).toString();
 
 		if (columnName == null) {
 			Logging.warning(this, "columnName is null");
@@ -59,7 +61,7 @@ public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 
 			setIcon(null);
 
-			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
+			String prevCol = licensingInfoMap.getColumnNames().get(modelColumn - 1);
 			if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.module"))
 					&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 				String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();

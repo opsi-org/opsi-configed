@@ -6,6 +6,9 @@
 
 package de.uib.configed.gui.features.searchpane;
 
+import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
+import de.uib.configed.gui.share.table.gui.TableFilterState;
+
 public sealed interface SearchPaneEffect permits SearchPaneEffect.UIEffect, SearchPaneEffect.ServiceEffect {
 	/**
 	 * UI-side effects (dialogs, navigation, state persistence).
@@ -39,6 +42,10 @@ public sealed interface SearchPaneEffect permits SearchPaneEffect.UIEffect, Sear
 		}
 
 		record ResetSearch() implements ServiceEffect {
+		}
+
+		record SaveFilterState(FilterKey filterKey, String scope, TableFilterState filterState)
+				implements ServiceEffect {
 		}
 	}
 }

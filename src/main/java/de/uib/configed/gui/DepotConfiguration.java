@@ -7,6 +7,8 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -66,6 +68,22 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		setMinimumSize(new Dimension());
 	}
 
+	void refreshData(List<String> depotNames, Map<String, Map<String, Object>> depotInfo, Runnable refreshPresenter) {
+		depotsList.removeListSelectionListener(this);
+		try {
+			List<String> selectedDepots = depotsList.getSelectedValuesList();
+			depotsList.setListData(depotNames);
+			depotsList.setInfo(depotInfo);
+			depotsList.setSelectedValues(selectedDepots);
+			refreshPresenter.run();
+			lastSelectedDepots = depotsList.getSelectedIndices();
+		} finally {
+			depotsList.addListSelectionListener(this);
+		}
+
+		updateTab();
+	}
+
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		if (ChangedDataManager.checkSaveAll(true)) {
@@ -95,8 +113,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 	private void updateTab() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
-
-		depotsList.requestFocus();
 
 		switch (getSelectedIndex()) {
 		case 0 -> {

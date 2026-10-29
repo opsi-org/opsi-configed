@@ -20,8 +20,10 @@ import de.uib.configed.gui.AbstractTeaComponent;
 import de.uib.configed.gui.features.searchpane.view.SearchPaneView;
 import de.uib.configed.gui.features.searchpane.view.SearchTargetModel;
 import de.uib.configed.gui.share.SwingUtils;
+import de.uib.configed.gui.share.table.gui.FilterStateManager;
 import de.uib.configed.gui.share.table.gui.FilterStateManager.FilterKey;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.gui.TableFilterState;
 import de.uib.configed.share.logging.Logging;
 import lombok.Builder;
 
@@ -30,6 +32,7 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 		implements KeyListener {
 	private SearchTargetModel targetModel;
 	private FilterKey filterKey;
+	private String filterScope;
 	private PanelGenEdit associatedPanel;
 	private boolean isNarrow;
 	private boolean showNavPanel;
@@ -39,11 +42,12 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 	private SearchPaneView searchPane;
 
 	@Builder
-	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, PanelGenEdit associatedPanel,
-			boolean isNarrow, boolean showNavPanel, boolean enableFilterBySelection, JComponent component,
-			SearchPaneView searchPane) {
+	public SearchPaneComponent(SearchTargetModel targetModel, FilterKey filterKey, String filterScope,
+			PanelGenEdit associatedPanel, boolean isNarrow, boolean showNavPanel, boolean enableFilterBySelection,
+			JComponent component, SearchPaneView searchPane) {
 		this.targetModel = targetModel;
 		this.filterKey = filterKey;
+		this.filterScope = filterScope;
 		this.associatedPanel = associatedPanel;
 		this.isNarrow = isNarrow;
 		this.showNavPanel = showNavPanel;
@@ -69,8 +73,8 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 
 	@Override
 	protected SearchPaneModel initModel() {
-		return SearchPaneModel.builder().filterKey(filterKey).isNarrow(isNarrow).showNavPanel(showNavPanel)
-				.enableFilterBySelection(enableFilterBySelection).build();
+		return SearchPaneModel.builder().filterKey(filterKey).filterScope(filterScope).isNarrow(isNarrow)
+				.showNavPanel(showNavPanel).enableFilterBySelection(enableFilterBySelection).build();
 	}
 
 	@Override
@@ -161,6 +165,8 @@ public class SearchPaneComponent extends AbstractTeaComponent<SearchPaneModel, S
 			targetModel.setSelectedRow(0);
 			targetModel.setCursorRow(0);
 		}
+		case SearchPaneEffect.ServiceEffect.SaveFilterState(FilterKey tableFilterKey, String scope, TableFilterState filterState) -> FilterStateManager
+				.saveFilterState(tableFilterKey, scope, filterState);
 		}
 	}
 
