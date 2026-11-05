@@ -266,22 +266,11 @@ public class ClientTablePanel extends JPanel implements MessagebusListener {
 	}
 
 	public void setSelectedValues(Collection<String> clientsToSelect) {
-		String valuesListS = null;
-		if (clientsToSelect != null) {
-			valuesListS = "" + clientsToSelect.size();
-		}
+		Logging.info(this, "setSelectedValues ", (clientsToSelect != null ? clientsToSelect.size() : 0));
 
-		Logging.info(this, "setSelectedValues ", valuesListS);
-
-		if (clientsToSelect == null) {
+		if (clientsToSelect == null || clientsToSelect.isEmpty()) {
 			// Clear selection when empty
 			clientTableViewComponent.dispatch(new GenericTableViewMsg.ChangeSelection(new HashSet<>()));
-		} else if (clientsToSelect.isEmpty()) {
-			// Also act on list selection when there is no client to select.
-			// For example when the last client is unselected in the client list,
-			// this method is not called automatically by the selection listener,
-			// so we do it manually
-			actOnListSelection();
 		} else {
 			Set<String> rowsToSelect = new HashSet<>();
 			for (int i = 0; i < clientTableViewComponent.model.getRows().size(); i++) {
