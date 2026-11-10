@@ -26,6 +26,20 @@ compile_and_package:
   image: sensedia/openjdk-25-pipeline
   stage: build_and_analyze
   script:
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "v4.3" ] || [ -n "$CI_COMMIT_TAG" ]; then
+        mvn --batch-mode versions:display-dependency-updates -DallowSnapshots=false -DallowPreReleases=false -Dversions.outputFile=target/dependency-updates.txt -Dversions.overwriteOutput=true
+        cat target/dependency-updates.txt
+        awk '
+          /^The following dependencies .* have newer versions:$/ { updates = 1 }
+          END {
+            if (updates) {
+              print "ERROR: Stable dependency updates are available. Update dependencies before releasing."
+              exit 1
+            }
+          }
+        ' target/dependency-updates.txt
+      fi
     - TRANSIFEX_MIN_TRANSLATION_RATE=0.0
     - '[ "$CI_COMMIT_TAG" = "" ] || TRANSIFEX_MIN_TRANSLATION_RATE=1.0'
     - curl -sS "${OPSIDEVTOOLS_INSTALLER_URL_LINUX_X64}" | sh
