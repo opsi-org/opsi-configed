@@ -59,6 +59,23 @@ Once your development environment is set up, you can follow this workflow:
 8. Once your changes have been reviewed and approved, they will be merged into
    the ```main``` branch.
 
+## Release Dependency Update Check
+
+For tag pipelines, the `compile_and_package` job reports available stable
+dependency updates before building. It uses the Versions Maven Plugin configuration
+in [pom.xml](pom.xml) to exclude snapshots and pre-release update candidates.
+Available stable updates in Dependencies or Dependency Management fail the job
+and block the release. Errors running the report also fail the job. No dependency
+versions are changed automatically. Branch pipelines skip this check.
+
+Inspect available stable updates locally with:
+
+```bash
+mvn --batch-mode versions:display-dependency-updates -DallowSnapshots=false -DallowPreReleases=false
+```
+
+This report does not check whether currently used dependencies are pre-releases.
+
 ## Windows Environment Configuration
 
 To configure the development environment in Windows, follow these additional
