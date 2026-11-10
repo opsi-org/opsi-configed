@@ -61,14 +61,14 @@ Once your development environment is set up, you can follow this workflow:
 
 ## Release Dependency Update Check
 
-For tag pipelines, the `compile_and_package` job reports available stable
+For `v4.3` branch pipelines and all tag pipelines, the `compile_and_package` job reports available stable
 dependency updates before building. It uses the Versions Maven Plugin configuration
 in [pom.xml](pom.xml) to exclude snapshots and pre-release update candidates.
 The central version-name filter also excludes Kotlin IntelliJ builds (`-ij...`),
 while allowing stable suffixes such as `Final`, `RELEASE` and `jre`.
 Available stable updates in Dependencies or Dependency Management fail the job
 and block the release. Errors running the report also fail the job. No dependency
-versions are changed automatically. Branch pipelines skip this check.
+versions are changed automatically. Pipelines for other branches skip this check.
 
 Inspect available stable updates locally with:
 
