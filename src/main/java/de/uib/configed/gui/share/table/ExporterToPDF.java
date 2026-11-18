@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -89,8 +88,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			}
 		} else {
 			try {
-				File temp = Files.createTempFile(null, extension).toFile();
-				FileUtils.restrictAccessToFile(temp);
+				File temp = FileUtils.createSecureTempFile(extension);
 				writeFile(temp.getAbsolutePath());
 				openFile(temp);
 			} catch (IOException e) {

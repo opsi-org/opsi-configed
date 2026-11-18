@@ -9,12 +9,9 @@ package de.uib.configed.share;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 import java.util.TreeMap;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -112,26 +109,18 @@ public final class FileUtils {
 		return result;
 	}
 
-	public static void restrictAccessToFile(File file) {
+	public static File createSecureTempFile(String extension) throws IOException {
+		return createSecureTempFile(null, extension);
+	}
+
+	public static File createSecureTempFile(String filename, String extension) throws IOException {
 		try {
-			Logging.info("Restricting file's ", file.getAbsolutePath(),
-					" access to only allow owner to modify/read file");
-			String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-			Logging.info("Detected operating system ", osName);
-			if (osName.contains("win")) {
-				boolean readablePermissionChanged = file.setReadable(true, true);
-				boolean writablePermissionChanged = file.setWritable(true, true);
-				Logging.info("Readable permission for file ", file.getAbsolutePath(), " changed ",
-						readablePermissionChanged);
-				Logging.info("Writable permission for file ", file.getAbsolutePath(), " changed ",
-						writablePermissionChanged);
-			} else {
-				Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rw-------");
-				Files.setPosixFilePermissions(file.toPath(), permissions);
-				Logging.info("Changed file's ", file.getAbsolutePath(), " permission");
-			}
-		} catch (IOException e) {
-			Logging.error(e, "Unable to set default permissions on temp file");
+			return Files
+					.createTempFile(filename, extension,
+							PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")))
+					.toFile();
+		} catch (UnsupportedOperationException e) {
+			return Files.createTempFile(filename, extension).toFile();
 		}
 	}
 

@@ -93,9 +93,8 @@ public final class CertificateManager {
 		File tmpCertFile = null;
 
 		try {
-			tmpCertFile = Files.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION)
-					.toFile();
-			FileUtils.restrictAccessToFile(tmpCertFile);
+			tmpCertFile = FileUtils.createSecureTempFile(Globals.CERTIFICATE_FILE_NAME,
+					"." + Globals.CERTIFICATE_FILE_EXTENSION);
 		} catch (IOException e) {
 			Logging.error(e, "unable to create tmp certificate file");
 		}
@@ -236,9 +235,9 @@ public final class CertificateManager {
 	private static Collection<? extends Certificate> createTmpCertificate(String certificateContent) {
 		File certificateFile = null;
 		try {
-			certificateFile = Files
-					.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION).toFile();
-			FileUtils.restrictAccessToFile(certificateFile);
+			certificateFile = FileUtils.createSecureTempFile(Globals.CERTIFICATE_FILE_NAME,
+					"." + Globals.CERTIFICATE_FILE_EXTENSION);
+
 			writeToCertificate(certificateFile, certificateContent);
 		} catch (IOException e) {
 			Logging.warning(e, "error on getting certificateFile");
