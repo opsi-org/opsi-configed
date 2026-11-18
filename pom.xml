@@ -15,7 +15,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 
-        <javafx.version>27.0.1</javafx.version>
+        <javafx.version>27.0.1.1</javafx.version>
         <jacoco.version>0.8.16</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -143,7 +143,7 @@
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>4.1.0</version>
+                <version>4.2.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -161,14 +161,14 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.13.6</version>
+            <version>5.5.13.7</version>
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/at.yawk.lz4/lz4-java -->
         <dependency>
             <groupId>at.yawk.lz4</groupId>
             <artifactId>lz4-java</artifactId>
-            <version>1.14.0</version>
+            <version>1.14.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
@@ -362,7 +362,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>3.10.0</version>
+            <version>3.10.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -384,14 +384,14 @@
         <dependency>
             <groupId>net.sf.sevenzipjbinding</groupId>
             <artifactId>sevenzipjbinding-all-platforms</artifactId>
-            <version>23.01-2.2</version>
+            <version>26.06-2.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding -->
         <dependency>
             <groupId>net.sf.sevenzipjbinding</groupId>
             <artifactId>sevenzipjbinding</artifactId>
-            <version>23.01-2.2</version>
+            <version>26.06-2.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
