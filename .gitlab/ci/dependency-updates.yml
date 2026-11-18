@@ -31,7 +31,7 @@ update_dependencies:
     - mvn --batch-mode clean verify
     - git add pom.xml
     - git commit -m "$MR_TITLE"
-    - git push --force "https://oauth2:${GITLAB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "$UPDATE_BRANCH"
+    - git push --force -o ci.skip "https://oauth2:${GITLAB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "$UPDATE_BRANCH"
     # Create a merge request only if none is open for the update branch yet.
     - |
       EXISTING_MR=$(curl --silent --show-error --fail \
