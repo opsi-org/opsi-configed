@@ -133,7 +133,7 @@ update_dependencies:
   script:
     - command -v git >/dev/null || (apt-get update && apt-get install -y git)
     - git config user.name "opsi-configed CI"
-    - git config user.email "n.otto@uib.gmbh"
+    - git config user.email "${DEPENDENCY_BOT_EMAIL:?Set DEPENDENCY_BOT_EMAIL in GitLab CI/CD variables}"
     # Always start from the current state of the default branch.
     - git fetch origin "$CI_DEFAULT_BRANCH"
     - git switch -C "$UPDATE_BRANCH" FETCH_HEAD
