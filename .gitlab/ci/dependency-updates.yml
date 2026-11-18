@@ -1,0 +1,55 @@
+stages:
+  - build_and_analyze
+
+update_dependencies:
+  stage: build_and_analyze
+  image: sensedia/openjdk-25-pipeline
+  # Prevent parallel update jobs modifying the same branch.
+  resource_group: dependency-updates
+  variables:
+    UPDATE_BRANCH: "automation/dependency-updates"
+    MR_TITLE: "chore: update dependencies"
+    MR_DESCRIPTION: "Automatically updated Maven dependency versions."
+  needs: []
+  script:
+    - command -v git >/dev/null || (apt-get update && apt-get install -y git)
+    - git config user.name "opsi-configed CI"
+    - git config user.email "${DEPENDENCY_BOT_EMAIL:?Set DEPENDENCY_BOT_EMAIL in GitLab CI/CD variables}"
+    # Always start from the current state of the default branch.
+    - git fetch origin "$CI_DEFAULT_BRANCH"
+    - git switch -C "$UPDATE_BRANCH" FETCH_HEAD
+    # Update shared properties first, then literal versions in dependencies and dependencyManagement.
+    - mvn --batch-mode versions:update-properties -DallowSnapshots=false -DallowPreReleases=false -DgenerateBackupPoms=false
+    - mvn --batch-mode versions:use-latest-versions -DallowSnapshots=false -DallowPreReleases=false -DgenerateBackupPoms=false
+    - |
+      if git diff --quiet -- pom.xml; then
+        echo "No dependency updates available. Nothing to do."
+        exit 0
+      fi
+    - git --no-pager diff -- pom.xml
+    # Only publish changes if build and tests succeed.
+    - mvn --batch-mode clean verify
+    - git add pom.xml
+    - git commit -m "$MR_TITLE"
+    - git push --force "https://oauth2:${GITLAB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "$UPDATE_BRANCH"
+    # Create a merge request only if none is open for the update branch yet.
+    - |
+      EXISTING_MR=$(curl --silent --show-error --fail \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?state=opened&source_branch=${UPDATE_BRANCH}")
+      if [ "$EXISTING_MR" = "[]" ]; then
+        echo "No open merge request found. Creating a new one."
+        curl --silent --show-error --fail --request POST \
+          --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+          --header "Content-Type: application/json" \
+          --data "{
+            \"source_branch\": \"${UPDATE_BRANCH}\",
+            \"target_branch\": \"${CI_DEFAULT_BRANCH}\",
+            \"title\": \"${MR_TITLE}\",
+            \"description\": \"${MR_DESCRIPTION}\",
+            \"remove_source_branch\": true
+          }" \
+          "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests"
+      else
+        echo "An open merge request for ${UPDATE_BRANCH} already exists. Branch was updated."
+      fi
