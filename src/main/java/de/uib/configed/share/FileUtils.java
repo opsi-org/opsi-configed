@@ -114,14 +114,8 @@ public final class FileUtils {
 	}
 
 	public static File createSecureTempFile(String filename, String extension) throws IOException {
-		try {
-			return Files
-					.createTempFile(filename, extension,
-							PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")))
-					.toFile();
-		} catch (UnsupportedOperationException e) {
-			return Files.createTempFile(filename, extension).toFile();
-		}
+		return Files.createTempFile(filename, extension,
+				PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------"))).toFile();
 	}
 
 	public static String getServerPathFromWebDAVPath(String webDAVPath) {
