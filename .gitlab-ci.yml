@@ -1,11 +1,11 @@
-# Set DEPENDENCY_UPDATE_ONLY=true on the schedule targeting a protected ref.
+# Target a protected ref in the schedule so the job can access GITLAB_TOKEN.
 include:
   - local: .gitlab/ci/dependency-updates.yml
     rules:
-      - if: &dependency_update_schedule '$CI_PIPELINE_SOURCE == "schedule" && $DEPENDENCY_UPDATE_ONLY == "true"'
+      - if: &scheduled_pipeline '$CI_PIPELINE_SOURCE == "schedule"'
 
   - local: .gitlab/ci/build.yml
     rules:
-      - if: *dependency_update_schedule
+      - if: *scheduled_pipeline
         when: never
       - when: always
