@@ -137,10 +137,9 @@ update_dependencies:
     # Always start from the current state of the default branch.
     - git fetch origin "$CI_DEFAULT_BRANCH"
     - git switch -C "$UPDATE_BRANCH" FETCH_HEAD
-    # Update centrally defined version properties (no snapshots, no pre-releases).
-    - mvn --batch-mode versions:update-properties -DallowSnapshots=false -DallowPreReleases=false
-    # Drop the backup file created by the versions plugin; keep pom.xml changes only.
-    - git restore -- pom.xml.versionsBackup 2>/dev/null || rm -f pom.xml.versionsBackup
+    # Update shared properties first, then literal versions in dependencies and dependencyManagement.
+    - mvn --batch-mode versions:update-properties -DallowSnapshots=false -DallowPreReleases=false -DgenerateBackupPoms=false
+    - mvn --batch-mode versions:use-latest-versions -DallowSnapshots=false -DallowPreReleases=false -DgenerateBackupPoms=false
     - |
       if git diff --quiet -- pom.xml; then
         echo "No dependency updates available. Nothing to do."
