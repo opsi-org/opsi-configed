@@ -9,11 +9,10 @@ package de.uib.configed.gui.features.tree;
 import java.awt.Component;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -233,12 +232,20 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean importFromTree(TransferSupport support) {
-		TreePath[] selectionPaths = ((AbstractGroupTree) source).getSelectionPaths();
-		Set<String> selectedObjects = selectionPaths == null ? Collections.emptySet()
-				: Arrays.stream(selectionPaths).map(path -> path.getLastPathComponent().toString())
-						.collect(Collectors.toSet());
+		Map<String, TreePath> sourcePaths = getSelectedObjectPaths((JTree) source);
 
-		return importObjects(selectedObjects, support, false);
+		return importObjects(sourcePaths.keySet(), support, false, sourcePaths);
+	}
+
+	static Map<String, TreePath> getSelectedObjectPaths(JTree sourceTree) {
+		Map<String, TreePath> sourcePaths = new LinkedHashMap<>();
+		TreePath[] selectionPaths = sourceTree.getSelectionPaths();
+		if (selectionPaths != null) {
+			for (TreePath path : selectionPaths) {
+				sourcePaths.putIfAbsent(path.getLastPathComponent().toString(), path);
+			}
+		}
+		return sourcePaths;
 	}
 
 	private boolean importFromTable(TransferSupport support) {
@@ -250,10 +257,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 					.getProductPageManager().getPanelInUse().getProductTable().getSelectedIDs();
 		}
 
-		return importObjects(selectedObjects, support, true);
+		return importObjects(selectedObjects, support, true, Map.of());
 	}
 
-	private boolean importObjects(Set<String> selectedObjects, TransferSupport support, boolean fromTable) {
+	private boolean importObjects(Set<String> selectedObjects, TransferSupport support, boolean fromTable,
+			Map<String, TreePath> sourcePaths) {
 		if (selectedObjects.isEmpty()) {
 			return false;
 		}
@@ -282,18 +290,17 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				tree.copyObjectTo(selectedObject, dropParentID, dropParentNode, dropPath);
 			} else {
 				// object is selected in tree
-				moveObjectInTree(selectedObject, dropParentNode, dropPath, dropParentID);
+				moveObjectInTree(selectedObject, sourcePaths.get(selectedObject), dropParentNode, dropPath, dropParentID);
 			}
 		}
 
 		return true;
 	}
 
-	private void moveObjectInTree(String selectedObject, DefaultMutableTreeNode dropParentNode, TreePath dropPath,
-			String dropParentID) {
+	private void moveObjectInTree(String selectedObject, TreePath activeTreePath,
+			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
 		GroupNode sourceParentNode = null;
 		GroupNode groupNode = null;
-		TreePath activeTreePath = tree.getActiveTreePath(selectedObject);
 
 		String sourceParentID = null;
 		if (activeTreePath != null) {

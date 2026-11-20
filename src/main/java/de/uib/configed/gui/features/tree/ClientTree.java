@@ -535,6 +535,24 @@ public class ClientTree extends AbstractGroupTree {
 		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode ", newParentNode, " ",
 				DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
 
+		List<GroupNode> selectedDirectoryGroups = null;
+		if (isInDirectory(newParentPath)) {
+			Set<GroupNode> proposedGroups = new TreeSet<>(new NodeComparator());
+			proposedGroups.addAll(locationsInDirectory.get(objectID));
+			proposedGroups.remove(groupNodeDirectoryNotAssigned);
+			proposedGroups.add((GroupNode) newParentNode);
+			if (proposedGroups.size() > 1) {
+				selectedDirectoryGroups = selectOneNode(proposedGroups, objectID, (GroupNode) newParentNode);
+				if (selectedDirectoryGroups == null) {
+					return;
+				}
+				if (!selectedDirectoryGroups.contains(newParentNode)) {
+					keepDirectoryGroups(objectID, selectedDirectoryGroups);
+					return;
+				}
+			}
+		}
+
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
@@ -556,7 +574,11 @@ public class ClientTree extends AbstractGroupTree {
 
 		repaint();
 
-		checkDirectory(objectID, (GroupNode) newParentNode);
+		if (selectedDirectoryGroups != null) {
+			keepDirectoryGroups(objectID, selectedDirectoryGroups);
+		} else {
+			checkDirectory(objectID, (GroupNode) newParentNode);
+		}
 	}
 
 	private void checkDirectory(String clientID, GroupNode selectedNode) {
@@ -573,19 +595,21 @@ public class ClientTree extends AbstractGroupTree {
 		List<GroupNode> correctNode = selectOneNode(groupsInDIRECTORY, clientID, selectedNode);
 
 		if (correctNode != null) {
-			// we did some selection
-
-			// we remove the one selected node, the not desired nodes remain
-			groupsInDIRECTORY.removeAll(correctNode);
-
-			for (GroupNode node : groupsInDIRECTORY) {
-				removeNodeInternally(clientID, node);
-				persistenceController.getDataServices().group.removeObject2Group(clientID,
-						node.getUserObject().toString());
-			}
-
-			locationsInDirectory.put(clientID, new HashSet<>(correctNode));
+			keepDirectoryGroups(clientID, correctNode);
 		}
+	}
+
+	private void keepDirectoryGroups(String clientID, List<GroupNode> selectedGroups) {
+		Set<GroupNode> groupsInDIRECTORY = locationsInDirectory.get(clientID);
+		groupsInDIRECTORY.removeAll(selectedGroups);
+
+		for (GroupNode node : groupsInDIRECTORY) {
+			removeNodeInternally(clientID, node);
+			persistenceController.getDataServices().group.removeObject2Group(clientID,
+					node.getUserObject().toString());
+		}
+
+		locationsInDirectory.put(clientID, new HashSet<>(selectedGroups));
 	}
 
 	private static List<GroupNode> selectOneNode(Set<GroupNode> groupSet, String clientID, GroupNode preSelected) {
@@ -599,17 +623,19 @@ public class ClientTree extends AbstractGroupTree {
 
 			ListSelectionDialog dialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ClientTree.selectCorrectLocation"));
+			dialog.setSingleSelection();
 			dialog.setListData(groupSet.stream().map(Object::toString).toList());
 			if (preSelected != null) {
 				dialog.setPreviousSelectionValues(Set.of(preSelected.toString()));
 			}
 
-			// Repeat until the user has selected exactly one group
 			do {
 				dialog.show();
-			} while (!dialog.wasAccepted() || dialog.getSelectedValues().size() != 1);
+			} while (dialog.wasAccepted() && dialog.getSelectedValues().size() != 1);
 
-			result = groupSet.stream().filter(node -> dialog.getSelectedValues().contains(node.toString())).toList();
+			if (dialog.wasAccepted()) {
+				result = groupSet.stream().filter(node -> dialog.getSelectedValues().contains(node.toString())).toList();
+			}
 		}
 
 		return result;
