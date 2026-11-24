@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TreeMap;
 
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
@@ -114,8 +115,13 @@ public final class FileUtils {
 	}
 
 	public static File createSecureTempFile(String filename, String extension) throws IOException {
-		return Files.createTempFile(filename, extension,
-				PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------"))).toFile();
+		String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+		return osName
+				.contains("win")
+						? Files.createTempFile(filename, extension).toFile()
+						: Files.createTempFile(filename, extension,
+								PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")))
+								.toFile();
 	}
 
 	public static String getServerPathFromWebDAVPath(String webDAVPath) {
