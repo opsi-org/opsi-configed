@@ -268,7 +268,7 @@ public class SoftwareDataService extends DataService {
 
 		// This needs to be a list, because we want this list to be the first argument
 		List<Object> callAttributes = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
-				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID,
+				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, "windowsSoftwareId",
 				SWAuditEntry.IS_OPERATING_SYSTEM);
 		List<Map<String, Object>> list = dataServices.exec.getListOfMaps(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
 				callAttributes);
